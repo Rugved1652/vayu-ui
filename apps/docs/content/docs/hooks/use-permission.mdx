@@ -1,0 +1,88 @@
+---
+title: usePermission
+description: A hook to query, monitor, and request browser permissions in real-time.
+---
+
+import { UsePermissionDemo } from '@/components/demos/use-permission-demo';
+
+The `usePermission` hook wraps the [Permissions API](https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API) to query and monitor permission state, and provides a `request()` method that triggers the appropriate browser prompt.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UsePermissionDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/usePermission.ts`:
+
+```tsx
+import { useCallback, useEffect, useState } from "react";
+
+export type PermissionName =
+  | "camera" | "microphone" | "geolocation" | "notifications"
+  | "clipboard-read" | "clipboard-write" | "push" | "midi";
+
+export type PermissionState = "granted" | "denied" | "prompt" | "unsupported" | "loading";
+
+export const usePermission = (permissionName: PermissionName) => {
+  const [state, setState] = useState<PermissionState>("loading");
+
+  useEffect(() => {
+    navigator.permissions
+      .query({ name: permissionName as any })
+      .then((status) => {
+        setState(status.state as PermissionState);
+        status.addEventListener("change", () =>
+          setState(status.state as PermissionState)
+        );
+      })
+      .catch(() => setState("unsupported"));
+  }, [permissionName]);
+
+  const request = useCallback(async () => {
+    // Trigger the appropriate browser prompt
+    // See full source for implementation
+  }, [permissionName]);
+
+  return { state, isGranted: state === "granted", isDenied: state === "denied", isPrompt: state === "prompt", isSupported: state !== "unsupported", request };
+};
+```
+
+## Usage
+
+```tsx
+import { usePermission } from "@/hooks/usePermission";
+
+const CameraAccess = () => {
+  const { state, isGranted, request } = usePermission("camera");
+
+  if (isGranted) return <p>✅ Camera access granted</p>;
+
+  return (
+    <button onClick={request}>
+      Grant Camera ({state})
+    </button>
+  );
+};
+```
+
+## API Reference
+
+### Parameters
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `permissionName` | `PermissionName` | The permission to query |
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `state` | `PermissionState` | `"granted"` \| `"denied"` \| `"prompt"` \| `"unsupported"` \| `"loading"` |
+| `isGranted` | `boolean` | Whether the permission is granted |
+| `isDenied` | `boolean` | Whether the permission is denied |
+| `isPrompt` | `boolean` | Whether the user hasn't been asked yet |
+| `isSupported` | `boolean` | Whether the Permissions API supports this permission |
+| `request` | `() => Promise<void>` | Triggers the browser's permission prompt |

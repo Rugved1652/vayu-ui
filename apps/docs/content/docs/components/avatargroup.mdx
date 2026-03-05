@@ -1,0 +1,63 @@
+---
+title: AvatarGroup
+description: Displays a stack of avatars with overflow handling.
+---
+
+import AvatarGroupDemo from '@/components/demos/avatargroup-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4">
+      <AvatarGroupDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { AvatarGroup } from "@/components/ui/avatargroup"
+
+    const users = [
+      { src: "https://github.com/shadcn.png", username: "Shadcn" },
+      { fallback: "JD", username: "John Doe" },
+      // ...
+    ]
+
+    <AvatarGroup users={users} maxDisplay={3} />
+    ```
+  </Tab>
+</Tabs>
+
+## Features
+
+- Stacked (overlapping) or Grid layouts
+- Overflow handling (`+3 more`)
+- Hover effects for stacked items (expand on hover)
+- Integrated with `Avatar` component for consistent styling
+- fully accessible `role="group"`
+
+## Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `users` | `UserData[]` | `[]` | Array of user objects |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Size of avatars |
+| `maxDisplay` | `number` | `5` | Max visible before overflow |
+| `layout` | `'stack' \| 'grid'` | `'stack'` | Layout mode |
+| `spacing` | `'tight' \| 'normal' \| 'loose' \| number` | `'normal'` | Negative margin for stack |
+| `renderOverflow` | `(count) => ReactNode` | — | Custom overflow indicator |
+| `onAvatarClick` | `(user, index) => void` | — | Click handler |
+
+### UserData Interface
+
+```tsx
+interface UserData {
+  id?: string | number;
+  src?: string;
+  username?: string;
+  alt?: string;
+  fallback?: string;
+  isOnline?: boolean;
+}
+```

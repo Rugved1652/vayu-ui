@@ -1,0 +1,83 @@
+---
+title: Checkbox
+description: A control that allows the user to make a binary choice.
+---
+
+import CheckboxDemo from '@/components/demos/checkbox-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <CheckboxDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Checkbox } from "@/components/ui/checkbox"
+
+    export function CheckboxDemo() {
+      return (
+        <div className="flex flex-col gap-4">
+            <Checkbox label="Accept terms" />
+            <Checkbox label="Subscribe" description="Receive weekly updates." />
+        </div>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+Add the component to your project.
+
+```tsx title="src/components/ui/checkbox.tsx"
+"use client"
+ 
+import { clsx } from "clsx"
+import { Check, Minus } from "lucide-react"
+import React, {
+    createContext,
+    forwardRef,
+    // ...
+} from "react"
+ 
+// ... (Copy full component code)
+```
+
+## Anatomy
+
+```tsx
+<Checkbox
+  label="Label"
+  description="Description"
+  error={isError}
+  errorText="Error message"
+/>
+```
+
+## Group
+
+```tsx
+<Checkbox.Group label="Preferences">
+  <Checkbox label="Option 1" />
+  <Checkbox label="Option 2" />
+</Checkbox.Group>
+```
+
+## Props
+
+### Checkbox
+
+| Prop           | Type                       | Default | Description                                      |
+| :------------- | :------------------------- | :------ | :----------------------------------------------- |
+| `label`        | `ReactNode`                | -       | The label content.                               |
+| `description`  | `string`                   | -       | Helper text below the label.                     |
+| `checked`      | `boolean`                  | -       | Controlled checked state.                        |
+| `indeterminate`| `boolean`                  | `false` | Indeterminate state.                             |
+| `variant`      | `primary`...               | `primary`| Visual variant.                                |
+| `size`         | `sm`, `md`, `lg`           | `md`    | Size of the checkbox.                            |
+| `error`        | `boolean`                  | `false` | Whether to show error styling.                   |

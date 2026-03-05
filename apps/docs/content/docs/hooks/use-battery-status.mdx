@@ -1,0 +1,92 @@
+---
+title: useBatteryStatus
+description: A hook to monitor device battery level, charging state, and time estimates.
+---
+
+import { UseBatteryStatusDemo } from '@/components/demos/use-battery-status-demo';
+
+The `useBatteryStatus` hook wraps the [Battery Status API](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API) and provides real-time updates when the battery state changes.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseBatteryStatusDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useBatteryStatus.ts`:
+
+```tsx
+import { useEffect, useState } from "react";
+
+export interface BatteryStatus {
+  charging: boolean;
+  chargingTime: number;
+  dischargingTime: number;
+  level: number;       // 0 to 1
+  isSupported: boolean;
+}
+
+export const useBatteryStatus = (): BatteryStatus => {
+  const [status, setStatus] = useState<BatteryStatus>({
+    charging: false,
+    chargingTime: 0,
+    dischargingTime: Infinity,
+    level: 1,
+    isSupported: false,
+  });
+
+  useEffect(() => {
+    const nav = navigator as any;
+    if (!nav.getBattery) return;
+
+    nav.getBattery().then((battery: any) => {
+      const update = () =>
+        setStatus({
+          charging: battery.charging,
+          chargingTime: battery.chargingTime,
+          dischargingTime: battery.dischargingTime,
+          level: battery.level,
+          isSupported: true,
+        });
+
+      update();
+      battery.addEventListener("chargingchange", update);
+      battery.addEventListener("levelchange", update);
+    });
+  }, []);
+
+  return status;
+};
+```
+
+## Usage
+
+```tsx
+import { useBatteryStatus } from "@/hooks/useBatteryStatus";
+
+const BatteryIndicator = () => {
+  const { level, charging, isSupported } = useBatteryStatus();
+
+  if (!isSupported) return <span>Battery API not supported</span>;
+
+  return (
+    <span>
+      {charging ? "⚡" : "🔋"} {Math.round(level * 100)}%
+    </span>
+  );
+};
+```
+
+## API Reference
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `charging` | `boolean` | Whether the device is currently charging |
+| `chargingTime` | `number` | Seconds until fully charged (`Infinity` if not charging) |
+| `dischargingTime` | `number` | Seconds until empty (`Infinity` if charging) |
+| `level` | `number` | Battery level from `0` to `1` |
+| `isSupported` | `boolean` | Whether the Battery API is available |

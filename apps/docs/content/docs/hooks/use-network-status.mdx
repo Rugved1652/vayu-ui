@@ -1,0 +1,77 @@
+---
+title: useNetworkStatus
+description: A hook that tracks the online/offline status of the browser.
+---
+
+import { UseNetworkStatusDemo } from '@/components/demos/use-network-status-demo';
+
+The `useNetworkStatus` hook monitors the browser's network connection state. It provides a simple boolean `isOnline` and optionally the timestamp when the connection was lost. This is essential for building offline-first applications or displaying connection warnings.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseNetworkStatusDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useNetworkStatus.ts`:
+
+```tsx
+import { useState, useEffect } from "react";
+
+export interface NetworkStatus {
+  isOnline: boolean;
+  offlineAt?: Date;
+}
+
+export const useNetworkStatus = (): NetworkStatus => {
+  const [status, setStatus] = useState<NetworkStatus>({
+    isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
+  });
+
+  useEffect(() => {
+    const handleOnline = () => setStatus({ isOnline: true });
+    const handleOffline = () => setStatus({ isOnline: false, offlineAt: new Date() });
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  return status;
+};
+```
+
+## Usage
+
+```tsx
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
+
+const AppStatus = () => {
+  const { isOnline, offlineAt } = useNetworkStatus();
+
+  if (isOnline) {
+    return <div>All systems go!</div>;
+  }
+
+  return (
+    <div className="bg-red-500 text-white p-2">
+      You are offline. Connection lost at {offlineAt?.toLocaleTimeString()}.
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `isOnline` | `boolean` | `true` if the browser is online, `false` otherwise. |
+| `offlineAt` | `Date \| undefined` | The date object representing when the offline event was triggered. |

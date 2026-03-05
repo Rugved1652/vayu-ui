@@ -1,0 +1,45 @@
+---
+title: ButtonGroup
+description: Groups multiple buttons together with connected borders and rounded edges.
+---
+
+import ButtonGroupDemo from '@/components/demos/buttongroup-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4">
+      <ButtonGroupDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Button } from "@/components/ui/button"
+    import { ButtonGroup } from "@/components/ui/buttongroup"
+
+    <ButtonGroup>
+      <Button variant="outline"><Button.Text>Left</Button.Text></Button>
+      <Button variant="outline"><Button.Text>Center</Button.Text></Button>
+      <Button variant="outline"><Button.Text>Right</Button.Text></Button>
+    </ButtonGroup>
+    ```
+  </Tab>
+</Tabs>
+
+## Features
+
+- Joins borders between adjacent buttons (no double-borders)
+- Rounds only the outer edges of first/last child
+- Horizontal (default) and vertical orientations
+- Works with every `Button` variant and size
+- `fullWidth` mode to stretch across container
+
+## Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Stack direction |
+| `fullWidth` | `boolean` | `false` | Stretch to fill container |
+| `className` | `string` | — | Additional CSS classes |

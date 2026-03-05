@@ -1,0 +1,70 @@
+---
+title: AspectRatio
+description: A layout primitive that constrains children to a fixed aspect ratio using CSS aspect-ratio or padding-bottom fallback.
+---
+
+import AspectRatioDemo from '@/components/demos/aspectratio-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <AspectRatioDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { AspectRatio } from "@/components/ui/aspectratio"
+
+    <AspectRatio ratio="video" className="rounded-xl bg-ground-100">
+      <img src="/image.jpg" alt="Example" />
+    </AspectRatio>
+
+    {/* Custom numeric ratio */}
+    <AspectRatio ratio={2.5} className="rounded-xl">
+      <video src="/clip.mp4" />
+    </AspectRatio>
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/aspectratio.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- 11 built-in presets (square, video, photo, landscape, ultrawide, portrait, golden, a4, cinema, iphone, ipad)
+- Custom numeric ratio support
+- CSS `aspect-ratio` for presets, `padding-bottom` fallback for custom values
+- Auto object-fit on child `<img>` / `<video>` elements
+- `forwardRef` for ref forwarding
+- Server component compatible (no `"use client"`)
+
+## Props
+
+| Prop        | Type                            | Default     | Description                          |
+| :---------- | :------------------------------ | :---------- | :----------------------------------- |
+| `ratio`     | `number \| AspectRatioPreset`   | `"square"`  | Aspect ratio (width / height)        |
+| `overflow`  | `hidden \| visible \| auto \| scroll` | `"hidden"` | Overflow behaviour             |
+| `objectFit` | `cover \| contain \| fill \| scale-down \| none` | `"cover"` | Object-fit for img/video children |
+
+## Presets
+
+| Preset       | Ratio       | Example use      |
+| :----------- | :---------- | :--------------- |
+| `square`     | 1 : 1       | Profile pictures |
+| `video`      | 16 : 9      | YouTube embeds   |
+| `photo`      | 4 : 3       | Photography      |
+| `landscape`  | 3 : 2       | DSLR photos      |
+| `ultrawide`  | 21 : 9      | Ultrawide banners |
+| `portrait`   | 9 : 16      | Phone wallpapers |
+| `golden`     | 1.618 : 1   | Golden ratio     |
+| `a4`         | √2 : 1      | A4 paper         |
+| `cinema`     | 2.39 : 1    | Cinemascope      |
+| `iphone`     | 19.5 : 9    | iPhone screens   |
+| `ipad`       | 4 : 3       | iPad screens     |

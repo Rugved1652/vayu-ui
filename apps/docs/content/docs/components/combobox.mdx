@@ -1,0 +1,91 @@
+---
+title: Combobox
+description: A searchable, single or multi-select dropdown with grouping, keyboard navigation, and portal rendering.
+---
+
+import ComboboxDemo from '@/components/demos/combobox-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <ComboboxDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Combobox } from "@/components/ui/combobox"
+
+    const options = [
+      { label: "React", value: "react" },
+      { label: "Vue", value: "vue" },
+      { label: "Angular", value: "angular" },
+    ]
+
+    export function Example() {
+      const [value, setValue] = useState(null)
+
+      return (
+        <Combobox
+          label="Framework"
+          options={options}
+          value={value}
+          onChange={setValue}
+          clearable
+        />
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/combobox.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- **Single & Multi Select** — Toggle with the `multiple` prop
+- **Search Filtering** — Built-in search with customizable placeholder
+- **Grouping** — Auto-group via the `group` property on options
+- **Keyboard Navigation** — Arrow keys, Enter, Escape
+- **Portal Rendering** — Dropdown renders in a portal to avoid overflow clipping
+- **Variants** — `default`, `outline`, `filled`, `ghost`
+
+## Props
+
+### Combobox
+
+| Prop             | Type                              | Default             | Description                              |
+| :--------------- | :-------------------------------- | :------------------ | :--------------------------------------- |
+| `options`        | `ComboboxOption[]`                | `[]`                | Array of options.                        |
+| `value`          | `string \| number \| null` or `(string \| number)[]` | — | Controlled value.                        |
+| `onChange`        | `(value) => void`                 | —                   | Callback on value change.                |
+| `multiple`       | `boolean`                         | `false`             | Enable multi-select.                     |
+| `maxSelected`    | `number`                          | —                   | Max selections (multi mode only).        |
+| `placeholder`    | `string`                          | `"Select..."`       | Placeholder text.                        |
+| `size`           | `sm \| md \| lg`                  | `md`                | Component size.                          |
+| `variant`        | `default \| outline \| filled \| ghost` | `default`     | Visual variant.                          |
+| `searchable`     | `boolean`                         | `true`              | Show search input.                       |
+| `clearable`      | `boolean`                         | `false`             | Show clear button.                       |
+| `loading`        | `boolean`                         | `false`             | Show loading state.                      |
+| `disabled`       | `boolean`                         | `false`             | Disable the combobox.                    |
+| `error`          | `boolean`                         | `false`             | Show error styling.                      |
+| `errorText`      | `string`                          | —                   | Error message text.                      |
+| `label`          | `string`                          | —                   | Label text.                              |
+| `required`       | `boolean`                         | `false`             | Mark as required.                        |
+
+### ComboboxOption
+
+| Property      | Type         | Description                          |
+| :------------ | :----------- | :----------------------------------- |
+| `label`       | `string`     | Display label.                       |
+| `value`       | `string \| number` | Unique value.                  |
+| `disabled`    | `boolean`    | Disable this option.                 |
+| `icon`        | `ReactNode`  | Optional icon.                       |
+| `description` | `string`     | Secondary description text.          |
+| `group`       | `string`     | Group name for auto-grouping.        |

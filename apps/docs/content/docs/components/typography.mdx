@@ -1,0 +1,422 @@
+---
+title: Typography
+description: Text styles and variants for headings, paragraphs, and other text elements.
+---
+
+import TypographyDemo from '@/components/demos/typography-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="flex items-center justify-center p-8 bg-white dark:bg-neutral-950 rounded-lg">
+      <TypographyDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import Typography from "@/components/ui/typography";
+
+    export default function TypographyDemo() {
+      return (
+        <div className="flex flex-col gap-8 w-full max-w-2xl">
+          <div className="flex flex-col gap-4 pb-8 border-b border-neutral-200 dark:border-neutral-800">
+            <Typography.H1>Heading 1</Typography.H1>
+            <Typography.H2>Heading 2</Typography.H2>
+            <Typography.H3>Heading 3</Typography.H3>
+            <Typography.H4>Heading 4</Typography.H4>
+            <Typography.H5>Heading 5</Typography.H5>
+            <Typography.H6>Heading 6</Typography.H6>
+          </div>
+
+          <div className="flex flex-col gap-4 pb-8 border-b border-neutral-200 dark:border-neutral-800">
+            <Typography.P>
+              This is a paragraph example. It has a relaxed line height and proper
+              spacing for optimal readability. Typography is the art and technique
+              of arranging type to make written language legible, readable, and
+              appealing when displayed.
+            </Typography.P>
+            <Typography.P variant="secondary">
+              This is a secondary paragraph. It uses a lighter text color to
+              indicate less emphasis.
+            </Typography.P>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-2">
+              <Typography.Label>Label:</Typography.Label>
+              <Typography.P className="text-sm">Input label example</Typography.P>
+            </div>
+            
+            <div>
+              <Typography.P>
+                Inline code example: <Typography.Code>npm install vayu-ui</Typography.Code>
+              </Typography.P>
+            </div>
+
+            <div>
+              <Typography.Link href="#">This is a link example</Typography.Link>
+            </div>
+
+            <Typography.CTA>This is a Call to Action text</Typography.CTA>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Typography.H4>Variants</Typography.H4>
+            <Typography.P variant="error">Error text variant</Typography.P>
+            <Typography.P variant="success">Success text variant</Typography.P>
+            <Typography.P variant="warning">Warning text variant</Typography.P>
+            <Typography.P variant="info">Info text variant</Typography.P>
+            <Typography.H3 variant="gradient">Gradient Heading</Typography.H3>
+          </div>
+        </div>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+All typography components share these base props.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `variant` | `'primary' \| 'secondary' \| 'tertiary' \| 'error' \| 'warning' \| 'info' \| 'success' \| 'gradient'` | `'primary'` | The visual style variant of the text. |
+| `ellipsis` | `boolean` | `false` | Whether to truncate text with specific width constraints. |
+| `font` | `'primary' \| 'secondary'` | - | The font family to use. |
+| `className` | `string` | - | Additional CSS classes. |
+| `children` | `ReactNode` | - | The content of the component. |
+
+### Components available
+
+- `Typography.H1`
+- `Typography.H2`
+- `Typography.H3`
+- `Typography.H4`
+- `Typography.H5`
+- `Typography.H6`
+- `Typography.P`
+- `Typography.Label`
+- `Typography.Link`
+- `Typography.CTA`
+- `Typography.Code`
+
+## Source Code
+
+```tsx title="src/components/ui/typography.tsx"
+import React from "react";
+
+interface BaseTypographyProps {
+    children: React.ReactNode;
+    className?: string;
+    variant?:
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "error"
+    | "warning"
+    | "info"
+    | "success"
+    | "gradient";
+    ellipsis?: boolean;
+    font?: "primary" | "secondary";
+}
+
+type H1Props = BaseTypographyProps & React.HTMLAttributes<HTMLHeadingElement>;
+type H2Props = BaseTypographyProps & React.HTMLAttributes<HTMLHeadingElement>;
+type H3Props = BaseTypographyProps & React.HTMLAttributes<HTMLHeadingElement>;
+type H4Props = BaseTypographyProps & React.HTMLAttributes<HTMLHeadingElement>;
+type H5Props = BaseTypographyProps & React.HTMLAttributes<HTMLHeadingElement>;
+type H6Props = BaseTypographyProps & React.HTMLAttributes<HTMLHeadingElement>;
+type PProps = BaseTypographyProps & React.HTMLAttributes<HTMLParagraphElement>;
+type LabelProps = BaseTypographyProps & React.HTMLAttributes<HTMLLabelElement>;
+type LinkProps = BaseTypographyProps & React.HTMLAttributes<HTMLAnchorElement>;
+type CTAProps = BaseTypographyProps &
+    React.HTMLAttributes<HTMLParagraphElement>;
+type CodeProps = BaseTypographyProps & React.HTMLAttributes<HTMLElement>;
+
+// Helper to map variant to Tailwind CSS classes
+const getVariantClasses = (variant: BaseTypographyProps["variant"]) => {
+    switch (variant) {
+        case "primary":
+            return "text-ground-900 dark:text-ground-50";
+        case "secondary":
+            return "text-primary-600 dark:text-primary-400";
+        case "tertiary":
+            return "text-primary-600 dark:text-primary-400";
+        case "error":
+            return "text-red-600";
+        case "warning":
+            return "text-yellow-600";
+        case "info":
+            return "text-blue-600";
+        case "success":
+            return "text-green-600";
+        case "gradient":
+            return "bg-gradient-to-r from-primary-200 via-primary-400 to-primary-700 dark:from-primary-300 dark:via-primary-500 dark:to-primary-600 bg-clip-text text-transparent";
+        default:
+            return "text-primary";
+    }
+};
+
+const getClassNames = (
+    className: string,
+    variant: BaseTypographyProps["variant"],
+    ellipsis?: boolean,
+    font?: "primary" | "secondary"
+) => {
+    const base = getVariantClasses(variant);
+    const ellipsisClass = ellipsis ? "truncate" : "";
+    const fontClass = font ? `font-${font}` : "";
+    return `${base} ${ellipsisClass} ${fontClass} ${className}`;
+};
+
+const Typography = {
+    H1: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font,
+        ...props
+    }: H1Props) => (
+        <h1
+            className={`text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </h1>
+    ),
+
+    H2: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font = "primary",
+        ...props
+    }: H2Props) => (
+        <h2
+            className={`tracking-tight text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </h2>
+    ),
+
+    H3: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font,
+        ...props
+    }: H3Props) => (
+        <h3
+            className={`text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </h3>
+    ),
+
+    H4: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font,
+        ...props
+    }: H4Props) => (
+        <h4
+            className={`text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </h4>
+    ),
+
+    H5: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font,
+        ...props
+    }: H5Props) => (
+        <h5
+            className={`text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </h5>
+    ),
+
+    H6: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font,
+        ...props
+    }: H6Props) => (
+        <h6
+            className={`text-base sm:text-lg lg:text-xl font-semibold tracking-tight ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </h6>
+    ),
+
+    P: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font = "secondary",
+        ...props
+    }: PProps) => (
+        <p
+            className={`text-para text-paragraph text-para-size leading-relaxed ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </p>
+    ),
+
+    Label: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font,
+        ...props
+    }: LabelProps) => (
+        <label
+            className={`text-base leading-relaxed ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </label>
+    ),
+    Code: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font,
+        ...props
+    }: CodeProps) => (
+        <code
+            className={`relative rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </code>
+    ),
+    Link: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font,
+        ...props
+    }: LinkProps) => (
+        <a
+            className={`text-link ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </a>
+    ),
+    CTA: ({
+        children,
+        className = "",
+        variant = "primary",
+        ellipsis,
+        font,
+        ...props
+    }: CTAProps) => (
+        <p
+            className={`text-cta ${getClassNames(
+                className,
+                variant,
+                ellipsis,
+                font
+            )}`}
+            {...props}
+        >
+            {children}
+        </p>
+    ),
+};
+
+// Export types for use in other components
+export type {
+    CodeProps,
+    CTAProps,
+    H1Props,
+    H2Props,
+    H3Props,
+    H4Props,
+    H5Props,
+    H6Props,
+    LabelProps,
+    LinkProps,
+    PProps,
+};
+
+export default Typography;
+```

@@ -1,0 +1,100 @@
+---
+title: Drawer
+description: A sidebar component that can slide in from any direction.
+---
+
+import DrawerDemo from '@/components/demos/drawer-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center">
+      <DrawerDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Drawer } from "@/components/ui/drawer";
+    import { Button } from "@/components/ui/button";
+
+    export default function App() {
+      return (
+        <Drawer side="right">
+          <Drawer.Trigger asChild>
+            <Button>Open Drawer</Button>
+          </Drawer.Trigger>
+          <Drawer.Overlay />
+          <Drawer.Content>
+            <Drawer.Header>
+              <Drawer.Title>Title</Drawer.Title>
+              <Drawer.Description>Description goes here.</Drawer.Description>
+            </Drawer.Header>
+            <div className="p-4">
+              Content...
+            </div>
+            <Drawer.Footer>
+               <Drawer.Close asChild>
+                 <Button>Close</Button>
+               </Drawer.Close>
+            </Drawer.Footer>
+          </Drawer.Content>
+        </Drawer>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+### Drawer (Root)
+
+The root component that provides context.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| open | `boolean` | - | Controlled open state. |
+| onOpenChange | `(open: boolean) => void` | - | Event handler for open state changes. |
+| defaultOpen | `boolean` | `false` | Default open state for uncontrolled usage. |
+| side | `"left" \| "right" \| "top" \| "bottom"` | `"right"` | The direction the drawer slides in from. |
+| modal | `boolean` | `true` | Whether to lock body scroll and show overlay. |
+
+### Drawer.Content
+
+The container for drawer content.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| trapFocus | `boolean` | `true` | Whether to trap focus within the drawer when open. |
+
+### Drawer.Overlay
+
+The backdrop overlay.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| dismissible | `boolean` | `true` | Whether clicking the overlay closes the drawer. |
+
+## Source Code
+
+```tsx title="src/components/ui/drawer.tsx"
+"use client";
+
+import React, {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useId,
+    useRef,
+    useState,
+    forwardRef,
+    HTMLAttributes,
+} from "react";
+import { clsx } from "clsx";
+import { X } from "lucide-react";
+
+// ...
+```

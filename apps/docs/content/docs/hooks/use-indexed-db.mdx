@@ -1,0 +1,131 @@
+---
+title: useIndexedDB
+description: A hook to manage IndexedDB efficiently with typed CRUD operations.
+---
+
+import { UseIndexedDBDemo } from '@/components/demos/use-indexed-db-demo';
+
+The `useIndexedDB` hook abstracts IndexedDB into a simple, typed, promise-based API. It handles database creation, store setup, indexing, and provides full CRUD operations with error tracking.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseIndexedDBDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useIndexedDB.ts`:
+
+```tsx
+import { useCallback, useEffect, useRef, useState } from "react";
+
+interface UseIndexedDBOptions {
+  dbName: string;
+  storeName: string;
+  version?: number;
+  keyPath?: string;
+  indexes?: { name: string; keyPath: string; unique?: boolean }[];
+}
+
+export const useIndexedDB = <T = unknown>({
+  dbName,
+  storeName,
+  version = 1,
+  keyPath = "id",
+  indexes,
+}: UseIndexedDBOptions) => {
+  const dbRef = useRef<IDBDatabase | null>(null);
+  const [isReady, setIsReady] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const request = indexedDB.open(dbName, version);
+
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(storeName)) {
+        const store = db.createObjectStore(storeName, { keyPath });
+        indexes?.forEach((idx) =>
+          store.createIndex(idx.name, idx.keyPath, { unique: idx.unique ?? false })
+        );
+      }
+    };
+
+    request.onsuccess = () => {
+      dbRef.current = request.result;
+      setIsReady(true);
+    };
+    request.onerror = () => setError(request.error as Error);
+
+    return () => dbRef.current?.close();
+  }, [dbName, storeName, version, keyPath]);
+
+  // ... CRUD methods (put, add, get, getAll, remove, clear, count, getByIndex)
+  // See full source for implementation details
+};
+```
+
+## Usage
+
+```tsx
+import { useIndexedDB } from "@/hooks/useIndexedDB";
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+const UserManager = () => {
+  const { put, get, getAll, remove, clear, count, getByIndex, isReady, error } =
+    useIndexedDB<User>({
+      dbName: "my-app",
+      storeName: "users",
+      keyPath: "id",
+      indexes: [
+        { name: "by-role", keyPath: "role" },
+        { name: "by-email", keyPath: "email", unique: true },
+      ],
+    });
+
+  const addUser = async () => {
+    await put({ id: "1", name: "Alice", email: "alice@example.com", role: "admin" });
+  };
+
+  const findAdmins = async () => {
+    const admins = await getByIndex("by-role", "admin");
+    console.log(admins);
+  };
+
+  return <div>{isReady ? "DB Ready" : "Connecting…"}</div>;
+};
+```
+
+## API Reference
+
+### Options
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `dbName` | `string` | — | Name of the IndexedDB database |
+| `storeName` | `string` | — | Name of the object store |
+| `version` | `number` | `1` | Schema version (increment when changing structure) |
+| `keyPath` | `string` | `"id"` | Primary key path for records |
+| `indexes` | `{ name, keyPath, unique? }[]` | — | Indexes to create on the store |
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `put` | `(value: T) => Promise<IDBValidKey>` | Add or update a record (upsert) |
+| `add` | `(value: T) => Promise<IDBValidKey>` | Add a record (throws if key exists) |
+| `get` | `(key: IDBValidKey) => Promise<T \| undefined>` | Get a single record by key |
+| `getAll` | `() => Promise<T[]>` | Get all records in the store |
+| `remove` | `(key: IDBValidKey) => Promise<void>` | Delete a record by key |
+| `clear` | `() => Promise<void>` | Delete all records |
+| `count` | `() => Promise<number>` | Count total records |
+| `getByIndex` | `(indexName: string, value: IDBValidKey) => Promise<T[]>` | Query records by index |
+| `isReady` | `boolean` | `true` once the database connection is open |
+| `error` | `Error \| null` | Any error that occurred |

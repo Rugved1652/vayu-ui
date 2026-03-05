@@ -1,0 +1,66 @@
+---
+title: useMouseTrack
+description: A hook that tracks the mouse cursor position.
+---
+
+import { UseMouseTrackDemo } from '@/components/demos/use-mouse-track-demo';
+
+The `useMouseTrack` hook tracks the coordinates of the mouse cursor in real-time. It returns an object containing the current `x` and `y` coordinates.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseMouseTrackDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useMouseTrack.ts`:
+
+```tsx
+import { useState, useEffect } from "react";
+
+export const useMouseTrack = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const updateMousePosition = (event: MouseEvent) => {
+      setMousePosition({ x: event.clientX, y: event.clientY });
+    };
+
+    window.addEventListener("mousemove", updateMousePosition);
+
+    return () => {
+      window.removeEventListener("mousemove", updateMousePosition);
+    };
+  }, []);
+
+  return mousePosition;
+};
+```
+
+## Usage
+
+```tsx
+import { useMouseTrack } from "@/hooks/useMouseTrack";
+
+const MouseTracker = () => {
+  const { x, y } = useMouseTrack();
+
+  return (
+    <div>
+      <p>Mouse X: {x}</p>
+      <p>Mouse Y: {y}</p>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `x` | `number` | The horizontal coordinate of the mouse pointer. |
+| `y` | `number` | The vertical coordinate of the mouse pointer. |

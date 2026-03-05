@@ -1,0 +1,61 @@
+---
+title: Affix
+description: Pins content to the viewport when scrolling past it. Supports top/bottom positioning, custom scroll containers, and an affixed callback.
+---
+
+import AffixDemo from '@/components/demos/affix-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <AffixDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Affix } from "@/components/ui/affix"
+
+    export function Example() {
+      return (
+        <Affix offset={64}>
+          <nav className="bg-white p-4 shadow">
+            Sticky navigation
+          </nav>
+        </Affix>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/affix.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- **Top / bottom pinning** — stick content to either edge of the viewport
+- **Configurable offset** — distance from the viewport edge before affixing
+- **Custom scroll container** — pass any scrollable `HTMLElement` via `target`
+- **Layout preservation** — placeholder `div` prevents content jump
+- **Affixed callback** — `onAffixed(boolean)` fires on state change
+- **Data attribute** — `data-affixed` for CSS targeting
+- **Shadow on affix** — smooth `shadow-md` transition when pinned
+- **Passive listeners** — scroll & resize use `{ passive: true }`
+
+## Props
+
+| Prop        | Type                          | Default  | Description                              |
+| :---------- | :---------------------------- | :------- | :--------------------------------------- |
+| `offset`    | `number`                      | `0`      | Distance (px) from viewport edge         |
+| `position`  | `top \| bottom`               | `top`    | Which edge to affix to                   |
+| `target`    | `HTMLElement \| null`         | `window` | Custom scroll container                  |
+| `zIndex`    | `number`                      | `100`    | Z-index when affixed                     |
+| `onAffixed` | `(affixed: boolean) => void`  | —        | Called when affixed state changes         |
+| `className` | `string`                      | —        | Additional class names                   |
+| `style`     | `CSSProperties`               | —        | Inline styles (merged with affix styles) |

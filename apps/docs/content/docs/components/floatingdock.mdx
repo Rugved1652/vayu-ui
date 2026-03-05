@@ -1,0 +1,72 @@
+---
+title: FloatingDock
+description: A fixed top-center navigation dock with tooltips, logo slot, dividers, and keyboard-accessible actions.
+---
+
+import FloatingDockDemo from '@/components/demos/floatingdock-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg min-h-[120px]">
+      <FloatingDockDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { FloatingDock } from "@/components/ui/floatingdock"
+    import { Home, Search, Settings } from "lucide-react"
+
+    const items = [
+      { label: "logo", logoText: "App", href: "/" },
+      { label: "divider" },
+      { icon: Home, label: "Home", href: "/" },
+      { icon: Search, label: "Search", onClick: () => {} },
+      { label: "divider" },
+      { icon: Settings, label: "Settings", href: "/settings" },
+    ]
+
+    export function Example() {
+      return <FloatingDock items={items} aria-label="Main navigation" />
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/floatingdock.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- Fixed to top-center with glassmorphism backdrop
+- `<nav>` element with `aria-label`
+- Tooltips with `role="tooltip"`, `useId`, and `aria-describedby`
+- Focus & hover trigger tooltips for keyboard access
+- `role="separator"` on dividers
+- Configurable logo with `logoText` prop
+- Custom link component (e.g. Next.js `Link`)
+- `forwardRef` for ref forwarding
+
+## DockItem
+
+| Property    | Type                 | Description                                     |
+| :---------- | :------------------- | :----------------------------------------------- |
+| `icon`      | `ComponentType`      | Icon component (e.g. Lucide)                     |
+| `label`     | `string`             | Tooltip text. Use `"divider"` or `"logo"` for special items |
+| `href`      | `string`             | URL — renders as link                            |
+| `onClick`   | `() => void`         | Click handler — renders as button                |
+| `logoText`  | `string`             | Logo text (only when `label === "logo"`)          |
+
+## FloatingDock Props
+
+| Prop             | Type          | Default           | Description                   |
+| :--------------- | :------------ | :---------------- | :---------------------------- |
+| `items`          | `DockItem[]`  | —                 | Items to render               |
+| `aria-label`     | `string`      | `"Floating dock"` | Accessible name for `<nav>`   |
+| `linkComponent`  | `ElementType` | `"a"`             | Custom link component         |
+| `className`      | `string`      | —                 | Class on the nav wrapper      |

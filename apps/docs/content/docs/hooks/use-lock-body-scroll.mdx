@@ -1,0 +1,77 @@
+---
+title: useLockBodyScroll
+description: A hook to lock body scrolling, useful for modals and overlays.
+---
+
+import { UseLockBodyScrollDemo } from '@/components/demos/use-lock-body-scroll-demo';
+
+The `useLockBodyScroll` hook temporarily disables scrolling on the document body. This is essential when displaying modals, drawers, or mobile menus to prevent the background content from scrolling while the overlay is open.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseLockBodyScrollDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useLockBodyScroll.ts`:
+
+```tsx
+import { useLayoutEffect } from "react";
+
+export const useLockBodyScroll = () => {
+  useLayoutEffect(() => {
+    // Store the original overflow style
+    const originalOverflow = document.body.style.overflow;
+
+    // Lock scrolling
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      // Restore the original overflow style when the component unmounts
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+};
+```
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
+
+const Modal = ({ onClose }) => {
+  // Lock body scroll when this component mounts
+  useLockBodyScroll();
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h2>I am a Modal</h2>
+        <p>You can't scroll the background!</p>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+};
+
+const App = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setIsOpen(true)}>Open Modal</button>
+      {isOpen && <Modal onClose={() => setIsOpen(false)} />}
+      <div style={{ height: "200vh" }}>
+        <p>Scroll down...</p>
+      </div>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+This hook takes no arguments and returns nothing. It uses `useLayoutEffect` to set `document.body.style.overflow` to `hidden` on mount and restores the original value on cleanup.

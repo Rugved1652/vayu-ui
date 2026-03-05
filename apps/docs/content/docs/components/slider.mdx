@@ -1,0 +1,51 @@
+---
+title: Slider
+description: An input where the user selects a value from within a given range.
+---
+
+import SliderDemo from '@/components/demos/slider-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4">
+      <SliderDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Slider } from "@/components/ui/slider"
+
+    // Single value
+    <Slider defaultValue={[33]} max={100} step={1} />
+    
+    // Range (Two thumbs)
+    <Slider defaultValue={[25, 75]} max={100} step={1} />
+    ```
+  </Tab>
+</Tabs>
+
+## Features
+
+- Supports single `value` or multiple (range)
+- Keyboard accessible (`Arrow` keys, `Home`, `End`)
+- Mouse and Touch dragging support
+- Custom `step` interpolation
+- Form submission support via hidden inputs
+
+## Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `defaultValue` | `number[]` | `[0]` | Initial value(s) |
+| `value` | `number[]` | — | Controlled value(s) |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `step` | `number` | `1` | Stepping interval |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `onValueChange` | `(val: number[]) => void` | — | Event handler for changes |
+| `onValueCommit` | `(val: number[]) => void` | — | Event handler for drag/key end |
+| `name` | `string` | — | Name for form input |
+

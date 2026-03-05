@@ -1,0 +1,115 @@
+---
+title: Tour
+description: A guided product tour with spotlight, popover steps, progress bar, and full keyboard navigation. WCAG 2.2 AA compliant.
+---
+
+import TourDemo from '@/components/demos/tour-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <TourDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Tour } from "@/components/ui/tour"
+    import type { TourStep } from "@/components/ui/tour"
+
+    const steps: TourStep[] = [
+      {
+        target: "#my-element",
+        title: "Welcome",
+        content: "This is the first step.",
+        placement: "bottom",
+      },
+    ]
+
+    export function Example() {
+      const [open, setOpen] = useState(false)
+
+      return (
+        <Tour
+          steps={steps}
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          onComplete={() => setOpen(false)}
+        >
+          <button id="my-element" onClick={() => setOpen(true)}>
+            Start Tour
+          </button>
+        </Tour>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/tour.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- CSS-selector-based spotlight with SVG mask cutout
+- Popover with auto-placement & viewport clamping
+- Arrow indicator per placement (top / bottom / left / right)
+- Center placement for modal-style steps
+- Progress bar with `role="progressbar"`
+- Step numbers badge
+- Async `onNext` / `onPrev` hooks per step
+- Custom button overrides per step
+- `role="dialog"` + `aria-modal` + `aria-labelledby`
+- `aria-live="polite"` screen-reader announcements
+- Keyboard navigation (ArrowRight / ArrowLeft / Escape)
+- Body scroll lock during tour
+
+## Props
+
+### Tour
+
+| Prop                       | Type                     | Default    | Description                          |
+| :------------------------- | :----------------------- | :--------- | :----------------------------------- |
+| `steps`                    | `TourStep[]`             | —          | Step definitions                     |
+| `isOpen`                   | `boolean`                | `false`    | Controlled open state                |
+| `onClose`                  | `() => void`             | —          | Close callback                       |
+| `onComplete`               | `() => void`             | —          | Fired after the last step            |
+| `onSkip`                   | `() => void`             | —          | Fired when user skips                |
+| `showProgress`             | `boolean`                | `true`     | Progress bar visibility              |
+| `showStepNumbers`          | `boolean`                | `true`     | Step counter badge                   |
+| `maskClickable`            | `boolean`                | `false`    | Allow clicks through overlay         |
+| `closeOnEscape`            | `boolean`                | `true`     | Close on Escape key                  |
+| `closeOnMaskClick`         | `boolean`                | `false`    | Close when clicking overlay          |
+| `scrollBehavior`           | `ScrollBehavior`         | `"smooth"` | Scroll-into-view behaviour           |
+| `highlightedAreaClassName` | `string`                 | —          | Spotlight border class               |
+| `maskClassName`            | `string`                 | —          | Overlay mask class                   |
+
+### TourStep
+
+| Prop                 | Type                                         | Default    | Description                       |
+| :------------------- | :------------------------------------------- | :--------- | :-------------------------------- |
+| `target`             | `string`                                     | —          | CSS selector for the target       |
+| `title`              | `string`                                     | —          | Step heading                      |
+| `content`            | `string \| ReactNode`                        | —          | Step body                         |
+| `placement`          | `top \| bottom \| left \| right \| center`   | `"bottom"` | Popover placement                 |
+| `spotlightPadding`   | `number`                                     | `8`        | Spotlight cutout padding           |
+| `disableInteraction` | `boolean`                                    | `false`    | Block pointer events on target    |
+| `showSkip`           | `boolean`                                    | `true`     | Show skip button for this step    |
+| `nextButtonText`     | `string`                                     | `"Next"`   | Override next button label        |
+| `prevButtonText`     | `string`                                     | `"Previous"` | Override previous button label  |
+| `onNext`             | `() => void \| Promise<void>`                | —          | Async hook before advancing       |
+| `onPrev`             | `() => void \| Promise<void>`                | —          | Async hook before going back      |
+| `customButtons`      | `ReactNode`                                  | —          | Replace the default button row    |
+
+### useTour Hook
+
+```tsx
+const { isOpen, currentStep, steps, goToStep, nextStep, prevStep, close, skip } = useTour()
+```
+
+Access tour state and controls from any component rendered inside `<Tour>`.

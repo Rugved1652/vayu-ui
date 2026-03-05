@@ -1,0 +1,82 @@
+---
+title: ColorPicker
+description: A color selection component with presets, format conversion, and alpha support.
+---
+
+import ColorPickerDemo from '@/components/demos/colorpicker-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <ColorPickerDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { ColorPicker } from "@/components/ui/colorpicker"
+
+    export function Example() {
+      const [color, setColor] = useState("#3b82f6")
+
+      return (
+        <ColorPicker
+          label="Brand Color"
+          value={color}
+          onChange={setColor}
+        />
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+Copy the component file into your project:
+
+```tsx title="src/components/ui/colorpicker.tsx"
+// Copy the full component code
+```
+
+## Components
+
+### ColorPicker
+
+The main picker with swatch trigger, text input, native `<input type="color">` dropdown, preset grid, and optional alpha slider.
+
+### ColorPicker.Swatches
+
+A standalone swatch grid for simple color selection without the full picker UI.
+
+## Props
+
+### ColorPicker
+
+| Prop           | Type                | Default      | Description                              |
+| :------------- | :------------------ | :----------- | :--------------------------------------- |
+| `value`        | `string`            | —            | Controlled color value (hex).            |
+| `defaultValue` | `string`            | `#3b82f6`    | Uncontrolled default color.              |
+| `onChange`      | `(color) => void`   | —            | Callback when color changes.             |
+| `format`       | `hex \| rgb \| hsl` | `hex`        | Display format in the text input.        |
+| `showInput`    | `boolean`           | `true`       | Show the text input field.               |
+| `showPresets`  | `boolean`           | `true`       | Show preset color swatches.              |
+| `showAlpha`    | `boolean`           | `false`      | Show the opacity slider.                 |
+| `presetColors` | `string[]`          | 16 defaults  | Array of hex colors for presets.         |
+| `disabled`     | `boolean`           | `false`      | Disable the picker.                      |
+| `label`        | `string`            | —            | Label text.                              |
+| `description`  | `string`            | —            | Helper text below the label.             |
+| `error`        | `boolean`           | `false`      | Show error styling.                      |
+| `errorText`    | `string`            | —            | Error message text.                      |
+
+### ColorPicker.Swatches
+
+| Prop       | Type              | Default | Description                       |
+| :--------- | :---------------- | :------ | :-------------------------------- |
+| `colors`   | `string[]`        | —       | Array of hex colors to display.   |
+| `value`    | `string`          | —       | Currently selected color.         |
+| `onChange`  | `(color) => void` | —       | Callback when a swatch is clicked.|
+| `size`     | `sm \| md \| lg`  | `md`    | Swatch size.                      |
+| `label`    | `string`          | —       | Label text above swatches.        |

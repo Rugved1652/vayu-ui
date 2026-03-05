@@ -1,0 +1,128 @@
+---
+title: useCountdown
+description: A hook to manage countdown timers with start, pause, and reset functionality.
+---
+
+import { UseCountdownDemo } from '@/components/demos/use-countdown-demo';
+
+The `useCountdown` hook provides a simple way to implement a countdown timer in your React components. It handles the interval logic and state management for you.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseCountdownDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useCountdown.ts`:
+
+```tsx
+import { useState, useEffect, useRef } from "react";
+
+interface UseCountdownOptions {
+  seconds: number;
+  interval?: number;
+  onTick?: (timeLeft: number) => void;
+  onComplete?: () => void;
+}
+
+export const useCountdown = ({
+  seconds,
+  interval = 1000,
+  onTick,
+  onComplete,
+}: UseCountdownOptions) => {
+  const [timeLeft, setTimeLeft] = useState(seconds);
+  const [isRunning, setIsRunning] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (isRunning && timeLeft > 0) {
+      intervalRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          const newTime = prev - 1;
+          if (onTick) onTick(newTime);
+          if (newTime <= 0) {
+            clearInterval(intervalRef.current!);
+            setIsRunning(false);
+            if (onComplete) onComplete();
+          }
+          return newTime > 0 ? newTime : 0;
+        });
+      }, interval);
+    }
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [isRunning, timeLeft, interval, onTick, onComplete]);
+
+  const start = () => {
+    if (!isRunning) {
+      setIsRunning(true);
+    }
+  };
+
+  const pause = () => {
+    if (isRunning) {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      setIsRunning(false);
+    }
+  };
+
+  const reset = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setTimeLeft(seconds);
+    setIsRunning(false);
+  };
+
+  return { timeLeft, start, pause, reset, isRunning };
+};
+```
+
+## Usage
+
+```tsx
+import { useCountdown } from "@/hooks/useCountdown";
+
+const CountdownComponent = () => {
+  const { timeLeft, start, pause, reset, isRunning } = useCountdown({
+    seconds: 60,
+    onComplete: () => alert("Time's up!"),
+  });
+
+  return (
+    <div>
+      <p>Time Left: {timeLeft}s</p>
+      <button onClick={start} disabled={isRunning}>
+        Start
+      </button>
+      <button onClick={pause} disabled={!isRunning}>
+        Pause
+      </button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Options
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `seconds` | `number` | **Required** | The initial time in seconds. |
+| `interval` | `number` | `1000` | The interval in milliseconds (default: 1 second). |
+| `onTick` | `(timeLeft: number) => void` | `undefined` | Callback function called on every tick. |
+| `onComplete` | `() => void` | `undefined` | Callback function called when countdown reaches 0. |
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `timeLeft` | `number` | The current time left in seconds. |
+| `start` | `() => void` | Function to start the countdown. |
+| `pause` | `() => void` | Function to pause the countdown. |
+| `reset` | `() => void` | Function to reset the countdown to original seconds. |
+| `isRunning` | `boolean` | Boolean indicating if the countdown is active. |

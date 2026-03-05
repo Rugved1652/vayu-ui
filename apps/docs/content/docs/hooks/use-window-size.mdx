@@ -1,0 +1,85 @@
+---
+title: useWindowSize
+description: A hook that tracks the dimensions of the browser window.
+---
+
+import { UseWindowSizeDemo } from '@/components/demos/use-window-size-demo';
+
+The `useWindowSize` hook returns the current width and height of the browser window. It automatically updates when the window is resized. This is useful for responsive designs, conditionally rendering components based on screen size, or canvas-based applications.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseWindowSizeDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useWindowSize.ts`:
+
+```tsx
+import { useState, useEffect } from "react";
+
+interface WindowSize {
+  width: number;
+  height: number;
+}
+
+export const useWindowSize = (): WindowSize => {
+  const [windowSize, setWindowSize] = useState<WindowSize>({
+    width: 0,
+    height: 0,
+  });
+
+  useEffect(() => {
+    // Handler to call on window resize
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    // Check availability of window
+    if (typeof window !== "undefined") {
+      // Call handler right away so state gets updated with initial window size
+      handleResize();
+
+      // Add event listener
+      window.addEventListener("resize", handleResize);
+
+      // Remove event listener on cleanup
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []); // Empty array ensures that effect is only run on mount
+
+  return windowSize;
+};
+```
+
+## Usage
+
+```tsx
+import { useWindowSize } from "@/hooks/useWindowSize";
+
+const MyComponent = () => {
+  const { width, height } = useWindowSize();
+
+  return (
+    <div>
+      <p>Window width: {width}</p>
+      <p>Window height: {height}</p>
+      {width < 768 && <p>You are on a mobile device!</p>}
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `width` | `number` | The current width of the window in pixels. |
+| `height` | `number` | The current height of the window in pixels. |

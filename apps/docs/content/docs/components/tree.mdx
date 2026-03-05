@@ -1,0 +1,119 @@
+---
+title: Tree
+description: A compound tree component with single-select and checkbox modes, search, keyboard navigation, cascade checking, and ARIA tree semantics.
+---
+
+import TreeDemo from '@/components/demos/tree-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <TreeDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Tree } from "@/components/ui/tree"
+    import type { TreeNode } from "@/components/ui/tree"
+
+    const data: TreeNode[] = [
+      {
+        id: "src",
+        label: "src",
+        children: [
+          { id: "app.tsx", label: "app.tsx" },
+          { id: "index.tsx", label: "index.tsx" },
+        ],
+      },
+    ]
+
+    export function Example() {
+      return (
+        <Tree data={data} aria-label="Files">
+          <Tree.Container>
+            <Tree.Nodes nodes={data} />
+          </Tree.Container>
+        </Tree>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/tree.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- **Compound pattern** — `Tree`, `Tree.Search`, `Tree.Actions`, `Tree.Container`, `Tree.Nodes`, `Tree.Node`
+- **Two modes** — `normal` (single select) and `checkbox` (multi-select with cascade)
+- **Four variants** — `default`, `filled`, `bordered`, `minimal`
+- **Three sizes** — `sm`, `md`, `lg`
+- **Search** — filter tree with auto-expand
+- **Expand / Collapse all** — toolbar buttons
+- **Custom actions** — per-node action buttons via `renderActions`
+- **Custom icons** — per-node icon override
+- **Keyboard navigation** — Enter, Space, ArrowRight, ArrowLeft
+- **ARIA tree semantics** — `role="tree"`, `role="treeitem"`, `role="group"`, `aria-expanded`, `aria-selected`, `aria-checked`, `aria-disabled`
+- **Cascade checking** — parent auto-checks when all children are checked, indeterminate state
+
+## Sub-components
+
+| Component       | Description                               |
+| :-------------- | :---------------------------------------- |
+| `Tree`          | Root provider with context                |
+| `Tree.Search`   | Searchbox for filtering                   |
+| `Tree.Actions`  | Expand All / Collapse All toolbar         |
+| `Tree.Container`| Bordered container with empty state       |
+| `Tree.Nodes`    | Renders an array of root `TreeNode`s      |
+| `Tree.Node`     | Single node (used internally or manually) |
+
+## Props
+
+### Tree
+
+| Prop                | Type                                                       | Default     | Description                   |
+| :------------------ | :--------------------------------------------------------- | :---------- | :---------------------------- |
+| `data`              | `TreeNode[]`                                               | —           | Tree data                     |
+| `mode`              | `normal \| checkbox`                                       | `"normal"`  | Selection mode                |
+| `variant`           | `default \| filled \| bordered \| minimal`                 | `"default"` | Visual variant                |
+| `size`              | `sm \| md \| lg`                                           | `"md"`      | Size                          |
+| `showLines`         | `boolean`                                                  | `true`      | Show connecting lines         |
+| `showIcons`         | `boolean`                                                  | `true`      | Show file/folder icons        |
+| `defaultExpandAll`  | `boolean`                                                  | `false`     | Expand all on mount           |
+| `expandedKeys`      | `(string \| number)[]`                                     | —           | Controlled expanded keys      |
+| `onExpandedChange`  | `(keys: (string \| number)[]) => void`                     | —           | Expanded change callback      |
+| `selectedKey`       | `string \| number \| null`                                 | —           | Controlled selected key       |
+| `onSelect`          | `(key, node) => void`                                      | —           | Select callback               |
+| `checkedKeys`       | `(string \| number)[]`                                     | —           | Controlled checked keys       |
+| `onCheck`           | `(keys, nodes) => void`                                    | —           | Check callback                |
+| `checkStrictly`     | `boolean`                                                  | `false`     | Disable cascade checking      |
+| `disabled`          | `boolean`                                                  | `false`     | Disable entire tree           |
+| `renderActions`     | `(node: TreeNode) => ReactNode`                            | —           | Per-node action renderer      |
+| `aria-label`        | `string`                                                   | `"Tree"`    | Accessible label              |
+
+### TreeNode
+
+| Prop         | Type                          | Default | Description          |
+| :----------- | :---------------------------- | :------ | :------------------- |
+| `id`         | `string \| number`            | —       | Unique identifier    |
+| `label`      | `string`                      | —       | Display text         |
+| `icon`       | `ReactNode`                   | —       | Custom icon          |
+| `children`   | `TreeNode[]`                  | —       | Child nodes          |
+| `disabled`   | `boolean`                     | `false` | Disable node         |
+| `selectable` | `boolean`                     | `true`  | Allow selection      |
+| `metadata`   | `Record<string, unknown>`     | —       | Arbitrary metadata   |
+
+### useTree Hook
+
+```tsx
+const ctx = useTree()
+```
+
+Access tree context from any component rendered inside `<Tree>`.

@@ -1,0 +1,41 @@
+---
+title: Badge
+description: Displays a badge or component that looks like a badge.
+---
+
+import BadgeDemo from '@/components/demos/badge-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4">
+      <BadgeDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Badge } from "@/components/ui/badge"
+
+    <Badge variant="primary">Badge</Badge>
+    ```
+  </Tab>
+</Tabs>
+
+## Features
+
+- Multiple semantic variants
+- 3 sizes (`sm`, `md`, `lg`)
+- Interactive mode with hover/active states
+- Full `HTMLAttributes<HTMLSpanElement>` support
+- Flex layout for easy icon composition
+
+## Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `variant` | `'primary' \| 'neutral' \| 'outline' \| 'destructive' \| 'success' \| 'warning' \| 'info'` | `'primary'` | Visual style |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size |
+| `interactive` | `boolean` | `false` | Enables hover/click styles |
+

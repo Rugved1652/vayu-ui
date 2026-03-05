@@ -1,0 +1,130 @@
+---
+title: Context Menu
+description: A right-click context menu with items, checkbox items, radio groups, sub-menus, separators, and labels. Fully keyboard-accessible with ARIA roles.
+---
+
+import ContextMenuDemo from '@/components/demos/contextmenu-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <ContextMenuDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { ContextMenu } from "@/components/ui/contextmenu"
+
+    export function Example() {
+      return (
+        <ContextMenu>
+          <ContextMenu.Trigger>
+            <div>Right-click here</div>
+          </ContextMenu.Trigger>
+          <ContextMenu.Content>
+            <ContextMenu.Item onSelect={() => console.log("Cut")}>
+              Cut
+            </ContextMenu.Item>
+            <ContextMenu.Separator />
+            <ContextMenu.CheckboxItem checked onCheckedChange={() => {}}>
+              Show Bookmarks
+            </ContextMenu.CheckboxItem>
+          </ContextMenu.Content>
+        </ContextMenu>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/contextmenu.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- Right-click trigger with disabled state
+- Portal-rendered menu with viewport clamping
+- Menu items with icons, keyboard shortcuts, and destructive style
+- Checkbox items with `aria-checked`
+- Radio groups with `aria-checked`
+- Sub-menus with hover & keyboard navigation (ArrowRight / ArrowLeft)
+- Labels and separators
+- `role="menu"`, `role="menuitem"`, `role="menuitemcheckbox"`, `role="menuitemradio"`, `role="separator"`
+- Enter / Space key activation on all items
+- Escape to close
+
+## Sub-components
+
+| Component                   | Description                                |
+| :-------------------------- | :----------------------------------------- |
+| `ContextMenu`               | Root wrapper                               |
+| `ContextMenu.Trigger`       | Right-click target area                    |
+| `ContextMenu.Content`       | Portal-rendered menu container             |
+| `ContextMenu.Item`          | Standard menu item                         |
+| `ContextMenu.CheckboxItem`  | Toggleable checkbox item                   |
+| `ContextMenu.RadioGroup`    | Radio selection group                      |
+| `ContextMenu.RadioItem`     | Radio option                               |
+| `ContextMenu.Sub`           | Sub-menu wrapper                           |
+| `ContextMenu.SubTrigger`    | Sub-menu trigger with arrow indicator      |
+| `ContextMenu.SubContent`    | Sub-menu content                           |
+| `ContextMenu.Separator`     | Visual divider                             |
+| `ContextMenu.Label`         | Non-interactive heading                    |
+
+## Props
+
+### ContextMenu
+
+| Prop           | Type                          | Default | Description                     |
+| :------------- | :---------------------------- | :------ | :------------------------------ |
+| `onOpenChange` | `(open: boolean) => void`     | —       | Callback when menu opens/closes |
+
+### ContextMenu.Trigger
+
+| Prop       | Type      | Default | Description          |
+| :--------- | :-------- | :------ | :------------------- |
+| `disabled` | `boolean` | `false` | Disable right-click  |
+
+### ContextMenu.Content
+
+| Prop         | Type                         | Default   | Description          |
+| :----------- | :--------------------------- | :-------- | :------------------- |
+| `align`      | `start \| center \| end`    | `start`   | Alignment            |
+| `sideOffset` | `number`                     | `4`       | Offset from cursor   |
+
+### ContextMenu.Item
+
+| Prop          | Type          | Default | Description                 |
+| :------------ | :------------ | :------ | :-------------------------- |
+| `onSelect`    | `() => void`  | —       | Selection callback          |
+| `disabled`    | `boolean`     | `false` | Disable item                |
+| `destructive` | `boolean`     | `false` | Red destructive styling     |
+| `icon`        | `ReactNode`   | —       | Leading icon                |
+| `shortcut`    | `string`      | —       | Trailing shortcut label     |
+
+### ContextMenu.CheckboxItem
+
+| Prop              | Type                          | Default | Description          |
+| :---------------- | :---------------------------- | :------ | :------------------- |
+| `checked`         | `boolean`                     | `false` | Checked state        |
+| `onCheckedChange` | `(checked: boolean) => void`  | —       | Toggle callback      |
+| `disabled`        | `boolean`                     | `false` | Disable item         |
+
+### ContextMenu.RadioGroup
+
+| Prop            | Type                          | Default | Description          |
+| :-------------- | :---------------------------- | :------ | :------------------- |
+| `value`         | `string`                      | —       | Selected value       |
+| `onValueChange` | `(value: string) => void`     | —       | Selection callback   |
+
+### ContextMenu.RadioItem
+
+| Prop       | Type      | Default | Description          |
+| :--------- | :-------- | :------ | :------------------- |
+| `value`    | `string`  | —       | Option value         |
+| `disabled` | `boolean` | `false` | Disable item         |

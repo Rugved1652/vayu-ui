@@ -1,0 +1,10 @@
+{
+    "title": "Documentation",
+    "pages": [
+        "index",
+        "components",
+        "hooks",
+        "mcp-support",
+        "maintainers"
+    ]
+}

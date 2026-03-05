@@ -1,0 +1,105 @@
+---
+title: AudioPlayer
+description: A compound audio player with playlist, keyboard shortcuts, Media Session API, and WCAG 2.2 AA compliance.
+---
+
+import AudioPlayerDemo from '@/components/demos/audioplayer-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <AudioPlayerDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { AudioPlayer } from "@/components/ui/audioplayer"
+
+    <AudioPlayer.Root track={{ id: "1", src: "/song.mp3", title: "My Song", artist: "Artist" }}>
+      <AudioPlayer.Audio />
+      <AudioPlayer.Player variant="card">
+        <AudioPlayer.Artwork size="md" />
+        <AudioPlayer.TrackInfo showAlbum />
+        <AudioPlayer.ProgressBar />
+        <div className="flex items-center gap-2">
+          <AudioPlayer.SkipBackwardButton />
+          <AudioPlayer.PlayPauseButton />
+          <AudioPlayer.SkipForwardButton />
+        </div>
+        <AudioPlayer.VolumeControl />
+      </AudioPlayer.Player>
+    </AudioPlayer.Root>
+    ```
+  </Tab>
+</Tabs>
+
+## Features
+
+- Compound component pattern — compose sub-components freely
+- Playlist with shuffle, repeat (off / all / one), prev/next
+- Progress bar with buffer indicator, hover tooltip, seek handle
+- Volume control with mute toggle and animated slider
+- Media Session API integration (lockscreen / notification controls)
+- `forwardRef` on all sub-components
+- `useMemo` on context value for performance
+- Keyboard shortcuts (container-scoped)
+- WCAG 2.2 AA compliant
+
+## Sub-components
+
+| Component | Description |
+|:----------|:------------|
+| `Root` | Context provider + keyboard listener |
+| `Audio` | Hidden `<audio>` element |
+| `Player` | Visual container (default / minimal / card) |
+| `Artwork` | Album art with spin animation |
+| `TrackInfo` | Title, artist, album text |
+| `ProgressBar` | Seekable slider with buffer + timestamps |
+| `PlayPauseButton` | Play / pause toggle |
+| `SkipBackwardButton` | Previous track |
+| `SkipForwardButton` | Next track |
+| `VolumeControl` | Mute + volume slider |
+| `RepeatButton` | Repeat off → all → one |
+| `ShuffleButton` | Shuffle toggle |
+| `FavoriteButton` | Heart toggle |
+| `DownloadButton` | Download current track |
+| `ShareButton` | Share action |
+| `MoreButton` | More options |
+| `PlaylistButton` | Toggle playlist visibility |
+| `Playlist` | Track list with remove |
+| `LoadingIndicator` | Spinner overlay |
+
+## Root Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `track` | `Track` | — | Initial track |
+| `playlist` | `Track[]` | `[]` | Additional tracks |
+| `autoPlay` | `boolean` | `false` | Auto-play on mount |
+| `defaultVolume` | `number` | `1` | Initial volume (0–1) |
+| `defaultPlaybackRate` | `number` | `1` | Initial speed |
+| `defaultRepeatMode` | `off \| all \| one` | `"off"` | Initial repeat |
+| `enableMediaSession` | `boolean` | `true` | Media Session API |
+| `onPlay` | `() => void` | — | Play callback |
+| `onPause` | `() => void` | — | Pause callback |
+| `onEnded` | `() => void` | — | Ended callback |
+| `onTimeUpdate` | `(time: number) => void` | — | Time callback |
+| `onVolumeChange` | `(vol: number) => void` | — | Volume callback |
+| `onTrackChange` | `(track: Track) => void` | — | Track change callback |
+
+## Keyboard Shortcuts
+
+| Key | Action |
+|:----|:-------|
+| `Space` / `K` | Play / pause |
+| `← →` | Seek ±5s |
+| `↑ ↓` | Volume ±10% |
+| `M` | Mute toggle |
+| `N` / `P` | Next / previous track |
+| `R` | Cycle repeat mode |
+| `S` | Toggle shuffle |
+| `Home` / `0` | Seek to start |
+| `End` | Seek to end |

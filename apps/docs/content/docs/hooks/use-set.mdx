@@ -1,0 +1,87 @@
+---
+title: useSet
+description: A hook to manage a Set state with utility functions.
+---
+
+import { UseSetDemo } from '@/components/demos/use-set-demo';
+
+The `useSet` hook provides a simple interface for managing a JavaScript `Set`. It includes methods to add, remove, and clear items, as well as a check for existence. Since it uses a `Set`, all values are guaranteed to be unique.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseSetDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useSet.ts`:
+
+```tsx
+import { useState } from "react";
+
+export const useSet = <T,>(initialValues?: T[]) => {
+  const [set, setSet] = useState(new Set<T>(initialValues));
+
+  const add = (value: T) => {
+    setSet((prev) => new Set(prev).add(value));
+  };
+
+  const remove = (value: T) => {
+    setSet((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(value);
+      return newSet;
+    });
+  };
+
+  const clear = () => {
+    setSet(new Set());
+  };
+
+  const has = (value: T) => set.has(value);
+
+  return { set, add, remove, clear, has };
+};
+```
+
+## Usage
+
+```tsx
+import { useSet } from "@/hooks/useSet";
+
+const TagManager = () => {
+  const { set, add, remove, has } = useSet<string>(["react", "hook"]);
+
+  const toggleTag = (tag: string) => {
+    if (has(tag)) {
+        remove(tag);
+    } else {
+        add(tag);
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex gap-2">
+        <button onClick={() => toggleTag("react")}>Toggle React</button>
+        <button onClick={() => toggleTag("vue")}>Toggle Vue</button>
+      </div>
+
+      <p>Selected Tags: {Array.from(set).join(", ")}</p>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `set` | `Set<T>` | The current Set object. |
+| `add` | `(value: T) => void` | Adds a value to the Set. Logic ensures uniqueness. |
+| `remove` | `(value: T) => void` | Removes a value from the Set. |
+| `clear` | `() => void` | Removes all values from the Set. |
+| `has` | `(value: T) => boolean` | Checks if a value exists in the Set. |

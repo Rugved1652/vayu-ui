@@ -1,0 +1,115 @@
+---
+title: Toaster
+description: A notification component with imperative API and custom toast support.
+---
+
+import ToasterDemo from '@/components/demos/toaster-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center">
+      <ToasterDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { useToast } from "@/components/ui/toaster";
+    import { Button } from "@/components/ui/button";
+
+    export default function App() {
+      const toast = useToast();
+
+      return (
+        <Button 
+          onClick={() => 
+            toast.success("Success", { 
+              description: "Action completed successfully" 
+            })
+          }
+        >
+          Show Toast
+        </Button>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+Add the `ToastProvider` to your root layout.
+
+```tsx title="app/layout.tsx"
+import { ToastProvider } from '@/components/ui/toaster';
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <ToastProvider>{children}</ToastProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+## API Reference
+
+### `useToast()`
+
+Returns an object with methods to trigger toasts.
+
+| Method | Arguments | Description |
+| :--- | :--- | :--- |
+| `toast.success` | `(message, options)` | Shows a success toast. |
+| `toast.error` | `(message, options)` | Shows an error toast. |
+| `toast.warning` | `(message, options)` | Shows a warning toast. |
+| `toast.info` | `(message, options)` | Shows an info toast. |
+| `toast.promise` | `(promise, messages, options)` | Handles loading/success/error states for a promise. |
+| `toast.custom` | `(content, options)` | Renders custom JSX content. |
+
+### `ToastOptions`
+
+| Option | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| description | `ReactNode` | - | Secondary text. |
+| duration | `number` | `5000` | Duration in ms before auto-dismiss. |
+| position | `ToastPosition` | `"top-right"` | Position of the toast. |
+| action | `{ label: string, onClick: () => void }` | - | Optional action button. |
+| dismissible | `boolean` | `true` | Whether the close button is visible. |
+
+## Custom Toasts
+
+You can build completely custom toasts using the exported Compound Components.
+
+```tsx
+import { useToast, Toast } from "@/components/ui/toaster";
+
+// ...
+toast.custom(
+  <div className="p-4 bg-white border rounded shadow">
+    <Toast.Title>Custom Notification</Toast.Title>
+    <Toast.Description>This is a completely custom toast.</Toast.Description>
+    <Toast.Action onClick={() => {}}>Undo</Toast.Action>
+  </div>
+)
+```
+
+## Source Code
+
+```tsx title="src/components/ui/toaster.tsx"
+"use client";
+
+import {
+    AlertCircle,
+    AlertTriangle,
+    CheckCircle,
+    Info,
+    Loader2,
+    X,
+} from "lucide-react";
+// ...
+```

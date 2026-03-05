@@ -1,0 +1,81 @@
+---
+title: useMeasure
+description: A hook to measure the dimensions of a DOM element using ResizeObserver.
+---
+
+import { UseMeasureDemo } from '@/components/demos/use-measure-demo';
+
+The `useMeasure` hook allows you to track the dimensions (width and height) of a DOM element in real-time. It uses the `ResizeObserver` API to detect size changes and updates the state accordingly.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseMeasureDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useMeasure.ts`:
+
+```tsx
+import { useState, useRef, useLayoutEffect } from "react";
+
+export const useMeasure = () => {
+  const ref = useRef<HTMLElement | null>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useLayoutEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry) {
+        setDimensions({
+          width: entry.contentRect.width,
+          height: entry.contentRect.height,
+        });
+      }
+    });
+
+    observer.observe(ref.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return { ref, ...dimensions };
+};
+```
+
+## Usage
+
+```tsx
+import { useMeasure } from "@/hooks/useMeasure";
+
+const ResizableComponent = () => {
+  const { ref, width, height } = useMeasure();
+
+  return (
+    <div>
+      <div 
+        ref={ref} 
+        style={{ resize: "both", overflow: "auto", border: "1px solid black", padding: "20px" }}
+      >
+        Resize me!
+      </div>
+      <p>Width: {width}px</p>
+      <p>Height: {height}px</p>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `ref` | `React.MutableRefObject<HTMLElement \| null>` | A ref to attach to the element you want to measure. |
+| `width` | `number` | The current width of the element. |
+| `height` | `number` | The current height of the element. |

@@ -1,0 +1,84 @@
+---
+title: Divider
+description: Visually or semantically separates content.
+---
+
+import DividerDemo from '@/components/demos/divider-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
+      <DividerDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Divider } from "@/components/ui/divider";
+
+    // 1. Simple Divider (Horizontal Line)
+    <Divider />
+
+    // 2. Vertical Divider
+    <div className="flex h-5 items-center space-x-4">
+      <div>Blog</div>
+      <Divider orientation="vertical" />
+      <div>Docs</div>
+    </div>
+
+    // 3. With Label (Compound Pattern)
+    <Divider>
+        <Divider.Line />
+        <Divider.Label>OR</Divider.Label>
+        <Divider.Line />
+    </Divider>
+
+    // 4. Custom Styling (Dashed, Gradient, Colors)
+    <Divider>
+        <Divider.Line variant="gradient" color="primary" />
+        <Divider.Label color="primary">Gradient</Divider.Label>
+        <Divider.Line variant="gradient" color="primary" />
+    </Divider>
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+### Divider (Root)
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Orientation of the divider. |
+| `spacing` | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl'` | `'md'` | Spacing margin around the divider. |
+| `children` | `ReactNode` | - | If provided, used as content (flex container). If not, renders a default line. |
+
+### Divider.Line
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `variant` | `'solid' \| 'dashed' \| 'dotted' \| 'gradient'` | `'solid'` | Visual style of the line. |
+| `color` | `'neutral' \| 'primary' \| ...` | `'neutral'` | Theme color of the line. |
+| `size` | `'thin' \| 'normal' \| 'thick' \| 'bold'` | `'normal'` | Thickness preset. |
+| `thickness` | `number` | - | Custom pixel thickness. |
+
+### Divider.Label
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `color` | `'neutral' \| 'primary' \| ...` | `'neutral'` | Text color of the label. |
+| `children` | `ReactNode` | - | Label text or content. |
+
+## Source Code
+
+```tsx title="src/components/ui/divider.tsx"
+import React, { forwardRef, HTMLAttributes } from "react";
+import { clsx } from "clsx";
+
+// ============================================================================
+// Types & Enums
+// ============================================================================
+
+type DividerOrientation = "horizontal" | "vertical";
+type DividerVariant = "solid" | "dashed" | "dotted" | "gradient";
+// ... (Full implementation)
+```

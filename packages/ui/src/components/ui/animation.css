@@ -1,0 +1,422 @@
+/* ============================================================================
+   Animation Keyframes & Utility Classes
+   No Tailwind import needed — these are pure CSS.
+   ============================================================================ */
+
+/* Fade Animation */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Slide Animations */
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-up {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-down {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Bounce Animation */
+@keyframes bounce-in {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  0% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  20% {
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+  40% {
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+  80% {
+    transform: scale3d(0.97, 0.97, 0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+/* Flip Animations */
+@keyframes flip-in-x {
+  0% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+  40% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    animation-timing-function: ease-in;
+  }
+  60% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1;
+  }
+  80% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+  }
+  100% {
+    transform: perspective(400px);
+  }
+}
+
+@keyframes flip-in-y {
+  0% {
+    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+  40% {
+    transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    animation-timing-function: ease-in;
+  }
+  60% {
+    transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    opacity: 1;
+  }
+  80% {
+    transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+  }
+  100% {
+    transform: perspective(400px);
+  }
+}
+
+/* Rotate Animation */
+@keyframes rotate-in {
+  0% {
+    transform: rotate(var(--rotation-start, -200deg));
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(0);
+    opacity: 1;
+  }
+}
+
+/* Zoom Animation */
+@keyframes zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Roll Animation */
+@keyframes roll-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%) rotate(-120deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes roll-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(100%) rotate(120deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes roll-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100%) rotate(120deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes roll-in-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%) rotate(-120deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Jack in the Box Animation */
+@keyframes jack-in-the-box {
+  0% {
+    opacity: 0;
+    transform: scale(0.1) rotate(30deg);
+    transform-origin: center bottom;
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+  70% {
+    transform: rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Hinge Animation */
+@keyframes hinge {
+  0% {
+    transform-origin: top left;
+    animation-timing-function: ease-in-out;
+  }
+  20%,
+  60% {
+    transform: rotate3d(0, 0, 1, 80deg);
+    transform-origin: top left;
+    animation-timing-function: ease-in-out;
+  }
+  40%,
+  80% {
+    transform: rotate3d(0, 0, 1, 60deg);
+    transform-origin: top left;
+    animation-timing-function: ease-in-out;
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 700px, 0);
+    opacity: 0;
+  }
+}
+
+/* Custom Spin Animations */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes reverse-spin {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* ============================================================================
+   Animation Utility Classes (plain CSS — no @utility / no @import needed)
+   ============================================================================ */
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 1s ease;
+}
+
+.animate-bounce-in-small {
+  animation: bounce-in 0.8s ease;
+}
+
+.animate-bounce-in-large {
+  animation: bounce-in 1.2s ease;
+}
+
+.animate-flip-in-x {
+  animation: flip-in-x 1s ease-in;
+}
+
+.animate-flip-in-y {
+  animation: flip-in-y 1s ease-in;
+}
+
+.animate-rotate-in {
+  animation: rotate-in 1s ease-out;
+}
+
+.animate-zoom-in {
+  animation: zoom-in 1s ease-out;
+}
+
+.animate-zoom-in-small {
+  animation: zoom-in 0.8s ease-out;
+}
+
+.animate-zoom-in-large {
+  animation: zoom-in 1.2s ease-out;
+}
+
+.animate-roll-in {
+  animation: roll-in 1s ease-out;
+}
+
+.animate-roll-in-right {
+  animation: roll-in-right 1s ease-out;
+}
+
+.animate-roll-in-up {
+  animation: roll-in-up 1s ease-out;
+}
+
+.animate-roll-in-down {
+  animation: roll-in-down 1s ease-out;
+}
+
+.animate-jack-in-the-box {
+  animation: jack-in-the-box 1s ease-out;
+}
+
+.animate-hinge {
+  animation: hinge 2s ease-in-out;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 60s linear infinite;
+}
+
+.animate-reverse-spin {
+  animation: reverse-spin 40s linear infinite;
+}
+
+/* Iteration utilities */
+.animate-iteration-1 {
+  animation-iteration-count: 1;
+}
+
+.animate-iteration-2 {
+  animation-iteration-count: 2;
+}
+
+.animate-iteration-3 {
+  animation-iteration-count: 3;
+}
+
+.animate-infinite {
+  animation-iteration-count: infinite;
+}
+
+/* Fill mode utilities */
+.animate-fill-none {
+  animation-fill-mode: none;
+}
+
+.animate-fill-forwards {
+  animation-fill-mode: forwards;
+}
+
+.animate-fill-backwards {
+  animation-fill-mode: backwards;
+}
+
+.animate-fill-both {
+  animation-fill-mode: both;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-slide-in-up,
+  .animate-slide-in-down,
+  .animate-bounce-in,
+  .animate-bounce-in-small,
+  .animate-bounce-in-large,
+  .animate-flip-in-x,
+  .animate-flip-in-y,
+  .animate-rotate-in,
+  .animate-zoom-in,
+  .animate-zoom-in-small,
+  .animate-zoom-in-large,
+  .animate-roll-in,
+  .animate-roll-in-right,
+  .animate-roll-in-up,
+  .animate-roll-in-down,
+  .animate-jack-in-the-box,
+  .animate-hinge,
+  .animate-spin-slow,
+  .animate-reverse-spin {
+    animation: none !important;
+  }
+}

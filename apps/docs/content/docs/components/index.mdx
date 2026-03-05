@@ -1,0 +1,291 @@
+---
+title: Components
+description: Collection of pre-built components for Vayu UI.
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import {
+  ListCollapse,
+  Pin,
+  AlertCircle,
+  Play,
+  Ratio,
+  Music,
+  User,
+  Badge as BadgeIcon,
+  Calendar,
+  ChevronRight,
+  MousePointerClick,
+  Group,
+  CreditCard,
+  GalleryHorizontal,
+  Briefcase,
+  CheckSquare,
+  ChevronsUpDown,
+  Palette,
+  Command,
+  MousePointer2,
+  CalendarClock,
+  Minus,
+  GripVertical,
+  PanelBottom,
+  UploadCloud,
+  PanelTop,
+  IdCard,
+  Tag,
+  Link,
+  Image,
+  Map,
+  MoveHorizontal,
+  Menu,
+  AppWindow,
+  Navigation,
+  Key,
+  ListStart,
+  MessageSquare,
+  QrCode,
+  CircleDot,
+  Star,
+  Move,
+  Shield,
+  ChevronDown,
+  Eye,
+  Sidebar,
+  Loader,
+  SlidersHorizontal,
+  Loader2,
+  ToggleRight,
+  Library,
+  Table,
+  Type,
+  AlignLeft,
+  Clock,
+  GitCommit,
+  Bell,
+  MessageCircle,
+  MapPin,
+  GitBranch,
+  Video
+} from 'lucide-react';
+
+export const Badge = ({ children, variant }) => {
+  const colors = {
+    server: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border-green-200 dark:border-green-800",
+    client: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border-blue-200 dark:border-blue-800"
+  };
+  return (
+    <span className={`text-[10px] px-2 py-0.5 rounded-full border font-medium uppercase tracking-wide ${colors[variant]}`}>
+      {children}
+    </span>
+  );
+};
+
+export const CardTitle = ({ children, type }) => (
+  <div className="flex items-center gap-2">
+    <span>{children}</span>
+    <Badge variant={type}>{type}</Badge>
+  </div>
+);
+
+Welcome to the Vayu UI Component Library.
+
+## Overview
+
+Vayu UI provides a set of accessible, performant, and customizable components built with React and Tailwind CSS.
+
+### Available Components
+
+<Cards>
+  <Card icon={<ListCollapse />} href="/docs/components/accordion" title={<CardTitle type="client">Accordion</CardTitle>}>
+    A vertically stacked set of interactive headings.
+  </Card>
+  <Card icon={<Pin />} href="/docs/components/affix" title={<CardTitle type="client">Affix</CardTitle>}>
+    Fix an element to the viewport.
+  </Card>
+  <Card icon={<AlertCircle />} href="/docs/components/alert" title={<CardTitle type="server">Alert</CardTitle>}>
+    Displays a callout for user attention.
+  </Card>
+  <Card icon={<Play />} href="/docs/components/animation" title={<CardTitle type="server">Animation</CardTitle>}>
+    Ready-to-use animation components.
+  </Card>
+  <Card icon={<Ratio />} href="/docs/components/aspect-ratio" title={<CardTitle type="server">Aspect Ratio</CardTitle>}>
+    Displays content within a desired ratio.
+  </Card>
+  <Card icon={<Music />} href="/docs/components/audio-player" title={<CardTitle type="client">Audio Player</CardTitle>}>
+    A custom audio player component.
+  </Card>
+  <Card icon={<User />} href="/docs/components/avatar" title={<CardTitle type="client">Avatar</CardTitle>}>
+    An image element with a fallback for representing the user.
+  </Card>
+  <Card icon={<BadgeIcon />} href="/docs/components/badge" title={<CardTitle type="server">Badge</CardTitle>}>
+     displays a badge or a component that looks like a badge.
+  </Card>
+  <Card icon={<Calendar />} href="/docs/components/big-calendar" title={<CardTitle type="client">Big Calendar</CardTitle>}>
+    A full-sized calendar component.
+  </Card>
+  <Card icon={<ChevronRight />} href="/docs/components/breadcrumb" title={<CardTitle type="server">Breadcrumb</CardTitle>}>
+    Displays the path to the current resource.
+  </Card>
+  <Card icon={<MousePointerClick />} href="/docs/components/button" title={<CardTitle type="server">Button</CardTitle>}>
+    Displays a button or a component that looks like a button.
+  </Card>
+  <Card icon={<Group />} href="/docs/components/button-group" title={<CardTitle type="server">Button Group</CardTitle>}>
+    Group a series of buttons together.
+  </Card>
+  <Card icon={<CreditCard />} href="/docs/components/card" title={<CardTitle type="server">Card</CardTitle>}>
+    Displays a card with header, content, and footer.
+  </Card>
+  <Card icon={<GalleryHorizontal />} href="/docs/components/carousel" title={<CardTitle type="client">Carousel</CardTitle>}>
+    A slideshow component for cycling through elements.
+  </Card>
+  <Card icon={<Briefcase />} href="/docs/components/case" title={<CardTitle type="server">Case</CardTitle>}>
+    Conditional rendering component.
+  </Card>
+  <Card icon={<CheckSquare />} href="/docs/components/checkbox" title={<CardTitle type="client">Checkbox</CardTitle>}>
+    A control that allows the user to toggle between checked and not checked.
+  </Card>
+  <Card icon={<ChevronsUpDown />} href="/docs/components/collapsible" title={<CardTitle type="client">Collapsible</CardTitle>}>
+    An interactive component which expands/collapses a panel.
+  </Card>
+  <Card icon={<Palette />} href="/docs/components/color-picker" title={<CardTitle type="client">Color Picker</CardTitle>}>
+    A component for selecting colors.
+  </Card>
+  <Card icon={<ChevronsUpDown />} href="/docs/components/combobox" title={<CardTitle type="client">Combobox</CardTitle>}>
+    Autocomplete input and command palette.
+  </Card>
+  <Card icon={<Command />} href="/docs/components/command-box" title={<CardTitle type="client">Command Box</CardTitle>}>
+    Fast, composable, unstyled command menu.
+  </Card>
+  <Card icon={<MousePointer2 />} href="/docs/components/context-menu" title={<CardTitle type="client">Context Menu</CardTitle>}>
+    Displays a menu to the user — such as a set of actions or functions — triggered by a button.
+  </Card>
+  <Card icon={<CalendarClock />} href="/docs/components/datetimepicker" title={<CardTitle type="client">Date Time Picker</CardTitle>}>
+    A date and time picker component.
+  </Card>
+  <Card icon={<Minus />} href="/docs/components/divider" title={<CardTitle type="server">Divider</CardTitle>}>
+    Visually or semantically separates content.
+  </Card>
+  <Card icon={<GripVertical />} href="/docs/components/draggablelist" title={<CardTitle type="client">Draggable List</CardTitle>}>
+    A list that can be reordered via drag and drop.
+  </Card>
+  <Card icon={<PanelBottom />} href="/docs/components/drawer" title={<CardTitle type="client">Drawer</CardTitle>}>
+    A drawer component for side content.
+  </Card>
+  <Card icon={<UploadCloud />} href="/docs/components/fileuploader" title={<CardTitle type="client">File Uploader</CardTitle>}>
+    A component for uploading files.
+  </Card>
+  <Card icon={<PanelBottom />} href="/docs/components/footer" title={<CardTitle type="server">Footer</CardTitle>}>
+    A footer component.
+  </Card>
+  <Card icon={<PanelTop />} href="/docs/components/header" title={<CardTitle type="server">Header</CardTitle>}>
+    A header component.
+  </Card>
+  <Card icon={<IdCard />} href="/docs/components/hovercard" title={<CardTitle type="client">Hover Card</CardTitle>}>
+    For sighted users to preview content available behind a link.
+  </Card>
+  <Card icon={<Tag />} href="/docs/components/label" title={<CardTitle type="server">Label</CardTitle>}>
+    Renders an accessible label associated with controls.
+  </Card>
+  <Card icon={<Link />} href="/docs/components/link" title={<CardTitle type="server">Link</CardTitle>}>
+    A link component.
+  </Card>
+  <Card icon={<Image />} href="/docs/components/logo" title={<CardTitle type="client">Logo</CardTitle>}>
+    The brand logo component.
+  </Card>
+  <Card icon={<Map />} href="/docs/components/map" title={<CardTitle type="client">Map</CardTitle>}>
+    A map component.
+  </Card>
+  <Card icon={<MoveHorizontal />} href="/docs/components/marquee" title={<CardTitle type="client">Marquee</CardTitle>}>
+    A scrolling marquee component.
+  </Card>
+  <Card icon={<Menu />} href="/docs/components/menubar" title={<CardTitle type="client">Menubar</CardTitle>}>
+    A visually persistent menu common in desktop applications.
+  </Card>
+  <Card icon={<AppWindow />} href="/docs/components/modal" title={<CardTitle type="client">Modal</CardTitle>}>
+    A window overlaid on either the primary window or another dialog window.
+  </Card>
+  <Card icon={<Navigation />} href="/docs/components/navbar" title={<CardTitle type="server">Navbar</CardTitle>}>
+    A navigation bar component.
+  </Card>
+  <Card icon={<Key />} href="/docs/components/otpinput" title={<CardTitle type="client">OTP Input</CardTitle>}>
+    An accessible one-time password input component.
+  </Card>
+  <Card icon={<ListStart />} href="/docs/components/pagination" title={<CardTitle type="server">Pagination</CardTitle>}>
+    Pagination with page navigation, next and previous links.
+  </Card>
+  <Card icon={<MessageSquare />} href="/docs/components/popover" title={<CardTitle type="client">Popover</CardTitle>}>
+    Displays rich content in a portal, triggered by a button.
+  </Card>
+  <Card icon={<QrCode />} href="/docs/components/qrcode" title={<CardTitle type="server">QR Code</CardTitle>}>
+    A QR code generator component.
+  </Card>
+  <Card icon={<CircleDot />} href="/docs/components/radiogroup" title={<CardTitle type="client">Radio Group</CardTitle>}>
+    A set of checkable buttons—known as radio buttons.
+  </Card>
+  <Card icon={<Star />} href="/docs/components/rate" title={<CardTitle type="client">Rate</CardTitle>}>
+    A rating component with star icons.
+  </Card>
+  <Card icon={<Move />} href="/docs/components/resizable" title={<CardTitle type="client">Resizable</CardTitle>}>
+    Accessible resizable panel groups and layouts.
+  </Card>
+  <Card icon={<Shield />} href="/docs/components/roleguard" title={<CardTitle type="server">Role Guard</CardTitle>}>
+    A component to guard content based on user roles.
+  </Card>
+  <Card icon={<ChevronDown />} href="/docs/components/select" title={<CardTitle type="client">Select</CardTitle>}>
+    Displays a list of options for the user to pick from.
+  </Card>
+  <Card icon={<Eye />} href="/docs/components/show" title={<CardTitle type="server">Show</CardTitle>}>
+    A component for conditional rendering.
+  </Card>
+  <Card icon={<Sidebar />} href="/docs/components/sidebar" title={<CardTitle type="server">Sidebar</CardTitle>}>
+    A sidebar navigation component.
+  </Card>
+  <Card icon={<Loader />} href="/docs/components/skeleton" title={<CardTitle type="server">Skeleton</CardTitle>}>
+    Use to show a placeholder while content is loading.
+  </Card>
+  <Card icon={<SlidersHorizontal />} href="/docs/components/slider" title={<CardTitle type="client">Slider</CardTitle>}>
+    An input where the user selects a value from within a given range.
+  </Card>
+  <Card icon={<Loader2 />} href="/docs/components/spinner" title={<CardTitle type="server">Spinner</CardTitle>}>
+    A loading spinner component.
+  </Card>
+  <Card icon={<ToggleRight />} href="/docs/components/switch" title={<CardTitle type="client">Switch</CardTitle>}>
+    A control that allows the user to toggle between checked and not checked.
+  </Card>
+  <Card icon={<Library />} href="/docs/components/tab" title={<CardTitle type="client">Tab</CardTitle>}>
+    A set of layered sections of content—known as tab panels.
+  </Card>
+  <Card icon={<Table />} href="/docs/components/table" title={<CardTitle type="server">Table</CardTitle>}>
+    A responsive table component.
+  </Card>
+  <Card icon={<AlignLeft />} href="/docs/components/textarea" title={<CardTitle type="client">Textarea</CardTitle>}>
+    A textarea component.
+  </Card>
+  <Card icon={<Type />} href="/docs/components/textinput" title={<CardTitle type="client">Text Input</CardTitle>}>
+    A text input component.
+  </Card>
+  <Card icon={<Clock />} href="/docs/components/time-picker" title={<CardTitle type="client">Time Picker</CardTitle>}>
+    A time picker component.
+  </Card>
+  <Card icon={<GitCommit />} href="/docs/components/timeline" title={<CardTitle type="server">Timeline</CardTitle>}>
+    A timeline component.
+  </Card>
+  <Card icon={<Bell />} href="/docs/components/toaster" title={<CardTitle type="client">Toaster</CardTitle>}>
+    A toast notification component.
+  </Card>
+  <Card icon={<MessageCircle />} href="/docs/components/tooltip" title={<CardTitle type="client">Tooltip</CardTitle>}>
+    A popup that displays information related to an element.
+  </Card>
+  <Card icon={<MapPin />} href="/docs/components/tour" title={<CardTitle type="client">Tour</CardTitle>}>
+    A guided tour component.
+  </Card>
+  <Card icon={<GitBranch />} href="/docs/components/tree" title={<CardTitle type="client">Tree</CardTitle>}>
+    A tree view component.
+  </Card>
+  <Card icon={<Type />} href="/docs/components/typography" title={<CardTitle type="server">Typography</CardTitle>}>
+    Styles for headings, paragraphs, lists, etc.
+  </Card>
+  <Card icon={<Video />} href="/docs/components/videoplayer" title={<CardTitle type="client">Video Player</CardTitle>}>
+    A custom video player component.
+  </Card>
+</Cards>

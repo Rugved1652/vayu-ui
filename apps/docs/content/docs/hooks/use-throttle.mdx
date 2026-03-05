@@ -1,0 +1,86 @@
+---
+title: useThrottle
+description: A hook to limit the execution frequency of value updates.
+---
+
+import { UseThrottleDemo } from '@/components/demos/use-throttle-demo';
+
+The `useThrottle` hook ensures that a value is updated at most once every specified time interval. It is useful for rate-limiting updates based on frequent events like scrolling, window resizing, or rapid user input.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseThrottleDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useThrottle.ts`:
+
+```tsx
+import { useState, useEffect, useRef } from "react";
+
+export const useThrottle = <T,>(value: T, interval: number): T => {
+  const [throttledValue, setThrottledValue] = useState(value);
+  const lastExecuted = useRef<number>(Date.now());
+
+  useEffect(() => {
+    const handler = setTimeout(
+      () => {
+        const now = Date.now();
+        if (now - lastExecuted.current >= interval) {
+          setThrottledValue(value);
+          lastExecuted.current = now;
+        }
+      },
+      interval - (Date.now() - lastExecuted.current)
+    );
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, interval]);
+
+  return throttledValue;
+};
+```
+
+## Usage
+
+```tsx
+import { useThrottle } from "@/hooks/useThrottle";
+import { useState, useEffect } from "react";
+
+const WindowResizeLogger = () => {
+  const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
+  const throttledWidth = useThrottle(width, 500);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <div>
+      <p>Actual Width: {width}px</p>
+      <p>Throttled Width (updates every 500ms): {throttledWidth}px</p>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `value` | `T` | The value to be throttled. |
+| `interval` | `number` | The time interval (in milliseconds) to wait before updating the value again. |
+
+### Return Value
+
+| Type | Description |
+| :--- | :--- |
+| `T` | The most recent value that passed the throttle check. |

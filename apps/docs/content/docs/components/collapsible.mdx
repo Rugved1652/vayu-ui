@@ -1,0 +1,79 @@
+---
+title: Collapsible
+description: A toggleable content section with smooth height animation, multiple variants, and group support.
+---
+
+import CollapsibleDemo from '@/components/demos/collapsible-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <CollapsibleDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Collapsible } from "@/components/ui/collapsible"
+
+    export function Example() {
+      return (
+        <Collapsible trigger="Click to expand" variant="bordered">
+          Hidden content revealed on toggle.
+        </Collapsible>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/collapsible.tsx"
+// Copy the full component code
+```
+
+## Variants
+
+### Default
+Transparent background with subtle hover state.
+
+### Bordered
+Card-like styling with border and background.
+
+### Filled
+Shaded background for visual grouping.
+
+## Collapsible.Group
+
+Wrapping multiple `Collapsible` items in `Collapsible.Group` enables accordion behavior — only one item open at a time by default. Set `allowMultiple` to let multiple items stay open.
+
+## Props
+
+### Collapsible
+
+| Prop               | Type                             | Default     | Description                              |
+| :----------------- | :------------------------------- | :---------- | :--------------------------------------- |
+| `trigger`          | `ReactNode`                      | —           | Content rendered in the trigger button.  |
+| `children`         | `ReactNode`                      | —           | Collapsible content.                     |
+| `defaultOpen`      | `boolean`                        | `false`     | Initially open (uncontrolled).           |
+| `open`             | `boolean`                        | —           | Controlled open state.                   |
+| `onOpenChange`     | `(open: boolean) => void`        | —           | Callback when open state changes.        |
+| `variant`          | `default \| bordered \| filled`  | `default`   | Visual variant.                          |
+| `size`             | `sm \| md \| lg`                 | `md`        | Size of trigger and content.             |
+| `disabled`         | `boolean`                        | `false`     | Disable toggling.                        |
+| `icon`             | `ReactNode`                      | auto        | Custom icon (replaces default chevron).  |
+| `iconPosition`     | `left \| right`                  | `right`     | Icon placement.                          |
+| `triggerClassName`  | `string`                        | —           | Extra classes for the trigger.           |
+| `contentClassName`  | `string`                        | —           | Extra classes for the content.           |
+| `animationDuration` | `number`                        | `300`       | Height animation duration (ms).          |
+
+### Collapsible.Group
+
+| Prop              | Type        | Default | Description                                  |
+| :---------------- | :---------- | :------ | :------------------------------------------- |
+| `children`        | `ReactNode` | —       | `Collapsible` items.                         |
+| `allowMultiple`   | `boolean`   | `false` | Allow multiple items open simultaneously.    |
+| `defaultOpenItems`| `number[]`  | `[]`    | Indices of initially open items.             |

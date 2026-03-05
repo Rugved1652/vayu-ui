@@ -1,0 +1,89 @@
+---
+title: useTimeout
+description: A hook to execute a callback function after a specified delay.
+---
+
+import { UseTimeoutDemo } from '@/components/demos/use-timeout-demo';
+
+The `useTimeout` hook allows you to schedule a function to run after a specified delay. It handles setting up the timeout on mount (or dependency change) and cleaning it up on unmount or when dependencies change. It also provides a `clearTimeout` function to cancel the execution manually.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseTimeoutDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useTimeout.ts`:
+
+```tsx
+import { useEffect, useRef } from "react";
+
+export const useTimeout = (callback: () => void, ms: number) => {
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(callback, ms);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [callback, ms]);
+
+  const clearTimeoutHandler = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+  };
+
+  return { clearTimeout: clearTimeoutHandler };
+};
+```
+
+## Usage
+
+```tsx
+import { useTimeout } from "@/hooks/useTimeout";
+import { useState } from "react";
+
+const Notification = () => {
+  const [visible, setVisible] = useState(true);
+
+  // Hide notification after 3 seconds
+  const { clearTimeout } = useTimeout(() => {
+    setVisible(false);
+  }, 3000);
+
+  if (!visible) return null;
+
+  return (
+    <div className="bg-blue-100 p-4 rounded flex justify-between">
+      <span>This message will disappear in 3 seconds.</span>
+      <button onClick={() => {
+          clearTimeout();
+          setVisible(false);
+      }}>
+        Dismiss Now
+      </button>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `callback` | `() => void` | The function to execute when the timeout expires. |
+| `ms` | `number` | The delay in milliseconds. |
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `clearTimeout` | `() => void` | A function to manually cancel the timeout. |

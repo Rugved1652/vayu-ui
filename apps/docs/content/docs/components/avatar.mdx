@@ -1,0 +1,117 @@
+---
+title: Avatar
+description: An image element with a fallback for representing the user.
+---
+
+import AvatarDemo from '@/components/demos/avatar-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
+      <AvatarDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Avatar } from "@/components/ui/avatar";
+
+    // 1. Basic Image Avatar
+    <Avatar size="medium" username="Shadcn">
+      <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
+      <Avatar.Fallback src="/default-user.png" />
+    </Avatar>
+
+    // 2. Initials Fallback (Auto-generated color)
+    <Avatar size="medium" username="Rugved Patel">
+      {/* If image fails or misses, initials typically sit behind it or are used as fallback */}
+      <Avatar.Initials username="Rugved Patel" /> 
+    </Avatar>
+
+    // 3. Status Indicator
+    <Avatar size="medium" username="Online User" status="online">
+      <Avatar.Initials username="Online User" />
+      <Avatar.Status status="online" />
+    </Avatar>
+
+    // 4. Avatar Group
+    <Avatar.Group max={3}>
+        <Avatar username="User 1"><Avatar.Initials username="U1"/></Avatar>
+        <Avatar username="User 2"><Avatar.Initials username="U2"/></Avatar>
+        <Avatar username="User 3"><Avatar.Initials username="U3"/></Avatar>
+        <Avatar username="User 4"><Avatar.Initials username="U4"/></Avatar>
+    </Avatar.Group>
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+### Avatar (Root)
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `size` | `'small' \| 'medium' \| 'large' \| 'xlarge' \| number` | `'medium'` | The size of the avatar container. |
+| `username` | `string` | - | Used for `aria-label` generation. |
+| `status` | `'online' \| 'offline' \| 'away' \| 'busy'` | - | Used for `aria-label` status announcement. |
+| `className` | `string` | - | Additional CSS classes. |
+
+### Avatar.Image
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `src` | `string` | - | The source URL of the image. |
+| `fallbackSrc` | `string` | - | A secondary image URL to use if the text `src` fails. |
+| `alt` | `string` | - | Alt text for the image. |
+
+### Avatar.Initials
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `username` | `string` | - | The name to generate initials and background color from. |
+
+### Avatar.Status
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `status` | `'online' \| 'offline' \| 'away' \| 'busy'` | - | The status to display visually. |
+| `label` | `string` | - | Accessible label for the status. |
+
+## Source Code
+
+```tsx title="src/components/ui/avatar.tsx"
+"use client";
+
+import React, { useMemo, useState, forwardRef, HTMLAttributes } from "react";
+import { clsx } from "clsx";
+
+// ============================================================================
+// Types & Enums
+// ============================================================================
+
+type AvatarSize = "small" | "medium" | "large" | "xlarge";
+
+type AvatarStatus = "online" | "offline" | "away" | "busy";
+
+interface AvatarRootProps extends HTMLAttributes<HTMLSpanElement> {
+    size?: AvatarSize | number;
+    username?: string;
+    alt?: string;
+    status?: AvatarStatus;
+    className?: string;
+    children: React.ReactNode;
+}
+
+interface AvatarImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+    fallbackSrc?: string;
+}
+
+interface AvatarInitialsProps extends HTMLAttributes<HTMLSpanElement> {
+    username: string;
+}
+
+interface AvatarStatusProps extends HTMLAttributes<HTMLSpanElement> {
+    status: AvatarStatus;
+    label?: string; // For custom status text
+}
+
+// ... (Rest of the implementation)
+```

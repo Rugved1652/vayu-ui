@@ -1,0 +1,95 @@
+---
+title: ResizablePane
+description: A compound resizable pane layout with drag handles, keyboard support, and WCAG 2.2 AA separator semantics.
+---
+
+import ResizablePaneDemo from '@/components/demos/resizablepane-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <ResizablePaneDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { ResizablePane } from "@/components/ui/resizablepane"
+
+    export function Example() {
+      return (
+        <div className="h-64">
+          <ResizablePane direction="horizontal">
+            <ResizablePane.Panel defaultSize={30} minSize={15}>
+              Sidebar
+            </ResizablePane.Panel>
+            <ResizablePane.Handle />
+            <ResizablePane.Panel defaultSize={70} minSize={30}>
+              Main content
+            </ResizablePane.Panel>
+          </ResizablePane>
+        </div>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/resizablepane.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- Compound pattern — compose `Panel` and `Handle` sub-components
+- Horizontal and vertical layouts
+- Percentage-based sizing with min / max constraints
+- Mouse and touch drag support (with body cursor lock)
+- `role="separator"` with `aria-valuenow` / `aria-valuemin` / `aria-valuemax`
+- Keyboard: Arrow keys (2% step), Shift+Arrow (10% step), Home / End (collapse / expand)
+- Visual grip dots on handles
+- Multiple panels (3+) with independent handles
+- `forwardRef` on all sub-components
+
+## Sub-components
+
+| Component | Description |
+|:----------|:------------|
+| `ResizablePane` | Root — flex container + context provider |
+| `ResizablePane.Panel` | Sized panel section |
+| `ResizablePane.Handle` | Draggable separator between panels |
+
+## ResizablePane Props
+
+| Prop        | Type                         | Default        | Description     |
+| :---------- | :--------------------------- | :------------- | :-------------- |
+| `direction` | `horizontal \| vertical`     | `"horizontal"` | Layout direction |
+
+## Panel Props
+
+| Prop          | Type     | Default | Description            |
+| :------------ | :------- | :------ | :--------------------- |
+| `defaultSize` | `number` | `50`    | Initial size (%)       |
+| `minSize`     | `number` | `10`    | Minimum size (%)       |
+| `maxSize`     | `number` | `90`    | Maximum size (%)       |
+
+## Handle Props
+
+| Prop         | Type     | Default | Description                      |
+| :----------- | :------- | :------ | :------------------------------- |
+| `step`       | `number` | `2`     | Keyboard step size (%)           |
+| `aria-label` | `string` | Auto    | Accessible label for the handle  |
+
+## Keyboard Shortcuts
+
+| Key              | Action               |
+| :--------------- | :------------------- |
+| `← ↑`            | Shrink panel before  |
+| `→ ↓`            | Expand panel before  |
+| `Shift + Arrow`  | 5× bigger step       |
+| `Home`           | Collapse to min      |
+| `End`            | Expand to max        |

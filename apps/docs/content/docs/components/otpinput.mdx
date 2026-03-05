@@ -1,0 +1,86 @@
+---
+title: OTP Input
+description: An accessible one-time password input component.
+---
+
+import OTPInputDemo from '@/components/demos/otpinput-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <OTPInputDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { OTPGroup, OTPInput, OTPSeparator, OTPSlot } from "@/components/ui/otpinput"
+
+    export function OTPInputDemo() {
+      return (
+        <OTPInput maxLength={6}>
+            <OTPGroup>
+                <OTPSlot index={0} />
+                <OTPSlot index={1} />
+                <OTPSlot index={2} />
+            </OTPGroup>
+            <OTPSeparator />
+            <OTPGroup>
+                <OTPSlot index={3} />
+                <OTPSlot index={4} />
+                <OTPSlot index={5} />
+            </OTPGroup>
+        </OTPInput>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+Add the component to your project.
+
+```tsx title="src/components/ui/otpinput.tsx"
+"use client"
+ 
+import React, {
+    createContext,
+    forwardRef,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react"
+import { clsx } from "clsx"
+ 
+// ... (Copy full component code)
+```
+
+## Anatomy
+
+```tsx
+<OTPInput>
+  <OTPGroup>
+    <OTPSlot />
+  </OTPGroup>
+  <OTPSeparator />
+  <OTPGroup>
+    <OTPSlot />
+  </OTPGroup>
+</OTPInput>
+```
+
+## Props
+
+### OTPInput
+
+| Prop           | Type                       | Default | Description                                      |
+| :------------- | :------------------------- | :------ | :----------------------------------------------- |
+| `value`        | `string`                   | -       | Controlled value.                                |
+| `onChange`     | `(value: string) => void`  | -       | Callback when value changes.                     |
+| `maxLength`    | `number`                   | `6`     | Maximum length of the code.                      |
+| `onComplete`   | `(code: string) => void`   | -       | Callback when maxLength is reached.              |
+| `autoFocus`    | `boolean`                  | `false` | Whether to auto-focus on mount.                  |

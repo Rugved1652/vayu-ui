@@ -1,0 +1,71 @@
+---
+title: Select
+description: A flexible dropdown select with single, multi, grouped, searchable, and creatable modes.
+---
+
+import SelectDemo from '@/components/demos/select-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4">
+      <SelectDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import Select from "@/components/ui/select"
+
+    // Single
+    <Select options={fruits} placeholder="Pick one…" searchable clearable />
+
+    // Multi
+    <Select options={techs} multiple placeholder="Choose…" />
+    ```
+  </Tab>
+</Tabs>
+
+## Features
+
+- Single and multi-select modes
+- Searchable dropdown with keyboard navigation
+- Grouped options with section headers
+- Creatable — let users add new options on the fly
+- Async — load options from an API with debounce
+- Error, disabled, and loading states
+- Custom sizes (`sm`, `md`, `lg`) and variants (`default`, `outline`, `filled`)
+
+## Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `options` | `SelectOption[]` | `[]` | Available options |
+| `value` | `string \| number \| null` or `(string \| number)[]` | — | Controlled value |
+| `onChange` | `(val) => void` | — | Change handler |
+| `multiple` | `boolean` | `false` | Enable multi-select |
+| `placeholder` | `string` | `"Select..."` | Placeholder text |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Trigger size |
+| `variant` | `'default' \| 'outline' \| 'filled'` | `'default'` | Visual variant |
+| `searchable` | `boolean` | `false` | Show search input |
+| `clearable` | `boolean` | `false` | Show clear button |
+| `creatable` | `boolean` | `false` | Allow creating options |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `error` | `boolean` | `false` | Show error styling |
+| `errorText` | `string` | — | Error message |
+| `label` | `string` | — | Accessible label |
+| `maxSelected` | `number` | — | Max selections (multi only) |
+
+### SelectOption
+
+```tsx
+interface SelectOption {
+  label: string;
+  value: string | number;
+  disabled?: boolean;
+  icon?: React.ReactNode;
+  description?: string;
+  group?: string;
+}
+```

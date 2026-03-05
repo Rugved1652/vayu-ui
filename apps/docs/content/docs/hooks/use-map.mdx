@@ -1,0 +1,89 @@
+---
+title: useMap
+description: A hook to manage a Map state with utility functions.
+---
+
+import { UseMapDemo } from '@/components/demos/use-map-demo';
+
+The `useMap` hook provides a convenient way to manage a `Map` state in React. It offers methods to set, remove, clear, and check for the existence of keys, triggering re-renders as expected.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseMapDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useMap.ts`:
+
+```tsx
+import { useState } from "react";
+
+export const useMap = <K, V>(initialEntries?: [K, V][]) => {
+  const [map, setMap] = useState(new Map<K, V>(initialEntries));
+
+  const set = (key: K, value: V) => {
+    setMap((prev) => new Map(prev).set(key, value));
+  };
+
+  const remove = (key: K) => {
+    setMap((prev) => {
+      const newMap = new Map(prev);
+      newMap.delete(key);
+      return newMap;
+    });
+  };
+
+  const clear = () => {
+    setMap(new Map());
+  };
+
+  const has = (key: K) => map.has(key);
+
+  return { map, set, remove, clear, has };
+};
+```
+
+## Usage
+
+```tsx
+import { useMap } from "@/hooks/useMap";
+
+const MyComponent = () => {
+  const { map, set, remove, clear } = useMap([
+    ["key1", "value1"],
+    ["key2", "value2"],
+  ]);
+
+  return (
+    <div>
+      <button onClick={() => set("newKey", "newValue")}>Add</button>
+      <button onClick={() => remove("key1")}>Remove key1</button>
+      <button onClick={clear}>Clear All</button>
+      
+      <pre>
+        {JSON.stringify(Array.from(map.entries()), null, 2)}
+      </pre>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `initialEntries` | `[K, V][]` | Optional. Initial entries for the map. |
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `map` | `Map<K, V>` | The current Map object. |
+| `set` | `(key: K, value: V) => void` | Sets a value for a key in the Map. |
+| `remove` | `(key: K) => void` | Removes a key from the Map. |
+| `clear` | `() => void` | Removes all entries from the Map. |
+| `has` | `(key: K) => boolean` | Checks if a key exists in the Map. |

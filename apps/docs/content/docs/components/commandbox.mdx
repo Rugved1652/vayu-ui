@@ -1,0 +1,85 @@
+---
+title: CommandBox
+description: A command palette for quick navigation, search, and actions with keyboard support.
+---
+
+import CommandBoxDemo from '@/components/demos/commandbox-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <CommandBoxDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { CommandBox } from "@/components/ui/commandbox"
+
+    const items = [
+      { id: "home", title: "Go to Home", shortcut: ["⌘", "H"] },
+      { id: "search", title: "Search", shortcut: ["⌘", "K"] },
+    ]
+
+    export function Example() {
+      return (
+        <CommandBox
+          items={items}
+          onSelect={(item) => console.log(item.title)}
+        />
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+Copy the component file into your project:
+
+```tsx title="src/components/ui/commandbox.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- **Keyboard Navigation** — Arrow keys, Enter to select, Escape to close
+- **Search Filtering** — Real-time filtering with pluggable filter function
+- **Grouping** — Auto-group items via `group` property or explicit `groups` prop
+- **Shortcuts** — Display keyboard shortcuts next to items
+- **Variants** — `default`, `bordered`, `elevated`, `minimal`
+
+## Props
+
+### CommandBox
+
+| Prop             | Type                                | Default                         | Description                              |
+| :--------------- | :---------------------------------- | :------------------------------ | :--------------------------------------- |
+| `items`          | `CommandItem[]`                     | `[]`                            | Flat list of command items.              |
+| `groups`         | `CommandGroup[]`                    | `[]`                            | Grouped command items.                   |
+| `placeholder`    | `string`                            | `"Type a command or search..."` | Search input placeholder.                |
+| `emptyText`      | `string`                            | `"No results found."`           | Text shown when no results match.        |
+| `variant`        | `default \| bordered \| elevated \| minimal` | `default`              | Visual variant.                          |
+| `size`           | `small \| medium \| large`          | `medium`                        | Size of the command box.                 |
+| `open`           | `boolean`                           | `false`                         | Control open state.                      |
+| `onOpenChange`   | `(open: boolean) => void`           | —                               | Callback when open state changes.        |
+| `onSelect`       | `(item: CommandItem) => void`       | —                               | Callback when an item is selected.       |
+| `filter`         | `(value, search) => number`         | built-in                        | Custom filter function.                  |
+| `disabled`       | `boolean`                           | `false`                         | Disable the command box.                 |
+| `showShortcuts`  | `boolean`                           | `true`                          | Show keyboard shortcuts on items.        |
+| `maxHeight`      | `string`                            | `"400px"`                       | Max height of the dropdown.              |
+
+### CommandItem
+
+| Property      | Type         | Description                          |
+| :------------ | :----------- | :----------------------------------- |
+| `id`          | `string`     | Unique identifier.                   |
+| `title`       | `string`     | Display title.                       |
+| `description` | `string`     | Optional description text.           |
+| `icon`        | `ReactNode`  | Optional icon element.               |
+| `shortcut`    | `string[]`   | Keyboard shortcut keys to display.   |
+| `group`       | `string`     | Group name for auto-grouping.        |
+| `disabled`    | `boolean`    | Disable this item.                   |
+| `onSelect`    | `() => void` | Item-level select callback.          |

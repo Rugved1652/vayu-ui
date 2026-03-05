@@ -1,0 +1,78 @@
+---
+title: useVisibilityChange
+description: A hook to track the visibility state of the document.
+---
+
+import { UseVisibilityChangeDemo } from '@/components/demos/use-visibility-change-demo';
+
+The `useVisibilityChange` hook returns a boolean indicating whether the document is currently visible or hidden. This uses the Page Visibility API and is useful for pausing expensive operations, analytics tracking, or resource management when the user switches tabs or minimizes the window.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseVisibilityChangeDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useVisibilityChange.ts`:
+
+```tsx
+import { useState, useEffect } from "react";
+
+export const useVisibilityChange = (): boolean => {
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsVisible(!document.hidden);
+    };
+
+    // Set initial value
+    setIsVisible(!document.hidden);
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  return isVisible;
+};
+```
+
+## Usage
+
+```tsx
+import { useVisibilityChange } from "@/hooks/useVisibilityChange";
+import { useEffect } from "react";
+
+const VideoPlayer = () => {
+  const isVisible = useVisibilityChange();
+
+  useEffect(() => {
+    if (isVisible) {
+      console.log("Resuming video...");
+      // videoRef.current.play();
+    } else {
+      console.log("Pausing video...");
+      // videoRef.current.pause();
+    }
+  }, [isVisible]);
+
+  return (
+    <div>
+      <p>Video Status: {isVisible ? "Playing" : "Paused"}</p>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Return Value
+
+| Type | Description |
+| :--- | :--- |
+| `boolean` | `true` if the document is visible, `false` otherwise. |

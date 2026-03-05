@@ -1,0 +1,91 @@
+---
+title: Navbar
+description: A responsive, accessible navigation bar with compound components.
+---
+
+import NavbarDemo from '@/components/demos/navbar-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4">
+      <NavbarDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Navbar } from "@/components/ui/navbar"
+    import { Button } from "@/components/ui/button"
+
+    <Navbar sticky>
+      <Navbar.Container>
+        <Navbar.Brand>Acme</Navbar.Brand>
+
+        <Navbar.Items>
+          <Navbar.Item active>Home</Navbar.Item>
+          <Navbar.Item>About</Navbar.Item>
+        </Navbar.Items>
+
+        <Navbar.Actions>
+          <Button variant="primary" size="small">
+            <Button.Text>CTA</Button.Text>
+          </Button>
+        </Navbar.Actions>
+
+        <Navbar.Toggle />
+      </Navbar.Container>
+
+      <Navbar.MobileMenu>
+        <Navbar.MobileItem active>Home</Navbar.MobileItem>
+        <Navbar.MobileItem>About</Navbar.MobileItem>
+      </Navbar.MobileMenu>
+    </Navbar>
+    ```
+  </Tab>
+</Tabs>
+
+## Accessibility (WCAG 2.2 AA)
+
+- `aria-label="Main navigation"` on `<nav>`
+- `aria-expanded` and `aria-controls` on hamburger toggle
+- Focus trap inside mobile menu panel
+- Escape key closes mobile menu
+- `aria-current="page"` on active items
+- All interactive elements have visible focus rings (`focus-visible:ring-2`)
+- Body scroll lock when mobile menu is open
+
+## Compound Components
+
+| Component | Description |
+|:----------|:------------|
+| `Navbar` | Root `<nav>` element with context provider |
+| `Navbar.Container` | Max-width + padding wrapper |
+| `Navbar.Brand` | Logo / brand slot |
+| `Navbar.Items` | Desktop link group (`role="menubar"`) |
+| `Navbar.Item` | Individual nav link |
+| `Navbar.Actions` | Right-side slot (buttons, avatars) |
+| `Navbar.Toggle` | Mobile hamburger button |
+| `Navbar.MobileMenu` | Slide-in panel with backdrop |
+| `Navbar.MobileItem` | Mobile nav link |
+| `Navbar.Separator` | Divider inside mobile menu |
+
+## Navbar Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `variant` | `'default' \| 'floating' \| 'bordered'` | `'default'` | Visual style |
+| `sticky` | `boolean` | `false` | Stick to top of viewport |
+
+## Container Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `maxWidth` | `'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | `'xl'` | Max container width |
+
+## Item Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `active` | `boolean` | `false` | Highlights as current page |

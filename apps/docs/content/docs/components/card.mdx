@@ -1,0 +1,104 @@
+---
+title: Card
+description: A compound card component with header, media, content, footer, and badge sub-components. Supports variants, sizes, linked and interactive cards.
+---
+
+import CardDemo from '@/components/demos/card-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <CardDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import {
+      Card, CardHeader, CardMedia,
+      CardContent, CardFooter, CardBadge,
+    } from "@/components/ui/card"
+
+    export function Example() {
+      return (
+        <Card>
+          <CardMedia src="/photo.jpg" alt="Photo" />
+          <CardHeader
+            title="Title"
+            subtitle="Subtitle"
+            action={<CardBadge>New</CardBadge>}
+          />
+          <CardContent>Body text.</CardContent>
+          <CardFooter>
+            <button>Action</button>
+          </CardFooter>
+        </Card>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/card.tsx"
+// Copy the full component code
+```
+
+## Sub-components
+
+| Component       | Description                                                |
+| :-------------- | :--------------------------------------------------------- |
+| `Card`          | Root container. Renders `<div>`, `<a>`, or interactive div |
+| `CardHeader`    | Title, subtitle, optional avatar and trailing action       |
+| `CardMedia`     | Responsive image with optional overlay                     |
+| `CardContent`   | Body text area                                             |
+| `CardFooter`    | Bottom bar with alignment control                          |
+| `CardBadge`     | Colored label chip                                         |
+
+## Props
+
+### Card
+
+| Prop          | Type                                          | Default     | Description                          |
+| :------------ | :-------------------------------------------- | :---------- | :----------------------------------- |
+| `variant`     | `elevated \| outlined \| filled \| ghost`     | `elevated`  | Visual style.                        |
+| `size`        | `sm \| md \| lg`                              | `md`        | Padding & gap.                       |
+| `radius`      | `none \| sm \| md \| lg \| xl \| full`        | `lg`        | Border radius.                       |
+| `interactive` | `boolean`                                     | `false`     | Make clickable with keyboard support.|
+| `href`        | `string`                                      | —           | Render as `<a>`.                     |
+| `target`      | `string`                                      | —           | Link target.                         |
+| `disabled`    | `boolean`                                     | `false`     | Disable interactions.                |
+
+### CardHeader
+
+| Prop       | Type          | Description                        |
+| :--------- | :------------ | :--------------------------------- |
+| `title`    | `ReactNode`   | Main heading.                      |
+| `subtitle` | `ReactNode`   | Secondary text.                    |
+| `action`   | `ReactNode`   | Trailing element (badge, button).  |
+| `avatar`   | `ReactNode`   | Leading icon or avatar.            |
+
+### CardMedia
+
+| Prop          | Type                             | Default  | Description             |
+| :------------ | :------------------------------- | :------- | :---------------------- |
+| `src`         | `string`                         | —        | Image URL.              |
+| `alt`         | `string`                         | —        | Image alt text.         |
+| `aspectRatio` | `string`                         | `"16/9"` | CSS aspect-ratio.       |
+| `fit`         | `cover \| contain \| fill`       | `cover`  | Object-fit.             |
+| `overlay`     | `ReactNode`                      | —        | Content over the image. |
+
+### CardFooter
+
+| Prop    | Type                                  | Default | Description           |
+| :------ | :------------------------------------ | :------ | :-------------------- |
+| `align` | `start \| center \| end \| between`  | `end`   | Horizontal alignment. |
+
+### CardBadge
+
+| Prop    | Type                                                          | Default   | Description   |
+| :------ | :------------------------------------------------------------ | :-------- | :------------ |
+| `color` | `primary \| secondary \| success \| warning \| error \| info`| `primary` | Badge color.  |

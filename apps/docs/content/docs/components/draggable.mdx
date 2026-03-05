@@ -1,0 +1,79 @@
+---
+title: Draggable
+description: An animated sortable drag-and-drop list with keyboard support, live announcements, and WCAG 2.2 AA compliance.
+---
+
+import DraggableDemo from '@/components/demos/draggable-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <DraggableDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { DraggableList, DragHandle } from "@/components/ui/draggable"
+
+    const [items, setItems] = useState([
+      { id: "1", label: "First" },
+      { id: "2", label: "Second" },
+      { id: "3", label: "Third" },
+    ])
+
+    <DraggableList items={items} onReorder={setItems} aria-label="My list">
+      {(item, { dragHandleProps }) => (
+        <div className="flex items-center gap-2 p-3 border rounded-lg">
+          <DragHandle handleProps={dragHandleProps} />
+          <span>{item.label}</span>
+        </div>
+      )}
+    </DraggableList>
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/draggable.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- Render-prop pattern — full control over item rendering
+- Mouse and touch drag with animated visual clone
+- CSS transform displacement animations (cubic-bezier spring)
+- Keyboard sort: Space to grab, Arrow keys to move, Space to drop, Escape to cancel
+- Screen reader: `role="listbox"` / `role="option"` / `aria-roledescription="sortable item"`
+- `aria-live="assertive"` live region for position announcements
+- `DragHandle` convenience component with grip icon
+- Vertical and horizontal layouts
+
+## DraggableList Props
+
+| Prop         | Type                                                        | Default        | Description        |
+| :----------- | :---------------------------------------------------------- | :------------- | :----------------- |
+| `items`      | `T[]` (each needs `id: string`)                             | —              | Items array        |
+| `onReorder`  | `(items: T[]) => void`                                      | —              | Reorder callback   |
+| `direction`  | `vertical \| horizontal \| grid`                            | `"vertical"`   | Layout direction   |
+| `columns`    | `number`                                                    | `3`            | Grid columns (grid mode only) |
+| `children`   | `(item, { dragHandleProps, isDragging, isOver }) => ReactNode` | —           | Render function    |
+| `aria-label` | `string`                                                    | `"Sortable list"` | List label      |
+
+## DragHandle Props
+
+| Prop          | Type            | Description                          |
+| :------------ | :-------------- | :----------------------------------- |
+| `handleProps` | `DragHandleProps` | Pass through from render function  |
+
+## Keyboard Shortcuts
+
+| Key               | Action                    |
+| :----------------- | :----------------------- |
+| `Space` / `Enter`  | Grab or drop item        |
+| `↑ ↓` / `← →`     | Move grabbed item        |
+| `Escape`           | Cancel reorder           |

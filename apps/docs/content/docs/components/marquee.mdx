@@ -1,0 +1,72 @@
+---
+title: Marquee
+description: An infinite scrolling component for showcasing logos, testimonials, or any other content.
+---
+
+import MarqueeDemo from '@/components/demos/marquee-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <MarqueeDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Marquee, MarqueeContent, MarqueeItem } from "@/components/ui/marquee"
+
+    export function MarqueeDemo() {
+      return (
+        <Marquee>
+          <MarqueeContent>
+            {/* Your content here */}
+            {["Item 1", "Item 2", "Item 3"].map((item) => (
+              <MarqueeItem key={item} className="mx-4">
+                {item}
+              </MarqueeItem>
+            ))}
+          </MarqueeContent>
+        </Marquee>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+Add the component to your project.
+
+```tsx title="src/components/ui/marquee.tsx"
+import { clsx } from "clsx";
+import React, { forwardRef } from "react";
+ 
+// ... (Copy full component code)
+```
+
+## Anatomy
+
+```tsx
+<Marquee speed="normal" direction="left" pauseOnHover>
+  <MarqueeContent>
+    <MarqueeItem>
+      Content...
+    </MarqueeItem>
+  </MarqueeContent>
+</Marquee>
+```
+
+## Props
+
+### Marquee
+
+| Prop           | Type                       | Default  | Description                                      |
+| :------------- | :------------------------- | :------- | :----------------------------------------------- |
+| `speed`        | `"slow" | "normal" | "fast"` | `"normal"` | Speed of the animation.                           |
+| `direction`    | `"left" | "right"`         | `"left"` | Direction of the animation.                       |
+| `pauseOnHover` | `boolean`                  | `true`   | Whether to pause the animation when hovering.    |
+| `gradient`     | `boolean`                  | `true`   | Whether to show fade gradient on edges.          |
+

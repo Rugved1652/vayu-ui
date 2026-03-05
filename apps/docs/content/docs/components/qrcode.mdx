@@ -1,0 +1,63 @@
+---
+title: QRCode
+description: A pure TypeScript QR code generator for React with support for logos, custom colors, and error correction levels.
+---
+
+import QRCodeDemo from '@/components/demos/qrcode-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <QRCodeDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { QRCode } from "@/components/ui/qrcode"
+
+    <QRCode
+      value="https://example.com"
+      size={200}
+      level="M"
+      bgColor="#ffffff"
+      fgColor="#000000"
+    />
+    ```
+  </Tab>
+</Tabs>
+
+## Features
+
+- Pure TypeScript implementation (no external QR libraries)
+- Supports logos/images in the center (with optional excavation)
+- Customizable colors (foreground and background)
+- Configurable error correction levels (L, M, Q, H)
+- Responsive and accessible (`role="img"`, `aria-label`)
+- SVG-based rendering for crisp scaling
+
+## Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `value` | `string` | — | The data to encode |
+| `size` | `number` | `200` | Size in pixels |
+| `level` | `'L' \| 'M' \| 'Q' \| 'H'` | `'M'` | Error correction level |
+| `bgColor` | `string` | `'white'` | Background color |
+| `fgColor` | `string` | `'black'` | Module color |
+| `includeMargin` | `boolean` | `true` | Add quiet zone |
+| `imageSettings` | `QRCodeImageSettings` | — | Center logo config |
+| `className` | `string` | — | Class for wrapper div |
+
+### QRCodeImageSettings
+
+```tsx
+interface QRCodeImageSettings {
+  src: string;      // Image URL
+  width: number;    // Width in pixels
+  height: number;   // Height in pixels
+  excavate?: boolean; // Clear modules behind image
+}
+```

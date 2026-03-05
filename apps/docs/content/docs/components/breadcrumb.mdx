@@ -1,0 +1,76 @@
+---
+title: Breadcrumb
+description: Displays the path to the current resource using a hierarchy of links.
+---
+
+import BreadcrumbDemo from '@/components/demos/breadcrumb-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <BreadcrumbDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import {
+      Breadcrumb,
+      BreadcrumbItem,
+      BreadcrumbLink,
+      BreadcrumbList,
+      BreadcrumbPage,
+      BreadcrumbSeparator,
+    } from "@/components/ui/breadcrumb"
+
+    export function BreadcrumbDemo() {
+      return (
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+Add the component to your project.
+
+```tsx title="src/components/ui/breadcrumb.tsx"
+import { ChevronRight, MoreHorizontal } from "lucide-react"
+import { Slot } from "@radix-ui/react-slot"
+ 
+// ... (Copy full component code)
+```
+
+## Anatomy
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage />
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```

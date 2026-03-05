@@ -1,0 +1,89 @@
+---
+title: useIdle
+description: A hook that detects if the user is idle based on activity events.
+---
+
+import { UseIdleDemo } from '@/components/demos/use-idle-demo';
+
+The `useIdle` hook allows you to detect when a user has been inactive for a specified period of time. It listens for events like mouse movement, scrolling, and key presses to reset the idle timer.
+
+This is useful for:
+- Automatically logging out inactive users
+- Showing a "Are you still there?" modal
+- Pausing background syncs or animations to save resources
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseIdleDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useIdle.ts`:
+
+```tsx
+import { useState, useEffect, useRef } from "react";
+
+export const useIdle = (timeout: number) => {
+  const [isIdle, setIsIdle] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const resetTimer = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIsIdle(false);
+    timeoutRef.current = setTimeout(() => setIsIdle(true), timeout);
+  };
+
+  useEffect(() => {
+    const events = ["mousemove", "keydown", "wheel", "touchstart", "scroll"];
+
+    resetTimer(); // Initialize the timer on mount
+
+    events.forEach((event) => window.addEventListener(event, resetTimer));
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeout]);
+
+  return isIdle;
+};
+```
+
+## Usage
+
+```tsx
+import { useIdle } from "@/hooks/useIdle";
+
+const IdleMonitor = () => {
+  // Set timeout to 5 minutes (300000ms)
+  const isIdle = useIdle(300000);
+
+  return (
+    <div>
+      {isIdle ? (
+        <p>You have been idle for a while.</p>
+      ) : (
+        <p>User is active.</p>
+      )}
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `timeout` | `number` | The time in milliseconds to wait before considering the user idle. |
+
+### Return Value
+
+| Type | Description |
+| :--- | :--- |
+| `boolean` | Returns `true` if the user is idle, `false` otherwise. |

@@ -1,0 +1,84 @@
+---
+title: useOnClickOutside
+description: A hook that handles clicking outside of a specified element.
+---
+
+import { UseOnClickOutsideDemo } from '@/components/demos/use-on-click-outside-demo';
+
+The `useOnClickOutside` hook allows you to detect clicks outside of a specific element (referenced by a `ref`). This is commonly used for closing modals, dropdowns, or popovers when the user clicks elsewhere on the page.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseOnClickOutsideDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useOnClickOutside.ts`:
+
+```tsx
+import { useEffect, RefObject } from "react";
+
+type EventType = MouseEvent | TouchEvent | PointerEvent;
+
+export const useOnClickOutside = (
+  ref: RefObject<HTMLElement>,
+  handler: (event: EventType) => void
+) => {
+  useEffect(() => {
+    const listener = (event: EventType) => {
+      // Do nothing if clicking ref's element or descendant elements
+      if (!ref.current || ref.current.contains(event.target as Node)) {
+        return;
+      }
+      handler(event);
+    };
+
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+    document.addEventListener("pointerdown", listener);
+
+    return () => {
+      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
+      document.removeEventListener("pointerdown", listener);
+    };
+  }, [ref, handler]);
+};
+```
+
+## Usage
+
+```tsx
+import { useState, useRef } from "react";
+import { useOnClickOutside } from "@/hooks/useOnClickOutside";
+
+const Dropdown = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef(null);
+
+  useOnClickOutside(ref, () => setIsOpen(false));
+
+  return (
+    <div>
+      <button onClick={() => setIsOpen(true)}>Open Dropdown</button>
+      
+      {isOpen && (
+        <div ref={ref} className="dropdown-menu">
+          <p>Dropdown content</p>
+        </div>
+      )}
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `ref` | `RefObject<HTMLElement>` | A ref identifying the element to detect outside clicks for. |
+| `handler` | `(event: MouseEvent \| TouchEvent \| PointerEvent) => void` | A callback function to execute when a click outside the element is detected. |

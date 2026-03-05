@@ -1,0 +1,61 @@
+---
+title: Tooltip
+description: A portal-rendered tooltip with positions, colour variants, keyboard & focus support, and screen-reader announcement via aria-describedby.
+---
+
+import TooltipDemo from '@/components/demos/tooltip-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <TooltipDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Tooltip } from "@/components/ui/tooltip"
+
+    export function Example() {
+      return (
+        <Tooltip content="Save changes" position="top">
+          <button>Save</button>
+        </Tooltip>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/tooltip.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- Portal-rendered with viewport clamping
+- Four positions — `top`, `bottom`, `left`, `right`
+- Seven colour variants — `default`, `primary`, `secondary`, `success`, `warning`, `error`, `info`
+- Directional arrow with variant-matched colour
+- `aria-describedby` linking trigger to tooltip (`useId`)
+- Focus & blur triggers for keyboard users
+- Escape key dismisses tooltip
+- Configurable show delay
+- Disabled state
+- `forwardRef` for ref forwarding
+
+## Props
+
+| Prop        | Type                                                                     | Default     | Description                  |
+| :---------- | :----------------------------------------------------------------------- | :---------- | :--------------------------- |
+| `content`   | `ReactNode`                                                              | —           | Tooltip content              |
+| `position`  | `top \| bottom \| left \| right`                                         | `"top"`     | Placement                    |
+| `delay`     | `number`                                                                 | `200`       | Show delay (ms)              |
+| `variant`   | `default \| primary \| secondary \| success \| warning \| error \| info` | `"default"` | Colour variant               |
+| `disabled`  | `boolean`                                                                | `false`     | Disable tooltip              |
+| `showArrow` | `boolean`                                                                | `true`      | Show directional arrow       |
+| `className` | `string`                                                                 | —           | Class on trigger wrapper     |

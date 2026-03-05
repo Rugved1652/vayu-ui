@@ -1,0 +1,83 @@
+---
+title: FileUpload
+description: A drag-and-drop file upload with previews, progress bars, validation, and ARIA-compliant keyboard interaction.
+---
+
+import FileUploadDemo from '@/components/demos/fileupload-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <FileUploadDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { FileUpload } from "@/components/ui/fileupload"
+
+    export function Example() {
+      return (
+        <FileUpload
+          label="Upload files"
+          accept="image/*"
+          maxSize={5 * 1024 * 1024}
+          maxFiles={5}
+          autoUpload
+          onUpload={async (files) => {
+            // upload logic
+          }}
+        />
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/fileupload.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- Drag-and-drop with visual feedback
+- Click or keyboard (Enter / Space) to browse
+- File type, size, and count validation
+- Image preview thumbnails
+- Per-file progress bar with `role="progressbar"`
+- Auto-upload mode with simulated progress
+- Error display with `role="alert"`
+- `aria-label` / `aria-labelledby` / `aria-describedby` linking
+- `useId` for label → input association
+- Three variants — `default`, `bordered`, `minimal`
+- Three sizes — `sm`, `md`, `lg`
+- `forwardRef` for ref forwarding
+
+## Props
+
+| Prop            | Type                                      | Default                           | Description                    |
+| :-------------- | :---------------------------------------- | :-------------------------------- | :----------------------------- |
+| `accept`        | `string`                                  | —                                 | Accepted MIME types / extensions |
+| `maxSize`       | `number`                                  | `5242880` (5 MB)                  | Max file size in bytes         |
+| `maxFiles`      | `number`                                  | `10`                              | Max number of files            |
+| `minFiles`      | `number`                                  | `0`                               | Min required files             |
+| `multiple`      | `boolean`                                 | `true`                            | Allow multiple files           |
+| `disabled`      | `boolean`                                 | `false`                           | Disable upload                 |
+| `autoUpload`    | `boolean`                                 | `false`                           | Upload immediately on drop     |
+| `onFilesChange` | `(files: File[]) => void`                 | —                                 | Files added callback           |
+| `onUpload`      | `(files: File[]) => Promise<void>`        | —                                 | Upload handler                 |
+| `onError`       | `(error: string) => void`                 | —                                 | Error callback                 |
+| `onRemove`      | `(fileId: string) => void`                | —                                 | File removed callback          |
+| `variant`       | `default \| bordered \| minimal`          | `"default"`                       | Visual variant                 |
+| `size`          | `sm \| md \| lg`                          | `"md"`                            | Size                           |
+| `label`         | `string`                                  | —                                 | Label text                     |
+| `description`   | `string`                                  | —                                 | Helper description             |
+| `uploadText`    | `string`                                  | `"Click to upload or drag…"`      | Drop zone text                 |
+| `dropText`      | `string`                                  | `"Drop files here"`               | Text shown while dragging      |
+| `showPreview`   | `boolean`                                 | `true`                            | Show image previews            |
+| `showProgress`  | `boolean`                                 | `true`                            | Show progress bars             |
+| `allowRemove`   | `boolean`                                 | `true`                            | Show remove buttons            |

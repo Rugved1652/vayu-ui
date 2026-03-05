@@ -1,0 +1,48 @@
+---
+title: Switch
+description: A control that allows the user to toggle between checked and not checked.
+---
+
+import SwitchDemo from '@/components/demos/switch-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4">
+      <SwitchDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Switch } from "@/components/ui/switch"
+
+    <Switch 
+        label="Airplane Mode" 
+        description="Disable all wireless connections."
+        defaultChecked
+    />
+    ```
+  </Tab>
+</Tabs>
+
+## Features
+
+- Built on native `input[type="checkbox"]` for full accessibility
+- Supports `label` and `description` props with automatic layout
+- 3 sizes (`sm`, `md`, `lg`)
+- Keyboard navigation & focus rings
+- Error state support
+
+## Props
+
+Extends `InputHTMLAttributes<HTMLInputElement>` (except `size`).
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size |
+| `label` | `ReactNode` | — | Primary Label |
+| `description` | `ReactNode` | — | Helper text |
+| `error` | `boolean` | `false` | Visual error state |
+

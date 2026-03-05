@@ -1,0 +1,88 @@
+---
+title: RadioGroup
+description: A group of radio buttons for selecting a single option from a list.
+---
+
+import RadioGroupDemo from '@/components/demos/radiogroup-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <RadioGroupDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { RadioGroup } from "@/components/ui/radiogroup"
+
+    export function Example() {
+      const [plan, setPlan] = useState("pro")
+
+      return (
+        <RadioGroup
+          label="Subscription Plan"
+          value={plan}
+          onChange={setPlan}
+        >
+          <RadioGroup.Item value="free" label="Free" />
+          <RadioGroup.Item value="pro" label="Pro" />
+          <RadioGroup.Item value="enterprise" label="Enterprise" />
+        </RadioGroup>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+Copy the component file into your project:
+
+```tsx title="src/components/ui/radiogroup.tsx"
+// Copy the full component code
+```
+
+## Variants
+
+### Default
+Standard radio buttons with a circular indicator.
+
+### Card
+Card-style radio options with optional icon and description — great for feature selection.
+
+### Button
+Compact pill-style buttons for inline selections like sizes or categories.
+
+## Props
+
+### RadioGroup
+
+| Prop          | Type                          | Default      | Description                               |
+| :------------ | :---------------------------- | :----------- | :---------------------------------------- |
+| `value`       | `string`                      | —            | Controlled selected value.                |
+| `defaultValue`| `string`                      | `""`         | Uncontrolled default value.               |
+| `onChange`     | `(value: string) => void`     | —            | Callback when selection changes.          |
+| `name`        | `string`                      | auto         | HTML name attribute for the radio group.  |
+| `disabled`    | `boolean`                     | `false`      | Disable all items.                        |
+| `size`        | `sm \| md \| lg`              | `md`         | Size of radio items.                      |
+| `variant`     | `default \| card \| button`   | `default`    | Visual variant.                           |
+| `color`       | `primary \| secondary \| success \| warning \| error \| info` | `primary` | Color theme. |
+| `orientation` | `vertical \| horizontal`      | `vertical`   | Layout direction.                         |
+| `label`       | `string`                      | —            | Group label.                              |
+| `description` | `string`                      | —            | Helper text below label.                  |
+| `error`       | `boolean`                     | `false`      | Show error styling.                       |
+| `errorText`   | `string`                      | —            | Error message text.                       |
+| `required`    | `boolean`                     | `false`      | Mark as required.                         |
+
+### RadioGroup.Item
+
+| Prop          | Type              | Default | Description                           |
+| :------------ | :---------------- | :------ | :------------------------------------ |
+| `value`       | `string`          | —       | Value for this radio option.          |
+| `label`       | `string`          | —       | Label text.                           |
+| `description` | `string`          | —       | Description text (default & card).    |
+| `disabled`    | `boolean`         | `false` | Disable this specific item.           |
+| `icon`        | `ReactNode`       | —       | Icon element (card & button variants).|

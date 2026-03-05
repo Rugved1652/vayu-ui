@@ -1,0 +1,80 @@
+---
+title: Stepper
+description: A flexible stepper and timeline component to visualize progress or workflows.
+---
+
+import StepperDemo from '@/components/demos/stepper-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4">
+      <StepperDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Stepper, Step, StepIndicator, StepContent, StepTitle, StepDescription } from "@/components/ui/stepper"
+
+    <Stepper activeStep={1} orientation="horizontal">
+      <Step>
+        <StepIndicator>1</StepIndicator>
+        <StepContent>
+          <StepTitle>Step 1</StepTitle>
+          <StepDescription>Description</StepDescription>
+        </StepContent>
+      </Step>
+      <Step>
+         <StepIndicator>2</StepIndicator>
+         <StepContent>...</StepContent>
+      </Step>
+    </Stepper>
+    ```
+  </Tab>
+</Tabs>
+
+## Features
+
+- Horizontal & Vertical orientation
+- Interactive steps (clickable)
+- Automatic state management (active, completed, inactive)
+- Custom icons and numbering
+- Compound component pattern for maximum flexibility
+- Accessible (`aria-current`, keyboard navigation)
+
+## Components
+
+| Component | Description |
+|:----------|:------------|
+| `Stepper` | Root container. Manages active step and orientation. |
+| `Step` | Individual step wrapper. Handles connecting lines. |
+| `StepIndicator` | The circle/icon element. Styles changes based on status. |
+| `StepContent` | Container for text content title and description. |
+| `StepTitle` | Title of the step. |
+| `StepDescription` | Helper text or detailed description. |
+
+## Props
+
+### Stepper
+
+| Prop | Type | Default |
+|:-----|:-----|:--------|
+| `activeStep` | `number` | `0` |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `onStepClick` | `(index: number) => void` | — |
+
+### Step
+
+| Prop | Type | Description |
+|:-----|:-----|:------------|
+| `status` | `'active' \| 'completed' \| 'inactive' \| 'error'` | Explicitly override status |
+| `onClick` | `() => void` | Click handler (combines with parent `onStepClick`) |
+
+### StepIndicator
+
+| Prop | Type | Description |
+|:-----|:-----|:------------|
+| `icon` | `ReactNode` | Optional icon to replace the child number/content |
+

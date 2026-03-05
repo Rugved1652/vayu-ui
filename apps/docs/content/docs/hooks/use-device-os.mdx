@@ -1,0 +1,87 @@
+---
+title: useDeviceOS
+description: A hook to detect the user's operating system, browser, device type, and touch capability.
+---
+
+import { UseDeviceOSDemo } from '@/components/demos/use-device-os-demo';
+
+The `useDeviceOS` hook detects the current device's OS, browser, form factor, and touch support from the user agent string. It's SSR-safe and resolves on mount.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseDeviceOSDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useDeviceOS.ts`:
+
+```tsx
+import { useEffect, useState } from "react";
+
+export type OSName = "Windows" | "macOS" | "Linux" | "Android" | "iOS" | "ChromeOS" | "Unknown";
+export type BrowserName = "Chrome" | "Firefox" | "Safari" | "Edge" | "Opera" | "Samsung Internet" | "Unknown";
+export type DeviceType = "mobile" | "tablet" | "desktop";
+
+export interface DeviceOSInfo {
+  os: OSName;
+  browser: BrowserName;
+  deviceType: DeviceType;
+  isTouchDevice: boolean;
+  userAgent: string;
+  isReady: boolean;
+}
+
+export const useDeviceOS = (): DeviceOSInfo => {
+  const [info, setInfo] = useState<DeviceOSInfo>({
+    os: "Unknown", browser: "Unknown", deviceType: "desktop",
+    isTouchDevice: false, userAgent: "", isReady: false,
+  });
+
+  useEffect(() => {
+    const ua = navigator.userAgent;
+    setInfo({
+      os: detectOS(ua),
+      browser: detectBrowser(ua),
+      deviceType: detectDeviceType(ua),
+      isTouchDevice: "ontouchstart" in window || navigator.maxTouchPoints > 0,
+      userAgent: ua,
+      isReady: true,
+    });
+  }, []);
+
+  return info;
+};
+```
+
+## Usage
+
+```tsx
+import { useDeviceOS } from "@/hooks/useDeviceOS";
+
+const PlatformMessage = () => {
+  const { os, browser, deviceType, isReady } = useDeviceOS();
+
+  if (!isReady) return null;
+
+  return (
+    <p>
+      You are on {os} using {browser} ({deviceType})
+    </p>
+  );
+};
+```
+
+## API Reference
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `os` | `OSName` | `"Windows"` \| `"macOS"` \| `"Linux"` \| `"Android"` \| `"iOS"` \| `"ChromeOS"` \| `"Unknown"` |
+| `browser` | `BrowserName` | `"Chrome"` \| `"Firefox"` \| `"Safari"` \| `"Edge"` \| `"Opera"` \| `"Samsung Internet"` \| `"Unknown"` |
+| `deviceType` | `DeviceType` | `"mobile"` \| `"tablet"` \| `"desktop"` |
+| `isTouchDevice` | `boolean` | Whether the device has touch capability |
+| `userAgent` | `string` | Raw user agent string |
+| `isReady` | `boolean` | `true` after client-side detection completes |

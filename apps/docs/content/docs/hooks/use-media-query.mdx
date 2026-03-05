@@ -1,0 +1,80 @@
+---
+title: useMediaQuery
+description: A hook to detect media query matches.
+---
+
+import { UseMediaQueryDemo } from '@/components/demos/use-media-query-demo';
+
+The `useMediaQuery` hook allows you to subscribe to media query changes in React components. It returns `true` if the document matches the media query, and `false` otherwise.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseMediaQueryDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useMediaQuery.ts`:
+
+```tsx
+import { useState, useEffect } from "react";
+
+export const useMediaQuery = (query: string): boolean => {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    // Ensure we are in the browser
+    if (typeof window === "undefined") return;
+
+    const mediaQueryList = window.matchMedia(query);
+    setMatches(mediaQueryList.matches);
+
+    const handler = (event: MediaQueryListEvent) => {
+      setMatches(event.matches);
+    };
+
+    mediaQueryList.addEventListener("change", handler);
+
+    return () => {
+      mediaQueryList.removeEventListener("change", handler);
+    };
+  }, [query]);
+
+  return matches;
+};
+```
+
+## Usage
+
+```tsx
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+
+const ResponsiveComponent = () => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  return (
+    <div>
+      {isDesktop ? (
+        <p>You are on a desktop or large screen.</p>
+      ) : (
+        <p>You are on a mobile device.</p>
+      )}
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `query` | `string` | The media query string to match against (e.g., `(min-width: 768px)`). |
+
+### Return Value
+
+| Type | Description |
+| :--- | :--- |
+| `boolean` | Returns `true` if the media query matches, `false` otherwise. |

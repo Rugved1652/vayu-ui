@@ -1,0 +1,41 @@
+# OS
+**/.DS_Store
+/.idea
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Build outputs
+/dist
+/build
+/out
+/.next/
+*.tsbuildinfo
+
+# Turborepo
+/.turbo
+
+# Logs
+*-debug.log
+*-error.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+*.pem
+.env*.local
+.vercel
+next-env.d.ts
+/tmp
+
+# Oclif
+oclif.manifest.json
+
+# Generated content
+.source

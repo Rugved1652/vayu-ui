@@ -1,0 +1,97 @@
+---
+title: DateTimePicker
+description: A compound date and time picker with calendar grid, keyboard navigation, and WCAG 2.2 AA compliance.
+---
+
+import DateTimePickerDemo from '@/components/demos/datetimepicker-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <DateTimePickerDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { DateTimePicker } from "@/components/ui/datetimepicker"
+
+    export function Example() {
+      const [date, setDate] = useState<Date | null>(null)
+
+      return (
+        <DateTimePicker value={date} onChange={setDate} mode="datetime">
+          <DateTimePicker.Trigger />
+          <DateTimePicker.Content>
+            <DateTimePicker.Calendar />
+            <DateTimePicker.TimePicker />
+          </DateTimePicker.Content>
+        </DateTimePicker>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/datetimepicker.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- Compound pattern — compose `Trigger`, `Content`, `Calendar`, `TimePicker`
+- Three modes — `date`, `time`, `datetime`
+- Calendar grid with `role="grid"` and roving tabindex
+- Full keyboard navigation:
+  - Arrow keys (day / week)
+  - Home / End (start / end of week)
+  - PageUp / PageDown (month), Shift+PageUp/Down (year)
+  - Enter / Space to select
+  - Escape to close
+- `aria-selected`, `aria-current="date"`, `aria-live="polite"` month announcements
+- `role="dialog"` + `aria-modal` on popover content
+- `role="combobox"` + `aria-expanded` / `aria-haspopup` on trigger
+- Min / max date constraints
+- 12-hour and 24-hour clock
+- Today and Clear buttons
+- Portal-rendered with collision-aware positioning
+- Scroll / resize repositioning
+
+## Sub-components
+
+| Component                    | Description                                      |
+| :--------------------------- | :----------------------------------------------- |
+| `DateTimePicker`             | Root — provides context (`value`, `onChange`, etc.) |
+| `DateTimePicker.Trigger`     | Opens the popover; shows formatted date/time     |
+| `DateTimePicker.Content`     | Portal dialog container                          |
+| `DateTimePicker.Calendar`    | Calendar grid with month/year navigation         |
+| `DateTimePicker.TimePicker`  | Hour / minute / AM-PM selects                    |
+
+## Root Props
+
+| Prop          | Type                            | Default       | Description              |
+| :------------ | :------------------------------ | :------------ | :----------------------- |
+| `value`       | `Date \| null`                  | `null`        | Selected value           |
+| `onChange`     | `(date: Date \| null) => void`  | —             | Change handler           |
+| `mode`        | `date \| time \| datetime`      | `"date"`      | Picker mode              |
+| `min`         | `Date`                          | —             | Earliest selectable date |
+| `max`         | `Date`                          | —             | Latest selectable date   |
+| `disabled`    | `boolean`                       | `false`       | Disable the picker       |
+| `use24Hour`   | `boolean`                       | `false`       | Use 24-hour clock        |
+| `placeholder` | `string`                        | `"Select…"`   | Trigger placeholder      |
+
+## Keyboard Shortcuts
+
+| Key                | Action              |
+| :----------------- | :------------------ |
+| `←` `→`            | Previous / next day |
+| `↑` `↓`            | Previous / next week |
+| `Home` / `End`     | Start / end of week |
+| `PageUp` / `PageDown` | Previous / next month |
+| `Shift+PageUp/Down`  | Previous / next year |
+| `Enter` / `Space`  | Select date         |
+| `Escape`           | Close picker        |

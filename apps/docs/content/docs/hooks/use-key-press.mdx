@@ -1,0 +1,72 @@
+---
+title: useKeyPress
+description: A hook that listens for specific key presses and executes a callback.
+---
+
+import { UseKeyPressDemo } from '@/components/demos/use-key-press-demo';
+
+The `useKeyPress` hook allows you to trigger a function when a specific key is pressed. This is useful for building keyboard shortcuts, game controls, or accessibility features.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseKeyPressDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useKeyPress.ts`:
+
+```tsx
+import { useEffect } from "react";
+
+export const useKeyPress = (
+  targetKey: KeyboardEvent["key"],
+  callback: () => void
+) => {
+  useEffect(() => {
+    const keyHandler = (event: KeyboardEvent) => {
+      if (event.key === targetKey) {
+        callback();
+      }
+    };
+
+    window.addEventListener("keydown", keyHandler);
+
+    return () => {
+      window.removeEventListener("keydown", keyHandler);
+    };
+  }, [targetKey, callback]);
+};
+```
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { useKeyPress } from "@/hooks/useKeyPress";
+
+const KeyPressComponent = () => {
+  const [count, setCount] = useState(0);
+
+  // Increment count when 'Enter' is pressed
+  useKeyPress("Enter", () => {
+    setCount((c) => c + 1);
+  });
+
+  return (
+    <div>
+      <p>Press "Enter" to increment count: {count}</p>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `targetKey` | `string` | The key value to listen for (e.g., "Enter", "Escape", "a"). |
+| `callback` | `() => void` | The function to be executed when the key is pressed. |

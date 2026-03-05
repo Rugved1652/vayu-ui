@@ -1,0 +1,80 @@
+---
+title: Carousel
+description: A feature-rich image and content carousel with multiple transition effects, bullet styles, zoom, fullscreen, drag, and autoplay.
+---
+
+import CarouselDemo from '@/components/demos/carousel-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <CarouselDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { Carousel } from "@/components/ui/carousel"
+
+    const slides = [
+      { id: 1, title: "First Slide", image: "/slide-1.jpg" },
+      { id: 2, title: "Second Slide", image: "/slide-2.jpg" },
+    ]
+
+    export function Example() {
+      return <Carousel items={slides} autoplay />
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+```tsx title="src/components/ui/carousel.tsx"
+// Copy the full component code
+```
+
+## Features
+
+- **Transition Effects** — `slide`, `fade`, `zoom`, `flip`
+- **Bullet Styles** — `dots`, `lines`, `numbers`, `thumbnails`
+- **Variants** — `default`, `gallery`, `testimonial`, `product`
+- **Autoplay** — With pause on hover and play/pause button
+- **Drag / Swipe** — Mouse and touch support
+- **Zoom** — Manual zoom controls and zoom-on-hover mode
+- **Fullscreen** — Portal-rendered fullscreen modal with keyboard navigation
+
+## Props
+
+### Carousel
+
+| Prop               | Type                          | Default     | Description                              |
+| :----------------- | :---------------------------- | :---------- | :--------------------------------------- |
+| `items`            | `CarouselItem[]`              | —           | Array of slide items.                    |
+| `variant`          | `default \| gallery \| testimonial \| product` | `default` | Visual variant.              |
+| `bulletStyle`      | `dots \| lines \| numbers \| thumbnails` | `dots` | Bullet navigation style.            |
+| `transitionEffect` | `slide \| fade \| zoom \| flip` | `slide`   | Slide transition effect.                 |
+| `autoplay`         | `boolean`                     | `false`     | Enable autoplay.                         |
+| `autoplayDelay`    | `number`                      | `3000`      | Autoplay interval (ms).                  |
+| `showControls`     | `boolean`                     | `true`      | Show prev/next buttons.                  |
+| `showBullets`      | `boolean`                     | `true`      | Show bullet navigation.                  |
+| `loop`             | `boolean`                     | `true`      | Loop slides.                             |
+| `draggable`        | `boolean`                     | `true`      | Enable drag/swipe.                       |
+| `enableZoom`       | `boolean`                     | `false`     | Show zoom controls (gallery variant).    |
+| `zoomOnHover`      | `boolean`                     | `false`     | Zoom on mouse hover.                     |
+| `maxZoom`          | `number`                      | `3`         | Maximum zoom level.                      |
+| `aspectRatio`      | `string`                      | `"16/9"`    | CSS aspect ratio.                        |
+| `onSlideChange`    | `(index: number) => void`     | —           | Callback on slide change.                |
+
+### CarouselItem
+
+| Property      | Type         | Description                       |
+| :------------ | :----------- | :-------------------------------- |
+| `id`          | `string \| number` | Unique identifier.           |
+| `image`       | `string`     | Image URL.                        |
+| `title`       | `string`     | Slide title.                      |
+| `description` | `string`     | Slide description text.           |
+| `content`     | `ReactNode`  | Custom content (overrides title/description). |
+| `thumbnail`   | `string`     | Thumbnail URL (for thumbnail bullets). |

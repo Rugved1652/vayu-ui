@@ -1,0 +1,96 @@
+---
+title: Footer
+description: A responsive footer component with multiple layout variants.
+---
+
+import FooterDemo from '@/components/demos/footer-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center">
+      <FooterDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import Footer from "@/components/ui/footer";
+    import { Twitter, Github } from "lucide-react";
+
+    export default function App() {
+      return (
+        <Footer>
+            <Footer.Container>
+                <Footer.Grid>
+                    <Footer.Section>
+                        <Footer.Logo>Logo</Footer.Logo>
+                        <p>Description</p>
+                        <Footer.Social>
+                            <Footer.SocialLink href="#"><Twitter /></Footer.SocialLink>
+                        </Footer.Social>
+                    </Footer.Section>
+                    <Footer.Section title="Links">
+                        <Footer.Link href="#">Link 1</Footer.Link>
+                        <Footer.Link href="#">Link 2</Footer.Link>
+                    </Footer.Section>
+                </Footer.Grid>
+                <Footer.Divider />
+                <Footer.Bottom>
+                    <Footer.Copyright>© 2024</Footer.Copyright>
+                </Footer.Bottom>
+            </Footer.Container>
+        </Footer>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+### Footer (Root)
+
+The main wrapper component.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| children | `ReactNode` | - | The content of the footer. |
+| variant | `"default" \| "minimal" \| "centered"` | `"default"` | The layout variant. Applied via data attributes for server rendering. |
+
+### Footer.Section
+
+A section within the footer grid.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| title | `string` | - | Optional title for the section. |
+| children | `ReactNode` | - | The content of the section. |
+
+### Footer.Link & Footer.SocialLink
+
+Link components with hover effects and accessible focus states.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| href | `string` | - | The URL to navigate to. |
+| external | `boolean` | `false` | Whether to open the link in a new tab. |
+| children | `ReactNode` | - | The link text or content. |
+
+## Source Code
+
+```tsx title="src/components/ui/footer.tsx"
+import React, { forwardRef } from "react";
+import { clsx } from "clsx";
+
+// ==================== Types ====================
+
+type FooterVariant = "default" | "minimal" | "centered";
+
+interface FooterRootProps extends React.HTMLAttributes<HTMLElement> {
+    children: React.ReactNode;
+    variant?: FooterVariant;
+}
+//...
+```

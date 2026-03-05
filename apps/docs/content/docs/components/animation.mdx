@@ -1,0 +1,86 @@
+---
+title: Animation
+description: A collection of pure CSS animations for React components.
+---
+
+import AnimationDemo from '@/components/demos/animation-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <AnimationDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import Animation from "@/components/ui/animation"
+
+    export function AnimationExample() {
+      return (
+        <Animation.Fade duration="slow">
+           <h1>Fade In Title</h1>
+        </Animation.Fade>
+      )
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Installation
+
+1. Copy the CSS animations.
+
+```css title="src/components/ui/animation.css"
+@import "tailwindcss";
+
+/* Copy the content of animation.css provided below */
+```
+
+2. Copy the React component.
+
+```tsx title="src/components/ui/animation.tsx"
+"use client"
+import "./animation.css";
+// ... (Copy full component code)
+```
+
+## Available Animations
+
+The `Animation` component exports several sub-components:
+
+- `Animation.Fade`
+- `Animation.Slide`
+- `Animation.Bounce`
+- `Animation.Flip`
+- `Animation.Rotate`
+- `Animation.Zoom`
+- `Animation.Roll`
+- `Animation.JackInTheBox`
+- `Animation.Hinge`
+
+## Props
+
+All animation components accept the following base props:
+
+| Prop       | Type                                      | Default  | Description |
+| :--------- | :---------------------------------------- | :------- | :---------- |
+| `duration` | `slow` \| `normal` \| `fast` \| `slower` | `normal` | Animation duration. |
+| `delay`    | `none` \| `short` \| `medium` \| `long`   | `none`   | Animation delay. |
+| `start`    | `boolean`                                 | `true`   | Whether to start animation immediately (if controlled externally, usually it starts on mount). |
+
+*Note: The actual implementation starts animation on mount. `fillMode` and `iteration` are also supported.*
+
+### Directional Props
+`Slide`, `Flip`, `Roll` accept:
+- `direction`: `left` | `right` | `up` | `down`
+
+### Scale Props
+`Bounce`, `Zoom` accept:
+- `scale`: `small` | `medium` | `large`
+
+### Rotate Props
+`Rotate` accepts:
+- `degrees`: `number` (start rotation)

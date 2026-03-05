@@ -1,0 +1,61 @@
+---
+title: usePageLeave
+description: A hook that runs a callback when the user's mouse leaves the page.
+---
+
+import { UsePageLeaveDemo } from '@/components/demos/use-page-leave-demo';
+
+The `usePageLeave` hook triggers a callback function when the user's cursor leaves the document, typically moving towards the browser tab bar. This is useful for showing exit-intent popups or saving state before the user leaves.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UsePageLeaveDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/usePageLeave.ts`:
+
+```tsx
+import { useEffect } from "react";
+
+export const usePageLeave = (callback: () => void) => {
+  useEffect(() => {
+    const handleMouseOut = (event: MouseEvent) => {
+      if (!event.relatedTarget && event.clientY <= 0) {
+        callback();
+      }
+    };
+
+    document.addEventListener("mouseout", handleMouseOut);
+
+    return () => {
+      document.removeEventListener("mouseout", handleMouseOut);
+    };
+  }, [callback]);
+};
+```
+
+## Usage
+
+```tsx
+import { usePageLeave } from "@/hooks/usePageLeave";
+
+const ExitIntentPopup = () => {
+  usePageLeave(() => {
+    console.log("User is leaving the page!");
+    // Show modal or perform action
+  });
+
+  return <div>Content</div>;
+};
+```
+
+## API Reference
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `callback` | `() => void` | The function to execute when the mouse leaves the page. |

@@ -1,0 +1,79 @@
+---
+title: useConfirmExit
+description: A hook to warn users before leaving a page with unsaved changes.
+---
+
+import { UseConfirmExitDemo } from '@/components/demos/use-confirm-exit-demo';
+
+The `useConfirmExit` hook attaches a `beforeunload` event listener that prompts the user with a confirmation dialog when they try to close or reload the tab while unsaved changes exist.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseConfirmExitDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useConfirmExit.ts`:
+
+```tsx
+import { useCallback, useEffect, useRef } from "react";
+
+export interface UseConfirmExitOptions {
+  enabled: boolean;
+  message?: string;
+}
+
+export const useConfirmExit = ({
+  enabled,
+  message = "You have unsaved changes. Are you sure you want to leave?",
+}: UseConfirmExitOptions): void => {
+  const messageRef = useRef(message);
+  messageRef.current = message;
+
+  const handler = useCallback(
+    (e: BeforeUnloadEvent) => {
+      if (!enabled) return;
+      e.preventDefault();
+      e.returnValue = messageRef.current;
+      return messageRef.current;
+    },
+    [enabled]
+  );
+
+  useEffect(() => {
+    if (!enabled) return;
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [enabled, handler]);
+};
+```
+
+## Usage
+
+```tsx
+import { useConfirmExit } from "@/hooks/useConfirmExit";
+
+const EditForm = () => {
+  const [dirty, setDirty] = useState(false);
+
+  useConfirmExit({ enabled: dirty });
+
+  return (
+    <form onChange={() => setDirty(true)} onSubmit={() => setDirty(false)}>
+      <input name="title" />
+      <button type="submit">Save</button>
+    </form>
+  );
+};
+```
+
+## API Reference
+
+### Options
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `enabled` | `boolean` | — | Whether the exit guard is active |
+| `message` | `string` | `"You have unsaved changes…"` | Message for the dialog (most browsers ignore custom text) |

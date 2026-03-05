@@ -1,0 +1,120 @@
+---
+title: VideoPlayer
+description: A compound video player with auto-hiding controls, fullscreen, subtitles, keyboard shortcuts, and WCAG 2.2 AA compliance.
+---
+
+import VideoPlayerDemo from '@/components/demos/videoplayer-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+      <VideoPlayerDemo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { VideoPlayer } from "@/components/ui/videoplayer"
+
+    <VideoPlayer.Root>
+      <VideoPlayer.Video src="/video.mp4" poster="/poster.jpg" />
+      <VideoPlayer.CenterPlayButton />
+      <VideoPlayer.LoadingOverlay />
+      <VideoPlayer.Controls>
+        <VideoPlayer.ProgressBar />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <VideoPlayer.PlayPauseButton />
+            <VideoPlayer.SkipBackwardButton />
+            <VideoPlayer.SkipForwardButton />
+            <VideoPlayer.VolumeControl />
+            <VideoPlayer.TimeDisplay />
+          </div>
+          <div className="flex items-center gap-1">
+            <VideoPlayer.SubtitlesButton />
+            <VideoPlayer.FullscreenButton />
+          </div>
+        </div>
+      </VideoPlayer.Controls>
+    </VideoPlayer.Root>
+    ```
+  </Tab>
+</Tabs>
+
+## Features
+
+- Compound component pattern — compose sub-components freely
+- Auto-hiding controls with configurable delay
+- Fullscreen support with toggle button
+- Subtitle/caption track support
+- Progress bar with buffer indicator, hover tooltip, seek handle
+- Volume control with mute toggle and animated slider
+- `forwardRef` on all sub-components
+- `useMemo` on context value for performance
+- Keyboard shortcuts (container-scoped)
+- WCAG 2.2 AA compliant
+
+## Sub-components
+
+| Component | Description |
+|:----------|:------------|
+| `Root` | Context provider, keyboard listener, auto-hide |
+| `Video` | The `<video>` element (click to toggle play) |
+| `Controls` | Bottom control bar with gradient overlay |
+| `ProgressBar` | Seekable slider with buffer + hover tooltip |
+| `PlayPauseButton` | Play / pause toggle |
+| `SkipBackwardButton` | Skip backward (default 10s) |
+| `SkipForwardButton` | Skip forward (default 10s) |
+| `VolumeControl` | Mute toggle + volume slider |
+| `TimeDisplay` | Current time / duration |
+| `FullscreenButton` | Fullscreen toggle |
+| `SubtitlesButton` | Toggle subtitles/captions |
+| `SettingsButton` | Settings (extensible) |
+| `DownloadButton` | Download source video |
+| `LoadingOverlay` | Buffering spinner overlay |
+| `CenterPlayButton` | Large center play (hidden when playing) |
+
+## Root Props
+
+| Prop | Type | Default | Description |
+|:-----|:-----|:--------|:------------|
+| `onPlay` | `() => void` | — | Play callback |
+| `onPause` | `() => void` | — | Pause callback |
+| `onEnded` | `() => void` | — | Ended callback |
+| `onTimeUpdate` | `(time: number) => void` | — | Time callback |
+| `onVolumeChange` | `(vol: number) => void` | — | Volume callback |
+| `onFullscreenChange` | `(fs: boolean) => void` | — | Fullscreen callback |
+| `defaultVolume` | `number` | `1` | Initial volume (0–1) |
+| `defaultPlaybackRate` | `number` | `1` | Initial speed |
+| `autoHideControls` | `boolean` | `true` | Auto-hide controls |
+| `autoHideDelay` | `number` | `3000` | Hide delay in ms |
+
+## Keyboard Shortcuts
+
+| Key | Action |
+|:----|:-------|
+| `Space` / `K` | Play / pause |
+| `← →` / `J` / `L` | Seek ±5s |
+| `↑ ↓` | Volume ±10% |
+| `M` | Mute toggle |
+| `F` | Fullscreen toggle |
+| `C` | Toggle subtitles |
+| `Home` / `0` | Seek to start |
+| `End` | Seek to end |
+
+## Utility Hooks
+
+Imported from `@/components/ui/hook`:
+
+| Hook | Description |
+|:-----|:------------|
+| `useWatchTime` | Track total and session watch time |
+| `useVideoAnalytics` | Record events and milestone tracking |
+| `useVideoChapters` | Chapter navigation with auto-detection |
+| `usePlaybackSpeed` | Stepped speed control |
+| `useVideoBuffer` | Buffer health monitoring |
+| `useVideoQuality` | Stream quality switching |
+| `useVideoStateSync` | Resume position via localStorage |
+| `useVideoHotkeys` | Custom keyboard shortcuts |

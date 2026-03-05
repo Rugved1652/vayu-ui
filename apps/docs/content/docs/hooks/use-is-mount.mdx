@@ -1,0 +1,70 @@
+---
+title: useIsMount
+description: A hook that returns true only on the first render (mount) of a component.
+---
+
+import { UseIsMountDemo } from '@/components/demos/use-is-mount-demo';
+
+The `useIsMount` hook allows you to distinguish between the initial mount of a component and subsequent updates. It returns `true` during the first render cycle and `false` after the component has mounted.
+
+This is useful for:
+- Preventing effects from running on the initial render
+- Showing loading skeletons or animations only during mount
+- Initializing data that should only be set once
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseIsMountDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useIsMount.ts`:
+
+```tsx
+import { useState, useEffect } from "react";
+
+export const useIsMount = () => {
+  const [isMount, setIsMount] = useState(true);
+
+  useEffect(() => {
+    setIsMount(false);
+  }, []);
+
+  return isMount;
+};
+```
+
+## Usage
+
+```tsx
+import { useEffect } from "react";
+import { useIsMount } from "@/hooks/useIsMount";
+
+const MyComponent = () => {
+  const isMount = useIsMount();
+
+  useEffect(() => {
+    if (isMount) {
+      console.log("Component Just Mounted!");
+    } else {
+      console.log("Component Updated");
+    }
+  });
+
+  return (
+    <div>
+      <p>Check the console.</p>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Return Value
+
+| Type | Description |
+| :--- | :--- |
+| `boolean` | `true` on the first render, `false` otherwise. |

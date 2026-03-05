@@ -1,0 +1,57 @@
+---
+title: useRenderCount
+description: A hook to track the number of component renders.
+---
+
+import { UseRenderCountDemo } from '@/components/demos/use-render-count-demo';
+
+The `useRenderCount` hook is a utility for debugging and performance optimization. It tracks how many times a component has rendered.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseRenderCountDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useRenderCount.ts`:
+
+```tsx
+import { useRef } from "react";
+
+export const useRenderCount = () => {
+  const renderCount = useRef(0);
+  renderCount.current += 1;
+  return renderCount.current;
+};
+```
+
+## Usage
+
+```tsx
+import { useRenderCount } from "@/hooks/useRenderCount";
+import { useState } from "react";
+
+const MyComponent = () => {
+  const renderCount = useRenderCount();
+  const [state, setState] = useState(false);
+
+  return (
+    <div>
+      <p>This component has rendered {renderCount} times.</p>
+      <button onClick={() => setState(!state)}>
+        Toggle State to Re-render
+      </button>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Return Value
+
+| Type | Description |
+| :--- | :--- |
+| `number` | The total number of times the component has rendered (including the initial render). |

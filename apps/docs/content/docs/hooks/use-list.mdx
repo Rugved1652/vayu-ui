@@ -1,0 +1,88 @@
+---
+title: useList
+description: A hook to manage an array list with utility functions.
+---
+
+import { UseListDemo } from '@/components/demos/use-list-demo';
+
+The `useList` hook provides a convenient way to manage an array state with built-in methods for common operations like adding, removing, updating, and clearing items.
+
+## Demo
+
+<div className="flex justify-center py-8">
+  <UseListDemo />
+</div>
+
+## Source Code
+
+Copy this code into `src/hooks/useList.ts`:
+
+```tsx
+import { useState } from "react";
+
+export const useList = <T,>(initialList: T[] = []) => {
+  const [list, setList] = useState<T[]>(initialList);
+
+  const add = (item: T) => {
+    setList((prevList) => [...prevList, item]);
+  };
+
+  const remove = (index: number) => {
+    setList((prevList) => prevList.filter((_, i) => i !== index));
+  };
+
+  const update = (index: number, newItem: T) => {
+    setList((prevList) =>
+      prevList.map((item, i) => (i === index ? newItem : item))
+    );
+  };
+
+  const clear = () => {
+    setList([]);
+  };
+
+  return { list, add, remove, update, clear };
+};
+```
+
+## Usage
+
+```tsx
+import { useList } from "@/hooks/useList";
+
+const TodoList = () => {
+  const { list, add, remove, clear } = useList(["Buy milk", "Walk dog"]);
+
+  return (
+    <div>
+      <button onClick={() => add("New Task")}>Add Task</button>
+      <button onClick={clear}>Clear All</button>
+      <ul>
+        {list.map((item, index) => (
+          <li key={index}>
+            {item} <button onClick={() => remove(index)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+```
+
+## API Reference
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `initialList` | `T[]` | An optional initial array of items. |
+
+### Return Value
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `list` | `T[]` | The current array of items. |
+| `add` | `(item: T) => void` | Adds an item to the end of the list. |
+| `remove` | `(index: number) => void` | Removes an item at the specified index. |
+| `update` | `(index: number, newItem: T) => void` | Updates an item at the specified index. |
+| `clear` | `() => void` | Removes all items from the list. |
