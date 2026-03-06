@@ -50,9 +50,9 @@ interface TooltipProps
 // ============================================================================
 
 const variantClasses: Record<TooltipVariant, string> = {
-    default: "bg-neutral-700 dark:bg-neutral-800 text-white",
+    default: "bg-ground-800 dark:bg-ground-900 text-white",
     primary: "bg-primary-600 text-white",
-    secondary: "bg-neutral-600 dark:bg-neutral-700 text-white",
+    secondary: "bg-ground-700 dark:bg-ground-800 text-white",
     success: "bg-success-600 text-white",
     warning: "bg-warning-600 text-white",
     error: "bg-error-600 text-white",
@@ -60,9 +60,9 @@ const variantClasses: Record<TooltipVariant, string> = {
 };
 
 const arrowBgClasses: Record<TooltipVariant, string> = {
-    default: "bg-neutral-700 dark:bg-neutral-800",
+    default: "bg-ground-800 dark:bg-ground-900",
     primary: "bg-primary-600",
-    secondary: "bg-neutral-600 dark:bg-neutral-700",
+    secondary: "bg-ground-700 dark:bg-ground-800",
     success: "bg-success-600",
     warning: "bg-warning-600",
     error: "bg-error-600",
@@ -235,7 +235,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             () => (
                 <div
                     className={clsx(
-                        "relative font-secondary text-sm px-3 py-2 rounded-md shadow-lg",
+                        "relative font-secondary text-sm px-3 py-2 rounded shadow-outer",
                         variantClasses[variant]
                     )}
                 >
@@ -279,7 +279,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
                             ref={tooltipRef}
                             id={tooltipId}
                             role="tooltip"
-                            className="fixed z-50 pointer-events-none animate-in fade-in duration-150"
+                            className="fixed z-50 pointer-events-none animate-fade-in"
                             style={{
                                 top: `${coords.top}px`,
                                 left: `${coords.left}px`,

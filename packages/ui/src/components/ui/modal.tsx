@@ -276,10 +276,10 @@ const ModalRoot = forwardRef<HTMLDivElement, ModalProps>(
                     <div
                         ref={overlayRef}
                         className={clsx(
-                            "fixed inset-0 bg-black/50 backdrop-blur-sm",
-                            "dark:bg-black/60",
-                            "animate-in fade-in-0 duration-300",
-                            "transition-all"
+                            "fixed inset-0 bg-black/50",
+                            "animate-fade-in",
+                            "duration-75"
+                            
                         )}
                         onClick={handleOverlayClick}
                         aria-hidden="true"
@@ -333,14 +333,14 @@ const Content = forwardRef<HTMLDivElement, ModalContentProps>(
 
         const variantClasses = {
             default:
-                "bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700",
+                "bg-ground-100 dark:bg-ground-900 border-ground-300 dark:border-ground-700",
             danger:
-                "bg-white dark:bg-neutral-900 border-error-300 dark:border-error-700",
+                "bg-ground-100 dark:bg-ground-900 border-error-600 dark:border-error-500",
             success:
-                "bg-white dark:bg-neutral-900 border-success-300 dark:border-success-700",
+                "bg-ground-100 dark:bg-ground-900 border-success-600 dark:border-success-500",
             warning:
-                "bg-white dark:bg-neutral-900 border-warning-300 dark:border-warning-700",
-            info: "bg-white dark:bg-neutral-900 border-info-300 dark:border-info-700",
+                "bg-ground-100 dark:bg-ground-900 border-warning-600 dark:border-warning-500",
+            info: "bg-ground-100 dark:bg-ground-900 border-info-600 dark:border-info-500",
         };
 
         return (
@@ -353,8 +353,9 @@ const Content = forwardRef<HTMLDivElement, ModalContentProps>(
                 tabIndex={-1}
                 className={clsx(
                     "relative w-full",
-                    "rounded-lg border-2 shadow-2xl",
-                    "animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300",
+                    "rounded border-2 shadow-outer",
+                    "animate-zoom-in",
+                    
                     "focus:outline-none",
                     sizeClasses[size],
                     variantClasses[variant],
@@ -384,18 +385,18 @@ const Header = forwardRef<HTMLDivElement, ModalHeaderProps>(
         const { variant, showCloseButton } = useModalContext();
 
         const variantClasses = {
-            default: "border-neutral-200 dark:border-neutral-700",
+            default: "border-ground-300 dark:border-ground-700",
             danger:
-                "border-error-200 dark:border-error-700 bg-error-50/50 dark:bg-error-900/20",
+                "border-error-600 dark:border-error-500 bg-error-100 dark:bg-error-950",
             success:
-                "border-success-200 dark:border-success-700 bg-success-50/50 dark:bg-success-900/20",
+                "border-success-600 dark:border-success-500 bg-success-100 dark:bg-success-950",
             warning:
-                "border-warning-200 dark:border-warning-700 bg-warning-50/50 dark:bg-warning-900/20",
-            info: "border-info-200 dark:border-info-700 bg-info-50/50 dark:bg-info-900/20",
+                "border-warning-600 dark:border-warning-500 bg-warning-100 dark:bg-warning-950",
+            info: "border-info-600 dark:border-info-500 bg-info-100 dark:bg-info-950",
         };
 
         const iconConfig = {
-            default: { icon: Info, color: "text-neutral-600 dark:text-neutral-400" },
+            default: { icon: Info, color: "text-ground-600 dark:text-ground-400" },
             danger: {
                 icon: AlertCircle,
                 color: "text-error-600 dark:text-error-400",
@@ -457,11 +458,11 @@ const Title = forwardRef<HTMLHeadingElement, ModalTitleProps>(
         const { variant, labelledBy } = useModalContext();
 
         const variantClasses = {
-            default: "text-neutral-900 dark:text-white",
-            danger: "text-error-900 dark:text-error-100",
-            success: "text-success-900 dark:text-success-100",
-            warning: "text-warning-900 dark:text-warning-100",
-            info: "text-info-900 dark:text-info-100",
+            default: "text-ground-800 dark:text-ground-100",
+            danger: "text-error-800 dark:text-error-100",
+            success: "text-success-800 dark:text-success-100",
+            warning: "text-warning-800 dark:text-warning-100",
+            info: "text-info-800 dark:text-info-100",
         };
 
         return (
@@ -469,7 +470,7 @@ const Title = forwardRef<HTMLHeadingElement, ModalTitleProps>(
                 ref={ref}
                 id={labelledBy}
                 className={clsx(
-                    "text-xl font-primary font-bold leading-6",
+                    "text-h4 font-primary font-bold leading-6",
                     variantClasses[variant],
                     className
                 )}
@@ -496,7 +497,7 @@ const Description = forwardRef<HTMLParagraphElement, ModalDescriptionProps>(
         const { variant, describedBy } = useModalContext();
 
         const variantClasses = {
-            default: "text-neutral-600 dark:text-neutral-400",
+            default: "text-ground-600 dark:text-ground-400",
             danger: "text-error-700 dark:text-error-300",
             success: "text-success-700 dark:text-success-300",
             warning: "text-warning-700 dark:text-warning-300",
@@ -508,7 +509,7 @@ const Description = forwardRef<HTMLParagraphElement, ModalDescriptionProps>(
                 ref={ref}
                 id={describedBy}
                 className={clsx(
-                    "text-sm font-secondary mt-2 leading-relaxed",
+                    "text-para font-secondary mt-2 leading-relaxed",
                     variantClasses[variant],
                     className
                 )}
@@ -537,7 +538,7 @@ const Body = forwardRef<HTMLDivElement, ModalBodyProps>(
                 ref={ref}
                 className={clsx(
                     "p-6 font-secondary",
-                    "text-neutral-700 dark:text-neutral-300",
+                    "text-ground-700 dark:text-ground-300",
                     className
                 )}
                 {...props}
@@ -565,14 +566,14 @@ const Footer = forwardRef<HTMLDivElement, ModalFooterProps>(
 
         const variantClasses = {
             default:
-                "border-neutral-200 dark:border-neutral-700 bg-neutral-50/50 dark:bg-neutral-800/50",
+                "border-ground-300 dark:border-ground-700 bg-ground-200/50 dark:bg-ground-800/50",
             danger:
-                "border-error-200 dark:border-error-700 bg-error-50/30 dark:bg-error-900/10",
+                "border-error-600 dark:border-error-500 bg-error-100/50 dark:bg-error-950/20",
             success:
-                "border-success-200 dark:border-success-700 bg-success-50/30 dark:bg-success-900/10",
+                "border-success-600 dark:border-success-500 bg-success-100/50 dark:bg-success-950/20",
             warning:
-                "border-warning-200 dark:border-warning-700 bg-warning-50/30 dark:bg-warning-900/10",
-            info: "border-info-200 dark:border-info-700 bg-info-50/30 dark:bg-info-900/10",
+                "border-warning-600 dark:border-warning-500 bg-warning-100/50 dark:bg-warning-950/20",
+            info: "border-info-600 dark:border-info-500 bg-info-100/50 dark:bg-info-950/20",
         };
 
         const alignClasses = {
@@ -616,14 +617,14 @@ const Close = forwardRef<HTMLButtonElement, ModalCloseProps>(
 
         const variantClasses = {
             default:
-                "text-neutral-400 hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300",
+                "text-ground-500 hover:text-ground-700 dark:text-ground-400 dark:hover:text-ground-300",
             danger:
-                "text-error-400 hover:text-error-600 dark:text-error-500 dark:hover:text-error-300",
+                "text-error-500 hover:text-error-700 dark:text-error-400 dark:hover:text-error-300",
             success:
-                "text-success-400 hover:text-success-600 dark:text-success-500 dark:hover:text-success-300",
+                "text-success-500 hover:text-success-700 dark:text-success-400 dark:hover:text-success-300",
             warning:
-                "text-warning-400 hover:text-warning-600 dark:text-warning-500 dark:hover:text-warning-300",
-            info: "text-info-400 hover:text-info-600 dark:text-info-500 dark:hover:text-info-300",
+                "text-warning-500 hover:text-warning-700 dark:text-warning-400 dark:hover:text-warning-300",
+            info: "text-info-500 hover:text-info-700 dark:text-info-400 dark:hover:text-info-300",
         };
 
         const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -644,11 +645,12 @@ const Close = forwardRef<HTMLButtonElement, ModalCloseProps>(
                 onClick={handleClick}
                 aria-label="Close modal"
                 className={clsx(
-                    "rounded-md p-1 transition-all duration-200",
-                    "hover:bg-neutral-100 dark:hover:bg-neutral-800",
+                    "rounded p-1 transition-colors",
+                    "[transition-duration:var(--transition-fast)]",
+                    "hover:bg-ground-200 dark:hover:bg-ground-800",
                     "focus:outline-none focus-visible:ring-2",
                     "focus-visible:ring-primary-500 focus-visible:ring-offset-2",
-                    "focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900",
+                    "focus-visible:ring-offset-ground-100 dark:focus-visible:ring-offset-ground-900",
                     "disabled:pointer-events-none disabled:opacity-50",
                     variantClasses[variant],
                     className

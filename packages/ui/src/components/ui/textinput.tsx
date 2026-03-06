@@ -39,13 +39,10 @@ type InputVariant = "default" | "filled" | "flushed";
 type ValidationState = "default" | "error" | "warning" | "success";
 
 interface TextInputContextValue {
-    // IDs for accessibility
     inputId: string;
     errorId: string;
     descriptionId: string;
     labelId: string;
-
-    // State
     value: string;
     isFocused: boolean;
     isDisabled: boolean;
@@ -54,18 +51,12 @@ interface TextInputContextValue {
     isLoading: boolean;
     validationState: ValidationState;
     hasValue: boolean;
-
-    // Input configuration
     inputType: InputType;
     size: InputSize;
     variant: InputVariant;
-
-    // Methods
     setValue: (value: string) => void;
     setFocused: (focused: boolean) => void;
     clearValue: () => void;
-
-    // Refs
     inputRef: React.RefObject<HTMLInputElement>;
 }
 
@@ -126,14 +117,12 @@ const TextInputRoot = forwardRef<HTMLDivElement, TextInputRootProps>(
         const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
         const [isFocused, setIsFocused] = useState(false);
 
-        // Generate unique IDs for accessibility
         const baseId = useId();
         const inputId = `${baseId}-input`;
         const errorId = `${baseId}-error`;
         const descriptionId = `${baseId}-description`;
         const labelId = `${baseId}-label`;
 
-        // Determine if controlled or uncontrolled
         const isControlled = controlledValue !== undefined;
         const value = isControlled ? controlledValue : uncontrolledValue;
 
@@ -208,16 +197,16 @@ const Label: React.FC<LabelProps> = ({
         <label
             id={labelId}
             htmlFor={inputId}
-            className={`block font-medium text-ground-950 dark:text-ground-50 mb-1.5 ${className}`}
+            className={`block font-primary font-medium text-ground-950 dark:text-ground-50 mb-1.5 ${className}`}
         >
             {children}
             {isRequired && (
-                <span className="text-error-500 ml-1" aria-label="required">
+                <span className="text-error-500 ml-1" aria-hidden="true">
                     *
                 </span>
             )}
             {optional && (
-                <span className="text-ground-500 text-sm font-normal ml-2">
+                <span className="text-ground-500 text-sm font-secondary font-normal ml-2">
                     (optional)
                 </span>
             )}
@@ -254,35 +243,35 @@ const Field: React.FC<FieldProps> = ({ children, className = "" }) => {
     };
 
     const variantClasses = {
-        default: "bg-ground-50 dark:bg-ground-900 border border-ground-300 dark:border-ground-700 rounded-xl",
-        filled: "border-0 rounded-lg bg-ground-100 dark:bg-ground-800",
+        default: "bg-ground-50 dark:bg-ground-900 border border-ground-300 dark:border-ground-700 rounded",
+        filled: "border-0 rounded bg-ground-100 dark:bg-ground-800",
         flushed: "border-0 border-b-2 rounded-none px-0",
     };
 
     const stateClasses = {
         default: isFocused
-            ? "border-primary-400 dark:border-primary-400 ring-1 ring-primary-200 dark:ring-primary-900/30"
+            ? "border-primary-400 dark:border-primary-400 ring-2 ring-primary-200 dark:ring-primary-900/30"
             : hasValue
                 ? "border-primary-200 dark:border-primary-800"
                 : "border-ground-300 dark:border-ground-700",
-        error: "border-error-500 ring-4 ring-error-100 dark:ring-error-900/30",
+        error: "border-error-500 ring-2 ring-error-100 dark:ring-error-900/30",
         warning:
-            "border-warning-500 ring-4 ring-warning-100 dark:ring-warning-900/30",
+            "border-warning-500 ring-2 ring-warning-100 dark:ring-warning-900/30",
         success:
-            "border-success-500 ring-4 ring-success-100 dark:ring-success-900/30",
+            "border-success-500 ring-2 ring-success-100 dark:ring-success-900/30",
     };
 
     return (
         <div
             className={`
-        flex items-center gap-2 w-full transition-all duration-200
-        bg-white dark:bg-ground-900
-        ${sizeClasses[size]}
-        ${variantClasses[variant]}
-        ${isFocused || validationState !== "default" ? stateClasses[validationState] : stateClasses.default}
-        ${isDisabled ? "opacity-60 cursor-not-allowed bg-ground-50 dark:bg-ground-800" : ""}
-        ${className}
-      `}
+                flex items-center gap-2 w-full transition-all duration-200
+                bg-white dark:bg-ground-900
+                ${sizeClasses[size]}
+                ${variantClasses[variant]}
+                ${isFocused || validationState !== "default" ? stateClasses[validationState] : stateClasses.default}
+                ${isDisabled ? "opacity-60 cursor-not-allowed bg-ground-50 dark:bg-ground-800" : ""}
+                ${className}
+            `}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
         >
@@ -326,7 +315,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             setValue(e.target.value);
         };
 
-        // Merge refs
         const mergedRef = (node: HTMLInputElement | null) => {
             (inputRef as React.MutableRefObject<HTMLInputElement | null>).current =
                 node;
@@ -356,12 +344,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                     aria-invalid={validationState === "error"}
                     aria-required={isRequired}
                     className={`
-            flex-1 bg-transparent outline-none
-            text-ground-900 dark:text-ground-50
-            placeholder:text-ground-700 dark:placeholder:text-ground-400
-            disabled:cursor-not-allowed
-            ${className}
-          `}
+                        flex-1 bg-transparent outline-none font-secondary
+                        text-ground-900 dark:text-ground-50
+                        placeholder:text-ground-400 dark:placeholder:text-ground-500
+                        disabled:cursor-not-allowed
+                        focus-visible:ring-0
+                        ${className}
+                    `}
                     {...props}
                 />
                 {rightIcon && (
@@ -393,7 +382,6 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
 
         return (
             <>
-                {/* @ts-ignore */}
                 <Input ref={ref} {...props} type={showPassword ? "text" : "password"} />
                 <button
                     type="button"
@@ -403,10 +391,8 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
                     tabIndex={-1}
                 >
                     {showPassword ? (
-                        // @ts-ignore
                         <EyeClosed className="w-5 h-5" />
                     ) : (
-                        // @ts-ignore
                         <Eye className="w-5 h-5" />
                     )}
                 </button>
@@ -438,7 +424,6 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         const { setValue, value } = useTextInput();
 
         const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-            // Allow: Cmd/Ctrl shortcuts
             if (e.metaKey || e.ctrlKey) return;
 
             const key = e.key;
@@ -456,9 +441,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 
             if (allowedKeys.includes(key)) return;
 
-            // Type-specific validation
             if (numberType === "integer" || numberType === "natural") {
-                // Only allow digits and minus (if not natural)
                 if (numberType === "natural") {
                     if (!/^\d$/.test(key)) {
                         e.preventDefault();
@@ -469,7 +452,6 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
                     }
                 }
             } else if (numberType === "decimal" || numberType === "positive") {
-                // Allow digits, decimal point, and minus (if not positive)
                 if (numberType === "positive") {
                     if (!/^[\d.]$/.test(key)) {
                         e.preventDefault();
@@ -508,7 +490,6 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
             const numValue = parseFloat(value);
 
             if (!isNaN(numValue)) {
-                // Apply min/max constraints
                 let constrainedValue = numValue;
                 if (min !== undefined && numValue < min) {
                     constrainedValue = min;
@@ -528,7 +509,6 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         return (
             <Input
                 ref={ref}
-                // @ts-ignore
                 type="text"
                 inputMode="numeric"
                 onKeyDown={handleKeyDown}
@@ -567,9 +547,7 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
 
         return (
             <>
-                {/* @ts-ignore */}
                 <Search className="w-5 h-5 text-ground-400" />
-                {/* @ts-ignore */}
                 <Input ref={ref} type="search" {...props} />
                 {hasValue && (
                     <button
@@ -579,7 +557,6 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
                         aria-label="Clear search"
                         tabIndex={-1}
                     >
-                        {/* @ts-ignore */}
                         <X className="w-4 h-4" />
                     </button>
                 )}
@@ -608,7 +585,7 @@ const Description: React.FC<HelperTextProps> = ({
     return (
         <p
             id={descriptionId}
-            className={`mt-1.5 text-sm text-ground-600 dark:text-ground-400 ${className}`}
+            className={`mt-1.5 text-sm font-secondary text-ground-600 dark:text-ground-400 ${className}`}
         >
             {children}
         </p>
@@ -630,10 +607,9 @@ const ErrorMessage: React.FC<HelperTextProps> = ({
             id={errorId}
             role="alert"
             aria-live="polite"
-            className={`mt-1.5 text-sm text-error-600 dark:text-error-400 flex items-center gap-1.5 ${className}`}
+            className={`mt-1.5 text-sm font-secondary text-error-600 dark:text-error-400 flex items-center gap-1.5 ${className}`}
         >
-            {/* @ts-ignore */}
-            <AlertCircle className="w-4 h-4 shrink-0" />
+            <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{children}</span>
         </p>
     );
@@ -653,10 +629,9 @@ const WarningMessage: React.FC<HelperTextProps> = ({
         <p
             role="status"
             aria-live="polite"
-            className={`mt-1.5 text-sm text-warning-600 dark:text-warning-400 flex items-center gap-1.5 ${className}`}
+            className={`mt-1.5 text-sm font-secondary text-warning-600 dark:text-warning-400 flex items-center gap-1.5 ${className}`}
         >
-            {/* @ts-ignore */}
-            <AlertCircle className="w-4 h-4 shrink-0" />
+            <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{children}</span>
         </p>
     );
@@ -676,10 +651,9 @@ const SuccessMessage: React.FC<HelperTextProps> = ({
         <p
             role="status"
             aria-live="polite"
-            className={`mt-1.5 text-sm text-success-600 dark:text-success-400 flex items-center gap-1.5 ${className}`}
+            className={`mt-1.5 text-sm font-secondary text-success-600 dark:text-success-400 flex items-center gap-1.5 ${className}`}
         >
-            {/* @ts-ignore */}
-            <CheckCircle className="w-4 h-4 shrink-0" />
+            <CheckCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{children}</span>
         </p>
     );
@@ -688,13 +662,12 @@ const SuccessMessage: React.FC<HelperTextProps> = ({
 SuccessMessage.displayName = "TextInput.SuccessMessage";
 
 // ============================================================================
-// Icon Components
+// Icon Component
 // ============================================================================
 
 interface IconProps {
     children: ReactNode;
     className?: string;
-    position?: "left" | "right";
 }
 
 const Icon: React.FC<IconProps> = ({ children, className = "" }) => {
@@ -717,7 +690,6 @@ const LoadingSpinner: React.FC = () => {
     if (!isLoading) return null;
 
     return (
-        // @ts-ignore
         <Loader2
             className="w-5 h-5 text-primary-500 animate-spin"
             aria-label="Loading"
@@ -756,14 +728,12 @@ const Tooltip: React.FC<TooltipProps> = ({
                 aria-label="More information"
                 tabIndex={-1}
             >
-                {children ||
-                    // @ts-ignore
-                    <HelpCircle className="w-5 h-5" />}
+                {children || <HelpCircle className="w-5 h-5" />}
             </button>
             {showTooltip && (
                 <div
                     role="tooltip"
-                    className={`absolute bottom-full right-0 mb-2 px-3 py-2 bg-ground-900 dark:bg-ground-700 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-50 ${className}`}
+                    className={`absolute bottom-full right-0 mb-2 px-3 py-2 bg-ground-900 dark:bg-ground-700 text-white text-sm font-secondary rounded shadow-outer whitespace-nowrap z-50 ${className}`}
                 >
                     {content}
                     <div className="absolute top-full right-4 -mt-1 w-2 h-2 bg-ground-900 dark:bg-ground-700 transform rotate-45" />
@@ -807,12 +777,13 @@ const CharacterCount: React.FC<CharacterCountProps> = ({
 
     return (
         <p
-            className={`mt-1.5 text-sm text-right ${remaining < 0
-                ? "text-error-600 dark:text-error-400"
-                : isNearLimit
-                    ? "text-warning-600 dark:text-warning-400"
-                    : "text-ground-600 dark:text-ground-400"
-                } ${className}`}
+            className={`mt-1.5 text-sm font-secondary text-right ${
+                remaining < 0
+                    ? "text-error-600 dark:text-error-400"
+                    : isNearLimit
+                        ? "text-warning-600 dark:text-warning-400"
+                        : "text-ground-600 dark:text-ground-400"
+            } ${className}`}
             aria-live="polite"
             aria-atomic="true"
         >
@@ -853,7 +824,6 @@ const ClearButton: React.FC<ClearButtonProps> = ({
             aria-label="Clear input"
             tabIndex={-1}
         >
-            {/* @ts-ignore */}
             <X className="w-4 h-4" />
         </button>
     );

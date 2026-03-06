@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { Modal } from "vayu-ui";
 import { useState } from "react";
 
@@ -6,17 +6,29 @@ export default function ModalDemo() {
     const [isOpen, setIsOpen] = useState(false);
     const [isDangerOpen, setIsDangerOpen] = useState(false);
 
-    const buttonClass = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-slate-900 text-white hover:bg-slate-900/90 h-10 py-2 px-4 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90";
-    const dangerButtonClass = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-red-500 text-white hover:bg-red-500/90 h-10 py-2 px-4";
-    const outlineButtonClass = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background border border-input hover:bg-slate-100 hover:text-slate-900 h-10 py-2 px-4 dark:border-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-50";
+    const buttonClass = "inline-flex items-center justify-center rounded font-secondary text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none focus-visible:ring-offset-ground-100 dark:focus-visible:ring-offset-ground-900 bg-primary-500 text-ground-900 hover:bg-primary-600 h-10 py-2 px-4";
+    const dangerButtonClass = "inline-flex items-center justify-center rounded font-secondary text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none focus-visible:ring-offset-ground-100 dark:focus-visible:ring-offset-ground-900 bg-error-500 text-ground-900 hover:bg-error-600 h-10 py-2 px-4";
+    const outlineButtonClass = "inline-flex items-center justify-center rounded font-secondary text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none focus-visible:ring-offset-ground-100 dark:focus-visible:ring-offset-ground-900 border-2 border-ground-300 hover:bg-ground-200 hover:text-ground-900 h-10 py-2 px-4 dark:border-ground-700 dark:hover:bg-ground-800 dark:hover:text-ground-50";
 
     return (
-        <div className="flex flex-wrap gap-4">
-            {/* Default Modal */}
-            <button onClick={() => setIsOpen(true)} className={buttonClass}>
-                Open Modal
-            </button>
+        <div className="w-full max-w-md not-prose">
+            <h2 id="modal-demo-label" className="text-h4 font-primary font-semibold mb-4">
+                Modal Example
+            </h2>
 
+            <div className="flex flex-wrap gap-4">
+                {/* Default Modal */}
+                <button onClick={() => setIsOpen(true)} className={buttonClass}>
+                    Open Modal
+                </button>
+
+                {/* Danger Modal */}
+                <button onClick={() => setIsDangerOpen(true)} className={dangerButtonClass}>
+                    Delete Account
+                </button>
+            </div>
+
+            {/* Default Modal */}
             <Modal open={isOpen} onOpenChange={setIsOpen}>
                 <Modal.Content className="sm:max-w-[425px]">
                     <Modal.Header>
@@ -33,7 +45,7 @@ export default function ModalDemo() {
                             <input
                                 id="name"
                                 defaultValue="Pedro Duarte"
-                                className="col-span-3 flex h-10 w-full rounded-md border border-slate-300 bg-transparent px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50"
+                                className="col-span-3 flex h-10 w-full rounded border-2 border-ground-300 bg-transparent px-3 py-2 text-sm font-secondary placeholder:text-ground-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-ground-700 dark:text-ground-50"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
@@ -43,7 +55,7 @@ export default function ModalDemo() {
                             <input
                                 id="username"
                                 defaultValue="@peduarte"
-                                className="col-span-3 flex h-10 w-full rounded-md border border-slate-300 bg-transparent px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50"
+                                className="col-span-3 flex h-10 w-full rounded border-2 border-ground-300 bg-transparent px-3 py-2 text-sm font-secondary placeholder:text-ground-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-ground-700 dark:text-ground-50"
                             />
                         </div>
                     </Modal.Body>
@@ -55,10 +67,6 @@ export default function ModalDemo() {
             </Modal>
 
             {/* Danger Modal */}
-            <button onClick={() => setIsDangerOpen(true)} className={dangerButtonClass}>
-                Delete Account
-            </button>
-
             <Modal open={isDangerOpen} onOpenChange={setIsDangerOpen} variant="danger">
                 <Modal.Content>
                     <Modal.Header>
@@ -68,7 +76,7 @@ export default function ModalDemo() {
                         </Modal.Description>
                     </Modal.Header>
                     <Modal.Body>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                        <p className="text-para font-secondary text-ground-500 dark:text-ground-400">
                             This action cannot be undone. This will permanently delete your account and remove your data from our servers.
                         </p>
                     </Modal.Body>

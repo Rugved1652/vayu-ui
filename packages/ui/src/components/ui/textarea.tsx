@@ -6,6 +6,7 @@ import React, {
     forwardRef,
     createContext,
     useContext,
+    useId,
 } from "react";
 
 export type TextAreaResize = "none" | "vertical" | "horizontal" | "both";
@@ -23,6 +24,9 @@ interface TextAreaContextValue {
     variant: TextAreaVariant;
     size: TextAreaSize;
     disabled?: boolean;
+    inputId: string;
+    supportTextId: string;
+    errorTextId: string;
 }
 
 const TextAreaContext = createContext<TextAreaContextValue | undefined>(
@@ -61,6 +65,12 @@ const TextAreaRoot = ({
 }: TextAreaRootProps) => {
     const [isFocused, setIsFocused] = useState(false);
     const [charCount, setCharCount] = useState(0);
+    
+    // Generate unique IDs for accessibility
+    const generatedId = useId();
+    const inputId = `textarea-input-${generatedId}`;
+    const supportTextId = `textarea-support-${generatedId}`;
+    const errorTextId = `textarea-error-${generatedId}`;
 
     return (
         <TextAreaContext.Provider
@@ -74,9 +84,15 @@ const TextAreaRoot = ({
                 variant,
                 size,
                 disabled,
+                inputId,
+                supportTextId,
+                errorTextId,
             }}
         >
-            <div className={`w-full flex flex-col gap-1 ${className}`}>
+            <div 
+                className={`w-full flex flex-col gap-1 ${className}`}
+                role="group"
+            >
                 {children}
             </div>
         </TextAreaContext.Provider>
@@ -84,7 +100,7 @@ const TextAreaRoot = ({
 };
 
 // Label Component
-interface TextAreaLabelProps {
+interface TextAreaLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
     children: React.ReactNode;
     showCharCount?: boolean;
 }
@@ -92,16 +108,26 @@ interface TextAreaLabelProps {
 const TextAreaLabel = ({
     children,
     showCharCount = false,
+    className = "",
+    ...props
 }: TextAreaLabelProps) => {
-    const { charCount, maxLength } = useTextAreaContext();
+    const { charCount, maxLength, inputId } = useTextAreaContext();
 
     return (
         <div className="flex items-center justify-between px-2">
-            <label className="font-primary text-neutral-900 dark:text-white text-sm font-medium">
+            <label 
+                htmlFor={inputId}
+                className={`font-primary text-ground-800 dark:text-ground-100 text-sm font-medium ${className}`}
+                {...props}
+            >
                 {children}
             </label>
             {showCharCount && (
-                <span className="text-xs font-secondary text-neutral-500 dark:text-neutral-400">
+                <span 
+                    className="text-xs font-secondary text-ground-500 dark:text-ground-400"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
                     {charCount}
                     {maxLength && `/${maxLength}`}
                 </span>
@@ -124,6 +150,7 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
             value,
             onChange,
             className = "",
+            "aria-describedby": ariaDescribedBy,
             ...restProps
         },
         ref
@@ -137,6 +164,9 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
             variant,
             size,
             disabled,
+            inputId,
+            supportTextId,
+            errorTextId,
         } = useTextAreaContext();
 
         const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -180,42 +210,63 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
 
         const variantStyles = {
             default: {
-                wrapper: `bg-white dark:bg-neutral-900 border-2 ${error
+                wrapper: `bg-white dark:bg-ground-900 border-2 ${
+                    error
                         ? "border-error-500 dark:border-error-600"
                         : isFocused
                             ? "border-primary-500 dark:border-primary-600"
-                            : "border-neutral-300 dark:border-neutral-700"
-                    } hover:border-primary-400 dark:hover:border-primary-600`,
+                            : "border-ground-300 dark:border-ground-700"
+                } hover:border-primary-400 dark:hover:border-primary-600`,
             },
             outline: {
-                wrapper: `bg-transparent border-2 ${error
+                wrapper: `bg-transparent border-2 ${
+                    error
                         ? "border-error-500 dark:border-error-600"
                         : isFocused
                             ? "border-primary-500 dark:border-primary-600"
-                            : "border-neutral-300 dark:border-neutral-700"
-                    } hover:border-primary-400 dark:hover:border-primary-600`,
+                            : "border-ground-300 dark:border-ground-700"
+                } hover:border-primary-400 dark:hover:border-primary-600`,
             },
         };
 
         const styles = variantStyles[variant];
 
+        // Build aria-describedby from context and any additional IDs
+        const describedBy = [
+            error && errorTextId,
+            ariaDescribedBy,
+        ].filter(Boolean).join(" ") || undefined;
+
         return (
             <div
-                className={`${styles.wrapper} ${config.wrapper} flex gap-3 w-full rounded-lg outline-0 transition-colors ${disabled ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                className={`${styles.wrapper} ${config.wrapper} flex gap-3 w-full rounded outline-0 transition-colors ${
+                    disabled ? "opacity-50 cursor-not-allowed" : ""
+                }`}
             >
                 <textarea
                     ref={ref}
-                    className={`w-full bg-transparent outline-0 font-secondary text-neutral-900 dark:text-white placeholder:text-neutral-500 ${config.text
-                        } ${getResizeClass()} ${disabled ? "cursor-not-allowed" : ""
-                        } ${className}`}
+                    id={inputId}
+                    className={`w-full bg-transparent outline-0 font-secondary text-ground-900 dark:text-ground-100 placeholder:text-ground-500 ${
+                        config.text
+                    } ${getResizeClass()} ${
+                        disabled ? "cursor-not-allowed" : ""
+                    } focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${className}`}
                     rows={rows}
                     value={value}
                     onChange={handleChange}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    onFocus={(e) => {
+                        setIsFocused(true);
+                        restProps.onFocus?.(e);
+                    }}
+                    onBlur={(e) => {
+                        setIsFocused(false);
+                        restProps.onBlur?.(e);
+                    }}
                     maxLength={maxLength}
                     disabled={disabled}
+                    aria-invalid={error}
+                    aria-describedby={describedBy}
+                    aria-disabled={disabled}
                     {...restProps}
                 />
             </div>
@@ -228,19 +279,28 @@ TextAreaInput.displayName = "TextAreaInput";
 // Support Text Component
 interface TextAreaSupportTextProps {
     children: string | string[];
+    className?: string;
 }
 
-const TextAreaSupportText = ({ children }: TextAreaSupportTextProps) => {
+const TextAreaSupportText = ({ children, className = "" }: TextAreaSupportTextProps) => {
+    const { supportTextId } = useTextAreaContext();
+
     if (typeof children === "string") {
         return (
-            <p className="text-xs font-secondary text-neutral-600 dark:text-neutral-400 px-2">
+            <p 
+                id={supportTextId}
+                className={`text-xs font-secondary text-ground-600 dark:text-ground-400 px-2 ${className}`}
+            >
                 {children}
             </p>
         );
     }
 
     return (
-        <ul className="text-xs font-secondary text-neutral-600 dark:text-neutral-400 px-2 list-disc list-inside space-y-1">
+        <ul 
+            id={supportTextId}
+            className={`text-xs font-secondary text-ground-600 dark:text-ground-400 px-2 list-disc list-inside space-y-1 ${className}`}
+        >
             {children.map((text, idx) => (
                 <li key={idx}>{text}</li>
             ))}
@@ -251,20 +311,31 @@ const TextAreaSupportText = ({ children }: TextAreaSupportTextProps) => {
 // Error Text Component
 interface TextAreaErrorTextProps {
     children: string | string[];
+    className?: string;
 }
 
-const TextAreaErrorText = ({ children }: TextAreaErrorTextProps) => {
+const TextAreaErrorText = ({ children, className = "" }: TextAreaErrorTextProps) => {
+    const { errorTextId } = useTextAreaContext();
+
     if (typeof children === "string") {
         return (
-            <p className="text-xs font-secondary text-error-600 dark:text-error-400 px-2 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
+            <p 
+                id={errorTextId}
+                role="alert"
+                className={`text-xs font-secondary text-error-600 dark:text-error-400 px-2 flex items-center gap-1 ${className}`}
+            >
+                <AlertCircle className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
                 {children}
             </p>
         );
     }
 
     return (
-        <ul className="text-xs font-secondary text-error-600 dark:text-error-400 px-2 list-disc list-inside space-y-1">
+        <ul 
+            id={errorTextId}
+            role="alert"
+            className={`text-xs font-secondary text-error-600 dark:text-error-400 px-2 list-disc list-inside space-y-1 ${className}`}
+        >
             {children.map((text, idx) => (
                 <li key={idx}>{text}</li>
             ))}
@@ -273,11 +344,19 @@ const TextAreaErrorText = ({ children }: TextAreaErrorTextProps) => {
 };
 
 // Character Count Component (standalone)
-const TextAreaCharCount = () => {
+interface TextAreaCharCountProps {
+    className?: string;
+}
+
+const TextAreaCharCount = ({ className = "" }: TextAreaCharCountProps) => {
     const { charCount, maxLength } = useTextAreaContext();
 
     return (
-        <span className="text-xs font-secondary text-neutral-500 dark:text-neutral-400 px-2">
+        <span 
+            className={`text-xs font-secondary text-ground-500 dark:text-ground-400 px-2 ${className}`}
+            aria-live="polite"
+            aria-atomic="true"
+        >
             {charCount}
             {maxLength && `/${maxLength}`}
         </span>

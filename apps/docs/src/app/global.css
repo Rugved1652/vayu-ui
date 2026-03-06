@@ -218,7 +218,7 @@
      ============================================================ */
 
   /* Border radius — 2px keeps the system sharp and utilitarian */
-  --radius: 2px;
+  --radius: 12px;
 
   /* ============================================================
      SHADOWS  (Tailwind v4 namespace mapping)

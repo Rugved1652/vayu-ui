@@ -19,7 +19,7 @@ export default function TooltipDemo() {
                                 content={`Tooltip on ${pos}`}
                                 position={pos}
                             >
-                                <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded-md hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors capitalize">
+                                <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors capitalize">
                                     {pos}
                                 </button>
                             </Tooltip>
@@ -35,31 +35,31 @@ export default function TooltipDemo() {
                 </p>
                 <div className="flex flex-wrap items-center gap-4">
                     <Tooltip content="Default tooltip" variant="default">
-                        <button className="p-2 rounded-md bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
+                        <button className="p-2 rounded bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
                             <Info className="w-4 h-4 text-ground-600 dark:text-ground-400" aria-hidden="true" />
                             <span className="sr-only">Info</span>
                         </button>
                     </Tooltip>
                     <Tooltip content="Success!" variant="success">
-                        <button className="p-2 rounded-md bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
-                            <CheckCircle className="w-4 h-4 text-green-600" aria-hidden="true" />
+                        <button className="p-2 rounded bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
+                            <CheckCircle className="w-4 h-4 text-success-600" aria-hidden="true" />
                             <span className="sr-only">Success</span>
                         </button>
                     </Tooltip>
                     <Tooltip content="Warning — check this" variant="warning">
-                        <button className="p-2 rounded-md bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
-                            <AlertTriangle className="w-4 h-4 text-yellow-600" aria-hidden="true" />
+                        <button className="p-2 rounded bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
+                            <AlertTriangle className="w-4 h-4 text-warning-600" aria-hidden="true" />
                             <span className="sr-only">Warning</span>
                         </button>
                     </Tooltip>
                     <Tooltip content="Error occurred" variant="error">
-                        <button className="p-2 rounded-md bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
-                            <XCircle className="w-4 h-4 text-red-600" aria-hidden="true" />
+                        <button className="p-2 rounded bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
+                            <XCircle className="w-4 h-4 text-error-600" aria-hidden="true" />
                             <span className="sr-only">Error</span>
                         </button>
                     </Tooltip>
                     <Tooltip content="Primary action" variant="primary">
-                        <button className="px-3 py-1.5 text-sm font-secondary bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors">
+                        <button className="px-3 py-1.5 text-sm font-secondary bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors">
                             Primary
                         </button>
                     </Tooltip>
@@ -73,17 +73,17 @@ export default function TooltipDemo() {
                 </p>
                 <div className="flex flex-wrap items-center gap-4">
                     <Tooltip content="This won't show" disabled>
-                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-400 rounded-md cursor-not-allowed">
+                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-400 rounded cursor-not-allowed">
                             Disabled
                         </button>
                     </Tooltip>
                     <Tooltip content="No arrow" showArrow={false}>
-                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded-md hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
+                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
                             No Arrow
                         </button>
                     </Tooltip>
                     <Tooltip content="Slow delay" delay={800}>
-                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded-md hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
+                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
                             800ms Delay
                         </button>
                     </Tooltip>

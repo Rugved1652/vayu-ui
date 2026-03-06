@@ -3,13 +3,13 @@ import fs from "fs"
 import path from "path"
 import os from "os"
 
-export function runClaudePrompt(prompt: string) {
+export function runClaudePrompt(prompt: string, model: string = "opus") {
   // Write prompt to a temp file to avoid shell escaping issues
   const tmpFile = path.join(os.tmpdir(), `claude-prompt-${Date.now()}.txt`)
   fs.writeFileSync(tmpFile, prompt, "utf-8")
 
   try {
-    const output = execSync(`cat "${tmpFile}" | claude`, {
+    const output = execSync(`cat "${tmpFile}" | claude --model ${model}`, {
       encoding: "utf-8",
       maxBuffer: 1024 * 1024 * 10,
     })
