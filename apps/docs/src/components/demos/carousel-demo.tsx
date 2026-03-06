@@ -7,7 +7,7 @@ const slides: CarouselItem[] = [
         id: 1,
         title: "Modern Design System",
         description:
-            "Build beautiful, accessible UIs with VED UI components.",
+            "Build beautiful, accessible UIs with VedUI components.",
         image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
     },
     {
@@ -29,7 +29,7 @@ const testimonials: CarouselItem[] = [
         id: "t1",
         title: "Alex Rivera, Engineering Lead",
         description:
-            "VED UI saved us months of work. The component quality is outstanding.",
+            "VedUI saved us months of work. The component quality is outstanding.",
     },
     {
         id: "t2",
@@ -47,39 +47,45 @@ const testimonials: CarouselItem[] = [
 
 export default function CarouselDemo() {
     return (
-        <div className="not-prose flex flex-col gap-12 w-full max-w-2xl">
-            {/* Default */}
-            <div>
-                <h3 className="text-sm font-medium font-primary text-neutral-500 dark:text-neutral-400 mb-3">
-                    Default
-                </h3>
-                <Carousel items={slides} autoplay showControls />
-            </div>
+        <div className="w-full max-w-2xl not-prose">
+            <h2 id="carousel-demo-label" className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-200 mb-4">
+                Carousel Example
+            </h2>
 
-            {/* Testimonial variant */}
-            <div>
-                <h3 className="text-sm font-medium font-primary text-neutral-500 dark:text-neutral-400 mb-3">
-                    Testimonial
-                </h3>
-                <Carousel
-                    items={testimonials}
-                    variant="testimonial"
-                    bulletStyle="lines"
-                    aspectRatio="16/7"
-                />
-            </div>
+            <div className="flex flex-col gap-12">
+                {/* Default */}
+                <div>
+                    <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
+                        Default
+                    </h3>
+                    <Carousel items={slides} autoplay showControls />
+                </div>
 
-            {/* Number bullets, no loop */}
-            <div>
-                <h3 className="text-sm font-medium font-primary text-neutral-500 dark:text-neutral-400 mb-3">
-                    Numbers &amp; No Loop
-                </h3>
-                <Carousel
-                    items={slides}
-                    bulletStyle="numbers"
-                    loop={false}
-                    transitionEffect="fade"
-                />
+                {/* Testimonial variant */}
+                <div>
+                    <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
+                        Testimonial
+                    </h3>
+                    <Carousel
+                        items={testimonials}
+                        variant="testimonial"
+                        bulletStyle="lines"
+                        aspectRatio="16/7"
+                    />
+                </div>
+
+                {/* Number bullets, no loop */}
+                <div>
+                    <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
+                        Numbers &amp; No Loop
+                    </h3>
+                    <Carousel
+                        items={slides}
+                        bulletStyle="numbers"
+                        loop={false}
+                        transitionEffect="fade"
+                    />
+                </div>
             </div>
         </div>
     );

@@ -99,7 +99,6 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
         const [mounted, setMounted] = useState(false);
 
         const uniqueId = useId();
-        const carouselLabelId = `${uniqueId}-label`;
         const slidePanelId = `${uniqueId}-slide`;
 
         const carouselRef = useRef<HTMLDivElement>(null);
@@ -379,10 +378,10 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                             bulletButton(
                                 i,
                                 clsx(
-                                    "rounded-full transition-all duration-300",
+                                    "rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
                                     i === currentIndex
                                         ? "w-8 h-2 bg-primary-600 dark:bg-primary-400"
-                                        : "w-2 h-2 bg-neutral-400 dark:bg-neutral-600 hover:bg-neutral-500 dark:hover:bg-neutral-500"
+                                        : "w-2 h-2 bg-ground-400 dark:bg-ground-600 hover:bg-ground-500 dark:hover:bg-ground-500"
                                 )
                             )
                         )
@@ -399,10 +398,10 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                 bulletButton(
                                     i,
                                     clsx(
-                                        "h-1 rounded-full transition-all duration-300",
+                                        "h-1 rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
                                         i === currentIndex
                                             ? "w-12 bg-primary-600 dark:bg-primary-400"
-                                            : "w-8 bg-neutral-400 dark:bg-neutral-600 hover:bg-neutral-500 dark:hover:bg-neutral-500"
+                                            : "w-8 bg-ground-400 dark:bg-ground-600 hover:bg-ground-500 dark:hover:bg-ground-500"
                                     )
                                 )
                             )}
@@ -415,10 +414,10 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                             bulletButton(
                                 i,
                                 clsx(
-                                    "w-8 h-8 rounded-full font-secondary font-semibold text-sm transition-all duration-300",
+                                    "w-8 h-8 rounded-full font-secondary font-semibold text-sm transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
                                     i === currentIndex
-                                        ? "bg-primary-600 dark:bg-primary-400 text-white scale-110"
-                                        : "bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-700"
+                                        ? "bg-primary-600 dark:bg-primary-400 text-ground-50 scale-110"
+                                        : "bg-ground-200 dark:bg-ground-800 text-ground-700 dark:text-ground-300 hover:bg-ground-300 dark:hover:bg-ground-700"
                                 ),
                                 i + 1
                             )
@@ -444,10 +443,10 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                     }
                                     onClick={() => goToSlide(i)}
                                     className={clsx(
-                                        "relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden transition-all duration-300 border-2",
+                                        "relative flex-shrink-0 w-16 h-16 rounded overflow-hidden transition-all duration-300 border-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
                                         i === currentIndex
                                             ? "border-primary-600 dark:border-primary-400 scale-110"
-                                            : "border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-600"
+                                            : "border-ground-300 dark:border-ground-700 hover:border-ground-400 dark:hover:border-ground-600"
                                     )}
                                 >
                                     {item.thumbnail || item.image ? (
@@ -460,8 +459,8 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <div className="w-full h-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center">
-                                            <span className="text-xs font-secondary text-neutral-500">
+                                        <div className="w-full h-full bg-ground-200 dark:bg-ground-800 flex items-center justify-center">
+                                            <span className="text-xs font-secondary text-ground-500">
                                                 {i + 1}
                                             </span>
                                         </div>
@@ -487,7 +486,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
             switch (variant) {
                 case "gallery":
                     return (
-                        <div className="relative w-full h-full overflow-hidden bg-neutral-900">
+                        <div className="relative w-full h-full overflow-hidden bg-ground-950">
                             {item.image && (
                                 <div
                                     className="relative w-full h-full"
@@ -530,7 +529,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                                     maxZoom
                                                 }
                                                 aria-label="Zoom in"
-                                                className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors"
+                                                className="p-2 bg-ground-950/50 hover:bg-ground-950/70 text-ground-50 rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                                             >
                                                 <ZoomIn className="w-5 h-5" />
                                             </button>
@@ -541,7 +540,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                                     zoomLevel <= 1
                                                 }
                                                 aria-label="Zoom out"
-                                                className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors"
+                                                className="p-2 bg-ground-950/50 hover:bg-ground-950/70 text-ground-50 rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                                             >
                                                 <ZoomOut className="w-5 h-5" />
                                             </button>
@@ -553,7 +552,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                                     )
                                                 }
                                                 aria-label="Enter fullscreen"
-                                                className="p-2 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors"
+                                                className="p-2 bg-ground-950/50 hover:bg-ground-950/70 text-ground-50 rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                                             >
                                                 <Maximize2 className="w-5 h-5" />
                                             </button>
@@ -562,12 +561,12 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                 </div>
                             )}
                             {item.title && (
-                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                                    <h3 className="text-2xl font-primary font-bold text-white mb-2">
+                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-ground-950/70 to-transparent p-6">
+                                    <h3 className="text-2xl font-primary font-bold text-ground-50 mb-2">
                                         {item.title}
                                     </h3>
                                     {item.description && (
-                                        <p className="font-secondary text-white/90">
+                                        <p className="font-secondary text-ground-100/90">
                                             {item.description}
                                         </p>
                                     )}
@@ -579,7 +578,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                 case "product":
                     return (
                         <div
-                            className="relative w-full h-full bg-white dark:bg-neutral-900 overflow-hidden cursor-crosshair"
+                            className="relative w-full h-full bg-ground-50 dark:bg-ground-950 overflow-hidden cursor-crosshair"
                             onMouseEnter={() =>
                                 zoomOnHover && setZoomLevel(2.5)
                             }
@@ -611,12 +610,12 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 
                 case "testimonial":
                     return (
-                        <div className="flex items-center justify-center h-full p-12 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20">
+                        <div className="flex items-center justify-center h-full p-12 bg-gradient-to-br from-primary-100 to-ground-100 dark:from-primary-900/20 dark:to-ground-900/20">
                             <div className="max-w-3xl text-center">
                                 {item.content || (
                                     <>
                                         {item.description && (
-                                            <blockquote className="text-2xl font-secondary text-neutral-800 dark:text-neutral-200 italic mb-6 leading-relaxed">
+                                            <blockquote className="text-2xl font-secondary text-ground-800 dark:text-ground-200 italic mb-6 leading-relaxed">
                                                 &ldquo;
                                                 {item.description}
                                                 &rdquo;
@@ -650,14 +649,14 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                     )}
                                     {(item.title ||
                                         item.description) && (
-                                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-ground-950/70 to-transparent p-6">
                                                 {item.title && (
-                                                    <h3 className="text-2xl font-primary font-bold text-white mb-2">
+                                                    <h3 className="text-2xl font-primary font-bold text-ground-50 mb-2">
                                                         {item.title}
                                                     </h3>
                                                 )}
                                                 {item.description && (
-                                                    <p className="font-secondary text-white/90">
+                                                    <p className="font-secondary text-ground-100/90">
                                                         {item.description}
                                                     </p>
                                                 )}
@@ -682,13 +681,13 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                     role="dialog"
                     aria-label="Fullscreen carousel"
                     aria-modal="true"
-                    className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
+                    className="fixed inset-0 z-[9999] bg-ground-950 flex items-center justify-center"
                 >
                     <button
                         type="button"
                         onClick={() => setIsFullscreen(false)}
                         aria-label="Close fullscreen"
-                        className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors z-10"
+                        className="absolute top-4 right-4 p-2 bg-ground-50/10 hover:bg-ground-50/20 text-ground-50 rounded transition-colors z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                     >
                         <X className="w-6 h-6" />
                     </button>
@@ -702,7 +701,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                     !loop && currentIndex === 0
                                 }
                                 aria-label="Previous slide"
-                                className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors z-10"
+                                className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-ground-50/10 hover:bg-ground-50/20 text-ground-50 rounded-full transition-colors z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <ChevronLeft className="w-8 h-8" />
                             </button>
@@ -715,7 +714,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                     items.length - 1
                                 }
                                 aria-label="Next slide"
-                                className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors z-10"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-ground-50/10 hover:bg-ground-50/20 text-ground-50 rounded-full transition-colors z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <ChevronRight className="w-8 h-8" />
                             </button>
@@ -745,7 +744,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                             onClick={handleZoomOut}
                             disabled={zoomLevel <= 1}
                             aria-label="Zoom out"
-                            className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+                            className="p-2 bg-ground-50/10 hover:bg-ground-50/20 text-ground-50 rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <ZoomOut className="w-5 h-5" />
                         </button>
@@ -753,7 +752,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                             type="button"
                             onClick={handleZoomReset}
                             aria-label="Reset zoom"
-                            className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors font-secondary text-sm"
+                            className="px-4 py-2 bg-ground-50/10 hover:bg-ground-50/20 text-ground-50 rounded transition-colors font-secondary text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                         >
                             Reset
                         </button>
@@ -762,7 +761,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                             onClick={handleZoomIn}
                             disabled={zoomLevel >= maxZoom}
                             aria-label="Zoom in"
-                            className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+                            className="p-2 bg-ground-50/10 hover:bg-ground-50/20 text-ground-50 rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <ZoomIn className="w-5 h-5" />
                         </button>
@@ -770,7 +769,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 
                     {/* Counter */}
                     <div
-                        className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-white/10 text-white rounded-lg font-secondary text-sm"
+                        className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-ground-50/10 text-ground-50 rounded font-secondary text-sm"
                         aria-live="polite"
                     >
                         {liveText}
@@ -808,7 +807,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                     </div>
 
                     <div
-                        className="relative overflow-hidden rounded-lg"
+                        className="relative overflow-hidden rounded"
                         style={{ aspectRatio }}
                     >
                         <div
@@ -858,7 +857,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                             currentIndex === 0
                                         }
                                         aria-label="Previous slide"
-                                        className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/90 dark:bg-neutral-900/90 hover:bg-white dark:hover:bg-neutral-800 text-neutral-900 dark:text-white rounded-full shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-ground-50/90 dark:bg-ground-950/90 hover:bg-ground-50 dark:hover:bg-ground-800 text-ground-900 dark:text-ground-50 rounded-full shadow-outer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
                                     >
                                         <ChevronLeft
                                             className="w-6 h-6"
@@ -874,7 +873,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                             items.length - 1
                                         }
                                         aria-label="Next slide"
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/90 dark:bg-neutral-900/90 hover:bg-white dark:hover:bg-neutral-800 text-neutral-900 dark:text-white rounded-full shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-ground-50/90 dark:bg-ground-950/90 hover:bg-ground-50 dark:hover:bg-ground-800 text-ground-900 dark:text-ground-50 rounded-full shadow-outer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
                                     >
                                         <ChevronRight
                                             className="w-6 h-6"
@@ -896,7 +895,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                                         ? "Pause autoplay"
                                         : "Start autoplay"
                                 }
-                                className="absolute bottom-4 right-4 p-2 bg-white/90 dark:bg-neutral-900/90 hover:bg-white dark:hover:bg-neutral-800 text-neutral-900 dark:text-white rounded-full shadow-lg transition-all duration-200"
+                                className="absolute bottom-4 right-4 p-2 bg-ground-50/90 dark:bg-ground-950/90 hover:bg-ground-50 dark:hover:bg-ground-800 text-ground-900 dark:text-ground-50 rounded-full shadow-outer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
                             >
                                 {isPlaying ? (
                                     <Pause
@@ -914,7 +913,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 
                         {/* Visual counter */}
                         <div
-                            className="absolute top-4 right-4 px-3 py-1.5 bg-black/50 text-white rounded-lg font-secondary text-sm"
+                            className="absolute top-4 right-4 px-3 py-1.5 bg-ground-950/50 text-ground-50 rounded font-secondary text-sm"
                             aria-hidden="true"
                         >
                             {currentIndex + 1} / {items.length}
