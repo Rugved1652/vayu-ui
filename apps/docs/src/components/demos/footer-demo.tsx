@@ -5,12 +5,12 @@ import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
 
 export default function FooterDemo() {
     return (
-        <div className="w-full space-y-12 p-6 border border-neutral-200 dark:border-neutral-800 rounded-xl bg-neutral-50 dark:bg-neutral-950 overflow-hidden">
+        <div className="w-full space-y-12 p-6 border border-ground-200 dark:border-ground-800 rounded-xl bg-ground-50 dark:bg-ground-950 overflow-hidden">
 
             {/* Default Footer */}
             <div className="space-y-4">
-                <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wider">Default Variant</h3>
-                <div className="border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden bg-white dark:bg-neutral-900">
+                <h3 className="text-sm font-medium text-ground-500 uppercase tracking-wider">Default Variant</h3>
+                <div className="border border-ground-200 dark:border-ground-800 rounded-lg overflow-hidden bg-white dark:bg-ground-900">
                     <Footer>
                         <Footer.Container>
                             <Footer.Grid>
@@ -18,7 +18,7 @@ export default function FooterDemo() {
                                     <Footer.Logo href="#">
                                         <span className="text-xl font-bold bg-linear-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent">Vayu UI</span>
                                     </Footer.Logo>
-                                    <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-2">
+                                    <p className="text-sm text-ground-500 dark:text-ground-400 mt-2">
                                         Building beautiful user interfaces with modern web technologies.
                                     </p>
                                     <Footer.Social className="mt-4">
@@ -68,8 +68,8 @@ export default function FooterDemo() {
 
             {/* Centered Footer */}
             <div className="space-y-4">
-                <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wider">Centered Variant</h3>
-                <div className="border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden bg-white dark:bg-neutral-900">
+                <h3 className="text-sm font-medium text-ground-500 uppercase tracking-wider">Centered Variant</h3>
+                <div className="border border-ground-200 dark:border-ground-800 rounded-lg overflow-hidden bg-white dark:bg-ground-900">
                     <Footer variant="centered">
                         <Footer.Container>
                             <Footer.Grid>
@@ -105,8 +105,8 @@ export default function FooterDemo() {
 
             {/* Minimal Footer */}
             <div className="space-y-4">
-                <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wider">Minimal Variant</h3>
-                <div className="border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden bg-white dark:bg-neutral-900">
+                <h3 className="text-sm font-medium text-ground-500 uppercase tracking-wider">Minimal Variant</h3>
+                <div className="border border-ground-200 dark:border-ground-800 rounded-lg overflow-hidden bg-white dark:bg-ground-900">
                     <Footer variant="minimal">
                         <Footer.Container>
                             <Footer.Bottom>

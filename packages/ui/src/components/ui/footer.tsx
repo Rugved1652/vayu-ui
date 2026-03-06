@@ -44,10 +44,10 @@ const FooterRoot = forwardRef<HTMLElement, FooterRootProps>(
                 ref={ref}
                 data-variant={variant}
                 className={clsx(
-                    "group/footer", // Group marker for children to target
-                    "bg-neutral-50 dark:bg-neutral-950",
-                    "text-neutral-900 dark:text-neutral-100",
-                    "font-sans",
+                    "group/footer",
+                    "bg-ground-50 dark:bg-ground-950",
+                    "text-ground-900 dark:text-ground-100",
+                    "font-secondary",
                     "transition-colors duration-300",
                     className
                 )}
@@ -90,11 +90,8 @@ const FooterGrid = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
                 ref={ref}
                 className={clsx(
                     "grid gap-8",
-                    // Default behavior: 4 columns
                     "group-data-[variant=default]/footer:grid-cols-1 group-data-[variant=default]/footer:md:grid-cols-2 group-data-[variant=default]/footer:lg:grid-cols-4",
-                    // Centered behavior: 1 column, centered text
                     "group-data-[variant=centered]/footer:grid-cols-1 group-data-[variant=centered]/footer:text-center group-data-[variant=centered]/footer:justify-items-center",
-                    // Minimal behavior: 1 column
                     "group-data-[variant=minimal]/footer:grid-cols-1 group-data-[variant=minimal]/footer:md:grid-cols-2",
                     className
                 )}
@@ -118,7 +115,7 @@ const FooterSection = forwardRef<HTMLElement, FooterSectionProps>(
                 {...props}
             >
                 {title && (
-                    <h3 className="font-semibold text-lg text-neutral-900 dark:text-neutral-50 uppercase tracking-wide transition-colors duration-300">
+                    <h3 className="font-primary font-semibold text-lg text-ground-900 dark:text-ground-50 uppercase tracking-wide transition-colors duration-300">
                         {title}
                     </h3>
                 )}
@@ -145,11 +142,11 @@ const FooterLink = forwardRef<HTMLAnchorElement, FooterLinkProps>(
                 ref={ref}
                 href={href}
                 className={clsx(
-                    "text-neutral-600 dark:text-neutral-400", // Accessible text color
+                    "text-ground-600 dark:text-ground-400",
                     "hover:text-primary-600 dark:hover:text-primary-400",
                     "transition-colors duration-200",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
-                    "focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 dark:focus-visible:ring-offset-neutral-950",
+                    "focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
                     "rounded-sm",
                     "inline-flex items-center gap-1.5",
                     "underline-offset-4 hover:underline",
@@ -198,7 +195,7 @@ const FooterLogo = forwardRef<HTMLDivElement, FooterLogoProps>(
                 {href ? (
                     <a
                         href={href}
-                        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 dark:focus-visible:ring-offset-neutral-950 rounded-sm"
+                        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950 rounded-sm"
                         aria-label="Home"
                     >
                         {children}
@@ -248,14 +245,14 @@ const FooterSocialLink = forwardRef<HTMLAnchorElement, FooterLinkProps>(
                 ref={ref}
                 href={href}
                 className={clsx(
-                    "text-neutral-600 dark:text-neutral-400",
+                    "text-ground-600 dark:text-ground-400",
                     "hover:text-primary-600 dark:hover:text-primary-400",
-                    "hover:bg-neutral-100 dark:hover:bg-neutral-900", // Fixed bg color names
+                    "hover:bg-ground-100 dark:hover:bg-ground-900",
                     "transition-all duration-200",
-                    "p-2.5 rounded-full min-w-[44px] min-h-[44px]", // Min touch target
+                    "p-2.5 rounded-full min-w-[44px] min-h-[44px]",
                     "flex items-center justify-center",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
-                    "focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 dark:focus-visible:ring-offset-neutral-950",
+                    "focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
                     className
                 )}
                 target="_blank"
@@ -278,7 +275,7 @@ const FooterCopyright = forwardRef<HTMLDivElement, FooterCopyrightProps>(
             <div
                 ref={ref}
                 className={clsx(
-                    "text-neutral-600 dark:text-neutral-400",
+                    "text-ground-600 dark:text-ground-400",
                     "text-sm transition-colors duration-300",
                     className
                 )}
@@ -299,7 +296,7 @@ const FooterDivider = forwardRef<HTMLHRElement, FooterDividerProps>(
             <hr
                 ref={ref}
                 className={clsx(
-                    "border-neutral-200 dark:border-neutral-800", // Subtle divider
+                    "border-ground-200 dark:border-ground-800",
                     "my-8 transition-colors duration-300",
                     className
                 )}
@@ -321,7 +318,6 @@ const FooterBottom = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElem
                 ref={ref}
                 className={clsx(
                     "flex flex-col md:flex-row gap-4",
-                    // Style adjustments based on parent variant via group-data
                     "group-data-[variant=centered]/footer:justify-center group-data-[variant=centered]/footer:items-center group-data-[variant=centered]/footer:text-center",
                     "group-data-[variant=default]/footer:justify-between group-data-[variant=default]/footer:items-center",
                     "group-data-[variant=minimal]/footer:justify-between group-data-[variant=minimal]/footer:items-center",
