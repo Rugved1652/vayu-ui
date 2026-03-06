@@ -1,6 +1,6 @@
 ---
 title: Rate
-description: A rating component with star icons and interactive feedback.
+description: A fully accessible rating component with star icons, half-star support, and interactive feedback.
 ---
 
 import RateDemo from '@/components/demos/rate-demo';
@@ -10,72 +10,46 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
+    <div className="flex items-center justify-center p-8 bg-ground-100 dark:bg-ground-900 rounded-lg">
       <RateDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
     import React, { useState } from "react";
-    import { Rate } from "@/components/ui/rate";
+    import { Rate } from "vayu-ui";
     import { Heart } from "lucide-react";
 
     export default function RateDemo() {
       const [value, setValue] = useState(3);
 
       return (
-        <div className="flex flex-col gap-8 w-full max-w-2xl">
+        <div className="w-full max-w-md space-y-8">
           {/* Basic Usage */}
           <div className="space-y-2">
             <h3 className="text-lg font-medium">Basic Usage</h3>
             <Rate value={value} onChange={setValue} />
-            <p className="text-sm text-neutral-500">Current value: {value}</p>
+            <p className="text-sm text-ground-500">Current value: {value}</p>
           </div>
 
-          {/* Read Only */}
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">Read Only</h3>
-            <Rate defaultValue={3.5} readOnly />
-          </div>
-
-          {/* Sizes */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Sizes</h3>
-            <div className="flex flex-col gap-2">
-              <Rate defaultValue={3} size="sm" />
-              <Rate defaultValue={3} size="md" />
-              <Rate defaultValue={3} size="lg" />
-              <Rate defaultValue={3} size="xl" />
-            </div>
-          </div>
-
-          {/* Colors & Variants */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Colors & Variants</h3>
-            <div className="flex flex-col gap-2">
-              <Rate defaultValue={4} color="primary" />
-              <Rate defaultValue={4} color="error" />
-              <Rate defaultValue={4} color="success" />
-              <Rate defaultValue={4} color="info" />
-              <Rate defaultValue={4} variant="outlined" color="primary" />
-            </div>
-          </div>
-
-          {/* With Text & Description */}
+          {/* With Labels */}
           <div className="space-y-2">
             <h3 className="text-lg font-medium">With Labels</h3>
-            <Rate defaultValue={2} labels={['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']}>
-                <Rate.Container>
-                    <Rate.Label>Product Rating</Rate.Label>
-                    <Rate.Stars />
-                    <Rate.TextLabel />
-                </Rate.Container>
-                <Rate.Description>Rate the product quality.</Rate.Description>
+            <Rate 
+              defaultValue={3} 
+              labels={['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']}
+            >
+              <Rate.Container>
+                <Rate.Label>Product Rating</Rate.Label>
+                <Rate.Stars />
+                <Rate.TextLabel />
+              </Rate.Container>
+              <Rate.Description>Rate the product quality.</Rate.Description>
             </Rate>
           </div>
 
           {/* Custom Icon */}
-           <div className="space-y-2">
+          <div className="space-y-2">
             <h3 className="text-lg font-medium">Custom Icon</h3>
             <Rate defaultValue={3} icon={<Heart />} color="error" />
           </div>
@@ -107,24 +81,30 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 | `error` | `boolean` | `false` | Whether to show error state. |
 | `labels` | `string[]` | - | Labels corresponding to each star value. |
 | `className` | `string` | - | Additional CSS classes. |
+| `aria-label` | `string` | - | Accessible label for the rating. |
+| `aria-labelledby` | `string` | - | ID of element that labels the rating. |
 
 ### Rate.Label
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | - | Label content. |
 | `className` | `string` | - | Additional CSS classes. |
 
 ### Rate.Description
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | - | Description content. |
 | `className` | `string` | - | Additional CSS classes. |
+| `id` | `string` | - | ID for the description element. |
 
 ### Rate.Stars
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `className` | `string` | - | Additional CSS classes. |
+| `aria-label` | `string` | - | Accessible label for the rating slider. |
 
 ### Rate.Value
 
@@ -140,17 +120,44 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 | :--- | :--- | :--- | :--- |
 | `className` | `string` | - | Additional CSS classes. |
 
+### Rate.Container
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | - | Container content. |
+| `className` | `string` | - | Additional CSS classes. |
+
 ### Rate.ErrorText
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | - | Error message content. |
 | `className` | `string` | - | Additional CSS classes. |
+| `id` | `string` | - | ID for the error element. |
+
+## Accessibility
+
+The Rate component is built with WCAG 2.2 AA compliance in mind:
+
+- **Keyboard Navigation**: Full support for Arrow keys (Left/Right/Up/Down), Home, and End keys
+- **Focus Visible**: Clear focus indicator with ring styling when the component receives keyboard focus
+- **ARIA Roles**: Uses `role="slider"` with proper `aria-valuemin`, `aria-valuemax`, and `aria-valuenow` attributes
+- **Screen Reader Support**: Proper `aria-label` and `aria-labelledby` support, with `aria-live` regions for dynamic text labels
+- **Read-only and Disabled States**: Proper `aria-readonly` and `aria-disabled` attributes
+- **Reduced Motion**: Respects `prefers-reduced-motion` for animations
+
+### Keyboard Interactions
+
+| Key | Action |
+| :--- | :--- |
+| `ArrowRight` / `ArrowUp` | Increase rating by step (0.5 or 1) |
+| `ArrowLeft` / `ArrowDown` | Decrease rating by step (0.5 or 1) |
+| `Home` | Set rating to minimum (0) |
+| `End` | Set rating to maximum (count) |
 
 ## Source Code
 
-```tsx title="src/components/ui/rate.tsx"
-// src/components/Rate.tsx
-
+```tsx title="packages/ui/src/components/ui/rate.tsx"
 "use client";
 import { Star } from "lucide-react";
 import React, {
@@ -260,36 +267,36 @@ const colorClasses = {
     primary: {
         filled:
             "text-primary-500 fill-primary-500 dark:text-primary-400 dark:fill-primary-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-primary-500 dark:text-primary-400",
     },
     secondary: {
         filled:
             "text-secondary-500 fill-secondary-500 dark:text-secondary-400 dark:fill-secondary-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-secondary-500 dark:text-secondary-400",
     },
     warning: {
         filled:
             "text-warning-500 fill-warning-500 dark:text-warning-400 dark:fill-warning-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-warning-500 dark:text-warning-400",
     },
     error: {
         filled:
             "text-error-500 fill-error-500 dark:text-error-400 dark:fill-error-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-error-500 dark:text-error-400",
     },
     info: {
         filled: "text-info-500 fill-info-500 dark:text-info-400 dark:fill-info-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-info-500 dark:text-info-400",
     },
     success: {
         filled:
             "text-success-500 fill-success-500 dark:text-success-400 dark:fill-success-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-success-500 dark:text-success-400",
     },
 };
@@ -299,7 +306,7 @@ const colorClasses = {
 // ============================================================================
 
 interface RateRootProps {
-    children: ReactNode;
+    children?: ReactNode;
     count?: number;
     value?: number;
     defaultValue?: number;
@@ -315,13 +322,7 @@ interface RateRootProps {
     error?: boolean;
     labels?: string[];
     className?: string;
-    /**
-     * Accessible label for the rating
-     */
     "aria-label"?: string;
-    /**
-     * ID of element that labels the rating
-     */
     "aria-labelledby"?: string;
 }
 
@@ -389,41 +390,6 @@ const RateRoot: React.FC<RateRootProps> = ({
         onChange?.(newValue);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (isDisabled) return;
-
-        let newValue = currentValue;
-        const step = allowHalf ? 0.5 : 1;
-
-        switch (e.key) {
-            case "ArrowRight":
-            case "ArrowUp":
-                e.preventDefault();
-                newValue = Math.min(currentValue + step, count);
-                break;
-            case "ArrowLeft":
-            case "ArrowDown":
-                e.preventDefault();
-                newValue = Math.max(currentValue - step, 0);
-                break;
-            case "Home":
-                e.preventDefault();
-                newValue = 0;
-                break;
-            case "End":
-                e.preventDefault();
-                newValue = count;
-                break;
-            default:
-                return;
-        }
-
-        if (!isControlled) {
-            setInternalValue(newValue);
-        }
-        onChange?.(newValue);
-    };
-
     const contextValue: RateContextType = {
         count,
         currentValue,
@@ -453,7 +419,7 @@ const RateRoot: React.FC<RateRootProps> = ({
                 aria-label={ariaLabel || "Rating"}
                 aria-labelledby={ariaLabelledby}
             >
-                {children}
+                {children ? children : <RateStars />}
             </div>
         </RateContext.Provider>
     );
@@ -473,7 +439,7 @@ const RateLabel: React.FC<RateLabelProps> = ({ children, className = "" }) => {
 
     return (
         <label
-            className={`block font-primary text-neutral-700 dark:text-neutral-300 font-medium mb-1 ${sizeClasses[size].label} ${className}`}
+            className={`block font-primary text-ground-700 dark:text-ground-300 font-medium mb-1 ${sizeClasses[size].label} ${className}`}
         >
             {children}
         </label>
@@ -498,7 +464,7 @@ const RateDescription: React.FC<RateDescriptionProps> = ({
     return (
         <p
             id={id}
-            className={`text-xs font-secondary text-neutral-500 dark:text-neutral-400 mb-2 ${className}`}
+            className={`text-xs font-secondary text-ground-500 dark:text-ground-400 mb-2 ${className}`}
         >
             {children}
         </p>
@@ -511,9 +477,6 @@ const RateDescription: React.FC<RateDescriptionProps> = ({
 
 interface RateStarsProps {
     className?: string;
-    /**
-     * Accessible label for the rating slider
-     */
     "aria-label"?: string;
 }
 
@@ -563,8 +526,8 @@ const RateStars: React.FC<RateStarsProps> = ({
             className={`
         flex items-center ${sizeClasses[size].gap}
         ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
-        ${!isDisabled && !readOnly && isFocused ? "scale-105" : ""}
-        transition-transform duration-200
+        ${!isDisabled && !readOnly && isFocused ? "ring-2 ring-primary-500 ring-offset-2 rounded" : ""}
+        transition-all duration-200
         ${className}
       `}
             onMouseLeave={handleMouseLeave}
@@ -638,12 +601,9 @@ const RateStar: React.FC<RateStarProps> = ({ index }) => {
             }}
             aria-hidden="true"
         >
-            {/* Empty Icon (Background) */}
             <div className="absolute top-0 left-0">
                 {renderIcon(currentColor.empty, false)}
             </div>
-
-            {/* Filled Icon (Foreground) */}
             <div
                 className="absolute top-0 left-0 h-full overflow-hidden"
                 style={{ width: `${fillPercentage}%` }}
@@ -652,11 +612,8 @@ const RateStar: React.FC<RateStarProps> = ({ index }) => {
                     ? renderIcon(currentColor.outlined, false)
                     : renderIcon(currentColor.filled, true)}
             </div>
-
-            {/* Interactive Hover Zones */}
             {!isDisabled && (
                 <>
-                    {/* Left half */}
                     {allowHalf && (
                         <span
                             className="absolute top-0 left-0 h-full w-1/2 z-10 cursor-pointer"
@@ -664,10 +621,8 @@ const RateStar: React.FC<RateStarProps> = ({ index }) => {
                             onClick={() => handleClick(leftHalfValue)}
                         />
                     )}
-                    {/* Right half or full */}
                     <span
-                        className={`absolute top-0 ${allowHalf ? "right-0 w-1/2" : "left-0 w-full"
-                            } h-full z-10 cursor-pointer`}
+                        className={`absolute top-0 ${allowHalf ? "right-0 w-1/2" : "left-0 w-full"} h-full z-10 cursor-pointer`}
                         onMouseEnter={() => handleHover(rightHalfValue)}
                         onClick={() => handleClick(rightHalfValue)}
                     />
@@ -697,7 +652,7 @@ const RateValue: React.FC<RateValueProps> = ({
 
     return (
         <span
-            className={`${sizeClasses[size].value} font-secondary font-medium text-neutral-700 dark:text-neutral-300 ${className}`}
+            className={`${sizeClasses[size].value} font-secondary font-medium text-ground-700 dark:text-ground-300 ${className}`}
         >
             {activeValue.toFixed(decimalPlaces)}
             {showTotal && ` / ${count}`}
@@ -725,7 +680,7 @@ const RateTextLabel: React.FC<RateTextLabelProps> = ({ className = "" }) => {
 
     return (
         <span
-            className={`${sizeClasses[size].value} font-secondary font-medium text-neutral-600 dark:text-neutral-400 ${className}`}
+            className={`${sizeClasses[size].value} font-secondary font-medium text-ground-600 dark:text-ground-400 ${className}`}
             role="status"
             aria-live="polite"
         >

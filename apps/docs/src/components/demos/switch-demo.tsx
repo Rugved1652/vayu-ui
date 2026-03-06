@@ -7,12 +7,12 @@ export default function SwitchDemo() {
     const [emailAlerts, setEmailAlerts] = useState(true);
 
     return (
-        <div className="flex flex-col gap-10">
+        <div className="w-full max-w-md not-prose space-y-10">
             {/* ── Sizes ── */}
-            <div className="flex flex-col gap-3">
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+            <div className="space-y-3">
+                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300">
                     Sizes
-                </p>
+                </h3>
                 <div className="flex items-center gap-6">
                     <Switch size="sm" defaultChecked aria-label="Small switch" />
                     <Switch size="md" defaultChecked aria-label="Medium switch" />
@@ -20,16 +20,13 @@ export default function SwitchDemo() {
                 </div>
             </div>
 
-            {/* ── With Labels ── */}
-            <div className="flex flex-col gap-3">
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+            {/* ── With Labels & Descriptions ── */}
+            <div className="space-y-3">
+                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300">
                     With Labels & Descriptions
-                </p>
-                <div className="flex flex-col gap-4 max-w-sm">
-                    <Switch
-                        size="sm"
-                        label="Compact Mode"
-                    />
+                </h3>
+                <div className="space-y-4">
+                    <Switch size="sm" label="Compact Mode" />
                     <Switch
                         checked={emailAlerts}
                         onChange={(e) => setEmailAlerts(e.target.checked)}
@@ -46,21 +43,13 @@ export default function SwitchDemo() {
             </div>
 
             {/* ── States ── */}
-            <div className="flex flex-col gap-3">
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+            <div className="space-y-3">
+                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300">
                     States
-                </p>
-                <div className="flex flex-col gap-4">
-                    <Switch
-                        disabled
-                        label="Disabled"
-                        description="Cannot check this."
-                    />
-                    <Switch
-                        disabled
-                        defaultChecked
-                        label="Disabled & Checked"
-                    />
+                </h3>
+                <div className="space-y-4">
+                    <Switch disabled label="Disabled" description="Cannot toggle this option" />
+                    <Switch disabled defaultChecked label="Disabled & Checked" />
                     <Switch
                         error
                         defaultChecked
@@ -68,6 +57,19 @@ export default function SwitchDemo() {
                         description="Something went wrong saving this setting."
                     />
                 </div>
+            </div>
+
+            {/* ── Controlled ── */}
+            <div className="space-y-3">
+                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300">
+                    Controlled Example
+                </h3>
+                <Switch
+                    checked={emailAlerts}
+                    onChange={(e) => setEmailAlerts(e.target.checked)}
+                    label={`Email alerts: ${emailAlerts ? "On" : "Off"}`}
+                    description="Toggle to enable or disable email notifications."
+                />
             </div>
         </div>
     );

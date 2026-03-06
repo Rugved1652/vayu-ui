@@ -1,4 +1,4 @@
-// src/components/Rate.tsx
+// packages/ui/src/components/ui/rate.tsx
 
 "use client";
 import { Star } from "lucide-react";
@@ -109,36 +109,36 @@ const colorClasses = {
     primary: {
         filled:
             "text-primary-500 fill-primary-500 dark:text-primary-400 dark:fill-primary-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-primary-500 dark:text-primary-400",
     },
     secondary: {
         filled:
             "text-secondary-500 fill-secondary-500 dark:text-secondary-400 dark:fill-secondary-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-secondary-500 dark:text-secondary-400",
     },
     warning: {
         filled:
             "text-warning-500 fill-warning-500 dark:text-warning-400 dark:fill-warning-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-warning-500 dark:text-warning-400",
     },
     error: {
         filled:
             "text-error-500 fill-error-500 dark:text-error-400 dark:fill-error-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-error-500 dark:text-error-400",
     },
     info: {
         filled: "text-info-500 fill-info-500 dark:text-info-400 dark:fill-info-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-info-500 dark:text-info-400",
     },
     success: {
         filled:
             "text-success-500 fill-success-500 dark:text-success-400 dark:fill-success-400",
-        empty: "text-neutral-300 dark:text-neutral-700",
+        empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-success-500 dark:text-success-400",
     },
 };
@@ -238,41 +238,6 @@ const RateRoot: React.FC<RateRootProps> = ({
         onChange?.(newValue);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (isDisabled) return;
-
-        let newValue = currentValue;
-        const step = allowHalf ? 0.5 : 1;
-
-        switch (e.key) {
-            case "ArrowRight":
-            case "ArrowUp":
-                e.preventDefault();
-                newValue = Math.min(currentValue + step, count);
-                break;
-            case "ArrowLeft":
-            case "ArrowDown":
-                e.preventDefault();
-                newValue = Math.max(currentValue - step, 0);
-                break;
-            case "Home":
-                e.preventDefault();
-                newValue = 0;
-                break;
-            case "End":
-                e.preventDefault();
-                newValue = count;
-                break;
-            default:
-                return;
-        }
-
-        if (!isControlled) {
-            setInternalValue(newValue);
-        }
-        onChange?.(newValue);
-    };
-
     const contextValue: RateContextType = {
         count,
         currentValue,
@@ -322,7 +287,7 @@ const RateLabel: React.FC<RateLabelProps> = ({ children, className = "" }) => {
 
     return (
         <label
-            className={`block font-primary text-neutral-700 dark:text-neutral-300 font-medium mb-1 ${sizeClasses[size].label} ${className}`}
+            className={`block font-primary text-ground-700 dark:text-ground-300 font-medium mb-1 ${sizeClasses[size].label} ${className}`}
         >
             {children}
         </label>
@@ -347,7 +312,7 @@ const RateDescription: React.FC<RateDescriptionProps> = ({
     return (
         <p
             id={id}
-            className={`text-xs font-secondary text-neutral-500 dark:text-neutral-400 mb-2 ${className}`}
+            className={`text-xs font-secondary text-ground-500 dark:text-ground-400 mb-2 ${className}`}
         >
             {children}
         </p>
@@ -372,6 +337,7 @@ const RateStars: React.FC<RateStarsProps> = ({
 }) => {
     const { count, activeValue, isDisabled, readOnly, size, handleMouseLeave } =
         useRate();
+    const [isFocused, setIsFocused] = useState(false);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         const context = useRate();
@@ -411,6 +377,8 @@ const RateStars: React.FC<RateStarsProps> = ({
             className={`
         flex items-center ${sizeClasses[size].gap}
         ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+        ${!isDisabled && !readOnly && isFocused ? "ring-2 ring-primary-500 ring-offset-2 rounded" : ""}
+        transition-all duration-200
         ${className}
       `}
             onMouseLeave={handleMouseLeave}
@@ -423,6 +391,8 @@ const RateStars: React.FC<RateStarsProps> = ({
             aria-disabled={isDisabled}
             tabIndex={isDisabled ? -1 : 0}
             onKeyDown={handleKeyDown}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
         >
             {Array.from({ length: count }).map((_, index) => (
                 <RateStar key={index} index={index + 1} />
@@ -541,7 +511,7 @@ const RateValue: React.FC<RateValueProps> = ({
 
     return (
         <span
-            className={`${sizeClasses[size].value} font-secondary font-medium text-neutral-700 dark:text-neutral-300 ${className}`}
+            className={`${sizeClasses[size].value} font-secondary font-medium text-ground-700 dark:text-ground-300 ${className}`}
         >
             {activeValue.toFixed(decimalPlaces)}
             {showTotal && ` / ${count}`}
@@ -569,7 +539,7 @@ const RateTextLabel: React.FC<RateTextLabelProps> = ({ className = "" }) => {
 
     return (
         <span
-            className={`${sizeClasses[size].value} font-secondary font-medium text-neutral-600 dark:text-neutral-400 ${className}`}
+            className={`${sizeClasses[size].value} font-secondary font-medium text-ground-600 dark:text-ground-400 ${className}`}
             role="status"
             aria-live="polite"
         >

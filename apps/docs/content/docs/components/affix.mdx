@@ -10,32 +10,36 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+    <div className="not-prose flex w-full justify-center p-4 border border-ground-200 dark:border-ground-700 rounded">
       <AffixDemo />
     </div>
   </Tab>
-  <Tab value="Code">
+  <Tab value="Code'>
     ```tsx
-    import { Affix } from "@/components/ui/affix"
+    import { Affix } from "vayu-ui";
 
-    export function Example() {
+    export default function Example() {
       return (
-        <Affix offset={64}>
-          <nav className="bg-white p-4 shadow">
-            Sticky navigation
-          </nav>
-        </Affix>
-      )
+        <div className="w-full max-w-md">
+          {/* Top affix */}
+          <Affix offset={64} label="Sticky navigation">
+            <nav className="bg-white dark:bg-ground-900 p-4 shadow-outer rounded">
+              Sticky navigation
+            </nav>
+          </Affix>
+
+          {/* Bottom affix */}
+          <Affix offset={16} position="bottom" label="Sticky footer">
+            <div className="bg-ground-100 dark:bg-ground-800 p-4 shadow-outer rounded">
+              Sticky footer
+            </div>
+          </Affix>
+        </div>
+      );
     }
     ```
   </Tab>
 </Tabs>
-
-## Installation
-
-```tsx title="src/components/ui/affix.tsx"
-// Copy the full component code
-```
 
 ## Features
 
@@ -45,17 +49,231 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 - **Layout preservation** — placeholder `div` prevents content jump
 - **Affixed callback** — `onAffixed(boolean)` fires on state change
 - **Data attribute** — `data-affixed` for CSS targeting
-- **Shadow on affix** — smooth `shadow-md` transition when pinned
+- **Shadow on affix** — smooth `shadow-outer` transition when pinned
 - **Passive listeners** — scroll & resize use `{ passive: true }`
 
 ## Props
 
-| Prop        | Type                          | Default  | Description                              |
-| :---------- | :---------------------------- | :------- | :--------------------------------------- |
-| `offset`    | `number`                      | `0`      | Distance (px) from viewport edge         |
-| `position`  | `top \| bottom`               | `top`    | Which edge to affix to                   |
-| `target`    | `HTMLElement \| null`         | `window` | Custom scroll container                  |
-| `zIndex`    | `number`                      | `100`    | Z-index when affixed                     |
-| `onAffixed` | `(affixed: boolean) => void`  | —        | Called when affixed state changes         |
-| `className` | `string`                      | —        | Additional class names                   |
-| `style`     | `CSSProperties`               | —        | Inline styles (merged with affix styles) |
+| Prop       | Type                         | Default     | Description                                   |
+| :--------- | :--------------------------- | :---------- | :-------------------------------------------- |
+| `offset`   | `number`                     | `0`         | Distance (px) from viewport edge              |
+| `position` | `"top" \| "bottom"`          | `"top"`     | Which edge to affix to                        |
+| `target`   | `HTMLElement \| null`        | `window`    | Custom scroll container                       |
+| `zIndex`   | `number`                     | `100`       | Z-index when affixed                          |
+| `label`    | `string`                     | `"Fixed content"` | Accessible label when affixed           |
+| `onAffixed`| `(affixed: boolean) => void` | —           | Called when affixed state changes             |
+| `className`| `string`                     | —           | Additional class names                        |
+| `style`    | `CSSProperties`              | —           | Inline styles (merged with affix styles)      |
+
+## Accessibility
+
+- **Region role** — Uses `role="region"` to create a landmark when content is affixed
+- **Accessible label** — `label` prop provides context for screen readers
+- **Live region** — `aria-live="polite"` announces state changes without interrupting
+- **Data attribute** — `data-affixed` allows for CSS-based styling hooks
+- **Semantic HTML** — Uses `<div>` as a neutral container; wrap children semantically
+
+## Source Code
+
+```tsx title="src/components/ui/affix.tsx"
+"use client";
+
+import { clsx } from "clsx";
+import React, {
+    forwardRef,
+    HTMLAttributes,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type AffixPosition = "top" | "bottom";
+
+interface AffixProps extends HTMLAttributes<HTMLDivElement> {
+    /** Distance from the viewport edge at which the element becomes affixed. */
+    offset?: number;
+    /** Pin to the top or bottom of the viewport. */
+    position?: AffixPosition;
+    /** Custom scroll container — defaults to `window`. */
+    target?: HTMLElement | null;
+    /** Z-index when affixed. */
+    zIndex?: number;
+    /** Accessible label for the affix region when affixed. */
+    label?: string;
+    /** Callback fired when affixed state changes. */
+    onAffixed?: (affixed: boolean) => void;
+    children: React.ReactNode;
+}
+
+// ============================================================================
+// Affix
+// ============================================================================
+
+const Affix = forwardRef<HTMLDivElement, AffixProps>(
+    (
+        {
+            offset = 0,
+            position = "top",
+            target = null,
+            zIndex = 100,
+            label = "Fixed content",
+            onAffixed,
+            className,
+            style,
+            children,
+            ...props
+        },
+        ref
+    ) => {
+        const [isAffixed, setIsAffixed] = useState(false);
+        const [placeholderHeight, setPlaceholderHeight] = useState(0);
+        const [affixStyle, setAffixStyle] = useState<React.CSSProperties>({});
+
+        const innerRef = useRef<HTMLDivElement>(null);
+        const placeholderRef = useRef<HTMLDivElement>(null);
+
+        // Generate a unique ID for accessibility
+        const affixId = useRef<string>(
+            `affix-${Math.random().toString(36).slice(2, 9)}`
+        );
+
+        // Sync affixed state with callback
+        const updateAffixed = useCallback(
+            (next: boolean) => {
+                setIsAffixed((prev) => {
+                    if (prev !== next) onAffixed?.(next);
+                    return next;
+                });
+            },
+            [onAffixed]
+        );
+
+        const measure = useCallback(() => {
+            const el = innerRef.current;
+            const placeholder = placeholderRef.current;
+            if (!el || !placeholder) return;
+
+            const scrollContainer = target || window;
+            const scrollTop =
+                target instanceof HTMLElement
+                    ? target.scrollTop
+                    : window.scrollY;
+            const containerTop =
+                target instanceof HTMLElement
+                    ? target.getBoundingClientRect().top
+                    : 0;
+            const containerBottom =
+                target instanceof HTMLElement
+                    ? target.getBoundingClientRect().bottom
+                    : window.innerHeight;
+
+            const rect = placeholder.getBoundingClientRect();
+            const elHeight = el.offsetHeight;
+
+            if (position === "top") {
+                // Affix when the placeholder scrolls above (offset + containerTop)
+                const shouldAffix = rect.top - containerTop <= offset;
+
+                if (shouldAffix) {
+                    setPlaceholderHeight(elHeight);
+                    setAffixStyle({
+                        position: "fixed",
+                        top: containerTop + offset,
+                        left: rect.left,
+                        width: rect.width,
+                        zIndex,
+                    });
+                    updateAffixed(true);
+                } else {
+                    setPlaceholderHeight(0);
+                    setAffixStyle({});
+                    updateAffixed(false);
+                }
+            } else {
+                // position === "bottom"
+                const shouldAffix =
+                    rect.bottom - containerBottom >= -offset;
+
+                if (shouldAffix) {
+                    setPlaceholderHeight(elHeight);
+                    setAffixStyle({
+                        position: "fixed",
+                        bottom: window.innerHeight - containerBottom + offset,
+                        left: rect.left,
+                        width: rect.width,
+                        zIndex,
+                    });
+                    updateAffixed(true);
+                } else {
+                    setPlaceholderHeight(0);
+                    setAffixStyle({});
+                    updateAffixed(false);
+                }
+            }
+        }, [offset, position, target, zIndex, updateAffixed]);
+
+        // Attach scroll + resize listeners
+        useEffect(() => {
+            const scrollTarget = target || window;
+
+            // Initial measurement
+            measure();
+
+            scrollTarget.addEventListener("scroll", measure, {
+                passive: true,
+            });
+            window.addEventListener("resize", measure, { passive: true });
+
+            return () => {
+                scrollTarget.removeEventListener("scroll", measure);
+                window.removeEventListener("resize", measure);
+            };
+        }, [measure, target]);
+
+        return (
+            <>
+                {/* Placeholder keeps layout space when element is affixed */}
+                <div
+                    ref={placeholderRef}
+                    aria-hidden="true"
+                    style={{
+                        height: isAffixed ? placeholderHeight : undefined,
+                    }}
+                />
+
+                <div
+                    ref={ref ?? innerRef}
+                    id={affixId.current}
+                    className={clsx(
+                        "transition-shadow duration-medium",
+                        isAffixed && "shadow-outer",
+                        className
+                    )}
+                    style={{ ...affixStyle, ...style }}
+                    data-affixed={isAffixed || undefined}
+                    role="region"
+                    aria-label={isAffixed ? label : undefined}
+                    aria-live="polite"
+                    {...props}
+                >
+                    {children}
+                </div>
+            </>
+        );
+    }
+);
+
+Affix.displayName = "Affix";
+
+// ============================================================================
+// Exports
+// ============================================================================
+
+export { Affix };
+export type { AffixPosition, AffixProps };
+```

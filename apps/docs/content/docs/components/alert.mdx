@@ -1,6 +1,6 @@
 ---
 title: Alert
-description: Displays a callout for user attention.
+description: Displays a callout for user attention with semantic variants.
 ---
 
 import AlertDemo from '@/components/demos/alert-demo';
@@ -10,17 +10,17 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
+    <div className="flex items-center justify-center p-8 bg-ground-100 dark:bg-ground-900 rounded">
       <AlertDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Alert } from "@/components/ui/alert";
+    import { Alert } from "vayu-ui";
     import { Info } from "lucide-react";
 
     <Alert variant="info">
-      <Alert.Icon>
+      <Alert.Icon variant="info">
         <Info className="w-5 h-5" />
       </Alert.Icon>
       <Alert.Content>
@@ -33,6 +33,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
     ```
   </Tab>
 </Tabs>
+
+## Variants
+
+The Alert component supports four semantic variants:
+
+- **info** - For informational messages (blue)
+- **success** - For positive feedback (green)
+- **warning** - For cautionary messages (yellow)
+- **error** - For error states and critical alerts (red)
 
 ## Props
 
@@ -48,6 +57,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
+| `variant` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | The variant for icon color. |
 | `children` | `ReactNode` | - | The icon component to display. |
 | `className` | `string` | - | Additional CSS classes. |
 
@@ -65,19 +75,40 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 | `children` | `ReactNode` | - | The content/description of the alert. |
 | `className` | `string` | - | Additional CSS classes. |
 
+### Alert.Content
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | - | The content wrapper for title and description. |
+| `className` | `string` | - | Additional CSS classes. |
+
 ### Alert.Dismiss
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
+| `variant` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | The variant for focus ring styling. |
+| `alertTitle` | `string` | - | Title for descriptive aria-label. |
 | `onClick` | `() => void` | - | Callback fired when the dismiss button is clicked. |
 | `children` | `ReactNode` | - | Optional custom content for the dismiss button. |
 | `className` | `string` | - | Additional CSS classes. |
+
+## Accessibility
+
+The Alert component follows WCAG 2.2 AA guidelines:
+
+- **ARIA Roles**: Uses `role="alert"` for warning/error variants and `role="status"` for info/success variants
+- **Live Regions**: Implements `aria-live` with appropriate politeness levels (`assertive` for warnings/errors, `polite` for info/success)
+- **Atomic Updates**: Uses `aria-atomic="true"` to ensure screen readers announce the full alert content
+- **Keyboard Navigation**: Dismiss button is fully keyboard accessible with Tab and Enter/Space
+- **Focus Visible**: Clear focus indicators with variant-specific ring colors
+- **Screen Reader Labels**: Descriptive `aria-label` on dismiss button including variant and title
+- **Decorative Icons**: Icons are marked with `aria-hidden="true"` as they are supplementary
 
 ## Source Code
 
 ```tsx title="src/components/ui/alert.tsx"
 import React, { HTMLAttributes, ButtonHTMLAttributes, forwardRef } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "./utils";
 
 // ============================================================================
 // Types & Interfaces
@@ -87,9 +118,17 @@ type AlertVariant = "info" | "success" | "warning" | "error";
 
 interface AlertRootProps extends HTMLAttributes<HTMLDivElement> {
     variant?: AlertVariant;
-    dismissible?: boolean;
-    onDismiss?: () => void;
     children: React.ReactNode;
+}
+
+interface AlertIconProps extends HTMLAttributes<HTMLDivElement> {
+    variant?: AlertVariant;
+    children: React.ReactNode;
+}
+
+interface AlertDismissProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    variant?: AlertVariant;
+    alertTitle?: string;
 }
 
 // ============================================================================
@@ -97,13 +136,26 @@ interface AlertRootProps extends HTMLAttributes<HTMLDivElement> {
 // ============================================================================
 
 const variantStyles: Record<AlertVariant, string> = {
-    info: "bg-info-50 border-info-200 text-info-900 dark:bg-info-950 dark:border-info-800 dark:text-info-100",
-    success: "bg-success-50 border-success-200 text-success-900 dark:bg-success-950 dark:border-success-800 dark:text-success-100",
-    warning: "bg-warning-50 border-warning-200 text-warning-900 dark:bg-warning-950 dark:border-warning-800 dark:text-warning-100",
-    error: "bg-error-50 border-error-200 text-error-900 dark:bg-error-950 dark:border-error-800 dark:text-error-100",
+    info: "bg-info-100 border-info-200 text-info-900 dark:bg-info-950 dark:border-info-800 dark:text-info-100",
+    success: "bg-success-100 border-success-200 text-success-900 dark:bg-success-950 dark:border-success-800 dark:text-success-100",
+    warning: "bg-warning-100 border-warning-200 text-warning-900 dark:bg-warning-950 dark:border-warning-800 dark:text-warning-100",
+    error: "bg-error-100 border-error-200 text-error-900 dark:bg-error-950 dark:border-error-800 dark:text-error-100",
 };
 
-// Maps for ARIA roles and live regions to ensure WCAG 2.2 AA compliance
+const variantIconStyles: Record<AlertVariant, string> = {
+    info: "text-info-600 dark:text-info-400",
+    success: "text-success-600 dark:text-success-400",
+    warning: "text-warning-600 dark:text-warning-400",
+    error: "text-error-600 dark:text-error-400",
+};
+
+const variantFocusStyles: Record<AlertVariant, string> = {
+    info: "focus-visible:ring-info-500 dark:focus-visible:ring-info-400",
+    success: "focus-visible:ring-success-500 dark:focus-visible:ring-success-400",
+    warning: "focus-visible:ring-warning-500 dark:focus-visible:ring-warning-400",
+    error: "focus-visible:ring-error-500 dark:focus-visible:ring-error-400",
+};
+
 const variantRole: Record<AlertVariant, "alert" | "status"> = {
     info: "status",
     success: "status",
@@ -111,14 +163,20 @@ const variantRole: Record<AlertVariant, "alert" | "status"> = {
     error: "alert",
 };
 
+const variantLive: Record<AlertVariant, "polite" | "assertive"> = {
+    info: "polite",
+    success: "polite",
+    warning: "assertive",
+    error: "assertive",
+};
+
 // ============================================================================
-// Alert Root Component (Server-safe, no state!)
+// Alert Root Component
 // ============================================================================
 
 const AlertRoot = forwardRef<HTMLDivElement, AlertRootProps>(({
     variant = "info",
-    dismissible = false,
-    className = "",
+    className,
     children,
     ...props
 }, ref) => {
@@ -126,8 +184,10 @@ const AlertRoot = forwardRef<HTMLDivElement, AlertRootProps>(({
         <div
             ref={ref}
             role={variantRole[variant]}
+            aria-live={variantLive[variant]}
+            aria-atomic="true"
             className={cn(
-                "relative flex gap-3 p-4 border rounded-lg w-full",
+                "relative flex gap-3 p-4 border rounded w-full",
                 variantStyles[variant],
                 className
             )}
@@ -144,16 +204,21 @@ AlertRoot.displayName = "Alert";
 // Alert Icon Component
 // ============================================================================
 
-const AlertIcon = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({
-    className = "",
+const AlertIcon = forwardRef<HTMLDivElement, AlertIconProps>(({
+    variant = "info",
+    className,
     children,
     ...props
 }, ref) => {
     return (
         <div
             ref={ref}
-            className={cn("shrink-0", className)}
-            aria-hidden="true" // Icons are decorative in this context
+            className={cn(
+                "shrink-0",
+                variantIconStyles[variant],
+                className
+            )}
+            aria-hidden="true"
             {...props}
         >
             {children}
@@ -167,14 +232,17 @@ AlertIcon.displayName = "Alert.Icon";
 // ============================================================================
 
 const AlertTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(({
-    className = "",
+    className,
     children,
     ...props
 }, ref) => {
     return (
         <h5
             ref={ref}
-            className={cn("font-semibold mb-1 leading-none tracking-tight", className)}
+            className={cn(
+                "font-primary font-semibold mb-1 leading-none tracking-tight",
+                className
+            )}
             {...props}
         >
             {children}
@@ -188,14 +256,17 @@ AlertTitle.displayName = "Alert.Title";
 // ============================================================================
 
 const AlertDescription = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({
-    className = "",
+    className,
     children,
     ...props
 }, ref) => {
     return (
         <div
             ref={ref}
-            className={cn("text-sm [&_p]:leading-relaxed", className)}
+            className={cn(
+                "font-secondary text-para [&_p]:leading-relaxed",
+                className
+            )}
             {...props}
         >
             {children}
@@ -208,12 +279,10 @@ AlertDescription.displayName = "Alert.Description";
 // Alert Dismiss Component
 // ============================================================================
 
-interface AlertDismissProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    onDismiss?: () => void;
-}
-
 const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
-    className = "",
+    variant = "info",
+    alertTitle,
+    className,
     children,
     onClick,
     ...props
@@ -234,16 +303,24 @@ const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
         </svg>
     );
 
+    const ariaLabel = alertTitle
+        ? `Dismiss ${variant} alert: ${alertTitle}`
+        : `Dismiss ${variant} alert`;
+
     return (
         <button
             ref={ref}
             type="button"
             onClick={onClick}
             className={cn(
-                "absolute top-4 right-4 rounded-md p-1 transition-colors hover:bg-black/10 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 ring-offset-2",
+                "absolute top-4 right-4 rounded p-1 transition-colors",
+                "hover:bg-ground-200 dark:hover:bg-ground-800",
+                "focus-visible:outline-none focus-visible:ring-2 ring-offset-2",
+                variantIconStyles[variant],
+                variantFocusStyles[variant],
                 className
             )}
-            aria-label="Dismiss alert"
+            aria-label={ariaLabel}
             {...props}
         >
             {children || defaultIcon}
@@ -257,14 +334,14 @@ AlertDismiss.displayName = "Alert.Dismiss";
 // ============================================================================
 
 const AlertContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({
-    className = "",
+    className,
     children,
     ...props
 }, ref) => {
     return (
         <div
             ref={ref}
-            className={cn("flex-1", className)}
+            className={cn("flex-1 pr-6", className)}
             {...props}
         >
             {children}

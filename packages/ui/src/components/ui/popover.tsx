@@ -17,6 +17,7 @@ interface PopoverContextType {
     setOpen: (open: boolean) => void;
     triggerRef: React.RefObject<HTMLElement | null>;
     contentRef: React.RefObject<HTMLDivElement | null>;
+    modal: boolean;
 }
 
 const PopoverContext = createContext<PopoverContextType | undefined>(undefined);
@@ -81,6 +82,7 @@ const PopoverRoot = forwardRef<HTMLDivElement, PopoverProps>(
             const handleEscape = (event: KeyboardEvent) => {
                 if (event.key === "Escape") {
                     setOpen(false);
+                    triggerRef.current?.focus();
                 }
             };
 
@@ -96,7 +98,7 @@ const PopoverRoot = forwardRef<HTMLDivElement, PopoverProps>(
         }, [open]);
 
         return (
-            <PopoverContext.Provider value={{ open, setOpen, triggerRef, contentRef }}>
+            <PopoverContext.Provider value={{ open, setOpen, triggerRef, contentRef, modal }}>
                 <div ref={ref} className={`relative inline-block ${className}`} {...props}>
                     {children}
                 </div>
@@ -107,53 +109,70 @@ const PopoverRoot = forwardRef<HTMLDivElement, PopoverProps>(
 
 PopoverRoot.displayName = "Popover";
 
-export interface PopoverTriggerProps {
+export interface PopoverTriggerProps extends HTMLAttributes<HTMLElement> {
     children: React.ReactNode;
     asChild?: boolean;
     disabled?: boolean;
 }
 
-const PopoverTrigger: React.FC<PopoverTriggerProps> = ({
-    children,
-    asChild = false,
-    disabled = false,
-}) => {
-    const { open, setOpen, triggerRef } = usePopover();
+const PopoverTrigger = forwardRef<HTMLElement, PopoverTriggerProps>(
+    (
+        {
+            children,
+            asChild = false,
+            disabled = false,
+            className = "",
+            ...props
+        },
+        ref
+    ) => {
+        const { open, setOpen, triggerRef } = usePopover();
 
-    const handleClick = () => {
-        if (!disabled) {
-            setOpen(!open);
-        }
-    };
+        const handleClick = () => {
+            if (!disabled) {
+                setOpen(!open);
+            }
+        };
 
-    if (asChild && React.isValidElement(children)) {
-        return React.cloneElement(children as React.ReactElement<any>, {
-            ref: triggerRef,
-            onClick: (e: React.MouseEvent) => {
-                (children as React.ReactElement<any>).props.onClick?.(e);
+        const handleKeyDown = (event: React.KeyboardEvent) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
                 handleClick();
-            },
-            "aria-expanded": open,
-            "aria-haspopup": "dialog",
-            disabled,
-        });
-    }
+            }
+        };
 
-    return (
-        <Button
-            ref={triggerRef as React.RefObject<HTMLButtonElement>}
-            onClick={handleClick}
-            type="button"
-            aria-expanded={open}
-            aria-haspopup="dialog"
-            disabled={disabled}
-            variant="ghost"
-            className="font-secondary text-slate-200"
-        >
-            {children}
-        </Button>
-    );
-};
+        if (asChild && React.isValidElement(children)) {
+            return React.cloneElement(children as React.ReactElement<any>, {
+                ref: triggerRef,
+                onClick: (e: React.MouseEvent) => {
+                    (children as React.ReactElement<any>).props.onClick?.(e);
+                    handleClick();
+                },
+                onKeyDown: handleKeyDown,
+                "aria-expanded": open,
+                "aria-haspopup": "dialog",
+                disabled,
+            });
+        }
+
+        return (
+            <Button
+                ref={triggerRef as React.RefObject<HTMLButtonElement>}
+                onClick={handleClick}
+                onKeyDown={handleKeyDown}
+                type="button"
+                aria-expanded={open}
+                aria-haspopup="dialog"
+                disabled={disabled}
+                variant="ghost"
+                className={`font-secondary text-ground-700 dark:text-ground-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950 ${className}`}
+                {...props}
+            >
+                {children}
+            </Button>
+        );
+    }
+);
 
 PopoverTrigger.displayName = "Popover.Trigger";
 
@@ -186,25 +205,23 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
         },
         ref
     ) => {
-        const { open, setOpen, contentRef, triggerRef } = usePopover();
+        const { open, setOpen, contentRef, triggerRef, modal } = usePopover();
         const [position, setPosition] = useState({ top: 0, left: 0 });
         const [currentSide, setCurrentSide] = useState(side);
         const [arrowPosition, setArrowPosition] = useState({ top: 0, left: 0 });
         const [isPositioned, setIsPositioned] = useState(false);
 
-        // Variant styles
         const variantClasses = {
             default:
-                "bg-surface border border-border-subtle shadow-lg",
+                "bg-ground-50 dark:bg-ground-900 border border-ground-200 dark:border-ground-700 shadow-outer",
             bordered:
-                "bg-surface border-2 border-primary shadow-lg",
+                "bg-ground-50 dark:bg-ground-900 border-2 border-primary-500 shadow-outer",
             elevated:
-                "bg-surface border border-border-subtle shadow-xl",
+                "bg-ground-50 dark:bg-ground-900 border border-ground-200 dark:border-ground-700 shadow-outer shadow-lg",
         };
 
         useLayoutEffect(() => {
             if (open && triggerRef.current && contentRef.current) {
-                // Reset positioned state when opening
                 setIsPositioned(false);
 
                 const triggerRect = triggerRef.current.getBoundingClientRect();
@@ -216,7 +233,6 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                 let top = 0;
                 let left = 0;
 
-                // Check for collisions and adjust side if needed
                 if (avoidCollisions) {
                     const spaceAbove = triggerRect.top;
                     const spaceBelow = viewportHeight - triggerRect.bottom;
@@ -252,7 +268,6 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
 
                 setCurrentSide(finalSide);
 
-                // Calculate position based on final side
                 switch (finalSide) {
                     case "top":
                         top = triggerRect.top - contentRect.height - sideOffset;
@@ -270,7 +285,6 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                         break;
                 }
 
-                // Calculate alignment for top/bottom
                 if (finalSide === "top" || finalSide === "bottom") {
                     switch (align) {
                         case "start":
@@ -288,7 +302,6 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                             break;
                     }
 
-                    // Prevent horizontal overflow
                     if (avoidCollisions) {
                         if (left < 0) left = 8;
                         if (left + contentRect.width > viewportWidth)
@@ -296,7 +309,6 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                     }
                 }
 
-                // Calculate alignment for left/right
                 if (finalSide === "left" || finalSide === "right") {
                     switch (align) {
                         case "start":
@@ -314,7 +326,6 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                             break;
                     }
 
-                    // Prevent vertical overflow
                     if (avoidCollisions) {
                         if (top < 0) top = 8;
                         if (top + contentRect.height > viewportHeight)
@@ -324,7 +335,6 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
 
                 setPosition({ top, left });
 
-                // Calculate arrow position
                 if (showArrow) {
                     const arrowSize = 8;
                     let arrowTop = 0;
@@ -342,9 +352,9 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                     setArrowPosition({ top: arrowTop, left: arrowLeft });
                 }
 
-                // Use requestAnimationFrame to ensure position is set before animation
                 requestAnimationFrame(() => {
                     setIsPositioned(true);
+                    contentRef.current?.focus();
                 });
             } else {
                 setIsPositioned(false);
@@ -355,14 +365,18 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
 
         return (
             <>
-                {/* Backdrop for modal variant */}
-
-
-                {/* Content */}
+                {modal && (
+                    <div
+                        className="fixed inset-0 bg-ground-950/50 z-40"
+                        onClick={() => setOpen(false)}
+                        aria-hidden="true"
+                    />
+                )}
                 <div
                     ref={contentRef}
                     role="dialog"
-                    aria-modal="true"
+                    aria-modal={modal ? "true" : "false"}
+                    tabIndex={-1}
                     style={{
                         position: "fixed",
                         top: `${position.top}px`,
@@ -372,15 +386,14 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                         zIndex: 50,
                     }}
                     className={`
-            rounded-lg p-4
-            ${isPositioned ? "animate-in fade-in-0 zoom-in-95 duration-200" : ""}
-            data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95
-            ${variantClasses[variant]}
-            ${className}
-          `.trim()}
+                        rounded p-4
+                        ${isPositioned ? "animate-zoom-in-small" : ""}
+                        ${variantClasses[variant]}
+                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500
+                        ${className}
+                    `.trim()}
                     {...props}
                 >
-                    {/* Arrow */}
                     {showArrow && (
                         <div
                             style={{
@@ -392,27 +405,26 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                         >
                             <div
                                 className={`
-                  w-4 h-4 rotate-45
-                  ${variant === "bordered"
-                                        ? "bg-surface border-2 border-primary"
-                                        : "bg-surface border border-border-subtle"
+                                    w-4 h-4 rotate-45
+                                    ${variant === "bordered"
+                                        ? "bg-ground-50 dark:bg-ground-900 border-2 border-primary-500"
+                                        : "bg-ground-50 dark:bg-ground-900 border border-ground-200 dark:border-ground-700"
                                     }
-                  ${currentSide === "bottom" && "border-b-0 border-r-0"}
-                  ${currentSide === "top" && "border-t-0 border-l-0"}
-                  ${currentSide === "left" && "border-l-0 border-b-0"}
-                  ${currentSide === "right" && "border-r-0 border-t-0"}
-                `}
+                                    ${currentSide === "bottom" && "border-b-0 border-r-0"}
+                                    ${currentSide === "top" && "border-t-0 border-l-0"}
+                                    ${currentSide === "left" && "border-l-0 border-b-0"}
+                                    ${currentSide === "right" && "border-r-0 border-t-0"}
+                                `}
                             />
                         </div>
                     )}
 
-                    {/* Close Button */}
                     {closeButton && (
                         <Button
                             onClick={() => setOpen(false)}
                             variant="ghost"
                             size="small"
-                            className="absolute top-2 right-2 p-1 text-slate-400 hover:text-slate-200"
+                            className="absolute top-2 right-2 p-1 text-ground-400 hover:text-ground-700 dark:text-ground-500 dark:hover:text-ground-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                             aria-label="Close popover"
                         >
                             <Button.Icon>
@@ -421,8 +433,7 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                         </Button>
                     )}
 
-                    {/* Content */}
-                    <div className="font-secondary text-slate-200">
+                    <div className="font-secondary text-ground-800 dark:text-ground-200">
                         {children}
                     </div>
                 </div>
@@ -433,7 +444,6 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
 
 PopoverContent.displayName = "Popover.Content";
 
-// Export main component with sub-components
 export const Popover = Object.assign(PopoverRoot, {
     Trigger: PopoverTrigger,
     Content: PopoverContent,

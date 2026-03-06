@@ -29,6 +29,10 @@ interface AspectRatioProps
     overflow?: Overflow;
     /** Object-fit applied to direct `<img>` / `<video>` children. */
     objectFit?: ObjectFit;
+    /** Accessible label for screen readers when content is meaningful. */
+    "aria-label"?: string;
+    /** Marks the container as decorative (hidden from screen readers). */
+    decorative?: boolean;
     children: React.ReactNode;
 }
 
@@ -75,6 +79,7 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
             ratio = "square",
             overflow = "hidden",
             objectFit = "cover",
+            decorative = false,
             className,
             style,
             children,
@@ -86,9 +91,15 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
         const preset = isPreset ? PRESET_MAP[ratio] : null;
         const numericRatio = preset ? preset.value : (ratio as number);
 
+        // Accessibility: hide from screen readers if decorative
+        const ariaProps = decorative
+            ? { role: "presentation" as const, "aria-hidden": true as const }
+            : {};
+
         return (
             <div
                 ref={ref}
+                role={decorative ? undefined : "region"}
                 className={clsx(
                     "relative w-full",
                     preset?.tw,
@@ -103,6 +114,7 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
                             ...style,
                         }
                 }
+                {...ariaProps}
                 {...props}
             >
                 <div

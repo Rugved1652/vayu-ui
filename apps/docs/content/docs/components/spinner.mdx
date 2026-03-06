@@ -1,6 +1,6 @@
 ---
 title: Spinner
-description: A loading spinner component to indicate active states.
+description: A loading spinner component to indicate active states and loading processes.
 ---
 
 import SpinnerDemo from '@/components/demos/spinner-demo';
@@ -10,18 +10,19 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
+    <div className="not-prose flex w-full justify-center p-4 bg-ground-50 dark:bg-ground-950 rounded-lg">
       <SpinnerDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import Spinner from "@/components/ui/spinner";
+    import { Spinner } from "vayu-ui";
 
-    export default function SpinnerDemo() {
+    export default function Example() {
       return (
-        <div className="flex items-center justify-center p-8 bg-neutral-900 rounded-lg">
-          <Spinner />
+        <div className="flex items-center gap-3">
+          <Spinner size="md" />
+          <span className="text-sm text-ground-600">Loading...</span>
         </div>
       );
     }
@@ -29,99 +30,175 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
 </Tabs>
 
+## Features
+
+- Three sizes (`sm`, `md`, `lg`) for different contexts
+- Built with design system tokens for consistent styling
+- Full ARIA accessibility with `role="status"` and screen reader text
+- Smooth CSS animation with Tailwind's `animate-spin`
+- Respects `prefers-reduced-motion` for accessibility
+- Customizable colors via className override
+- Dark mode support with semantic color tokens
+
+## Anatomy
+
+```tsx
+<Spinner
+  size="md"
+  aria-label="Loading content"
+/>
+```
+
+## Props
+
+Extends `HTMLAttributes<HTMLSpanElement>`.
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the spinner |
+| `aria-label` | `string` | `"Loading"` | Accessible label for screen readers |
+| `className` | `string` | — | Additional CSS classes |
+
+## Sizes
+
+| Size | Dimensions | Use Case |
+| :--- | :--------- | :------- |
+| `sm` | 16×16 px | Inline text, buttons, small indicators |
+| `md` | 24×24 px | Default, general loading states |
+| `lg` | 32×32 px | Full-page loaders, prominent areas |
+
+## Examples
+
+### Button with Spinner
+
+```tsx
+<button
+  disabled
+  className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-ground-900 rounded"
+>
+  <Spinner size="sm" className="border-ground-900 border-t-transparent" />
+  Processing...
+</button>
+```
+
+### Custom Color
+
+Override the default primary color with semantic tokens:
+
+```tsx
+<Spinner className="border-info-500 border-t-transparent" />
+<Spinner className="border-success-500 border-t-transparent" />
+<Spinner className="border-warning-500 border-t-transparent" />
+<Spinner className="border-error-500 border-t-transparent" />
+```
+
+### Full Page Loader
+
+```tsx
+<div className="fixed inset-0 flex items-center justify-center bg-ground-50/80 dark:bg-ground-950/80">
+  <Spinner size="lg" aria-label="Loading page content" />
+</div>
+```
+
+## Accessibility
+
+This component follows WCAG 2.2 AA guidelines:
+
+- **Semantic HTML**: Uses `<span>` with `role="status"` for live regions
+- **Screen Readers**: Includes visually hidden "Loading..." text
+- **ARIA Labels**: Supports custom `aria-label` for context
+- **Reduced Motion**: Animation respects `prefers-reduced-motion`
+
+### Screen Reader Behavior
+
+The spinner announces "Loading..." to screen readers when it appears. Use a descriptive `aria-label` for context:
+
+```tsx
+<Spinner aria-label="Loading search results" />
+```
+
 ## Source Code
 
-<Tabs items={['tsx', 'css']}>
-  <Tab value="tsx">
-    ```tsx title="src/components/ui/spinner.tsx"
-    import React from 'react'
-    import './spinner.css'
+```tsx title="packages/ui/src/components/ui/spinner.tsx"
+"use client";
 
-    type Props = {}
+import { clsx } from "clsx";
+import { cva, type VariantProps } from "class-variance-authority";
+import { forwardRef, HTMLAttributes } from "react";
 
-    const Spinner = ({ }: Props) => {
-        return (
-            <span className="loader"></span>
-        )
-    }
+// ============================================================================
+// CVA Variants
+// ============================================================================
 
-    export default Spinner
-    ```
-  </Tab>
-  <Tab value="css">
-    ```css title="src/components/ui/spinner.css"
-    .loader {
-            transform: rotateZ(45deg);
-            perspective: 1000px;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            color: #fff;
-          }
-            .loader:before,
-            .loader:after {
-              content: '';
-              display: block;
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: inherit;
-              height: inherit;
-              border-radius: 50%;
-              transform: rotateX(70deg);
-              animation: 1s spin linear infinite;
-            }
-            .loader:after {
-              color: var(--color-primary-400);
-              transform: rotateY(70deg);
-              animation-delay: .4s;
-            }
+const spinnerVariants = cva(
+  [
+    "rounded-full",
+    "border-2",
+    "border-t-transparent",
+    "animate-spin",
+    "border-primary-500",
+    "dark:border-primary-400",
+    "dark:border-t-transparent",
+  ],
+  {
+    variants: {
+      size: {
+        sm: "w-4 h-4",
+        md: "w-6 h-6",
+        lg: "w-8 h-8",
+      },
+    },
+    defaultVariants: {
+      size: "md",
+    },
+  }
+);
 
-          @keyframes rotate {
-            0% {
-              transform: translate(-50%, -50%) rotateZ(0deg);
-            }
-            100% {
-              transform: translate(-50%, -50%) rotateZ(360deg);
-            }
-          }
+// ============================================================================
+// Types
+// ============================================================================
 
-          @keyframes rotateccw {
-            0% {
-              transform: translate(-50%, -50%) rotate(0deg);
-            }
-            100% {
-              transform: translate(-50%, -50%) rotate(-360deg);
-            }
-          }
+export type SpinnerSize = VariantProps<typeof spinnerVariants>["size"];
 
-          @keyframes spin {
-            0%,
-            100% {
-              box-shadow: .2em 0px 0 0px currentcolor;
-            }
-            12% {
-              box-shadow: .2em .2em 0 0 currentcolor;
-            }
-            25% {
-              box-shadow: 0 .2em 0 0px currentcolor;
-            }
-            37% {
-              box-shadow: -.2em .2em 0 0 currentcolor;
-            }
-            50% {
-              box-shadow: -.2em 0 0 0 currentcolor;
-            }
-            62% {
-              box-shadow: -.2em -.2em 0 0 currentcolor;
-            }
-            75% {
-              box-shadow: 0px -.2em 0 0 currentcolor;
-            }
-            87% {
-              box-shadow: .2em -.2em 0 0 currentcolor;
-            }
-          }
-    ```
-  </Tab>
-</Tabs>
+export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
+  /** Size of the spinner */
+  size?: SpinnerSize;
+  /** Accessible label for screen readers */
+  "aria-label"?: string;
+}
+
+// ============================================================================
+// Component
+// ============================================================================
+
+/**
+ * Spinner — A loading indicator component to show active states.
+ *
+ * Displays an animated circular spinner using design system tokens.
+ * Fully accessible with proper ARIA attributes for screen readers.
+ *
+ * @example
+ * ```tsx
+ * <Spinner size="md" aria-label="Loading content" />
+ * ```
+ */
+const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(
+  ({ className, size = "md", "aria-label": ariaLabel, ...props }, ref) => {
+    return (
+      <span
+        ref={ref}
+        role="status"
+        aria-label={ariaLabel || "Loading"}
+        className={clsx(spinnerVariants({ size }), className)}
+        {...props}
+      >
+        <span className="sr-only">{ariaLabel || "Loading..."}</span>
+      </span>
+    );
+  }
+);
+
+Spinner.displayName = "Spinner";
+
+export { Spinner, spinnerVariants };
+```

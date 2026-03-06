@@ -82,7 +82,7 @@ const DrawerRoot: React.FC<DrawerProps> = ({
         [isControlled, onOpenChange]
     );
 
-    // Lock body scroll
+    // Lock body scroll when modal
     useEffect(() => {
         if (open && modal) {
             const originalStyle = window.getComputedStyle(document.body).overflow;
@@ -145,7 +145,14 @@ const DrawerTrigger = forwardRef<HTMLButtonElement, DrawerTriggerProps>(
                 ref={ref}
                 type="button"
                 onClick={handleClick}
-                className={className}
+                className={clsx(
+                    "inline-flex items-center justify-center rounded px-4 py-2 text-sm font-medium transition-colors",
+                    "bg-ground-100 text-ground-900 hover:bg-ground-200",
+                    "dark:bg-ground-800 dark:text-ground-100 dark:hover:bg-ground-700",
+                    "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
+                    "dark:focus:ring-offset-ground-950",
+                    className
+                )}
                 aria-expanded={open}
                 aria-haspopup="dialog"
                 {...props}
@@ -176,7 +183,7 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
                 ref={ref}
                 data-state={open ? "open" : "closed"}
                 className={clsx(
-                    "fixed inset-0 z-40 bg-black/50 backdrop-blur-sm",
+                    "fixed inset-0 z-40 bg-ground-950/50 backdrop-blur-sm",
                     "data-[state=open]:animate-in data-[state=open]:fade-in-0",
                     "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
                     className
@@ -266,10 +273,10 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         if (!open) return null;
 
         const sideClasses = {
-            top: "inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
-            bottom: "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
-            left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
-            right: "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+            top: "inset-x-0 top-0 border-b border-ground-200 dark:border-ground-700 data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
+            bottom: "inset-x-0 bottom-0 border-t border-ground-200 dark:border-ground-700 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
+            left: "inset-y-0 left-0 h-full w-3/4 border-r border-ground-200 dark:border-ground-700 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+            right: "inset-y-0 right-0 h-full w-3/4 border-l border-ground-200 dark:border-ground-700 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
         };
 
         return (
@@ -281,7 +288,8 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
                 aria-describedby={descriptionId}
                 data-state={open ? "open" : "closed"}
                 className={clsx(
-                    "fixed z-50 bg-white dark:bg-neutral-950 p-6 shadow-lg transition ease-in-out duration-300",
+                    "fixed z-50 flex flex-col bg-ground-50 dark:bg-ground-950 p-6 shadow-outer",
+                    "transition ease-in-out duration-300",
                     "data-[state=open]:animate-in data-[state=closed]:animate-out",
                     sideClasses[side],
                     className
@@ -290,7 +298,18 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
                 {...props}
             >
                 {children}
-                <DrawerClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-neutral-100 dark:ring-offset-neutral-950 dark:focus:ring-neutral-300 dark:data-[state=open]:bg-neutral-800">
+                <DrawerClose
+                    className={clsx(
+                        "absolute right-4 top-4 rounded-sm opacity-70 transition-opacity",
+                        "hover:opacity-100 focus:outline-none focus:ring-2",
+                        "focus:ring-ground-900 focus:ring-offset-2 focus:ring-offset-ground-50",
+                        "disabled:pointer-events-none",
+                        "data-[state=open]:bg-ground-100",
+                        "dark:focus:ring-ground-300 dark:ring-offset-ground-950",
+                        "dark:data-[state=open]:bg-ground-800"
+                    )}
+                    aria-label="Close drawer"
+                >
                     <X className="h-4 w-4" />
                     <span className="sr-only">Close</span>
                 </DrawerClose>
@@ -324,7 +343,7 @@ const DrawerFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
         <div
             ref={ref}
             className={clsx(
-                "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+                "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 mt-auto pt-4",
                 className
             )}
             {...props}
@@ -345,7 +364,7 @@ const DrawerTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingEle
                 id={titleId}
                 ref={ref}
                 className={clsx(
-                    "text-lg font-semibold text-neutral-950 dark:text-neutral-50",
+                    "text-lg font-semibold text-ground-900 dark:text-ground-100",
                     className
                 )}
                 {...props}
@@ -366,7 +385,7 @@ const DrawerDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLPa
             <p
                 id={descriptionId}
                 ref={ref}
-                className={clsx("text-sm text-neutral-500 dark:text-neutral-400", className)}
+                className={clsx("text-sm text-ground-500 dark:text-ground-400", className)}
                 {...props}
             />
         );
@@ -414,23 +433,14 @@ const DrawerClose = forwardRef<HTMLButtonElement, DrawerCloseProps>(
 );
 DrawerClose.displayName = "Drawer.Close";
 
-
 // ============================================================================
-// Drawer Portal (Wrapper for Overlay + Content)
+// Drawer Portal
 // ============================================================================
-
-// Optional Portal component if users want to wrap content explicitly, 
-// though typical usage might just put Overlay and Content as direct children of Root.
-// For now, we export it to match previous API surface if needed, but it's often cleaner to just use Root > Portal > (Overlay + Content).
 
 const DrawerPortal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // In a real app, might use createPortal here. 
-    // For simplicity and SSR safety without extra hydration logic, we render inline 
-    // but fixed positioning handles the visual "portal" effect.
     return <>{children}</>;
 };
 DrawerPortal.displayName = "Drawer.Portal";
-
 
 // ============================================================================
 // Export Compound Component

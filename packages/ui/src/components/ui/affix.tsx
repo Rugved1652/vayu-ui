@@ -25,6 +25,8 @@ interface AffixProps extends HTMLAttributes<HTMLDivElement> {
     target?: HTMLElement | null;
     /** Z-index when affixed. */
     zIndex?: number;
+    /** Accessible label for the affix region when affixed. */
+    label?: string;
     /** Callback fired when affixed state changes. */
     onAffixed?: (affixed: boolean) => void;
     children: React.ReactNode;
@@ -41,6 +43,7 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
             position = "top",
             target = null,
             zIndex = 100,
+            label = "Fixed content",
             onAffixed,
             className,
             style,
@@ -55,6 +58,11 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
 
         const innerRef = useRef<HTMLDivElement>(null);
         const placeholderRef = useRef<HTMLDivElement>(null);
+
+        // Generate a unique ID for accessibility
+        const affixId = useRef<string>(
+            `affix-${Math.random().toString(36).slice(2, 9)}`
+        );
 
         // Sync affixed state with callback
         const updateAffixed = useCallback(
@@ -162,13 +170,17 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
 
                 <div
                     ref={ref ?? innerRef}
+                    id={affixId.current}
                     className={clsx(
-                        "transition-shadow duration-200",
-                        isAffixed && "shadow-md",
+                        "transition-shadow duration-medium",
+                        isAffixed && "shadow-outer",
                         className
                     )}
                     style={{ ...affixStyle, ...style }}
                     data-affixed={isAffixed || undefined}
+                    role="region"
+                    aria-label={isAffixed ? label : undefined}
+                    aria-live="polite"
                     {...props}
                 >
                     {children}

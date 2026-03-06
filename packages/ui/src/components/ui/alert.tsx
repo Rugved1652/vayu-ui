@@ -9,20 +9,17 @@ type AlertVariant = "info" | "success" | "warning" | "error";
 
 interface AlertRootProps extends HTMLAttributes<HTMLDivElement> {
     variant?: AlertVariant;
-    dismissible?: boolean;
-    onDismiss?: () => void;
-    title?: string; // Add title for better dismiss labeling
     children: React.ReactNode;
 }
 
 interface AlertIconProps extends HTMLAttributes<HTMLDivElement> {
-    variant?: AlertVariant; // Add variant prop
+    variant?: AlertVariant;
     children: React.ReactNode;
 }
 
 interface AlertDismissProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: AlertVariant; // Add variant for focus styling
-    alertTitle?: string; // For descriptive aria-label
+    variant?: AlertVariant;
+    alertTitle?: string;
 }
 
 // ============================================================================
@@ -30,10 +27,10 @@ interface AlertDismissProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 // ============================================================================
 
 const variantStyles: Record<AlertVariant, string> = {
-    info: "bg-info-50 border-info-200 text-info-900 dark:bg-info-950 dark:border-info-800 dark:text-info-100",
-    success: "bg-success-50 border-success-200 text-success-900 dark:bg-success-950 dark:border-success-800 dark:text-success-100",
-    warning: "bg-warning-50 border-warning-200 text-warning-900 dark:bg-warning-950 dark:border-warning-800 dark:text-warning-100",
-    error: "bg-error-50 border-error-200 text-error-900 dark:bg-error-950 dark:border-error-800 dark:text-error-100",
+    info: "bg-info-100 border-info-200 text-info-900 dark:bg-info-950 dark:border-info-800 dark:text-info-100",
+    success: "bg-success-100 border-success-200 text-success-900 dark:bg-success-950 dark:border-success-800 dark:text-success-100",
+    warning: "bg-warning-100 border-warning-200 text-warning-900 dark:bg-warning-950 dark:border-warning-800 dark:text-warning-100",
+    error: "bg-error-100 border-error-200 text-error-900 dark:bg-error-950 dark:border-error-800 dark:text-error-100",
 };
 
 const variantIconStyles: Record<AlertVariant, string> = {
@@ -70,9 +67,7 @@ const variantLive: Record<AlertVariant, "polite" | "assertive"> = {
 
 const AlertRoot = forwardRef<HTMLDivElement, AlertRootProps>(({
     variant = "info",
-    dismissible = false,
-    title,
-    className = "",
+    className,
     children,
     ...props
 }, ref) => {
@@ -80,15 +75,14 @@ const AlertRoot = forwardRef<HTMLDivElement, AlertRootProps>(({
         <div
             ref={ref}
             role={variantRole[variant]}
-            aria-live={variantLive[variant]} // ✅ CRITICAL FIX
-            aria-atomic="true" // ✅ CRITICAL FIX
+            aria-live={variantLive[variant]}
+            aria-atomic="true"
             className={cn(
-                "relative flex gap-3 p-4 border rounded-lg w-full",
+                "relative flex gap-3 p-4 border rounded w-full",
                 variantStyles[variant],
                 className
             )}
             data-variant={variant}
-            data-title={title}
             {...props}
         >
             {children}
@@ -102,8 +96,8 @@ AlertRoot.displayName = "Alert";
 // ============================================================================
 
 const AlertIcon = forwardRef<HTMLDivElement, AlertIconProps>(({
-    variant = "info", // ✅ FIX: Accept variant
-    className = "",
+    variant = "info",
+    className,
     children,
     ...props
 }, ref) => {
@@ -112,7 +106,7 @@ const AlertIcon = forwardRef<HTMLDivElement, AlertIconProps>(({
             ref={ref}
             className={cn(
                 "shrink-0",
-                // variantIconStyles[variant], // ✅ FIX: Apply variant color
+                variantIconStyles[variant],
                 className
             )}
             aria-hidden="true"
@@ -129,14 +123,17 @@ AlertIcon.displayName = "Alert.Icon";
 // ============================================================================
 
 const AlertTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(({
-    className = "",
+    className,
     children,
     ...props
 }, ref) => {
     return (
         <h5
             ref={ref}
-            className={cn("font-semibold mb-1 leading-none tracking-tight", className)}
+            className={cn(
+                "font-primary font-semibold mb-1 leading-none tracking-tight",
+                className
+            )}
             {...props}
         >
             {children}
@@ -150,14 +147,17 @@ AlertTitle.displayName = "Alert.Title";
 // ============================================================================
 
 const AlertDescription = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({
-    className = "",
+    className,
     children,
     ...props
 }, ref) => {
     return (
         <div
             ref={ref}
-            className={cn("text-sm [&_p]:leading-relaxed", className)}
+            className={cn(
+                "font-secondary text-para [&_p]:leading-relaxed",
+                className
+            )}
             {...props}
         >
             {children}
@@ -171,9 +171,9 @@ AlertDescription.displayName = "Alert.Description";
 // ============================================================================
 
 const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
-    variant = "info", // ✅ FIX: Accept variant
-    alertTitle, // ✅ FIX: Accept title for better labeling
-    className = "",
+    variant = "info",
+    alertTitle,
+    className,
     children,
     onClick,
     ...props
@@ -194,7 +194,6 @@ const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
         </svg>
     );
 
-    // ✅ FIX: More descriptive aria-label
     const ariaLabel = alertTitle
         ? `Dismiss ${variant} alert: ${alertTitle}`
         : `Dismiss ${variant} alert`;
@@ -205,11 +204,11 @@ const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
             type="button"
             onClick={onClick}
             className={cn(
-                "absolute top-4 right-4 rounded-md p-1 transition-colors",
-                "hover:bg-black/10 dark:hover:bg-white/10",
+                "absolute top-4 right-4 rounded p-1 transition-colors",
+                "hover:bg-ground-200 dark:hover:bg-ground-800",
                 "focus-visible:outline-none focus-visible:ring-2 ring-offset-2",
-                variantIconStyles[variant], // ✅ FIX: Icon color
-                variantFocusStyles[variant], // ✅ FIX: Variant-specific focus ring
+                variantIconStyles[variant],
+                variantFocusStyles[variant],
                 className
             )}
             aria-label={ariaLabel}
@@ -226,14 +225,14 @@ AlertDismiss.displayName = "Alert.Dismiss";
 // ============================================================================
 
 const AlertContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({
-    className = "",
+    className,
     children,
     ...props
 }, ref) => {
     return (
         <div
             ref={ref}
-            className={cn("flex-1", className)}
+            className={cn("flex-1 pr-6", className)}
             {...props}
         >
             {children}

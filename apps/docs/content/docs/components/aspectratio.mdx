@@ -10,61 +10,238 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+    <div className="not-prose flex w-full justify-center p-4 border rounded border-ground-200 dark:border-ground-700">
       <AspectRatioDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { AspectRatio } from "@/components/ui/aspectratio"
+    import { AspectRatio } from "vayu-ui";
 
-    <AspectRatio ratio="video" className="rounded-xl bg-ground-100">
-      <img src="/image.jpg" alt="Example" />
-    </AspectRatio>
+    export default function AspectRatioExample() {
+      return (
+        <div className="w-full max-w-md space-y-4">
+          {/* Using preset */}
+          <AspectRatio ratio="video" className="rounded bg-ground-100 dark:bg-ground-800">
+            <img src="/image.jpg" alt="Example" />
+          </AspectRatio>
 
-    {/* Custom numeric ratio */}
-    <AspectRatio ratio={2.5} className="rounded-xl">
-      <video src="/clip.mp4" />
-    </AspectRatio>
+          {/* Custom numeric ratio */}
+          <AspectRatio ratio={2.5} className="rounded bg-ground-100 dark:bg-ground-800">
+            <video src="/clip.mp4" />
+          </AspectRatio>
+
+          {/* Decorative (hidden from screen readers) */}
+          <AspectRatio ratio="square" decorative className="rounded">
+            <div>Decorative content</div>
+          </AspectRatio>
+        </div>
+      );
+    }
     ```
   </Tab>
 </Tabs>
 
-## Installation
-
-```tsx title="src/components/ui/aspectratio.tsx"
-// Copy the full component code
-```
-
-## Features
-
-- 11 built-in presets (square, video, photo, landscape, ultrawide, portrait, golden, a4, cinema, iphone, ipad)
-- Custom numeric ratio support
-- CSS `aspect-ratio` for presets, `padding-bottom` fallback for custom values
-- Auto object-fit on child `<img>` / `<video>` elements
-- `forwardRef` for ref forwarding
-- Server component compatible (no `"use client"`)
-
 ## Props
 
-| Prop        | Type                            | Default     | Description                          |
-| :---------- | :------------------------------ | :---------- | :----------------------------------- |
-| `ratio`     | `number \| AspectRatioPreset`   | `"square"`  | Aspect ratio (width / height)        |
-| `overflow`  | `hidden \| visible \| auto \| scroll` | `"hidden"` | Overflow behaviour             |
-| `objectFit` | `cover \| contain \| fill \| scale-down \| none` | `"cover"` | Object-fit for img/video children |
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `ratio` | `number \| AspectRatioPreset` | `"square"` | Aspect ratio (width / height). Use a preset name or numeric value. |
+| `overflow` | `"hidden" \| "visible" \| "auto" \| "scroll"` | `"hidden"` | Overflow behaviour for the container. |
+| `objectFit` | `"cover" \| "contain" \| "fill" \| "scale-down" \| "none"` | `"cover"` | Object-fit applied to direct `<img>` / `<video>` children. |
+| `decorative` | `boolean` | `false` | Marks the container as decorative, hiding it from screen readers. |
+| `aria-label` | `string` | - | Accessible label for screen readers when content is meaningful. |
+| `className` | `string` | - | Additional CSS classes. |
+| `children` | `ReactNode` | - | Content to render inside the aspect ratio container. |
 
 ## Presets
 
-| Preset       | Ratio       | Example use      |
-| :----------- | :---------- | :--------------- |
-| `square`     | 1 : 1       | Profile pictures |
-| `video`      | 16 : 9      | YouTube embeds   |
-| `photo`      | 4 : 3       | Photography      |
-| `landscape`  | 3 : 2       | DSLR photos      |
-| `ultrawide`  | 21 : 9      | Ultrawide banners |
-| `portrait`   | 9 : 16      | Phone wallpapers |
-| `golden`     | 1.618 : 1   | Golden ratio     |
-| `a4`         | √2 : 1      | A4 paper         |
-| `cinema`     | 2.39 : 1    | Cinemascope      |
-| `iphone`     | 19.5 : 9    | iPhone screens   |
-| `ipad`       | 4 : 3       | iPad screens     |
+| Preset | Ratio | Example Use |
+| :--- | :--- | :--- |
+| `square` | 1 : 1 | Profile pictures, thumbnails |
+| `video` | 16 : 9 | YouTube embeds, video players |
+| `photo` | 4 : 3 | Photography, classic images |
+| `landscape` | 3 : 2 | DSLR photos |
+| `ultrawide` | 21 : 9 | Ultrawide banners, cinematic displays |
+| `portrait` | 9 : 16 | Phone wallpapers, stories |
+| `golden` | 1.618 : 1 | Golden ratio compositions |
+| `a4` | √2 : 1 | A4 paper, documents |
+| `cinema` | 2.39 : 1 | Cinemascope, widescreen films |
+| `iphone` | 19.5 : 9 | iPhone screen mockups |
+| `ipad` | 4 : 3 | iPad screen mockups |
+
+## Accessibility
+
+- **Semantic HTML**: Uses `<div>` with appropriate `role="region"` for meaningful content
+- **Screen Reader Support**: Use `decorative` prop to hide purely visual containers from assistive technology
+- **ARIA Labels**: Use `aria-label` to provide context when the container holds meaningful content (e.g., images with context)
+- **Object Fit**: Automatically applies proper object-fit to child images and videos for visual consistency
+- **Reduced Motion**: No animations; respects user motion preferences inherently
+
+### When to use `decorative`
+
+Set `decorative={true}` when the aspect ratio container is purely for visual layout and doesn't convey meaningful information:
+
+```tsx
+{/* Decorative background or placeholder */}
+<AspectRatio ratio="square" decorative className="rounded bg-ground-100">
+  <div className="flex items-center justify-center">Icon or decoration</div>
+</AspectRatio>
+```
+
+### When to use `aria-label`
+
+Provide an `aria-label` when the content has meaning that should be announced:
+
+```tsx
+{/* Meaningful image with context */}
+<AspectRatio ratio="video" aria-label="Product showcase video">
+  <img src="/product.jpg" alt="Product name" />
+</AspectRatio>
+```
+
+## Source Code
+
+```tsx title="packages/ui/src/components/ui/aspectratio.tsx"
+import { clsx } from "clsx";
+import React, { forwardRef, HTMLAttributes } from "react";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type AspectRatioPreset =
+    | "square"
+    | "video"
+    | "photo"
+    | "landscape"
+    | "ultrawide"
+    | "portrait"
+    | "golden"
+    | "a4"
+    | "cinema"
+    | "iphone"
+    | "ipad";
+
+type Overflow = "hidden" | "visible" | "auto" | "scroll";
+type ObjectFit = "cover" | "contain" | "fill" | "scale-down" | "none";
+
+interface AspectRatioProps
+    extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+    /** Preset name or numeric ratio (width / height). */
+    ratio?: number | AspectRatioPreset;
+    /** Overflow behaviour. */
+    overflow?: Overflow;
+    /** Object-fit applied to direct `<img>` / `<video>` children. */
+    objectFit?: ObjectFit;
+    /** Accessible label for screen readers when content is meaningful. */
+    "aria-label"?: string;
+    /** Marks the container as decorative (hidden from screen readers). */
+    decorative?: boolean;
+    children: React.ReactNode;
+}
+
+// ============================================================================
+// Hoisted config
+// ============================================================================
+
+const PRESET_MAP: Record<AspectRatioPreset, { value: number; tw: string }> = {
+    square: { value: 1, tw: "aspect-square" },
+    video: { value: 16 / 9, tw: "aspect-video" },
+    photo: { value: 4 / 3, tw: "aspect-[4/3]" },
+    landscape: { value: 3 / 2, tw: "aspect-[3/2]" },
+    ultrawide: { value: 21 / 9, tw: "aspect-[21/9]" },
+    portrait: { value: 9 / 16, tw: "aspect-[9/16]" },
+    golden: { value: 1.618, tw: "aspect-[1.618/1]" },
+    a4: { value: Math.sqrt(2), tw: "aspect-[1.414/1]" },
+    cinema: { value: 2.39, tw: "aspect-[2.39/1]" },
+    iphone: { value: 19.5 / 9, tw: "aspect-[19.5/9]" },
+    ipad: { value: 4 / 3, tw: "aspect-[4/3]" },
+} as const;
+
+const OVERFLOW_CLASS: Record<Overflow, string> = {
+    hidden: "overflow-hidden",
+    visible: "overflow-visible",
+    auto: "overflow-auto",
+    scroll: "overflow-scroll",
+} as const;
+
+const OBJECT_FIT_CLASS: Record<ObjectFit, string> = {
+    cover: "[&>img]:object-cover [&>video]:object-cover",
+    contain: "[&>img]:object-contain [&>video]:object-contain",
+    fill: "[&>img]:object-fill [&>video]:object-fill",
+    "scale-down": "[&>img]:object-scale-down [&>video]:object-scale-down",
+    none: "[&>img]:object-none [&>video]:object-none",
+} as const;
+
+// ============================================================================
+// AspectRatio
+// ============================================================================
+
+const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
+    (
+        {
+            ratio = "square",
+            overflow = "hidden",
+            objectFit = "cover",
+            decorative = false,
+            className,
+            style,
+            children,
+            ...props
+        },
+        ref
+    ) => {
+        const isPreset = typeof ratio === "string";
+        const preset = isPreset ? PRESET_MAP[ratio] : null;
+        const numericRatio = preset ? preset.value : (ratio as number);
+
+        // Accessibility: hide from screen readers if decorative
+        const ariaProps = decorative
+            ? { role: "presentation" as const, "aria-hidden": true as const }
+            : {};
+
+        return (
+            <div
+                ref={ref}
+                role={decorative ? undefined : "region"}
+                className={clsx(
+                    "relative w-full",
+                    preset?.tw,
+                    OVERFLOW_CLASS[overflow],
+                    className
+                )}
+                style={
+                    preset
+                        ? style
+                        : {
+                            paddingBottom: `${100 / numericRatio}%`,
+                            ...style,
+                        }
+                }
+                {...ariaProps}
+                {...props}
+            >
+                <div
+                    className={clsx(
+                        "absolute inset-0 w-full h-full",
+                        OBJECT_FIT_CLASS[objectFit],
+                        "[&>img]:w-full [&>img]:h-full [&>video]:w-full [&>video]:h-full"
+                    )}
+                >
+                    {children}
+                </div>
+            </div>
+        );
+    }
+);
+
+AspectRatio.displayName = "AspectRatio";
+
+// ============================================================================
+// Exports
+// ============================================================================
+
+export { AspectRatio };
+export type { AspectRatioPreset, AspectRatioProps };
+```

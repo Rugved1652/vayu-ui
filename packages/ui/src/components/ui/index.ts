@@ -45,7 +45,7 @@ export { Show, Case, Default } from "./show";
 export * from "./sidebar";
 export * from "./skeleton";
 export * from "./slider";
-export { default as Spinner } from "./spinner";
+export { Spinner } from "./spinner";
 export * from "./stepper";
 export * from "./switch";
 export { default as Tabs } from "./tab";

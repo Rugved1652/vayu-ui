@@ -1,6 +1,6 @@
 ---
 title: Animation
-description: A collection of pure CSS animations for React components.
+description: A collection of pure CSS animations for React components with full accessibility support.
 ---
 
 import AnimationDemo from '@/components/demos/animation-demo';
@@ -10,77 +10,678 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+    <div className="not-prose flex w-full justify-center p-4 border border-ground-200 rounded">
       <AnimationDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import Animation from "@/components/ui/animation"
+    import { Animation } from "vayu-ui";
 
-    export function AnimationExample() {
+    export default function AnimationExample() {
       return (
-        <Animation.Fade duration="slow">
-           <h1>Fade In Title</h1>
-        </Animation.Fade>
-      )
+        <div className="flex flex-col gap-4">
+          <Animation.Fade duration="slow">
+            <div className="p-4 bg-primary-500 rounded">Fade In</div>
+          </Animation.Fade>
+
+          <Animation.Slide direction="left">
+            <div className="p-4 bg-info-500 rounded">Slide Left</div>
+          </Animation.Slide>
+
+          <Animation.Bounce scale="medium">
+            <div className="p-4 bg-success-500 rounded">Bounce</div>
+          </Animation.Bounce>
+        </div>
+      );
     }
     ```
   </Tab>
 </Tabs>
 
-## Installation
-
-1. Copy the CSS animations.
-
-```css title="src/components/ui/animation.css"
-@import "tailwindcss";
-
-/* Copy the content of animation.css provided below */
-```
-
-2. Copy the React component.
-
-```tsx title="src/components/ui/animation.tsx"
-"use client"
-import "./animation.css";
-// ... (Copy full component code)
-```
-
 ## Available Animations
 
-The `Animation` component exports several sub-components:
+The `Animation` component uses the compound component pattern and exports the following sub-components:
 
-- `Animation.Fade`
-- `Animation.Slide`
-- `Animation.Bounce`
-- `Animation.Flip`
-- `Animation.Rotate`
-- `Animation.Zoom`
-- `Animation.Roll`
-- `Animation.JackInTheBox`
-- `Animation.Hinge`
+| Component | Description |
+| :-------- | :---------- |
+| `Animation.Fade` | Fades content in from transparent to opaque |
+| `Animation.Slide` | Slides content in from a specified direction |
+| `Animation.Bounce` | Bounces content in with elastic scaling |
+| `Animation.Flip` | Flips content in along X or Y axis |
+| `Animation.Rotate` | Rotates content in from a specified angle |
+| `Animation.Zoom` | Zooms content in from a scaled state |
+| `Animation.Roll` | Rolls content in with rotation from a direction |
+| `Animation.JackInTheBox` | Playful pop animation |
+| `Animation.Hinge` | Exit animation that swings and drops |
 
 ## Props
 
-All animation components accept the following base props:
+### Base Props
 
-| Prop       | Type                                      | Default  | Description |
-| :--------- | :---------------------------------------- | :------- | :---------- |
-| `duration` | `slow` \| `normal` \| `fast` \| `slower` | `normal` | Animation duration. |
-| `delay`    | `none` \| `short` \| `medium` \| `long`   | `none`   | Animation delay. |
-| `start`    | `boolean`                                 | `true`   | Whether to start animation immediately (if controlled externally, usually it starts on mount). |
+All animation components accept the following props:
 
-*Note: The actual implementation starts animation on mount. `fillMode` and `iteration` are also supported.*
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `children` | `ReactNode` | - | Content to animate |
+| `duration` | `"slower"` \| `"slow"` \| `"normal"` \| `"fast"` \| `"faster"` | `"normal"` | Animation duration |
+| `delay` | `"none"` \| `"short"` \| `"medium"` \| `"long"` | `"none"` | Delay before animation starts |
+| `iteration` | `1` \| `2` \| `3` \| `"infinite"` | `1` | Number of times to repeat |
+| `fillMode` | `"none"` \| `"forwards"` \| `"backwards"` \| `"both"` | `"none"` | Animation fill mode |
+| `className` | `string` | - | Additional CSS classes |
+| `onAnimationEnd` | `() => void` | - | Callback when animation completes |
+| `onAnimationStart` | `() => void` | - | Callback when animation starts |
 
 ### Directional Props
-`Slide`, `Flip`, `Roll` accept:
-- `direction`: `left` | `right` | `up` | `down`
+
+`Animation.Slide`, `Animation.Flip`, and `Animation.Roll` accept:
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `direction` | `"up"` \| `"down"` \| `"left"` \| `"right"` | `"left"` | Direction of animation |
 
 ### Scale Props
-`Bounce`, `Zoom` accept:
-- `scale`: `small` | `medium` | `large`
+
+`Animation.Bounce` and `Animation.Zoom` accept:
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `scale` | `"small"` \| `"medium"` \| `"large"` | `"medium"` | Scale intensity of animation |
 
 ### Rotate Props
-`Rotate` accepts:
-- `degrees`: `number` (start rotation)
+
+`Animation.Rotate` accepts:
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `degrees` | `number` | `-200` | Starting rotation angle in degrees |
+
+## Duration Values
+
+| Value | Duration |
+| :---- | :------- |
+| `slower` | 2000ms |
+| `slow` | 1500ms |
+| `normal` | 1000ms |
+| `fast` | 700ms |
+| `faster` | 500ms |
+
+## Delay Values
+
+| Value | Delay |
+| :---- | :---- |
+| `none` | 0ms |
+| `short` | 150ms |
+| `medium` | 300ms |
+| `long` | 500ms |
+
+## Accessibility
+
+- **Reduced Motion**: All animations respect the `prefers-reduced-motion` media query. Users who have enabled reduced motion in their system preferences will see static content without animations.
+- **Semantic HTML**: Uses standard `<div>` elements for animation wrappers.
+- **No Seizure Risk**: Animations are designed to avoid rapid flashing or strobing effects.
+
+## Source Code
+
+```tsx title="packages/ui/src/components/ui/animation.tsx"
+"use client";
+
+import { clsx } from "clsx";
+import {
+    CSSProperties,
+    forwardRef,
+    HTMLAttributes,
+    ReactNode,
+} from "react";
+import "./animation.css";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+export type AnimationDuration = "slower" | "slow" | "normal" | "fast" | "faster";
+export type AnimationDelay = "none" | "short" | "medium" | "long";
+export type AnimationIteration = 1 | 2 | 3 | "infinite";
+export type AnimationDirection = "up" | "down" | "left" | "right";
+export type AnimationFillMode = "none" | "forwards" | "backwards" | "both";
+export type AnimationScale = "small" | "medium" | "large";
+
+export interface BaseAnimationProps extends HTMLAttributes<HTMLDivElement> {
+    children: ReactNode;
+    duration?: AnimationDuration;
+    delay?: AnimationDelay;
+    iteration?: AnimationIteration;
+    fillMode?: AnimationFillMode;
+    onAnimationEnd?: () => void;
+    onAnimationStart?: () => void;
+}
+
+export interface DirectionalAnimationProps extends BaseAnimationProps {
+    direction?: AnimationDirection;
+}
+
+export interface ScaleAnimationProps extends BaseAnimationProps {
+    scale?: AnimationScale;
+}
+
+export interface RotateAnimationProps extends BaseAnimationProps {
+    degrees?: number;
+}
+
+// ============================================================================
+// Mappings
+// ============================================================================
+
+const durationMap: Record<AnimationDuration, string> = {
+    slower: "duration-[2000ms]",
+    slow: "duration-[1500ms]",
+    normal: "duration-1000",
+    fast: "duration-700",
+    faster: "duration-500",
+};
+
+const delayMap: Record<AnimationDelay, string> = {
+    none: "delay-0",
+    short: "delay-150",
+    medium: "delay-300",
+    long: "delay-500",
+};
+
+const iterationMap: Record<AnimationIteration, string> = {
+    1: "animate-iteration-1",
+    2: "animate-iteration-2",
+    3: "animate-iteration-3",
+    infinite: "animate-infinite",
+};
+
+const fillModeMap: Record<AnimationFillMode, string> = {
+    none: "animate-fill-none",
+    forwards: "animate-fill-forwards",
+    backwards: "animate-fill-backwards",
+    both: "animate-fill-both",
+};
+
+const directionAnimationMap: Record<AnimationDirection, string> = {
+    left: "animate-slide-in-left",
+    right: "animate-slide-in-right",
+    up: "animate-slide-in-up",
+    down: "animate-slide-in-down",
+};
+
+const flipAnimationMap: Record<AnimationDirection, string> = {
+    up: "animate-flip-in-x",
+    down: "animate-flip-in-x [animation-direction:reverse]",
+    left: "animate-flip-in-y",
+    right: "animate-flip-in-y [animation-direction:reverse]",
+};
+
+const rollAnimationMap: Record<AnimationDirection, string> = {
+    left: "animate-roll-in",
+    right: "animate-roll-in-right",
+    up: "animate-roll-in-up",
+    down: "animate-roll-in-down",
+};
+
+const bounceScaleMap: Record<AnimationScale, string> = {
+    small: "animate-bounce-in-small",
+    medium: "animate-bounce-in",
+    large: "animate-bounce-in-large",
+};
+
+const zoomScaleMap: Record<AnimationScale, string> = {
+    small: "animate-zoom-in-small",
+    medium: "animate-zoom-in",
+    large: "animate-zoom-in-large",
+};
+
+// ============================================================================
+// Utility Functions
+// ============================================================================
+
+const buildAnimationClasses = (
+    baseAnimation: string,
+    duration: AnimationDuration,
+    delay: AnimationDelay,
+    iteration: AnimationIteration,
+    fillMode: AnimationFillMode,
+    className?: string
+): string => {
+    return clsx(
+        baseAnimation,
+        durationMap[duration],
+        delayMap[delay],
+        iterationMap[iteration],
+        fillModeMap[fillMode],
+        className
+    );
+};
+
+// ============================================================================
+// Animation Root Component
+// ============================================================================
+
+interface AnimationRootProps extends HTMLAttributes<HTMLDivElement> {
+    children: ReactNode;
+}
+
+const AnimationRoot = forwardRef<HTMLDivElement, AnimationRootProps>(
+    ({ children, className, ...props }, ref) => {
+        return (
+            <div ref={ref} className={clsx("contents", className)} {...props}>
+                {children}
+            </div>
+        );
+    }
+);
+
+AnimationRoot.displayName = "Animation";
+
+// ============================================================================
+// Fade Animation
+// ============================================================================
+
+const AnimationFade = forwardRef<HTMLDivElement, BaseAnimationProps>(
+    (
+        {
+            children,
+            className,
+            duration = "normal",
+            delay = "none",
+            iteration = 1,
+            fillMode = "none",
+            onAnimationEnd,
+            onAnimationStart,
+            ...props
+        },
+        ref
+    ) => {
+        return (
+            <div
+                ref={ref}
+                className={buildAnimationClasses(
+                    "animate-fade-in",
+                    duration,
+                    delay,
+                    iteration,
+                    fillMode,
+                    className
+                )}
+                onAnimationEnd={onAnimationEnd}
+                onAnimationStart={onAnimationStart}
+                {...props}
+            >
+                {children}
+            </div>
+        );
+    }
+);
+
+AnimationFade.displayName = "Animation.Fade";
+
+// ============================================================================
+// Slide Animation
+// ============================================================================
+
+const AnimationSlide = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
+    (
+        {
+            children,
+            className,
+            direction = "left",
+            duration = "normal",
+            delay = "none",
+            iteration = 1,
+            fillMode = "none",
+            onAnimationEnd,
+            onAnimationStart,
+            ...props
+        },
+        ref
+    ) => {
+        return (
+            <div
+                ref={ref}
+                className={buildAnimationClasses(
+                    directionAnimationMap[direction],
+                    duration,
+                    delay,
+                    iteration,
+                    fillMode,
+                    className
+                )}
+                onAnimationEnd={onAnimationEnd}
+                onAnimationStart={onAnimationStart}
+                {...props}
+            >
+                {children}
+            </div>
+        );
+    }
+);
+
+AnimationSlide.displayName = "Animation.Slide";
+
+// ============================================================================
+// Bounce Animation
+// ============================================================================
+
+const AnimationBounce = forwardRef<HTMLDivElement, ScaleAnimationProps>(
+    (
+        {
+            children,
+            className,
+            scale = "medium",
+            duration = "normal",
+            delay = "none",
+            iteration = 1,
+            fillMode = "none",
+            onAnimationEnd,
+            onAnimationStart,
+            ...props
+        },
+        ref
+    ) => {
+        return (
+            <div
+                ref={ref}
+                className={buildAnimationClasses(
+                    bounceScaleMap[scale],
+                    duration,
+                    delay,
+                    iteration,
+                    fillMode,
+                    className
+                )}
+                onAnimationEnd={onAnimationEnd}
+                onAnimationStart={onAnimationStart}
+                {...props}
+            >
+                {children}
+            </div>
+        );
+    }
+);
+
+AnimationBounce.displayName = "Animation.Bounce";
+
+// ============================================================================
+// Flip Animation
+// ============================================================================
+
+const AnimationFlip = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
+    (
+        {
+            children,
+            className,
+            direction = "up",
+            duration = "normal",
+            delay = "none",
+            iteration = 1,
+            fillMode = "none",
+            onAnimationEnd,
+            onAnimationStart,
+            ...props
+        },
+        ref
+    ) => {
+        return (
+            <div
+                ref={ref}
+                className={buildAnimationClasses(
+                    flipAnimationMap[direction],
+                    duration,
+                    delay,
+                    iteration,
+                    fillMode,
+                    className
+                )}
+                onAnimationEnd={onAnimationEnd}
+                onAnimationStart={onAnimationStart}
+                {...props}
+            >
+                {children}
+            </div>
+        );
+    }
+);
+
+AnimationFlip.displayName = "Animation.Flip";
+
+// ============================================================================
+// Rotate Animation
+// ============================================================================
+
+const AnimationRotate = forwardRef<HTMLDivElement, RotateAnimationProps>(
+    (
+        {
+            children,
+            className,
+            degrees = -200,
+            duration = "normal",
+            delay = "none",
+            iteration = 1,
+            fillMode = "none",
+            onAnimationEnd,
+            onAnimationStart,
+            ...props
+        },
+        ref
+    ) => {
+        const style: CSSProperties = {
+            "--rotation-start": `${degrees}deg`,
+            ...props.style,
+        } as CSSProperties;
+
+        return (
+            <div
+                ref={ref}
+                style={style}
+                className={buildAnimationClasses(
+                    "animate-rotate-in",
+                    duration,
+                    delay,
+                    iteration,
+                    fillMode,
+                    className
+                )}
+                onAnimationEnd={onAnimationEnd}
+                onAnimationStart={onAnimationStart}
+                {...props}
+            >
+                {children}
+            </div>
+        );
+    }
+);
+
+AnimationRotate.displayName = "Animation.Rotate";
+
+// ============================================================================
+// Zoom Animation
+// ============================================================================
+
+const AnimationZoom = forwardRef<HTMLDivElement, ScaleAnimationProps>(
+    (
+        {
+            children,
+            className,
+            scale = "medium",
+            duration = "normal",
+            delay = "none",
+            iteration = 1,
+            fillMode = "none",
+            onAnimationEnd,
+            onAnimationStart,
+            ...props
+        },
+        ref
+    ) => {
+        return (
+            <div
+                ref={ref}
+                className={buildAnimationClasses(
+                    zoomScaleMap[scale],
+                    duration,
+                    delay,
+                    iteration,
+                    fillMode,
+                    className
+                )}
+                onAnimationEnd={onAnimationEnd}
+                onAnimationStart={onAnimationStart}
+                {...props}
+            >
+                {children}
+            </div>
+        );
+    }
+);
+
+AnimationZoom.displayName = "Animation.Zoom";
+
+// ============================================================================
+// Roll Animation
+// ============================================================================
+
+const AnimationRoll = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
+    (
+        {
+            children,
+            className,
+            direction = "left",
+            duration = "normal",
+            delay = "none",
+            iteration = 1,
+            fillMode = "none",
+            onAnimationEnd,
+            onAnimationStart,
+            ...props
+        },
+        ref
+    ) => {
+        return (
+            <div
+                ref={ref}
+                className={buildAnimationClasses(
+                    rollAnimationMap[direction],
+                    duration,
+                    delay,
+                    iteration,
+                    fillMode,
+                    className
+                )}
+                onAnimationEnd={onAnimationEnd}
+                onAnimationStart={onAnimationStart}
+                {...props}
+            >
+                {children}
+            </div>
+        );
+    }
+);
+
+AnimationRoll.displayName = "Animation.Roll";
+
+// ============================================================================
+// JackInTheBox Animation
+// ============================================================================
+
+const AnimationJackInTheBox = forwardRef<HTMLDivElement, BaseAnimationProps>(
+    (
+        {
+            children,
+            className,
+            duration = "normal",
+            delay = "none",
+            iteration = 1,
+            fillMode = "none",
+            onAnimationEnd,
+            onAnimationStart,
+            ...props
+        },
+        ref
+    ) => {
+        return (
+            <div
+                ref={ref}
+                className={buildAnimationClasses(
+                    "animate-jack-in-the-box",
+                    duration,
+                    delay,
+                    iteration,
+                    fillMode,
+                    className
+                )}
+                onAnimationEnd={onAnimationEnd}
+                onAnimationStart={onAnimationStart}
+                {...props}
+            >
+                {children}
+            </div>
+        );
+    }
+);
+
+AnimationJackInTheBox.displayName = "Animation.JackInTheBox";
+
+// ============================================================================
+// Hinge Animation
+// ============================================================================
+
+const AnimationHinge = forwardRef<HTMLDivElement, BaseAnimationProps>(
+    (
+        {
+            children,
+            className,
+            duration = "normal",
+            delay = "none",
+            iteration = 1,
+            fillMode = "forwards",
+            onAnimationEnd,
+            onAnimationStart,
+            ...props
+        },
+        ref
+    ) => {
+        return (
+            <div
+                ref={ref}
+                className={buildAnimationClasses(
+                    "animate-hinge",
+                    duration,
+                    delay,
+                    iteration,
+                    fillMode,
+                    className
+                )}
+                onAnimationEnd={onAnimationEnd}
+                onAnimationStart={onAnimationStart}
+                {...props}
+            >
+                {children}
+            </div>
+        );
+    }
+);
+
+AnimationHinge.displayName = "Animation.Hinge";
+
+// ============================================================================
+// Compound Component Export
+// ============================================================================
+
+const Animation = Object.assign(AnimationRoot, {
+    Fade: AnimationFade,
+    Slide: AnimationSlide,
+    Bounce: AnimationBounce,
+    Flip: AnimationFlip,
+    Rotate: AnimationRotate,
+    Zoom: AnimationZoom,
+    Roll: AnimationRoll,
+    JackInTheBox: AnimationJackInTheBox,
+    Hinge: AnimationHinge,
+});
+
+export { Animation };
+export default Animation;
+```
