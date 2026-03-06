@@ -5,9 +5,13 @@ import { X } from "lucide-react";
 
 export default function BadgeDemo() {
     return (
-        <div className="flex flex-col gap-10">
-            {/* ── Variants ── */}
-            <div className="flex flex-col gap-3">
+        <div className="w-full max-w-md not-prose">
+            <h2 id="badge-demo-label" className="text-xl font-semibold mb-4">
+                Badge Example
+            </h2>
+
+            {/* Variants */}
+            <div className="flex flex-col gap-3 mb-6">
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Variants
                 </p>
@@ -22,8 +26,8 @@ export default function BadgeDemo() {
                 </div>
             </div>
 
-            {/* ── Sizes ── */}
-            <div className="flex flex-col gap-3">
+            {/* Sizes */}
+            <div className="flex flex-col gap-3 mb-6">
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Sizes
                 </p>
@@ -34,8 +38,8 @@ export default function BadgeDemo() {
                 </div>
             </div>
 
-            {/* ── Interactive ── */}
-            <div className="flex flex-col gap-3">
+            {/* Interactive */}
+            <div className="flex flex-col gap-3 mb-6">
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Interactive (Clickable)
                 </p>
@@ -52,7 +56,7 @@ export default function BadgeDemo() {
                 </div>
             </div>
 
-            {/* ── With Icons ── */}
+            {/* With Icons */}
             <div className="flex flex-col gap-3">
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     With Icons

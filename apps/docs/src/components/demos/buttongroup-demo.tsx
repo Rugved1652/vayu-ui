@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "vayu-ui";
-import { ButtonGroup } from "vayu-ui";
+import { Button, ButtonGroup } from "vayu-ui";
 
 export default function ButtonGroupDemo() {
     return (
@@ -11,7 +10,7 @@ export default function ButtonGroupDemo() {
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Horizontal (Outline)
                 </p>
-                <ButtonGroup>
+                <ButtonGroup.Root aria-label="Text alignment options">
                     <Button variant="outline">
                         <Button.Text>Left</Button.Text>
                     </Button>
@@ -21,7 +20,7 @@ export default function ButtonGroupDemo() {
                     <Button variant="outline">
                         <Button.Text>Right</Button.Text>
                     </Button>
-                </ButtonGroup>
+                </ButtonGroup.Root>
             </div>
 
             {/* ── Primary Variant ── */}
@@ -29,14 +28,14 @@ export default function ButtonGroupDemo() {
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Primary
                 </p>
-                <ButtonGroup>
+                <ButtonGroup.Root aria-label="Save options">
                     <Button variant="primary">
                         <Button.Text>Save</Button.Text>
                     </Button>
                     <Button variant="primary">
                         <Button.Text>Save &amp; Close</Button.Text>
                     </Button>
-                </ButtonGroup>
+                </ButtonGroup.Root>
             </div>
 
             {/* ── Vertical ── */}
@@ -44,7 +43,11 @@ export default function ButtonGroupDemo() {
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Vertical
                 </p>
-                <ButtonGroup orientation="vertical" className="w-fit">
+                <ButtonGroup.Root 
+                    orientation="vertical" 
+                    aria-label="Vertical actions"
+                    className="w-fit"
+                >
                     <Button variant="outline">
                         <Button.Text>Top</Button.Text>
                     </Button>
@@ -54,7 +57,7 @@ export default function ButtonGroupDemo() {
                     <Button variant="outline">
                         <Button.Text>Bottom</Button.Text>
                     </Button>
-                </ButtonGroup>
+                </ButtonGroup.Root>
             </div>
 
             {/* ── Full Width ── */}
@@ -62,14 +65,67 @@ export default function ButtonGroupDemo() {
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Full Width
                 </p>
-                <ButtonGroup fullWidth>
+                <ButtonGroup.Root fullWidth aria-label="Confirmation actions">
                     <Button variant="secondary">
                         <Button.Text>Cancel</Button.Text>
                     </Button>
                     <Button variant="primary">
                         <Button.Text>Confirm</Button.Text>
                     </Button>
-                </ButtonGroup>
+                </ButtonGroup.Root>
+            </div>
+
+            {/* ── Mixed Variants ── */}
+            <div className="flex flex-col gap-3">
+                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+                    Mixed Variants
+                </p>
+                <ButtonGroup.Root aria-label="Mixed action buttons">
+                    <Button variant="outline">
+                        <Button.Text>Back</Button.Text>
+                    </Button>
+                    <Button variant="secondary">
+                        <Button.Text>Save Draft</Button.Text>
+                    </Button>
+                    <Button variant="primary">
+                        <Button.Text>Submit</Button.Text>
+                    </Button>
+                </ButtonGroup.Root>
+            </div>
+
+            {/* ── With Icons ── */}
+            <div className="flex flex-col gap-3">
+                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+                    With Icons
+                </p>
+                <ButtonGroup.Root aria-label="Formatting options">
+                    <Button variant="outline">
+                        <Button.Icon>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                                <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                            </svg>
+                        </Button.Icon>
+                    </Button>
+                    <Button variant="outline">
+                        <Button.Icon>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="19" x2="10" y1="4" y2="4"/>
+                                <line x1="14" x2="15" y1="20" y2="4"/>
+                                <line x1="5" x2="19" y1="20" y2="20"/>
+                            </svg>
+                        </Button.Icon>
+                    </Button>
+                    <Button variant="outline">
+                        <Button.Icon>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M10 4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-8"/>
+                                <path d="M14 12H6"/>
+                                <path d="M10 8l-4 4 4 4"/>
+                            </svg>
+                        </Button.Icon>
+                    </Button>
+                </ButtonGroup.Root>
             </div>
         </div>
     );

@@ -6,7 +6,7 @@ const sampleTrack: Track = {
     id: "1",
     src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     title: "SoundHelix Song 1",
-    artist: "T. Schürger",
+    artist: "T. Schurger",
     album: "SoundHelix",
 };
 
@@ -16,22 +16,21 @@ const playlist: Track[] = [
         id: "2",
         src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
         title: "SoundHelix Song 2",
-        artist: "T. Schürger",
+        artist: "T. Schurger",
         album: "SoundHelix",
     },
     {
         id: "3",
         src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
         title: "SoundHelix Song 3",
-        artist: "T. Schürger",
+        artist: "T. Schurger",
         album: "SoundHelix",
     },
 ];
 
 export default function AudioPlayerDemo() {
     return (
-        <div className="not-prose flex flex-col gap-10 w-full max-w-lg">
-            {/* ── Full player ── */}
+        <div className="w-full max-w-lg not-prose flex flex-col gap-8">
             <div>
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
                     Full player with playlist
@@ -72,7 +71,6 @@ export default function AudioPlayerDemo() {
                 </AudioPlayer.Root>
             </div>
 
-            {/* ── Minimal player ── */}
             <div>
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
                     Minimal

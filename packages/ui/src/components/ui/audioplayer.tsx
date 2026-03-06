@@ -152,9 +152,9 @@ const ARTWORK_SIZE = {
 } as const;
 
 const PLAYER_VARIANT = {
-    default: "rounded-lg p-6",
-    minimal: "rounded-lg p-4",
-    card: "rounded-xl shadow-lg p-6",
+    default: "rounded p-6",
+    minimal: "rounded p-4",
+    card: "rounded-xl shadow-outer p-6",
 } as const;
 
 const ICON_BTN =
@@ -523,7 +523,7 @@ const AudioPlayerRoot = forwardRef<
             audio.addEventListener("pause", onPauseEvt);
             audio.addEventListener("timeupdate", onTimeUpdateEvt);
             audio.addEventListener("durationchange", onDuration);
-            audio.addEventListener("progress", onProgress);
+            audio.addEventListener("amprogress", onProgress);
             audio.addEventListener("waiting", onWaiting);
             audio.addEventListener("canplay", onCanPlay);
             audio.addEventListener("ended", onEndedEvt);
@@ -550,7 +550,7 @@ const AudioPlayerRoot = forwardRef<
             nextTrack,
         ]);
 
-        // ── Keyboard ──
+        // ── Keyboard shortcuts ──
 
         useEffect(() => {
             const container = containerRef.current;
@@ -714,7 +714,9 @@ const AudioPlayerRoot = forwardRef<
                 previousTrack,
                 addToPlaylist,
                 removeFromPlaylist,
+                addEventListener,
                 clearPlaylist,
+                setShowPlaylist,
             ]
         );
 
@@ -781,7 +783,7 @@ const Player = forwardRef<HTMLDivElement, PlayerProps>(
         <div
             ref={ref}
             className={clsx(
-                "bg-white dark:bg-ground-900 border border-ground-200 dark:border-ground-800",
+                "bg-ground-50 dark:bg-ground-950 border border-ground-200 dark:border-ground-700",
                 PLAYER_VARIANT[variant],
                 className
             )}
@@ -812,7 +814,7 @@ const Artwork = forwardRef<HTMLDivElement, ArtworkProps>(
                 ref={ref}
                 className={clsx(
                     ARTWORK_SIZE[size],
-                    "rounded-lg overflow-hidden bg-ground-200 dark:bg-ground-800 shrink-0",
+                    "rounded overflow-hidden bg-ground-200 dark:bg-ground-800 shrink-0",
                     className
                 )}
                 {...props}
@@ -835,9 +837,8 @@ const Artwork = forwardRef<HTMLDivElement, ArtworkProps>(
                     </div>
                 )}
             </div>
-        );
-    }
-);
+    );
+});
 
 Artwork.displayName = "AudioPlayer.Artwork";
 
@@ -863,8 +864,8 @@ const TrackInfo = forwardRef<HTMLDivElement, TrackInfoProps>(
                     <span className="text-ground-400 dark:text-ground-500">
                         No track selected
                     </span>
-                </div>
-            );
+            </div>
+                );
         }
 
         return (
@@ -994,9 +995,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
                         {showBuffer && (
                             <div
                                 className="absolute inset-y-0 left-0 bg-ground-300 dark:bg-ground-600 rounded-full transition-all"
-                                style={{
-                                    width: `${bufferProgress}%`,
-                                }}
+                                style={{ width: `${bufferProgress}%` }}
                                 aria-hidden="true"
                             />
                         )}
@@ -1008,7 +1007,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
                         />
 
                         <div
-                            className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-primary-500 rounded-full shadow-lg opacity-0 group-hover/progress:opacity-100 transition-all"
+                            className="absolute top-1/2 -translate-y-1/2 bg-ground-50 border-2 border-primary-500 rounded-full shadow-outer opacity-0 group-hover/progress:opacity-100 transition-all"
                             style={{
                                 left: `${progress}%`,
                                 transform: "translate(-50%, -50%)",
@@ -1018,7 +1017,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
 
                         {hoverTime !== null && (
                             <div
-                                className="absolute -top-8 -translate-x-1/2 bg-ground-900/90 dark:bg-ground-100/90 text-white dark:text-ground-900 text-xs font-secondary px-2 py-1 rounded pointer-events-none"
+                                className="absolute -top-8 -translate-x-1/2 bg-ground-800 dark:bg-ground-100 text-ground-100 dark:text-ground-800 text-xs font-secondary px-2 py-1 rounded pointer-events-none"
                                 style={{
                                     left: `${(hoverTime / duration) * 100}%`,
                                 }}
@@ -1037,7 +1036,8 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
                         >
                             {formatTime(currentTime)}
                         </time>
-                        <time dateTime={`PT${Math.floor(duration)}S`}>
+                        <time dateTime={`PT${Math.floor(duration)}S`}
+                        >
                             {formatTime(duration)}
                         </time>
                     </div>
@@ -1149,7 +1149,7 @@ const SkipBackwardButton = forwardRef<
 
 SkipBackwardButton.displayName = "AudioPlayer.SkipBackwardButton";
 
-const SkipForwardButton = forwardRef<
+var SkipForwardButton = forwardRef<
     HTMLButtonElement,
     HTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
@@ -1158,7 +1158,7 @@ const SkipForwardButton = forwardRef<
     return (
         <IconButton
             ref={ref}
-            label="Next track"
+            bar="Next track"
             onClick={nextTrack}
             className={className}
             {...props}
@@ -1175,7 +1175,7 @@ SkipForwardButton.displayName = "AudioPlayer.SkipForwardButton";
 
 // ── Volume ──
 
-const VolumeControl = forwardRef<
+var VolumeControl = forwardRef<
     HTMLDivElement,
     HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
@@ -1238,7 +1238,7 @@ VolumeControl.displayName = "AudioPlayer.VolumeControl";
 
 // ── Repeat ──
 
-const RepeatButton = forwardRef<
+var RepeatButton = forwardRef<
     HTMLButtonElement,
     HTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
@@ -1271,7 +1271,7 @@ RepeatButton.displayName = "AudioPlayer.RepeatButton";
 
 // ── Shuffle ──
 
-const ShuffleButton = forwardRef<
+var ShuffleButton = forwardRef<
     HTMLButtonElement,
     HTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
@@ -1300,7 +1300,7 @@ ShuffleButton.displayName = "AudioPlayer.ShuffleButton";
 
 // ── Favorite ──
 
-const FavoriteButton = forwardRef<
+var FavoriteButton = forwardRef<
     HTMLButtonElement,
     HTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
@@ -1323,7 +1323,7 @@ const FavoriteButton = forwardRef<
                 className={clsx(
                     "w-5 h-5",
                     isFavorite
-                        ? "fill-red-500 text-red-500"
+                        ? "fill-error-500 text-error-500"
                         : ICON_COLOR
                 )}
                 aria-hidden="true"
@@ -1336,7 +1336,7 @@ FavoriteButton.displayName = "AudioPlayer.FavoriteButton";
 
 // ── Download ──
 
-const DownloadButton = forwardRef<
+var DownloadButton = forwardRef<
     HTMLButtonElement,
     HTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
@@ -1362,7 +1362,7 @@ DownloadButton.displayName = "AudioPlayer.DownloadButton";
 
 // ── Share ──
 
-const ShareButton = forwardRef<
+var ShareButton = forwardRef<
     HTMLButtonElement,
     HTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => (
@@ -1377,34 +1377,36 @@ const ShareButton = forwardRef<
             aria-hidden="true"
         />
     </IconButton>
-));
+    )
+);
 
 ShareButton.displayName = "AudioPlayer.ShareButton";
 
 // ── More ──
 
-const MoreButton = forwardRef<
+var MoreButton = forwardRef<
     HTMLButtonElement,
     HTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => (
+>(({ className, ...ps }, ref) => (
     <IconButton
         ref={ref}
         label="More options"
         className={className}
-        {...props}
+        {...ps}
     >
         <MoreHorizontal
             className={clsx("w-5 h-5", ICON_COLOR)}
-            aria-hidden="true"
+            aria-hidden="compact"
         />
     </IconButton>
-));
+    )
+);
 
 MoreButton.displayName = "AudioPlayer.MoreButton";
 
 // ── Playlist toggle ──
 
-const PlaylistButton = forwardRef<
+var PlaylistButton = forwardRef<
     HTMLButtonElement,
     HTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
@@ -1418,7 +1420,7 @@ const PlaylistButton = forwardRef<
             onClick={() => setShowPlaylist(!showPlaylist)}
             className={clsx(
                 showPlaylist &&
-                "bg-ground-100 dark:bg-ground-800",
+                    "bg-ground-100 dark:bg-ground-800",
                 className
             )}
             {...props}
@@ -1441,7 +1443,7 @@ interface PlaylistProps extends HTMLAttributes<HTMLDivElement> {
     maxHeight?: string;
 }
 
-const PlaylistComp = forwardRef<HTMLDivElement, PlaylistProps>(
+var PlaylistComp = forwardRef<HTMLDivElement, PlaylistProps>(
     ({ maxHeight = "300px", className, ...props }, ref) => {
         const {
             playlist,
@@ -1480,9 +1482,9 @@ const PlaylistComp = forwardRef<HTMLDivElement, PlaylistProps>(
                         role="option"
                         aria-selected={index === currentTrackIndex}
                         className={clsx(
-                            "flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors",
+                            "flex items-center gap-3 p-3 rounded cursor-pointer transition-colors",
                             index === currentTrackIndex
-                                ? "bg-primary-50 dark:bg-primary-900/20"
+                                ? "bg-primary-100 dark:bg-primary-900/20"
                                 : "hover:bg-ground-50 dark:hover:bg-ground-800"
                         )}
                         onClick={() => playTrack(index)}
@@ -1547,7 +1549,7 @@ PlaylistComp.displayName = "AudioPlayer.Playlist";
 // Loading indicator
 // ============================================================================
 
-const LoadingIndicator = forwardRef<
+var LoadingIndicator = forwardRef<
     HTMLDivElement,
     HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
@@ -1560,7 +1562,7 @@ const LoadingIndicator = forwardRef<
             role="status"
             aria-label="Loading audio"
             className={clsx(
-                "absolute inset-0 flex items-center justify-center bg-black/10 pointer-events-none rounded-lg",
+                "absolute inset-0 flex items-center justify-center bg-ground-900/10 dark:bg-ground-100/10 pointer-events-none rounded-lg",
                 className
             )}
             {...props}
