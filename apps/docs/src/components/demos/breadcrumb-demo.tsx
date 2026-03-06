@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import {
     Breadcrumb,
@@ -11,73 +12,79 @@ import {
 
 export default function BreadcrumbDemo() {
     return (
-        <div className="flex flex-col gap-10">
-            {/* Basic Example */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-medium">Basic</h3>
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-            </div>
+        <div className="w-full max-w-md not-prose">
+            <h2 id="breadcrumb-demo-label" className="text-xl font-semibold mb-4">
+                Breadcrumb Example
+            </h2>
 
-            {/* Custom Separator */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-medium">Custom Separator</h3>
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator>/</BreadcrumbSeparator>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href="/docs">Docs</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator>/</BreadcrumbSeparator>
-                        <BreadcrumbItem>
-                            <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-            </div>
+            <div className="space-y-8">
+                {/* Basic Example */}
+                <div className="space-y-2">
+                    <h3 className="text-lg font-medium">Basic</h3>
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                </div>
 
-            {/* With Dropdown (Ellipsis) */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-medium">Collapsed</h3>
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink asChild>
-                                <Link href="/">Home</Link>
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbEllipsis />
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbLink asChild>
-                                <Link href="/docs/components">Components</Link>
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
+                {/* Custom Separator */}
+                <div className="space-y-2">
+                    <h3 className="text-lg font-medium">Custom Separator</h3>
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href="/docs">Docs</BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                </div>
+
+                {/* With Dropdown (Ellipsis) */}
+                <div className="space-y-2">
+                    <h3 className="text-lg font-medium">Collapsed</h3>
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink asChild>
+                                    <Link href="/">Home</Link>
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbEllipsis />
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbLink asChild>
+                                    <Link href="/docs/components">Components</Link>
+                                </BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                </div>
             </div>
         </div>
     );

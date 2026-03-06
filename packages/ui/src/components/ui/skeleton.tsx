@@ -1,5 +1,3 @@
-// src/components/Skeleton.tsx
-
 "use client";
 import React, { createContext, ReactNode, useContext, useState, useEffect } from "react";
 
@@ -12,7 +10,7 @@ import React, { createContext, ReactNode, useContext, useState, useEffect } from
  * - Multiple animation types (pulse, wave, none)
  * - Four shape variants (text, circular, rectangular, rounded)
  * - Four size presets
- * - Pre-built patterns (Card, Avatar, List, Table)
+ * - Pre-built patterns (Card, Avatar, List, Table, Grid)
  * - Screen reader friendly loading states
  * - WCAG 2.2 AA compliant with motion preferences
  */
@@ -35,16 +33,12 @@ interface SkeletonContextType {
     id?: string;
 }
 
-const SkeletonContext = createContext<SkeletonContextType | undefined>(
-    undefined
-);
+const SkeletonContext = createContext<SkeletonContextType | undefined>(undefined);
 
 const useSkeleton = () => {
     const context = useContext(SkeletonContext);
     if (!context) {
-        throw new Error(
-            "Skeleton compound components must be used within Skeleton"
-        );
+        throw new Error("Skeleton compound components must be used within Skeleton");
     }
     return context;
 };
@@ -83,7 +77,7 @@ const sizeClasses = {
 // WCAG 2.2 AA: Respects prefers-reduced-motion
 const animationClasses = {
     pulse: "animate-pulse motion-reduce:animate-none",
-    wave: "relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full motion-reduce:before:animate-none before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent",
+    wave: "relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full motion-reduce:before:animate-none before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-ground-950/10 before:to-transparent",
     none: "",
 };
 
@@ -97,22 +91,10 @@ interface SkeletonRootProps {
     size?: SkeletonSize;
     className?: string;
     id?: string;
-    /**
-     * Accessible label for loading state
-     */
     "aria-label"?: string;
-    /**
-     * Custom loading message for screen readers
-     */
     "aria-live"?: "polite" | "assertive" | "off";
-    /**
-     * Whether to announce loading state to screen readers
-     */
-    announce?: boolean;
-    /**
-     * Delay before announcing loading state (ms)
-     */
-    announcementDelay?: number;
+    "announce"?: boolean;
+    "announcementDelay"?: number;
 }
 
 const SkeletonRoot: React.FC<SkeletonRootProps> = ({
@@ -127,7 +109,7 @@ const SkeletonRoot: React.FC<SkeletonRootProps> = ({
     announcementDelay = 500,
 }) => {
     const [shouldAnnounce, setShouldAnnounce] = useState(false);
-    const skeletonId = id || `skeleton-${crypto.randomUUID()}`;
+    const skeletonId = id || `skeleton-${Math.random().toString(36).substring(2, 9)}`;
 
     // WCAG 2.2 AA: Delay loading announcements to avoid interrupting screen readers
     useEffect(() => {
@@ -168,18 +150,13 @@ const SkeletonRoot: React.FC<SkeletonRootProps> = ({
 // Skeleton Item (Single Element)
 // ============================================================================
 
-interface SkeletonItemProps {
+interface SkeletonItemProps extends React.HTMLAttributes<HTMLDivElement> {
     variant?: SkeletonVariant;
     animation?: SkeletonAnimation;
     width?: string | number;
     height?: string | number;
     size?: SkeletonSize;
-    className?: string;
     count?: number;
-    /**
-     * ARIA label for this specific skeleton item
-     */
-    "aria-label"?: string;
 }
 
 const SkeletonItem: React.FC<SkeletonItemProps> = ({
@@ -190,24 +167,21 @@ const SkeletonItem: React.FC<SkeletonItemProps> = ({
     size: customSize,
     className = "",
     count = 1,
-    "aria-label": itemAriaLabel,
+    ...props
 }) => {
-    // Try to get from context, fall back to props or defaults
     const context = useContext(SkeletonContext);
     const animation = customAnimation || context?.animation || "pulse";
     const size = customSize || context?.size || "md";
 
     const variantClasses = {
-        text: `${sizeClasses[size].text} w-full rounded-sm`,
+        text: `${sizeClasses[size].text} w-full rounded`,
         circular: `${sizeClasses[size].circular} rounded-full`,
-        rectangular: `${sizeClasses[size].rectangular} w-full rounded-sm`,
-        rounded: `${sizeClasses[size].rounded} w-full rounded-lg`,
+        rectangular: `${sizeClasses[size].rectangular} w-full rounded`,
+        rounded: `${sizeClasses[size].rounded} w-full rounded`,
     };
 
-    // WCAG 2.2 AA: Colors meet contrast requirements and are decorative
-    const baseClasses = "bg-neutral-200 dark:bg-neutral-800";
-    // WCAG 2.2 AA: Add border for better visibility
-    const borderClasses = "border border-transparent";
+    // WCAG 2.2 AA: Uses ground tokens for skeleton color
+    const baseClasses = "bg-ground-200 dark:bg-ground-900 border border-transparent";
 
     const baseStyles = {
         width: width
@@ -224,17 +198,11 @@ const SkeletonItem: React.FC<SkeletonItemProps> = ({
 
     const skeletonElement = (
         <div
-            className={`
-        ${baseClasses}
-        ${borderClasses}
-        ${variantClasses[variant]}
-        ${animationClasses[animation]}
-        ${className}
-      `}
+            className={`${baseClasses} ${variantClasses[variant]} ${animationClasses[animation]} ${className}`}
             style={baseStyles}
             aria-hidden="true"
             tabIndex={-1}
-            aria-label={itemAriaLabel}
+            {...props}
         />
     );
 
@@ -255,15 +223,10 @@ const SkeletonItem: React.FC<SkeletonItemProps> = ({
 // Skeleton Text
 // ============================================================================
 
-interface SkeletonTextProps {
+interface SkeletonTextProps extends React.HTMLAttributes<HTMLDivElement> {
     lines?: number;
     width?: string | number;
     lastLineWidth?: string | number;
-    className?: string;
-    /**
-     * ARIA label for text skeleton
-     */
-    "aria-label"?: string;
 }
 
 const SkeletonText: React.FC<SkeletonTextProps> = ({
@@ -271,10 +234,10 @@ const SkeletonText: React.FC<SkeletonTextProps> = ({
     width,
     lastLineWidth,
     className = "",
-    "aria-label": textAriaLabel,
+    ...props
 }) => {
     if (lines === 1) {
-        return <SkeletonItem variant="text" width={width} className={className} aria-label={textAriaLabel} />;
+        return <SkeletonItem variant="text" width={width} className={className} {...props} />;
     }
 
     return (
@@ -284,7 +247,7 @@ const SkeletonText: React.FC<SkeletonTextProps> = ({
                     key={index}
                     variant="text"
                     width={index === lines - 1 && lastLineWidth ? lastLineWidth : width}
-                    aria-label={textAriaLabel}
+                    {...props}
                 />
             ))}
         </div>
@@ -295,32 +258,22 @@ const SkeletonText: React.FC<SkeletonTextProps> = ({
 // Skeleton Circle
 // ============================================================================
 
-interface SkeletonCircleProps {
-    className?: string;
+interface SkeletonCircleProps extends React.HTMLAttributes<HTMLDivElement> {
     size?: SkeletonSize;
-    /**
-     * ARIA label for circle skeleton
-     */
-    "aria-label"?: string;
 }
 
-const SkeletonCircle: React.FC<SkeletonCircleProps> = ({ className = "", size, "aria-label": circleAriaLabel }) => {
-    return <SkeletonItem variant="circular" className={className} size={size} aria-label={circleAriaLabel} />;
+const SkeletonCircle: React.FC<SkeletonCircleProps> = ({ className = "", size, ...props }) => {
+    return <SkeletonItem variant="circular" className={className} size={size} {...props} />;
 };
 
 // ============================================================================
 // Skeleton Rectangle
 // ============================================================================
 
-interface SkeletonRectangleProps {
+interface SkeletonRectangleProps extends React.HTMLAttributes<HTMLDivElement> {
     width?: string | number;
     height?: string | number;
     rounded?: boolean;
-    className?: string;
-    /**
-     * ARIA label for rectangle skeleton
-     */
-    "aria-label"?: string;
 }
 
 const SkeletonRectangle: React.FC<SkeletonRectangleProps> = ({
@@ -328,15 +281,15 @@ const SkeletonRectangle: React.FC<SkeletonRectangleProps> = ({
     height,
     rounded = false,
     className = "",
-    "aria-label": rectAriaLabel,
+    ...props
 }) => {
     return (
         <SkeletonItem
-            variant={rounded ? "rounded" : "rectangular"}
+            variant="rounded"
             width={width}
             height={height}
             className={className}
-            aria-label={rectAriaLabel}
+            {...props}
         />
     );
 };
@@ -345,16 +298,11 @@ const SkeletonRectangle: React.FC<SkeletonRectangleProps> = ({
 // Skeleton Card
 // ============================================================================
 
-interface SkeletonCardProps {
-    className?: string;
+interface SkeletonCardProps extends React.HTMLAttributes<HTMLDivElement> {
     showImage?: boolean;
     imageHeight?: number;
     lines?: number;
     titleWidth?: string | number;
-    /**
-     * ARIA label for card skeleton
-     */
-    "aria-label"?: string;
 }
 
 const SkeletonCard: React.FC<SkeletonCardProps> = ({
@@ -363,25 +311,24 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({
     imageHeight = 200,
     lines = 3,
     titleWidth = "60%",
-    "aria-label": cardAriaLabel,
+    ...props
 }) => {
     return (
         <div
-            className={`bg-white dark:bg-neutral-900 rounded-lg p-4 border border-neutral-200 dark:border-neutral-800 ${className}`}
-            role="presentation"
-            aria-label={cardAriaLabel}
+            className={`bg-ground-50 dark:bg-ground-950 rounded p-4 border border-ground-200 dark:border-ground-900 shadow-outer ${className}`}
+            aria-hidden="true"
+            {...props}
         >
             {showImage && (
-                <SkeletonRectangle height={imageHeight} rounded className="mb-4" aria-label="Loading image" />
+                <SkeletonRectangle height={imageHeight} className="mb-4" />
             )}
             <SkeletonItem
                 variant="text"
                 size="lg"
                 width={titleWidth}
                 className="mb-3"
-                aria-label="Loading title"
             />
-            <SkeletonText lines={lines} aria-label="Loading content" />
+            <SkeletonText lines={lines} />
         </div>
     );
 };
@@ -390,17 +337,12 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({
 // Skeleton Avatar
 // ============================================================================
 
-interface SkeletonAvatarProps {
-    className?: string;
+interface SkeletonAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
     showText?: boolean;
     textLines?: number;
     titleWidth?: string | number;
     subtitleWidth?: string | number;
     size?: SkeletonSize;
-    /**
-     * ARIA label for avatar skeleton
-     */
-    "aria-label"?: string;
 }
 
 const SkeletonAvatar: React.FC<SkeletonAvatarProps> = ({
@@ -410,16 +352,16 @@ const SkeletonAvatar: React.FC<SkeletonAvatarProps> = ({
     titleWidth = "40%",
     subtitleWidth = "60%",
     size,
-    "aria-label": avatarAriaLabel,
+    ...props
 }) => {
     return (
-        <div className={`flex items-center gap-3 ${className}`} role="presentation" aria-label={avatarAriaLabel}>
-            <SkeletonCircle size={size} aria-label="Loading avatar" />
+        <div className={`flex items-center gap-3 ${className}`} aria-hidden="true" {...props}>
+            <SkeletonCircle size={size} />
             {showText && (
                 <div className="flex-1">
-                    <SkeletonItem variant="text" width={titleWidth} className="mb-2" aria-label="Loading name" />
+                    <SkeletonItem variant="text" width={titleWidth} className="mb-2" />
                     {textLines > 1 && (
-                        <SkeletonItem variant="text" size="sm" width={subtitleWidth} aria-label="Loading role" />
+                        <SkeletonItem variant="text" size="sm" width={subtitleWidth} />
                     )}
                 </div>
             )}
@@ -431,34 +373,28 @@ const SkeletonAvatar: React.FC<SkeletonAvatarProps> = ({
 // Skeleton List
 // ============================================================================
 
-interface SkeletonListProps {
-    className?: string;
+interface SkeletonListProps extends React.HTMLAttributes<HTMLDivElement> {
     items?: number;
     showAvatar?: boolean;
-    /**
-     * ARIA label for list skeleton
-     */
-    "aria-label"?: string;
 }
 
 const SkeletonList: React.FC<SkeletonListProps> = ({
     className = "",
     items = 5,
     showAvatar = true,
-    "aria-label": listAriaLabel,
+    ...props
 }) => {
     return (
-        <div className={`space-y-4 ${className}`} role="presentation" aria-label={listAriaLabel}>
+        <div className={`space-y-4 ${className}`} aria-hidden="true" {...props}>
             {Array.from({ length: items }).map((_, index) => (
                 <div
                     key={index}
-                    className="flex items-center gap-3 p-3 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800"
-                    role="presentation"
+                    className="flex items-center gap-3 p-3 bg-ground-50 dark:bg-ground-950 rounded border border-ground-200 dark:border-ground-900"
                 >
-                    {showAvatar && <SkeletonCircle aria-label="Loading avatar" />}
+                    {showAvatar && <SkeletonCircle />}
                     <div className="flex-1">
-                        <SkeletonItem variant="text" width="70%" className="mb-2" aria-label="Loading title" />
-                        <SkeletonItem variant="text" size="sm" width="40%" aria-label="Loading subtitle" />
+                        <SkeletonItem variant="text" width="70%" className="mb-2" />
+                        <SkeletonItem variant="text" size="sm" width="40%" />
                     </div>
                 </div>
             ))}
@@ -470,15 +406,10 @@ const SkeletonList: React.FC<SkeletonListProps> = ({
 // Skeleton Table
 // ============================================================================
 
-interface SkeletonTableProps {
-    className?: string;
+interface SkeletonTableProps extends React.HTMLAttributes<HTMLDivElement> {
     rows?: number;
     columns?: number;
     showHeader?: boolean;
-    /**
-     * ARIA label for table skeleton
-     */
-    "aria-label"?: string;
 }
 
 const SkeletonTable: React.FC<SkeletonTableProps> = ({
@@ -486,36 +417,32 @@ const SkeletonTable: React.FC<SkeletonTableProps> = ({
     rows = 5,
     columns = 4,
     showHeader = true,
-    "aria-label": tableAriaLabel,
+    ...props
 }) => {
     return (
         <div
-            className={`bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden ${className}`}
-            role="presentation"
-            aria-label={tableAriaLabel}
+            className={`bg-ground-50 dark:bg-ground-950 rounded border border-ground-200 dark:border-ground-900 overflow-hidden ${className}`}
+            aria-hidden="true"
+            {...props}
         >
-            {/* Header */}
             {showHeader && (
                 <div
-                    className="grid gap-4 p-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50"
+                    className="grid gap-4 p-4 border-b border-ground-200 dark:border-ground-900 bg-ground-100 dark:bg-ground-900/50"
                     style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-                    role="presentation"
                 >
                     {Array.from({ length: columns }).map((_, index) => (
-                        <SkeletonItem key={index} variant="text" width="60%" aria-label={`Loading column header ${index + 1}`} />
+                        <SkeletonItem key={index} variant="text" width="60%" />
                     ))}
                 </div>
             )}
-            {/* Rows */}
             {Array.from({ length: rows }).map((_, rowIndex) => (
                 <div
                     key={rowIndex}
-                    className="grid gap-4 p-4 border-b border-neutral-200 dark:border-neutral-800 last:border-b-0"
+                    className="grid gap-4 p-4 border-b border-ground-200 dark:border-ground-900 last:border-b-0"
                     style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-                    role="presentation"
                 >
                     {Array.from({ length: columns }).map((_, colIndex) => (
-                        <SkeletonItem key={colIndex} variant="text" size="sm" width="80%" aria-label={`Loading cell ${rowIndex + 1}-${colIndex + 1}`} />
+                        <SkeletonItem key={colIndex} variant="text" size="sm" width="80%" />
                     ))}
                 </div>
             ))}
@@ -527,15 +454,10 @@ const SkeletonTable: React.FC<SkeletonTableProps> = ({
 // Skeleton Grid
 // ============================================================================
 
-interface SkeletonGridProps {
-    className?: string;
+interface SkeletonGridProps extends React.HTMLAttributes<HTMLDivElement> {
     items?: number;
     columns?: number;
     itemHeight?: number;
-    /**
-     * ARIA label for grid skeleton
-     */
-    "aria-label"?: string;
 }
 
 const SkeletonGrid: React.FC<SkeletonGridProps> = ({
@@ -543,17 +465,17 @@ const SkeletonGrid: React.FC<SkeletonGridProps> = ({
     items = 6,
     columns = 3,
     itemHeight = 200,
-    "aria-label": gridAriaLabel,
+    ...props
 }) => {
     return (
         <div
             className={`grid gap-4 ${className}`}
             style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-            role="presentation"
-            aria-label={gridAriaLabel}
+            aria-hidden="true"
+            {...props}
         >
             {Array.from({ length: items }).map((_, index) => (
-                <SkeletonCard key={index} imageHeight={itemHeight} lines={2} aria-label={`Loading item ${index + 1}`} />
+                <SkeletonCard key={index} imageHeight={itemHeight} lines={2} />
             ))}
         </div>
     );
@@ -563,21 +485,15 @@ const SkeletonGrid: React.FC<SkeletonGridProps> = ({
 // Skeleton Group (Container)
 // ============================================================================
 
-interface SkeletonGroupProps {
-    children: ReactNode;
-    className?: string;
+interface SkeletonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
     spacing?: "sm" | "md" | "lg";
-    /**
-     * ARIA label for group
-     */
-    "aria-label"?: string;
 }
 
 const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
     children,
     className = "",
     spacing = "md",
-    "aria-label": groupAriaLabel,
+    ...props
 }) => {
     const spacingClasses = {
         sm: "space-y-2",
@@ -586,7 +502,7 @@ const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
     };
 
     return (
-        <div className={`${spacingClasses[spacing]} ${className}`} role="presentation" aria-label={groupAriaLabel}>
+        <div className={`${spacingClasses[spacing]} ${className}`} {...props}>
             {children}
         </div>
     );

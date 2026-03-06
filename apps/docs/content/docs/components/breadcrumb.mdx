@@ -10,7 +10,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+    <div className="flex items-center justify-center p-8 bg-ground-100 dark:bg-ground-900 rounded-lg">
       <BreadcrumbDemo />
     </div>
   </Tab>
@@ -23,9 +23,9 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       BreadcrumbList,
       BreadcrumbPage,
       BreadcrumbSeparator,
-    } from "@/components/ui/breadcrumb"
+    } from "vayu-ui";
 
-    export function BreadcrumbDemo() {
+    export default function BreadcrumbDemo() {
       return (
         <Breadcrumb>
           <BreadcrumbList>
@@ -42,7 +42,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-      )
+      );
     }
     ```
   </Tab>
@@ -55,8 +55,8 @@ Add the component to your project.
 ```tsx title="src/components/ui/breadcrumb.tsx"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
 import { Slot } from "@radix-ui/react-slot"
- 
-// ... (Copy full component code)
+
+// ... (Copy full component code from Source Code section below)
 ```
 
 ## Anatomy
@@ -73,4 +73,205 @@ import { Slot } from "@radix-ui/react-slot"
     </BreadcrumbItem>
   </BreadcrumbList>
 </Breadcrumb>
+```
+
+## Props
+
+### Breadcrumb
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `separator` | `ReactNode` | - | Custom separator element |
+| `className` | `string` | - | Additional CSS classes |
+
+### BreadcrumbList
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `className` | `string` | - | Additional CSS classes |
+
+### BreadcrumbItem
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `className` | `string` | - | Additional CSS classes |
+
+### BreadcrumbLink
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `asChild` | `boolean` | `false` | Whether to merge with child element |
+| `href` | `string` | - | Link destination |
+| `className` | `string` | - | Additional CSS classes |
+
+### BreadcrumbPage
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `className` | `string` | - | Additional CSS classes |
+
+### BreadcrumbSeparator
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | `<ChevronRight />` | Custom separator icon or text |
+| `className` | `string` | - | Additional CSS classes |
+
+### BreadcrumbEllipsis
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `className` | `string` | - | Additional CSS classes |
+
+## Accessibility
+
+- Full keyboard navigation support for breadcrumb links
+- Proper ARIA roles and attributes (`aria-label="breadcrumb"`, `role="presentation"`, `aria-current="page"`)
+- Visible focus indicators using system `focus-visible` ring
+- Screen reader compatible labels ("More" for ellipsis)
+- Semantic HTML elements (`<nav>`, `<ol>`, `<li>`, `<a>`)
+- Hover and focus states use design system tokens for consistent visual feedback
+
+## Source Code
+
+```tsx title="src/components/ui/breadcrumb.tsx"
+import React, { forwardRef } from "react";
+import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { clsx } from "clsx";
+import { Slot } from "@radix-ui/react-slot";
+
+// ============================================================================
+// Breadcrumb Root
+// ============================================================================
+
+const Breadcrumb = forwardRef<HTMLElement, React.ComponentPropsWithoutRef<"nav"> & {
+    separator?: React.ReactNode;
+}>(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />);
+Breadcrumb.displayName = "Breadcrumb";
+
+// ============================================================================
+// Breadcrumb List
+// ============================================================================
+
+const BreadcrumbList = forwardRef<HTMLOListElement, React.OlHTMLAttributes<HTMLOListElement>>(
+    ({ className, ...props }, ref) => (
+        <ol
+            ref={ref}
+            className={clsx(
+                "flex flex-wrap items-center gap-1.5 break-words text-sm text-ground-600 sm:gap-2.5 dark:text-ground-400",
+                className
+            )}
+            {...props}
+        />
+    )
+);
+BreadcrumbList.displayName = "BreadcrumbList";
+
+// ============================================================================
+// Breadcrumb Item
+// ============================================================================
+
+const BreadcrumbItem = forwardRef<HTMLLIElement, React.LiHTMLAttributes<HTMLLIElement>>(
+    ({ className, ...props }, ref) => (
+        <li
+            ref={ref}
+            className={clsx("inline-flex items-center gap-1.5", className)}
+            {...props}
+        />
+    )
+);
+BreadcrumbItem.displayName = "BreadcrumbItem";
+
+// ============================================================================
+// Breadcrumb Link
+// ============================================================================
+
+interface BreadcrumbLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+    asChild?: boolean;
+}
+
+const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
+    ({ asChild, className, ...props }, ref) => {
+        const Comp = asChild ? Slot : "a";
+
+        return (
+            <Comp
+                ref={ref}
+                className={clsx(
+                    "rounded transition-colors duration-[var(--transition-fast)] ease-in-out hover:text-ground-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-ground-600 dark:focus-visible:ring-offset-ground-950 dark:hover:text-ground-100",
+                    className
+                )}
+                {...props}
+            />
+        );
+    }
+);
+BreadcrumbLink.displayName = "BreadcrumbLink";
+
+// ============================================================================
+// Breadcrumb Page
+// ============================================================================
+
+const BreadcrumbPage = forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
+    ({ className, ...props }, ref) => (
+        <span
+            ref={ref}
+            role="link"
+            aria-disabled="true"
+            aria-current="page"
+            className={clsx("font-normal text-ground-950 dark:text-ground-100", className)}
+            {...props}
+        />
+    )
+);
+BreadcrumbPage.displayName = "BreadcrumbPage";
+
+// ============================================================================
+// Breadcrumb Separator
+// ============================================================================
+
+const BreadcrumbSeparator = forwardRef<HTMLLIElement, React.LiHTMLAttributes<HTMLLIElement>>(
+    ({ children, className, ...props }, ref) => (
+        <li
+            ref={ref}
+            role="presentation"
+            aria-hidden="true"
+            className={clsx("[&>svg]:size-3.5", className)}
+            {...props}
+        >
+            {children ?? <ChevronRight />}
+        </li>
+    )
+);
+BreadcrumbSeparator.displayName = "BreadcrumbSeparator";
+
+// ============================================================================
+// Breadcrumb Ellipsis
+// ============================================================================
+
+const BreadcrumbEllipsis = forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
+    ({ className, ...props }, ref) => (
+        <span
+            ref={ref}
+            role="presentation"
+            aria-hidden="true"
+            className={clsx("flex h-9 w-9 items-center justify-center", className)}
+            {...props}
+        >
+            <MoreHorizontal className="h-4 w-4" />
+            <span className="sr-only">More</span>
+        </span>
+    )
+);
+BreadcrumbEllipsis.displayName = "BreadcrumbEllipsis";
+
+export {
+    Breadcrumb,
+    BreadcrumbList,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+    BreadcrumbEllipsis,
+};
 ```

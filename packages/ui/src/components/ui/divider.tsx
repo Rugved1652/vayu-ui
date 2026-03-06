@@ -9,9 +9,8 @@ type DividerOrientation = "horizontal" | "vertical";
 type DividerVariant = "solid" | "dashed" | "dotted";
 type DividerSpacing = "none" | "sm" | "md" | "lg" | "xl" | "2xl";
 type DividerColor =
-    | "neutral"
+    | "ground"
     | "primary"
-    | "secondary"
     | "success"
     | "warning"
     | "error"
@@ -21,7 +20,7 @@ type DividerSize = "thin" | "normal" | "thick" | "bold";
 interface DividerRootProps extends HTMLAttributes<HTMLDivElement> {
     orientation?: DividerOrientation;
     spacing?: DividerSpacing;
-    decorative?: boolean; // ✅ NEW: For semantic vs decorative dividers
+    decorative?: boolean;
 }
 
 interface DividerLineProps extends HTMLAttributes<HTMLDivElement> {
@@ -38,7 +37,7 @@ interface DividerLabelProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 // ============================================================================
-// Helper Maps - WCAG COMPLIANT
+// Helper Maps - Design Tokens & WCAG Compliant
 // ============================================================================
 
 const spacingMap: Record<DividerSpacing, string> = {
@@ -65,35 +64,34 @@ const variantMap: Record<DividerVariant, string> = {
     dotted: "border-dotted",
 };
 
-// ✅ FIX: WCAG-compliant border colors (3:1 contrast minimum)
+// Design token colors - using ground-*, primary-*, etc. from @theme
+// WCAG-compliant border colors (3:1 contrast minimum)
 const colorMap: Record<DividerColor, string> = {
-    // Using *-300 (light mode) and *-600 (dark mode) for 3:1+ contrast
-    neutral: "border-neutral-300 dark:border-neutral-600",
+    // Using ground-300 (light mode) and ground-700 (dark mode) for 3:1+ contrast
+    ground: "border-ground-300 dark:border-ground-700",
     primary: "border-primary-300 dark:border-primary-600",
-    secondary: "border-secondary-300 dark:border-secondary-600",
-    success: "border-success-400 dark:border-success-600", // Green needs darker shade
-    warning: "border-warning-500 dark:border-warning-600", // Yellow/amber needs much darker
+    success: "border-success-400 dark:border-success-600",
+    warning: "border-warning-500 dark:border-warning-600",
     error: "border-error-400 dark:border-error-600",
     info: "border-info-400 dark:border-info-600",
 };
 
-// ✅ FIX: Minimum 2px for better visibility with lower contrast
-const sizeMap: Record<DividerSize, number> = {
-    thin: 1,    // Only use with high-contrast colors
-    normal: 2,  // ✅ Better default
-    thick: 3,
-    bold: 4,
-};
-
-// ✅ FIX: WCAG-compliant text colors (4.5:1 contrast minimum)
+// WCAG-compliant text colors (4.5:1 contrast minimum)
 const labelColorMap: Record<DividerColor, string> = {
-    neutral: "text-neutral-600 dark:text-neutral-300",      // ✅ 4.5:1+
-    primary: "text-primary-700 dark:text-primary-300",      // ✅ 4.5:1+
-    secondary: "text-secondary-700 dark:text-secondary-300",
+    ground: "text-ground-600 dark:text-ground-300",
+    primary: "text-primary-700 dark:text-primary-300",
     success: "text-success-700 dark:text-success-300",
-    warning: "text-warning-800 dark:text-warning-200",      // ✅ Yellow needs extra dark
+    warning: "text-warning-800 dark:text-warning-200",
     error: "text-error-700 dark:text-error-300",
     info: "text-info-700 dark:text-info-300",
+};
+
+// Thickness presets in pixels
+const sizeMap: Record<DividerSize, number> = {
+    thin: 1,
+    normal: 2,
+    thick: 3,
+    bold: 4,
 };
 
 // ============================================================================
@@ -104,7 +102,7 @@ const DividerLine = forwardRef<HTMLDivElement, DividerLineProps>(
     (
         {
             variant = "solid",
-            color = "neutral",
+            color = "ground",
             size = "normal",
             thickness,
             opacity = 1,
@@ -123,7 +121,6 @@ const DividerLine = forwardRef<HTMLDivElement, DividerLineProps>(
             ...style,
         };
 
-        // ✅ FIX: Removed gradient variant - not WCAG-compliant
         return (
             <div
                 ref={ref}
@@ -137,7 +134,7 @@ const DividerLine = forwardRef<HTMLDivElement, DividerLineProps>(
                     ...borderStyle,
                     [isHorizontal ? "borderTopWidth" : "borderLeftWidth"]: `${actualThickness}px`,
                 }}
-                aria-hidden="true" // ✅ FIX: Line is decorative, parent handles semantics
+                aria-hidden="true"
                 {...props}
             />
         );
@@ -146,12 +143,12 @@ const DividerLine = forwardRef<HTMLDivElement, DividerLineProps>(
 DividerLine.displayName = "Divider.Line";
 
 const DividerLabel = forwardRef<HTMLSpanElement, DividerLabelProps>(
-    ({ color = "neutral", className, children, ...props }, ref) => {
+    ({ color = "ground", className, children, ...props }, ref) => {
         return (
             <span
                 ref={ref}
                 className={clsx(
-                    "px-3 py-1 text-sm font-medium whitespace-nowrap", // ✅ FIX: More padding for touch target
+                    "px-3 py-1 text-sm font-medium whitespace-nowrap font-secondary",
                     labelColorMap[color],
                     className
                 )}
@@ -169,7 +166,7 @@ const DividerRoot = forwardRef<HTMLDivElement, DividerRootProps>(
         {
             orientation = "horizontal",
             spacing = "md",
-            decorative = false, // ✅ NEW: Semantic vs decorative
+            decorative = false,
             className,
             children,
             ...props
@@ -185,15 +182,13 @@ const DividerRoot = forwardRef<HTMLDivElement, DividerRootProps>(
                 verticalSpacingMap[spacing]
             );
 
-        // ✅ FIX: Better ARIA handling
         const ariaProps = decorative
-            ? { "aria-hidden": "true" as const } // Decorative dividers
+            ? { "aria-hidden": "true" as const }
             : {
                 role: "separator",
                 "aria-orientation": orientation
-            }; // Semantic dividers
+            };
 
-        // If no children, render default line
         if (!children) {
             return (
                 <div

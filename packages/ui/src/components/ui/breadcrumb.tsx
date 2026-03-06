@@ -21,7 +21,7 @@ const BreadcrumbList = forwardRef<HTMLOListElement, React.OlHTMLAttributes<HTMLO
         <ol
             ref={ref}
             className={clsx(
-                "flex flex-wrap items-center gap-1.5 wrap-break-words text-sm text-neutral-500 sm:gap-2.5 dark:text-neutral-400",
+                "flex flex-wrap items-center gap-1.5 break-words text-sm text-ground-600 sm:gap-2.5 dark:text-ground-400",
                 className
             )}
             {...props}
@@ -61,7 +61,7 @@ const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
             <Comp
                 ref={ref}
                 className={clsx(
-                    "transition-colors hover:text-neutral-950 dark:hover:text-neutral-50",
+                    "rounded transition-colors duration-(--transition-fast) ease-in-out hover:text-ground-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-ground-600 dark:focus-visible:ring-offset-ground-950 dark:hover:text-ground-100",
                     className
                 )}
                 {...props}
@@ -82,7 +82,7 @@ const BreadcrumbPage = forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpan
             role="link"
             aria-disabled="true"
             aria-current="page"
-            className={clsx("font-normal text-neutral-950 dark:text-neutral-50", className)}
+            className={clsx("font-normal text-ground-950 dark:text-ground-100", className)}
             {...props}
         />
     )
