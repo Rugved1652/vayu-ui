@@ -6,12 +6,12 @@ import { Button } from "vayu-ui";
 export default function NavbarDemo() {
     return (
         <div className="flex flex-col not-prose gap-10 w-full">
-            {/* ── Default ── */}
+            {/* Default Variant */}
             <div className="flex flex-col gap-3">
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Default
                 </p>
-                <div className="rounded-lg overflow-hidden border border-ground-200 dark:border-ground-800">
+                <div className="rounded overflow-hidden border border-ground-200 dark:border-ground-800">
                     <Navbar>
                         <Navbar.Container>
                             <Navbar.Brand>
@@ -58,17 +58,17 @@ export default function NavbarDemo() {
                 </div>
             </div>
 
-            {/* ── Floating ── */}
+            {/* Floating Variant */}
             <div className="flex flex-col gap-3">
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
-                    Floating Variant
+                    Floating
                 </p>
-                <div className="rounded-lg bg-ground-50 dark:bg-ground-900 p-4">
+                <div className="rounded bg-ground-50 dark:bg-ground-900 p-4">
                     <Navbar variant="floating">
                         <Navbar.Container>
                             <Navbar.Brand>
                                 <span className="text-lg font-bold font-primary text-ground-900 dark:text-white">
-                                    ✦ Studio
+                                    Studio
                                 </span>
                             </Navbar.Brand>
 
@@ -96,12 +96,12 @@ export default function NavbarDemo() {
                 </div>
             </div>
 
-            {/* ── Bordered ── */}
+            {/* Bordered Variant */}
             <div className="flex flex-col gap-3">
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
-                    Bordered Variant
+                    Bordered
                 </p>
-                <div className="rounded-lg overflow-hidden">
+                <div className="rounded overflow-hidden">
                     <Navbar variant="bordered">
                         <Navbar.Container>
                             <Navbar.Brand>
@@ -131,6 +131,45 @@ export default function NavbarDemo() {
                             <Navbar.MobileItem>Blog</Navbar.MobileItem>
                         </Navbar.MobileMenu>
                     </Navbar>
+                </div>
+            </div>
+
+            {/* Sticky Example */}
+            <div className="flex flex-col gap-3">
+                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+                    Sticky
+                </p>
+                <div className="rounded overflow-hidden border border-ground-200 dark:border-ground-800 h-48 relative">
+                    <Navbar sticky>
+                        <Navbar.Container>
+                            <Navbar.Brand>
+                                <span className="text-lg font-bold font-primary text-ground-900 dark:text-white">
+                                    Sticky Nav
+                                </span>
+                            </Navbar.Brand>
+
+                            <Navbar.Items>
+                                <Navbar.Item active>Page 1</Navbar.Item>
+                                <Navbar.Item>Page 2</Navbar.Item>
+                            </Navbar.Items>
+
+                            <Navbar.Actions>
+                                <Button variant="primary" size="small">
+                                    <Button.Text>Action</Button.Text>
+                                </Button>
+                            </Navbar.Actions>
+
+                            <Navbar.Toggle />
+                        </Navbar.Container>
+
+                        <Navbar.MobileMenu>
+                            <Navbar.MobileItem active>Page 1</Navbar.MobileItem>
+                            <Navbar.MobileItem>Page 2</Navbar.MobileItem>
+                        </Navbar.MobileMenu>
+                    </Navbar>
+                    <div className="p-4 text-sm text-ground-500 font-secondary">
+                        Scroll to see sticky behavior...
+                    </div>
                 </div>
             </div>
         </div>

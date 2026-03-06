@@ -44,8 +44,9 @@ function useNavbar() {
 // ============================================================================
 
 export interface NavbarProps extends HTMLAttributes<HTMLElement> {
+    /** Visual style variant */
     variant?: NavbarVariant;
-    /** Stick to the top of the viewport. */
+    /** Stick to the top of the viewport */
     sticky?: boolean;
 }
 
@@ -82,7 +83,7 @@ const NavbarRoot = forwardRef<HTMLElement, NavbarProps>(
         const variantClasses: Record<NavbarVariant, string> = {
             default: "bg-white dark:bg-ground-950 border-b border-ground-200 dark:border-ground-800",
             floating:
-                "bg-white/80 dark:bg-ground-950/80 backdrop-blur-lg border border-ground-200 dark:border-ground-800 rounded-xl mx-4 mt-4 shadow-lg",
+                "bg-white/80 dark:bg-ground-950/80 backdrop-blur-lg border border-ground-200 dark:border-ground-800 rounded mx-4 mt-4 shadow-outer",
             bordered:
                 "bg-white dark:bg-ground-950 border-2 border-ground-300 dark:border-ground-700",
         };
@@ -114,6 +115,7 @@ NavbarRoot.displayName = "Navbar";
 // ============================================================================
 
 export interface NavbarContainerProps extends HTMLAttributes<HTMLDivElement> {
+    /** Maximum width of the container */
     maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "full";
 }
 
@@ -150,7 +152,7 @@ NavbarContainer.displayName = "Navbar.Container";
 // Navbar Brand
 // ============================================================================
 
-export interface NavbarBrandProps extends HTMLAttributes<HTMLDivElement> { }
+export interface NavbarBrandProps extends HTMLAttributes<HTMLDivElement> {}
 
 const NavbarBrand = forwardRef<HTMLDivElement, NavbarBrandProps>(
     ({ className, children, ...props }, ref) => (
@@ -170,7 +172,7 @@ NavbarBrand.displayName = "Navbar.Brand";
 // Navbar Items (desktop link group)
 // ============================================================================
 
-export interface NavbarItemsProps extends HTMLAttributes<HTMLUListElement> { }
+export interface NavbarItemsProps extends HTMLAttributes<HTMLUListElement> {}
 
 const NavbarItems = forwardRef<HTMLUListElement, NavbarItemsProps>(
     ({ className, children, ...props }, ref) => (
@@ -195,6 +197,7 @@ NavbarItems.displayName = "Navbar.Items";
 // ============================================================================
 
 export interface NavbarItemProps extends HTMLAttributes<HTMLLIElement> {
+    /** Highlights the item as the current page */
     active?: boolean;
 }
 
@@ -206,16 +209,11 @@ const NavbarItem = forwardRef<HTMLLIElement, NavbarItemProps>(
             className={clsx("list-none", className)}
             {...props}
         >
-            {/* 
-                Expects an <a> or <button> child. 
-                We apply styling via CSS child selector so the consumer
-                keeps full control of the element.
-            */}
             <div
                 role="menuitem"
                 tabIndex={0}
                 className={clsx(
-                    "px-3 py-2 rounded-md text-sm font-medium font-secondary transition-colors cursor-pointer",
+                    "px-3 py-2 rounded text-sm font-medium font-secondary transition-colors cursor-pointer",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-ground-950",
                     active
                         ? "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
@@ -235,7 +233,7 @@ NavbarItem.displayName = "Navbar.Item";
 // Navbar Actions (right side slot for buttons, avatars, etc.)
 // ============================================================================
 
-export interface NavbarActionsProps extends HTMLAttributes<HTMLDivElement> { }
+export interface NavbarActionsProps extends HTMLAttributes<HTMLDivElement> {}
 
 const NavbarActions = forwardRef<HTMLDivElement, NavbarActionsProps>(
     ({ className, children, ...props }, ref) => (
@@ -255,7 +253,7 @@ NavbarActions.displayName = "Navbar.Actions";
 // Mobile Toggle (hamburger)
 // ============================================================================
 
-export interface NavbarToggleProps extends HTMLAttributes<HTMLButtonElement> { }
+export interface NavbarToggleProps extends HTMLAttributes<HTMLButtonElement> {}
 
 const NavbarToggle = forwardRef<HTMLButtonElement, NavbarToggleProps>(
     ({ className, ...props }, ref) => {
@@ -271,33 +269,35 @@ const NavbarToggle = forwardRef<HTMLButtonElement, NavbarToggleProps>(
                 aria-controls={menuId}
                 aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
                 className={clsx(
-                    "md:hidden relative flex items-center justify-center w-10 h-10 rounded-md transition-colors",
+                    "md:hidden relative flex items-center justify-center w-10 h-10 rounded transition-colors",
                     "text-ground-700 dark:text-ground-300 hover:bg-ground-100 dark:hover:bg-ground-800",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-ground-950",
                     className
                 )}
                 {...props}
             >
-                {/* Animated hamburger → X */}
                 <span className="sr-only">{mobileOpen ? "Close menu" : "Open menu"}</span>
                 <span className="flex flex-col items-center justify-center w-5 h-5">
                     <span
                         className={clsx(
-                            "block h-0.5 w-5 bg-current transition-all duration-300 rounded-full",
+                            "block h-0.5 w-5 bg-current transition-all rounded-full",
                             mobileOpen ? "rotate-45 translate-y-[3px]" : "-translate-y-1"
                         )}
+                        style={{ transitionDuration: "var(--transition-medium)" }}
                     />
                     <span
                         className={clsx(
-                            "block h-0.5 w-5 bg-current transition-all duration-300 rounded-full",
+                            "block h-0.5 w-5 bg-current transition-all rounded-full",
                             mobileOpen ? "opacity-0" : "opacity-100"
                         )}
+                        style={{ transitionDuration: "var(--transition-medium)" }}
                     />
                     <span
                         className={clsx(
-                            "block h-0.5 w-5 bg-current transition-all duration-300 rounded-full",
+                            "block h-0.5 w-5 bg-current transition-all rounded-full",
                             mobileOpen ? "-rotate-45 -translate-y-[3px]" : "translate-y-1"
                         )}
+                        style={{ transitionDuration: "var(--transition-medium)" }}
                     />
                 </span>
             </button>
@@ -311,7 +311,7 @@ NavbarToggle.displayName = "Navbar.Toggle";
 // Mobile Menu (slide-in panel)
 // ============================================================================
 
-export interface NavbarMobileMenuProps extends HTMLAttributes<HTMLDivElement> { }
+export interface NavbarMobileMenuProps extends HTMLAttributes<HTMLDivElement> {}
 
 const NavbarMobileMenu = forwardRef<HTMLDivElement, NavbarMobileMenuProps>(
     ({ className, children, ...props }, ref) => {
@@ -357,9 +357,10 @@ const NavbarMobileMenu = forwardRef<HTMLDivElement, NavbarMobileMenuProps>(
                 {/* Backdrop */}
                 <div
                     className={clsx(
-                        "fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 md:hidden",
+                        "fixed inset-0 z-40 bg-ground-950/50 transition-opacity md:hidden",
                         mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
                     )}
+                    style={{ transitionDuration: "var(--transition-medium)" }}
                     aria-hidden="true"
                     onClick={() => setMobileOpen(false)}
                 />
@@ -367,9 +368,9 @@ const NavbarMobileMenu = forwardRef<HTMLDivElement, NavbarMobileMenuProps>(
                 {/* Panel */}
                 <div
                     ref={(node) => {
-                        (menuRef as any).current = node;
+                        (menuRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
                         if (typeof ref === "function") ref(node);
-                        else if (ref) (ref as any).current = node;
+                        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
                     }}
                     id={menuId}
                     role="dialog"
@@ -379,11 +380,12 @@ const NavbarMobileMenu = forwardRef<HTMLDivElement, NavbarMobileMenuProps>(
                     className={clsx(
                         "fixed top-0 right-0 z-50 h-full w-72 max-w-[80vw] md:hidden",
                         "bg-white dark:bg-ground-950 border-l border-ground-200 dark:border-ground-800",
-                        "shadow-2xl",
-                        "transform transition-transform duration-300 ease-in-out",
+                        "shadow-outer",
+                        "transform transition-transform ease-in-out",
                         mobileOpen ? "translate-x-0" : "translate-x-full",
                         className
                     )}
+                    style={{ transitionDuration: "var(--transition-medium)" }}
                     {...props}
                 >
                     {/* Close button inside panel */}
@@ -393,7 +395,7 @@ const NavbarMobileMenu = forwardRef<HTMLDivElement, NavbarMobileMenuProps>(
                             onClick={() => setMobileOpen(false)}
                             aria-label="Close navigation menu"
                             className={clsx(
-                                "flex items-center justify-center w-9 h-9 rounded-md transition-colors",
+                                "flex items-center justify-center w-9 h-9 rounded transition-colors",
                                 "text-ground-500 hover:text-ground-900 dark:hover:text-white hover:bg-ground-100 dark:hover:bg-ground-800",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                             )}
@@ -422,6 +424,7 @@ NavbarMobileMenu.displayName = "Navbar.MobileMenu";
 // ============================================================================
 
 export interface NavbarMobileItemProps extends HTMLAttributes<HTMLDivElement> {
+    /** Highlights the item as the current page */
     active?: boolean;
 }
 
@@ -442,7 +445,7 @@ const NavbarMobileItem = forwardRef<HTMLDivElement, NavbarMobileItemProps>(
                     }
                 }}
                 className={clsx(
-                    "px-4 py-3 rounded-lg text-sm font-medium font-secondary transition-colors cursor-pointer",
+                    "px-4 py-3 rounded text-sm font-medium font-secondary transition-colors cursor-pointer",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
                     active
                         ? "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
