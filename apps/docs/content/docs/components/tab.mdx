@@ -3,45 +3,95 @@ title: Tabs
 description: A set of layered sections of content—known as tab panels—that are displayed one at a time.
 ---
 
-import TabDemo from '@/components/demos/tab-demo';
+import TabsDemo from '@/components/demos/tab-demo';
 import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
 
 ## Usage
 
 <FumaTabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center w-full p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
-      <TabDemo />
+    <div className="flex items-center justify-center w-full p-8 bg-ground-100 dark:bg-ground-900 rounded-lg">
+      <TabsDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import Tabs from "@/components/ui/tab";
+    import { Tabs } from "vayu-ui";
 
-    export default function TabDemo() {
+    export default function TabsDemo() {
       return (
-        <Tabs defaultValue="account" className="w-full max-w-[400px]">
-          <Tabs.List className="grid w-full grid-cols-2">
-            <Tabs.Trigger value="account">Account</Tabs.Trigger>
-            <Tabs.Trigger value="password">Password</Tabs.Trigger>
-          </Tabs.List>
-          <Tabs.Content value="account">
-            <div className="p-4 mt-2 border rounded-md border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
-              <h3 className="mb-2 text-lg font-medium">Account</h3>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                Make changes to your account here. Click save when you're done.
-              </p>
-            </div>
-          </Tabs.Content>
-          <Tabs.Content value="password">
-            <div className="p-4 mt-2 border rounded-md border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
-              <h3 className="mb-2 text-lg font-medium">Password</h3>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                Change your password here. After saving, you'll be logged out.
-              </p>
-            </div>
-          </Tabs.Content>
-        </Tabs>
+        <div className="w-full max-w-md">
+          <Tabs defaultValue="account" className="mb-8">
+            <Tabs.List className="grid w-full grid-cols-2">
+              <Tabs.Trigger value="account">Account</Tabs.Trigger>
+              <Tabs.Trigger value="password">Password</Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="account">
+              <div className="p-4 mt-2 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
+                <h3 className="mb-2 text-lg font-medium">Account</h3>
+                <p className="text-sm text-ground-600 dark:text-ground-400">
+                  Make changes to your account here. Click save when you're done.
+                </p>
+              </div>
+            </Tabs.Content>
+            <Tabs.Content value="password">
+              <div className="p-4 mt-2 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
+                <h3 className="mb-2 text-lg font-medium">Password</h3>
+                <p className="text-sm text-ground-600 dark:text-ground-400">
+                  Change your password here. After saving, you'll be logged out.
+                </p>
+              </div>
+            </Tabs.Content>
+          </Tabs>
+
+          {/* Vertical orientation */}
+          <Tabs defaultValue="profile" orientation="vertical" className="mb-8">
+            <Tabs.List className="min-w-[200px]">
+              <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
+              <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+              <Tabs.Trigger value="notifications">Notifications</Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="profile" className="pl-4">
+              <div className="p-4 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
+                <h4 className="mb-2 text-md font-medium">Profile Settings</h4>
+                <p className="text-sm text-ground-600 dark:text-ground-400">
+                  Manage your personal information and preferences.
+                </p>
+              </div>
+            </Tabs.Content>
+            <Tabs.Content value="settings" className="pl-4">
+              <div className="p-4 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
+                <h4 className="mb-2 text-md font-medium">Application Settings</h4>
+                <p className="text-sm text-ground-600 dark:text-ground-400">
+                  Configure your application preferences and options.
+                </p>
+              </div>
+            </Tabs.Content>
+            <Tabs.Content value="notifications" className="pl-4">
+              <div className="p-4 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
+                <h4 className="mb-2 text-md font-medium">Notification Settings</h4>
+                <p className="text-sm text-ground-600 dark:text-ground-400">
+                  Choose which notifications you want to receive.
+                </p>
+              </div>
+            </Tabs.Content>
+          </Tabs>
+
+          {/* With disabled tab */}
+          <Tabs defaultValue="enabled">
+            <Tabs.List className="grid w-full grid-cols-2">
+              <Tabs.Trigger value="enabled">Enabled Tab</Tabs.Trigger>
+              <Tabs.Trigger value="disabled" disabled>Disabled Tab</Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="enabled">
+              <div className="p-4 mt-2 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
+                <p className="text-sm text-ground-600 dark:text-ground-400">
+                  This tab is active and can be selected.
+                </p>
+              </div>
+            </Tabs.Content>
+          </Tabs>
+        </div>
       );
     }
     ```
@@ -59,6 +109,7 @@ import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
 | `onValueChange` | `(value: string) => void` | - | Event handler called when the value changes. |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | The orientation of the tabs. |
 | `className` | `string` | - | Additional CSS classes. |
+| `children` | `ReactNode` | - | The tab list and content components. |
 
 ### Tabs.List
 
@@ -80,14 +131,26 @@ import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `value` | `string` | - | A unique value for the content. Must check with a trigger. |
+| `value` | `string` | - | A unique value for the content. Must match a trigger. |
 | `className` | `string` | - | Additional CSS classes. |
 | `children` | `ReactNode` | - | The content to display. |
 | `forceMount` | `boolean` | `false` | Whether to force mount the content when inactive. |
 
+## Accessibility
+
+The Tabs component is built with accessibility in mind and follows WCAG 2.2 AA guidelines:
+
+- **Keyboard Navigation**: Use arrow keys to move between tabs, Home/End to jump to first/last tab
+- **Focus Management**: Visible focus indicators with focus ring on interactive elements
+- **ARIA Attributes**: Proper roles, states, and properties for screen readers
+- **Semantic HTML**: Uses native button and div elements with correct semantic meaning
+- **Screen Reader Support**: All interactive elements have appropriate labels
+- **Reduced Motion**: Animations respect `prefers-reduced-motion` setting
+
 ## Source Code
 
 ```tsx title="src/components/ui/tab.tsx"
+"use client";
 import React, {
     createContext,
     useContext,
@@ -95,7 +158,7 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "../ui/utils";
 
 type TabsOrientation = "horizontal" | "vertical";
 
@@ -117,30 +180,26 @@ const useTabsContext = () => {
     return context;
 };
 
-interface TabsProps {
+interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
     defaultValue?: string;
     value?: string;
     onValueChange?: (value: string) => void;
     orientation?: TabsOrientation;
-    className?: string;
     children: React.ReactNode;
 }
 
-interface TabsListProps {
-    className?: string;
+interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
 }
 
-interface TabsTriggerProps {
+interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     value: string;
     disabled?: boolean;
-    className?: string;
     children: React.ReactNode;
 }
 
-interface TabsContentProps {
+interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
     value: string;
-    className?: string;
     children: React.ReactNode;
     forceMount?: boolean;
 }
@@ -148,7 +207,7 @@ interface TabsContentProps {
 /**
  * Tabs Component - Compound Pattern
  * A flexible, headless-style tabbed interface component with full dark/light mode support.
- * Supports controlled/uncontrolled modes, keyboard navigation, and full accessibility (WCAG 2.1).
+ * Supports controlled/uncontrolled modes, keyboard navigation, and full accessibility (WCAG 2.2 AA).
  *
  * @example
  * ```tsx
@@ -171,6 +230,7 @@ const TabsBase = React.forwardRef<HTMLDivElement, TabsProps>(
             orientation = "horizontal",
             className,
             children,
+            ...props
         },
         ref
     ) => {
@@ -207,6 +267,7 @@ const TabsBase = React.forwardRef<HTMLDivElement, TabsProps>(
                         className
                     )}
                     data-orientation={orientation}
+                    {...props}
                 >
                     {children}
                 </div>
@@ -219,7 +280,7 @@ TabsBase.displayName = "Tabs";
 
 // TabsList Component
 const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
-    ({ className, children }, ref) => {
+    ({ className, children, ...props }, ref) => {
         const { orientation } = useTabsContext();
         const listRef = useRef<HTMLDivElement>(null);
 
@@ -300,10 +361,11 @@ const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
                 className={cn(
                     "inline-flex items-center",
                     orientation === "horizontal"
-                        ? "border-b border-gray-200 dark:border-gray-700"
-                        : "flex-col border-r border-gray-200 dark:border-gray-700 pr-4 min-w-[160px]",
+                        ? "border-b border-ground-200 dark:border-ground-700"
+                        : "flex-col border-r border-ground-200 dark:border-ground-700 pr-4 min-w-[160px]",
                     className
                 )}
+                {...props}
             >
                 {children}
             </div>
@@ -315,7 +377,7 @@ TabsList.displayName = "Tabs.List";
 
 // TabsTrigger Component
 const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
-    ({ value, disabled = false, className, children }, ref) => {
+    ({ value, disabled = false, className, children, ...props }, ref) => {
         const { activeTab, setActiveTab, orientation } = useTabsContext();
 
         const isActive = activeTab === value;
@@ -349,22 +411,24 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
                 onKeyDown={handleKeyDown}
                 className={cn(
                     "px-4 py-2 text-sm font-medium transition-all",
-                    "focus:outline-none disabled:opacity-50 disabled:pointer-events-none",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
+                    "disabled:opacity-50 disabled:pointer-events-none",
                     orientation === "horizontal"
                         ? cn(
                             "border-b-2 -mb-px",
                             isActive
-                                ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
-                                : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                                ? "border-primary-600 text-primary-600 dark:border-primary-400 dark:text-primary-400"
+                                : "border-transparent text-ground-600 hover:text-ground-900 dark:text-ground-400 dark:hover:text-ground-200"
                         )
                         : cn(
-                            "w-full text-left rounded-md",
+                            "w-full text-left rounded",
                             isActive
-                                ? "bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400"
-                                : "text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800/50"
+                                ? "bg-primary-50 text-primary-600 dark:bg-primary-950/30 dark:text-primary-400"
+                                : "text-ground-600 hover:bg-ground-50 dark:text-ground-400 dark:hover:bg-ground-800/50"
                         ),
                     className
                 )}
+                {...props}
             >
                 {children}
             </button>
@@ -376,7 +440,7 @@ TabsTrigger.displayName = "Tabs.Trigger";
 
 // TabsContent Component
 const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
-    ({ value, className, children, forceMount = false }, ref) => {
+    ({ value, className, children, forceMount = false, ...props }, ref) => {
         const { activeTab } = useTabsContext();
         const isActive = activeTab === value;
 
@@ -394,9 +458,10 @@ const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
                 data-state={isActive ? "active" : "inactive"}
                 hidden={!isActive && forceMount}
                 className={cn(
-                    "mt-4 focus:outline-none animate-in fade-in-0",
+                    "mt-4 focus:outline-none animate-fade-in",
                     className
                 )}
+                {...props}
             >
                 {children}
             </div>
@@ -421,4 +486,3 @@ const Tabs = TabsBase as React.ForwardRefExoticComponent<
 };
 
 export default Tabs;
-```

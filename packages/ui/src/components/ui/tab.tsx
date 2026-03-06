@@ -28,30 +28,26 @@ const useTabsContext = () => {
     return context;
 };
 
-interface TabsProps {
+interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
     defaultValue?: string;
     value?: string;
     onValueChange?: (value: string) => void;
     orientation?: TabsOrientation;
-    className?: string;
     children: React.ReactNode;
 }
 
-interface TabsListProps {
-    className?: string;
+interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
 }
 
-interface TabsTriggerProps {
+interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     value: string;
     disabled?: boolean;
-    className?: string;
     children: React.ReactNode;
 }
 
-interface TabsContentProps {
+interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
     value: string;
-    className?: string;
     children: React.ReactNode;
     forceMount?: boolean;
 }
@@ -59,7 +55,7 @@ interface TabsContentProps {
 /**
  * Tabs Component - Compound Pattern
  * A flexible, headless-style tabbed interface component with full dark/light mode support.
- * Supports controlled/uncontrolled modes, keyboard navigation, and full accessibility (WCAG 2.1).
+ * Supports controlled/uncontrolled modes, keyboard navigation, and full accessibility (WCAG 2.2 AA).
  *
  * @example
  * ```tsx
@@ -82,6 +78,7 @@ const TabsBase = React.forwardRef<HTMLDivElement, TabsProps>(
             orientation = "horizontal",
             className,
             children,
+            ...props
         },
         ref
     ) => {
@@ -118,6 +115,7 @@ const TabsBase = React.forwardRef<HTMLDivElement, TabsProps>(
                         className
                     )}
                     data-orientation={orientation}
+                    {...props}
                 >
                     {children}
                 </div>
@@ -130,7 +128,7 @@ TabsBase.displayName = "Tabs";
 
 // TabsList Component
 const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
-    ({ className, children }, ref) => {
+    ({ className, children, ...props }, ref) => {
         const { orientation } = useTabsContext();
         const listRef = useRef<HTMLDivElement>(null);
 
@@ -211,10 +209,11 @@ const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
                 className={cn(
                     "inline-flex items-center",
                     orientation === "horizontal"
-                        ? "border-b border-gray-200 dark:border-gray-700"
-                        : "flex-col border-r border-gray-200 dark:border-gray-700 pr-4 min-w-[160px]",
+                        ? "border-b border-ground-200 dark:border-ground-700"
+                        : "flex-col border-r border-ground-200 dark:border-ground-700 pr-4 min-w-[160px]",
                     className
                 )}
+                {...props}
             >
                 {children}
             </div>
@@ -226,7 +225,7 @@ TabsList.displayName = "Tabs.List";
 
 // TabsTrigger Component
 const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
-    ({ value, disabled = false, className, children }, ref) => {
+    ({ value, disabled = false, className, children, ...props }, ref) => {
         const { activeTab, setActiveTab, orientation } = useTabsContext();
 
         const isActive = activeTab === value;
@@ -260,22 +259,24 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
                 onKeyDown={handleKeyDown}
                 className={cn(
                     "px-4 py-2 text-sm font-medium transition-all",
-                    "focus:outline-none disabled:opacity-50 disabled:pointer-events-none",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
+                    "disabled:opacity-50 disabled:pointer-events-none",
                     orientation === "horizontal"
                         ? cn(
                             "border-b-2 -mb-px",
                             isActive
                                 ? "border-primary-600 text-primary-600 dark:border-primary-400 dark:text-primary-400"
-                                : "border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                                : "border-transparent text-ground-600 hover:text-ground-900 dark:text-ground-400 dark:hover:text-ground-200"
                         )
                         : cn(
-                            "w-full text-left rounded-md",
+                            "w-full text-left rounded",
                             isActive
                                 ? "bg-primary-50 text-primary-600 dark:bg-primary-950/30 dark:text-primary-400"
-                                : "text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800/50"
+                                : "text-ground-600 hover:bg-ground-50 dark:text-ground-400 dark:hover:bg-ground-800/50"
                         ),
                     className
                 )}
+                {...props}
             >
                 {children}
             </button>
@@ -287,7 +288,7 @@ TabsTrigger.displayName = "Tabs.Trigger";
 
 // TabsContent Component
 const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
-    ({ value, className, children, forceMount = false }, ref) => {
+    ({ value, className, children, forceMount = false, ...props }, ref) => {
         const { activeTab } = useTabsContext();
         const isActive = activeTab === value;
 
@@ -305,9 +306,10 @@ const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
                 data-state={isActive ? "active" : "inactive"}
                 hidden={!isActive && forceMount}
                 className={cn(
-                    "mt-4 focus:outline-none animate-in fade-in-0",
+                    "mt-4 focus:outline-none animate-fade-in",
                     className
                 )}
+                {...props}
             >
                 {children}
             </div>
