@@ -6,17 +6,16 @@ import React, {
     useId,
     useRef,
     useState,
+    useCallback,
 } from "react";
 import { createPortal } from "react-dom";
 import { useElementPosition } from "vayu-ui";
 
 // ==================== Types ====================
 
-type Theme = "light" | "dark";
 type Orientation = "horizontal" | "vertical";
 
 interface MenubarContextValue {
-    theme: Theme;
     orientation: Orientation;
     activeMenu: string | null;
     setActiveMenu: (id: string | null) => void;
@@ -28,14 +27,11 @@ interface MenuContextValue {
     setIsOpen: (open: boolean) => void;
     level: number;
     parentId: string;
-    theme: Theme;
 }
 
 interface MenubarProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
-    theme?: Theme;
     orientation?: Orientation;
-    onThemeChange?: (theme: Theme) => void;
 }
 
 interface MenuProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -53,7 +49,7 @@ interface MenuItemProps extends React.HTMLAttributes<HTMLButtonElement> {
     onSelect?: () => void;
 }
 
-interface MenuSeparatorProps extends React.HTMLAttributes<HTMLDivElement> { }
+interface MenuSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 interface MenuLabelProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
@@ -76,9 +72,7 @@ interface MenuRadioItemProps extends Omit<MenuItemProps, "onSelect"> {
 
 // ==================== Menubar Context ====================
 
-const MenubarContext = createContext<MenubarContextValue | undefined>(
-    undefined
-);
+const MenubarContext = createContext<MenubarContextValue | undefined>(undefined);
 
 const useMenubarContext = () => {
     const context = useContext(MenubarContext);
@@ -123,57 +117,59 @@ const Portal = ({ children }: PortalProps) => {
 
 export const Menubar = ({
     children,
-    theme: initialTheme = "light",
     orientation = "horizontal",
-    onThemeChange,
     className = "",
     ...props
 }: MenubarProps) => {
-    const [theme, setTheme] = useState<Theme>(initialTheme);
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (onThemeChange) {
-            onThemeChange(theme);
-        }
-    }, [theme, onThemeChange]);
-
-    const closeAllMenus = () => {
+    const closeAllMenus = useCallback(() => {
         setActiveMenu(null);
-    };
+    }, []);
 
     // Close menus when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as HTMLElement;
-            if (!target.closest("[data-menubar]") && !target.closest("[data-menu-portal]")) {
+            if (
+                !target.closest("[data-menubar]") &&
+                !target.closest("[data-menu-portal]")
+            ) {
                 closeAllMenus();
             }
         };
 
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    }, [closeAllMenus]);
 
-    const themeClasses =
-        theme === "light"
-            ? "bg-white border-ground-200"
-            : "bg-ground-900 border-ground-700";
+    // Close menus on Escape key
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                closeAllMenus();
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    }, [closeAllMenus]);
 
     return (
         <MenubarContext.Provider
-            value={{ theme, orientation, activeMenu, setActiveMenu, closeAllMenus }}
+            value={{ orientation, activeMenu, setActiveMenu, closeAllMenus }}
         >
             <div
                 data-menubar
                 className={`
-          ${themeClasses}
-          border rounded-md p-1
-          ${orientation === "horizontal" ? "flex items-center gap-1" : "flex flex-col gap-1"}
-          font-secondary
-          transition-colors transition-fast
-          ${className}
-        `}
+                    bg-white dark:bg-ground-900
+                    border border-ground-200 dark:border-ground-700
+                    rounded p-1
+                    ${orientation === "horizontal" ? "flex items-center gap-1" : "flex flex-col gap-1"}
+                    font-secondary
+                    duration-[var(--transition-fast)]
+                    ${className}
+                `}
                 role="menubar"
                 aria-orientation={orientation}
                 {...props}
@@ -193,7 +189,7 @@ const Menu = ({
     className = "",
     ...props
 }: MenuProps) => {
-    const { theme, orientation, activeMenu, setActiveMenu } = useMenubarContext();
+    const { orientation, activeMenu, setActiveMenu } = useMenubarContext();
     const menuId = useId();
     const [isOpen, setIsOpen] = useState(false);
     const triggerRef = useRef<HTMLButtonElement>(null);
@@ -225,10 +221,9 @@ const Menu = ({
             case "ArrowDown":
                 e.preventDefault();
                 setActiveMenu(menuId);
-                // Focus first item
                 setTimeout(() => {
                     const firstItem = menuRef.current?.querySelector<HTMLElement>(
-                        '[role="menuitem"]:not([disabled])'
+                        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
                     );
                     firstItem?.focus();
                 }, 0);
@@ -241,10 +236,9 @@ const Menu = ({
             case "ArrowRight":
                 if (orientation === "horizontal") {
                     e.preventDefault();
-                    // Focus next menu trigger
                     const nextTrigger =
                         triggerRef.current?.parentElement?.nextElementSibling?.querySelector(
-                            "button"
+                            "button[aria-haspopup]"
                         );
                     (nextTrigger as HTMLElement)?.focus();
                 }
@@ -252,10 +246,9 @@ const Menu = ({
             case "ArrowLeft":
                 if (orientation === "horizontal") {
                     e.preventDefault();
-                    // Focus previous menu trigger
                     const prevTrigger =
                         triggerRef.current?.parentElement?.previousElementSibling?.querySelector(
-                            "button"
+                            "button[aria-haspopup]"
                         );
                     (prevTrigger as HTMLElement)?.focus();
                 }
@@ -263,26 +256,22 @@ const Menu = ({
         }
     };
 
-    const triggerClasses =
-        theme === "light"
-            ? "text-ground-900 hover:bg-ground-100 data-[state=open]:bg-ground-100"
-            : "text-ground-100 hover:bg-ground-800 data-[state=open]:bg-ground-800";
-
     return (
-        <MenuContext.Provider
-            value={{ isOpen, setIsOpen, level, parentId: menuId, theme }}
-        >
+        <MenuContext.Provider value={{ isOpen, setIsOpen, level, parentId: menuId }}>
             <div className={`relative ${className}`} {...props}>
                 <button
                     ref={triggerRef}
                     className={`
-            ${triggerClasses}
-            px-3 py-2 rounded-sm
-            transition-colors transition-fast
-            focus:outline-none focus:ring-2 focus:ring-primary-500
-            disabled:opacity-50 disabled:cursor-not-allowed
-            text-sm font-medium
-          `}
+                        text-ground-900 dark:text-ground-100
+                        hover:bg-ground-100 dark:hover:bg-ground-800
+                        data-[state=open]:bg-ground-100 dark:data-[state=open]:bg-ground-800
+                        px-3 py-2 rounded-sm
+                        duration-[var(--transition-fast)]
+                        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2
+                        dark:focus-visible:ring-offset-ground-900
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        text-sm font-medium
+                    `}
                     onClick={handleTriggerClick}
                     onKeyDown={handleKeyDown}
                     disabled={disabled}
@@ -296,13 +285,16 @@ const Menu = ({
                 {isOpen && (
                     <Portal>
                         <div
+                            ref={menuRef}
                             data-menu-portal
                             className={`
-                absolute min-w-[200px] z-50
-                ${theme === "light" ? "bg-white border-ground-200" : "bg-ground-800 border-ground-700"}
-                border rounded-md shadow-lg
-                py-1
-              `}
+                                fixed min-w-[200px] z-50
+                                bg-white dark:bg-ground-800
+                                border border-ground-200 dark:border-ground-700
+                                rounded shadow-outer
+                                py-1
+                                animate-fade-in
+                            `}
                             style={{
                                 top: `${position.top}px`,
                                 left: `${position.left}px`,
@@ -319,7 +311,7 @@ const Menu = ({
     );
 };
 
-// ==================== SubMenu Component (for nested menus) ====================
+// ==================== SubMenu Component ====================
 
 const SubMenu = ({
     children,
@@ -334,8 +326,8 @@ const SubMenu = ({
     const triggerRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const level = parentContext.level + 1;
-    const openTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
-    const closeTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+    const openTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const position = useElementPosition(triggerRef, isOpen);
 
@@ -363,10 +355,9 @@ const SubMenu = ({
             case "ArrowRight":
                 e.preventDefault();
                 setIsOpen(true);
-                // Focus first item in submenu
                 setTimeout(() => {
                     const firstItem = menuRef.current?.querySelector<HTMLElement>(
-                        '[role="menuitem"]:not([disabled])'
+                        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
                     );
                     firstItem?.focus();
                 }, 0);
@@ -384,11 +375,6 @@ const SubMenu = ({
         }
     };
 
-    const itemClasses =
-        parentContext.theme === "light"
-            ? "text-ground-900 hover:bg-ground-100 data-[state=open]:bg-ground-100"
-            : "text-ground-100 hover:bg-ground-800 data-[state=open]:bg-ground-800";
-
     return (
         <MenuContext.Provider
             value={{
@@ -396,7 +382,6 @@ const SubMenu = ({
                 setIsOpen,
                 level,
                 parentId: submenuId,
-                theme: parentContext.theme,
             }}
         >
             <div
@@ -408,13 +393,16 @@ const SubMenu = ({
                 <button
                     ref={triggerRef}
                     className={`
-            ${itemClasses}
-            w-full px-3 py-2 text-left text-sm
-            transition-colors transition-fast
-            focus:outline-none focus:bg-primary-50 focus:text-primary-600
-            disabled:opacity-50 disabled:cursor-not-allowed
-            flex items-center justify-between gap-2
-          `}
+                        text-ground-900 dark:text-ground-100
+                        hover:bg-ground-100 dark:hover:bg-ground-800
+                        data-[state=open]:bg-ground-100 dark:data-[state=open]:bg-ground-800
+                        w-full px-3 py-2 text-left text-sm
+                        duration-[var(--transition-fast)]
+                        focus:outline-none focus-visible:bg-primary-50 focus-visible:text-primary-600
+                        dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400
+                        disabled:opacity-50 disabled:cursor-not-allowed
+                        flex items-center justify-between gap-2
+                    `}
                     onKeyDown={handleKeyDown}
                     disabled={disabled}
                     role="menuitem"
@@ -424,7 +412,7 @@ const SubMenu = ({
                 >
                     <span>{trigger}</span>
                     <svg
-                        className="w-4 h-4"
+                        className="w-4 h-4 shrink-0 text-ground-500 dark:text-ground-400"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -442,13 +430,16 @@ const SubMenu = ({
                 {isOpen && (
                     <Portal>
                         <div
+                            ref={menuRef}
                             data-menu-portal
                             className={`
-                absolute min-w-[200px] z-50
-                ${parentContext.theme === "light" ? "bg-white border-ground-200" : "bg-ground-800 border-ground-700"}
-                border rounded-md shadow-lg
-                py-1
-              `}
+                                fixed min-w-[200px] z-50
+                                bg-white dark:bg-ground-800
+                                border border-ground-200 dark:border-ground-700
+                                rounded shadow-outer
+                                py-1
+                                animate-fade-in
+                            `}
                             style={{
                                 top: `${position.top}px`,
                                 left: `${position.left + position.width}px`,
@@ -477,15 +468,12 @@ const MenuItem = ({
     className = "",
     ...props
 }: MenuItemProps) => {
-    const { theme } = useMenuContext();
     const { closeAllMenus } = useMenubarContext();
     const itemRef = useRef<HTMLButtonElement>(null);
 
     const handleClick = () => {
         if (disabled) return;
-        if (onSelect) {
-            onSelect();
-        }
+        onSelect?.();
         closeAllMenus();
     };
 
@@ -500,19 +488,17 @@ const MenuItem = ({
                 break;
             case "ArrowDown":
                 e.preventDefault();
-                // Focus next item
                 const nextItem =
                     itemRef.current?.parentElement?.nextElementSibling?.querySelector<HTMLElement>(
-                        '[role="menuitem"]:not([disabled])'
+                        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
                     );
                 nextItem?.focus();
                 break;
             case "ArrowUp":
                 e.preventDefault();
-                // Focus previous item
                 const prevItem =
                     itemRef.current?.parentElement?.previousElementSibling?.querySelector<HTMLElement>(
-                        '[role="menuitem"]:not([disabled])'
+                        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
                     );
                 prevItem?.focus();
                 break;
@@ -520,25 +506,22 @@ const MenuItem = ({
     };
 
     const itemClasses = danger
-        ? theme === "light"
-            ? "text-error-600 hover:bg-error-50"
-            : "text-error-400 hover:bg-error-950"
-        : theme === "light"
-            ? "text-ground-900 hover:bg-ground-100"
-            : "text-ground-100 hover:bg-ground-800";
+        ? "text-error-600 dark:text-error-400 hover:bg-error-50 dark:hover:bg-error-950"
+        : "text-ground-900 dark:text-ground-100 hover:bg-ground-100 dark:hover:bg-ground-800";
 
     return (
         <button
             ref={itemRef}
             className={`
-        ${itemClasses}
-        w-full px-3 py-2 text-left text-sm
-        transition-colors transition-fast
-        focus:outline-none focus:bg-primary-50 focus:text-primary-600
-        disabled:opacity-50 disabled:cursor-not-allowed
-        flex items-center justify-between gap-2
-        ${className}
-      `}
+                ${itemClasses}
+                w-full px-3 py-2 text-left text-sm
+                duration-[var(--transition-fast)]
+                focus:outline-none focus-visible:bg-primary-50 focus-visible:text-primary-600
+                dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400
+                disabled:opacity-50 disabled:cursor-not-allowed
+                flex items-center justify-between gap-2
+                ${className}
+            `}
             onClick={handleClick}
             onKeyDown={handleKeyDown}
             disabled={disabled}
@@ -547,13 +530,15 @@ const MenuItem = ({
             {...props}
         >
             <div className="flex items-center gap-2">
-                {icon && <span className="w-4 h-4 shrink-0">{icon}</span>}
+                {icon && (
+                    <span className="w-4 h-4 flex-shrink-0" aria-hidden="true">
+                        {icon}
+                    </span>
+                )}
                 <span>{children}</span>
             </div>
             {shortcut && (
-                <span
-                    className={`text-xs ${theme === "light" ? "text-ground-500" : "text-ground-400"}`}
-                >
+                <span className="text-xs text-ground-500 dark:text-ground-400" aria-label={`Shortcut: ${shortcut}`}>
                     {shortcut}
                 </span>
             )}
@@ -564,15 +549,9 @@ const MenuItem = ({
 // ==================== MenuSeparator Component ====================
 
 const MenuSeparator = ({ className = "", ...props }: MenuSeparatorProps) => {
-    const { theme } = useMenuContext();
-
     return (
         <div
-            className={`
-        my-1 h-px
-        ${theme === "light" ? "bg-ground-200" : "bg-ground-700"}
-        ${className}
-      `}
+            className={`my-1 h-px bg-ground-200 dark:bg-ground-700 ${className}`}
             role="separator"
             aria-orientation="horizontal"
             {...props}
@@ -583,15 +562,13 @@ const MenuSeparator = ({ className = "", ...props }: MenuSeparatorProps) => {
 // ==================== MenuLabel Component ====================
 
 const MenuLabel = ({ children, className = "", ...props }: MenuLabelProps) => {
-    const { theme } = useMenuContext();
-
     return (
         <div
             className={`
-        px-3 py-2 text-xs font-semibold uppercase tracking-wide
-        ${theme === "light" ? "text-ground-500" : "text-ground-400"}
-        ${className}
-      `}
+                px-3 py-2 text-xs font-semibold uppercase tracking-wide
+                text-ground-500 dark:text-ground-400
+                ${className}
+            `}
             role="presentation"
             {...props}
         >
@@ -612,14 +589,11 @@ const MenuCheckboxItem = ({
     className = "",
     ...props
 }: MenuCheckboxItemProps) => {
-    const { theme } = useMenuContext();
     const itemRef = useRef<HTMLButtonElement>(null);
 
     const handleClick = () => {
         if (disabled) return;
-        if (onCheckedChange) {
-            onCheckedChange(!checked);
-        }
+        onCheckedChange?.(!checked);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -635,7 +609,7 @@ const MenuCheckboxItem = ({
                 e.preventDefault();
                 const nextItem =
                     itemRef.current?.parentElement?.nextElementSibling?.querySelector<HTMLElement>(
-                        '[role="menuitemcheckbox"]:not([disabled]), [role="menuitem"]:not([disabled])'
+                        '[role="menuitemcheckbox"]:not([disabled]), [role="menuitem"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
                     );
                 nextItem?.focus();
                 break;
@@ -643,30 +617,27 @@ const MenuCheckboxItem = ({
                 e.preventDefault();
                 const prevItem =
                     itemRef.current?.parentElement?.previousElementSibling?.querySelector<HTMLElement>(
-                        '[role="menuitemcheckbox"]:not([disabled]), [role="menuitem"]:not([disabled])'
+                        '[role="menuitemcheckbox"]:not([disabled]), [role="menuitem"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
                     );
                 prevItem?.focus();
                 break;
         }
     };
 
-    const itemClasses =
-        theme === "light"
-            ? "text-ground-900 hover:bg-ground-100"
-            : "text-ground-100 hover:bg-ground-800";
-
     return (
         <button
             ref={itemRef}
             className={`
-        ${itemClasses}
-        w-full px-3 py-2 text-left text-sm
-        transition-colors transition-fast
-        focus:outline-none focus:bg-primary-50 focus:text-primary-600
-        disabled:opacity-50 disabled:cursor-not-allowed
-        flex items-center justify-between gap-2
-        ${className}
-      `}
+                text-ground-900 dark:text-ground-100
+                hover:bg-ground-100 dark:hover:bg-ground-800
+                w-full px-3 py-2 text-left text-sm
+                duration-[var(--transition-fast)]
+                focus:outline-none focus-visible:bg-primary-50 focus-visible:text-primary-600
+                dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400
+                disabled:opacity-50 disabled:cursor-not-allowed
+                flex items-center justify-between gap-2
+                ${className}
+            `}
             onClick={handleClick}
             onKeyDown={handleKeyDown}
             disabled={disabled}
@@ -676,10 +647,10 @@ const MenuCheckboxItem = ({
             {...props}
         >
             <div className="flex items-center gap-2">
-                <span className="w-4 h-4 shrink-0">
+                <span className="w-4 h-4 flex-shrink-0" aria-hidden="true">
                     {checked && (
                         <svg
-                            className="w-4 h-4"
+                            className="w-4 h-4 text-primary-600 dark:text-primary-400"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -693,13 +664,15 @@ const MenuCheckboxItem = ({
                         </svg>
                     )}
                 </span>
-                {icon && <span className="w-4 h-4 shrink-0">{icon}</span>}
+                {icon && (
+                    <span className="w-4 h-4 flex-shrink-0" aria-hidden="true">
+                        {icon}
+                    </span>
+                )}
                 <span>{children}</span>
             </div>
             {shortcut && (
-                <span
-                    className={`text-xs ${theme === "light" ? "text-ground-500" : "text-ground-400"}`}
-                >
+                <span className="text-xs text-ground-500 dark:text-ground-400" aria-label={`Shortcut: ${shortcut}`}>
                     {shortcut}
                 </span>
             )}
@@ -707,7 +680,7 @@ const MenuCheckboxItem = ({
     );
 };
 
-// ==================== MenuRadioGroup Component ====================
+// ==================== MenuRadioGroup Context ====================
 
 const MenuRadioGroupContext = createContext<
     | {
@@ -716,6 +689,8 @@ const MenuRadioGroupContext = createContext<
     }
     | undefined
 >(undefined);
+
+// ==================== MenuRadioGroup Component ====================
 
 const MenuRadioGroup = ({
     children,
@@ -744,7 +719,6 @@ const MenuRadioItem = ({
     className = "",
     ...props
 }: MenuRadioItemProps) => {
-    const { theme } = useMenuContext();
     const radioContext = useContext(MenuRadioGroupContext);
     const itemRef = useRef<HTMLButtonElement>(null);
 
@@ -752,9 +726,7 @@ const MenuRadioItem = ({
 
     const handleClick = () => {
         if (disabled) return;
-        if (radioContext?.onValueChange) {
-            radioContext.onValueChange(value);
-        }
+        radioContext?.onValueChange?.(value);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -785,23 +757,20 @@ const MenuRadioItem = ({
         }
     };
 
-    const itemClasses =
-        theme === "light"
-            ? "text-ground-900 hover:bg-ground-100"
-            : "text-ground-100 hover:bg-ground-800";
-
     return (
         <button
             ref={itemRef}
             className={`
-        ${itemClasses}
-        w-full px-3 py-2 text-left text-sm
-        transition-colors transition-fast
-        focus:outline-none focus:bg-primary-50 focus:text-primary-600
-        disabled:opacity-50 disabled:cursor-not-allowed
-        flex items-center justify-between gap-2
-        ${className}
-      `}
+                text-ground-900 dark:text-ground-100
+                hover:bg-ground-100 dark:hover:bg-ground-800
+                w-full px-3 py-2 text-left text-sm
+                duration-[var(--transition-fast)]
+                focus:outline-none focus-visible:bg-primary-50 focus-visible:text-primary-600
+                dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400
+                disabled:opacity-50 disabled:cursor-not-allowed
+                flex items-center justify-between gap-2
+                ${className}
+            `}
             onClick={handleClick}
             onKeyDown={handleKeyDown}
             disabled={disabled}
@@ -811,20 +780,26 @@ const MenuRadioItem = ({
             {...props}
         >
             <div className="flex items-center gap-2">
-                <span className="w-4 h-4 shrink-0">
+                <span className="w-4 h-4 flex-shrink-0" aria-hidden="true">
                     {isChecked && (
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <svg
+                            className="w-4 h-4 text-primary-600 dark:text-primary-400"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                        >
                             <circle cx="12" cy="12" r="4" />
                         </svg>
                     )}
                 </span>
-                {icon && <span className="w-4 h-4 shrink-0">{icon}</span>}
+                {icon && (
+                    <span className="w-4 h-4 flex-shrink-0" aria-hidden="true">
+                        {icon}
+                    </span>
+                )}
                 <span>{children}</span>
             </div>
             {shortcut && (
-                <span
-                    className={`text-xs ${theme === "light" ? "text-ground-500" : "text-ground-400"}`}
-                >
+                <span className="text-xs text-ground-500 dark:text-ground-400" aria-label={`Shortcut: ${shortcut}`}>
                     {shortcut}
                 </span>
             )}
