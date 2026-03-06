@@ -4,45 +4,46 @@ import { Avatar } from "vayu-ui";
 
 export default function AvatarDemo() {
     return (
-        <div className="flex flex-col not-prose gap-10 w-full max-w-2xl bg-white dark:bg-black p-6 rounded-xl border border-neutral-200 dark:border-neutral-800">
+        <div className="w-full max-w-md not-prose">
+            <h2 id="avatar-demo-label" className="text-xl font-semibold mb-4">
+                Avatar Example
+            </h2>
+
             {/* Sizes */}
-            <div className="flex flex-col gap-4">
-                <h3 className="text-sm font-medium text-muted-foreground border-b pb-2">Sizes</h3>
+            <div className="flex flex-col gap-4 mb-6">
+                <h3 className="text-sm font-medium text-ground-600 dark:text-ground-400">Sizes</h3>
                 <div className="flex items-center gap-6 flex-wrap">
                     <div className="flex flex-col items-center gap-2">
                         <Avatar size="small" username="Small">
                             <Avatar.Initials username="Small" />
                         </Avatar>
-                        <span className="text-xs text-muted-foreground">Small</span>
+                        <span className="text-xs text-ground-500 dark:text-ground-400">Small</span>
                     </div>
                     <div className="flex flex-col items-center gap-2">
                         <Avatar size="medium" username="Medium">
                             <Avatar.Initials username="Medium" />
                         </Avatar>
-                        <span className="text-xs text-muted-foreground">Medium</span>
+                        <span className="text-xs text-ground-500 dark:text-ground-400">Medium</span>
                     </div>
                     <div className="flex flex-col items-center gap-2">
                         <Avatar size="large" username="Large">
                             <Avatar.Initials username="Large" />
                         </Avatar>
-                        <span className="text-xs text-muted-foreground">Large</span>
+                        <span className="text-xs text-ground-500 dark:text-ground-400">Large</span>
                     </div>
                     <div className="flex flex-col items-center gap-2">
                         <Avatar size="xlarge" username="Extra">
                             <Avatar.Initials username="Extra" />
                         </Avatar>
-                        <span className="text-xs text-muted-foreground">Extra Large</span>
+                        <span className="text-xs text-ground-500 dark:text-ground-400">Extra Large</span>
                     </div>
                 </div>
             </div>
 
-            {/* States & Variants */}
-            <div className="flex flex-col gap-4">
-                <h3 className="text-sm font-medium text-muted-foreground border-b pb-2">
-                    Usage Variants
-                </h3>
+            {/* Variants */}
+            <div className="flex flex-col gap-4 mb-6">
+                <h3 className="text-sm font-medium text-ground-600 dark:text-ground-400">Usage Variants</h3>
                 <div className="flex flex-wrap gap-8">
-
                     {/* Image Avatar */}
                     <div className="flex flex-col items-center gap-2">
                         <Avatar size="large" username="John Doe">
@@ -52,7 +53,7 @@ export default function AvatarDemo() {
                             />
                             <Avatar.Fallback src="https://via.placeholder.com/150" />
                         </Avatar>
-                        <span className="text-xs text-muted-foreground font-medium">Image</span>
+                        <span className="text-xs text-ground-500 dark:text-ground-400 font-medium">Image</span>
                     </div>
 
                     {/* Initials Avatar */}
@@ -60,15 +61,7 @@ export default function AvatarDemo() {
                         <Avatar size="large" username="Rugved Patel">
                             <Avatar.Initials username="Rugved Patel" />
                         </Avatar>
-                        <span className="text-xs text-muted-foreground font-medium">Initials</span>
-                    </div>
-
-                    {/* Auto-Color Initials */}
-                    <div className="flex flex-col items-center gap-2">
-                        <Avatar size="large" username="Alice Wonder">
-                            <Avatar.Initials username="Alice Wonder" />
-                        </Avatar>
-                        <span className="text-xs text-muted-foreground font-medium">Auto Color</span>
+                        <span className="text-xs text-ground-500 dark:text-ground-400 font-medium">Initials</span>
                     </div>
 
                     {/* With Status */}
@@ -77,50 +70,76 @@ export default function AvatarDemo() {
                             <Avatar.Initials username="Online User" />
                             <Avatar.Status status="online" />
                         </Avatar>
-                        <span className="text-xs text-muted-foreground font-medium">Status</span>
+                        <span className="text-xs text-ground-500 dark:text-ground-400 font-medium">Status</span>
+                    </div>
+
+                    {/* Offline Status */}
+                    <div className="flex flex-col items-center gap-2">
+                        <Avatar size="large" username="Offline User" status="offline">
+                            <Avatar.Initials username="Offline User" />
+                            <Avatar.Status status="offline" />
+                        </Avatar>
+                        <span className="text-xs text-ground-500 dark:text-ground-400 font-medium">Offline</span>
                     </div>
                 </div>
             </div>
 
-            {/* Fallback Behavior */}
-            <div className="flex flex-col gap-4">
-                <h3 className="text-sm font-medium text-muted-foreground border-b pb-2">
-                    Error & Fallback Handling
-                </h3>
+            {/* Status States */}
+            <div className="flex flex-col gap-4 mb-6">
+                <h3 className="text-sm font-medium text-ground-600 dark:text-ground-400">Status States</h3>
                 <div className="flex flex-wrap gap-8">
-                    {/* Fallback to Initials */}
                     <div className="flex flex-col items-center gap-2">
-                        <Avatar size="large" username="Broken Image">
-                            <Avatar.Image
-                                src="https://invalid-url.com/broken.jpg"
-                                alt="Broken"
-                            />
-                            {/* If image fails, initials will show if we don't put a Fallback Image, 
-                                but in this DOM structure, we usually layer them. 
-                                Actually, existing logic hides image on error. 
-                                Initials are separate. We can put both? 
-                                No, Initials component always renders. 
-                                New Pattern: Put Initials behind Image (absolute positioning handled by CSS) 
-                            */}
-                            <Avatar.Initials username="Broken Image" />
+                        <Avatar size="large" status="online">
+                            <Avatar.Initials username="Online" />
+                            <Avatar.Status status="online" />
                         </Avatar>
-                        <span className="text-xs text-muted-foreground font-medium">Fallback to Initials</span>
+                        <span className="text-xs text-ground-500 dark:text-ground-400">Online</span>
                     </div>
-
-                    {/* Fallback to Verified Image */}
                     <div className="flex flex-col items-center gap-2">
-                        <Avatar size="large" username="Fallback">
-                            <Avatar.Image
-                                src="https://invalid-url.com/broken.jpg"
-                                fallbackSrc="https://github.com/shadcn.png"
-                                alt="Fallback"
-                            />
+                        <Avatar size="large" status="away">
+                            <Avatar.Initials username="Away" />
+                            <Avatar.Status status="away" />
                         </Avatar>
-                        <span className="text-xs text-muted-foreground font-medium">Fallback Image</span>
+                        <span className="text-xs text-ground-500 dark:text-ground-400">Away</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                        <Avatar size="large" status="busy">
+                            <Avatar.Initials username="Busy" />
+                            <Avatar.Status status="busy" />
+                        </Avatar>
+                        <span className="text-xs text-ground-500 dark:text-ground-400">Busy</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-2">
+                        <Avatar size="large" status="offline">
+                            <Avatar.Initials username="Offline" />
+                            <Avatar.Status status="offline" />
+                        </Avatar>
+                        <span className="text-xs text-ground-500 dark:text-ground-400">Offline</span>
                     </div>
                 </div>
             </div>
 
+            {/* Group */}
+            <div className="flex flex-col gap-4">
+                <h3 className="text-sm font-medium text-ground-600 dark:text-ground-400">Avatar Group</h3>
+                <Avatar.Group max={3}>
+                    <Avatar username="User 1">
+                        <Avatar.Initials username="User 1" />
+                    </Avatar>
+                    <Avatar username="User 2">
+                        <Avatar.Initials username="User 2" />
+                    </Avatar>
+                    <Avatar username="User 3">
+                        <Avatar.Initials username="User 3" />
+                    </Avatar>
+                    <Avatar username="User 4">
+                        <Avatar.Initials username="User 4" />
+                    </Avatar>
+                    <Avatar username="User 5">
+                        <Avatar.Initials username="User 5" />
+                    </Avatar>
+                </Avatar.Group>
+            </div>
         </div>
     );
 }
