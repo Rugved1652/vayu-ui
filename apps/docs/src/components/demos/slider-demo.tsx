@@ -6,32 +6,40 @@ import { useState } from "react";
 export default function SliderDemo() {
     const [volume, setVolume] = useState([50]);
     const [range, setRange] = useState([20, 80]);
+    const [brightness, setBrightness] = useState([75]);
 
     return (
-        <div className="flex flex-col gap-10 w-full max-w-sm">
-            {/* ── Basic ── */}
-            <div className="flex flex-col gap-3">
+        <div className="w-full max-w-md not-prose space-y-8">
+            <h2 id="slider-demo-label" className="text-xl font-primary font-semibold text-ground-900 dark:text-ground-100">
+                Slider Examples
+            </h2>
+
+            {/* Default Single Value */}
+            <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                    <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+                    <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
                         Volume
-                    </p>
-                    <span className="text-sm font-medium tabular-nums">{volume[0]}%</span>
+                    </label>
+                    <span className="text-sm font-tertiary tabular-nums text-ground-600 dark:text-ground-400">
+                        {volume[0]}%
+                    </span>
                 </div>
                 <Slider
                     defaultValue={[50]}
                     max={100}
                     step={1}
+                    label="Volume"
                     onValueChange={setVolume}
                 />
             </div>
 
-            {/* ── Range ── */}
-            <div className="flex flex-col gap-3">
+            {/* Range Slider */}
+            <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                    <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+                    <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
                         Price Range
-                    </p>
-                    <span className="text-sm font-medium tabular-nums">
+                    </label>
+                    <span className="text-sm font-tertiary tabular-nums text-ground-600 dark:text-ground-400">
                         ${range[0]} - ${range[1]}
                     </span>
                 </div>
@@ -40,27 +48,68 @@ export default function SliderDemo() {
                     min={0}
                     max={100}
                     step={5}
+                    label="Price range"
                     onValueChange={setRange}
                 />
             </div>
 
-            {/* ── Disabled ── */}
-            <div className="flex flex-col gap-3">
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
-                    Disabled
-                </p>
-                <Slider defaultValue={[25]} disabled />
+            {/* Size Variants */}
+            <div className="space-y-3">
+                <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
+                    Size Variants
+                </label>
+                <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                        <span className="text-xs font-secondary text-ground-500 w-8">sm</span>
+                        <Slider defaultValue={[30]} size="sm" label="Small slider" className="flex-1" />
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <span className="text-xs font-secondary text-ground-500 w-8">md</span>
+                        <Slider defaultValue={[50]} size="md" label="Medium slider" className="flex-1" />
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <span className="text-xs font-secondary text-ground-500 w-8">lg</span>
+                        <Slider defaultValue={[70]} size="lg" label="Large slider" className="flex-1" />
+                    </div>
+                </div>
             </div>
 
-            {/* ── Custom Step ── */}
-            <div className="flex flex-col gap-3">
+            {/* Controlled */}
+            <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                    <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
-                        Steps (25)
-                    </p>
+                    <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
+                        Brightness (Controlled)
+                    </label>
+                    <span className="text-sm font-tertiary tabular-nums text-ground-600 dark:text-ground-400">
+                        {brightness[0]}%
+                    </span>
                 </div>
-                <Slider defaultValue={[25]} max={100} step={25} />
-                <div className="flex justify-between text-[10px] text-ground-400 font-secondary px-1">
+                <Slider
+                    value={brightness}
+                    max={100}
+                    step={1}
+                    label="Brightness"
+                    onValueChange={setBrightness}
+                />
+            </div>
+
+            {/* Disabled */}
+            <div className="space-y-3">
+                <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
+                    Disabled
+                </label>
+                <Slider defaultValue={[25]} disabled label="Disabled slider" />
+            </div>
+
+            {/* Custom Step */}
+            <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                    <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
+                        Custom Step (25)
+                    </label>
+                </div>
+                <Slider defaultValue={[50]} max={100} step={25} label="Step slider" />
+                <div className="flex justify-between text-[10px] font-secondary text-ground-400 px-1">
                     <span>0</span>
                     <span>25</span>
                     <span>50</span>
