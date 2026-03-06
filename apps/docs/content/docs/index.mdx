@@ -3,11 +3,77 @@ title: Getting Started
 description: Fully Accessible, Typescript, TailwindCSS, Own the Code Library
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+Welcome to **Vayu UI** — an AI-optimized React UI system built with TypeScript and Tailwind CSS.
 
-## What is Next?
+This documentation covers:
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
-</Cards>
+- The **core component & hooks library** (`vayu-ui`)
+- The **CLI** (`vayu-ui-cli`) for installing components and design tokens
+- The **registry & MCP server** used by AI tools
+
+## What is Vayu UI?
+
+Vayu UI is a **copy-the-code** design system:
+
+- You install components and hooks as **source files** into your app.
+- Everything is written in **TypeScript + Tailwind v4**.
+- A shared **registry** powers the CLI and MCP server so humans and AI see the same API.
+
+Monorepo layout:
+
+- `packages/ui` – all components & hooks (published as `vayu-ui`)
+- `packages/cli` – `vayu-ui-cli` (add/init/list/update commands)
+- `packages/registry` – typed registry definitions
+- `packages/mcp` – MCP server exposing the registry to AI tools
+- `apps/docs` – this documentation (Next.js + Fumadocs)
+
+## Install the core library
+
+Add Vayu UI to your project:
+
+```tsx
+npm install vayu-ui
+# or
+pnpm add vayu-ui
+# or
+yarn add vayu-ui
+```
+
+Then import components from the package:
+
+```tsx
+import { Button } from 'vayu-ui';
+
+export function Example() {
+  return <Button>Click me</Button>;
+}
+```
+
+## Use the CLI
+
+The CLI helps you **copy fully-typed source files** from this repo into your app.
+
+```tsx
+# Initialize Vayu UI tokens + Tailwind CSS v4
+npx vayu-ui-cli init
+
+# Browse available items
+npx vayu-ui-cli list
+
+# Add a component or hook (copies from packages/ui)
+npx vayu-ui-cli add button
+npx vayu-ui-cli add use-debounce
+```
+
+Under the hood:
+
+- The CLI looks up metadata in `vayu-ui-registry`.
+- It downloads the matching file from `packages/ui/src/...` on GitHub.
+- It writes it into your project at the registry-defined `targetPath`.
+
+## Learn the building blocks
+
+- **Components** – see [`/docs/components`](./components) for all UI primitives and patterns.
+- **Hooks** – see the Hooks section for browser, state, and utility hooks.
+
+You can explore live examples in the **Components** section of this site; all demos are powered by the same `vayu-ui` package and registry that the CLI and MCP server use.

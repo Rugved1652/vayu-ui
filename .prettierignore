@@ -1,0 +1,16 @@
+node_modules
+.turbo
+dist
+build
+.next
+coverage
+.eslintcache
+
+# Lockfiles and package manager artifacts
+package-lock.json
+apps/**/package-lock.json
+
+# Generated docs/output
+apps/docs/.source
+apps/docs/.next
+

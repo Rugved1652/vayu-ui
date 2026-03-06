@@ -83,8 +83,8 @@ export async function installItem(
         return { filePath: targetFile, alreadyExists: true };
     }
 
-    // Construct GitHub raw URL
-    const baseUrl = "https://raw.githubusercontent.com/Rugved1652/vayu-ui-docs/main";
+    // Construct GitHub raw URL (monorepo layout: packages/ui)
+    const baseUrl = "https://raw.githubusercontent.com/Rugved1652/vayu-ui/main/packages/ui";
     const sourcePath = item.type === "hook"
         ? `src/hooks/${item.fileName}`
         : `src/components/ui/${item.fileName}`;

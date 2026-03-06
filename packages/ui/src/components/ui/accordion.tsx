@@ -16,25 +16,25 @@ import { cn } from "./utils";
 type AccordionProps = {
     children: React.ReactNode;
     allowMultiple?: boolean;
-    className?: string; // Restore className
+    className?: string;
 };
 
 type AccordionItemProps = {
     children: React.ReactNode;
     itemId: string;
-    className?: string; // Restore className
+    className?: string;
 };
 
 type AccordionHeaderProps = {
     children: React.ReactNode;
     itemId: string;
-    className?: string; // Restore className
+    className?: string;
 };
 
 type AccordionBodyProps = {
     children: React.ReactNode;
     itemId: string;
-    className?: string; // Restore className
+    className?: string;
 };
 
 type AccordionContextType = {
@@ -45,6 +45,8 @@ type AccordionContextType = {
     unregisterItem: (id: string) => void;
     registerPanel: (id: string, ref: React.RefObject<HTMLDivElement | null>) => void;
     unregisterPanel: (id: string) => void;
+    firstFocusableRef: React.RefObject<HTMLDivElement | null>;
+    moveFocusToPanel: (id: string) => void;
 };
 
 /* ---------------- CONTEXT ---------------- */
@@ -63,6 +65,7 @@ const Accordion: React.FC<AccordionProps> & {
     const panelRefs = useRef<Map<string, React.RefObject<HTMLDivElement | null>>>(
         new Map()
     );
+    const firstFocusableRef = useRef<HTMLDivElement | null>(null);
 
     const toggleItem = useCallback((id: string) => {
         setOpenItems((prev) => {
@@ -112,6 +115,20 @@ const Accordion: React.FC<AccordionProps> & {
         panelRefs.current.delete(id);
     }, []);
 
+    const moveFocusToPanel = useCallback((id: string) => {
+        const panelRef = panelRefs.current.get(id);
+        if (panelRef?.current) {
+            // Find the first focusable element inside the panel
+            const focusableElements = panelRef.current.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstFocusable = focusableElements[0] as HTMLElement;
+            if (firstFocusable) {
+                firstFocusable.focus();
+            }
+        }
+    }, []);
+
     const contextValue = useMemo(() => ({
         isItemOpen,
         toggleItem,
@@ -120,7 +137,9 @@ const Accordion: React.FC<AccordionProps> & {
         unregisterItem,
         registerPanel,
         unregisterPanel,
-    }), [isItemOpen, toggleItem, itemIds, registerItem, unregisterItem, registerPanel, unregisterPanel]);
+        firstFocusableRef,
+        moveFocusToPanel,
+    }), [isItemOpen, toggleItem, itemIds, registerItem, unregisterItem, registerPanel, unregisterPanel, moveFocusToPanel]);
 
     return (
         <AccordionContext.Provider value={contextValue}>
@@ -129,7 +148,6 @@ const Accordion: React.FC<AccordionProps> & {
                     "border border-ground-200 dark:border-ground-800 rounded-xl overflow-hidden bg-white dark:bg-ground-950",
                     className
                 )}
-                role="presentation"
             >
                 {children}
             </div>
@@ -176,7 +194,7 @@ const AccordionHeader: React.FC<AccordionHeaderProps> = ({
     const context = useContext(AccordionContext);
     if (!context) throw new Error("AccordionHeader must be inside Accordion");
 
-    const { isItemOpen, toggleItem, itemIds } = context;
+    const { isItemOpen, toggleItem, itemIds, moveFocusToPanel } = context;
     const isOpen = isItemOpen(itemId);
 
     const headerId = `accordion-header-${itemId}`;
@@ -204,6 +222,12 @@ const AccordionHeader: React.FC<AccordionHeaderProps> = ({
                 e.preventDefault();
                 nextIndex = itemIds.length - 1;
                 break;
+            case "Escape":
+                if (isOpen) {
+                    e.preventDefault();
+                    toggleItem(itemId);
+                }
+                break;
         }
 
         if (nextIndex !== null) {
@@ -219,15 +243,22 @@ const AccordionHeader: React.FC<AccordionHeaderProps> = ({
         <h3>
             <button
                 id={headerId}
+                type="button"
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                onClick={() => toggleItem(itemId)}
+                onClick={() => {
+                    toggleItem(itemId);
+                    // Move focus to the first focusable element in the panel when opening
+                    if (!isOpen) {
+                        setTimeout(() => moveFocusToPanel(itemId), 300);
+                    }
+                }}
                 onKeyDown={handleKeyDown}
                 className={cn(
                     "w-full text-left px-5 py-4 flex items-center justify-between transition-all duration-200",
                     "font-secondary font-medium text-ground-900 dark:text-ground-100",
                     "hover:bg-ground-50 dark:hover:bg-ground-900",
-                    "focus:outline-none focus:ring-1 focus:ring-inset focus:ring-primary-500",
+                    "focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 focus:ring-offset-2",
                     "group-first:rounded-t-xl",
                     !isOpen && "group-last:rounded-b-xl",
                     isOpen ? "bg-ground-50 dark:bg-ground-900/50" : "",
@@ -252,6 +283,7 @@ const AccordionHeader: React.FC<AccordionHeaderProps> = ({
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        aria-hidden="true"
                     >
                         <path d="m6 9 6 6 6-6" />
                     </svg>
@@ -320,13 +352,16 @@ const AccordionBody: React.FC<AccordionBodyProps> = ({
             role="region"
             aria-labelledby={headerId}
             aria-hidden={!isOpen}
-            inert={!isOpen ? true : undefined}
             style={{
                 height: rendered ? height : 0,
                 transition: "height 300ms cubic-bezier(0.87, 0, 0.13, 1)",
             }}
-            className="overflow-hidden will-change-[height]"
+            className={cn(
+                "overflow-hidden will-change-[height]",
+                !isOpen && "pointer-events-none"
+            )}
             onTransitionEnd={handleTransitionEnd}
+            tabIndex={-1}
         >
             <div
                 ref={contentRef}

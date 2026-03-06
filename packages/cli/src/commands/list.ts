@@ -2,9 +2,8 @@ import { Command, Flags } from "@oclif/core";
 import chalk from "chalk";
 import { registry, type RegistryItem } from "../index.js";
 
-
 // ============================================================================
-// `mycli list`
+// `vayu-ui list`
 // ============================================================================
 
 export default class List extends Command {
@@ -15,9 +14,9 @@ Shows everything available in the registry.
 Filter by type or tag to narrow results.
 
 Examples:
-  $ mycli list
-  $ mycli list --type hook
-  $ mycli list --tag browser-api
+    $ vayu-ui list
+    $ vayu-ui list --type hook
+    $ vayu-ui list --tag browser-api
 `;
 
     static flags = {
@@ -80,7 +79,7 @@ Examples:
         this.log(
             chalk.dim(`  ${items.length} item${items.length === 1 ? "" : "s"} total`) +
             chalk.dim(`  •  Run `) +
-            chalk.white("mycli add <name>") +
+            chalk.white("vayu-ui add <name>") +
             chalk.dim(" to install")
         );
         this.log("");

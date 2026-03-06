@@ -9,35 +9,3 @@
  Detected additional lockfiles: 
    * /Users/rugvedpatel/Desktop/Workspace/VedUI/package-lock.json
 
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
-
-[MDX] generated files in 13.275666999999885ms
-▲ Next.js 16.1.6 (Turbopack)
-
-  Creating an optimized production build ...
-✓ Compiled successfully in 15.3s
-  Running TypeScript ...
-  Collecting page data using 7 workers ...
-  Generating static pages using 7 workers (0/303) ...
-⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-  Generating static pages using 7 workers (75/303) 
-⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-  Generating static pages using 7 workers (151/303) 
-Error occurred prerendering page "/docs/components/show". Read more: https://nextjs.org/docs/messages/prerender-error
-Error: input is a self-closing tag and must neither have `children` nor use `dangerouslySetInnerHTML`.
-    at ignore-listed frames {
-  digest: '2512663818'
-}
-Export encountered an error on /docs/[[...slug]]/page: /docs/components/show, exiting the build.
-⨯ Next.js build worker exited with code: 1 and signal: null
-npm error Lifecycle script `build` failed with error:
-npm error code 1
-npm error path /Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs
-npm error workspace vayu-ui-docs@0.0.0
-npm error location /Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs
-npm error command failed
-npm error command sh -c next build

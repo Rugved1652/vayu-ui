@@ -7,7 +7,7 @@ import { findWithDependencies, findItem, type RegistryItem } from "../index.js";
 import { installItem, installDependencies, detectPackageManager } from "../utils/installer";
 
 // ============================================================================
-// `mycli add <hook-or-component>`
+// `vayu-ui add <hook-or-component>`
 // ============================================================================
 
 export default class Add extends Command {
@@ -18,13 +18,13 @@ Copies a hook or component from the library into your project.
 Automatically resolves and installs any required dependencies.
 
 Examples:
-  $ mycli add use-battery-status
-  $ mycli add use-battery-status --overwrite
-  $ mycli add use-battery-status --path src/lib/hooks
+  $ vayu-ui add use-battery-status
+  $ vayu-ui add use-battery-status --overwrite
+  $ vayu-ui add use-battery-status --path src/lib/hooks
 `;
 
     // The thing the user wants to add
-    // e.g: mycli add use-battery-status
+    // e.g: vayu-ui add use-battery-status
     static args = {
         name: Args.string({
             name: "name",
@@ -56,7 +56,7 @@ Examples:
 
         if (!item) {
             this.log(chalk.red(`\n✖ "${slug}" not found in registry.\n`));
-            this.log(chalk.dim(`  Run ${chalk.white("mycli list")} to see all available items.\n`));
+            this.log(chalk.dim(`  Run ${chalk.white("vayu-ui list")} to see all available items.\n`));
             this.exit(1);
         }
 

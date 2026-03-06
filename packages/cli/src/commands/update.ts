@@ -53,9 +53,10 @@ function discoverInstalledItems(cwd: string): InstalledItem[] {
 
 /**
  * Build the raw GitHub URL for a registry item.
+ * Monorepo layout: components & hooks live under packages/ui.
  */
 function getGitHubUrl(item: RegistryItem): string {
-    const baseUrl = "https://raw.githubusercontent.com/Rugved1652/vayu-ui-docs/main";
+    const baseUrl = "https://raw.githubusercontent.com/Rugved1652/vayu-ui/main/packages/ui";
     const sourcePath = item.type === "hook"
         ? `src/hooks/${item.fileName}`
         : `src/components/ui/${item.fileName}`;
