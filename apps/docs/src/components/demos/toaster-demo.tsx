@@ -1,32 +1,47 @@
 "use client";
 
 import React from "react";
-import { useToast, Toast, ToastProvider } from "vayu-ui";
-import { Button } from "vayu-ui";
+import { useToast, Toast, ToastProvider, Button } from "vayu-ui";
 
 export default function ToasterDemo() {
     const toast = useToast();
 
     return (
         <ToastProvider>
-            <div className="flex flex-col not-prose items-center justify-center space-y-8 p-8 border rounded-lg border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
-                <h2 className="text-xl font-semibold">Standard Variants</h2>
+            <div className="flex flex-col not-prose items-center justify-center gap-8 p-8 border border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
+                <h2 id="toaster-demo-label" className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
+                    Standard Variants
+                </h2>
                 <div className="flex gap-4 flex-wrap justify-center">
-                    <Button variant="outline" onClick={() => toast.success("Operation successful", { description: "Your changes have been saved." })}>
+                    <Button 
+                        variant="outline" 
+                        onClick={() => toast.success("Operation successful", { description: "Your changes have been saved." })}
+                    >
                         Success
                     </Button>
-                    <Button variant="destructive" onClick={() => toast.error("Operation failed", { description: "Please try again later." })}>
+                    <Button 
+                        variant="destructive" 
+                        onClick={() => toast.error("Operation failed", { description: "Please try again later." })}
+                    >
                         Error
                     </Button>
-                    <Button variant="outline" onClick={() => toast.warning("Warning", { description: "This action cannot be undone." })}>
+                    <Button 
+                        variant="outline" 
+                        onClick={() => toast.warning("Warning", { description: "This action cannot be undone." })}
+                    >
                         Warning
                     </Button>
-                    <Button variant="secondary" onClick={() => toast.info("Information", { description: "A new update is available." })}>
+                    <Button 
+                        variant="secondary" 
+                        onClick={() => toast.info("Information", { description: "A new update is available." })}
+                    >
                         Info
                     </Button>
                 </div>
 
-                <h2 className="text-xl font-semibold">Promise & Loading</h2>
+                <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
+                    Promise & Loading
+                </h2>
                 <div className="flex gap-4">
                     <Button
                         onClick={() => {
@@ -42,15 +57,17 @@ export default function ToasterDemo() {
                     </Button>
                 </div>
 
-                <h2 className="text-xl font-semibold">Custom Toast (Compound)</h2>
+                <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
+                    Custom Toast (Compound)
+                </h2>
                 <div className="flex gap-4">
                     <Button
                         variant="outline"
                         onClick={() => {
                             toast.custom(
-                                <div className="w-full max-w-sm rounded-lg border border-neutral-200 bg-white p-4 shadow-lg dark:border-neutral-800 dark:bg-neutral-950">
+                                <div className="w-full max-w-sm border border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900 p-4 shadow-outer">
                                     <div className="flex items-start gap-4">
-                                        <div className="rounded-full bg-primary-100 p-2 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400">
+                                        <div className="bg-primary-100 dark:bg-primary-900/30 p-2 text-primary-600 dark:text-primary-400">
                                             👋
                                         </div>
                                         <div className="flex-1">
@@ -67,6 +84,6 @@ export default function ToasterDemo() {
                     </Button>
                 </div>
             </div>
-        </ToastProvider >
+        </ToastProvider>
     );
 }

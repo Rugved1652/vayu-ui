@@ -1,5 +1,8 @@
 "use client";
 import React, { useMemo } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { clsx } from "clsx";
+import { forwardRef, HTMLAttributes } from "react";
 
 // ─── QR Code Encoding Engine ──────────────────────────────────────────────────
 // Pure TypeScript implementation of QR code generation (byte mode).
@@ -449,7 +452,6 @@ function encodeQR(text: string, level: ErrorCorrectionLevel): boolean[][] {
     // Split into blocks and generate EC
     const ecCWPerBlock = EC_CODEWORDS_PER_BLOCK[level][version - 1]!;
     const numBlocks = NUM_EC_BLOCKS[level][version - 1]!;
-    const totalCW = TOTAL_CODEWORDS[version - 1]!;
     const totalDataCW = dataCW;
 
     const shortBlockDataCW = Math.floor(totalDataCW / numBlocks);
@@ -519,8 +521,18 @@ function encodeQR(text: string, level: ErrorCorrectionLevel): boolean[][] {
 
 // ─── React Component ──────────────────────────────────────────────────────────
 
-import { clsx } from "clsx";
-import { forwardRef, HTMLAttributes } from "react";
+const qrcodeVariants = cva("inline-block", {
+    variants: {
+        size: {
+            sm: "",
+            md: "",
+            lg: "",
+        },
+    },
+    defaultVariants: {
+        size: "md",
+    },
+});
 
 export interface QRCodeImageSettings {
     /** URL of the center logo image */
@@ -533,16 +545,18 @@ export interface QRCodeImageSettings {
     excavate?: boolean;
 }
 
-export interface QRCodeProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+export interface QRCodeProps
+    extends Omit<HTMLAttributes<HTMLDivElement>, "children">,
+        VariantProps<typeof qrcodeVariants> {
     /** Data to encode in the QR code */
     value: string;
     /** Width & height in pixels (default 200) */
-    size?: number;
+    qrSize?: number;
     /** Error correction level (default "M") */
     level?: ErrorCorrectionLevel;
-    /** Background color (default "white") */
+    /** Background color (uses design token by default) */
     bgColor?: string;
-    /** Foreground / module color (default "black") */
+    /** Foreground / module color (uses design token by default) */
     fgColor?: string;
     /** Add quiet-zone margin (default true) */
     includeMargin?: boolean;
@@ -550,14 +564,21 @@ export interface QRCodeProps extends Omit<HTMLAttributes<HTMLDivElement>, "child
     imageSettings?: QRCodeImageSettings;
 }
 
+const sizeMap = {
+    sm: 128,
+    md: 200,
+    lg: 300,
+} as const;
+
 const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
     (
         {
             value,
-            size = 200,
+            size = "md",
+            qrSize,
             level = "M",
-            bgColor = "white",
-            fgColor = "black",
+            bgColor,
+            fgColor,
             includeMargin = true,
             imageSettings,
             className,
@@ -566,6 +587,13 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
         },
         ref
     ) => {
+        const computedSize = qrSize ?? sizeMap[size ?? "md"];
+
+        // Default colors using CSS custom properties that map to design tokens
+        // Falls back to sensible defaults for QR scannability
+        const resolvedBgColor = bgColor ?? "var(--color-ground-50, #fafafa)";
+        const resolvedFgColor = fgColor ?? "var(--color-ground-950, #09090b)";
+
         const { cells, numCells } = useMemo(() => {
             if (!value) return { cells: [] as boolean[][], numCells: 0 };
             const matrix = encodeQR(value, level);
@@ -577,10 +605,11 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
                 <div
                     ref={ref}
                     className={clsx(
-                        "inline-flex items-center justify-center bg-ground-100 dark:bg-ground-800 rounded-lg",
+                        qrcodeVariants({ size }),
+                        "inline-flex items-center justify-center bg-ground-100 dark:bg-ground-800 rounded",
                         className
                     )}
-                    style={{ width: size, height: size }}
+                    style={{ width: computedSize, height: computedSize }}
                     role="img"
                     aria-label={ariaLabel ?? "Empty QR code"}
                     {...props}
@@ -597,11 +626,10 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
         const cellSize = 1;
 
         // Determine which cells to excavate (clear) for the center logo
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         const excavatedCells = useMemo(() => {
             if (!imageSettings?.excavate) return new Set<string>();
-            const imgW = (imageSettings.width / size) * viewBoxSize;
-            const imgH = (imageSettings.height / size) * viewBoxSize;
+            const imgW = (imageSettings.width / computedSize) * viewBoxSize;
+            const imgH = (imageSettings.height / computedSize) * viewBoxSize;
             const startX = Math.floor((viewBoxSize - imgW) / 2) - margin;
             const startY = Math.floor((viewBoxSize - imgH) / 2) - margin;
             const endX = Math.ceil(startX + imgW);
@@ -618,19 +646,19 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
                 }
             }
             return set;
-        }, [imageSettings, size, viewBoxSize, margin, numCells]);
+        }, [imageSettings, computedSize, viewBoxSize, margin, numCells]);
 
         return (
             <div
                 ref={ref}
-                className={clsx("inline-block", className)}
+                className={clsx(qrcodeVariants({ size }), className)}
                 role="img"
                 aria-label={ariaLabel ?? `QR code for: ${value}`}
                 {...props}
             >
                 <svg
-                    width={size}
-                    height={size}
+                    width={computedSize}
+                    height={computedSize}
                     viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
                     xmlns="http://www.w3.org/2000/svg"
                     shapeRendering="crispEdges"
@@ -639,7 +667,7 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
                     <rect
                         width={viewBoxSize}
                         height={viewBoxSize}
-                        fill={bgColor}
+                        fill={resolvedBgColor}
                     />
 
                     {/* QR modules */}
@@ -654,7 +682,7 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
                                     y={r + margin}
                                     width={cellSize}
                                     height={cellSize}
-                                    fill={fgColor}
+                                    fill={resolvedFgColor}
                                 />
                             );
                         })
@@ -666,21 +694,21 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
                             href={imageSettings.src}
                             x={
                                 (viewBoxSize -
-                                    (imageSettings.width / size) *
+                                    (imageSettings.width / computedSize) *
                                     viewBoxSize) /
                                 2
                             }
                             y={
                                 (viewBoxSize -
-                                    (imageSettings.height / size) *
+                                    (imageSettings.height / computedSize) *
                                     viewBoxSize) /
                                 2
                             }
                             width={
-                                (imageSettings.width / size) * viewBoxSize
+                                (imageSettings.width / computedSize) * viewBoxSize
                             }
                             height={
-                                (imageSettings.height / size) * viewBoxSize
+                                (imageSettings.height / computedSize) * viewBoxSize
                             }
                             preserveAspectRatio="xMidYMid meet"
                         />
@@ -694,4 +722,3 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
 QRCode.displayName = "QRCode";
 
 export { QRCode };
-

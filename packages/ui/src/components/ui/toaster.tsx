@@ -84,7 +84,7 @@ interface ToastContextType {
         messages: {
             loading: ReactNode;
             success: ReactNode | ((data: T) => ReactNode);
-            error: ReactNode | ((error: any) => ReactNode);
+            error: ReactNode | ((error: unknown) => ReactNode);
         },
         options?: Omit<ToastOptions, "type">
     ) => Promise<T>;
@@ -228,7 +228,7 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
             messages: {
                 loading: ReactNode;
                 success: ReactNode | ((data: T) => ReactNode);
-                error: ReactNode | ((error: any) => ReactNode);
+                error: ReactNode | ((error: unknown) => ReactNode);
             },
             options?: Omit<ToastOptions, "type">
         ): Promise<T> => {
@@ -334,11 +334,14 @@ const ToastContainer: React.FC<ToastContainerProps> = ({
             {Object.entries(toastsByPosition).map(([position, positionToasts]) => (
                 <div
                     key={position}
-                    className={`fixed z-100 flex flex-col gap-2 pointer-events-none ${positionClasses[position as ToastPosition]
-                        }`}
+                    className={clsx(
+                        "fixed z-100 flex flex-col gap-2 pointer-events-none",
+                        positionClasses[position as ToastPosition]
+                    )}
                     style={{ maxWidth: "calc(100vw - 2rem)" }}
                     role="region"
                     aria-label={`Notifications ${position}`}
+                    aria-live="polite"
                 >
                     {positionToasts.map((toast) => (
                         <ToastItem key={toast.id} toast={toast} onRemove={onRemove} />
@@ -386,7 +389,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
                 clearInterval(interval);
             };
         }
-    }, [toast.duration, isPaused, toast.id]); // Added toast.id for stability
+    }, [toast.duration, isPaused, toast.id]);
 
     const handleClose = useCallback(() => {
         setIsExiting(true);
@@ -396,41 +399,56 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
         }, 200);
     }, [onRemove, toast]);
 
+    // Keyboard dismiss support
+    const handleKeyDown = useCallback(
+        (event: React.KeyboardEvent) => {
+            if (event.key === "Escape" && toast.dismissible) {
+                handleClose();
+            }
+        },
+        [handleClose, toast.dismissible]
+    );
+
     const typeConfig = {
         success: {
             icon: CheckCircle,
-            colors: "bg-white dark:bg-neutral-900 border-success-200 dark:border-success-800",
+            borderColor: "border-success-300 dark:border-success-700",
             iconColor: "text-success-600 dark:text-success-400",
-            progressColor: "bg-success-600 dark:bg-success-400",
-            role: "status",
+            progressColor: "bg-success-500",
+            progressBg: "bg-success-100 dark:bg-success-900",
+            role: "status" as const,
         },
         error: {
             icon: AlertCircle,
-            colors: "bg-white dark:bg-neutral-900 border-error-200 dark:border-error-800",
+            borderColor: "border-error-300 dark:border-error-700",
             iconColor: "text-error-600 dark:text-error-400",
-            progressColor: "bg-error-600 dark:bg-error-400",
-            role: "alert",
+            progressColor: "bg-error-500",
+            progressBg: "bg-error-100 dark:bg-error-900",
+            role: "alert" as const,
         },
         warning: {
             icon: AlertTriangle,
-            colors: "bg-white dark:bg-neutral-900 border-warning-200 dark:border-warning-800",
+            borderColor: "border-warning-300 dark:border-warning-700",
             iconColor: "text-warning-600 dark:text-warning-400",
-            progressColor: "bg-warning-600 dark:bg-warning-400",
-            role: "alert",
+            progressColor: "bg-warning-500",
+            progressBg: "bg-warning-100 dark:bg-warning-900",
+            role: "alert" as const,
         },
         info: {
             icon: Info,
-            colors: "bg-white dark:bg-neutral-900 border-info-200 dark:border-info-800",
+            borderColor: "border-info-300 dark:border-info-700",
             iconColor: "text-info-600 dark:text-info-400",
-            progressColor: "bg-info-600 dark:bg-info-400",
-            role: "status",
+            progressColor: "bg-info-500",
+            progressBg: "bg-info-100 dark:bg-info-900",
+            role: "status" as const,
         },
         loading: {
             icon: Loader2,
-            colors: "bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800",
-            iconColor: "text-neutral-600 dark:text-neutral-400",
-            progressColor: "bg-neutral-600 dark:bg-neutral-400",
-            role: "status",
+            borderColor: "border-ground-300 dark:border-ground-700",
+            iconColor: "text-ground-500 dark:text-ground-400",
+            progressColor: "bg-ground-500",
+            progressBg: "bg-ground-200 dark:bg-ground-800",
+            role: "status" as const,
         },
     };
 
@@ -442,19 +460,18 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
         return (
             <div
                 className={clsx(
-                    "pointer-events-auto relative w-auto max-w-[calc(100vw-2rem)] transition-all duration-300",
+                    "pointer-events-auto relative w-auto max-w-[calc(100vw-2rem)]",
+                    "transition-all duration-300",
                     isExiting
                         ? "animate-out fade-out-0 slide-out-to-right-full"
                         : "animate-in fade-in-0 slide-in-from-right-full"
                 )}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
-                role={config.role} // Pass role to wrapper for screen readers
+                onKeyDown={handleKeyDown}
+                role={config.role}
+                tabIndex={-1}
             >
-                {/* 
-                  Allow custom content to be anything, but wrap it in a div 
-                  that handles the exit animation and positioning context 
-                */}
                 {toast.customContent}
             </div>
         );
@@ -463,21 +480,24 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
     return (
         <div
             className={clsx(
-                "pointer-events-auto relative w-[350px] max-w-[calc(100vw-2rem)]",
-                "border rounded-lg shadow-lg overflow-hidden",
-                "bg-white dark:bg-neutral-900", // Ensure background opacity
-                config.colors,
+                "pointer-events-auto relative w-80 max-w-[calc(100vw-2rem)]",
+                "border shadow-outer overflow-hidden",
+                "bg-ground-50 dark:bg-ground-900",
+                config.borderColor,
                 isExiting
                     ? "animate-out fade-out-0 slide-out-to-right-full duration-200"
                     : "animate-in fade-in-0 slide-in-from-right-full duration-300"
             )}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
+            onKeyDown={handleKeyDown}
             role={config.role}
+            aria-live={config.role === "alert" ? "assertive" : "polite"}
+            tabIndex={-1}
         >
             {/* Progress Bar */}
             {toast.duration && toast.duration > 0 && (
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-neutral-100 dark:bg-neutral-800">
+                <div className={clsx("absolute bottom-0 left-0 right-0 h-1", config.progressBg)}>
                     <div
                         className={clsx(
                             "h-full transition-all",
@@ -489,13 +509,13 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
                 </div>
             )}
 
-            {/* Content using Compound Components internally */}
+            {/* Content */}
             <div className="p-4 flex gap-3 items-start">
-                <div className={clsx("shrink-0 mt-0.5", config.iconColor)}>
+                <div className={clsx("shrink-0 mt-0.5", config.iconColor)} aria-hidden="true">
                     <Icon className={clsx("w-5 h-5", toast.type === "loading" && "animate-spin")} />
                 </div>
 
-                <div className="flex-1 w-0"> {/* w-0 to allow text truncation */}
+                <div className="flex-1 min-w-0 font-secondary">
                     {toast.title && <Toast.Title>{toast.title}</Toast.Title>}
                     {toast.description && <Toast.Description>{toast.description}</Toast.Description>}
                     {toast.action && (
@@ -509,7 +529,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
                 </div>
 
                 {toast.dismissible && (
-                    <Toast.Close onClick={handleClose} />
+                    <Toast.Close onClick={handleClose} aria-label="Dismiss notification" />
                 )}
             </div>
         </div>
@@ -524,7 +544,10 @@ const ToastTitle = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
     ({ className, ...props }, ref) => (
         <div
             ref={ref}
-            className={clsx("font-semibold text-sm text-neutral-900 dark:text-neutral-50 mb-1 leading-none tracking-tight", className)}
+            className={clsx(
+                "font-primary font-semibold text-sm text-ground-800 dark:text-ground-100 mb-1 leading-none tracking-tight",
+                className
+            )}
             {...props}
         />
     )
@@ -535,7 +558,10 @@ const ToastDescription = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
     ({ className, ...props }, ref) => (
         <div
             ref={ref}
-            className={clsx("text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed", className)}
+            className={clsx(
+                "font-secondary text-sm text-ground-600 dark:text-ground-400 leading-relaxed",
+                className
+            )}
             {...props}
         />
     )
@@ -547,8 +573,11 @@ const ToastAction = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTM
         <button
             ref={ref}
             className={clsx(
-                "mt-2 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50",
-                "bg-neutral-900 text-neutral-50 shadow hover:bg-neutral-900/90 dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-50/90",
+                "mt-2 inline-flex items-center justify-center text-sm font-medium transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-500 focus-visible:ring-offset-2",
+                "disabled:pointer-events-none disabled:opacity-50",
+                "bg-ground-900 text-ground-50 hover:bg-ground-800",
+                "dark:bg-ground-100 dark:text-ground-900 dark:hover:bg-ground-200",
                 "h-8 px-3 text-xs",
                 className
             )}
@@ -563,14 +592,17 @@ const ToastClose = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTML
         <button
             ref={ref}
             className={clsx(
-                "absolute right-2 top-2 rounded-md p-1 text-neutral-950/50 opacity-0 transition-opacity hover:text-neutral-950 focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 dark:text-neutral-50/50 dark:hover:text-neutral-50",
-                "opacity-100", // Force visible for now as hover logic can be tricky on mobile
+                "absolute right-2 top-2 p-1.5",
+                "text-ground-500 hover:text-ground-700 dark:text-ground-400 dark:hover:text-ground-200",
+                "transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-500 focus-visible:ring-offset-2",
+                "disabled:pointer-events-none disabled:opacity-50",
                 className
             )}
-            toast-close=""
+            type="button"
             {...props}
         >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
         </button>
     )
 );
