@@ -121,34 +121,6 @@ export default function AvatarDemo() {
                 </div>
             </div>
 
-            {/* Avatar Group */}
-            <div className="flex flex-col gap-4">
-                <h3 className="text-sm font-medium text-muted-foreground border-b pb-2">
-                    Avatar Group
-                </h3>
-                <div className="flex items-center gap-4">
-                    <Avatar.Group max={4}>
-                        <Avatar size="medium" username="User 1">
-                            <Avatar.Initials username="User 1" />
-                        </Avatar>
-                        <Avatar size="medium" username="User 2">
-                            <Avatar.Initials username="User 2" />
-                        </Avatar>
-                        <Avatar size="medium" username="User 3">
-                            <Avatar.Initials username="User 3" />
-                        </Avatar>
-                        <Avatar size="medium" username="User 4">
-                            <Avatar.Initials username="User 4" />
-                        </Avatar>
-                        <Avatar size="medium" username="User 5">
-                            <Avatar.Initials username="User 5" />
-                        </Avatar>
-                        <Avatar size="medium" username="User 6">
-                            <Avatar.Initials username="User 6" />
-                        </Avatar>
-                    </Avatar.Group>
-                </div>
-            </div>
         </div>
     );
 }
