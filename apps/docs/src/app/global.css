@@ -3,42 +3,72 @@
 @import 'fumadocs-ui/css/preset.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
+/* ============================================================
+   VAYU-UI DESIGN SYSTEM — Tailwind v4 CSS Config
+   ============================================================ */
 
 @theme {
-  --color-primary-100: var(--color-blue-100);
-  --color-primary-200: var(--color-blue-200);
-  --color-primary-300: var(--color-blue-300);
-  --color-primary-400: var(--color-blue-400);
-  --color-primary-500: var(--color-blue-500);
-  --color-primary-600: var(--color-blue-600);
-  --color-primary-700: var(--color-blue-700);
-  --color-primary-800: var(--color-blue-800);
-  --color-primary-900: var(--color-blue-900);
-  --color-primary-950: var(--color-blue-950);
 
-  --color-secondary-100: var(--color-indigo-100);
-  --color-secondary-200: var(--color-indigo-200);
-  --color-secondary-300: var(--color-indigo-300);
-  --color-secondary-400: var(--color-indigo-400);
-  --color-secondary-500: var(--color-indigo-500);
-  --color-secondary-600: var(--color-indigo-600);
-  --color-secondary-700: var(--color-indigo-700);
-  --color-secondary-800: var(--color-indigo-800);
-  --color-secondary-900: var(--color-indigo-900);
-  --color-secondary-950: var(--color-indigo-950);
+  /* ============================================================
+     PRIMARY — Lime
+     Brand identity color. Use for CTAs, active states, 
+     key highlights, and interactive affordances.
+     ============================================================
+     
+     SHADE    LIGHT MODE USE                    DARK MODE USE
+     ─────────────────────────────────────────────────────────
+     100      Subtle tinted bg, hover fill      Disabled state bg
+     200      Tinted surface, tag bg            Muted badge bg
+     300      Decorative border, icon fill      Subdued icon color
+     400      Secondary action bg               Soft interactive hover
+     500      Primary CTA bg, active badge      Primary CTA bg (same)
+     600      CTA hover state, solid icon       Focus ring, strong accent
+     700      Pressed state, bold badge         Active/selected bg
+     800      Text on light bg, heading accent  Chip/tag bg
+     900      Dark text on tinted bg            Muted label text
+     950      Strongest contrast text           Subtle dark surface tint
+     ─────────────────────────────────────────────────────────
+     RULE:    100–300 → backgrounds & decorative surfaces
+              400–600 → interactive elements & primary actions
+              700–950 → text on light bg / inverted surfaces in dark
+  */
+  --color-primary-100: var(--color-lime-100);
+  --color-primary-200: var(--color-lime-200);
+  --color-primary-300: var(--color-lime-300);
+  --color-primary-400: var(--color-lime-400);
+  --color-primary-500: var(--color-lime-500);
+  --color-primary-600: var(--color-lime-600);
+  --color-primary-700: var(--color-lime-700);
+  --color-primary-800: var(--color-lime-800);
+  --color-primary-900: var(--color-lime-900);
+  --color-primary-950: var(--color-lime-950);
 
-  --color-tertiary-100: var(--color-amber-100);
-  --color-tertiary-200: var(--color-amber-200);
-  --color-tertiary-300: var(--color-amber-300);
-  --color-tertiary-400: var(--color-amber-400);
-  --color-tertiary-500: var(--color-amber-500);
-  --color-tertiary-600: var(--color-amber-600);
-  --color-tertiary-700: var(--color-amber-700);
-  --color-tertiary-800: var(--color-amber-800);
-  --color-tertiary-900: var(--color-amber-900);
-  --color-tertiary-950: var(--color-amber-950);
-
-  --color-ground-50: var(--color-zinc-50);
+  /* ============================================================
+     GROUND — Zinc
+     Neutral foundation. Used for backgrounds, surfaces, 
+     borders, text, and layout structure.
+     ============================================================
+     
+     SHADE    LIGHT MODE USE                    DARK MODE USE
+     ─────────────────────────────────────────────────────────
+     50       Page background                   (avoid — too light)
+     100      Card / panel surface              Subtle hover overlay
+     200      Input bg, subtle divider          Muted border, divider
+     300      Border, placeholder text          Disabled border
+     400      Muted icon, secondary label       Muted text / icon
+     500      Body text (secondary)             Subdued body text
+     600      Body text (primary)               Secondary body text
+     700      Heading text                      Primary body text
+     800      Strong headings, labels           Heading / strong text
+     900      Page-level headings               Card surface
+     950      Max contrast text                 Page / app background
+     ─────────────────────────────────────────────────────────
+     RULE:    50–300  → surfaces, cards, borders (light mode)
+              400–600 → text, icons, labels
+              700–950 → headings in light / become surfaces in dark
+              In dark mode, flip: 950 is bg, 50 is near-white text
+  */
+  --color-ground-50:  var(--color-zinc-50);
   --color-ground-100: var(--color-zinc-100);
   --color-ground-200: var(--color-zinc-200);
   --color-ground-300: var(--color-zinc-300);
@@ -50,6 +80,28 @@
   --color-ground-900: var(--color-zinc-900);
   --color-ground-950: var(--color-zinc-950);
 
+  /* ============================================================
+     WARNING — Yellow
+     Caution signals, alerts, pending states, important notices.
+     ============================================================
+     
+     SHADE    LIGHT MODE USE                    DARK MODE USE
+     ─────────────────────────────────────────────────────────
+     100      Warning banner bg                 Warning banner bg (dim)
+     200      Highlight / callout bg            Muted warning surface
+     300      Warning icon fill                 Decorative warning border
+     400      Badge bg, inline warning          Soft warning badge
+     500      Warning icon, solid badge         Warning icon / indicator
+     600      Warning label text, border        Warning border, label
+     700      Strong warning text               Warning badge bg
+     800      Dark warning text                 Warning text on dark card
+     900      Richest warning label             Subtle tint on dark bg
+     950      Max-contrast warning text         Dark surface tint
+     ─────────────────────────────────────────────────────────
+     RULE:    100–200 → tinted backgrounds for warning zones
+              300–500 → icons, badges, indicators
+              600–950 → text labels, borders in both modes
+  */
   --color-warning-100: var(--color-yellow-100);
   --color-warning-200: var(--color-yellow-200);
   --color-warning-300: var(--color-yellow-300);
@@ -61,6 +113,28 @@
   --color-warning-900: var(--color-yellow-900);
   --color-warning-950: var(--color-yellow-950);
 
+  /* ============================================================
+     SUCCESS — Green
+     Confirmations, completed states, positive feedback, health.
+     ============================================================
+     
+     SHADE    LIGHT MODE USE                    DARK MODE USE
+     ─────────────────────────────────────────────────────────
+     100      Success banner / toast bg         Dim success surface
+     200      Verified badge bg, row highlight  Soft success tint
+     300      Success checkmark icon            Decorative success border
+     400      Soft action (save, confirm) bg    Muted success badge
+     500      Primary success indicator         Success icon / dot
+     600      Success label text, check icon    Success border + label
+     700      Confirmed/done label              Success badge on dark
+     800      Strong confirmed text             Success text on card
+     900      Richest success text              Dark tint label
+     950      Max-contrast success text         Dark success surface
+     ─────────────────────────────────────────────────────────
+     RULE:    100–200 → success zone backgrounds (toasts, banners)
+              300–600 → icons, checks, badges
+              700–950 → labels and text on both modes
+  */
   --color-success-100: var(--color-green-100);
   --color-success-200: var(--color-green-200);
   --color-success-300: var(--color-green-300);
@@ -72,6 +146,29 @@
   --color-success-900: var(--color-green-900);
   --color-success-950: var(--color-green-950);
 
+  /* ============================================================
+     ERROR — Red
+     Validation failures, destructive actions, critical alerts.
+     ============================================================
+     
+     SHADE    LIGHT MODE USE                    DARK MODE USE
+     ─────────────────────────────────────────────────────────
+     100      Error field bg, alert banner bg   Dim error surface
+     200      Error zone highlight, row bg      Muted error tint
+     300      Error icon fill, field border     Subtle error border
+     400      Error badge, inline alert         Muted error badge
+     500      Primary error indicator, icon     Error dot / icon
+     600      Error label, field border ring    Error border + label
+     700      Error message text                Error badge on dark card
+     800      Strong error label                Error text on dark
+     900      Destructive action text           Dark tint error label
+     950      Max-contrast error                Dark error surface
+     ─────────────────────────────────────────────────────────
+     RULE:    100–200 → error backgrounds (field, toast, banner)
+              300–500 → icons, borders, inline indicators
+              600–950 → error text labels in both modes
+              NEVER use 100–300 as text — fails WCAG contrast
+  */
   --color-error-100: var(--color-red-100);
   --color-error-200: var(--color-red-200);
   --color-error-300: var(--color-red-300);
@@ -83,6 +180,28 @@
   --color-error-900: var(--color-red-900);
   --color-error-950: var(--color-red-950);
 
+  /* ============================================================
+     INFO — Blue
+     Informational content, help text, links, neutral guidance.
+     ============================================================
+     
+     SHADE    LIGHT MODE USE                    DARK MODE USE
+     ─────────────────────────────────────────────────────────
+     100      Info banner bg, tooltip surface   Dim info surface
+     200      Callout bg, note highlight        Muted info tint
+     300      Info icon, decorative border      Subtle info border
+     400      Info badge bg, soft link hover    Muted info badge
+     500      Primary info icon, link color     Info icon / link
+     600      Info label, hyperlink color       Info border + label
+     700      Link hover, info text             Info badge on dark
+     800      Strong info/link text             Info text on dark card
+     900      Richest info label text           Dark tint info label
+     950      Max-contrast info text            Dark info surface
+     ─────────────────────────────────────────────────────────
+     RULE:    100–200 → info zone backgrounds (tips, notes)
+              300–600 → icons, links, badges, borders
+              700–950 → text labels and link states
+  */
   --color-info-100: var(--color-blue-100);
   --color-info-200: var(--color-blue-200);
   --color-info-300: var(--color-blue-300);
@@ -94,63 +213,320 @@
   --color-info-900: var(--color-blue-900);
   --color-info-950: var(--color-blue-950);
 
-  --radius-xss: 2px;
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 24px;
-  --radius-3xl: 32px;
-  --radius-4xl: 40px;
-  --radius-5xl: 48px;
-  --radius-6xl: 56px;
-  --radius-full: 9999px;
+  /* ============================================================
+     SPACING & SHAPE
+     ============================================================ */
 
+  /* Border radius — 2px keeps the system sharp and utilitarian */
+  --radius: 2px;
+
+  /* ============================================================
+     SHADOWS  (Tailwind v4 namespace mapping)
+     --shadow-*       → shadow-*       utilities
+     --inset-shadow-* → inset-shadow-* utilities
+
+     Use "shadow-outer"       for cards, modals, dropdowns, popovers.
+     Use "inset-shadow-inner" for pressed buttons, inputs (focused/active).
+     ============================================================ */
   --shadow-color: rgba(0, 0, 0, 0.1);
-  --shadow-xs: 0 0 0 1px var(--shadow-color);
-  --shadow-sm: 0 1px 2px 0 var(--shadow-color);
-  --shadow-md:
-    0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
-  --shadow-lg:
-    0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
-  --shadow-xl:
-    0 20px 25px -5px var(--shadow-color), 0 10px 10px -5px var(--shadow-color);
-  --shadow-2xl: 0 25px 50px -12px var(--shadow-color);
-  --shadow-inner: inset 0 2px 4px 0 var(--shadow-color);
+  --shadow-outer: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+  --inset-shadow-inner: inset 0 2px 4px 0 var(--shadow-color);
 
-  --font-primary: "Oswald", sans-serif;
-  --font-secondary: "Mulish", sans-serif;
-  --font-tertiary: "Geist Mono", monospace;
+  /* ============================================================
+     TYPOGRAPHY
+     --font-primary  (Oswald)     → Headings, labels, nav, badges
+     --font-secondary (Mulish)    → Body copy, descriptions, captions
+     --font-tertiary (Geist Mono) → Code blocks, kbd, technical values
+     ============================================================ */
+  --font-primary:   "Oswald",     sans-serif;
+  --font-secondary: "Mulish",     sans-serif;
+  --font-tertiary:  "Geist Mono", monospace;
 
-  --transition-fast: 150ms ease-in-out;
+  /* Type scale — fluid and intentional.
+     h1–h3 use --font-primary. h4–h6 can use either.
+     --text-para always uses --font-secondary.          */
+  --text-h1:   2.25rem;  /* 36px — page-level hero titles          */
+  --text-h2:   1.875rem; /* 30px — section headings                */
+  --text-h3:   1.5rem;   /* 24px — card / panel headings           */
+  --text-h4:   1.25rem;  /* 20px — subsection, dialog titles       */
+  --text-h5:   1.125rem; /* 18px — sidebar labels, group headers   */
+  --text-h6:   1rem;     /* 16px — small labels, table headers     */
+  --text-para: 0.875rem; /* 14px — all body text, captions, hints  */
+
+  /* ============================================================
+     TRANSITIONS
+     fast   → hover states, tooltips, icon swaps
+     medium → modals, dropdowns, sidebar expand/collapse
+     slow   → page transitions, onboarding overlays, banners
+     ============================================================ */
+  --transition-fast:   150ms ease-in-out;
   --transition-medium: 300ms ease-in-out;
-  --transition-slow: 500ms ease-in-out;
+  --transition-slow:   500ms ease-in-out;
 
-  /* Typography Component */
-  --text-h1: 2.25rem; /* 36px */
-  --text-h2: 1.875rem; /* 30px */
-  --text-h3: 1.5rem; /* 24px */
-  --text-h4: 1.25rem; /* 20px */
-  --text-h5: 1.125rem; /* 18px */
-  --text-h6: 1rem; /* 16px */
-  --text-para: 0.875rem; /* 14px */
+  /* ============================================================
+     KEYFRAMES & ANIMATIONS
+     ============================================================
+     
+     ANIMATION          CLASS                      USE WHEN
+     ──────────────────────────────────────────────────────────────────
+     Marquee scroll     (utility var below)         Infinite ticker/scroll
+     Fade in            .animate-fade-in            Page load, toast appear
+     Slide in left      .animate-slide-in-left      Drawer, sidebar open
+     Slide in right     .animate-slide-in-right     Panel, offcanvas right
+     Slide in up        .animate-slide-in-up        Bottom sheet, snackbar
+     Slide in down      .animate-slide-in-down      Dropdown, notification
+     Bounce in          .animate-bounce-in          Success state, modal
+     Flip in X          .animate-flip-in-x          Card reveal, 3D effect
+     Flip in Y          .animate-flip-in-y          Card flip, badge pop
+     Rotate in          .animate-rotate-in          Icon entrance, loader
+     Zoom in            .animate-zoom-in            Modal, dialog open
+     Roll in            .animate-roll-in            Fun entrance (left)
+     Roll in right      .animate-roll-in-right      Fun entrance (right)
+     Roll in up         .animate-roll-in-up         Fun entrance (bottom)
+     Roll in down       .animate-roll-in-down       Fun entrance (top)
+     Jack in the box    .animate-jack-in-the-box    Playful pop, tooltip
+     Hinge              .animate-hinge              Exit/dismiss animation
+     Spin slow          .animate-spin-slow          Background deco, loader
+     Reverse spin       .animate-reverse-spin       Counter-rotate deco
+     ──────────────────────────────────────────────────────────────────
+     SIZE VARIANTS      -small (0.8s)  / -large (1.2s) on bounce & zoom
+     ITERATION          .animate-iteration-1/2/3 · .animate-infinite
+     FILL MODE          .animate-fill-none/forwards/backwards/both
+     REDUCED MOTION     All animations disabled via prefers-reduced-motion
+  */
 
-  /* Keyframes */
+  /* --- Marquee (registered as @theme token) --- */
   --keyframes-marquee-scroll: marquee-scroll;
   @keyframes marquee-scroll {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
+    0%   { transform: translateX(0);    }
+    100% { transform: translateX(-50%); }
   }
-
-  /* Animation */
-  --animate-marquee-scroll: marquee-scroll var(--marquee-duration, 20s) linear
-    infinite;
+  /* Control speed via --marquee-duration on the parent element.
+     e.g. style="--marquee-duration: 30s" for a slower scroll.   */
+  --animate-marquee-scroll: marquee-scroll var(--marquee-duration, 20s) linear infinite;
 }
+
+
+/* ============================================================
+   ANIMATION KEYFRAMES
+   Defined outside @theme — pure CSS, no Tailwind dependency.
+   ============================================================ */
+
+@keyframes fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slide-in-left {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  100% { transform: translateX(0);     opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  0%   { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes slide-in-up {
+  0%   { transform: translateY(100%); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes slide-in-down {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0);     opacity: 1; }
+}
+
+@keyframes bounce-in {
+  0%, 20%, 40%, 60%, 80%, 100% {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  0%   { opacity: 0; transform: scale3d(0.3,    0.3,    0.3);    }
+  20%  {             transform: scale3d(1.1,    1.1,    1.1);    }
+  40%  {             transform: scale3d(0.9,    0.9,    0.9);    }
+  60%  { opacity: 1; transform: scale3d(1.03,   1.03,   1.03);   }
+  80%  {             transform: scale3d(0.97,   0.97,   0.97);   }
+  100% { opacity: 1; transform: scale3d(1,      1,      1);      }
+}
+
+@keyframes flip-in-x {
+  0%   { transform: perspective(400px) rotate3d(1, 0, 0,  90deg); animation-timing-function: ease-in; opacity: 0; }
+  40%  { transform: perspective(400px) rotate3d(1, 0, 0, -20deg); animation-timing-function: ease-in; }
+  60%  { transform: perspective(400px) rotate3d(1, 0, 0,  10deg); opacity: 1; }
+  80%  { transform: perspective(400px) rotate3d(1, 0, 0,  -5deg); }
+  100% { transform: perspective(400px); }
+}
+
+@keyframes flip-in-y {
+  0%   { transform: perspective(400px) rotate3d(0, 1, 0,  90deg); animation-timing-function: ease-in; opacity: 0; }
+  40%  { transform: perspective(400px) rotate3d(0, 1, 0, -20deg); animation-timing-function: ease-in; }
+  60%  { transform: perspective(400px) rotate3d(0, 1, 0,  10deg); opacity: 1; }
+  80%  { transform: perspective(400px) rotate3d(0, 1, 0,  -5deg); }
+  100% { transform: perspective(400px); }
+}
+
+@keyframes rotate-in {
+  0%   { transform: rotate(var(--rotation-start, -200deg)); opacity: 0; }
+  100% { transform: rotate(0);                              opacity: 1; }
+}
+
+@keyframes zoom-in {
+  0%  { opacity: 0; transform: scale3d(0.3, 0.3, 0.3); }
+  50% { opacity: 1; }
+}
+
+@keyframes roll-in {
+  0%   { opacity: 0; transform: translateX(-100%) rotate(-120deg); }
+  100% { opacity: 1; transform: translateX(0)     rotate(0deg);    }
+}
+
+@keyframes roll-in-right {
+  0%   { opacity: 0; transform: translateX(100%) rotate(120deg); }
+  100% { opacity: 1; transform: translateX(0)    rotate(0deg);   }
+}
+
+@keyframes roll-in-up {
+  0%   { opacity: 0; transform: translateY(100%) rotate(120deg); }
+  100% { opacity: 1; transform: translateY(0)    rotate(0deg);   }
+}
+
+@keyframes roll-in-down {
+  0%   { opacity: 0; transform: translateY(-100%) rotate(-120deg); }
+  100% { opacity: 1; transform: translateY(0)     rotate(0deg);    }
+}
+
+@keyframes jack-in-the-box {
+  0%   { opacity: 0; transform: scale(0.1) rotate(30deg); transform-origin: center bottom; }
+  50%  {             transform: rotate(-10deg); }
+  70%  {             transform: rotate(3deg);   }
+  100% { opacity: 1; transform: scale(1);       }
+}
+
+@keyframes hinge {
+  0%        { transform-origin: top left; animation-timing-function: ease-in-out; }
+  20%, 60%  { transform: rotate3d(0, 0, 1,  80deg); transform-origin: top left; animation-timing-function: ease-in-out; }
+  40%, 80%  { transform: rotate3d(0, 0, 1,  60deg); transform-origin: top left; animation-timing-function: ease-in-out; opacity: 1; }
+  100%      { transform: translate3d(0, 700px, 0); opacity: 0; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes reverse-spin {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg);   }
+}
+
+
+/* ============================================================
+   ANIMATION UTILITY CLASSES
+   ============================================================ */
+
+.animate-fade-in          { animation: fade-in         1s ease-out; }
+
+.animate-slide-in-left    { animation: slide-in-left   1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+.animate-slide-in-right   { animation: slide-in-right  1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+.animate-slide-in-up      { animation: slide-in-up     1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+.animate-slide-in-down    { animation: slide-in-down   1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+
+.animate-bounce-in        { animation: bounce-in       1s ease; }
+.animate-bounce-in-small  { animation: bounce-in       0.8s ease; }
+.animate-bounce-in-large  { animation: bounce-in       1.2s ease; }
+
+.animate-flip-in-x        { animation: flip-in-x       1s ease-in; }
+.animate-flip-in-y        { animation: flip-in-y       1s ease-in; }
+
+.animate-rotate-in        { animation: rotate-in       1s ease-out; }
+
+.animate-zoom-in          { animation: zoom-in         1s ease-out; }
+.animate-zoom-in-small    { animation: zoom-in         0.8s ease-out; }
+.animate-zoom-in-large    { animation: zoom-in         1.2s ease-out; }
+
+.animate-roll-in          { animation: roll-in         1s ease-out; }
+.animate-roll-in-right    { animation: roll-in-right   1s ease-out; }
+.animate-roll-in-up       { animation: roll-in-up      1s ease-out; }
+.animate-roll-in-down     { animation: roll-in-down    1s ease-out; }
+
+.animate-jack-in-the-box  { animation: jack-in-the-box 1s ease-out; }
+.animate-hinge            { animation: hinge           2s ease-in-out; }
+
+.animate-spin-slow        { animation: spin-slow       60s linear infinite; }
+.animate-reverse-spin     { animation: reverse-spin    40s linear infinite; }
+
+/* --- Iteration utilities --- */
+.animate-iteration-1      { animation-iteration-count: 1; }
+.animate-iteration-2      { animation-iteration-count: 2; }
+.animate-iteration-3      { animation-iteration-count: 3; }
+.animate-infinite         { animation-iteration-count: infinite; }
+
+/* --- Fill mode utilities --- */
+.animate-fill-none        { animation-fill-mode: none; }
+.animate-fill-forwards    { animation-fill-mode: forwards; }
+.animate-fill-backwards   { animation-fill-mode: backwards; }
+.animate-fill-both        { animation-fill-mode: both; }
+
+
+/* ============================================================
+   REDUCED MOTION — Accessibility
+   All entrance/exit animations are disabled for users who
+   prefer reduced motion (WCAG 2.3 / prefers-reduced-motion).
+   Infinite ambient animations (spin-slow, reverse-spin) are
+   also stopped to prevent vestibular discomfort.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-slide-in-up,
+  .animate-slide-in-down,
+  .animate-bounce-in,
+  .animate-bounce-in-small,
+  .animate-bounce-in-large,
+  .animate-flip-in-x,
+  .animate-flip-in-y,
+  .animate-rotate-in,
+  .animate-zoom-in,
+  .animate-zoom-in-small,
+  .animate-zoom-in-large,
+  .animate-roll-in,
+  .animate-roll-in-right,
+  .animate-roll-in-up,
+  .animate-roll-in-down,
+  .animate-jack-in-the-box,
+  .animate-hinge,
+  .animate-spin-slow,
+  .animate-reverse-spin {
+    animation: none !important;
+  }
+}
+
+
+/* ============================================================
+   QUICK REFERENCE — Dark Mode Inversion Pattern
+   ============================================================
+
+   Light Mode                         Dark Mode
+   ────────────────────────────────────────────────────────────
+   Background  → ground-50/100        ground-950/900
+   Surface     → ground-100/200       ground-900/800
+   Border      → ground-200/300       ground-700/800
+   Text body   → ground-600/700       ground-300/400
+   Text strong → ground-800/900       ground-100/200
+   Text muted  → ground-400/500       ground-500/600
+
+   Semantic color pairing rule for both modes:
+   ── [color]-100/200  as background  +  [color]-700/800 as text
+   ── [color]-500      as icon/indicator (works on both bg types)
+   ── [color]-600      as border + label text
+
+   ============================================================
+   GLOBAL CONTRAST RULE (WCAG 2.1 AA)
+   ── Never render text below shade 600 on white/light bg
+   ── Never render text above shade 400 on dark/950 bg
+   ── For primary (lime): use 700+ for text — lime is low-contrast
+   ============================================================ */
 
 :root {
   /* Keep Fumadocs primary for now, or assume it uses standard colors */
@@ -161,20 +537,4 @@
 .dark {
   --primary: 132 204 22;
   --primary-foreground: 20 28 10;
-}
-
-/* Custom Lime Glow Effect (Preserved) */
-.lime-glow {
-  box-shadow: 0 0 50px -10px rgba(132, 204, 22, 0.3);
-}
-
-body {
-  @apply bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100;
-  overscroll-behavior: none;
-}
-
-/* Center the sidebar logo button */
-aside button  {
-    margin: auto !important;
-    width: 100%;
 }

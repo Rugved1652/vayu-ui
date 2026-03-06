@@ -13,8 +13,7 @@ export default function ButtonDemo() {
     };
 
     return (
-        <div className="flex flex-col gap-8 items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg w-full">
-
+        <div className="flex flex-col gap-8 items-center justify-center p-8 bg-ground-100 dark:bg-ground-900 rounded-lg w-full">
             {/* Variants */}
             <div className="flex flex-wrap gap-4 justify-center items-center">
                 <Button variant="primary">Primary</Button>
@@ -77,6 +76,12 @@ export default function ButtonDemo() {
                 </Button>
             </div>
 
+            {/* Disabled State */}
+            <div className="flex flex-wrap gap-4 justify-center items-center">
+                <Button variant="primary" disabled>Disabled</Button>
+                <Button variant="secondary" disabled>Disabled</Button>
+                <Button variant="outline" disabled>Disabled</Button>
+            </div>
         </div>
     );
 }

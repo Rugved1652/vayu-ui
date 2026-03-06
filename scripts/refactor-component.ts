@@ -95,6 +95,38 @@ Tasks:
 7. Docs must use Fumadocs Tab/Tabs for Preview/Code sections
 8. Include full source code in the docs
 
+CRITICAL — Tailwind v4 Design Token Usage:
+
+This project uses Tailwind CSS v4 with @theme for design tokens.
+Tokens defined in @theme automatically generate utility classes:
+  --radius-*    → rounded-*    (e.g. --radius  = the bare token → class "rounded")
+  --shadow-*    → shadow-*     (e.g. --shadow-outer → class "shadow-outer")
+  --inset-shadow-* → inset-shadow-* (e.g. --inset-shadow-inner → class "inset-shadow-inner")
+  --color-*     → bg-*, text-*, border-* etc.
+  --font-*      → font-*       (e.g. --font-primary → class "font-primary")
+  --text-*      → text-*       (e.g. --text-h1 → class "text-h1")
+
+RADIUS:
+  - Use the "rounded" class for border-radius (maps to --radius: 4px)
+  - NEVER hardcode border-radius px values. Always use "rounded".
+  - Example: className="rounded" → applies border-radius: var(--radius)
+
+SHADOWS:
+  - Use "shadow-outer" class for cards, modals, dropdowns, popovers.
+  - Use "inset-shadow-inner" class for pressed buttons, active inputs.
+  - NEVER hardcode box-shadow values or rgba().
+  - Example: className="shadow-outer rounded" → outer shadow + system radius
+
+COLORS:
+  - Use semantic color tokens: primary-*, ground-*, error-*, warning-*, success-*, info-*
+  - Example: className="bg-primary-500 text-ground-900"
+  - NEVER hardcode hex, rgb, hsl, or oklch. Always use token classes.
+
+FONTS:
+  - Use "font-primary" (Oswald) for headings, labels, nav
+  - Use "font-secondary" (Mulish) for body text, descriptions
+  - Use "font-tertiary" (Geist Mono) for code/technical values
+
 Important paths for reference:
 - Component lives at: packages/ui/src/components/ui/${name}.tsx
 - Demo lives at: apps/docs/src/components/demos/${name}-demo.tsx

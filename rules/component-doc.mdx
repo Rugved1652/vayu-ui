@@ -20,7 +20,13 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
     export default function {ComponentName}Demo() {
       return (
-        {/* Usage example code here */}
+        <div className="w-full max-w-md">
+          <{ComponentName}>
+            <{ComponentName}.SubComponent>
+              Content here
+            </{ComponentName}.SubComponent>
+          </{ComponentName}>
+        </div>
       );
     }
     ```
@@ -33,19 +39,28 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `prop1` | `string` | - | Description of prop1 |
+| `variant` | `string` | - | Visual style variant |
+| `size` | `"small" \| "medium" \| "large"` | `"medium"` | Size of the component |
+| `disabled` | `boolean` | `false` | Whether the component is disabled |
+| `className` | `string` | - | Additional CSS classes |
 
-{/* Add sub-component props tables if compound component */}
+### {ComponentName}.SubComponent
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | - | Content to render |
+| `className` | `string` | - | Additional CSS classes |
 
 ## Accessibility
 
-- Keyboard navigation support
-- ARIA roles and attributes
-- Focus management
-- Screen reader compatibility
+- Full keyboard navigation support
+- Proper ARIA roles and attributes
+- Visible focus indicators
+- Screen reader compatible labels
+- Respects `prefers-reduced-motion`
 
 ## Source Code
 
 ```tsx title="src/components/ui/{componentname}.tsx"
-{/* Full component source code here */}
+{/* Paste the full component source code here */}
 ```

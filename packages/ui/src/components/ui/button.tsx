@@ -105,22 +105,22 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
                 "bg-primary-600 text-white",
                 "border border-primary-700",
                 "hover:bg-primary-700 active:bg-primary-800",
-                "shadow-sm",
+                "shadow-outer",
                 "dark:bg-primary-500 dark:text-white",
                 "dark:border-primary-600",
                 "dark:hover:bg-primary-600 dark:active:bg-primary-700"
             ),
             secondary: clsx(
-                "bg-neutral-100 hover:bg-neutral-200 active:bg-neutral-300",
-                "text-neutral-900 font-medium",
-                "border border-neutral-300 hover:border-neutral-400",
-                "shadow-sm",
-                "dark:bg-neutral-800 dark:hover:bg-neutral-700",
-                "dark:text-neutral-100 dark:border-neutral-600"
+                "bg-ground-100 hover:bg-ground-200 active:bg-ground-300",
+                "text-ground-800 font-medium",
+                "border border-ground-300 hover:border-ground-400",
+                "shadow-outer",
+                "dark:bg-ground-800 dark:hover:bg-ground-700",
+                "dark:text-ground-100 dark:border-ground-600"
             ),
             outline: clsx(
                 "bg-transparent hover:bg-ground-100 active:bg-ground-200",
-                "text-ground-900 font-medium",
+                "text-ground-800 font-medium",
                 "border-2 border-ground-400 hover:border-ground-500",
                 "dark:hover:bg-ground-800 dark:active:bg-ground-700",
                 "dark:text-ground-100 dark:border-ground-500"
@@ -136,7 +136,7 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
                 "bg-error-600 text-white",
                 "border border-error-700",
                 "hover:bg-error-700 active:bg-error-800",
-                "shadow-sm",
+                "shadow-outer",
                 "dark:bg-error-500 dark:text-white",
                 "dark:border-error-600",
                 "dark:hover:bg-error-600 dark:active:bg-error-700"
@@ -145,17 +145,17 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
 
         const buttonClasses = clsx(
             "relative inline-flex items-center justify-center",
-            "rounded-md",
+            "rounded",
             "font-secondary font-medium",
-            "transition-all duration-200 ease-in-out",
+            "transition-all duration-150 ease-in-out",
             "outline-none focus-visible:outline-none",
             "focus-visible:ring-2 focus-visible:ring-offset-2",
-            variant === "primary" && "focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400",
-            variant === "secondary" && "focus-visible:ring-neutral-500 dark:focus-visible:ring-neutral-400",
-            variant === "outline" && "focus-visible:ring-ground-500 dark:focus-visible:ring-ground-400",
-            variant === "ghost" && "focus-visible:ring-ground-500 dark:focus-visible:ring-ground-400",
-            variant === "destructive" && "focus-visible:ring-error-500 dark:focus-visible:ring-error-400",
-            "focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900",
+            variant === "primary" && "focus-visible:ring-primary-600 dark:focus-visible:ring-primary-500",
+            variant === "secondary" && "focus-visible:ring-ground-500 dark:focus-visible:ring-ground-400",
+            variant === "outline" && "focus-visible:ring-ground-600 dark:focus-visible:ring-ground-400",
+            variant === "ghost" && "focus-visible:ring-ground-600 dark:focus-visible:ring-ground-400",
+            variant === "destructive" && "focus-visible:ring-error-600 dark:focus-visible:ring-error-500",
+            "focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
             sizeClasses[size],
             variantClasses[variant],
             fullWidth ? "w-full" : "w-auto",
@@ -200,7 +200,7 @@ ButtonRoot.displayName = "Button";
 // ============================================================================
 
 interface IconProps extends HTMLAttributes<HTMLSpanElement> {
-    size?: ButtonSize; // Pass explicitly
+    size?: ButtonSize;
     children: React.ReactNode;
     label?: string;
 }
@@ -239,18 +239,19 @@ Icon.displayName = "Button.Icon";
 // ============================================================================
 
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-    size?: ButtonSize; // Pass explicitly
+    size?: ButtonSize;
     value?: number | string;
     max?: number;
     position?: BadgePosition;
     variant?: BadgeVariant;
     showZero?: boolean;
+    className?: string;
 }
 
 const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
     (
         {
-            size = "small", // Pass explicitly
+            size = "small",
             value,
             max = 99,
             position = "top-right",
@@ -312,8 +313,8 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
                 className={clsx(
                     "inline-flex items-center justify-center",
                     "rounded-full font-semibold leading-none",
-                    "border-2 border-white dark:border-neutral-900",
-                    "shadow-md",
+                    "border-2 border-white dark:border-ground-950",
+                    "shadow-outer",
                     badgeSizeClasses[size],
                     badgeVariantClasses[variant],
                     badgePositionClasses[position],
