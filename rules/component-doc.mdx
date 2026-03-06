@@ -1,0 +1,51 @@
+---
+title: {ComponentName}
+description: {ComponentDescription}
+---
+
+import {ComponentName}Demo from '@/components/demos/{componentname}-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
+      <{ComponentName}Demo />
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { {ComponentName} } from "vayu-ui";
+
+    export default function {ComponentName}Demo() {
+      return (
+        {/* Usage example code here */}
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Props
+
+### {ComponentName}
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `prop1` | `string` | - | Description of prop1 |
+
+{/* Add sub-component props tables if compound component */}
+
+## Accessibility
+
+- Keyboard navigation support
+- ARIA roles and attributes
+- Focus management
+- Screen reader compatibility
+
+## Source Code
+
+```tsx title="src/components/ui/{componentname}.tsx"
+{/* Full component source code here */}
+```
