@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Circle } from "lucide-react";
+import { Check } from "lucide-react";
 import {
     Children,
     cloneElement,
@@ -32,13 +32,13 @@ const StepperContext = createContext<StepperContextValue | undefined>(undefined)
 // Root
 // ============================================================================
 
-interface StepperProps extends HTMLAttributes<HTMLDivElement> {
+interface StepperRootProps extends HTMLAttributes<HTMLDivElement> {
     activeStep: number;
     orientation?: StepperOrientation;
     onStepClick?: (step: number) => void;
 }
 
-const Stepper = forwardRef<HTMLDivElement, StepperProps>(
+const StepperRoot = forwardRef<HTMLDivElement, StepperRootProps>(
     (
         {
             activeStep,
@@ -58,6 +58,8 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
             >
                 <div
                     ref={ref}
+                    role="list"
+                    aria-label="Progress steps"
                     className={clsx(
                         "flex w-full gap-2",
                         orientation === "vertical" ? "flex-col" : "flex-row",
@@ -78,7 +80,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
         );
     }
 );
-Stepper.displayName = "Stepper";
+StepperRoot.displayName = "Stepper.Root";
 
 // ============================================================================
 // Step
@@ -99,6 +101,7 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
             className,
             children,
             onClick,
+            onKeyDown,
             ...props
         },
         ref
@@ -113,6 +116,8 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
             else status = "inactive";
         }
 
+        const isClickable = !!onStepClick;
+
         const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
             if (onStepClick) {
                 onStepClick(index);
@@ -120,19 +125,30 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
             onClick?.(e);
         };
 
+        const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+            if (isClickable && (e.key === "Enter" || e.key === " ")) {
+                e.preventDefault();
+                onStepClick?.(index);
+            }
+            onKeyDown?.(e);
+        };
+
         return (
             <div
                 ref={ref}
+                role="listitem"
                 className={clsx(
-                    "relative flex group",
+                    "relative flex",
                     orientation === "vertical" ? "flex-col" : "items-center flex-1",
                     !isLast && orientation === "horizontal" && "flex-1",
+                    isClickable && "cursor-pointer",
                     className
                 )}
                 onClick={handleClick}
-                role="button"
-                tabIndex={onStepClick ? 0 : -1}
+                onKeyDown={handleKeyDown}
+                tabIndex={isClickable ? 0 : -1}
                 aria-current={status === "active" ? "step" : undefined}
+                aria-label={`Step ${index + 1}${status === "active" ? ", current" : status === "completed" ? ", completed" : ""}`}
                 {...props}
             >
                 {/* Horizontal Connector Line */}
@@ -196,12 +212,15 @@ const StepIndicator = forwardRef<HTMLDivElement, StepIndicatorProps>(
         return (
             <div
                 ref={ref}
+                aria-hidden="true"
                 className={clsx(
-                    "relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 font-semibold text-sm",
-                    status === "active" && "border-primary-500 bg-primary-500 text-white shadow-[0_0_0_4px_rgba(var(--primary-500-rgb),0.2)]",
-                    status === "completed" && "border-primary-500 bg-primary-500 text-white",
+                    "relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 font-secondary font-semibold text-sm",
+                    // Focus ring for parent's focus-visible state
+                    "group-focus-visible:ring-2 group-focus-visible:ring-primary-500 group-focus-visible:ring-offset-2",
+                    status === "active" && "border-primary-500 bg-primary-500 text-ground-950 ring-4 ring-primary-500/20",
+                    status === "completed" && "border-primary-500 bg-primary-500 text-ground-950",
                     status === "inactive" && "border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900 text-ground-500 dark:text-ground-400",
-                    status === "error" && "border-red-500 bg-red-500 text-white",
+                    status === "error" && "border-error-500 bg-error-500 text-white",
                     status === "loading" && "border-primary-500 text-primary-500 animate-pulse",
                     className
                 )}
@@ -210,7 +229,7 @@ const StepIndicator = forwardRef<HTMLDivElement, StepIndicatorProps>(
                 {status === "completed" && !icon && !children ? (
                     <Check className="w-5 h-5" />
                 ) : status === "error" && !icon && !children ? (
-                    <span className="text-lg">!</span>
+                    <span className="text-lg font-bold">!</span>
                 ) : (
                     children || icon
                 )}
@@ -237,7 +256,6 @@ const StepContent = forwardRef<HTMLDivElement, StepContentProps>(
                 className={clsx(
                     "flex flex-col",
                     orientation === "horizontal" && "items-center text-center",
-                    // Adjust padding for vertical layout alignment with indicator
                     orientation === "vertical" && "pt-1 pb-6",
                     className
                 )}
@@ -270,7 +288,7 @@ const StepTitle = forwardRef<HTMLHeadingElement, StepTitleProps>(
             <h3
                 ref={ref}
                 className={clsx(
-                    "text-sm font-semibold transition-colors duration-200",
+                    "font-secondary text-sm font-semibold transition-colors duration-200",
                     status === "active" ? "text-ground-900 dark:text-ground-100" : "text-ground-600 dark:text-ground-400",
                     status === "completed" && "text-ground-900 dark:text-ground-100",
                     className
@@ -298,7 +316,7 @@ const StepDescription = forwardRef<HTMLParagraphElement, StepDescriptionProps>(
             <p
                 ref={ref}
                 className={clsx(
-                    "text-xs text-ground-500 dark:text-ground-400 max-w-[200px]",
+                    "font-secondary text-xs text-ground-500 dark:text-ground-400 max-w-[200px]",
                     className
                 )}
                 {...props}
@@ -310,4 +328,25 @@ const StepDescription = forwardRef<HTMLParagraphElement, StepDescriptionProps>(
 );
 StepDescription.displayName = "Stepper.Description";
 
-export { Stepper, Step, StepIndicator, StepContent, StepTitle, StepDescription };
+// ============================================================================
+// Compound Export
+// ============================================================================
+
+const Stepper = Object.assign(StepperRoot, {
+    Root: StepperRoot,
+    Step: Step,
+    Indicator: StepIndicator,
+    Content: StepContent,
+    Title: StepTitle,
+    Description: StepDescription,
+});
+
+export {
+    Stepper,
+    StepperRoot,
+    Step,
+    StepIndicator,
+    StepContent,
+    StepTitle,
+    StepDescription,
+};

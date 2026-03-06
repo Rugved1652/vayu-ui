@@ -1,6 +1,6 @@
 ---
 title: Pagination
-description: A set of presentational components for building pagination interfaces.
+description: A fully accessible pagination component with compound pattern for building flexible navigation interfaces.
 ---
 
 import PaginationDemo from '@/components/demos/pagination-demo';
@@ -10,72 +10,100 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
+    <div className="flex items-center justify-center p-8 bg-ground-100 dark:bg-ground-900 rounded-lg">
       <PaginationDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Pagination } from "@/components/ui/pagination";
+    import { Pagination } from "vayu-ui";
     import { useState } from "react";
 
-    export default function PaginationDemo() {
+    export default function PaginationExample() {
       const [currentPage, setCurrentPage] = useState(1);
       const [pageSize, setPageSize] = useState(10);
       const totalItems = 450;
       const totalPages = Math.ceil(totalItems / pageSize);
 
       return (
-        <div className="flex flex-col w-full gap-8 p-6">
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Default Pagination</h3>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            >
-              <Pagination.Controls>
-                <Pagination.Info totalItems={totalItems} pageSize={pageSize} />
-                <Pagination.PageSizeSelector
-                  pageSize={pageSize}
-                  onPageSizeChange={(size) => {
-                    setPageSize(size);
-                    setCurrentPage(1);
-                  }}
-                />
-              </Pagination.Controls>
-              
-              <div className="flex justify-center mt-4">
-                <Pagination.Buttons />
-              </div>
-            </Pagination>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Compact Variant (Mobile)</h3>
-            <Pagination.Compact
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        >
+          <Pagination.Controls>
+            <Pagination.Info totalItems={totalItems} pageSize={pageSize} />
+            <Pagination.PageSizeSelector
+              pageSize={pageSize}
+              onPageSizeChange={(size) => {
+                setPageSize(size);
+                setCurrentPage(1);
+              }}
             />
-          </div>
+          </Pagination.Controls>
 
-           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Jump to Page</h3>
-             <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            >
-                 <Pagination.JumpToPage />
-            </Pagination>
+          <div className="flex justify-center mt-4">
+            <Pagination.Buttons />
           </div>
-        </div>
+        </Pagination>
       );
     }
     ```
   </Tab>
 </Tabs>
+
+## Variants
+
+The Pagination component supports four visual variants:
+
+- **default** — Standard squared buttons with subtle backgrounds
+- **outlined** — Bordered buttons with transparent backgrounds
+- **rounded** — Circular buttons with shadows for active states
+- **pills** — Circular buttons with gradient active states
+
+```tsx
+<Pagination variant="outlined" ...>
+  <Pagination.Buttons />
+</Pagination>
+
+<Pagination variant="rounded" ...>
+  <Pagination.Buttons />
+</Pagination>
+
+<Pagination variant="pills" ...>
+  <Pagination.Buttons />
+</Pagination>
+```
+
+## Compound Components
+
+### Pagination (Root)
+
+The main container that provides context to all child components.
+
+### Pagination.Buttons
+
+Renders the page number buttons with first, previous, next, and last navigation.
+
+### Pagination.Info
+
+Displays the current range of items being shown (e.g., "Showing 1 to 10 of 450 results").
+
+### Pagination.PageSizeSelector
+
+A dropdown selector for choosing the number of items per page.
+
+### Pagination.Controls
+
+A flex container for laying out Pagination.Info and Pagination.PageSizeSelector side by side.
+
+### Pagination.JumpToPage
+
+An input field with a submit button for jumping directly to a specific page.
+
+### Pagination.Compact
+
+A simplified mobile-friendly pagination with only Previous and Next buttons.
 
 ## Props
 
@@ -83,49 +111,79 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `currentPage` | `number` | - | The current active page. |
-| `totalPages` | `number` | - | The total number of pages. |
-| `onPageChange` | `(page: number) => void` | - | Callback fired when the page changes. |
-| `variant` | `'default' \| 'outlined' \| 'rounded' \| 'pills'` | `'default'` | The visual style variant. |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | The size of the pagination buttons. |
-| `pageRange` | `'compact' \| 'extended' \| 'full'` | `'compact'` | How many page numbers to show. |
-| `disabled` | `boolean` | `false` | Whether the pagination is disabled. |
-| `siblingCount` | `number` | `1` | Number of siblings to show around the current page. |
-| `className` | `string` | - | Additional CSS classes. |
+| `currentPage` | `number` | — | The current active page (required) |
+| `totalPages` | `number` | — | The total number of pages (required) |
+| `onPageChange` | `(page: number) => void` | — | Callback fired when the page changes (required) |
+| `variant` | `"default" \| "outlined" \| "rounded" \| "pills"` | `"default"` | The visual style variant |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | The size of the pagination buttons |
+| `pageRange` | `"compact" \| "extended" \| "full"` | `"compact"` | How many page numbers to show |
+| `disabled` | `boolean` | `false` | Whether the pagination is disabled |
+| `siblingCount` | `number` | `1` | Number of siblings to show around the current page |
+| `className` | `string` | — | Additional CSS classes |
+| `aria-label` | `string` | `"Pagination"` | Accessible label for the navigation |
 
 ### Pagination.Info
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `totalItems` | `number` | - | The total number of items. |
-| `pageSize` | `number` | - | The number of items per page. |
-| `className` | `string` | - | Additional CSS classes. |
+| `totalItems` | `number` | — | The total number of items (required) |
+| `pageSize` | `number` | — | The number of items per page (required) |
+| `className` | `string` | — | Additional CSS classes |
 
 ### Pagination.PageSizeSelector
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `pageSize` | `number` | - | The current page size. |
-| `pageSizeOptions` | `number[]` | `[10, 20, 50, 100]` | Available page size options. |
-| `onPageSizeChange` | `(size: number) => void` | - | Callback fired when the page size changes. |
-| `className` | `string` | - | Additional CSS classes. |
+| `pageSize` | `number` | — | The current page size (required) |
+| `pageSizeOptions` | `number[]` | `[10, 20, 50, 100]` | Available page size options |
+| `onPageSizeChange` | `(size: number) => void` | — | Callback fired when the page size changes (required) |
+| `className` | `string` | — | Additional CSS classes |
+
+### Pagination.Buttons
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `className` | `string` | — | Additional CSS classes |
+
+### Pagination.JumpToPage
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `className` | `string` | — | Additional CSS classes |
+
+### Pagination.Controls
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | — | Content to render |
+| `className` | `string` | — | Additional CSS classes |
 
 ### Pagination.Compact
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `currentPage` | `number` | - | The current active page. |
-| `totalPages` | `number` | - | The total number of pages. |
-| `onPageChange` | `(page: number) => void` | - | Callback fired when the page changes. |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | The size of the controls. |
-| `disabled` | `boolean` | `false` | Whether the pagination is disabled. |
-| `className` | `string` | - | Additional CSS classes. |
+| `currentPage` | `number` | — | The current active page (required) |
+| `totalPages` | `number` | — | The total number of pages (required) |
+| `onPageChange` | `(page: number) => void` | — | Callback fired when the page changes (required) |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | The size of the controls |
+| `disabled` | `boolean` | `false` | Whether the pagination is disabled |
+| `className` | `string` | — | Additional CSS classes |
+| `aria-label` | `string` | `"Pagination"` | Accessible label for the navigation |
+
+## Accessibility
+
+- Full keyboard navigation support with Tab and Enter/Space
+- Visible focus indicators with proper ring styling
+- Proper ARIA roles (`navigation`, `group`) and attributes (`aria-label`, `aria-current`, `aria-live`)
+- Semantic HTML with `<nav>` element
+- Screen reader compatible labels for all buttons
+- Live regions announce page changes to screen readers
+- Respects `prefers-reduced-motion` for transitions
+- WCAG 2.2 AA compliant contrast ratios
 
 ## Source Code
 
-```tsx title="src/components/ui/pagination.tsx"
-// src/components/Pagination.tsx
-
+```tsx title="packages/ui/src/components/ui/pagination.tsx"
 "use client";
 import {
     ChevronLeft,
@@ -137,26 +195,13 @@ import {
 import React, {
     createContext,
     FormEvent,
+    HTMLAttributes,
     ReactNode,
     useContext,
     useMemo,
 } from "react";
-
-/**
- * Pagination Component - Compound Pattern with Accessibility
- *
- * A fully accessible pagination component with:
- * - Compound component pattern for flexible composition
- * - Full keyboard navigation support
- * - ARIA labels and proper navigation semantics
- * - Multiple visual variants and sizes
- * - Page range options (compact, extended, full)
- * - Page size selector
- * - Jump to page functionality
- * - Info display
- * - Mobile-friendly compact mode
- * - Screen reader friendly
- */
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "../../lib/utils";
 
 // ============================================================================
 // Types
@@ -230,10 +275,95 @@ const sizeConfig = {
 };
 
 // ============================================================================
+// CVA Variants
+// ============================================================================
+
+const paginationButtonVariants = cva(
+    "font-secondary font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950 disabled:opacity-50 disabled:cursor-not-allowed",
+    {
+        variants: {
+            variant: {
+                default: "rounded",
+                outlined: "rounded border-2",
+                rounded: "rounded-full",
+                pills: "rounded-full",
+            },
+            isActive: {
+                true: "",
+                false: "",
+            },
+            isDisabled: {
+                true: "opacity-50 cursor-not-allowed",
+                false: "",
+            },
+        },
+        compoundVariants: [
+            {
+                variant: "default",
+                isActive: true,
+                className: "bg-primary-600 dark:bg-primary-500 text-white",
+            },
+            {
+                variant: "default",
+                isActive: false,
+                isDisabled: false,
+                className:
+                    "bg-ground-100 dark:bg-ground-800 text-ground-700 dark:text-ground-300 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400",
+            },
+            {
+                variant: "outlined",
+                isActive: true,
+                className:
+                    "bg-primary-600 dark:bg-primary-500 text-white border-primary-600 dark:border-primary-500",
+            },
+            {
+                variant: "outlined",
+                isActive: false,
+                isDisabled: false,
+                className:
+                    "bg-white dark:bg-ground-900 border-ground-300 dark:border-ground-700 text-ground-700 dark:text-ground-300 hover:border-primary-500 dark:hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400",
+            },
+            {
+                variant: "rounded",
+                isActive: true,
+                className:
+                    "bg-primary-600 dark:bg-primary-500 text-white shadow-outer",
+            },
+            {
+                variant: "rounded",
+                isActive: false,
+                isDisabled: false,
+                className:
+                    "bg-ground-100 dark:bg-ground-800 text-ground-700 dark:text-ground-300 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400",
+            },
+            {
+                variant: "pills",
+                isActive: true,
+                className:
+                    "bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-outer",
+            },
+            {
+                variant: "pills",
+                isActive: false,
+                isDisabled: false,
+                className:
+                    "bg-ground-100 dark:bg-ground-800 text-ground-700 dark:text-ground-300 hover:bg-ground-200 dark:hover:bg-ground-700",
+            },
+        ],
+        defaultVariants: {
+            variant: "default",
+            isActive: false,
+            isDisabled: false,
+        },
+    }
+);
+
+// ============================================================================
 // Main Pagination Component
 // ============================================================================
 
-interface PaginationRootProps {
+interface PaginationRootProps
+    extends Omit<HTMLAttributes<HTMLElement>, "aria-label"> {
     children: ReactNode;
     currentPage: number;
     totalPages: number;
@@ -243,10 +373,6 @@ interface PaginationRootProps {
     pageRange?: PageRange;
     disabled?: boolean;
     siblingCount?: number;
-    className?: string;
-    /**
-     * Accessible label for the pagination navigation
-     */
     "aria-label"?: string;
 }
 
@@ -260,12 +386,12 @@ const PaginationRoot: React.FC<PaginationRootProps> = ({
     pageRange = "compact",
     disabled = false,
     siblingCount = 1,
-    className = "",
+    className,
     "aria-label": ariaLabel = "Pagination",
+    ...props
 }) => {
     const config = sizeConfig[size];
 
-    // Calculate page numbers to display
     const pageNumbers = useMemo(() => {
         if (pageRange === "full") {
             return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -279,7 +405,10 @@ const PaginationRoot: React.FC<PaginationRootProps> = ({
         }
 
         const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
-        const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPages);
+        const rightSiblingIndex = Math.min(
+            currentPage + siblingCount,
+            totalPages
+        );
 
         const shouldShowLeftDots = leftSiblingIndex > 2;
         const shouldShowRightDots = rightSiblingIndex < totalPages - 1;
@@ -307,57 +436,10 @@ const PaginationRoot: React.FC<PaginationRootProps> = ({
     }, [currentPage, totalPages, siblingCount, pageRange]);
 
     const getButtonStyles = (isActive: boolean, isDisabled: boolean): string => {
-        const baseStyles = `
-      font-secondary font-medium transition-all duration-200
-      disabled:opacity-50 disabled:cursor-not-allowed
-      ${config.button}
-    `;
-
-        if (isDisabled) {
-            return `${baseStyles} opacity-50 cursor-not-allowed`;
-        }
-
-        switch (variant) {
-            case "outlined":
-                return `
-          ${baseStyles}
-          border-2 border-neutral-300 dark:border-neutral-700
-          ${isActive
-                        ? "bg-primary-600 dark:bg-primary-500 text-white border-primary-600 dark:border-primary-500"
-                        : "bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:border-primary-500 dark:hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400"
-                    }
-        `;
-
-            case "rounded":
-                return `
-          ${baseStyles}
-          rounded-full
-          ${isActive
-                        ? "bg-primary-600 dark:bg-primary-500 text-white shadow-lg shadow-primary-500/30"
-                        : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400"
-                    }
-        `;
-
-            case "pills":
-                return `
-          ${baseStyles}
-          rounded-full
-          ${isActive
-                        ? "bg-gradient-to-r from-primary-600 to-secondary-600 text-white shadow-lg"
-                        : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-                    }
-        `;
-
-            default:
-                return `
-          ${baseStyles}
-          rounded-md
-          ${isActive
-                        ? "bg-primary-600 dark:bg-primary-500 text-white"
-                        : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-primary-100 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400"
-                    }
-        `;
-        }
+        return cn(
+            paginationButtonVariants({ variant, isActive, isDisabled }),
+            config.button
+        );
     };
 
     const handlePageChange = (page: number) => {
@@ -385,7 +467,8 @@ const PaginationRoot: React.FC<PaginationRootProps> = ({
         <PaginationContext.Provider value={contextValue}>
             <nav
                 aria-label={ariaLabel}
-                className={`flex flex-col gap-4 ${className}`}
+                className={cn("flex flex-col gap-4", className)}
+                {...props}
             >
                 {children}
             </nav>
@@ -397,16 +480,16 @@ const PaginationRoot: React.FC<PaginationRootProps> = ({
 // Pagination Info
 // ============================================================================
 
-interface PaginationInfoProps {
+interface PaginationInfoProps extends HTMLAttributes<HTMLParagraphElement> {
     totalItems: number;
     pageSize: number;
-    className?: string;
 }
 
 const PaginationInfo: React.FC<PaginationInfoProps> = ({
     totalItems,
     pageSize,
-    className = "",
+    className,
+    ...props
 }) => {
     const { currentPage } = usePagination();
 
@@ -415,20 +498,24 @@ const PaginationInfo: React.FC<PaginationInfoProps> = ({
 
     return (
         <p
-            className={`text-sm font-secondary text-neutral-600 dark:text-neutral-400 ${className}`}
+            className={cn(
+                "text-sm font-secondary text-ground-600 dark:text-ground-400",
+                className
+            )}
             role="status"
             aria-live="polite"
+            {...props}
         >
             Showing{" "}
-            <span className="font-semibold text-neutral-900 dark:text-white">
+            <span className="font-semibold text-ground-900 dark:text-white">
                 {startItem}
             </span>{" "}
             to{" "}
-            <span className="font-semibold text-neutral-900 dark:text-white">
+            <span className="font-semibold text-ground-900 dark:text-white">
                 {endItem}
             </span>{" "}
             of{" "}
-            <span className="font-semibold text-neutral-900 dark:text-white">
+            <span className="font-semibold text-ground-900 dark:text-white">
                 {totalItems}
             </span>{" "}
             results
@@ -440,26 +527,26 @@ const PaginationInfo: React.FC<PaginationInfoProps> = ({
 // Page Size Selector
 // ============================================================================
 
-interface PageSizeSelectorProps {
+interface PageSizeSelectorProps extends HTMLAttributes<HTMLDivElement> {
     pageSize: number;
     pageSizeOptions?: number[];
     onPageSizeChange: (size: number) => void;
-    className?: string;
 }
 
 const PageSizeSelector: React.FC<PageSizeSelectorProps> = ({
     pageSize,
     pageSizeOptions = [10, 20, 50, 100],
     onPageSizeChange,
-    className = "",
+    className,
+    ...props
 }) => {
     const { disabled, config } = usePagination();
 
     return (
-        <div className={`flex items-center gap-2 ${className}`}>
+        <div className={cn("flex items-center gap-2", className)} {...props}>
             <label
                 htmlFor="page-size-select"
-                className="text-sm font-secondary text-neutral-600 dark:text-neutral-400"
+                className="text-sm font-secondary text-ground-600 dark:text-ground-400"
             >
                 Show:
             </label>
@@ -468,15 +555,10 @@ const PageSizeSelector: React.FC<PageSizeSelectorProps> = ({
                 value={pageSize}
                 onChange={(e) => onPageSizeChange(parseInt(e.target.value))}
                 disabled={disabled}
-                className={`
-          ${config.select}
-          bg-white dark:bg-neutral-900
-          border-2 border-neutral-300 dark:border-neutral-700
-          rounded-md font-secondary
-          text-neutral-700 dark:text-neutral-300
-          focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500
-          disabled:opacity-50 disabled:cursor-not-allowed
-        `}
+                className={cn(
+                    config.select,
+                    "bg-white dark:bg-ground-900 border-2 border-ground-300 dark:border-ground-700 rounded font-secondary text-ground-700 dark:text-ground-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                )}
                 aria-label="Items per page"
             >
                 {pageSizeOptions.map((option) => (
@@ -485,7 +567,7 @@ const PageSizeSelector: React.FC<PageSizeSelectorProps> = ({
                     </option>
                 ))}
             </select>
-            <span className="text-sm font-secondary text-neutral-600 dark:text-neutral-400">
+            <span className="text-sm font-secondary text-ground-600 dark:text-ground-400">
                 per page
             </span>
         </div>
@@ -496,18 +578,22 @@ const PageSizeSelector: React.FC<PageSizeSelectorProps> = ({
 // Pagination Controls Container
 // ============================================================================
 
-interface PaginationControlsProps {
+interface PaginationControlsProps extends HTMLAttributes<HTMLDivElement> {
     children: ReactNode;
-    className?: string;
 }
 
 const PaginationControls: React.FC<PaginationControlsProps> = ({
     children,
-    className = "",
+    className,
+    ...props
 }) => {
     return (
         <div
-            className={`flex items-center justify-between gap-4 flex-wrap ${className}`}
+            className={cn(
+                "flex items-center justify-between gap-4 flex-wrap",
+                className
+            )}
+            {...props}
         >
             {children}
         </div>
@@ -518,12 +604,11 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
 // Pagination Buttons Container
 // ============================================================================
 
-interface PaginationButtonsProps {
-    className?: string;
-}
+interface PaginationButtonsProps extends HTMLAttributes<HTMLDivElement> {}
 
 const PaginationButtons: React.FC<PaginationButtonsProps> = ({
-    className = "",
+    className,
+    ...props
 }) => {
     const {
         currentPage,
@@ -536,42 +621,38 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
         config,
     } = usePagination();
 
+    const isRoundedVariant = variant === "rounded" || variant === "pills";
+
     return (
-        <div className={`flex items-center gap-1 ${className}`} role="group">
-            {/* First page */}
+        <div className={cn("flex items-center gap-1", className)} role="group" {...props}>
             <button
                 onClick={() => handlePageChange(1)}
                 disabled={currentPage === 1 || disabled}
                 className={getButtonStyles(false, currentPage === 1 || disabled)}
                 aria-label="Go to first page"
             >
-                <ChevronsLeft className={config.icon} />
+                <ChevronsLeft className={config.icon} aria-hidden="true" />
             </button>
 
-            {/* Previous page */}
             <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1 || disabled}
                 className={getButtonStyles(false, currentPage === 1 || disabled)}
                 aria-label="Go to previous page"
             >
-                <ChevronLeft className={config.icon} />
+                <ChevronLeft className={config.icon} aria-hidden="true" />
             </button>
 
-            {/* Page numbers */}
             {pageNumbers.map((page, index) => {
                 if (typeof page === "string") {
                     return (
                         <span
                             key={`${page}-${index}`}
-                            className={`
-                ${config.button}
-                ${variant === "rounded" || variant === "pills"
-                                    ? "rounded-full"
-                                    : "rounded-md"
-                                }
-                bg-transparent text-neutral-400 dark:text-neutral-600 flex items-center justify-center
-              `}
+                            className={cn(
+                                config.button,
+                                isRoundedVariant ? "rounded-full" : "rounded",
+                                "bg-transparent text-ground-400 dark:text-ground-600 flex items-center justify-center"
+                            )}
                             aria-hidden="true"
                         >
                             <MoreHorizontal className={config.icon} />
@@ -593,7 +674,6 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
                 );
             })}
 
-            {/* Next page */}
             <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages || disabled}
@@ -603,10 +683,9 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
                 )}
                 aria-label="Go to next page"
             >
-                <ChevronRight className={config.icon} />
+                <ChevronRight className={config.icon} aria-hidden="true" />
             </button>
 
-            {/* Last page */}
             <button
                 onClick={() => handlePageChange(totalPages)}
                 disabled={currentPage === totalPages || disabled}
@@ -616,7 +695,7 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
                 )}
                 aria-label="Go to last page"
             >
-                <ChevronsRight className={config.icon} />
+                <ChevronsRight className={config.icon} aria-hidden="true" />
             </button>
         </div>
     );
@@ -626,11 +705,9 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
 // Jump to Page
 // ============================================================================
 
-interface JumpToPageProps {
-    className?: string;
-}
+interface JumpToPageProps extends HTMLAttributes<HTMLFormElement> {}
 
-const JumpToPage: React.FC<JumpToPageProps> = ({ className = "" }) => {
+const JumpToPage: React.FC<JumpToPageProps> = ({ className, ...props }) => {
     const { totalPages, handlePageChange, disabled, variant, config } =
         usePagination();
 
@@ -644,14 +721,17 @@ const JumpToPage: React.FC<JumpToPageProps> = ({ className = "" }) => {
         }
     };
 
+    const isRoundedVariant = variant === "rounded" || variant === "pills";
+
     return (
         <form
             onSubmit={handleSubmit}
-            className={`flex items-center gap-2 ${className}`}
+            className={cn("flex items-center gap-2", className)}
+            {...props}
         >
             <label
                 htmlFor="jump-to-page"
-                className="text-sm font-secondary text-neutral-600 dark:text-neutral-400"
+                className="text-sm font-secondary text-ground-600 dark:text-ground-400"
             >
                 Go to:
             </label>
@@ -663,32 +743,20 @@ const JumpToPage: React.FC<JumpToPageProps> = ({ className = "" }) => {
                 max={totalPages}
                 placeholder={`1-${totalPages}`}
                 disabled={disabled}
-                className={`
-          ${config.input}
-          bg-white dark:bg-neutral-900
-          border-2 border-neutral-300 dark:border-neutral-700
-          rounded-md font-secondary
-          text-neutral-700 dark:text-neutral-300
-          placeholder-neutral-400 dark:placeholder-neutral-600
-          focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500
-          disabled:opacity-50 disabled:cursor-not-allowed
-        `}
+                className={cn(
+                    config.input,
+                    "bg-white dark:bg-ground-900 border-2 border-ground-300 dark:border-ground-700 rounded font-secondary text-ground-700 dark:text-ground-300 placeholder-ground-400 dark:placeholder-ground-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                )}
                 aria-label="Page number"
             />
             <button
                 type="submit"
                 disabled={disabled}
-                className={`
-          ${config.button}
-          ${variant === "rounded" || variant === "pills"
-                        ? "rounded-full"
-                        : "rounded-md"
-                    }
-          bg-primary-600 dark:bg-primary-500 text-white
-          hover:bg-primary-700 dark:hover:bg-primary-600
-          disabled:opacity-50 disabled:cursor-not-allowed
-          transition-colors duration-200
-        `}
+                className={cn(
+                    config.button,
+                    isRoundedVariant ? "rounded-full" : "rounded",
+                    "bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950"
+                )}
                 aria-label="Go to page"
             >
                 Go
@@ -701,16 +769,29 @@ const JumpToPage: React.FC<JumpToPageProps> = ({ className = "" }) => {
 // Compact Pagination (Mobile-friendly)
 // ============================================================================
 
-interface CompactPaginationProps {
+const compactPaginationVariants = cva(
+    "font-secondary font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2",
+    {
+        variants: {
+            size: {
+                sm: "px-3 py-1.5 text-xs",
+                md: "px-4 py-2 text-sm",
+                lg: "px-5 py-2.5 text-base",
+            },
+        },
+        defaultVariants: {
+            size: "md",
+        },
+    }
+);
+
+interface CompactPaginationProps
+    extends Omit<HTMLAttributes<HTMLElement>, "aria-label"> {
     currentPage: number;
     totalPages: number;
     onPageChange: (page: number) => void;
     size?: PaginationSize;
     disabled?: boolean;
-    className?: string;
-    /**
-     * Accessible label for the pagination
-     */
     "aria-label"?: string;
 }
 
@@ -720,17 +801,10 @@ const CompactPagination: React.FC<CompactPaginationProps> = ({
     onPageChange,
     size = "md",
     disabled = false,
-    className = "",
+    className,
     "aria-label": ariaLabel = "Pagination",
+    ...props
 }) => {
-    const sizeConfigLocal = {
-        sm: "px-3 py-1.5 text-xs",
-        md: "px-4 py-2 text-sm",
-        lg: "px-5 py-2.5 text-base",
-    };
-
-    const config = sizeConfigLocal[size];
-
     const handlePrevious = () => {
         if (currentPage > 1) {
             onPageChange(currentPage - 1);
@@ -746,31 +820,24 @@ const CompactPagination: React.FC<CompactPaginationProps> = ({
     return (
         <nav
             aria-label={ariaLabel}
-            className={`flex items-center justify-between gap-4 ${className}`}
+            className={cn("flex items-center justify-between gap-4", className)}
+            {...props}
         >
             <button
                 onClick={handlePrevious}
                 disabled={currentPage === 1 || disabled}
-                className={`
-          ${config}
-          bg-white dark:bg-neutral-900
-          border-2 border-neutral-300 dark:border-neutral-700
-          rounded-lg font-secondary font-medium
-          text-neutral-700 dark:text-neutral-300
-          hover:bg-primary-50 dark:hover:bg-primary-900/30
-          hover:border-primary-500 dark:hover:border-primary-600
-          disabled:opacity-50 disabled:cursor-not-allowed
-          transition-all duration-200
-          flex items-center gap-2
-        `}
+                className={cn(
+                    compactPaginationVariants({ size }),
+                    "bg-white dark:bg-ground-900 border-2 border-ground-300 dark:border-ground-700 rounded text-ground-700 dark:text-ground-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-500 dark:hover:border-primary-600"
+                )}
                 aria-label="Go to previous page"
             >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4" aria-hidden="true" />
                 Previous
             </button>
 
             <span
-                className="text-sm font-secondary text-neutral-700 dark:text-neutral-300"
+                className="text-sm font-secondary text-ground-700 dark:text-ground-300"
                 role="status"
                 aria-live="polite"
                 aria-atomic="true"
@@ -785,22 +852,14 @@ const CompactPagination: React.FC<CompactPaginationProps> = ({
             <button
                 onClick={handleNext}
                 disabled={currentPage === totalPages || disabled}
-                className={`
-          ${config}
-          bg-white dark:bg-neutral-900
-          border-2 border-neutral-300 dark:border-neutral-700
-          rounded-lg font-secondary font-medium
-          text-neutral-700 dark:text-neutral-300
-          hover:bg-primary-50 dark:hover:bg-primary-900/30
-          hover:border-primary-500 dark:hover:border-primary-600
-          disabled:opacity-50 disabled:cursor-not-allowed
-          transition-all duration-200
-          flex items-center gap-2
-        `}
+                className={cn(
+                    compactPaginationVariants({ size }),
+                    "bg-white dark:bg-ground-900 border-2 border-ground-300 dark:border-ground-700 rounded text-ground-700 dark:text-ground-300 hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:border-primary-500 dark:hover:border-primary-600"
+                )}
                 aria-label="Go to next page"
             >
                 Next
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </button>
         </nav>
     );
@@ -835,4 +894,11 @@ export type {
     PaginationSize,
     PaginationVariant,
 };
+
+export type PaginationButtonVariants = VariantProps<
+    typeof paginationButtonVariants
+>;
+export type CompactPaginationVariants = VariantProps<
+    typeof compactPaginationVariants
+>;
 ```

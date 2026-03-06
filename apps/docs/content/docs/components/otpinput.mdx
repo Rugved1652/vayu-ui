@@ -1,6 +1,6 @@
 ---
 title: OTP Input
-description: An accessible one-time password input component.
+description: An accessible one-time password input component with compound component pattern.
 ---
 
 import OTPInputDemo from '@/components/demos/otpinput-demo';
@@ -10,77 +10,349 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+    <div className="flex items-center justify-center p-8 bg-ground-100 dark:bg-ground-900 rounded">
       <OTPInputDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { OTPGroup, OTPInput, OTPSeparator, OTPSlot } from "@/components/ui/otpinput"
+    import { OTPInput } from "vayu-ui";
 
-    export function OTPInputDemo() {
+    export default function OTPInputDemo() {
       return (
-        <OTPInput maxLength={6}>
-            <OTPGroup>
-                <OTPSlot index={0} />
-                <OTPSlot index={1} />
-                <OTPSlot index={2} />
-            </OTPGroup>
-            <OTPSeparator />
-            <OTPGroup>
-                <OTPSlot index={3} />
-                <OTPSlot index={4} />
-                <OTPSlot index={5} />
-            </OTPGroup>
-        </OTPInput>
-      )
+        <OTPInput.Root maxLength={6} onComplete={(code) => console.log(code)}>
+          <OTPInput.Group>
+            <OTPInput.Slot index={0} />
+            <OTPInput.Slot index={1} />
+            <OTPInput.Slot index={2} />
+          </OTPInput.Group>
+          <OTPInput.Separator />
+          <OTPInput.Group>
+            <OTPInput.Slot index={3} />
+            <OTPInput.Slot index={4} />
+            <OTPInput.Slot index={5} />
+          </OTPInput.Group>
+        </OTPInput.Root>
+      );
     }
     ```
   </Tab>
 </Tabs>
 
-## Installation
+## Anatomy
 
-Add the component to your project.
+```tsx
+<OTPInput.Root>
+  <OTPInput.Group>
+    <OTPInput.Slot index={0} />
+    <OTPInput.Slot index={1} />
+    <OTPInput.Slot index={2} />
+  </OTPInput.Group>
+  <OTPInput.Separator />
+  <OTPInput.Group>
+    <OTPInput.Slot index={3} />
+    <OTPInput.Slot index={4} />
+    <OTPInput.Slot index={5} />
+  </OTPInput.Group>
+</OTPInput.Root>
+```
+
+## Props
+
+### OTPInput.Root
+
+| Prop              | Type                        | Default              | Description                                      |
+| :---------------- | :-------------------------- | :------------------- | :----------------------------------------------- |
+| `value`           | `string`                    | —                    | Controlled value.                                |
+| `onChange`        | `(value: string) => void`   | —                    | Callback when value changes.                     |
+| `maxLength`       | `number`                    | `6`                  | Maximum length of the code.                      |
+| `onComplete`      | `(code: string) => void`    | —                    | Callback when maxLength is reached.              |
+| `label`           | `string`                    | `"One-time password"`| Accessible label for the input.                  |
+| `autoFocus`       | `boolean`                   | `false`              | Whether to auto-focus on mount.                  |
+| `disabled`        | `boolean`                   | `false`              | Whether the input is disabled.                   |
+| `containerClassName` | `string`                 | —                    | Additional classes for the container.            |
+| `className`       | `string`                    | —                    | Additional CSS classes.                          |
+
+### OTPInput.Group
+
+| Prop        | Type         | Default | Description                    |
+| :---------- | :----------- | :------ | :----------------------------- |
+| `children`  | `ReactNode`  | —       | Slot elements to render.       |
+| `className` | `string`     | —       | Additional CSS classes.        |
+
+### OTPInput.Slot
+
+| Prop        | Type     | Default | Description                        |
+| :---------- | :------- | :------ | :--------------------------------- |
+| `index`     | `number` | —       | **Required.** Position in the OTP. |
+| `className` | `string` | —       | Additional CSS classes.            |
+
+### OTPInput.Separator
+
+| Prop        | Type         | Default | Description                          |
+| :---------- | :----------- | :------ | :----------------------------------- |
+| `children`  | `ReactNode`  | —       | Custom separator content.            |
+| `className` | `string`     | —       | Additional CSS classes.              |
+
+## Accessibility
+
+- **Keyboard Navigation**: Full keyboard support — Tab to focus, type to enter digits, Backspace to delete
+- **ARIA Roles**: Uses `role="group"` with proper `aria-label` for screen readers
+- **Focus Indicators**: Visible focus ring on active slot using design tokens
+- **Screen Reader Support**: Hidden input with `aria-label` for accessibility
+- **Autofill Support**: `autoComplete="one-time-code"` enables SMS OTP autofill
+- **Input Mode**: `inputMode="numeric"` shows numeric keyboard on mobile devices
+- **Disabled State**: Properly communicates disabled state via `aria-disabled`
+- **Reduced Motion**: Animations respect `prefers-reduced-motion` preference
+
+## Source Code
 
 ```tsx title="src/components/ui/otpinput.tsx"
-"use client"
- 
+"use client";
+
 import React, {
     createContext,
     forwardRef,
     useContext,
     useEffect,
+    useId,
     useRef,
     useState,
-} from "react"
-import { clsx } from "clsx"
- 
-// ... (Copy full component code)
+} from "react";
+import { clsx } from "clsx";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+interface OTPInputContextValue {
+    value: string;
+    isFocused: boolean;
+    maxLength: number;
+    disabled: boolean;
+    id: string;
+}
+
+const OTPInputContext = createContext<OTPInputContextValue | undefined>(undefined);
+
+const useOTPInput = () => {
+    const context = useContext(OTPInputContext);
+    if (!context) {
+        throw new Error("OTPInput compound components must be used within OTPInput.Root");
+    }
+    return context;
+};
+
+// ============================================================================
+// Root Component
+// ============================================================================
+
+interface OTPInputRootProps
+    extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+    value?: string;
+    onChange?: (value: string) => void;
+    maxLength?: number;
+    containerClassName?: string;
+    onComplete?: (code: string) => void;
+    label?: string;
+    children?: React.ReactNode;
+}
+
+const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
+    (
+        {
+            value: controlledValue,
+            onChange,
+            maxLength = 6,
+            containerClassName,
+            onComplete,
+            label = "One-time password",
+            className,
+            children,
+            autoFocus,
+            disabled,
+            id: providedId,
+            ...props
+        },
+        ref
+    ) => {
+        const [internalValue, setInternalValue] = useState("");
+        const [isFocused, setIsFocused] = useState(false);
+        const inputRef = useRef<HTMLInputElement>(null);
+        const generatedId = useId();
+        const id = providedId ?? generatedId;
+
+        const value = controlledValue ?? internalValue;
+
+        const handleFocus = () => setIsFocused(true);
+        const handleBlur = () => setIsFocused(false);
+
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const newValue = e.target.value.replace(/\D/g, "").slice(0, maxLength);
+            if (newValue.length <= maxLength) {
+                setInternalValue(newValue);
+                onChange?.(newValue);
+                if (newValue.length === maxLength) {
+                    onComplete?.(newValue);
+                }
+            }
+        };
+
+        const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === "Backspace" && value.length > 0) {
+                const newValue = value.slice(0, -1);
+                setInternalValue(newValue);
+                onChange?.(newValue);
+            }
+        };
+
+        React.useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
+
+        useEffect(() => {
+            if (autoFocus) {
+                inputRef.current?.focus();
+            }
+        }, [autoFocus]);
+
+        return (
+            <OTPInputContext.Provider
+                value={{ value, isFocused, maxLength, disabled: disabled ?? false, id }}
+            >
+                <div
+                    role="group"
+                    aria-label={label}
+                    aria-disabled={disabled}
+                    className={clsx(
+                        "relative flex items-center justify-center cursor-text select-none",
+                        disabled && "opacity-50 cursor-not-allowed"
+                    )}
+                    onClick={() => !disabled && inputRef.current?.focus()}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            !disabled && inputRef.current?.focus();
+                        }
+                    }}
+                    tabIndex={disabled ? -1 : 0}
+                >
+                    <div className={clsx("flex items-center gap-2", className)}>
+                        {children}
+                    </div>
+
+                    <input
+                        ref={inputRef}
+                        id={id}
+                        value={value}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyDown}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        maxLength={maxLength}
+                        disabled={disabled}
+                        aria-label={label}
+                        autoComplete="one-time-code"
+                        inputMode="numeric"
+                        pattern={`[0-9]*{${maxLength}}`}
+                        className="absolute inset-0 opacity-0 w-full h-full pointer-events-none"
+                        style={{ caretColor: "transparent" }}
+                        {...props}
+                    />
+                </div>
+            </OTPInputContext.Provider>
+        );
+    }
+);
+OTPInputRoot.displayName = "OTPInput.Root";
+
+// ============================================================================
+// Group Component
+// ============================================================================
+
+interface OTPInputGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+    children?: React.ReactNode;
+}
+
+const OTPInputGroup = forwardRef<HTMLDivElement, OTPInputGroupProps>(
+    ({ className, children, ...props }, ref) => (
+        <div ref={ref} role="presentation" className={clsx("flex items-center", className)} {...props}>
+            {children}
+        </div>
+    )
+);
+OTPInputGroup.displayName = "OTPInput.Group";
+
+// ============================================================================
+// Slot Component
+// ============================================================================
+
+interface OTPInputSlotProps extends React.HTMLAttributes<HTMLDivElement> {
+    index: number;
+}
+
+const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
+    ({ index, className, ...props }, ref) => {
+        const { value, isFocused, maxLength, disabled, id } = useOTPInput();
+        const char = value[index];
+        const isActive = isFocused && index === Math.min(value.length, maxLength - 1);
+        const hasValue = char !== undefined && char !== "";
+
+        return (
+            <div
+                ref={ref}
+                role="presentation"
+                aria-hidden="true"
+                className={clsx(
+                    "relative flex size-10 items-center justify-center",
+                    "border-y border-r border-ground-300 dark:border-ground-700",
+                    "text-sm text-ground-700 dark:text-ground-300",
+                    "transition-all duration-150",
+                    "first:rounded-l first:border-l",
+                    "last:rounded-r",
+                    isActive && ["z-10", "ring-2 ring-ground-950 dark:ring-ground-100", "ring-offset-background"],
+                    hasValue && "bg-ground-50 dark:bg-ground-900",
+                    disabled && "opacity-50",
+                    className
+                )}
+                {...props}
+            >
+                <span className="font-secondary">{char}</span>
+                {isActive && !disabled && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
+                        <div className="h-4 w-0.5 bg-ground-950 dark:bg-ground-50 animate-caret-blink" />
+                    </div>
+                )}
+            </div>
+        );
+    }
+);
+OTPInputSlot.displayName = "OTPInput.Slot";
+
+// ============================================================================
+// Separator Component
+// ============================================================================
+
+interface OTPInputSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
+    children?: React.ReactNode;
+}
+
+const OTPInputSeparator = forwardRef<HTMLDivElement, OTPInputSeparatorProps>(
+    ({ className, children, ...props }, ref) => (
+        <div ref={ref} role="presentation" aria-hidden="true" className={clsx("flex items-center justify-center px-2", className)} {...props}>
+            {children ?? <div className="h-1.5 w-1.5 bg-ground-400 dark:bg-ground-600" />}
+        </div>
+    )
+);
+OTPInputSeparator.displayName = "OTPInput.Separator";
+
+// ============================================================================
+// Compound Export
+// ============================================================================
+
+const OTPInput = Object.assign(OTPInputRoot, {
+    Root: OTPInputRoot,
+    Group: OTPInputGroup,
+    Slot: OTPInputSlot,
+    Separator: OTPInputSeparator,
+});
+
+export { OTPInput, OTPInputRoot, OTPInputGroup, OTPInputSlot, OTPInputSeparator };
 ```
-
-## Anatomy
-
-```tsx
-<OTPInput>
-  <OTPGroup>
-    <OTPSlot />
-  </OTPGroup>
-  <OTPSeparator />
-  <OTPGroup>
-    <OTPSlot />
-  </OTPGroup>
-</OTPInput>
-```
-
-## Props
-
-### OTPInput
-
-| Prop           | Type                       | Default | Description                                      |
-| :------------- | :------------------------- | :------ | :----------------------------------------------- |
-| `value`        | `string`                   | -       | Controlled value.                                |
-| `onChange`     | `(value: string) => void`  | -       | Callback when value changes.                     |
-| `maxLength`    | `number`                   | `6`     | Maximum length of the code.                      |
-| `onComplete`   | `(code: string) => void`   | -       | Callback when maxLength is reached.              |
-| `autoFocus`    | `boolean`                  | `false` | Whether to auto-focus on mount.                  |

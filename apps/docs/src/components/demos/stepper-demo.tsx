@@ -1,16 +1,8 @@
 "use client";
 
-import {
-    Stepper,
-    Step,
-    StepIndicator,
-    StepContent,
-    StepTitle,
-    StepDescription,
-} from "vayu-ui";
+import { Stepper, Button } from "vayu-ui";
 import { useState } from "react";
 import { User, MapPin, CreditCard, CheckCircle } from "lucide-react";
-import { Button } from "vayu-ui";
 
 export default function StepperDemo() {
     const [activeStep, setActiveStep] = useState(1);
@@ -39,61 +31,61 @@ export default function StepperDemo() {
     ];
 
     return (
-        <div className="flex flex-col gap-12 w-full max-w-3xl">
-            {/* ── Horizontal ── */}
-            <div className="flex flex-col gap-6 p-6 border rounded-xl bg-white dark:bg-ground-900 border-ground-200 dark:border-ground-800">
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-lg">Checkout Flow</h3>
-                    <div className="flex gap-2">
-                        <Button
-                            variant="outline"
-                            size="small"
-                            disabled={activeStep === 0}
-                            onClick={() => setActiveStep((p) => Math.max(0, p - 1))}
-                        >
-                            Back
-                        </Button>
-                        <Button
-                            size="small"
-                            disabled={activeStep === steps.length}
-                            onClick={() => setActiveStep((p) => Math.min(steps.length, p + 1))}
-                        >
-                            Next
-                        </Button>
-                    </div>
+        <div className="w-full max-w-3xl not-prose space-y-12">
+            <div className="space-y-6">
+                <h2 id="stepper-demo-label" className="font-primary text-xl font-semibold text-ground-900 dark:text-ground-100">
+                    Horizontal Stepper
+                </h2>
+
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="outline"
+                        size="small"
+                        disabled={activeStep === 0}
+                        onClick={() => setActiveStep((p) => Math.max(0, p - 1))}
+                    >
+                        Back
+                    </Button>
+                    <Button
+                        size="small"
+                        disabled={activeStep === steps.length - 1}
+                        onClick={() => setActiveStep((p) => Math.min(steps.length - 1, p + 1))}
+                    >
+                        Next
+                    </Button>
                 </div>
 
-                <Stepper activeStep={activeStep}>
+                <Stepper.Root activeStep={activeStep} onStepClick={setActiveStep}>
                     {steps.map((step, index) => (
-                        <Step key={step.title} onClick={() => setActiveStep(index)}>
-                            <StepIndicator icon={step.icon} />
-                            <StepContent>
-                                <StepTitle>{step.title}</StepTitle>
-                                <StepDescription>{step.description}</StepDescription>
-                            </StepContent>
-                        </Step>
+                        <Stepper.Step key={step.title}>
+                            <Stepper.Indicator icon={step.icon} />
+                            <Stepper.Content>
+                                <Stepper.Title>{step.title}</Stepper.Title>
+                                <Stepper.Description>{step.description}</Stepper.Description>
+                            </Stepper.Content>
+                        </Stepper.Step>
                     ))}
-                </Stepper>
+                </Stepper.Root>
             </div>
 
-            {/* ── Vertical ── */}
-            <div className="flex flex-col gap-6 p-6 border rounded-xl bg-white dark:bg-ground-900 border-ground-200 dark:border-ground-800">
-                <h3 className="font-semibold text-lg">Timeline View</h3>
-                <Stepper activeStep={activeStep} orientation="vertical">
+            <div className="space-y-6">
+                <h2 className="font-primary text-xl font-semibold text-ground-900 dark:text-ground-100">
+                    Vertical Stepper
+                </h2>
+
+                <Stepper.Root activeStep={activeStep} orientation="vertical" onStepClick={setActiveStep}>
                     {steps.map((step, index) => (
-                        <Step key={step.title} onClick={() => setActiveStep(index)}>
-                            <StepIndicator>{index + 1}</StepIndicator>
-                            <StepContent>
-                                <StepTitle>{step.title}</StepTitle>
-                                <StepDescription>
-                                    This step requires you to enter details for {step.title.toLowerCase()}.
-                                    <br />
-                                    <span className="opacity-60 text-[10px]">Updated 2 mins ago</span>
-                                </StepDescription>
-                            </StepContent>
-                        </Step>
+                        <Stepper.Step key={step.title}>
+                            <Stepper.Indicator>{index + 1}</Stepper.Indicator>
+                            <Stepper.Content>
+                                <Stepper.Title>{step.title}</Stepper.Title>
+                                <Stepper.Description>
+                                    Complete the {step.title.toLowerCase()} step to continue.
+                                </Stepper.Description>
+                            </Stepper.Content>
+                        </Stepper.Step>
                     ))}
-                </Stepper>
+                </Stepper.Root>
             </div>
         </div>
     );

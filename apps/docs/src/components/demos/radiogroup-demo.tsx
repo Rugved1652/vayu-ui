@@ -71,7 +71,7 @@ export default function RadioGroupDemo() {
                 orientation="horizontal"
                 value={size}
                 onChange={setSize}
-                color="secondary"
+                color="info"
             >
                 <RadioGroup.Item value="sm" label="Small" />
                 <RadioGroup.Item value="md" label="Medium" />

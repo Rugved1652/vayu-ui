@@ -9,16 +9,24 @@ export default function PaginationDemo() {
     const totalPages = Math.ceil(totalItems / pageSize);
 
     return (
-        <div className="flex flex-col w-full gap-8 p-6">
-            <div className="space-y-4">
-                <h3 className="text-lg font-medium">Default Pagination</h3>
+        <div className="w-full max-w-2xl not-prose space-y-8">
+            <div>
+                <h2
+                    id="pagination-demo-label"
+                    className="text-xl font-semibold mb-4"
+                >
+                    Default Pagination
+                </h2>
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                 >
                     <Pagination.Controls>
-                        <Pagination.Info totalItems={totalItems} pageSize={pageSize} />
+                        <Pagination.Info
+                            totalItems={totalItems}
+                            pageSize={pageSize}
+                        />
                         <Pagination.PageSizeSelector
                             pageSize={pageSize}
                             onPageSizeChange={(size) => {
@@ -34,8 +42,54 @@ export default function PaginationDemo() {
                 </Pagination>
             </div>
 
-            <div className="space-y-4">
-                <h3 className="text-lg font-medium">Compact Variant (Mobile)</h3>
+            <div>
+                <h2 className="text-xl font-semibold mb-4">
+                    Outlined Variant
+                </h2>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    variant="outlined"
+                >
+                    <div className="flex justify-center">
+                        <Pagination.Buttons />
+                    </div>
+                </Pagination>
+            </div>
+
+            <div>
+                <h2 className="text-xl font-semibold mb-4">Rounded Variant</h2>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    variant="rounded"
+                >
+                    <div className="flex justify-center">
+                        <Pagination.Buttons />
+                    </div>
+                </Pagination>
+            </div>
+
+            <div>
+                <h2 className="text-xl font-semibold mb-4">Pills Variant</h2>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    variant="pills"
+                >
+                    <div className="flex justify-center">
+                        <Pagination.Buttons />
+                    </div>
+                </Pagination>
+            </div>
+
+            <div>
+                <h2 className="text-xl font-semibold mb-4">
+                    Compact (Mobile-friendly)
+                </h2>
                 <Pagination.Compact
                     currentPage={currentPage}
                     totalPages={totalPages}
@@ -43,14 +97,28 @@ export default function PaginationDemo() {
                 />
             </div>
 
-            <div className="space-y-4">
-                <h3 className="text-lg font-medium">Jump to Page</h3>
+            <div>
+                <h2 className="text-xl font-semibold mb-4">Jump to Page</h2>
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                 >
                     <Pagination.JumpToPage />
+                </Pagination>
+            </div>
+
+            <div>
+                <h2 className="text-xl font-semibold mb-4">Disabled State</h2>
+                <Pagination
+                    currentPage={1}
+                    totalPages={totalPages}
+                    onPageChange={() => {}}
+                    disabled
+                >
+                    <div className="flex justify-center">
+                        <Pagination.Buttons />
+                    </div>
                 </Pagination>
             </div>
         </div>

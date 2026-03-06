@@ -20,7 +20,6 @@ type RadioSize = "sm" | "md" | "lg";
 type RadioVariant = "default" | "card" | "button";
 type RadioColor =
     | "primary"
-    | "secondary"
     | "success"
     | "warning"
     | "error"
@@ -75,13 +74,13 @@ const RadioGroupContext = createContext<RadioGroupContextType | undefined>(
 const useRadioGroup = () => {
     const context = useContext(RadioGroupContext);
     if (!context) {
-        throw new Error("Radio components must be used within RadioGroup");
+        throw new Error("RadioGroup components must be used within RadioGroup.Root");
     }
     return context;
 };
 
 // ============================================================================
-// Size & Color Config
+// Size Config
 // ============================================================================
 
 const sizeClasses: Record<
@@ -117,6 +116,10 @@ const sizeClasses: Record<
     },
 };
 
+// ============================================================================
+// Color Config
+// ============================================================================
+
 const colorClasses: Record<
     RadioColor,
     { checked: string; unchecked: string; focus: string; cardBg: string }
@@ -124,49 +127,42 @@ const colorClasses: Record<
     primary: {
         checked:
             "border-primary-600 bg-primary-600 dark:border-primary-500 dark:bg-primary-500",
-        unchecked: "border-neutral-300 dark:border-neutral-600",
+        unchecked: "border-ground-300 dark:border-ground-600",
         focus: "focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400",
-        cardBg: "bg-primary-50 dark:bg-primary-900/20 border-primary-500 dark:border-primary-400",
-    },
-    secondary: {
-        checked:
-            "border-secondary-600 bg-secondary-600 dark:border-secondary-500 dark:bg-secondary-500",
-        unchecked: "border-neutral-300 dark:border-neutral-600",
-        focus: "focus-visible:ring-secondary-500 dark:focus-visible:ring-secondary-400",
-        cardBg: "bg-secondary-50 dark:bg-secondary-900/20 border-secondary-500 dark:border-secondary-400",
+        cardBg: "bg-primary-100 dark:bg-primary-900/20 border-primary-500 dark:border-primary-400",
     },
     success: {
         checked:
             "border-success-600 bg-success-600 dark:border-success-500 dark:bg-success-500",
-        unchecked: "border-neutral-300 dark:border-neutral-600",
+        unchecked: "border-ground-300 dark:border-ground-600",
         focus: "focus-visible:ring-success-500 dark:focus-visible:ring-success-400",
-        cardBg: "bg-success-50 dark:bg-success-900/20 border-success-500 dark:border-success-400",
+        cardBg: "bg-success-100 dark:bg-success-900/20 border-success-500 dark:border-success-400",
     },
     warning: {
         checked:
             "border-warning-600 bg-warning-600 dark:border-warning-500 dark:bg-warning-500",
-        unchecked: "border-neutral-300 dark:border-neutral-600",
+        unchecked: "border-ground-300 dark:border-ground-600",
         focus: "focus-visible:ring-warning-500 dark:focus-visible:ring-warning-400",
-        cardBg: "bg-warning-50 dark:bg-warning-900/20 border-warning-500 dark:border-warning-400",
+        cardBg: "bg-warning-100 dark:bg-warning-900/20 border-warning-500 dark:border-warning-400",
     },
     error: {
         checked:
             "border-error-600 bg-error-600 dark:border-error-500 dark:bg-error-500",
-        unchecked: "border-neutral-300 dark:border-neutral-600",
+        unchecked: "border-ground-300 dark:border-ground-600",
         focus: "focus-visible:ring-error-500 dark:focus-visible:ring-error-400",
-        cardBg: "bg-error-50 dark:bg-error-900/20 border-error-500 dark:border-error-400",
+        cardBg: "bg-error-100 dark:bg-error-900/20 border-error-500 dark:border-error-400",
     },
     info: {
         checked:
             "border-info-600 bg-info-600 dark:border-info-500 dark:bg-info-500",
-        unchecked: "border-neutral-300 dark:border-neutral-600",
+        unchecked: "border-ground-300 dark:border-ground-600",
         focus: "focus-visible:ring-info-500 dark:focus-visible:ring-info-400",
-        cardBg: "bg-info-50 dark:bg-info-900/20 border-info-500 dark:border-info-400",
+        cardBg: "bg-info-100 dark:bg-info-900/20 border-info-500 dark:border-info-400",
     },
 };
 
 // ============================================================================
-// RadioGroup Component
+// RadioGroup Root Component
 // ============================================================================
 
 const RadioGroupRoot = forwardRef<HTMLDivElement, RadioGroupProps>(
@@ -235,7 +231,7 @@ const RadioGroupRoot = forwardRef<HTMLDivElement, RadioGroupProps>(
                             {label && (
                                 <label
                                     id={labelId}
-                                    className="block font-primary text-neutral-700 dark:text-neutral-300 text-sm font-medium mb-1"
+                                    className="block font-primary text-ground-700 dark:text-ground-300 text-sm font-medium mb-1"
                                 >
                                     {label}
                                     {required && (
@@ -251,7 +247,7 @@ const RadioGroupRoot = forwardRef<HTMLDivElement, RadioGroupProps>(
                             {description && (
                                 <p
                                     id={descriptionId}
-                                    className="text-xs font-secondary text-neutral-500 dark:text-neutral-400"
+                                    className="text-xs font-secondary text-ground-500 dark:text-ground-400"
                                 >
                                     {description}
                                 </p>
@@ -268,6 +264,7 @@ const RadioGroupRoot = forwardRef<HTMLDivElement, RadioGroupProps>(
                             error && errorText && errorId
                         ) || undefined}
                         aria-required={required || undefined}
+                        aria-invalid={error || undefined}
                         className={clsx(
                             "flex gap-3",
                             orientation === "vertical"
@@ -294,10 +291,10 @@ const RadioGroupRoot = forwardRef<HTMLDivElement, RadioGroupProps>(
     }
 );
 
-RadioGroupRoot.displayName = "RadioGroup";
+RadioGroupRoot.displayName = "RadioGroup.Root";
 
 // ============================================================================
-// RadioItem Component
+// RadioGroup Item Component
 // ============================================================================
 
 const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
@@ -340,7 +337,7 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
             }
         };
 
-        // Shared radio circle
+        // Shared radio circle indicator
         const radioCircle = (checked: boolean, mt?: boolean) => (
             <div
                 className={clsx(
@@ -370,7 +367,7 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
             </div>
         );
 
-        // Hidden native input
+        // Hidden native input for accessibility
         const hiddenInput = (
             <input
                 type="radio"
@@ -380,7 +377,11 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 disabled={isDisabled}
-                className="sr-only"
+                className={clsx(
+                    "sr-only",
+                    "focus-visible:ring-2 focus-visible:ring-offset-2",
+                    currentColor.focus
+                )}
                 aria-label={label || value}
             />
         );
@@ -407,9 +408,9 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
                                     className={clsx(
                                         sizeClasses[size].label,
                                         "font-secondary font-medium",
-                                        "text-neutral-900 dark:text-white",
+                                        "text-ground-900 dark:text-white",
                                         !isDisabled &&
-                                        "group-hover:text-neutral-700 dark:group-hover:text-neutral-200",
+                                            "group-hover:text-ground-700 dark:group-hover:text-ground-200",
                                         "transition-colors block"
                                     )}
                                 >
@@ -421,7 +422,7 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
                                     className={clsx(
                                         sizeClasses[size].description,
                                         "font-secondary",
-                                        "text-neutral-500 dark:text-neutral-400",
+                                        "text-ground-500 dark:text-ground-400",
                                         "mt-0.5"
                                     )}
                                 >
@@ -442,14 +443,14 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
                     className={clsx(
                         "flex items-start gap-3",
                         sizeClasses[size].padding,
-                        "rounded-lg border-2 cursor-pointer",
+                        "rounded border-2 cursor-pointer",
                         "transition-all duration-200",
                         isChecked
                             ? currentColor.cardBg
-                            : "bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800",
+                            : "bg-white dark:bg-ground-900 border-ground-200 dark:border-ground-800",
                         isDisabled
                             ? "cursor-not-allowed opacity-50"
-                            : "hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-sm",
+                            : "hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-outer",
                         className
                     )}
                     {...props}
@@ -459,7 +460,7 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
 
                     <div className="flex-1 min-w-0">
                         {icon && (
-                            <div className="mb-2 text-neutral-600 dark:text-neutral-400">
+                            <div className="mb-2 text-ground-600 dark:text-ground-400">
                                 {icon}
                             </div>
                         )}
@@ -468,7 +469,7 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
                                 className={clsx(
                                     sizeClasses[size].label,
                                     "font-secondary font-semibold",
-                                    "text-neutral-900 dark:text-white",
+                                    "text-ground-900 dark:text-white",
                                     "block"
                                 )}
                             >
@@ -480,7 +481,7 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
                                 className={clsx(
                                     sizeClasses[size].description,
                                     "font-secondary",
-                                    "text-neutral-600 dark:text-neutral-300",
+                                    "text-ground-600 dark:text-ground-300",
                                     "mt-1"
                                 )}
                             >
@@ -500,14 +501,14 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
                     className={clsx(
                         "flex items-center justify-center gap-2",
                         sizeClasses[size].padding,
-                        "rounded-lg border-2 cursor-pointer",
+                        "rounded border-2 cursor-pointer",
                         "font-secondary font-medium transition-all duration-200",
                         isChecked
                             ? clsx(
                                 currentColor.checked,
-                                "text-white border-transparent shadow-md"
+                                "text-white border-transparent shadow-outer"
                             )
-                            : "bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-800",
+                            : "bg-white dark:bg-ground-900 text-ground-700 dark:text-ground-300 border-ground-200 dark:border-ground-800",
                         isDisabled
                             ? "cursor-not-allowed opacity-50"
                             : "hover:border-primary-300 dark:hover:border-primary-600 active:scale-95",
@@ -540,6 +541,7 @@ RadioItem.displayName = "RadioGroup.Item";
 // ============================================================================
 
 export const RadioGroup = Object.assign(RadioGroupRoot, {
+    Root: RadioGroupRoot,
     Item: RadioItem,
 });
 
