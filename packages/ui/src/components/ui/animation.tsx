@@ -6,6 +6,8 @@ import {
     forwardRef,
     HTMLAttributes,
     ReactNode,
+    useEffect,
+    useState,
 } from "react";
 import "./animation.css";
 
@@ -26,8 +28,9 @@ export interface BaseAnimationProps extends HTMLAttributes<HTMLDivElement> {
     delay?: AnimationDelay;
     iteration?: AnimationIteration;
     fillMode?: AnimationFillMode;
-    onAnimationEnd?: () => void;
-    onAnimationStart?: () => void;
+    /** Fixed: Uses correct React Animation Event types */
+    onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement>;
+    onAnimationStart?: React.AnimationEventHandler<HTMLDivElement>;
 }
 
 export interface DirectionalAnimationProps extends BaseAnimationProps {
@@ -41,6 +44,38 @@ export interface ScaleAnimationProps extends BaseAnimationProps {
 export interface RotateAnimationProps extends BaseAnimationProps {
     degrees?: number;
 }
+
+// ============================================================================
+// Accessibility Hook (WCAG 2.2)
+// ============================================================================
+
+/**
+ * Detects if the user has requested reduced motion in their OS settings.
+ * Essential for preventing vestibular disorders triggers.
+ */
+const usePrefersReducedMotion = (): boolean => {
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+    useEffect(() => {
+        // Check if window is defined (SSR safety)
+        if (typeof window === "undefined") return;
+
+        const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        
+        // Set initial value
+        setPrefersReducedMotion(mediaQuery.matches);
+
+        // Listen for changes
+        const handler = (event: MediaQueryListEvent) => {
+            setPrefersReducedMotion(event.matches);
+        };
+
+        mediaQuery.addEventListener("change", handler);
+        return () => mediaQuery.removeEventListener("change", handler);
+    }, []);
+
+    return prefersReducedMotion;
+};
 
 // ============================================================================
 // Mappings
@@ -61,18 +96,19 @@ const delayMap: Record<AnimationDelay, string> = {
     long: "delay-500",
 };
 
+// Fixed: Using arbitrary properties to ensure these work without tailwind.config.js extensions
 const iterationMap: Record<AnimationIteration, string> = {
-    1: "animate-iteration-1",
-    2: "animate-iteration-2",
-    3: "animate-iteration-3",
+    1: "[animation-iteration:1]",
+    2: "[animation-iteration:2]",
+    3: "[animation-iteration:3]",
     infinite: "animate-infinite",
 };
 
 const fillModeMap: Record<AnimationFillMode, string> = {
-    none: "animate-fill-none",
-    forwards: "animate-fill-forwards",
-    backwards: "animate-fill-backwards",
-    both: "animate-fill-both",
+    none: "[animation-fill-mode:none]",
+    forwards: "[animation-fill-mode:forwards]",
+    backwards: "[animation-fill-mode:backwards]",
+    both: "[animation-fill-mode:both]",
 };
 
 const directionAnimationMap: Record<AnimationDirection, string> = {
@@ -118,8 +154,15 @@ const buildAnimationClasses = (
     delay: AnimationDelay,
     iteration: AnimationIteration,
     fillMode: AnimationFillMode,
-    className?: string
+    className?: string,
+    reduceMotion?: boolean
 ): string => {
+    // WCAG Fix: If user prefers reduced motion, we skip the animation classes.
+    // We ensure the element is visible (opacity-100) instead of animating in.
+    if (reduceMotion) {
+        return clsx("opacity-100", className);
+    }
+
     return clsx(
         baseAnimation,
         durationMap[duration],
@@ -141,7 +184,8 @@ interface AnimationRootProps extends HTMLAttributes<HTMLDivElement> {
 const AnimationRoot = forwardRef<HTMLDivElement, AnimationRootProps>(
     ({ children, className, ...props }, ref) => {
         return (
-            <div ref={ref} className={clsx("contents", className)} {...props}>
+            // Fix: Removed 'contents' to allow proper styling and ref behavior
+            <div ref={ref} className={clsx("", className)} {...props}>
                 {children}
             </div>
         );
@@ -169,6 +213,8 @@ const AnimationFade = forwardRef<HTMLDivElement, BaseAnimationProps>(
         },
         ref
     ) => {
+        const reduceMotion = usePrefersReducedMotion();
+
         return (
             <div
                 ref={ref}
@@ -178,7 +224,8 @@ const AnimationFade = forwardRef<HTMLDivElement, BaseAnimationProps>(
                     delay,
                     iteration,
                     fillMode,
-                    className
+                    className,
+                    reduceMotion
                 )}
                 onAnimationEnd={onAnimationEnd}
                 onAnimationStart={onAnimationStart}
@@ -212,6 +259,8 @@ const AnimationSlide = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
         },
         ref
     ) => {
+        const reduceMotion = usePrefersReducedMotion();
+
         return (
             <div
                 ref={ref}
@@ -221,7 +270,8 @@ const AnimationSlide = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
                     delay,
                     iteration,
                     fillMode,
-                    className
+                    className,
+                    reduceMotion
                 )}
                 onAnimationEnd={onAnimationEnd}
                 onAnimationStart={onAnimationStart}
@@ -255,6 +305,8 @@ const AnimationBounce = forwardRef<HTMLDivElement, ScaleAnimationProps>(
         },
         ref
     ) => {
+        const reduceMotion = usePrefersReducedMotion();
+
         return (
             <div
                 ref={ref}
@@ -264,7 +316,8 @@ const AnimationBounce = forwardRef<HTMLDivElement, ScaleAnimationProps>(
                     delay,
                     iteration,
                     fillMode,
-                    className
+                    className,
+                    reduceMotion
                 )}
                 onAnimationEnd={onAnimationEnd}
                 onAnimationStart={onAnimationStart}
@@ -298,6 +351,8 @@ const AnimationFlip = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
         },
         ref
     ) => {
+        const reduceMotion = usePrefersReducedMotion();
+
         return (
             <div
                 ref={ref}
@@ -307,7 +362,8 @@ const AnimationFlip = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
                     delay,
                     iteration,
                     fillMode,
-                    className
+                    className,
+                    reduceMotion
                 )}
                 onAnimationEnd={onAnimationEnd}
                 onAnimationStart={onAnimationStart}
@@ -341,6 +397,8 @@ const AnimationRotate = forwardRef<HTMLDivElement, RotateAnimationProps>(
         },
         ref
     ) => {
+        const reduceMotion = usePrefersReducedMotion();
+
         const style: CSSProperties = {
             "--rotation-start": `${degrees}deg`,
             ...props.style,
@@ -356,7 +414,8 @@ const AnimationRotate = forwardRef<HTMLDivElement, RotateAnimationProps>(
                     delay,
                     iteration,
                     fillMode,
-                    className
+                    className,
+                    reduceMotion
                 )}
                 onAnimationEnd={onAnimationEnd}
                 onAnimationStart={onAnimationStart}
@@ -390,6 +449,8 @@ const AnimationZoom = forwardRef<HTMLDivElement, ScaleAnimationProps>(
         },
         ref
     ) => {
+        const reduceMotion = usePrefersReducedMotion();
+
         return (
             <div
                 ref={ref}
@@ -399,7 +460,8 @@ const AnimationZoom = forwardRef<HTMLDivElement, ScaleAnimationProps>(
                     delay,
                     iteration,
                     fillMode,
-                    className
+                    className,
+                    reduceMotion
                 )}
                 onAnimationEnd={onAnimationEnd}
                 onAnimationStart={onAnimationStart}
@@ -433,6 +495,8 @@ const AnimationRoll = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
         },
         ref
     ) => {
+        const reduceMotion = usePrefersReducedMotion();
+
         return (
             <div
                 ref={ref}
@@ -442,7 +506,8 @@ const AnimationRoll = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
                     delay,
                     iteration,
                     fillMode,
-                    className
+                    className,
+                    reduceMotion
                 )}
                 onAnimationEnd={onAnimationEnd}
                 onAnimationStart={onAnimationStart}
@@ -475,6 +540,8 @@ const AnimationJackInTheBox = forwardRef<HTMLDivElement, BaseAnimationProps>(
         },
         ref
     ) => {
+        const reduceMotion = usePrefersReducedMotion();
+
         return (
             <div
                 ref={ref}
@@ -484,7 +551,8 @@ const AnimationJackInTheBox = forwardRef<HTMLDivElement, BaseAnimationProps>(
                     delay,
                     iteration,
                     fillMode,
-                    className
+                    className,
+                    reduceMotion
                 )}
                 onAnimationEnd={onAnimationEnd}
                 onAnimationStart={onAnimationStart}
@@ -517,6 +585,8 @@ const AnimationHinge = forwardRef<HTMLDivElement, BaseAnimationProps>(
         },
         ref
     ) => {
+        const reduceMotion = usePrefersReducedMotion();
+
         return (
             <div
                 ref={ref}
@@ -526,7 +596,8 @@ const AnimationHinge = forwardRef<HTMLDivElement, BaseAnimationProps>(
                     delay,
                     iteration,
                     fillMode,
-                    className
+                    className,
+                    reduceMotion
                 )}
                 onAnimationEnd={onAnimationEnd}
                 onAnimationStart={onAnimationStart}

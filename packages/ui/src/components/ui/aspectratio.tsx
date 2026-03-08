@@ -89,17 +89,54 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
     ) => {
         const isPreset = typeof ratio === "string";
         const preset = isPreset ? PRESET_MAP[ratio] : null;
+        // FIX: Safety check for 0 to avoid Infinity padding
         const numericRatio = preset ? preset.value : (ratio as number);
 
-        // Accessibility: hide from screen readers if decorative
-        const ariaProps = decorative
-            ? { role: "presentation" as const, "aria-hidden": true as const }
-            : {};
+        // Accessibility Logic
+        // 1. If decorative, we MUST hide it and ensure no label exists (conflict).
+        // 2. If not decorative, we check if an aria-label was passed.
+        //    - If yes, we apply role="region" (or "group").
+        //    - If no, we apply no role (generic container).
+        
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let ariaLabel: string | undefined = undefined;
+        // We extract aria-label from props to handle logic safely
+        // Note: In strict TS, props rest picks this up, so we just use it for logic checks.
+        const passedAriaLabel = props["aria-label"];
+
+        const getAriaProps = () => {
+            if (decorative) {
+                // Decorative: hide from tree. Do not allow aria-label.
+                return { 
+                    role: "presentation", 
+                    "aria-hidden": true, 
+                    "aria-label": undefined 
+                };
+            }
+
+            if (passedAriaLabel) {
+                // Meaningful content with label: Use region/group
+                return { 
+                    role: "region", 
+                    "aria-hidden": undefined 
+                };
+            }
+
+            // Default: Just a layout container. No semantic role.
+            return { 
+                role: undefined, 
+                "aria-hidden": undefined 
+            };
+        };
+
+        const ariaProps = getAriaProps();
+
+        // Calculate Padding Bottom safely
+        const paddingBottom = numericRatio > 0 ? `${100 / numericRatio}%` : undefined;
 
         return (
             <div
                 ref={ref}
-                role={decorative ? undefined : "region"}
                 className={clsx(
                     "relative w-full",
                     preset?.tw,
@@ -110,7 +147,7 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
                     preset
                         ? style
                         : {
-                            paddingBottom: `${100 / numericRatio}%`,
+                            paddingBottom,
                             ...style,
                         }
                 }

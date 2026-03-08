@@ -26,8 +26,7 @@ npx vayu-ui add alert
   </Tab>
   <Tab value="Code">
     ```tsx
-    <div className="flex flex-col gap-4">
-                {/* Info Alert */}
+   
                 <Alert variant="info">
                     <Alert.Icon variant="info">
                         <Info className="w-5 h-5" />
@@ -85,15 +84,6 @@ npx vayu-ui add alert
                     </Alert>
                 )}
 
-                {(!showSuccess || !showError) && (
-                    <button
-                        onClick={() => { setShowSuccess(true); setShowError(true); }}
-                        className="mt-2 font-secondary text-para text-ground-500 hover:text-ground-900 dark:hover:text-ground-100 hover:underline transition-colors"
-                    >
-                        Reset Alerts
-                    </button>
-                )}
-            </div>
     ```
   </Tab>
 </Tabs>

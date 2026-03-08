@@ -26,6 +26,8 @@ export interface ComponentProp {
     default?: string;
     /** One-line description of what it controls */
     description: string;
+    /** Which sub-component(s) this prop applies to (for compound components) */
+    component?: string;
     /** Mark props that still exist but should no longer be used */
     deprecated?: {
         since: SemVer;
@@ -102,6 +104,8 @@ export interface ComponentA11y {
     focusManagement?: string;
     /** Live region behaviour if any */
     liveRegion?: string;
+    /** Additional notes or guidance */
+    notes?: string[];
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -135,7 +139,7 @@ export interface ComponentComposition {
 // 8. DO-NOT RULE
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type DoNotCategory = 'api' | 'a11y' | 'styling' | 'nesting' | 'perf' | 'ux';
+export type DoNotCategory = 'setup' | 'api' | 'a11y' | 'styling' | 'nesting' | 'perf' | 'ux';
 
 export interface DoNotRule {
     rule: string;
@@ -201,7 +205,7 @@ export interface RegistryItem {
     /** hook or component */
     type: ItemType;
     /** Grouping for list/filter */
-    category: 'action' | 'input' | 'layout' | 'overlay' | 'display' | 'navigation' | 'feedback' | 'utility';
+    category: 'animation' | 'action' | 'input' | 'layout' | 'overlay' | 'display' | 'navigation' | 'feedback' | 'utility';
     /** One sentence — what it is and primary use case */
     description: string;
     /** Version this item was introduced */
