@@ -1,13 +1,7 @@
 "use client";
+import { useState } from "react";
+import { Affix } from "vayu-ui"; 
 
-import React, { useState } from "react";
-import { Affix } from "vayu-ui"; // Adjust this import path to where you saved the Affix component
-
-// ============================================================================
-// Mock Data / Helpers
-// ============================================================================
-
-// Simple placeholder block to fill up space and allow scrolling
 const ScrollPlaceHolder = ({ 
   height = 400, 
   color = "bg-gray-100 dark:bg-gray-700" 
@@ -39,22 +33,8 @@ export default function AffixDemo() {
   const [isBottomAffixed, setIsBottomAffixed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 pb-20 transition-colors">
-      {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 backdrop-blur-sm bg-opacity-80">
-        <div className="max-w-4xl mx-auto p-6">
-          <h1 className="text-3xl font-bold">Affix Component Demo</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">
-            Scroll down to see the components stick.
-          </p>
-        </div>
-      </header>
-
+    <div className="min-h-screen text-gray-800 dark:text-gray-100 pb-20 transition-colors">
       <main className="max-w-4xl mx-auto p-6 space-y-12">
-        
-        {/* ============================================================ */}
-        {/* 1. Basic Top Affix with Offset */}
-        {/* ============================================================ */}
         <section>
           <h2 className="text-xl font-semibold mb-2">1. Top Affix (with Offset)</h2>
           <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
@@ -130,7 +110,7 @@ export default function AffixDemo() {
 
           <div
             ref={(node) => setScrollContainer(node)}
-            className="h-[400px] overflow-auto border-2 border-gray-300 dark:border-gray-600 rounded-lg relative bg-gray-100 dark:bg-gray-700"
+            className="h-100 overflow-auto border-2 border-gray-300 dark:border-gray-600 rounded-lg relative bg-gray-100 dark:bg-gray-700"
           >
             <div className="p-4">
               <div className="text-center text-gray-500 dark:text-gray-400 mb-4">

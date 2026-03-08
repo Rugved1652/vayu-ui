@@ -1,5 +1,5 @@
 import React, { HTMLAttributes, ButtonHTMLAttributes, forwardRef } from "react";
-import { cn } from "./utils";
+import { cn } from "./utils"; // Assuming cn is clsx + tailwind-merge
 
 // ============================================================================
 // Types & Interfaces
@@ -205,8 +205,10 @@ const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
             onClick={onClick}
             className={cn(
                 "absolute top-4 right-4 rounded p-1 transition-colors",
-                "hover:bg-ground-200 dark:hover:bg-ground-800",
-                "focus-visible:outline-none focus-visible:ring-2 ring-offset-2",
+                "hover:bg-black/10 dark:hover:bg-white/10", // Better contrast for hover
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                // Dynamic ring offset color to match background seamlessly
+                "ring-offset-info-100 dark:ring-offset-info-950",
                 variantIconStyles[variant],
                 variantFocusStyles[variant],
                 className
@@ -232,7 +234,8 @@ const AlertContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     return (
         <div
             ref={ref}
-            className={cn("flex-1 pr-6", className)}
+            // FIX: Increased padding from pr-6 to pr-10 to prevent overlap with dismiss button
+            className={cn("flex-1 pr-10", className)}
             {...props}
         >
             {children}

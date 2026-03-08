@@ -1,21 +1,10 @@
 import { accordionRegistry } from "./Components/accordion.registry";
+import { affixRegistry } from "./Components/affix.registry";
 import type { RegistryItem } from "./index";
 
 export const components: RegistryItem[] = [
 accordionRegistry,
-  {
-    name: "Affix",
-    slug: "affix",
-    type: "component",
-    category: "layout",
-    since: "1.0.0",
-    description: "Component from Vayu UI",
-    targetPath: "src/components/ui",
-    fileName: "affix.tsx",
-    dependencies: ["clsx"],
-    registryDependencies: [],
-    tags: ["component"],
-  },
+affixRegistry,
   {
     name: "Alert",
     slug: "alert",
