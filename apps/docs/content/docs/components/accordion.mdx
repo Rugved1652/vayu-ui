@@ -6,6 +6,16 @@ description: A vertically stacked set of interactive headings that each reveal a
 import AccordionDemo from '@/components/demos/accordion-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add accordion
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -16,37 +26,95 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
-    import Accordion from "@/components/ui/accordion";
-
-    export default function AccordionDemo() {
-      return (
-        <div className="w-full max-w-md">
-          <Accordion>
-            <Accordion.Item itemId="item-1">
-              <Accordion.Header itemId="item-1">Is it accessible?</Accordion.Header>
-              <Accordion.Body itemId="item-1">
-                Yes. It adheres to the WAI-ARIA design pattern.
-              </Accordion.Body>
-            </Accordion.Item>
-            <Accordion.Item itemId="item-2">
-              <Accordion.Header itemId="item-2">Is it styled?</Accordion.Header>
-              <Accordion.Body itemId="item-2">
-                Yes. It comes with default styles that matches the other components' aesthetic.
-              </Accordion.Body>
-            </Accordion.Item>
-            <Accordion.Item itemId="item-3">
-              <Accordion.Header itemId="item-3">Is it animated?</Accordion.Header>
-              <Accordion.Body itemId="item-3">
-                Yes. It's animated by default, but you can disable it if you prefer.
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
+          <div className="w-full max-w-md not-prose">
+            <h2 id="single-accordion-label" className="text-xl font-semibold mb-4">Accordion Example</h2>
+            <Accordion aria-labelledby="single-accordion-label">
+                <Accordion.Item itemId="item-1">
+                    <Accordion.Header itemId="item-1">
+                        Is it accessible?
+                    </Accordion.Header>
+                    <Accordion.Body itemId="item-1">
+                        <p>Yes. It adheres to the WAI-ARIA design pattern and WCAG 2.2 AA standards.</p>
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item itemId="item-2">
+                    <Accordion.Header itemId="item-2">
+                        Is it styled?
+                    </Accordion.Header>
+                    <Accordion.Body itemId="item-2">
+                        <p>Yes. It comes with default styles that matches the other
+                        components&apos; aesthetic.</p>
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item itemId="item-3">
+                    <Accordion.Header itemId="item-3">
+                        Is it animated?
+                    </Accordion.Header>
+                    <Accordion.Body itemId="item-3">
+                        <p>Yes. It&apos;s animated by default, but you can disable it if you
+                        prefer. Animations respect prefers-reduced-motion preferences.</p>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+            <div className="my-8 border-t border-ground-200 dark:border-ground-800"></div>
+            <h2 id="multi-accordion-label" className="text-xl font-semibold mb-4">Multiple Items Can Be Open</h2>
+            <Accordion allowMultiple aria-labelledby="multi-accordion-label">
+                <Accordion.Item itemId="multi-item-1">
+                    <Accordion.Header itemId="multi-item-1">
+                        Is it accessible?
+                    </Accordion.Header>
+                    <Accordion.Body itemId="multi-item-1">
+                        <p>Yes. It adheres to the WAI-ARIA design pattern and WCAG 2.2 AA standards.</p>
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item itemId="multi-item-2">
+                    <Accordion.Header itemId="multi-item-2">
+                        Is it styled?
+                    </Accordion.Header>
+                    <Accordion.Body itemId="multi-item-2">
+                        <p>Yes. It comes with default styles that matches the other
+                        components&apos; aesthetic.</p>
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item itemId="multi-item-3">
+                    <Accordion.Header itemId="multi-item-3">
+                        Is it animated?
+                    </Accordion.Header>
+                    <Accordion.Body itemId="multi-item-3">
+                        <p>Yes. It&apos;s animated by default, but you can disable it if you
+                        prefer. Animations respect prefers-reduced-motion preferences.</p>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
         </div>
-      );
-    }
     ```
   </Tab>
 </Tabs>
+
+## Anatomy
+
+```tsx
+<Accordion>
+  <Accordion.Item itemId="item-1">
+    <Accordion.Header itemId="item-1">
+      {/* Header content */}
+    </Accordion.Header>
+    <Accordion.Body itemId="item-1">
+      {/* Panel content */}
+    </Accordion.Body>
+  </Accordion.Item>
+</Accordion>
+```
+
+## Accessibility
+
+- Full keyboard navigation support (Arrow Up/Down, Home, End keys)
+- Proper ARIA roles and attributes (`aria-expanded`, `aria-controls`, `aria-labelledby`, `aria-hidden`)
+- WAI-ARIA accordion pattern compliance
+- Visible focus indicators using system focus-visible ring
+- Screen reader compatible with proper region and heading semantics
+- Focus is automatically restored to the header when a panel closes while focused
+- `inert` attribute applied to closed panels to prevent unintended focus
 
 ## Props
 

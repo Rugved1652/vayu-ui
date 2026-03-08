@@ -2,6 +2,7 @@
     "title": "Documentation",
     "pages": [
         "index",
+        "design-system",
         "components",
         "hooks",
         "mcp-support",

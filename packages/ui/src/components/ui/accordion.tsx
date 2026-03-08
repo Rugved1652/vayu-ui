@@ -240,7 +240,7 @@ const AccordionHeader: React.FC<AccordionHeaderProps> = ({
     };
 
     return (
-        <h3>
+        <h3 className="rounded-xl">
             <button
                 id={headerId}
                 type="button"
@@ -255,12 +255,12 @@ const AccordionHeader: React.FC<AccordionHeaderProps> = ({
                 }}
                 onKeyDown={handleKeyDown}
                 className={cn(
+                    "outline-none",
                     "w-full text-left px-5 py-4 flex items-center justify-between transition-all duration-200",
                     "font-secondary font-medium text-ground-900 dark:text-ground-100",
                     "hover:bg-ground-50 dark:hover:bg-ground-900",
-                    "focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 focus:ring-offset-2",
-                    "group-first:rounded-t-xl",
-                    !isOpen && "group-last:rounded-b-xl",
+                    "focus:outline-none focus:ring-2 first:focus:rounded-t-xl focus:ring-inset focus:ring-primary-500",
+                    "rounded-xl",
                     isOpen ? "bg-ground-50 dark:bg-ground-900/50" : "",
                     className
                 )}
@@ -354,7 +354,6 @@ const AccordionBody: React.FC<AccordionBodyProps> = ({
             aria-hidden={!isOpen}
             style={{
                 height: rendered ? height : 0,
-                transition: "height 300ms cubic-bezier(0.87, 0, 0.13, 1)",
             }}
             className={cn(
                 "overflow-hidden will-change-[height]",
@@ -366,7 +365,7 @@ const AccordionBody: React.FC<AccordionBodyProps> = ({
             <div
                 ref={contentRef}
                 className={cn(
-                    "px-5 pb-5 pt-1",
+                    "px-5 pb-5 pt-1 my-2",
                     "font-secondary text-base leading-relaxed text-ground-600 dark:text-ground-400 bg-ground-50 dark:bg-ground-900/50",
                     className
                 )}

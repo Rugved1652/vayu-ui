@@ -2,7 +2,7 @@ import { accordionRegistry } from "./Components/accordion.registry";
 import type { RegistryItem } from "./index";
 
 export const components: RegistryItem[] = [
-accordionRegistry
+accordionRegistry,
   {
     name: "Affix",
     slug: "affix",

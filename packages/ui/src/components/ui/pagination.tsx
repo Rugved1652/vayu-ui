@@ -15,7 +15,8 @@ import React, {
     useMemo,
 } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "../../lib/utils";
+import { cn } from "./utils";
+
 
 /**
  * Pagination Component - Compound Pattern with Accessibility

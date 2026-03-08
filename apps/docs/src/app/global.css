@@ -312,6 +312,53 @@
    Defined outside @theme — pure CSS, no Tailwind dependency.
    ============================================================ */
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes float-particle {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(20px);
+    opacity: 0;
+  }
+}
+
+@keyframes orbit {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes morph-blob {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  33% {
+    transform: scale(1.1) rotate(10deg);
+  }
+  66% {
+    transform: scale(0.8) rotate(20deg);
+  }
+}
+
 @keyframes fade-in {
   0%   { opacity: 0; }
   100% { opacity: 1; }
@@ -426,6 +473,14 @@
 
 .animate-fade-in          { animation: fade-in         1s ease-out; }
 
+.animate-float           { animation: float           6s ease-in-out infinite; }
+
+.animate-float-particle  { animation: float-particle 15s linear infinite; }
+
+.animate-morph-blob   { animation: morph-blob 20s ease-in-out infinite; }
+
+.animate-orbit         { animation: orbit 20s linear infinite; }
+
 .animate-slide-in-left    { animation: slide-in-left   1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
 .animate-slide-in-right   { animation: slide-in-right  1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
 .animate-slide-in-up      { animation: slide-in-up     1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
@@ -477,6 +532,10 @@
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in,
+  .animate-float,
+  .animate-float-particle,
+  .animate-morph-blob,
+  .animate-orbit,
   .animate-slide-in-left,
   .animate-slide-in-right,
   .animate-slide-in-up,
