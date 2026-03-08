@@ -6,6 +6,16 @@ description: Pins content to the viewport when scrolling past it. Supports top/b
 import AffixDemo from '@/components/demos/affix-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add affix
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -16,41 +26,96 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Affix } from "vayu-ui";
+     const [topAffixed, setTopAffixed] = useState(false);
+    const [bottomAffixed, setBottomAffixed] = useState(false);
 
-    export default function Example() {
-      return (
-        <div className="w-full max-w-md">
-          {/* Top affix */}
-          <Affix offset={64} label="Sticky navigation">
-            <nav className="bg-white dark:bg-ground-900 p-4 shadow-outer rounded">
-              Sticky navigation
-            </nav>
-          </Affix>
+    return (
+        <div className="not-prose flex flex-col gap-6 w-full max-w-lg">
+            <h2 id="affix-demo-label" className="text-h3 font-primary text-ground-800 dark:text-ground-100">
+                Affix Example
+            </h2>
 
-          {/* Bottom affix */}
-          <Affix offset={16} position="bottom" label="Sticky footer">
-            <div className="bg-ground-100 dark:bg-ground-800 p-4 shadow-outer rounded">
-              Sticky footer
+            <p className="text-para font-secondary text-ground-500 dark:text-ground-400">
+                Scroll this page to see the affix in action. The bars below
+                will stick to the top or bottom of the viewport once you scroll past
+                them.
+            </p>
+
+            {/* Top Affix */}
+            <Affix
+                offset={64}
+                onAffixed={setTopAffixed}
+                label="Sticky navigation bar"
+            >
+                <div
+                    className={`
+                        flex items-center justify-between px-4 py-3 rounded
+                        font-secondary text-sm transition-colors duration-medium
+                        ${topAffixed
+                            ? "bg-primary-600 text-white dark:bg-primary-500"
+                            : "bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200"
+                        }
+                    `}
+                >
+                    <span className="font-semibold">
+                        {topAffixed ? "Affixed to top" : "Scroll down to affix me"}
+                    </span>
+                    <span className="text-xs opacity-75">
+                        offset: 64px · position: top
+                    </span>
+                </div>
+            </Affix>
+
+            {/* Content blocks for scrolling */}
+            <div className="space-y-4">
+                {Array.from({ length: 8 }, (_, i) => (
+                    <div
+                        key={i}
+                        className="h-24 rounded bg-ground-50 dark:bg-ground-900 border border-ground-200 dark:border-ground-700 flex items-center justify-center text-sm font-secondary text-ground-400"
+                    >
+                        Content block {i + 1}
+                    </div>
+                ))}
             </div>
-          </Affix>
+
+            {/* Bottom Affix */}
+            <Affix
+                offset={16}
+                position="bottom"
+                onAffixed={setBottomAffixed}
+                label="Sticky footer bar"
+            >
+                <div
+                    className={`
+                        flex items-center justify-between px-4 py-3 rounded
+                        font-secondary text-sm transition-colors duration-medium
+                        ${bottomAffixed
+                            ? "bg-info-600 text-white dark:bg-info-500"
+                            : "bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200"
+                        }
+                    `}
+                >
+                    <span className="font-semibold">
+                        {bottomAffixed ? "Affixed to bottom" : "Scroll up to affix me"}
+                    </span>
+                    <span className="text-xs opacity-75">
+                        offset: 16px · position: bottom
+                    </span>
+                </div>
+            </Affix>
         </div>
-      );
-    }
+    );
     ```
   </Tab>
 </Tabs>
 
-## Features
+## Anatomy
 
-- **Top / bottom pinning** — stick content to either edge of the viewport
-- **Configurable offset** — distance from the viewport edge before affixing
-- **Custom scroll container** — pass any scrollable `HTMLElement` via `target`
-- **Layout preservation** — placeholder `div` prevents content jump
-- **Affixed callback** — `onAffixed(boolean)` fires on state change
-- **Data attribute** — `data-affixed` for CSS targeting
-- **Shadow on affix** — smooth `shadow-outer` transition when pinned
-- **Passive listeners** — scroll & resize use `{ passive: true }`
+```tsx
+<Affix offset={64} position="top" label="Sticky navigation">
+  {/* Content to be affixed */}
+</Affix>
+```
 
 ## Props
 
@@ -84,6 +149,7 @@ import React, {
     HTMLAttributes,
     useCallback,
     useEffect,
+    useLayoutEffect,
     useRef,
     useState,
 } from "react";
@@ -103,12 +169,28 @@ interface AffixProps extends HTMLAttributes<HTMLDivElement> {
     target?: HTMLElement | null;
     /** Z-index when affixed. */
     zIndex?: number;
-    /** Accessible label for the affix region when affixed. */
-    label?: string;
     /** Callback fired when affixed state changes. */
     onAffixed?: (affixed: boolean) => void;
     children: React.ReactNode;
 }
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+const mergeRefs = <T extends HTMLElement>(
+    ...refs: React.Ref<T>[]
+): React.RefCallback<T> => {
+    return (node) => {
+        refs.forEach((ref) => {
+            if (typeof ref === "function") {
+                ref(node);
+            } else if (ref) {
+                (ref as React.MutableRefObject<T | null>).current = node;
+            }
+        });
+    };
+};
 
 // ============================================================================
 // Affix
@@ -121,12 +203,11 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
             position = "top",
             target = null,
             zIndex = 100,
-            label = "Fixed content",
             onAffixed,
             className,
             style,
             children,
-            ...props
+            ...props // Role, aria-label, etc. are passed here by the consumer
         },
         ref
     ) => {
@@ -136,19 +217,15 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
 
         const innerRef = useRef<HTMLDivElement>(null);
         const placeholderRef = useRef<HTMLDivElement>(null);
+        const prevAffixedRef = useRef(false);
 
-        // Generate a unique ID for accessibility
-        const affixId = useRef<string>(
-            `affix-${Math.random().toString(36).slice(2, 9)}`
-        );
-
-        // Sync affixed state with callback
         const updateAffixed = useCallback(
             (next: boolean) => {
-                setIsAffixed((prev) => {
-                    if (prev !== next) onAffixed?.(next);
-                    return next;
-                });
+                if (prevAffixedRef.current !== next) {
+                    onAffixed?.(next);
+                    prevAffixedRef.current = next;
+                }
+                setIsAffixed(next);
             },
             [onAffixed]
         );
@@ -158,75 +235,109 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
             const placeholder = placeholderRef.current;
             if (!el || !placeholder) return;
 
-            const scrollContainer = target || window;
-            const scrollTop =
-                target instanceof HTMLElement
-                    ? target.scrollTop
-                    : window.scrollY;
-            const containerTop =
-                target instanceof HTMLElement
-                    ? target.getBoundingClientRect().top
-                    : 0;
-            const containerBottom =
-                target instanceof HTMLElement
-                    ? target.getBoundingClientRect().bottom
-                    : window.innerHeight;
-
-            const rect = placeholder.getBoundingClientRect();
             const elHeight = el.offsetHeight;
+            const rect = placeholder.getBoundingClientRect();
+            const isContainerMode = target instanceof HTMLElement;
 
-            if (position === "top") {
-                // Affix when the placeholder scrolls above (offset + containerTop)
-                const shouldAffix = rect.top - containerTop <= offset;
+            // --- Mode 1: Custom Container (Absolute Positioning) ---
+            if (isContainerMode) {
+                const containerRect = target.getBoundingClientRect();
+                const scrollTop = target.scrollTop;
 
-                if (shouldAffix) {
-                    setPlaceholderHeight(elHeight);
-                    setAffixStyle({
-                        position: "fixed",
-                        top: containerTop + offset,
-                        left: rect.left,
-                        width: rect.width,
-                        zIndex,
-                    });
-                    updateAffixed(true);
+                if (position === "top") {
+                    const shouldAffix = rect.top - containerRect.top <= offset;
+
+                    if (shouldAffix) {
+                        setPlaceholderHeight(elHeight);
+                        setAffixStyle({
+                            position: "absolute",
+                            top: scrollTop + offset,
+                            left: rect.left - containerRect.left,
+                            width: rect.width,
+                            zIndex,
+                        });
+                        updateAffixed(true);
+                    } else {
+                        setPlaceholderHeight(0);
+                        setAffixStyle({});
+                        updateAffixed(false);
+                    }
                 } else {
-                    setPlaceholderHeight(0);
-                    setAffixStyle({});
-                    updateAffixed(false);
+                    // position === "bottom"
+                    const shouldAffix = rect.bottom - containerRect.bottom >= -offset;
+
+                    if (shouldAffix) {
+                        setPlaceholderHeight(elHeight);
+                        const containerVisibleBottom = target.clientHeight;
+                        
+                        setAffixStyle({
+                            position: "absolute",
+                            top: scrollTop + (containerVisibleBottom - elHeight) - offset,
+                            left: rect.left - containerRect.left,
+                            width: rect.width,
+                            zIndex,
+                        });
+                        updateAffixed(true);
+                    } else {
+                        setPlaceholderHeight(0);
+                        setAffixStyle({});
+                        updateAffixed(false);
+                    }
                 }
-            } else {
-                // position === "bottom"
-                const shouldAffix =
-                    rect.bottom - containerBottom >= -offset;
+            } 
+            // --- Mode 2: Window (Fixed Positioning) ---
+            else {
+                const containerTop = 0;
+                const containerBottom = window.innerHeight;
 
-                if (shouldAffix) {
-                    setPlaceholderHeight(elHeight);
-                    setAffixStyle({
-                        position: "fixed",
-                        bottom: window.innerHeight - containerBottom + offset,
-                        left: rect.left,
-                        width: rect.width,
-                        zIndex,
-                    });
-                    updateAffixed(true);
+                if (position === "top") {
+                    const shouldAffix = rect.top - containerTop <= offset;
+
+                    if (shouldAffix) {
+                        setPlaceholderHeight(elHeight);
+                        setAffixStyle({
+                            position: "fixed",
+                            top: containerTop + offset,
+                            left: rect.left,
+                            width: rect.width,
+                            zIndex,
+                        });
+                        updateAffixed(true);
+                    } else {
+                        setPlaceholderHeight(0);
+                        setAffixStyle({});
+                        updateAffixed(false);
+                    }
                 } else {
-                    setPlaceholderHeight(0);
-                    setAffixStyle({});
-                    updateAffixed(false);
+                    const shouldAffix = rect.bottom - containerBottom >= -offset;
+
+                    if (shouldAffix) {
+                        setPlaceholderHeight(elHeight);
+                        setAffixStyle({
+                            position: "fixed",
+                            bottom: offset,
+                            left: rect.left,
+                            width: rect.width,
+                            zIndex,
+                        });
+                        updateAffixed(true);
+                    } else {
+                        setPlaceholderHeight(0);
+                        setAffixStyle({});
+                        updateAffixed(false);
+                    }
                 }
             }
         }, [offset, position, target, zIndex, updateAffixed]);
 
-        // Attach scroll + resize listeners
+        useLayoutEffect(() => {
+            measure();
+        }, [measure]);
+
         useEffect(() => {
             const scrollTarget = target || window;
 
-            // Initial measurement
-            measure();
-
-            scrollTarget.addEventListener("scroll", measure, {
-                passive: true,
-            });
+            scrollTarget.addEventListener("scroll", measure, { passive: true });
             window.addEventListener("resize", measure, { passive: true });
 
             return () => {
@@ -237,18 +348,14 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
 
         return (
             <>
-                {/* Placeholder keeps layout space when element is affixed */}
                 <div
                     ref={placeholderRef}
                     aria-hidden="true"
-                    style={{
-                        height: isAffixed ? placeholderHeight : undefined,
-                    }}
+                    style={{ height: isAffixed ? placeholderHeight : undefined }}
                 />
 
                 <div
-                    ref={ref ?? innerRef}
-                    id={affixId.current}
+                    ref={mergeRefs(ref, innerRef)}
                     className={clsx(
                         "transition-shadow duration-medium",
                         isAffixed && "shadow-outer",
@@ -256,10 +363,7 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
                     )}
                     style={{ ...affixStyle, ...style }}
                     data-affixed={isAffixed || undefined}
-                    role="region"
-                    aria-label={isAffixed ? label : undefined}
-                    aria-live="polite"
-                    {...props}
+                    {...props} // Accessibility attributes are now passed in here
                 >
                     {children}
                 </div>
@@ -269,10 +373,6 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
 );
 
 Affix.displayName = "Affix";
-
-// ============================================================================
-// Exports
-// ============================================================================
 
 export { Affix };
 export type { AffixPosition, AffixProps };
