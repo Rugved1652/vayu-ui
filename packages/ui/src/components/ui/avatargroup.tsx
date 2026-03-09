@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar } from "./avatar";
+import { Avatar, AvatarSize } from "./avatar";
 import { cn } from "./utils";
 import {
     CSSProperties,
@@ -13,8 +13,9 @@ import {
 // Types
 // ============================================================================
 
-export type AvatarGroupSize = "sm" | "md" | "lg" | "xl";
+export type AvatarGroupSize = "small" | "medium" | "large" | "xlarge";
 export type AvatarGroupLayout = "stack" | "grid";
+export type AvatarStatus = "online" | "offline" | "away" | "busy";
 
 export interface UserData {
     id?: string | number | null;
@@ -22,6 +23,8 @@ export interface UserData {
     username?: string;
     alt?: string;
     fallback?: string;
+    status?: AvatarStatus;
+    /** @deprecated Use `status` instead */
     isOnline?: boolean;
 }
 
@@ -43,7 +46,7 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
     (
         {
             users = [],
-            size = "md",
+            size = "medium",
             maxDisplay = 5,
             layout = "stack",
             spacing = "normal",
@@ -120,7 +123,7 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                         onClick={() => onAvatarClick?.(user, index)}
                     >
                         <Avatar
-                            size={size as any}
+                            size={size as AvatarSize}
                             username={user.username}
                             className="pointer-events-none"
                         >
@@ -129,8 +132,8 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                             ) : (
                                 <Avatar.Initials username={user.username || user.fallback || "?"} />
                             )}
-                            {user.isOnline !== undefined && (
-                                <Avatar.Status status={user.isOnline ? "online" : "offline"} />
+                            {(user.status || user.isOnline !== undefined) && (
+                                <Avatar.Status status={user.status || (user.isOnline ? "online" : "offline")} />
                             )}
                         </Avatar>
                     </div>
@@ -144,10 +147,10 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                             layout === "stack" && "hover:z-10",
                             onOverflowClick && "cursor-pointer hover:bg-ground-300 dark:hover:bg-ground-700",
                             // Sizes matching Avatar
-                            size === "sm" && "w-8 h-8",
-                            size === "md" && "w-10 h-10",
-                            size === "lg" && "w-12 h-12",
-                            size === "xl" && "w-14 h-14"
+                            size === "small" && "w-8 h-8",
+                            size === "medium" && "w-10 h-10",
+                            size === "large" && "w-12 h-12",
+                            size === "xlarge" && "w-14 h-14"
                         )}
                         style={{
                             marginLeft: layout === "stack" ? spacingValue : 0,

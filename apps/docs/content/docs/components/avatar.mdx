@@ -78,7 +78,6 @@ npx vayu-ui add avatar
 | **Avatar.Initials** | Auto-generated initials with deterministic color based on username |
 | **Avatar.Fallback** | Default image shown when primary image fails                       |
 | **Avatar.Status**   | Status indicator badge (online, offline, away, busy)               |
-| **Avatar.Group**    | Container for stacking multiple avatars with overflow              |
 
 ## Props
 
@@ -129,14 +128,6 @@ npx vayu-ui add avatar
 | `label`     | `string`                                    | -       | Accessible label for the status (overrides default). |
 | `className` | `string`                                    | -       | Additional CSS classes.                              |
 
-### Avatar.Group
-
-| Prop        | Type        | Default | Description                                                         |
-| :---------- | :---------- | :------ | :------------------------------------------------------------------ |
-| `max`       | `number`    | `5`     | Maximum number of avatars to display before showing overflow count. |
-| `children`  | `ReactNode` | -       | Avatar components to render in the group.                           |
-| `className` | `string`    | -       | Additional CSS classes.                                             |
-
 ### Sizes
 
 | Size     | Dimensions | Font Size   | Use Case                         |
@@ -173,7 +164,6 @@ The Avatar component follows WCAG 2.2 Level AA guidelines:
 | Avatar (static)      | `img`    | `aria-label="{username}'s avatar"`                      |
 | Avatar (interactive) | `button` | `aria-label="{username}'s avatar"`, `tabIndex={0}`      |
 | Avatar.Status        | `status` | `aria-label="{status}"`, `aria-live="polite"`           |
-| Avatar.Group         | `group`  | `aria-label="{count} users"`, `aria-live="polite"`      |
 | Loading spinner      | `status` | `aria-busy="true"`, `aria-label="Loading avatar image"` |
 
 ### Color Contrast
@@ -199,7 +189,6 @@ The Avatar component follows WCAG 2.2 Level AA guidelines:
 1. **Always provide `username`**: Enables automatic alt text generation and initials
 2. **Use `aria-label` for meaningful content**: When avatar represents specific user context
 3. **Interactive avatars**: Ensure `onClick` handler is provided for keyboard accessibility
-4. **Group overflow**: Screen readers announce total count and overflow count
 
 ## Source Code
 

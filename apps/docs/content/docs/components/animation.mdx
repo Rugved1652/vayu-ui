@@ -201,8 +201,8 @@ All animation components accept the following props:
 | `iteration` | `1` \| `2` \| `3` \| `"infinite"` | `1` | Number of times to repeat |
 | `fillMode` | `"none"` \| `"forwards"` \| `"backwards"` \| `"both"` | `"none"` | Animation fill mode |
 | `className` | `string` | - | Additional CSS classes |
-| `onAnimationEnd` | `() => void` | - | Callback when animation completes |
-| `onAnimationStart` | `() => void` | - | Callback when animation starts |
+| `onAnimationEnd` | `AnimationEventHandler<HTMLDivElement>` | - | Callback when animation completes |
+| `onAnimationStart` | `AnimationEventHandler<HTMLDivElement>` | - | Callback when animation starts |
 
 ### Directional Props
 
@@ -258,7 +258,7 @@ All animation components accept the following props:
 ```tsx title="packages/ui/src/components/ui/animation.tsx"
 "use client";
 
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import {
     CSSProperties,
     forwardRef,
@@ -418,10 +418,10 @@ const buildAnimationClasses = (
     // WCAG Fix: If user prefers reduced motion, we skip the animation classes.
     // We ensure the element is visible (opacity-100) instead of animating in.
     if (reduceMotion) {
-        return clsx("opacity-100", className);
+        return cn("opacity-100", className);
     }
 
-    return clsx(
+    return cn(
         baseAnimation,
         durationMap[duration],
         delayMap[delay],
@@ -443,7 +443,7 @@ const AnimationRoot = forwardRef<HTMLDivElement, AnimationRootProps>(
     ({ children, className, ...props }, ref) => {
         return (
             // Fix: Removed 'contents' to allow proper styling and ref behavior
-            <div ref={ref} className={clsx("", className)} {...props}>
+            <div ref={ref} className={cn("", className)} {...props}>
                 {children}
             </div>
         );

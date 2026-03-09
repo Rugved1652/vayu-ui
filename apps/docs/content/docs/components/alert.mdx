@@ -26,7 +26,11 @@ npx vayu-ui add alert
   </Tab>
   <Tab value="Code">
     ```tsx
-   
+import { Alert } from "vayu-ui";
+import { Info, CheckCircle, TriangleAlert, XCircle } from "lucide-react";
+
+// ...
+
                 <Alert variant="info">
                     <Alert.Icon variant="info">
                         <Info className="w-5 h-5" />
@@ -100,9 +104,12 @@ The Alert component supports four semantic variants:
 ## Anatomy
 
 ```tsx
+import { Alert } from "vayu-ui";
+import { Info } from "lucide-react"; // or your preferred icon library
+
 <Alert variant="info">
   <Alert.Icon variant="info">
-    {/* Icon component */}
+    <Info className="w-5 h-5" />
   </Alert.Icon>
   <Alert.Content>
     <Alert.Title>Title</Alert.Title>

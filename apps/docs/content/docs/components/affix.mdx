@@ -29,7 +29,8 @@ npx vayu-ui add affix
             <Affix
                 offset={64}
                 onAffixed={setTopAffixed}
-                label="Sticky navigation bar"
+                role="navigation"
+                aria-label="Sticky navigation bar"
             >
                 <div
                     className={`
@@ -54,7 +55,8 @@ npx vayu-ui add affix
                 offset={16}
                 position="bottom"
                 onAffixed={setBottomAffixed}
-                label="Sticky footer bar"
+                role="region"
+                aria-label="Sticky footer bar"
             >
                 <div
                     className={`
@@ -82,7 +84,7 @@ npx vayu-ui add affix
 ## Anatomy
 
 ```tsx
-<Affix offset={64} position="top" label="Sticky navigation">
+<Affix offset={64} position="top" role="navigation" aria-label="Sticky navigation">
   {/* Content to be affixed */}
 </Affix>
 ```
@@ -95,25 +97,25 @@ npx vayu-ui add affix
 | `position` | `"top" \| "bottom"`          | `"top"`     | Which edge to affix to                        |
 | `target`   | `HTMLElement \| null`        | `window`    | Custom scroll container                       |
 | `zIndex`   | `number`                     | `100`       | Z-index when affixed                          |
-| `label`    | `string`                     | `"Fixed content"` | Accessible label when affixed           |
 | `onAffixed`| `(affixed: boolean) => void` | —           | Called when affixed state changes             |
 | `className`| `string`                     | —           | Additional class names                        |
 | `style`    | `CSSProperties`              | —           | Inline styles (merged with affix styles)      |
 
+Accepts all standard HTML div attributes (e.g., `role`, `aria-label`, `id`).
+
 ## Accessibility
 
-- **Region role** — Uses `role="region"` to create a landmark when content is affixed
-- **Accessible label** — `label` prop provides context for screen readers
-- **Live region** — `aria-live="polite"` announces state changes without interrupting
-- **Data attribute** — `data-affixed` allows for CSS-based styling hooks
+- **ARIA support** — Pass `role` and `aria-label` props directly for screen reader context
+- **Data attribute** — `data-affixed` attribute is set when content is affixed (useful for CSS hooks)
 - **Semantic HTML** — Uses `<div>` as a neutral container; wrap children semantically
+- **Placeholder** — Uses `aria-hidden="true"` on the placeholder element to hide it from screen readers
 
 ## Source Code
 
 ```tsx title="src/components/ui/affix.tsx"
 "use client";
 
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import React, {
     forwardRef,
     HTMLAttributes,
@@ -344,7 +346,7 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
 
                 <div
                     ref={mergeRefs(ref, innerRef)}
-                    className={clsx(
+                    className={cn(
                         "transition-shadow duration-medium",
                         isAffixed && "shadow-outer",
                         className

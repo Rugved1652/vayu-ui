@@ -1,6 +1,5 @@
 "use client";
 
-import { clsx } from "clsx";
 import {
     CSSProperties,
     forwardRef,
@@ -10,6 +9,7 @@ import {
     useState,
 } from "react";
 import "./animation.css";
+import { cn } from "./utils";
 
 // ============================================================================
 // Types
@@ -160,10 +160,10 @@ const buildAnimationClasses = (
     // WCAG Fix: If user prefers reduced motion, we skip the animation classes.
     // We ensure the element is visible (opacity-100) instead of animating in.
     if (reduceMotion) {
-        return clsx("opacity-100", className);
+        return cn("opacity-100", className);
     }
 
-    return clsx(
+    return cn(
         baseAnimation,
         durationMap[duration],
         delayMap[delay],
@@ -185,7 +185,7 @@ const AnimationRoot = forwardRef<HTMLDivElement, AnimationRootProps>(
     ({ children, className, ...props }, ref) => {
         return (
             // Fix: Removed 'contents' to allow proper styling and ref behavior
-            <div ref={ref} className={clsx("", className)} {...props}>
+            <div ref={ref} className={cn("", className)} {...props}>
                 {children}
             </div>
         );
