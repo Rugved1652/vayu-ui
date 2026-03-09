@@ -1,1608 +1,354 @@
 "use client";
 
-import { clsx } from "clsx";
-import {
-    Download,
-    Heart,
-    ListMusic,
-    MoreHorizontal,
-    Pause,
-    Play,
-    Repeat,
-    Repeat1,
-    Share2,
-    Shuffle,
-    SkipBack,
-    SkipForward,
-    Volume2,
-    VolumeX,
-    X,
-} from "lucide-react";
 import React, {
-    AudioHTMLAttributes,
-    createContext,
-    forwardRef,
-    HTMLAttributes,
-    ReactNode,
-    useCallback,
-    useContext,
-    useEffect,
-    useId,
-    useImperativeHandle,
-    useMemo,
-    useRef,
-    useState,
+  createContext,
+  forwardRef,
+  HTMLAttributes,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 
 // ============================================================================
-// Types
+// 1. Types
 // ============================================================================
 
-type RepeatMode = "off" | "all" | "one";
-
-interface Track {
-    id: string;
-    src: string;
-    title: string;
-    artist?: string;
-    album?: string;
-    artwork?: string;
-    duration?: number;
+export interface Track {
+  id: string;
+  src: string;
+  title: string;
+  artist?: string;
+  album?: string;
+  artwork?: string;
 }
 
-interface AudioPlayerContextValue {
-    audioRef: React.RefObject<HTMLAudioElement | null>;
-    containerRef: React.RefObject<HTMLDivElement | null>;
+interface AudioPlayerState {
+  isPlaying: boolean;
+  isLoading: boolean;
+  currentTime: number;
+  duration: number;
+  buffered: number;
+  volume: number;
+  isMuted: boolean;
+  isSeeking: boolean;
+  currentTrack: Track | null;
+  playlist: Track[];
+  currentTrackIndex: number;
+}
 
-    isPlaying: boolean;
-    currentTime: number;
-    duration: number;
-    buffered: number;
-    isLoading: boolean;
-    hasEnded: boolean;
+interface AudioPlayerActions {
+  formatTime: (seconds: number) => string;
+  play: () => void;
+  pause: () => void;
+  togglePlay: () => void;
+  seek: (time: number) => void;
+  seekForward: (seconds?: number) => void;
+  seekBackward: (seconds?: number) => void;
+  setVolume: (vol: number) => void;
+  volumeUp: (step?: number) => void;
+  volumeDown: (step?: number) => void;
+  toggleMute: () => void;
+  playTrack: (index: number) => void;
+  nextTrack: () => void;
+  previousTrack: () => void;
+  setSeeking: (isSeeking: boolean) => void;
+}
 
-    volume: number;
-    isMuted: boolean;
-    previousVolume: number;
+type PropGetter = (props?: Record<string, any>) => Record<string, any>;
 
-    playbackRate: number;
-    repeatMode: RepeatMode;
-    isShuffled: boolean;
-
-    currentTrack: Track | null;
-    playlist: Track[];
-    currentTrackIndex: number;
-
-    showPlaylist: boolean;
-    isFavorite: boolean;
-
-    play: () => void;
-    pause: () => void;
-    togglePlay: () => void;
-    seek: (time: number) => void;
-    seekForward: (seconds?: number) => void;
-    seekBackward: (seconds?: number) => void;
-    setVolume: (vol: number) => void;
-    toggleMute: () => void;
-    setPlaybackRate: (rate: number) => void;
-    toggleRepeat: () => void;
-    toggleShuffle: () => void;
-    toggleFavorite: () => void;
-    download: () => void;
-
-    playTrack: (index: number) => void;
-    nextTrack: () => void;
-    previousTrack: () => void;
-    addToPlaylist: (track: Track) => void;
-    removeFromPlaylist: (index: number) => void;
-    clearPlaylist: () => void;
-    setShowPlaylist: (show: boolean) => void;
+interface AudioPlayerGetters {
+  getRootProps: PropGetter;
+  getPlayButtonProps: PropGetter;
+  getPrevButtonProps: PropGetter;
+  getNextButtonProps: PropGetter;
+  getProgressProps: PropGetter;
+  getVolumeProps: PropGetter;
 }
 
 // ============================================================================
-// Context
+// 2. Contexts
 // ============================================================================
 
-const AudioPlayerContext = createContext<AudioPlayerContextValue | undefined>(
-    undefined
-);
+const AudioPlayerStateContext = createContext<AudioPlayerState | undefined>(undefined);
+const AudioPlayerActionsContext = createContext<(AudioPlayerActions & AudioPlayerGetters) | undefined>(undefined);
 
-const useAudioPlayer = (): AudioPlayerContextValue => {
-    const ctx = useContext(AudioPlayerContext);
-    if (!ctx) {
-        throw new Error(
-            "AudioPlayer.* components must be rendered inside <AudioPlayer.Root>."
-        );
-    }
-    return ctx;
+// ============================================================================
+// 3. Hooks
+// ============================================================================
+
+export const useAudioPlayerState = () => {
+  const ctx = useContext(AudioPlayerStateContext);
+  if (!ctx) throw new Error("useAudioPlayerState must be used within AudioPlayer.Root");
+  return ctx;
+};
+
+export const useAudioPlayerActions = () => {
+  const ctx = useContext(AudioPlayerActionsContext);
+  if (!ctx) throw new Error("useAudioPlayerActions must be used within AudioPlayer.Root");
+  return ctx;
+};
+
+export const useAudioPlayer = () => {
+  const state = useAudioPlayerState();
+  const actions = useAudioPlayerActions();
+  return { ...state, ...actions };
 };
 
 // ============================================================================
-// Helpers (hoisted)
+// 4. Utilities
 // ============================================================================
 
-function formatTime(seconds: number): string {
-    if (isNaN(seconds) || !isFinite(seconds)) return "0:00";
-    const m = Math.floor(seconds / 60);
-    const s = Math.floor(seconds % 60);
-    return `${m}:${s.toString().padStart(2, "0")}`;
-}
-
-// ============================================================================
-// Hoisted configs
-// ============================================================================
-
-const PLAY_PAUSE_SIZE = {
-    sm: "w-8 h-8",
-    md: "w-10 h-10",
-    lg: "w-12 h-12",
-} as const;
-
-const PLAY_PAUSE_ICON_SIZE = {
-    sm: "w-4 h-4",
-    md: "w-5 h-5",
-    lg: "w-6 h-6",
-} as const;
-
-const ARTWORK_SIZE = {
-    sm: "w-12 h-12",
-    md: "w-20 h-20",
-    lg: "w-32 h-32",
-    xl: "w-48 h-48",
-} as const;
-
-const PLAYER_VARIANT = {
-    default: "rounded p-6",
-    minimal: "rounded p-4",
-    card: "rounded-xl shadow-outer p-6",
-} as const;
-
-const ICON_BTN =
-    "p-2 rounded-full transition-colors hover:bg-ground-100 dark:hover:bg-ground-800 focus:outline-none focus:ring-2 focus:ring-primary-500";
-
-const ICON_COLOR = "text-ground-700 dark:text-ground-300";
-
-// ============================================================================
-// Root
-// ============================================================================
-
-interface AudioPlayerRootProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "onPlay" | "onPause" | "onEnded" | "onTimeUpdate" | "onVolumeChange"> {
-    children: ReactNode;
-    track?: Track;
-    playlist?: Track[];
-    autoPlay?: boolean;
-    onPlay?: () => void;
-    onPause?: () => void;
-    onEnded?: () => void;
-    onTimeUpdate?: (time: number) => void;
-    onVolumeChange?: (volume: number) => void;
-    onTrackChange?: (track: Track) => void;
-    defaultVolume?: number;
-    defaultPlaybackRate?: number;
-    defaultRepeatMode?: RepeatMode;
-    enableMediaSession?: boolean;
-}
-
-const AudioPlayerRoot = forwardRef<
-    { audioElement: HTMLAudioElement | null },
-    AudioPlayerRootProps
->(
-    (
-        {
-            children,
-            className,
-            track,
-            playlist = [],
-            autoPlay = false,
-            onPlay,
-            onPause,
-            onEnded,
-            onTimeUpdate,
-            onVolumeChange,
-            onTrackChange,
-            defaultVolume = 1,
-            defaultPlaybackRate = 1,
-            defaultRepeatMode = "off",
-            enableMediaSession = true,
-            ...divProps
-        },
-        ref
-    ) => {
-        const audioRef = useRef<HTMLAudioElement>(null);
-        const containerRef = useRef<HTMLDivElement>(null);
-
-        // Playback
-        const [isPlaying, setIsPlaying] = useState(false);
-        const [currentTime, setCurrentTime] = useState(0);
-        const [duration, setDuration] = useState(0);
-        const [buffered, setBuffered] = useState(0);
-        const [isLoading, setIsLoading] = useState(false);
-        const [hasEnded, setHasEnded] = useState(false);
-
-        // Volume
-        const [volume, setVolumeState] = useState(defaultVolume);
-        const [isMuted, setIsMuted] = useState(false);
-        const [previousVolume, setPreviousVolume] = useState(defaultVolume);
-
-        // Playback controls
-        const [playbackRate, setPlaybackRateState] =
-            useState(defaultPlaybackRate);
-        const [repeatMode, setRepeatMode] =
-            useState<RepeatMode>(defaultRepeatMode);
-        const [isShuffled, setIsShuffled] = useState(false);
-
-        // Track / playlist
-        const [currentTrack, setCurrentTrack] = useState<Track | null>(
-            track ?? null
-        );
-        const [playlistState, setPlaylistState] = useState<Track[]>(
-            track ? [track, ...playlist] : playlist
-        );
-        const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-        const [originalPlaylistOrder, setOriginalPlaylistOrder] = useState<
-            Track[]
-        >([]);
-
-        // UI
-        const [showPlaylist, setShowPlaylist] = useState(false);
-        const [isFavorite, setIsFavorite] = useState(false);
-
-        const regionId = useId();
-
-        // Expose audio element
-        useImperativeHandle(ref, () => ({
-            audioElement: audioRef.current,
-        }));
-
-        // ── Actions ──
-
-        const play = useCallback(() => {
-            audioRef.current?.play();
-        }, []);
-
-        const pause = useCallback(() => {
-            audioRef.current?.pause();
-        }, []);
-
-        const togglePlay = useCallback(() => {
-            if (isPlaying) pause();
-            else play();
-        }, [isPlaying, play, pause]);
-
-        const seek = useCallback((time: number) => {
-            if (audioRef.current) {
-                audioRef.current.currentTime = Math.max(
-                    0,
-                    Math.min(time, audioRef.current.duration || 0)
-                );
-            }
-        }, []);
-
-        const seekForward = useCallback(
-            (seconds = 10) => seek(currentTime + seconds),
-            [currentTime, seek]
-        );
-
-        const seekBackward = useCallback(
-            (seconds = 10) => seek(currentTime - seconds),
-            [currentTime, seek]
-        );
-
-        const setVolume = useCallback(
-            (vol: number) => {
-                const v = Math.max(0, Math.min(1, vol));
-                if (audioRef.current) {
-                    audioRef.current.volume = v;
-                    if (v > 0 && isMuted) audioRef.current.muted = false;
-                }
-            },
-            [isMuted]
-        );
-
-        const toggleMute = useCallback(() => {
-            if (!audioRef.current) return;
-            if (isMuted) {
-                audioRef.current.muted = false;
-                audioRef.current.volume = previousVolume;
-            } else {
-                setPreviousVolume(volume);
-                audioRef.current.muted = true;
-            }
-        }, [isMuted, volume, previousVolume]);
-
-        const setPlaybackRate = useCallback((rate: number) => {
-            if (audioRef.current) audioRef.current.playbackRate = rate;
-        }, []);
-
-        const toggleRepeat = useCallback(() => {
-            setRepeatMode((p) =>
-                p === "off" ? "all" : p === "all" ? "one" : "off"
-            );
-        }, []);
-
-        const toggleShuffle = useCallback(() => {
-            setIsShuffled((prev) => {
-                if (!prev) {
-                    setOriginalPlaylistOrder([...playlistState]);
-                    const shuffled = [...playlistState];
-                    for (let i = shuffled.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-                    }
-                    setPlaylistState(shuffled);
-                    const idx = shuffled.findIndex(
-                        (t) => t.id === currentTrack?.id
-                    );
-                    if (idx !== -1) setCurrentTrackIndex(idx);
-                } else {
-                    setPlaylistState(originalPlaylistOrder);
-                    const idx = originalPlaylistOrder.findIndex(
-                        (t) => t.id === currentTrack?.id
-                    );
-                    if (idx !== -1) setCurrentTrackIndex(idx);
-                }
-                return !prev;
-            });
-        }, [playlistState, originalPlaylistOrder, currentTrack]);
-
-        const toggleFavorite = useCallback(
-            () => setIsFavorite((p) => !p),
-            []
-        );
-
-        const download = useCallback(() => {
-            if (!audioRef.current?.src) return;
-            const a = document.createElement("a");
-            a.href = audioRef.current.src;
-            a.download = currentTrack?.title ?? "audio.mp3";
-            a.click();
-        }, [currentTrack]);
-
-        const playTrack = useCallback(
-            (index: number) => {
-                if (index < 0 || index >= playlistState.length) return;
-                const t = playlistState[index];
-                setCurrentTrack(t);
-                setCurrentTrackIndex(index);
-                onTrackChange?.(t);
-                setTimeout(() => {
-                    if (audioRef.current) {
-                        audioRef.current.load();
-                        audioRef.current.play();
-                    }
-                }, 0);
-            },
-            [playlistState, onTrackChange]
-        );
-
-        const nextTrack = useCallback(() => {
-            if (playlistState.length === 0) return;
-            playTrack(
-                (currentTrackIndex + 1) % playlistState.length
-            );
-        }, [currentTrackIndex, playlistState.length, playTrack]);
-
-        const previousTrack = useCallback(() => {
-            if (playlistState.length === 0) return;
-            if (currentTime > 3) {
-                seek(0);
-                return;
-            }
-            playTrack(
-                currentTrackIndex <= 0
-                    ? playlistState.length - 1
-                    : currentTrackIndex - 1
-            );
-        }, [
-            currentTrackIndex,
-            currentTime,
-            playlistState.length,
-            playTrack,
-            seek,
-        ]);
-
-        const addToPlaylist = useCallback(
-            (t: Track) => setPlaylistState((p) => [...p, t]),
-            []
-        );
-
-        const removeFromPlaylist = useCallback(
-            (i: number) =>
-                setPlaylistState((p) => p.filter((_, idx) => idx !== i)),
-            []
-        );
-
-        const clearPlaylist = useCallback(() => {
-            setPlaylistState([]);
-            setCurrentTrack(null);
-            setCurrentTrackIndex(0);
-        }, []);
-
-        // ── Media Session API ──
-
-        useEffect(() => {
-            if (!enableMediaSession || !("mediaSession" in navigator))
-                return;
-            if (!currentTrack) return;
-
-            navigator.mediaSession.metadata = new MediaMetadata({
-                title: currentTrack.title,
-                artist: currentTrack.artist ?? "Unknown Artist",
-                album: currentTrack.album ?? "Unknown Album",
-                artwork: currentTrack.artwork
-                    ? [
-                        {
-                            src: currentTrack.artwork,
-                            sizes: "512x512",
-                            type: "image/png",
-                        },
-                    ]
-                    : [],
-            });
-
-            navigator.mediaSession.setActionHandler("play", play);
-            navigator.mediaSession.setActionHandler("pause", pause);
-            navigator.mediaSession.setActionHandler(
-                "previoustrack",
-                previousTrack
-            );
-            navigator.mediaSession.setActionHandler("nexttrack", nextTrack);
-            navigator.mediaSession.setActionHandler("seekbackward", () =>
-                seekBackward(10)
-            );
-            navigator.mediaSession.setActionHandler("seekforward", () =>
-                seekForward(10)
-            );
-
-            return () => {
-                if ("mediaSession" in navigator)
-                    navigator.mediaSession.metadata = null;
-            };
-        }, [
-            currentTrack,
-            enableMediaSession,
-            play,
-            pause,
-            previousTrack,
-            nextTrack,
-            seekBackward,
-            seekForward,
-        ]);
-
-        // ── Audio event listeners ──
-
-        useEffect(() => {
-            const audio = audioRef.current;
-            if (!audio) return;
-
-            const onPlayEvt = () => {
-                setIsPlaying(true);
-                setHasEnded(false);
-                onPlay?.();
-            };
-            const onPauseEvt = () => {
-                setIsPlaying(false);
-                onPause?.();
-            };
-            const onTimeUpdateEvt = () => {
-                setCurrentTime(audio.currentTime);
-                onTimeUpdate?.(audio.currentTime);
-            };
-            const onDuration = () => setDuration(audio.duration);
-            const onProgress = () => {
-                if (audio.buffered.length > 0)
-                    setBuffered(
-                        audio.buffered.end(audio.buffered.length - 1)
-                    );
-            };
-            const onWaiting = () => setIsLoading(true);
-            const onCanPlay = () => setIsLoading(false);
-            const onEndedEvt = () => {
-                setIsPlaying(false);
-                setHasEnded(true);
-                onEnded?.();
-                if (repeatMode === "one") {
-                    audio.currentTime = 0;
-                    audio.play();
-                } else if (
-                    repeatMode === "all" ||
-                    currentTrackIndex < playlistState.length - 1
-                ) {
-                    nextTrack();
-                }
-            };
-            const onVolume = () => {
-                setVolumeState(audio.volume);
-                setIsMuted(audio.muted);
-                onVolumeChange?.(audio.volume);
-            };
-            const onRate = () =>
-                setPlaybackRateState(audio.playbackRate);
-
-            audio.addEventListener("play", onPlayEvt);
-            audio.addEventListener("pause", onPauseEvt);
-            audio.addEventListener("timeupdate", onTimeUpdateEvt);
-            audio.addEventListener("durationchange", onDuration);
-            audio.addEventListener("amprogress", onProgress);
-            audio.addEventListener("waiting", onWaiting);
-            audio.addEventListener("canplay", onCanPlay);
-            audio.addEventListener("ended", onEndedEvt);
-            audio.addEventListener("volumechange", onVolume);
-            audio.addEventListener("ratechange", onRate);
-
-            return () => {
-                audio.removeEventListener("play", onPlayEvt);
-                audio.removeEventListener("pause", onPauseEvt);
-                audio.removeEventListener("timeupdate", onTimeUpdateEvt);
-                audio.removeEventListener("durationchange", onDuration);
-                audio.removeEventListener("progress", onProgress);
-                audio.removeEventListener("waiting", onWaiting);
-                audio.removeEventListener("canplay", onCanPlay);
-                audio.removeEventListener("ended", onEndedEvt);
-                audio.removeEventListener("volumechange", onVolume);
-                audio.removeEventListener("ratechange", onRate);
-            };
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [
-            repeatMode,
-            currentTrackIndex,
-            playlistState.length,
-            nextTrack,
-        ]);
-
-        // ── Keyboard shortcuts ──
-
-        useEffect(() => {
-            const container = containerRef.current;
-            if (!container) return;
-
-            const handler = (e: KeyboardEvent) => {
-                if (
-                    e.target instanceof HTMLInputElement ||
-                    e.target instanceof HTMLTextAreaElement
-                )
-                    return;
-
-                switch (e.key) {
-                    case " ":
-                    case "k":
-                        e.preventDefault();
-                        togglePlay();
-                        break;
-                    case "ArrowLeft":
-                        e.preventDefault();
-                        seekBackward(5);
-                        break;
-                    case "ArrowRight":
-                        e.preventDefault();
-                        seekForward(5);
-                        break;
-                    case "ArrowUp":
-                        e.preventDefault();
-                        setVolume(Math.min(1, volume + 0.1));
-                        break;
-                    case "ArrowDown":
-                        e.preventDefault();
-                        setVolume(Math.max(0, volume - 0.1));
-                        break;
-                    case "m":
-                        e.preventDefault();
-                        toggleMute();
-                        break;
-                    case "n":
-                        e.preventDefault();
-                        nextTrack();
-                        break;
-                    case "p":
-                        e.preventDefault();
-                        previousTrack();
-                        break;
-                    case "r":
-                        e.preventDefault();
-                        toggleRepeat();
-                        break;
-                    case "s":
-                        e.preventDefault();
-                        toggleShuffle();
-                        break;
-                    case "0":
-                    case "Home":
-                        e.preventDefault();
-                        seek(0);
-                        break;
-                    case "End":
-                        e.preventDefault();
-                        seek(duration);
-                        break;
-                }
-            };
-
-            container.addEventListener("keydown", handler);
-            return () => container.removeEventListener("keydown", handler);
-        }, [
-            togglePlay,
-            seekBackward,
-            seekForward,
-            setVolume,
-            volume,
-            toggleMute,
-            nextTrack,
-            previousTrack,
-            toggleRepeat,
-            toggleShuffle,
-            seek,
-            duration,
-        ]);
-
-        // ── Context value (memoized) ──
-
-        const ctx = useMemo<AudioPlayerContextValue>(
-            () => ({
-                audioRef,
-                containerRef,
-                isPlaying,
-                currentTime,
-                duration,
-                buffered,
-                isLoading,
-                hasEnded,
-                volume,
-                isMuted,
-                previousVolume,
-                playbackRate,
-                repeatMode,
-                isShuffled,
-                currentTrack,
-                playlist: playlistState,
-                currentTrackIndex,
-                showPlaylist,
-                isFavorite,
-                play,
-                pause,
-                togglePlay,
-                seek,
-                seekForward,
-                seekBackward,
-                setVolume,
-                toggleMute,
-                setPlaybackRate,
-                toggleRepeat,
-                toggleShuffle,
-                toggleFavorite,
-                download,
-                playTrack,
-                nextTrack,
-                previousTrack,
-                addToPlaylist,
-                removeFromPlaylist,
-                clearPlaylist,
-                setShowPlaylist,
-            }),
-            [
-                isPlaying,
-                currentTime,
-                duration,
-                buffered,
-                isLoading,
-                hasEnded,
-                volume,
-                isMuted,
-                previousVolume,
-                playbackRate,
-                repeatMode,
-                isShuffled,
-                currentTrack,
-                playlistState,
-                currentTrackIndex,
-                showPlaylist,
-                isFavorite,
-                play,
-                pause,
-                togglePlay,
-                seek,
-                seekForward,
-                seekBackward,
-                setVolume,
-                toggleMute,
-                setPlaybackRate,
-                toggleRepeat,
-                toggleShuffle,
-                toggleFavorite,
-                download,
-                playTrack,
-                nextTrack,
-                previousTrack,
-                addToPlaylist,
-                removeFromPlaylist,
-                addEventListener,
-                clearPlaylist,
-                setShowPlaylist,
-            ]
-        );
-
-        return (
-            <AudioPlayerContext.Provider value={ctx}>
-                <div
-                    ref={containerRef}
-                    id={regionId}
-                    role="region"
-                    aria-label="Audio player"
-                    tabIndex={0}
-                    className={clsx(
-                        "relative focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg",
-                        className
-                    )}
-                    {...divProps}
-                >
-                    {children}
-                </div>
-            </AudioPlayerContext.Provider>
-        );
-    }
-);
-
-AudioPlayerRoot.displayName = "AudioPlayer.Root";
-
-// ============================================================================
-// Audio
-// ============================================================================
-
-interface AudioProps extends AudioHTMLAttributes<HTMLAudioElement> {
-    src?: string;
-}
-
-const Audio = forwardRef<HTMLAudioElement, AudioProps>(
-    ({ src, className, ...props }, _ref) => {
-        const { audioRef, currentTrack } = useAudioPlayer();
-
-        return (
-            <audio
-                ref={audioRef}
-                src={src ?? currentTrack?.src}
-                className={clsx("sr-only", className)}
-                {...props}
-            >
-                Your browser does not support the audio element.
-            </audio>
-        );
-    }
-);
-
-Audio.displayName = "AudioPlayer.Audio";
-
-// ============================================================================
-// Player container
-// ============================================================================
-
-interface PlayerProps extends HTMLAttributes<HTMLDivElement> {
-    variant?: "default" | "minimal" | "card";
-}
-
-const Player = forwardRef<HTMLDivElement, PlayerProps>(
-    ({ variant = "default", className, children, ...props }, ref) => (
-        <div
-            ref={ref}
-            className={clsx(
-                "bg-ground-50 dark:bg-ground-950 border border-ground-200 dark:border-ground-700",
-                PLAYER_VARIANT[variant],
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </div>
-    )
-);
-
-Player.displayName = "AudioPlayer.Player";
-
-// ============================================================================
-// Artwork
-// ============================================================================
-
-interface ArtworkProps extends HTMLAttributes<HTMLDivElement> {
-    size?: "sm" | "md" | "lg" | "xl";
-    animated?: boolean;
-}
-
-const Artwork = forwardRef<HTMLDivElement, ArtworkProps>(
-    ({ size = "lg", animated = true, className, ...props }, ref) => {
-        const { currentTrack, isPlaying } = useAudioPlayer();
-
-        return (
-            <div
-                ref={ref}
-                className={clsx(
-                    ARTWORK_SIZE[size],
-                    "rounded overflow-hidden bg-ground-200 dark:bg-ground-800 shrink-0",
-                    className
-                )}
-                {...props}
-            >
-                {currentTrack?.artwork ? (
-                    <img
-                        src={currentTrack.artwork}
-                        alt={`${currentTrack.title} artwork`}
-                        className={clsx(
-                            "w-full h-full object-cover",
-                            animated && isPlaying && "animate-spin-slow"
-                        )}
-                    />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                        <ListMusic
-                            className="w-1/2 h-1/2 text-ground-400"
-                            aria-hidden="true"
-                        />
-                    </div>
-                )}
-            </div>
-    );
-});
-
-Artwork.displayName = "AudioPlayer.Artwork";
-
-// ============================================================================
-// Track info
-// ============================================================================
-
-interface TrackInfoProps extends HTMLAttributes<HTMLDivElement> {
-    showArtist?: boolean;
-    showAlbum?: boolean;
-}
-
-const TrackInfo = forwardRef<HTMLDivElement, TrackInfoProps>(
-    (
-        { showArtist = true, showAlbum = false, className, ...props },
-        ref
-    ) => {
-        const { currentTrack } = useAudioPlayer();
-
-        if (!currentTrack) {
-            return (
-                <div ref={ref} className={className} {...props}>
-                    <span className="text-ground-400 dark:text-ground-500">
-                        No track selected
-                    </span>
-            </div>
-                );
-        }
-
-        return (
-            <div
-                ref={ref}
-                className={clsx("min-w-0", className)}
-                {...props}
-            >
-                <h3 className="font-secondary font-semibold text-ground-900 dark:text-ground-100 truncate">
-                    {currentTrack.title}
-                </h3>
-                {showArtist && currentTrack.artist && (
-                    <p className="text-sm font-secondary text-ground-600 dark:text-ground-400 truncate">
-                        {currentTrack.artist}
-                    </p>
-                )}
-                {showAlbum && currentTrack.album && (
-                    <p className="text-xs font-secondary text-ground-500 truncate">
-                        {currentTrack.album}
-                    </p>
-                )}
-            </div>
-        );
-    }
-);
-
-TrackInfo.displayName = "AudioPlayer.TrackInfo";
-
-// ============================================================================
-// Progress bar
-// ============================================================================
-
-interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
-    showBuffer?: boolean;
-    showTimestamps?: boolean;
-}
-
-const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
-    (
-        {
-            showBuffer = true,
-            showTimestamps = true,
-            className,
-            ...props
-        },
-        ref
-    ) => {
-        const { currentTime, duration, buffered, seek } =
-            useAudioPlayer();
-        const [isSeeking, setIsSeeking] = useState(false);
-        const [hoverTime, setHoverTime] = useState<number | null>(null);
-        const progressRef = useRef<HTMLDivElement>(null);
-
-        const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
-        const bufferProgress =
-            duration > 0 ? (buffered / duration) * 100 : 0;
-
-        const updateSeek = useCallback(
-            (clientX: number) => {
-                const rect =
-                    progressRef.current?.getBoundingClientRect();
-                if (!rect) return;
-                const pos = Math.max(
-                    0,
-                    Math.min(1, (clientX - rect.left) / rect.width)
-                );
-                seek(pos * duration);
-            },
-            [seek, duration]
-        );
-
-        const handleMouseDown = useCallback(
-            (e: React.MouseEvent) => {
-                setIsSeeking(true);
-                updateSeek(e.clientX);
-            },
-            [updateSeek]
-        );
-
-        const handleMouseMove = useCallback(
-            (e: React.MouseEvent) => {
-                const rect =
-                    progressRef.current?.getBoundingClientRect();
-                if (rect) {
-                    const pos =
-                        (e.clientX - rect.left) / rect.width;
-                    setHoverTime(pos * duration);
-                }
-                if (isSeeking) updateSeek(e.clientX);
-            },
-            [isSeeking, updateSeek, duration]
-        );
-
-        const handleMouseLeave = useCallback(
-            () => setHoverTime(null),
-            []
-        );
-
-        useEffect(() => {
-            if (!isSeeking) return;
-            const up = () => setIsSeeking(false);
-            document.addEventListener("mouseup", up);
-            return () => document.removeEventListener("mouseup", up);
-        }, [isSeeking]);
-
-        return (
-            <div
-                ref={ref}
-                className={clsx("space-y-2", className)}
-                {...props}
-            >
-                <div className="relative group/progress">
-                    <div
-                        ref={progressRef}
-                        role="slider"
-                        tabIndex={0}
-                        aria-label="Seek audio"
-                        aria-valuemin={0}
-                        aria-valuemax={duration}
-                        aria-valuenow={currentTime}
-                        aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
-                        className="relative h-1.5 bg-ground-200 dark:bg-ground-700 rounded-full cursor-pointer group-hover/progress:h-2 transition-all"
-                        onMouseDown={handleMouseDown}
-                        onMouseMove={handleMouseMove}
-                        onMouseLeave={handleMouseLeave}
-                    >
-                        {showBuffer && (
-                            <div
-                                className="absolute inset-y-0 left-0 bg-ground-300 dark:bg-ground-600 rounded-full transition-all"
-                                style={{ width: `${bufferProgress}%` }}
-                                aria-hidden="true"
-                            />
-                        )}
-
-                        <div
-                            className="absolute inset-y-0 left-0 bg-primary-500 rounded-full transition-all"
-                            style={{ width: `${progress}%` }}
-                            aria-hidden="true"
-                        />
-
-                        <div
-                            className="absolute top-1/2 -translate-y-1/2 bg-ground-50 border-2 border-primary-500 rounded-full shadow-outer opacity-0 group-hover/progress:opacity-100 transition-all"
-                            style={{
-                                left: `${progress}%`,
-                                transform: "translate(-50%, -50%)",
-                            }}
-                            aria-hidden="true"
-                        />
-
-                        {hoverTime !== null && (
-                            <div
-                                className="absolute -top-8 -translate-x-1/2 bg-ground-800 dark:bg-ground-100 text-ground-100 dark:text-ground-800 text-xs font-secondary px-2 py-1 rounded pointer-events-none"
-                                style={{
-                                    left: `${(hoverTime / duration) * 100}%`,
-                                }}
-                                aria-hidden="true"
-                            >
-                                {formatTime(hoverTime)}
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {showTimestamps && (
-                    <div className="flex items-center justify-between text-xs font-secondary text-ground-600 dark:text-ground-400">
-                        <time
-                            dateTime={`PT${Math.floor(currentTime)}S`}
-                        >
-                            {formatTime(currentTime)}
-                        </time>
-                        <time dateTime={`PT${Math.floor(duration)}S`}
-                        >
-                            {formatTime(duration)}
-                        </time>
-                    </div>
-                )}
-            </div>
-        );
-    }
-);
-
-ProgressBar.displayName = "AudioPlayer.ProgressBar";
-
-// ============================================================================
-// Control buttons
-// ============================================================================
-
-interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
-    label: string;
-    pressed?: boolean;
-}
-
-const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-    ({ label, pressed, className, children, ...props }, ref) => (
-        <button
-            ref={ref}
-            type="button"
-            aria-label={label}
-            aria-pressed={pressed}
-            className={clsx(ICON_BTN, className)}
-            {...props}
-        >
-            {children}
-        </button>
-    )
-);
-
-IconButton.displayName = "IconButton";
-
-// ── Play / Pause ──
-
-interface PlayPauseButtonProps
-    extends HTMLAttributes<HTMLButtonElement> {
-    size?: "sm" | "md" | "lg";
-}
-
-const PlayPauseButton = forwardRef<
-    HTMLButtonElement,
-    PlayPauseButtonProps
->(({ size = "md", className, ...props }, ref) => {
-    const { isPlaying, togglePlay } = useAudioPlayer();
-
-    return (
-        <button
-            ref={ref}
-            type="button"
-            onClick={togglePlay}
-            aria-label={isPlaying ? "Pause" : "Play"}
-            className={clsx(
-                PLAY_PAUSE_SIZE[size],
-                "flex items-center justify-center rounded-full bg-primary-600 hover:bg-primary-700 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
-                className
-            )}
-            {...props}
-        >
-            {isPlaying ? (
-                <Pause
-                    className={PLAY_PAUSE_ICON_SIZE[size]}
-                    fill="currentColor"
-                    aria-hidden="true"
-                />
-            ) : (
-                <Play
-                    className={clsx(
-                        PLAY_PAUSE_ICON_SIZE[size],
-                        "ml-0.5"
-                    )}
-                    fill="currentColor"
-                    aria-hidden="true"
-                />
-            )}
-        </button>
-    );
-});
-
-PlayPauseButton.displayName = "AudioPlayer.PlayPauseButton";
-
-// ── Skip buttons ──
-
-const SkipBackwardButton = forwardRef<
-    HTMLButtonElement,
-    HTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => {
-    const { previousTrack } = useAudioPlayer();
-
-    return (
-        <IconButton
-            ref={ref}
-            label="Previous track"
-            onClick={previousTrack}
-            className={className}
-            {...props}
-        >
-            <SkipBack
-                className={clsx("w-5 h-5", ICON_COLOR)}
-                aria-hidden="true"
-            />
-        </IconButton>
-    );
-});
-
-SkipBackwardButton.displayName = "AudioPlayer.SkipBackwardButton";
-
-var SkipForwardButton = forwardRef<
-    HTMLButtonElement,
-    HTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => {
-    const { nextTrack } = useAudioPlayer();
-
-    return (
-        <IconButton
-            ref={ref}
-            bar="Next track"
-            onClick={nextTrack}
-            className={className}
-            {...props}
-        >
-            <SkipForward
-                className={clsx("w-5 h-5", ICON_COLOR)}
-                aria-hidden="true"
-            />
-        </IconButton>
-    );
-});
-
-SkipForwardButton.displayName = "AudioPlayer.SkipForwardButton";
-
-// ── Volume ──
-
-var VolumeControl = forwardRef<
-    HTMLDivElement,
-    HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-    const { volume, isMuted, setVolume, toggleMute } = useAudioPlayer();
-    const [showSlider, setShowSlider] = useState(false);
-    const volumeId = useId();
-
-    return (
-        <div
-            ref={ref}
-            className={clsx("flex items-center gap-2", className)}
-            onMouseEnter={() => setShowSlider(true)}
-            onMouseLeave={() => setShowSlider(false)}
-            {...props}
-        >
-            <IconButton
-                label={isMuted ? "Unmute" : "Mute"}
-                onClick={toggleMute}
-            >
-                {isMuted || volume === 0 ? (
-                    <VolumeX
-                        className={clsx("w-5 h-5", ICON_COLOR)}
-                        aria-hidden="true"
-                    />
-                ) : (
-                    <Volume2
-                        className={clsx("w-5 h-5", ICON_COLOR)}
-                        aria-hidden="true"
-                    />
-                )}
-            </IconButton>
-
-            <div
-                className={clsx(
-                    "overflow-hidden transition-all duration-200",
-                    showSlider
-                        ? "w-20 opacity-100"
-                        : "w-0 opacity-0"
-                )}
-            >
-                <input
-                    id={volumeId}
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={isMuted ? 0 : volume}
-                    onChange={(e) =>
-                        setVolume(parseFloat(e.target.value))
-                    }
-                    aria-label="Volume"
-                    className="w-full h-1 bg-ground-200 dark:bg-ground-700 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-primary-500 [&::-webkit-slider-thumb]:rounded-full"
-                />
-            </div>
-        </div>
-    );
-});
-
-VolumeControl.displayName = "AudioPlayer.VolumeControl";
-
-// ── Repeat ──
-
-var RepeatButton = forwardRef<
-    HTMLButtonElement,
-    HTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => {
-    const { repeatMode, toggleRepeat } = useAudioPlayer();
-
-    return (
-        <IconButton
-            ref={ref}
-            label={`Repeat: ${repeatMode}`}
-            pressed={repeatMode !== "off"}
-            onClick={toggleRepeat}
-            className={clsx(
-                repeatMode !== "off"
-                    ? "text-primary-600 dark:text-primary-400"
-                    : ICON_COLOR,
-                className
-            )}
-            {...props}
-        >
-            {repeatMode === "one" ? (
-                <Repeat1 className="w-5 h-5" aria-hidden="true" />
-            ) : (
-                <Repeat className="w-5 h-5" aria-hidden="true" />
-            )}
-        </IconButton>
-    );
-});
-
-RepeatButton.displayName = "AudioPlayer.RepeatButton";
-
-// ── Shuffle ──
-
-var ShuffleButton = forwardRef<
-    HTMLButtonElement,
-    HTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => {
-    const { isShuffled, toggleShuffle } = useAudioPlayer();
-
-    return (
-        <IconButton
-            ref={ref}
-            label={isShuffled ? "Shuffle on" : "Shuffle off"}
-            pressed={isShuffled}
-            onClick={toggleShuffle}
-            className={clsx(
-                isShuffled
-                    ? "text-primary-600 dark:text-primary-400"
-                    : ICON_COLOR,
-                className
-            )}
-            {...props}
-        >
-            <Shuffle className="w-5 h-5" aria-hidden="true" />
-        </IconButton>
-    );
-});
-
-ShuffleButton.displayName = "AudioPlayer.ShuffleButton";
-
-// ── Favorite ──
-
-var FavoriteButton = forwardRef<
-    HTMLButtonElement,
-    HTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => {
-    const { isFavorite, toggleFavorite } = useAudioPlayer();
-
-    return (
-        <IconButton
-            ref={ref}
-            label={
-                isFavorite
-                    ? "Remove from favorites"
-                    : "Add to favorites"
-            }
-            pressed={isFavorite}
-            onClick={toggleFavorite}
-            className={className}
-            {...props}
-        >
-            <Heart
-                className={clsx(
-                    "w-5 h-5",
-                    isFavorite
-                        ? "fill-error-500 text-error-500"
-                        : ICON_COLOR
-                )}
-                aria-hidden="true"
-            />
-        </IconButton>
-    );
-});
-
-FavoriteButton.displayName = "AudioPlayer.FavoriteButton";
-
-// ── Download ──
-
-var DownloadButton = forwardRef<
-    HTMLButtonElement,
-    HTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => {
-    const { download } = useAudioPlayer();
-
-    return (
-        <IconButton
-            ref={ref}
-            label="Download audio"
-            onClick={download}
-            className={className}
-            {...props}
-        >
-            <Download
-                className={clsx("w-5 h-5", ICON_COLOR)}
-                aria-hidden="true"
-            />
-        </IconButton>
-    );
-});
-
-DownloadButton.displayName = "AudioPlayer.DownloadButton";
-
-// ── Share ──
-
-var ShareButton = forwardRef<
-    HTMLButtonElement,
-    HTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => (
-    <IconButton
-        ref={ref}
-        label="Share"
-        className={className}
-        {...props}
-    >
-        <Share2
-            className={clsx("w-5 h-5", ICON_COLOR)}
-            aria-hidden="true"
-        />
-    </IconButton>
-    )
-);
-
-ShareButton.displayName = "AudioPlayer.ShareButton";
-
-// ── More ──
-
-var MoreButton = forwardRef<
-    HTMLButtonElement,
-    HTMLAttributes<HTMLButtonElement>
->(({ className, ...ps }, ref) => (
-    <IconButton
-        ref={ref}
-        label="More options"
-        className={className}
-        {...ps}
-    >
-        <MoreHorizontal
-            className={clsx("w-5 h-5", ICON_COLOR)}
-            aria-hidden="compact"
-        />
-    </IconButton>
-    )
-);
-
-MoreButton.displayName = "AudioPlayer.MoreButton";
-
-// ── Playlist toggle ──
-
-var PlaylistButton = forwardRef<
-    HTMLButtonElement,
-    HTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => {
-    const { showPlaylist, setShowPlaylist } = useAudioPlayer();
-
-    return (
-        <IconButton
-            ref={ref}
-            label="Toggle playlist"
-            pressed={showPlaylist}
-            onClick={() => setShowPlaylist(!showPlaylist)}
-            className={clsx(
-                showPlaylist &&
-                    "bg-ground-100 dark:bg-ground-800",
-                className
-            )}
-            {...props}
-        >
-            <ListMusic
-                className={clsx("w-5 h-5", ICON_COLOR)}
-                aria-hidden="true"
-            />
-        </IconButton>
-    );
-});
-
-PlaylistButton.displayName = "AudioPlayer.PlaylistButton";
-
-// ============================================================================
-// Playlist
-// ============================================================================
-
-interface PlaylistProps extends HTMLAttributes<HTMLDivElement> {
-    maxHeight?: string;
-}
-
-var PlaylistComp = forwardRef<HTMLDivElement, PlaylistProps>(
-    ({ maxHeight = "300px", className, ...props }, ref) => {
-        const {
-            playlist,
-            currentTrackIndex,
-            playTrack,
-            removeFromPlaylist,
-        } = useAudioPlayer();
-
-        if (playlist.length === 0) {
-            return (
-                <div
-                    ref={ref}
-                    className={clsx(
-                        "text-center font-secondary text-ground-500 dark:text-ground-400 py-8",
-                        className
-                    )}
-                    {...props}
-                >
-                    No tracks in playlist
-                </div>
-            );
-        }
-
-        return (
-            <ul
-                ref={ref as React.Ref<HTMLUListElement>}
-                role="listbox"
-                aria-label="Playlist"
-                className={clsx("space-y-1", className)}
-                style={{ maxHeight, overflowY: "auto" }}
-                {...(props as HTMLAttributes<HTMLUListElement>)}
-            >
-                {playlist.map((track, index) => (
-                    <li
-                        key={track.id}
-                        role="option"
-                        aria-selected={index === currentTrackIndex}
-                        className={clsx(
-                            "flex items-center gap-3 p-3 rounded cursor-pointer transition-colors",
-                            index === currentTrackIndex
-                                ? "bg-primary-100 dark:bg-primary-900/20"
-                                : "hover:bg-ground-50 dark:hover:bg-ground-800"
-                        )}
-                        onClick={() => playTrack(index)}
-                    >
-                        <div className="shrink-0 w-10 h-10 rounded bg-ground-200 dark:bg-ground-700 flex items-center justify-center overflow-hidden">
-                            {track.artwork ? (
-                                <img
-                                    src={track.artwork}
-                                    alt={`${track.title} artwork`}
-                                    className="w-full h-full object-cover"
-                                />
-                            ) : (
-                                <ListMusic
-                                    className="w-5 h-5 text-ground-400"
-                                    aria-hidden="true"
-                                />
-                            )}
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                            <div
-                                className={clsx(
-                                    "font-secondary font-medium text-sm truncate",
-                                    index === currentTrackIndex
-                                        ? "text-primary-600 dark:text-primary-400"
-                                        : "text-ground-900 dark:text-ground-100"
-                                )}
-                            >
-                                {track.title}
-                            </div>
-                            {track.artist && (
-                                <div className="text-xs font-secondary text-ground-600 dark:text-ground-400 truncate">
-                                    {track.artist}
-                                </div>
-                            )}
-                        </div>
-
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                removeFromPlaylist(index);
-                            }}
-                            className="p-1 hover:bg-ground-200 dark:hover:bg-ground-600 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500"
-                            aria-label={`Remove ${track.title} from playlist`}
-                        >
-                            <X
-                                className="w-4 h-4 text-ground-500"
-                                aria-hidden="true"
-                            />
-                        </button>
-                    </li>
-                ))}
-            </ul>
-        );
-    }
-);
-
-PlaylistComp.displayName = "AudioPlayer.Playlist";
-
-// ============================================================================
-// Loading indicator
-// ============================================================================
-
-var LoadingIndicator = forwardRef<
-    HTMLDivElement,
-    HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-    const { isLoading } = useAudioPlayer();
-    if (!isLoading) return null;
-
-    return (
-        <div
-            ref={ref}
-            role="status"
-            aria-label="Loading audio"
-            className={clsx(
-                "absolute inset-0 flex items-center justify-center bg-ground-900/10 dark:bg-ground-100/10 pointer-events-none rounded-lg",
-                className
-            )}
-            {...props}
-        >
-            <div
-                className="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"
-                aria-hidden="true"
-            />
-            <span className="sr-only">Loading…</span>
-        </div>
-    );
-});
-
-LoadingIndicator.displayName = "AudioPlayer.LoadingIndicator";
-
-// ============================================================================
-// Exports
-// ============================================================================
-
-const AudioPlayer = {
-    Root: AudioPlayerRoot,
-    Audio,
-    Player,
-    Artwork,
-    TrackInfo,
-    ProgressBar,
-    PlayPauseButton,
-    SkipBackwardButton,
-    SkipForwardButton,
-    VolumeControl,
-    RepeatButton,
-    ShuffleButton,
-    FavoriteButton,
-    DownloadButton,
-    ShareButton,
-    MoreButton,
-    PlaylistButton,
-    Playlist: PlaylistComp,
-    LoadingIndicator,
+const formatTime = (seconds: number): string => {
+  if (!isFinite(seconds) || isNaN(seconds)) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${s.toString().padStart(2, "0")}`;
 };
 
-export { AudioPlayer, useAudioPlayer };
-export type { AudioPlayerContextValue, RepeatMode, Track };
+// ============================================================================
+// 5. Root Component
+// ============================================================================
+
+interface RootProps {
+  children: ReactNode;
+  track?: Track;
+  playlist?: Track[];
+  defaultVolume?: number;
+}
+
+const Root = forwardRef<HTMLDivElement, RootProps>(
+  ({ children, track, playlist: initialPlaylist = [], defaultVolume = 0.8 }, ref) => {
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const rafRef = useRef<number | null>(null);
+    
+    // --- State ---
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [buffered, setBuffered] = useState(0);
+    const [volume, setVolumeState] = useState(defaultVolume);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isSeeking, setIsSeekingState] = useState(false);
+
+    const [playlist, setPlaylist] = useState<Track[]>(
+      track ? [track, ...initialPlaylist] : initialPlaylist
+    );
+    const [currentTrackIndex, setCurrentTrackIndex] = useState(track ? 0 : -1);
+    const currentTrack = currentTrackIndex >= 0 ? playlist[currentTrackIndex] : null;
+
+    // --- Cleanup ---
+    useEffect(() => {
+      const audio = audioRef.current;
+      return () => {
+        if (audio) {
+          audio.pause();
+          audio.src = "";
+        }
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      };
+    }, []);
+
+    // --- Core Actions ---
+
+    const play = useCallback(() => audioRef.current?.play().catch(() => {}), []);
+    const pause = useCallback(() => audioRef.current?.pause(), []);
+    const togglePlay = useCallback(() => (isPlaying ? pause() : play()), [isPlaying, play, pause]);
+
+    const seek = useCallback((time: number) => {
+      if (audioRef.current) {
+        audioRef.current.currentTime = Math.max(0, Math.min(time, duration));
+      }
+    }, [duration]);
+
+    const seekForward = useCallback((s = 5) => seek(currentTime + s), [currentTime, seek]);
+    const seekBackward = useCallback((s = 5) => seek(currentTime - s), [currentTime, seek]);
+
+    const setVolume = useCallback((vol: number) => {
+      const v = Math.max(0, Math.min(1, vol));
+      setVolumeState(v);
+      if (audioRef.current) audioRef.current.volume = v;
+      if (v > 0 && isMuted) {
+        setIsMuted(false);
+        if(audioRef.current) audioRef.current.muted = false;
+      }
+    }, [isMuted]);
+
+    const volumeUp = useCallback((step = 0.1) => setVolume(volume + step), [volume, setVolume]);
+    const volumeDown = useCallback((step = 0.1) => setVolume(volume - step), [volume, setVolume]);
+
+    const toggleMute = useCallback(() => {
+      if (!audioRef.current) return;
+      const newMuted = !isMuted;
+      audioRef.current.muted = newMuted;
+      setIsMuted(newMuted);
+    }, [isMuted]);
+
+    const playTrack = useCallback((index: number) => {
+      if (index < 0 || index >= playlist.length) return;
+      setCurrentTrackIndex(index);
+      setIsLoading(true);
+      setIsPlaying(false);
+      rafRef.current = requestAnimationFrame(() => {
+        if (audioRef.current) {
+            audioRef.current.load();
+            audioRef.current.play().catch(() => {});
+        }
+      });
+    }, [playlist]);
+
+    const nextTrack = useCallback(() => playTrack((currentTrackIndex + 1) % playlist.length), [currentTrackIndex, playlist.length, playTrack]);
+
+    const previousTrack = useCallback(() => {
+      if (currentTime > 3) seek(0);
+      else playTrack(currentTrackIndex <= 0 ? playlist.length - 1 : currentTrackIndex - 1);
+    }, [currentTime, currentTrackIndex, playlist.length, playTrack, seek]);
+
+    const setSeeking = useCallback((seeking: boolean) => setIsSeekingState(seeking), []);
+
+    // --- Event Listeners ---
+    useEffect(() => {
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      const onPlay = () => { setIsPlaying(true); setIsLoading(false); };
+      const onPause = () => setIsPlaying(false);
+      const onWaiting = () => setIsLoading(true);
+      const onCanPlay = () => setIsLoading(false);
+      const onDuration = () => setDuration(audio.duration);
+      const onTime = () => { if (!isSeeking) setCurrentTime(audio.currentTime); };
+      const onProgress = () => {
+        if (audio.buffered.length > 0) setBuffered(audio.buffered.end(audio.buffered.length - 1));
+      };
+      const onEnd = () => { setIsPlaying(false); nextTrack(); };
+      const onVol = () => { setVolumeState(audio.volume); setIsMuted(audio.muted); };
+
+      const events: [string, EventListener][] = [
+        ["play", onPlay], ["pause", onPause], ["waiting", onWaiting],
+        ["canplay", onCanPlay], ["durationchange", onDuration],
+        ["timeupdate", onTime], ["progress", onProgress],
+        ["ended", onEnd], ["volumechange", onVol]
+      ];
+
+      events.forEach(([e, h]) => audio.addEventListener(e, h));
+      audio.volume = defaultVolume;
+
+      return () => events.forEach(([e, h]) => audio.removeEventListener(e, h));
+    }, [defaultVolume, isSeeking, nextTrack]);
+
+    // --- Prop Getters with WCAG Keybinds ---
+
+    const getRootProps = useCallback((props = {}) => ({
+      role: "region",
+      "aria-label": "Audio Player",
+      tabIndex: -1, // Focusable region for global keys
+      onKeyDown: (e: React.KeyboardEvent) => {
+        // Global Hotkeys when focus is inside the player region
+        if (e.target === e.currentTarget) {
+            switch(e.key) {
+                case " ": case "k": togglePlay(); e.preventDefault(); break;
+                case "m": toggleMute(); break;
+                case "ArrowLeft": seekBackward(); break;
+                case "ArrowRight": seekForward(); break;
+                case "ArrowUp": volumeUp(); e.preventDefault(); break;
+                case "ArrowDown": volumeDown(); e.preventDefault(); break;
+            }
+        }
+        // Allow propagation to children if needed
+        props.onKeyDown?.(e);
+      },
+      ...props,
+    }), [togglePlay, toggleMute, seekBackward, seekForward, volumeUp, volumeDown]);
+
+    const getPlayButtonProps = useCallback((props = {}) => ({
+      "aria-label": isPlaying ? "Pause" : "Play",
+      onClick: togglePlay,
+      disabled: isLoading,
+      ...props,
+    }), [isPlaying, isLoading, togglePlay]);
+
+    const getPrevButtonProps = useCallback((props = {}) => ({
+      "aria-label": "Previous track",
+      onClick: previousTrack,
+      ...props,
+    }), [previousTrack]);
+
+    const getNextButtonProps = useCallback((props = {}) => ({
+      "aria-label": "Next track",
+      onClick: nextTrack,
+      ...props,
+    }), [nextTrack]);
+
+    const getProgressProps = useCallback((props = {}) => ({
+      role: "slider",
+      "aria-label": "Audio progress",
+      "aria-valuemin": 0,
+      "aria-valuemax": duration,
+      "aria-valuenow": Math.floor(currentTime),
+      "aria-valuetext": formatTime(currentTime),
+      tabIndex: 0,
+      onKeyDown: (e: React.KeyboardEvent) => {
+        // WCAG 2.1.1 Slider Interaction
+        switch(e.key) {
+            case "ArrowRight": seekForward(); e.preventDefault(); break;
+            case "ArrowLeft": seekBackward(); e.preventDefault(); break;
+            case "Home": seek(0); e.preventDefault(); break;
+            case "End": seek(duration); e.preventDefault(); break;
+        }
+        props.onKeyDown?.(e);
+      },
+      ...props,
+    }), [duration, currentTime, seekForward, seekBackward, seek]);
+
+    const getVolumeProps = useCallback((props = {}) => ({
+      type: "range",
+      min: 0,
+      max: 1,
+      step: 0.01,
+      value: isMuted ? 0 : volume,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setVolume(parseFloat(e.target.value)),
+      "aria-label": "Volume",
+      ...props,
+    }), [volume, isMuted, setVolume]);
+
+    // --- Context Values ---
+
+    const stateValue = useMemo<AudioPlayerState>(() => ({
+      isPlaying, isLoading, currentTime, duration, buffered, volume, isMuted,
+      isSeeking, currentTrack, playlist, currentTrackIndex,
+    }), [isPlaying, isLoading, currentTime, duration, buffered, volume, isMuted,
+        isSeeking, currentTrack, playlist, currentTrackIndex]);
+
+    const actionsValue = useMemo<AudioPlayerActions & AudioPlayerGetters>(() => ({
+      formatTime, play, pause, togglePlay, seek, seekForward, seekBackward,
+      setVolume, volumeUp, volumeDown, toggleMute, setSeeking,
+      playTrack, nextTrack, previousTrack,
+      getRootProps, getPlayButtonProps, getPrevButtonProps, 
+      getNextButtonProps, getProgressProps, getVolumeProps,
+    }), [
+      play, pause, togglePlay, seek, seekForward, seekBackward,
+      setVolume, volumeUp, volumeDown, toggleMute, setSeeking,
+      playTrack, nextTrack, previousTrack,
+      getRootProps, getPlayButtonProps, getPrevButtonProps,
+      getNextButtonProps, getProgressProps, getVolumeProps,
+    ]);
+
+    return (
+      <AudioPlayerActionsContext.Provider value={actionsValue}>
+        <AudioPlayerStateContext.Provider value={stateValue}>
+          <div ref={ref} {...getRootProps()}>
+            <audio ref={audioRef} src={currentTrack?.src} preload="metadata" className="sr-only" />
+            {children}
+          </div>
+        </AudioPlayerStateContext.Provider>
+      </AudioPlayerActionsContext.Provider>
+    );
+  }
+);
+
+Root.displayName = "AudioPlayer.Root";
+export const AudioPlayer = { Root };

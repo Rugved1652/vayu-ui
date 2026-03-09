@@ -26,22 +26,47 @@ const capabilities = [
     },
 ];
 
+// Pre-generated static particles to avoid hydration mismatch with Math.random()
+const particles = [
+    { top: 42, left: 15, duration: 3.1, delay: 0.4 },
+    { top: 75, left: 82, duration: 4.2, delay: 1.3 },
+    { top: 28, left: 38, duration: 2.9, delay: 0.7 },
+    { top: 63, left: 58, duration: 3.6, delay: 1.6 },
+    { top: 35, left: 22, duration: 4.4, delay: 0.2 },
+    { top: 88, left: 48, duration: 2.3, delay: 1.9 },
+    { top: 18, left: 72, duration: 3.8, delay: 0.5 },
+    { top: 52, left: 28, duration: 2.1, delay: 1.2 },
+    { top: 78, left: 55, duration: 4.7, delay: 0.8 },
+    { top: 45, left: 85, duration: 3.3, delay: 1.5 },
+    { top: 32, left: 45, duration: 2.6, delay: 0.3 },
+    { top: 68, left: 12, duration: 3.9, delay: 1.8 },
+    { top: 22, left: 68, duration: 4.1, delay: 0.1 },
+    { top: 82, left: 35, duration: 2.8, delay: 1.1 },
+    { top: 58, left: 78, duration: 3.4, delay: 0.6 },
+    { top: 38, left: 18, duration: 4.3, delay: 1.4 },
+    { top: 72, left: 62, duration: 2.5, delay: 1.7 },
+    { top: 15, left: 42, duration: 3.7, delay: 0.9 },
+    { top: 65, left: 88, duration: 4.5, delay: 2.0 },
+    { top: 48, left: 52, duration: 2.4, delay: 0.8 },
+];
+
 export function AIEraSection() {
+
     return (
-        <section className="relative isolate overflow-hidden bg-gradient-to-b from-neutral-50 via-white to-neutral-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 px-6 py-24 sm:py-32 lg:px-8">
+        <section className="relative isolate overflow-hidden bg-linear-to-b from-neutral-50 via-white to-neutral-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 px-6 py-24 sm:py-32 lg:px-8">
             {/* Animated background elements */}
             <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
                 {/* Morphing gradient blobs */}
                 <div
-                    className="absolute top-1/4 left-1/3 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-violet-400/15 via-purple-400/10 to-transparent dark:from-violet-500/8 dark:via-purple-500/5 blur-[100px] animate-morph-blob"
+                    className="absolute top-1/4 left-1/3 w-125 h-125 rounded-full bg-linear-to-br from-violet-400/15 via-purple-400/10 to-transparent dark:from-violet-500/8 dark:via-purple-500/5 blur-[100px] animate-morph-blob"
                     style={{ animationDuration: '25s' }}
                 />
                 <div
-                    className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-gradient-to-bl from-lime-400/15 via-emerald-400/10 to-transparent dark:from-lime-500/8 dark:via-emerald-500/5 blur-[80px] animate-morph-blob"
+                    className="absolute bottom-1/4 right-1/4 w-100 h-100 rounded-full bg-linear-to-bl from-lime-400/15 via-emerald-400/10 to-transparent dark:from-lime-500/8 dark:via-emerald-500/5 blur-[80px] animate-morph-blob"
                     style={{ animationDuration: '30s', animationDelay: '5s' }}
                 />
                 <div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-gradient-to-r from-cyan-400/10 via-teal-400/5 to-transparent dark:from-cyan-500/5 dark:via-teal-500/3 blur-[120px] animate-morph-blob"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-75 rounded-full bg-linear-to-r from-cyan-400/10 via-teal-400/5 to-transparent dark:from-cyan-500/5 dark:via-teal-500/3 blur-[120px] animate-morph-blob"
                     style={{ animationDuration: '35s', animationDelay: '10s' }}
                 />
 
@@ -96,25 +121,25 @@ export function AIEraSection() {
 
                 {/* Glowing orbs */}
                 <div className="absolute top-1/4 right-[20%] animate-pulse" style={{ animationDuration: '4s' }}>
-                    <div className="w-28 h-28 rounded-full bg-gradient-to-br from-purple-500/10 to-violet-500/5 blur-2xl" />
+                    <div className="w-28 h-28 rounded-full bg-linear-to-br from-purple-500/10 to-violet-500/5 blur-2xl" />
                 </div>
 
                 <div className="absolute bottom-1/4 left-[20%] animate-pulse" style={{ animationDuration: '5s', animationDelay: '2s' }}>
-                    <div className="w-36 h-36 rounded-full bg-gradient-to-br from-lime-500/10 to-emerald-500/5 blur-2xl" />
+                    <div className="w-36 h-36 rounded-full bg-linear-to-br from-lime-500/10 to-emerald-500/5 blur-2xl" />
                 </div>
 
                 {/* Animated particles */}
-                {[...Array(20)].map((_, i) => (
+                {particles.map((p, i) => (
                     <div
                         key={i}
                         className="absolute w-1 h-1 rounded-full animate-pulse"
                         style={{
-                            top: `${10 + Math.random() * 80}%`,
-                            left: `${5 + Math.random() * 90}%`,
+                            top: `${p.top}%`,
+                            left: `${p.left}%`,
                             backgroundColor: ['#84cc16', '#a855f7', '#06b6d4'][i % 3],
                             opacity: 0.4,
-                            animationDuration: `${2 + Math.random() * 3}s`,
-                            animationDelay: `${Math.random() * 2}s`,
+                            animationDuration: `${p.duration}s`,
+                            animationDelay: `${p.delay}s`,
                         }}
                     />
                 ))}
@@ -132,10 +157,10 @@ export function AIEraSection() {
                         <span className="text-neutral-900 dark:text-white">Built for the</span>
                         <br className="hidden sm:block" />
                         <span className="relative inline-block">
-                            <span className="relative z-10 bg-gradient-to-r from-violet-600 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent dark:from-violet-400 dark:via-purple-400 dark:to-fuchsia-400">
+                            <span className="relative z-10 bg-linear-to-r from-violet-600 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent dark:from-violet-400 dark:via-purple-400 dark:to-fuchsia-400">
                                 AI Development Era
                             </span>
-                            <span className="absolute inset-0 blur-2xl bg-gradient-to-r from-violet-600/20 via-purple-500/20 to-fuchsia-500/20 dark:from-violet-400/10 dark:via-purple-400/10 dark:to-fuchsia-400/10" />
+                            <span className="absolute inset-0 blur-2xl bg-linear-to-r from-violet-600/20 via-purple-500/20 to-fuchsia-500/20 dark:from-violet-400/10 dark:via-purple-400/10 dark:to-fuchsia-400/10" />
                         </span>
                     </h2>
 
@@ -153,11 +178,11 @@ export function AIEraSection() {
                             className="group relative"
                             style={{ animationDelay: `${index * 100}ms` }}
                         >
-                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/10 to-lime-500/5 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-purple-500/10 to-lime-500/5 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                             <div className="relative flex items-start gap-4 p-6 rounded-2xl border border-neutral-200/50 dark:border-neutral-800/50 bg-white/80 dark:bg-neutral-900/50 backdrop-blur-sm transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 hover:shadow-lg hover:-translate-y-1">
                                 {/* Icon */}
-                                <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/10 to-lime-500/5 dark:from-purple-500/5 dark:to-lime-500/3">
+                                <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-purple-500/10 to-lime-500/5 dark:from-purple-500/5 dark:to-lime-500/3">
                                     <item.icon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                                 </div>
 
@@ -172,7 +197,7 @@ export function AIEraSection() {
                                 </div>
 
                                 {/* Check mark */}
-                                <div className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-lime-100 dark:bg-lime-500/10">
+                                <div className="shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-lime-100 dark:bg-lime-500/10">
                                     <Check className="h-3.5 w-3.5 text-lime-600 dark:text-lime-400" />
                                 </div>
                             </div>
@@ -182,7 +207,7 @@ export function AIEraSection() {
 
                 {/* AI workflow visualization */}
                 <div className="relative max-w-4xl mx-auto">
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-purple-500/5 via-transparent to-lime-500/5 blur-3xl" />
+                    <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-purple-500/5 via-transparent to-lime-500/5 blur-3xl" />
 
                     <div className="relative rounded-3xl border border-neutral-200/50 dark:border-neutral-800/50 bg-white/50 dark:bg-neutral-900/30 backdrop-blur-sm p-8 sm:p-12">
                         {/* Workflow header */}
@@ -214,9 +239,9 @@ export function AIEraSection() {
                         <div className="mt-8 text-center">
                             <Link
                                 href="/docs"
-                                className="group relative inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-500 dark:to-purple-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] overflow-hidden"
+                                className="group relative inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-violet-600 to-purple-600 dark:from-violet-500 dark:to-purple-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] overflow-hidden"
                             >
-                                <span className="absolute inset-0 bg-gradient-to-r from-violet-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                                <span className="absolute inset-0 bg-linear-to-r from-violet-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                                 <span className="relative z-10 flex items-center gap-2">
                                     Explore AI Integration
                                     <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />

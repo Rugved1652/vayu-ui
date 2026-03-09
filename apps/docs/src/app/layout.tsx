@@ -7,6 +7,10 @@ const inter = Inter({
   subsets: ['latin'],
 });
 
+export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://vayu-ui.dev'),
+};
+
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>

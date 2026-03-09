@@ -26,8 +26,7 @@ npx vayu-ui add accordion
   </Tab>
   <Tab value="Code">
     ```tsx
-          <div className="w-full max-w-md not-prose">
-            <h2 id="single-accordion-label" className="text-xl font-semibold mb-4">Accordion Example</h2>
+         
             <Accordion aria-labelledby="single-accordion-label">
                 <Accordion.Item itemId="item-1">
                     <Accordion.Header itemId="item-1">
@@ -56,8 +55,7 @@ npx vayu-ui add accordion
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
-            <div className="my-8 border-t border-ground-200 dark:border-ground-800"></div>
-            <h2 id="multi-accordion-label" className="text-xl font-semibold mb-4">Multiple Items Can Be Open</h2>
+          
             <Accordion allowMultiple aria-labelledby="multi-accordion-label">
                 <Accordion.Item itemId="multi-item-1">
                     <Accordion.Header itemId="multi-item-1">
@@ -86,7 +84,6 @@ npx vayu-ui add accordion
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
-        </div>
     ```
   </Tab>
 </Tabs>

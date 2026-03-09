@@ -33,11 +33,11 @@ export default function Dashboard() {
             <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
                 {/* Morphing gradient blobs */}
                 <div
-                    className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-gradient-to-bl from-lime-400/10 via-emerald-400/5 to-transparent dark:from-lime-500/5 dark:via-emerald-500/3 blur-[100px] animate-morph-blob"
+                    className="absolute top-0 right-0 w-125 h-125 rounded-full bg-linear-to-bl from-lime-400/10 via-emerald-400/5 to-transparent dark:from-lime-500/5 dark:via-emerald-500/3 blur-[100px] animate-morph-blob"
                     style={{ animationDuration: '25s' }}
                 />
                 <div
-                    className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-gradient-to-tr from-cyan-400/10 via-teal-400/5 to-transparent dark:from-cyan-500/5 dark:via-teal-500/3 blur-[80px] animate-morph-blob"
+                    className="absolute bottom-0 left-0 w-100 h-100 rounded-full bg-linear-to-tr from-cyan-400/10 via-teal-400/5 to-transparent dark:from-cyan-500/5 dark:via-teal-500/3 blur-[80px] animate-morph-blob"
                     style={{ animationDuration: '30s', animationDelay: '8s' }}
                 />
 
@@ -83,11 +83,11 @@ export default function Dashboard() {
 
                 {/* Glowing orbs */}
                 <div className="absolute top-1/3 left-[30%] animate-pulse" style={{ animationDuration: '4s' }}>
-                    <div className="w-24 h-24 rounded-full bg-gradient-to-br from-lime-500/10 to-emerald-500/5 blur-2xl" />
+                    <div className="w-24 h-24 rounded-full bg-linear-to-br from-lime-500/10 to-emerald-500/5 blur-2xl" />
                 </div>
 
                 <div className="absolute bottom-1/3 right-[25%] animate-pulse" style={{ animationDuration: '5s', animationDelay: '2s' }}>
-                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500/10 to-teal-500/5 blur-2xl" />
+                    <div className="w-32 h-32 rounded-full bg-linear-to-br from-cyan-500/10 to-teal-500/5 blur-2xl" />
                 </div>
 
                 {/* Grid pattern */}
@@ -112,10 +112,10 @@ export default function Dashboard() {
                     <h2 className="font-primary text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white leading-[1.1]">
                         Clean by{" "}
                         <span className="relative inline-block">
-                            <span className="relative z-10 bg-gradient-to-r from-lime-600 via-emerald-500 to-cyan-500 bg-clip-text text-transparent dark:from-lime-400 dark:via-emerald-400 dark:to-cyan-400">
+                            <span className="relative z-10 bg-linear-to-r from-lime-600 via-emerald-500 to-cyan-500 bg-clip-text text-transparent dark:from-lime-400 dark:via-emerald-400 dark:to-cyan-400">
                                 Default
                             </span>
-                            <span className="absolute inset-0 blur-2xl bg-gradient-to-r from-lime-600/20 via-emerald-500/20 to-cyan-500/20 dark:from-lime-400/10 dark:via-emerald-400/10 dark:to-cyan-400/10" />
+                            <span className="absolute inset-0 blur-2xl bg-linear-to-r from-lime-600/20 via-emerald-500/20 to-cyan-500/20 dark:from-lime-400/10 dark:via-emerald-400/10 dark:to-cyan-400/10" />
                         </span>
                     </h2>
 
@@ -127,7 +127,7 @@ export default function Dashboard() {
                 {/* Code editor */}
                 <div className="relative group">
                     {/* Glow effect */}
-                    <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-lime-500/20 via-emerald-500/10 to-cyan-500/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute -inset-1 rounded-2xl bg-linear-to-r from-lime-500/20 via-emerald-500/10 to-cyan-500/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                     <div className="relative rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden shadow-2xl bg-neutral-950">
                         {/* Editor chrome */}
@@ -278,9 +278,9 @@ export default function Dashboard() {
                 <div className="mt-12 text-center">
                     <Link
                         href="/docs"
-                        className="group relative inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-lime-600 to-emerald-600 dark:from-lime-500 dark:to-emerald-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] overflow-hidden"
+                        className="group relative inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-lime-600 to-emerald-600 dark:from-lime-500 dark:to-emerald-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] overflow-hidden"
                     >
-                        <span className="absolute inset-0 bg-gradient-to-r from-lime-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        <span className="absolute inset-0 bg-linear-to-r from-lime-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                         <span className="relative z-10 flex items-center gap-2">
                             View All Components
                             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />

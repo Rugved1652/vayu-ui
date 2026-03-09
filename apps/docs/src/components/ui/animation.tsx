@@ -1,7 +1,6 @@
 "use client";
 
 import { CSSProperties, ReactNode } from "react";
-import "./animation.css";
 
 // Base types
 type AnimationDuration = "slow" | "normal" | "fast" | "slower" | "faster";

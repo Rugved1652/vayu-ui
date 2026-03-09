@@ -10,15 +10,15 @@ export function Hero() {
             <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
                 {/* Morphing gradient blobs */}
                 <div
-                    className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-lime-400/20 via-emerald-400/15 to-transparent dark:from-lime-500/10 dark:via-emerald-500/5 blur-[100px] animate-morph-blob"
+                    className="absolute top-0 left-1/4 w-150 h-150 rounded-full bg-linear-to-br from-lime-400/20 via-emerald-400/15 to-transparent dark:from-lime-500/10 dark:via-emerald-500/5 blur-[100px] animate-morph-blob"
                     style={{ animationDuration: '20s' }}
                 />
                 <div
-                    className="absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-gradient-to-bl from-cyan-400/20 via-teal-400/15 to-transparent dark:from-cyan-500/10 dark:via-teal-500/5 blur-[80px] animate-morph-blob"
+                    className="absolute top-1/3 right-1/4 w-125 h-125 rounded-full bg-linear-to-bl from-cyan-400/20 via-teal-400/15 to-transparent dark:from-cyan-500/10 dark:via-teal-500/5 blur-[80px] animate-morph-blob"
                     style={{ animationDuration: '25s', animationDelay: '5s' }}
                 />
                 <div
-                    className="absolute bottom-0 left-1/2 w-[700px] h-[400px] rounded-full bg-gradient-to-t from-purple-400/15 via-pink-400/10 to-transparent dark:from-purple-500/8 dark:via-pink-500/5 blur-[120px] animate-morph-blob"
+                    className="absolute bottom-0 left-1/2 w-175 h-100 rounded-full bg-linear-to-t from-purple-400/15 via-pink-400/10 to-transparent dark:from-purple-500/8 dark:via-pink-500/5 blur-[120px] animate-morph-blob"
                     style={{ animationDuration: '30s', animationDelay: '10s' }}
                 />
 
@@ -92,7 +92,7 @@ export function Hero() {
                                     animationDelay: `${i * 0.2}s`
                                 }}
                             />
-                            <div className="w-8 h-px bg-gradient-to-r from-lime-500/20 to-transparent dark:from-lime-400/10" />
+                            <div className="w-8 h-px bg-linear-to-r from-lime-500/20 to-transparent dark:from-lime-400/10" />
                         </div>
                     ))}
                 </div>
@@ -120,11 +120,11 @@ export function Hero() {
 
                 {/* Glowing orbs */}
                 <div className="absolute top-1/4 right-[20%] animate-pulse" style={{ animationDuration: '3s' }}>
-                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-lime-500/10 to-emerald-500/5 blur-2xl" />
+                    <div className="w-32 h-32 rounded-full bg-linear-to-br from-lime-500/10 to-emerald-500/5 blur-2xl" />
                 </div>
 
                 <div className="absolute bottom-1/4 left-[20%] animate-pulse" style={{ animationDuration: '4s', animationDelay: '1s' }}>
-                    <div className="w-40 h-40 rounded-full bg-gradient-to-br from-cyan-500/10 to-purple-500/5 blur-2xl" />
+                    <div className="w-40 h-40 rounded-full bg-linear-to-br from-cyan-500/10 to-purple-500/5 blur-2xl" />
                 </div>
 
                 {/* Circuit lines */}
@@ -203,7 +203,7 @@ export function Hero() {
                 </div>
 
                 {/* Radial gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/50 dark:to-neutral-950/50" />
+                <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-white/50 dark:to-neutral-950/50" />
 
                 {/* Decorative SVG wave */}
                 <svg className="absolute bottom-0 left-0 right-0 h-32 text-neutral-100 dark:text-neutral-900" viewBox="0 0 1440 120" preserveAspectRatio="none">
@@ -226,10 +226,10 @@ export function Hero() {
                 <h1 className="font-primary text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] text-neutral-900 dark:text-white">
                     Build{" "}
                     <span className="relative inline-block">
-                        <span className="relative z-10 bg-gradient-to-r from-lime-600 via-emerald-500 to-cyan-500 bg-clip-text text-transparent dark:from-lime-400 dark:via-emerald-400 dark:to-cyan-400">
+                        <span className="relative z-10 bg-linear-to-r from-lime-600 via-emerald-500 to-cyan-500 bg-clip-text text-transparent dark:from-lime-400 dark:via-emerald-400 dark:to-cyan-400">
                             Beautiful
                         </span>
-                        <span className="absolute inset-0 blur-2xl bg-gradient-to-r from-lime-600/30 via-emerald-500/30 to-cyan-500/30 dark:from-lime-400/20 dark:via-emerald-400/20 dark:to-cyan-400/20" />
+                        <span className="absolute inset-0 blur-2xl bg-linear-to-r from-lime-600/30 via-emerald-500/30 to-cyan-500/30 dark:from-lime-400/20 dark:via-emerald-400/20 dark:to-cyan-400/20" />
                     </span>
                     <br className="hidden sm:block" />
                     UI with{" "}
@@ -254,9 +254,9 @@ export function Hero() {
                 <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link
                         href="/docs"
-                        className="group relative inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-lime-600 to-emerald-600 dark:from-lime-500 dark:to-emerald-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] overflow-hidden"
+                        className="group relative inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-lime-600 to-emerald-600 dark:from-lime-500 dark:to-emerald-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] overflow-hidden"
                     >
-                        <span className="absolute inset-0 bg-gradient-to-r from-lime-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        <span className="absolute inset-0 bg-linear-to-r from-lime-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                         <span className="relative z-10 flex items-center gap-2">
                             Explore Components
                             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />

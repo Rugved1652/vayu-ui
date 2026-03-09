@@ -68,25 +68,25 @@ export function Features() {
             <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
                 {/* Morphing gradient blobs */}
                 <div
-                    className="absolute top-0 right-1/4 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-lime-400/15 via-emerald-400/10 to-transparent dark:from-lime-500/8 dark:via-emerald-500/5 blur-[100px] animate-morph-blob"
+                    className="absolute top-0 right-1/4 w-100 h-100 rounded-full bg-linear-to-br from-lime-400/15 via-emerald-400/10 to-transparent dark:from-lime-500/8 dark:via-emerald-500/5 blur-[100px] animate-morph-blob"
                     style={{ animationDuration: '22s' }}
                 />
                 <div
-                    className="absolute bottom-1/4 left-1/4 w-[350px] h-[350px] rounded-full bg-gradient-to-bl from-purple-400/15 via-pink-400/10 to-transparent dark:from-purple-500/8 dark:via-pink-500/5 blur-[80px] animate-morph-blob"
+                    className="absolute bottom-1/4 left-1/4 w-87.5 h-87.5 rounded-full bg-linear-to-bl from-purple-400/15 via-pink-400/10 to-transparent dark:from-purple-500/8 dark:via-pink-500/5 blur-[80px] animate-morph-blob"
                     style={{ animationDuration: '28s', animationDelay: '7s' }}
                 />
                 <div
-                    className="absolute top-1/2 right-0 w-[500px] h-[300px] rounded-full bg-gradient-to-l from-cyan-400/10 via-teal-400/5 to-transparent dark:from-cyan-500/5 dark:via-teal-500/3 blur-[120px] animate-morph-blob"
+                    className="absolute top-1/2 right-0 w-125 h-75 rounded-full bg-linear-to-l from-cyan-400/10 via-teal-400/5 to-transparent dark:from-cyan-500/5 dark:via-teal-500/3 blur-[120px] animate-morph-blob"
                     style={{ animationDuration: '35s', animationDelay: '3s' }}
                 />
 
                 {/* Floating orbs */}
                 <div className="absolute top-1/3 left-[5%] animate-pulse" style={{ animationDuration: '4s' }}>
-                    <div className="w-28 h-28 rounded-full bg-gradient-to-br from-lime-500/10 to-emerald-500/5 blur-2xl" />
+                    <div className="w-28 h-28 rounded-full bg-linear-to-br from-lime-500/10 to-emerald-500/5 blur-2xl" />
                 </div>
 
                 <div className="absolute bottom-1/4 right-[8%] animate-pulse" style={{ animationDuration: '5s', animationDelay: '2s' }}>
-                    <div className="w-36 h-36 rounded-full bg-gradient-to-br from-purple-500/10 to-pink-500/5 blur-2xl" />
+                    <div className="w-36 h-36 rounded-full bg-linear-to-br from-purple-500/10 to-pink-500/5 blur-2xl" />
                 </div>
 
                 {/* Floating icons */}
@@ -133,10 +133,10 @@ export function Features() {
                     <h2 className="font-primary text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white leading-[1.1]">
                         What Makes{" "}
                         <span className="relative inline-block">
-                            <span className="relative z-10 bg-gradient-to-r from-lime-600 via-emerald-500 to-cyan-500 bg-clip-text text-transparent dark:from-lime-400 dark:via-emerald-400 dark:to-cyan-400">
+                            <span className="relative z-10 bg-linear-to-r from-lime-600 via-emerald-500 to-cyan-500 bg-clip-text text-transparent dark:from-lime-400 dark:via-emerald-400 dark:to-cyan-400">
                                 Vayu UI
                             </span>
-                            <span className="absolute inset-0 blur-2xl bg-gradient-to-r from-lime-600/20 via-emerald-500/20 to-cyan-500/20 dark:from-lime-400/10 dark:via-emerald-400/10 dark:to-cyan-400/10" />
+                            <span className="absolute inset-0 blur-2xl bg-linear-to-r from-lime-600/20 via-emerald-500/20 to-cyan-500/20 dark:from-lime-400/10 dark:via-emerald-400/10 dark:to-cyan-400/10" />
                         </span>
                         <br className="hidden sm:block" />
                         Different
@@ -156,13 +156,13 @@ export function Features() {
                             style={{ animationDelay: `${index * 100}ms` }}
                         >
                             {/* Glow effect on hover */}
-                            <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.bgGradient} blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                            <div className={`absolute inset-0 rounded-2xl bg-linear-to-br ${feature.bgGradient} blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
                             <div className="relative h-full rounded-2xl border border-neutral-200/50 dark:border-neutral-800/50 bg-white/80 dark:bg-neutral-900/50 backdrop-blur-sm p-6 transition-all duration-300 hover:border-neutral-300 dark:hover:border-neutral-700 hover:shadow-lg hover:-translate-y-1">
                                 {/* Icon */}
-                                <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} p-0.5`}>
+                                <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br ${feature.gradient} p-0.5`}>
                                     <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-white dark:bg-neutral-900">
-                                        <feature.icon className={`h-5 w-5 bg-gradient-to-br ${feature.gradient} bg-clip-text`} style={{ color: 'transparent', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }} />
+                                        <feature.icon className={`h-5 w-5 bg-linear-to-br ${feature.gradient} bg-clip-text`} style={{ color: 'transparent', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }} />
                                     </div>
                                 </div>
 
@@ -188,9 +188,9 @@ export function Features() {
                 <div className="mt-16 text-center">
                     <Link
                         href="/docs"
-                        className="group relative inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-lime-600 to-emerald-600 dark:from-lime-500 dark:to-emerald-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] overflow-hidden"
+                        className="group relative inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-lime-600 to-emerald-600 dark:from-lime-500 dark:to-emerald-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 active:scale-[0.98] overflow-hidden"
                     >
-                        <span className="absolute inset-0 bg-gradient-to-r from-lime-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        <span className="absolute inset-0 bg-linear-to-r from-lime-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                         <span className="relative z-10 flex items-center gap-2">
                             Explore All Components
                             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />

@@ -52,7 +52,7 @@ export default function AvatarGroupDemo() {
         setSelectedUser(user.username || `User ${index + 1}`);
     };
 
-    const handleOverflowClick = (hiddenUsers: typeof users) => {
+    const handleOverflowClick = (hiddenUsers: any[]) => {
         setShowHiddenUsers(!showHiddenUsers);
         console.log("Hidden users:", hiddenUsers);
     };

@@ -18,15 +18,10 @@ import React, {
 type AffixPosition = "top" | "bottom";
 
 interface AffixProps extends HTMLAttributes<HTMLDivElement> {
-    /** Distance from the viewport edge at which the element becomes affixed. */
     offset?: number;
-    /** Pin to the top or bottom of the viewport. */
     position?: AffixPosition;
-    /** Custom scroll container — defaults to `window`. */
     target?: HTMLElement | null;
-    /** Z-index when affixed. */
     zIndex?: number;
-    /** Callback fired when affixed state changes. */
     onAffixed?: (affixed: boolean) => void;
     children: React.ReactNode;
 }
@@ -64,7 +59,7 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
             className,
             style,
             children,
-            ...props // Role, aria-label, etc. are passed here by the consumer
+            ...props
         },
         ref
     ) => {
@@ -74,7 +69,13 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
 
         const innerRef = useRef<HTMLDivElement>(null);
         const placeholderRef = useRef<HTMLDivElement>(null);
+        
+        // Performance: Track previous state to avoid unnecessary callback triggers
         const prevAffixedRef = useRef(false);
+        
+        // Performance: Refs for animation frame to prevent scroll jank
+        const frameId = useRef<number | null>(null);
+        const isTicking = useRef(false);
 
         const updateAffixed = useCallback(
             (next: boolean) => {
@@ -96,7 +97,7 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
             const rect = placeholder.getBoundingClientRect();
             const isContainerMode = target instanceof HTMLElement;
 
-            // --- Mode 1: Custom Container (Absolute Positioning) ---
+            // --- Mode 1: Custom Container (Absolute) ---
             if (isContainerMode) {
                 const containerRect = target.getBoundingClientRect();
                 const scrollTop = target.scrollTop;
@@ -120,7 +121,6 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
                         updateAffixed(false);
                     }
                 } else {
-                    // position === "bottom"
                     const shouldAffix = rect.bottom - containerRect.bottom >= -offset;
 
                     if (shouldAffix) {
@@ -142,7 +142,7 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
                     }
                 }
             } 
-            // --- Mode 2: Window (Fixed Positioning) ---
+            // --- Mode 2: Window (Fixed) ---
             else {
                 const containerTop = 0;
                 const containerBottom = window.innerHeight;
@@ -187,21 +187,39 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
             }
         }, [offset, position, target, zIndex, updateAffixed]);
 
+        // Performance: Throttle measure calls to Animation Frames
+        const handleScroll = useCallback(() => {
+            if (!isTicking.current) {
+                frameId.current = requestAnimationFrame(() => {
+                    measure();
+                    isTicking.current = false;
+                });
+                isTicking.current = true;
+            }
+        }, [measure]);
+
+        // Initial Measurement
         useLayoutEffect(() => {
             measure();
         }, [measure]);
 
+        // Event Listeners
         useEffect(() => {
             const scrollTarget = target || window;
 
-            scrollTarget.addEventListener("scroll", measure, { passive: true });
+            // Passive: true improves scroll performance by telling browser we won't preventDefault
+            scrollTarget.addEventListener("scroll", handleScroll, { passive: true });
             window.addEventListener("resize", measure, { passive: true });
 
             return () => {
-                scrollTarget.removeEventListener("scroll", measure);
+                // Cleanup: Cancel any pending animation frame
+                if (frameId.current) {
+                    cancelAnimationFrame(frameId.current);
+                }
+                scrollTarget.removeEventListener("scroll", handleScroll);
                 window.removeEventListener("resize", measure);
             };
-        }, [measure, target]);
+        }, [measure, handleScroll, target]);
 
         return (
             <>
@@ -220,7 +238,7 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
                     )}
                     style={{ ...affixStyle, ...style }}
                     data-affixed={isAffixed || undefined}
-                    {...props} // Accessibility attributes are now passed in here
+                    {...props}
                 >
                     {children}
                 </div>

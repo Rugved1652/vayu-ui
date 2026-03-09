@@ -1,95 +1,130 @@
 "use client";
 
-import { AudioPlayer, type Track } from "vayu-ui";
+import { AudioPlayer, useAudioPlayer, Track } from "vayu-ui";
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Loader2 } from "lucide-react";
 
-const sampleTrack: Track = {
-    id: "1",
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    title: "SoundHelix Song 1",
-    artist: "T. Schurger",
-    album: "SoundHelix",
-};
-
-const playlist: Track[] = [
-    sampleTrack,
-    {
-        id: "2",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-        title: "SoundHelix Song 2",
-        artist: "T. Schurger",
-        album: "SoundHelix",
-    },
-    {
-        id: "3",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-        title: "SoundHelix Song 3",
-        artist: "T. Schurger",
-        album: "SoundHelix",
-    },
+const tracks: Track[] = [
+  { id: "1", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", title: "Neon Dreams", artist: "Synthwave" },
+  { id: "2", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", title: "Electric Soul", artist: "Funky" },
 ];
 
-export default function AudioPlayerDemo() {
-    return (
-        <div className="w-full max-w-lg not-prose flex flex-col gap-8">
-            <div>
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
-                    Full player with playlist
-                </p>
-                <AudioPlayer.Root
-                    track={sampleTrack}
-                    playlist={playlist.slice(1)}
-                >
-                    <AudioPlayer.Audio />
-                    <AudioPlayer.Player variant="card">
-                        <div className="flex items-center gap-4 mb-4">
-                            <AudioPlayer.Artwork size="md" />
-                            <AudioPlayer.TrackInfo showAlbum />
-                        </div>
+const PlayerUI = () => {
+  const player = useAudioPlayer();
+  
+  // Screen Reader Announcer for track changes
+  const announcement = player.isPlaying 
+    ? `Playing ${player.currentTrack?.title}` 
+    : `Paused ${player.currentTrack?.title}`;
 
-                        <AudioPlayer.ProgressBar className="mb-4" />
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    player.seek(percent * player.duration);
+  };
 
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1">
-                                <AudioPlayer.ShuffleButton />
-                                <AudioPlayer.RepeatButton />
-                            </div>
+  return (
+    <div className="w-full max-w-md bg-white shadow-xl rounded-xl p-6 border border-gray-200 relative">
+      
+      {/* Accessibility Live Region - Screen readers announce this when it changes */}
+      <div role="status" aria-live="polite" className="sr-only">
+        {announcement}
+      </div>
 
-                            <div className="flex items-center gap-2">
-                                <AudioPlayer.SkipBackwardButton />
-                                <AudioPlayer.PlayPauseButton size="lg" />
-                                <AudioPlayer.SkipForwardButton />
-                            </div>
+      {/* Track Info */}
+      <div className="mb-6 text-center">
+        <h2 className="text-xl font-bold text-gray-900 truncate">
+          {player.currentTrack?.title || "Select a track"}
+        </h2>
+        <p className="text-sm text-gray-500 truncate">
+          {player.currentTrack?.artist || "Unknown Artist"}
+        </p>
+      </div>
 
-                            <div className="flex items-center gap-1">
-                                <AudioPlayer.VolumeControl />
-                                <AudioPlayer.PlaylistButton />
-                            </div>
-                        </div>
+      {/* Progress Bar */}
+      <div 
+        className="relative w-full h-2 bg-gray-200 rounded-full cursor-pointer group"
+        onClick={handleSeek}
+        {...player.getProgressProps({ 
+          className: "w-full h-2 bg-gray-200 rounded-full cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-full"
+        })}
+      >
+        {/* Buffer */}
+        <div 
+          className="absolute h-full bg-gray-300 rounded-full"
+          style={{ width: `${(player.buffered / player.duration) * 100}%` }}
+        />
+        {/* Progress */}
+        <div 
+          className="absolute h-full bg-blue-600 rounded-full"
+          style={{ width: `${(player.currentTime / player.duration) * 100}%` }}
+        />
+        {/* Thumb (Visual only) */}
+        <div className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-blue-600 rounded-full shadow opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity"
+             style={{ left: `${(player.currentTime / player.duration) * 100}%`, transform: 'translate(-50%, -50%)' }} 
+        />
+      </div>
 
-                        <AudioPlayer.LoadingIndicator />
-                    </AudioPlayer.Player>
-                </AudioPlayer.Root>
-            </div>
+      {/* Time Display */}
+      <div className="flex justify-between text-xs text-gray-500 font-mono mt-2 mb-4">
+        <span>{player.formatTime(player.currentTime)}</span>
+        <span>{player.formatTime(player.duration)}</span>
+      </div>
 
-            <div>
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
-                    Minimal
-                </p>
-                <AudioPlayer.Root track={sampleTrack}>
-                    <AudioPlayer.Audio />
-                    <AudioPlayer.Player variant="minimal">
-                        <div className="flex items-center gap-3">
-                            <AudioPlayer.PlayPauseButton size="sm" />
-                            <AudioPlayer.TrackInfo className="flex-1" />
-                            <AudioPlayer.VolumeControl />
-                        </div>
-                        <AudioPlayer.ProgressBar
-                            showTimestamps={false}
-                            className="mt-3"
-                        />
-                    </AudioPlayer.Player>
-                </AudioPlayer.Root>
-            </div>
-        </div>
-    );
+      {/* Controls */}
+      <div className="flex items-center justify-center gap-6">
+        
+        <button {...player.getPrevButtonProps({ 
+          className: "p-2 rounded-full hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-50" 
+        })}>
+          <SkipBack className="w-6 h-6 text-gray-700" />
+        </button>
+
+        <button {...player.getPlayButtonProps({ 
+          className: "w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition-colors disabled:bg-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+        })}>
+          {player.isLoading ? (
+            <Loader2 className="w-6 h-6 animate-spin" />
+          ) : player.isPlaying ? (
+            <Pause className="w-6 h-6" />
+          ) : (
+            <Play className="w-6 h-6 ml-0.5" />
+          )}
+        </button>
+
+        <button {...player.getNextButtonProps({ 
+          className: "p-2 rounded-full hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-50" 
+        })}>
+          <SkipForward className="w-6 h-6 text-gray-700" />
+        </button>
+
+      </div>
+
+      {/* Volume */}
+      <div className="flex items-center justify-center gap-2 mt-6">
+        <button 
+          onClick={player.toggleMute}
+          className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          aria-label={player.isMuted ? "Unmute" : "Mute"}
+        >
+          {player.isMuted ? <VolumeX className="w-5 h-5 text-gray-500"/> : <Volume2 className="w-5 h-5 text-gray-500"/>}
+        </button>
+        
+        <input 
+          {...player.getVolumeProps({ 
+            className: "w-24 h-1 bg-gray-200 rounded-full appearance-none cursor-pointer accent-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          })} 
+        />
+      </div>
+    </div>
+  );
+};
+
+export default function DemoPage() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
+      <AudioPlayer.Root track={tracks[0]} playlist={tracks}>
+        <PlayerUI />
+      </AudioPlayer.Root>
+    </div>
+  );
 }

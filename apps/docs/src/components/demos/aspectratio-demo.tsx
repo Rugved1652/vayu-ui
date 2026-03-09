@@ -61,13 +61,13 @@ export default function AspectRatioDemo() {
           Device Presets
         </h2>
         <div className="flex gap-4 items-end">
-          <div className="flex-1 max-w-[200px]">
+          <div className="flex-1 max-w-50">
             <p className="text-xs text-gray-500 mb-2 text-center">iPhone</p>
             <AspectRatio ratio="iphone" decorative>
               <Placeholder label="19.5:9" />
             </AspectRatio>
           </div>
-          <div className="flex-1 max-w-[150px]">
+          <div className="flex-1 max-w-37.5">
             <p className="text-xs text-gray-500 mb-2 text-center">iPad</p>
             <AspectRatio ratio="ipad" decorative>
               <Placeholder label="4:3" />
@@ -100,33 +100,37 @@ export default function AspectRatioDemo() {
           
           {/* Cover (Default) */}
           <div>
-            <p className="text-xs text-gray-500 mb-2">objectFit="cover" (Default)</p>
+            <p className="text-xs text-gray-500 mb-2">objectFit=&quot;cover&quot; (Default)</p>
             <AspectRatio 
               ratio="square" 
               decorative
               className="rounded overflow-hidden"
             >
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80"
                 alt="Mountain landscape"
-                className="w-full h-full"
+                fill
+                className="object-cover"
+                unoptimized
               />
             </AspectRatio>
           </div>
 
           {/* Contain */}
           <div>
-            <p className="text-xs text-gray-500 mb-2">objectFit="contain"</p>
+            <p className="text-xs text-gray-500 mb-2">objectFit=&quot;contain&quot;</p>
             <AspectRatio 
               ratio="square" 
               objectFit="contain"
               decorative
               className="rounded bg-gray-100 dark:bg-gray-800 overflow-hidden"
             >
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80"
                 alt="Mountain landscape"
-                className="w-full h-full"
+                fill
+                className="object-contain"
+                unoptimized
               />
             </AspectRatio>
           </div>
