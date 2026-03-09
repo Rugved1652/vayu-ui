@@ -6,6 +6,16 @@ description: An interactive element triggered by a user.
 import ButtonDemo from '@/components/demos/button-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add button
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -16,17 +26,22 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Button } from "vayu-ui";
+    import { Button, Status } from "vayu-ui";
     import { Mail } from "lucide-react";
 
     export default function App() {
       return (
         <div className="flex gap-4">
             <Button variant="primary">Click me</Button>
-            
+
             <Button variant="secondary" size="large">
                 <Button.Icon size="large"><Mail /></Button.Icon>
                 <Button.Text>Login with Email</Button.Text>
+            </Button>
+
+            <Button variant="destructive">
+                <Button.Icon><Trash2 /></Button.Icon>
+                <Button.Text>Delete</Button.Text>
             </Button>
         </div>
       );
@@ -34,6 +49,141 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
     ```
   </Tab>
 </Tabs>
+
+## Anatomy
+
+```tsx
+<Button variant="primary" size="medium">
+  <Button.Icon><Mail /></Button.Icon>
+  <Button.Text>Button Label</Button.Text>
+  <Button.Badge value={3} variant="danger" />
+</Button>
+```
+
+## Variants
+
+### Primary
+
+Used for main actions and primary CTAs.
+
+```tsx
+<Button variant="primary">Primary Button</Button>
+```
+
+### Secondary
+
+Used for secondary actions and less prominent buttons.
+
+```tsx
+<Button variant="secondary">Secondary Button</Button>
+```
+
+### Outline
+
+Used for tertiary actions with a border-only style.
+
+```tsx
+<Button variant="outline">Outline Button</Button>
+```
+
+### Ghost
+
+Used for subtle actions with no background or border.
+
+```tsx
+<Button variant="ghost">Ghost Button</Button>
+```
+
+### Destructive
+
+Used for dangerous actions like delete or remove.
+
+```tsx
+<Button variant="destructive">Delete</Button>
+```
+
+## Sizes
+
+```tsx
+<Button size="small" variant="secondary">Small</Button>
+<Button size="medium" variant="secondary">Medium</Button>
+<Button size="large" variant="secondary">Large</Button>
+```
+
+## With Icons
+
+```tsx
+<Button variant="primary">
+  <Button.Icon><Mail /></Button.Icon>
+  <Button.Text>Email Login</Button.Text>
+</Button>
+
+<Button variant="outline" size="large">
+  <Button.Text>Send</Button.Text>
+  <Button.Icon size="large"><Send /></Button.Icon>
+</Button>
+```
+
+## Loading State
+
+```tsx
+import { Button, Status } from "vayu-ui";
+import { useState } from "react";
+
+function Example() {
+  const [loading, setLoading] = useState(Status.IDLE);
+
+  const handleClick = () => {
+    setLoading(Status.PENDING);
+    setTimeout(() => setLoading(Status.SUCCESS), 2000);
+    setTimeout(() => setLoading(Status.IDLE), 4000);
+  };
+
+  return (
+    <Button
+      variant="primary"
+      loading={loading}
+      onClick={handleClick}
+      loadingText="Sending..."
+    >
+      Click to Load
+    </Button>
+  );
+}
+```
+
+## With Badge
+
+```tsx
+<Button variant="secondary">
+  <Button.Icon><Bell /></Button.Icon>
+  <Button.Badge value={3} variant="danger" />
+</Button>
+
+<Button variant="outline">
+  <Button.Text>Messages</Button.Text>
+  <Button.Badge value={12} max={9} variant="primary" position="top-right" />
+</Button>
+
+<Button variant="ghost">
+  <Button.Text>Updates</Button.Text>
+  <Button.Badge value="New" variant="info" position="inline-right" />
+</Button>
+```
+
+## Disabled State
+
+```tsx
+<Button variant="primary" disabled>Disabled</Button>
+<Button variant="secondary" disabled>Disabled</Button>
+<Button variant="outline" disabled>Disabled</Button>
+```
+
+## Full Width
+
+```tsx
+<Button variant="primary" fullWidth>Full Width Button</Button>
+```
 
 ## Props
 
@@ -49,18 +199,6 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 | `disabled` | `boolean` | `false` | Disables the button |
 | `type` | `"button" \| "submit" \| "reset"` | `"button"` | HTML button type |
 | `aria-label` | `string` | - | Accessible label for the button |
-
-### Button.Badge
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `size` | `"small" \| "medium" \| "large"` | `"small"` | Size of the badge |
-| `value` | `number \| string` | - | Content of the badge |
-| `max` | `number` | `99` | Max number to show before adding + |
-| `variant` | `"primary" \| "danger" \| "warning" \| "info" \| "success"` | `"danger"` | Visual style of the badge |
-| `position` | `"top-right" \| "top-left" \| "inline-right" \| "inline-left"` | `"top-right"` | Position of the badge |
-| `showZero` | `boolean` | `false` | Whether to show badge when value is 0 |
-| `className` | `string` | - | Custom classes |
 
 ### Button.Icon
 
@@ -78,6 +216,27 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 | `children` | `ReactNode` | - | The text content |
 | `className` | `string` | - | Custom classes for the text container |
 
+### Button.Badge
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `size` | `"small" \| "medium" \| "large"` | `"small"` | Size of the badge |
+| `value` | `number \| string` | - | Content of the badge |
+| `max` | `number` | `99` | Max number to show before adding + |
+| `variant` | `"primary" \| "danger" \| "warning" \| "info" \| "success"` | `"danger"` | Visual style of the badge |
+| `position` | `"top-right" \| "top-left" \| "inline-right" \| "inline-left"` | `"top-right"` | Position of the badge |
+| `showZero` | `boolean` | `false` | Whether to show badge when value is 0 |
+| `className` | `string` | - | Custom classes |
+
+### Status Enum
+
+| Value | Description |
+| :--- | :--- |
+| `Status.IDLE` | Default state, no loading |
+| `Status.PENDING` | Loading in progress |
+| `Status.SUCCESS` | Operation completed successfully |
+| `Status.REJECTED` | Operation failed |
+
 ## Accessibility
 
 - **Keyboard Navigation**: Button can be activated using Enter and Space keys
@@ -91,7 +250,10 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Source Code
 
 ```tsx title="src/components/ui/button.tsx"
-// button.tsx - TRUE Server Component (No "use client" needed!)
+// button.tsx
+// "use client" is required here because we use forwardRef and handle events (onClick, etc.).
+// This allows the button to work in both Client and Server Components seamlessly.
+"use client";
 
 import { clsx } from "clsx";
 import React, {
@@ -142,8 +304,6 @@ const Spinner = forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
             strokeLinecap="round"
             strokeLinejoin="round"
             className="animate-spin w-4 h-4"
-            role="status"
-            aria-label="Loading"
             {...props}
         >
             <path d="M21 12a9 9 0 1 1-6.219-8.56" />
@@ -214,9 +374,9 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
             outline: clsx(
                 "bg-transparent hover:bg-ground-100 active:bg-ground-200",
                 "text-ground-800 font-medium",
-                "border-2 border-ground-400 hover:border-ground-500",
+                "border-2 border-ground-500 hover:border-ground-600",
                 "dark:hover:bg-ground-800 dark:active:bg-ground-700",
-                "dark:text-ground-100 dark:border-ground-500"
+                "dark:text-ground-100 dark:border-ground-400"
             ),
             ghost: clsx(
                 "bg-transparent hover:bg-ground-100 active:bg-ground-200",
@@ -289,7 +449,7 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
 ButtonRoot.displayName = "Button";
 
 // ============================================================================
-// Icon Component - NO CONTEXT, accepts size as prop
+// Icon Component
 // ============================================================================
 
 interface IconProps extends HTMLAttributes<HTMLSpanElement> {
@@ -328,7 +488,7 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>(
 Icon.displayName = "Button.Icon";
 
 // ============================================================================
-// Badge Component - NO CONTEXT, accepts size as prop
+// Badge Component
 // ============================================================================
 
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -408,6 +568,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
                     "rounded-full font-semibold leading-none",
                     "border-2 border-white dark:border-ground-950",
                     "shadow-outer",
+                    "z-10",
                     badgeSizeClasses[size],
                     badgeVariantClasses[variant],
                     badgePositionClasses[position],
@@ -464,3 +625,4 @@ export type {
     IconProps,
     TextProps,
 };
+```

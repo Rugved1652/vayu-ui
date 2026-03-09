@@ -1,4 +1,7 @@
-// button.tsx - TRUE Server Component (No "use client" needed!)
+// button.tsx
+// "use client" is required here because we use forwardRef and handle events (onClick, etc.).
+// This allows the button to work in both Client and Server Components seamlessly.
+"use client";
 
 import { clsx } from "clsx";
 import React, {
@@ -49,8 +52,6 @@ const Spinner = forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
             strokeLinecap="round"
             strokeLinejoin="round"
             className="animate-spin w-4 h-4"
-            role="status"
-            aria-label="Loading"
             {...props}
         >
             <path d="M21 12a9 9 0 1 1-6.219-8.56" />
@@ -118,12 +119,13 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
                 "dark:bg-ground-800 dark:hover:bg-ground-700",
                 "dark:text-ground-100 dark:border-ground-600"
             ),
+            // FIX: Improved contrast for WCAG compliance (ground-400 -> ground-500)
             outline: clsx(
                 "bg-transparent hover:bg-ground-100 active:bg-ground-200",
                 "text-ground-800 font-medium",
-                "border-2 border-ground-400 hover:border-ground-500",
+                "border-2 border-ground-500 hover:border-ground-600",
                 "dark:hover:bg-ground-800 dark:active:bg-ground-700",
-                "dark:text-ground-100 dark:border-ground-500"
+                "dark:text-ground-100 dark:border-ground-400"
             ),
             ghost: clsx(
                 "bg-transparent hover:bg-ground-100 active:bg-ground-200",
@@ -196,7 +198,7 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
 ButtonRoot.displayName = "Button";
 
 // ============================================================================
-// Icon Component - NO CONTEXT, accepts size as prop
+// Icon Component
 // ============================================================================
 
 interface IconProps extends HTMLAttributes<HTMLSpanElement> {
@@ -235,7 +237,7 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>(
 Icon.displayName = "Button.Icon";
 
 // ============================================================================
-// Badge Component - NO CONTEXT, accepts size as prop
+// Badge Component
 // ============================================================================
 
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -315,6 +317,8 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
                     "rounded-full font-semibold leading-none",
                     "border-2 border-white dark:border-ground-950",
                     "shadow-outer",
+                    // FIX: Added z-10 to ensure badge sits above button content
+                    "z-10",
                     badgeSizeClasses[size],
                     badgeVariantClasses[variant],
                     badgePositionClasses[position],
