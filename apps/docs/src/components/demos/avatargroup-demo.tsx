@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { AvatarGroup } from "@/components/ui/avatargroup";
+import { AvatarGroup } from "vayu-ui";
 
 export default function AvatarGroupDemo() {
     const [selectedUser, setSelectedUser] = useState<string | null>(null);

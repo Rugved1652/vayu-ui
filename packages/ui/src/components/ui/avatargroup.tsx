@@ -1,13 +1,8 @@
 "use client";
 
-import { Avatar, AvatarSize } from "./avatar";
-import { cn } from "./utils";
-import {
-    CSSProperties,
-    forwardRef,
-    HTMLAttributes,
-    useMemo,
-} from "react";
+import React, { useMemo, forwardRef, HTMLAttributes, KeyboardEvent } from "react";
+import { Avatar } from "vayu-ui";
+import { clsx } from "clsx";
 
 // ============================================================================
 // Types
@@ -15,7 +10,6 @@ import {
 
 export type AvatarGroupSize = "small" | "medium" | "large" | "xlarge";
 export type AvatarGroupLayout = "stack" | "grid";
-export type AvatarStatus = "online" | "offline" | "away" | "busy";
 
 export interface UserData {
     id?: string | number | null;
@@ -23,9 +17,7 @@ export interface UserData {
     username?: string;
     alt?: string;
     fallback?: string;
-    status?: AvatarStatus;
-    /** @deprecated Use `status` instead */
-    isOnline?: boolean;
+    status?: "online" | "offline" | "away" | "busy";
 }
 
 export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
@@ -34,6 +26,7 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
     maxDisplay?: number;
     layout?: AvatarGroupLayout;
     spacing?: "tight" | "normal" | "loose" | number;
+    renderOverflow?: (count: number) => React.ReactNode;
     onAvatarClick?: (user: UserData, index: number) => void;
     onOverflowClick?: (hiddenUsers: UserData[]) => void;
 }
@@ -51,9 +44,9 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
             layout = "stack",
             spacing = "normal",
             className,
+            renderOverflow,
             onAvatarClick,
             onOverflowClick,
-            children,
             ...props
         },
         ref
@@ -86,8 +79,28 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
             return map[spacing];
         }, [spacing]);
 
-        const avatarStyle: CSSProperties | undefined =
-            layout === "stack" ? { marginLeft: spacingValue } : undefined;
+        // ------------------------------------------------------------------------
+        // Keyboard Navigation (WCAG 2.2)
+        // ------------------------------------------------------------------------
+
+        const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+            if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+                event.preventDefault();
+                const focusableElements = Array.from(
+                    event.currentTarget.querySelectorAll('[role="button"]')
+                );
+                const currentIndex = focusableElements.indexOf(event.target as HTMLElement);
+                if (currentIndex === -1) return;
+
+                let newIndex = currentIndex;
+                if (event.key === "ArrowRight") {
+                    newIndex = (currentIndex + 1) % focusableElements.length;
+                } else if (event.key === "ArrowLeft") {
+                    newIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+                }
+                (focusableElements[newIndex] as HTMLElement).focus();
+            }
+        };
 
         // ------------------------------------------------------------------------
         // Render
@@ -96,69 +109,84 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
         return (
             <div
                 ref={ref}
-                className={cn(
+                className={clsx(
                     "flex items-center",
                     layout === "grid" && "flex-wrap gap-2",
-                    layout === "stack" && "pl-2", // compensator for negative margin
+                    layout === "stack" && "pl-2", 
                     className
                 )}
                 role="group"
                 aria-label={`Avatar group with ${users.length} members`}
+                onKeyDown={handleKeyDown}
                 {...props}
             >
-                {/* Visible Avatars */}
                 {visibleUsers.map((user, index) => (
                     <div
                         key={user.id || index}
-                        className={cn(
-                            "relative transition-all duration-200 ease-in-out",
-                            layout === "stack" && "hover:z-10 hover:scale-110 hover:ml-2 hover:mr-2 first:ml-0", // Hover effects for stack
-                            layout === "stack" && "rounded-full ring-2 ring-white dark:ring-ground-950", // Border separation
+                        className={clsx(
+                            // FIX 1: Added "flex items-center justify-center"
+                            // This forces the wrapper to ignore line-height/baseline issues of the Avatar (inline-flex)
+                            // ensuring the wrapper height matches the Avatar height exactly (e.g., 48px).
+                            "relative flex items-center justify-center",
+                            "motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out",
+                            layout === "stack" && [
+                                "rounded-full ring-2 ring-white dark:ring-neutral-900",
+                                "motion-safe:hover:z-20 motion-safe:hover:scale-110 motion-safe:hover:ml-2 motion-safe:hover:mr-2 first:ml-0",
+                            ],
                             onAvatarClick && "cursor-pointer"
                         )}
                         style={{
-                            zIndex: layout === "stack" ? visibleUsers.length - index : undefined,
-                            marginLeft: index === 0 ? 0 : avatarStyle?.marginLeft,
+                            zIndex: layout === "stack" ? index + 1 : undefined,
+                            marginLeft: index === 0 ? 0 : spacingValue,
                         }}
-                        onClick={() => onAvatarClick?.(user, index)}
                     >
                         <Avatar
-                            size={size as AvatarSize}
+                            size={size}
                             username={user.username}
-                            className="pointer-events-none"
+                            onClick={onAvatarClick ? () => onAvatarClick(user, index) : undefined}
+                            tabIndex={onAvatarClick ? 0 : undefined}
+                            // Remove Avatar's default border/shadow to avoid double rings
+                            className="border-transparent shadow-none dark:border-transparent"
                         >
                             {user.src ? (
-                                <Avatar.Image src={user.src} alt={user.alt || user.username} />
+                                <Avatar.Image src={user.src} alt="" />
                             ) : (
                                 <Avatar.Initials username={user.username || user.fallback || "?"} />
                             )}
-                            {(user.status || user.isOnline !== undefined) && (
-                                <Avatar.Status status={user.status || (user.isOnline ? "online" : "offline")} />
-                            )}
+                            {user.status && <Avatar.Status status={user.status} />}
                         </Avatar>
                     </div>
                 ))}
 
-                {/* Overflow */}
                 {hasOverflow && (
-                    <div
-                        className={cn(
-                            "relative flex items-center justify-center rounded-full bg-ground-200 dark:bg-ground-800 text-ground-600 dark:text-ground-300 font-medium text-xs ring-2 ring-white dark:ring-ground-950",
-                            layout === "stack" && "hover:z-10",
-                            onOverflowClick && "cursor-pointer hover:bg-ground-300 dark:hover:bg-ground-700",
-                            // Sizes matching Avatar
-                            size === "small" && "w-8 h-8",
-                            size === "medium" && "w-10 h-10",
-                            size === "large" && "w-12 h-12",
-                            size === "xlarge" && "w-14 h-14"
+                    <button
+                        type="button"
+                        className={clsx(
+                            "relative flex items-center justify-center rounded-full",
+                            "bg-neutral-200 dark:bg-neutral-700",
+                            "text-neutral-700 dark:text-neutral-200",
+                            "font-medium",
+                            "ring-2 ring-white dark:ring-neutral-900",
+                            onOverflowClick && "cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-600",
+                            "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
+                            "dark:focus:ring-primary-400 dark:ring-offset-neutral-900",
+                            onOverflowClick && "motion-safe:transition-all motion-safe:duration-200",
+                            
+                            // Sizes match Avatar exactly
+                            size === "small" && "w-8 h-8 text-xs",
+                            size === "medium" && "w-12 h-12 text-sm",
+                            size === "large" && "w-16 h-16 text-lg",
+                            size === "xlarge" && "w-24 h-24 text-2xl"
                         )}
                         style={{
                             marginLeft: layout === "stack" ? spacingValue : 0,
                         }}
                         onClick={() => onOverflowClick?.(hiddenUsers)}
+                        aria-label={`Show ${hiddenUsers.length} more users`}
+                        role="button"
                     >
-                        {`+${hiddenUsers.length}`}
-                    </div>
+                        {renderOverflow ? renderOverflow(hiddenUsers.length) : `+${hiddenUsers.length}`}
+                    </button>
                 )}
             </div>
         );
