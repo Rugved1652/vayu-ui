@@ -1,4 +1,4 @@
-import React, { forwardRef, HTMLAttributes } from "react";
+import React, { HTMLAttributes } from "react";
 import { clsx } from "clsx";
 
 // ============================================================================
@@ -64,11 +64,9 @@ const variantMap: Record<DividerVariant, string> = {
     dotted: "border-dotted",
 };
 
-// Design token colors - using ground-*, primary-*, etc. from @theme
-// WCAG-compliant border colors (3:1 contrast minimum)
+// FIX: Using ground-400 for 3:1 contrast ratio (WCAG 1.4.11)
 const colorMap: Record<DividerColor, string> = {
-    // Using ground-300 (light mode) and ground-700 (dark mode) for 3:1+ contrast
-    ground: "border-ground-300 dark:border-ground-700",
+    ground: "border-ground-400 dark:border-ground-600",
     primary: "border-primary-300 dark:border-primary-600",
     success: "border-success-400 dark:border-success-600",
     warning: "border-warning-500 dark:border-warning-600",
@@ -86,7 +84,6 @@ const labelColorMap: Record<DividerColor, string> = {
     info: "text-info-700 dark:text-info-300",
 };
 
-// Thickness presets in pixels
 const sizeMap: Record<DividerSize, number> = {
     thin: 1,
     normal: 2,
@@ -98,123 +95,117 @@ const sizeMap: Record<DividerSize, number> = {
 // Components
 // ============================================================================
 
-const DividerLine = forwardRef<HTMLDivElement, DividerLineProps>(
-    (
-        {
-            variant = "solid",
-            color = "ground",
-            size = "normal",
-            thickness,
-            opacity = 1,
-            orientation = "horizontal",
-            className,
-            style,
-            ...props
-        },
-        ref
-    ) => {
-        const actualThickness = thickness || sizeMap[size];
-        const isHorizontal = orientation === "horizontal";
+const DividerLine = ({
+    variant = "solid",
+    color = "ground",
+    size = "normal",
+    thickness,
+    opacity = 1,
+    orientation = "horizontal",
+    className,
+    style,
+    ...props
+}: DividerLineProps) => {
+    const actualThickness = thickness || sizeMap[size];
+    const isHorizontal = orientation === "horizontal";
 
-        const borderStyle: React.CSSProperties = {
-            opacity,
-            ...style,
+    const borderStyle: React.CSSProperties = {
+        opacity,
+        ...style,
+    };
+
+    return (
+        <div
+            className={clsx(
+                "grow shrink-0 border-0",
+                variantMap[variant],
+                colorMap[color],
+                className
+            )}
+            style={{
+                ...borderStyle,
+                [isHorizontal ? "borderTopWidth" : "borderLeftWidth"]: `${actualThickness}px`,
+            }}
+            aria-hidden="true"
+            {...props}
+        />
+    );
+};
+
+const DividerLabel = ({
+    color = "ground",
+    className,
+    children,
+    ...props
+}: DividerLabelProps) => {
+    return (
+        <span
+            className={clsx(
+                "px-3 py-1 text-sm font-medium whitespace-nowrap font-secondary",
+                labelColorMap[color],
+                className
+            )}
+            {...props}
+        >
+            {children}
+        </span>
+    );
+};
+
+const DividerRoot = ({
+    orientation = "horizontal",
+    spacing = "md",
+    decorative = false,
+    className,
+    children,
+    ...props
+}: DividerRootProps) => {
+    const isHorizontal = orientation === "horizontal";
+
+    const layoutClasses = isHorizontal
+        ? clsx("flex items-center w-full", spacingMap[spacing])
+        : clsx(
+            "inline-flex flex-col items-center h-full min-h-[1em]",
+            verticalSpacingMap[spacing]
+        );
+
+    // FIX: Accessibility Semantics
+    // 1. Decorative -> hidden.
+    // 2. Has Children (Label) -> No role (content is readable).
+    // 3. Default -> Separator role.
+    const hasChildren = !!children;
+
+    const ariaProps = decorative
+        ? { "aria-hidden": "true" as const }
+        : hasChildren
+        ? {}
+        : {
+            role: "separator",
+            "aria-orientation": orientation
         };
 
+    if (!children) {
         return (
             <div
-                ref={ref}
-                className={clsx(
-                    "grow shrink-0 border-0",
-                    variantMap[variant],
-                    colorMap[color],
-                    className
-                )}
-                style={{
-                    ...borderStyle,
-                    [isHorizontal ? "borderTopWidth" : "borderLeftWidth"]: `${actualThickness}px`,
-                }}
-                aria-hidden="true"
-                {...props}
-            />
-        );
-    }
-);
-DividerLine.displayName = "Divider.Line";
-
-const DividerLabel = forwardRef<HTMLSpanElement, DividerLabelProps>(
-    ({ color = "ground", className, children, ...props }, ref) => {
-        return (
-            <span
-                ref={ref}
-                className={clsx(
-                    "px-3 py-1 text-sm font-medium whitespace-nowrap font-secondary",
-                    labelColorMap[color],
-                    className
-                )}
-                {...props}
-            >
-                {children}
-            </span>
-        );
-    }
-);
-DividerLabel.displayName = "Divider.Label";
-
-const DividerRoot = forwardRef<HTMLDivElement, DividerRootProps>(
-    (
-        {
-            orientation = "horizontal",
-            spacing = "md",
-            decorative = false,
-            className,
-            children,
-            ...props
-        },
-        ref
-    ) => {
-        const isHorizontal = orientation === "horizontal";
-
-        const layoutClasses = isHorizontal
-            ? clsx("flex items-center w-full", spacingMap[spacing])
-            : clsx(
-                "inline-flex flex-col items-center h-full min-h-[1em]",
-                verticalSpacingMap[spacing]
-            );
-
-        const ariaProps = decorative
-            ? { "aria-hidden": "true" as const }
-            : {
-                role: "separator",
-                "aria-orientation": orientation
-            };
-
-        if (!children) {
-            return (
-                <div
-                    ref={ref}
-                    className={clsx(layoutClasses, className)}
-                    {...ariaProps}
-                    {...props}
-                >
-                    <DividerLine orientation={orientation} />
-                </div>
-            );
-        }
-
-        return (
-            <div
-                ref={ref}
                 className={clsx(layoutClasses, className)}
                 {...ariaProps}
                 {...props}
             >
-                {children}
+                <DividerLine orientation={orientation} />
             </div>
         );
     }
-);
-DividerRoot.displayName = "Divider";
+
+    return (
+        <div
+            className={clsx(layoutClasses, className)}
+            {...ariaProps}
+            {...props}
+        >
+            {children}
+        </div>
+    );
+};
 
 // ============================================================================
 // Compound Component Export

@@ -6,6 +6,16 @@ description: Visually or semantically separates content.
 import DividerDemo from '@/components/demos/divider-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add divider
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -16,40 +26,59 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
+    "use client"
     import { Divider } from "vayu-ui";
 
     export default function DividerDemo() {
-      return (
-        <div className="w-full max-w-md">
-          {/* 1. Simple Divider (Horizontal Line) */}
-          <Divider />
+        return (
+            <div className="w-full max-w-md not-prose">
+                {/* Simple Divider */}
+                <Divider />
 
-          {/* 2. Vertical Divider */}
-          <div className="flex h-5 items-center space-x-4">
-            <div>Blog</div>
-            <Divider orientation="vertical" />
-            <div>Docs</div>
-          </div>
+                {/* Vertical Divider */}
+                <div className="flex items-center h-5 space-x-2 text-sm font-secondary">
+                    <div>Blog</div>
+                    <Divider orientation="vertical" />
+                    <div>Docs</div>
+                    <Divider orientation="vertical" />
+                    <div>Source</div>
+                </div>
 
-          {/* 3. With Label (Compound Pattern) */}
-          <Divider>
-            <Divider.Line />
-            <Divider.Label>OR</Divider.Label>
-            <Divider.Line />
-          </Divider>
+                {/* With Label (Compound Pattern) */}
+                <Divider>
+                    <Divider.Line />
+                    <Divider.Label>OR</Divider.Label>
+                    <Divider.Line />
+                </Divider>
 
-          {/* 4. Custom Styling (Dashed, Colors) */}
-          <Divider>
-            <Divider.Line variant="dashed" color="primary" />
-            <Divider.Label color="primary">Dashed Primary</Divider.Label>
-            <Divider.Line variant="dashed" color="primary" />
-          </Divider>
-        </div>
-      );
+                {/* Custom Styling (Dashed, Colors) */}
+                <Divider>
+                    <Divider.Line variant="dashed" color="primary" />
+                    <Divider.Label color="primary">Dashed Primary</Divider.Label>
+                    <Divider.Line variant="dashed" color="primary" />
+                </Divider>
+            </div>
+        );
     }
     ```
   </Tab>
 </Tabs>
+
+## Anatomy
+
+```tsx
+<Divider>
+  <Divider.Line />
+  <Divider.Label>Label</Divider.Label>
+  <Divider.Line />
+</Divider>
+```
+
+## Accessibility
+
+- **Semantic vs Decorative**: By default, dividers render with `role="separator"` and `aria-orientation` for screen readers. Set `decorative={true}` to mark the divider as purely decorative. When the divider has children (labels), no role is applied as the content is readable.
+- **Color Contrast**: All colors use WCAG-compliant tokens ensuring at least 3:1 contrast ratio for borders (using `ground-400` for better visibility) and 4.5:1 for text labels.
+- **Server Component**: This is a true server component with no `"use client"` directive needed, making it fully SSR-compatible.
 
 ## Props
 
@@ -82,15 +111,6 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 | `children` | `ReactNode` | - | Label text or content. |
 | `className` | `string` | - | Additional CSS classes. |
 
-## Accessibility
-
-The Divider component follows WCAG 2.2 AA accessibility guidelines:
-
-- **Semantic vs Decorative**: By default, dividers render with `role="separator"` and `aria-orientation` for screen readers. Set `decorative={true}` to mark the divider as purely decorative.
-- **Color Contrast**: All colors use WCAG-compliant tokens ensuring at least 3:1 contrast ratio for borders and 4.5:1 for text labels.
-- **Focus Visible**: The component respects system focus states when used as an interactive separator.
-- **Reduced Motion**: The component respects `prefers-reduced-motion` settings.
-
 ## Design Tokens
 
 The Divider component uses the following design token color scales:
@@ -107,7 +127,10 @@ The Divider component uses the following design token color scales:
 ## Source Code
 
 ```tsx title="src/components/ui/divider.tsx"
-import React, { forwardRef, HTMLAttributes } from "react";
+// divider.tsx
+// TRUE Server Component (No "use client" needed!)
+
+import React, { HTMLAttributes } from "react";
 import { clsx } from "clsx";
 
 // ============================================================================
@@ -173,10 +196,9 @@ const variantMap: Record<DividerVariant, string> = {
     dotted: "border-dotted",
 };
 
-// Design token colors - using ground-*, primary-*, etc. from @theme
-// WCAG-compliant border colors (3:1 contrast minimum)
+// FIX: Using ground-400 for 3:1 contrast ratio (WCAG 1.4.11)
 const colorMap: Record<DividerColor, string> = {
-    ground: "border-ground-300 dark:border-ground-700",
+    ground: "border-ground-400 dark:border-ground-600",
     primary: "border-primary-300 dark:border-primary-600",
     success: "border-success-400 dark:border-success-600",
     warning: "border-warning-500 dark:border-warning-600",
@@ -194,7 +216,6 @@ const labelColorMap: Record<DividerColor, string> = {
     info: "text-info-700 dark:text-info-300",
 };
 
-// Thickness presets in pixels
 const sizeMap: Record<DividerSize, number> = {
     thin: 1,
     normal: 2,
@@ -206,123 +227,117 @@ const sizeMap: Record<DividerSize, number> = {
 // Components
 // ============================================================================
 
-const DividerLine = forwardRef<HTMLDivElement, DividerLineProps>(
-    (
-        {
-            variant = "solid",
-            color = "ground",
-            size = "normal",
-            thickness,
-            opacity = 1,
-            orientation = "horizontal",
-            className,
-            style,
-            ...props
-        },
-        ref
-    ) => {
-        const actualThickness = thickness || sizeMap[size];
-        const isHorizontal = orientation === "horizontal";
+const DividerLine = ({
+    variant = "solid",
+    color = "ground",
+    size = "normal",
+    thickness,
+    opacity = 1,
+    orientation = "horizontal",
+    className,
+    style,
+    ...props
+}: DividerLineProps) => {
+    const actualThickness = thickness || sizeMap[size];
+    const isHorizontal = orientation === "horizontal";
 
-        const borderStyle: React.CSSProperties = {
-            opacity,
-            ...style,
+    const borderStyle: React.CSSProperties = {
+        opacity,
+        ...style,
+    };
+
+    return (
+        <div
+            className={clsx(
+                "grow shrink-0 border-0",
+                variantMap[variant],
+                colorMap[color],
+                className
+            )}
+            style={{
+                ...borderStyle,
+                [isHorizontal ? "borderTopWidth" : "borderLeftWidth"]: `${actualThickness}px`,
+            }}
+            aria-hidden="true"
+            {...props}
+        />
+    );
+};
+
+const DividerLabel = ({
+    color = "ground",
+    className,
+    children,
+    ...props
+}: DividerLabelProps) => {
+    return (
+        <span
+            className={clsx(
+                "px-3 py-1 text-sm font-medium whitespace-nowrap font-secondary",
+                labelColorMap[color],
+                className
+            )}
+            {...props}
+        >
+            {children}
+        </span>
+    );
+};
+
+const DividerRoot = ({
+    orientation = "horizontal",
+    spacing = "md",
+    decorative = false,
+    className,
+    children,
+    ...props
+}: DividerRootProps) => {
+    const isHorizontal = orientation === "horizontal";
+
+    const layoutClasses = isHorizontal
+        ? clsx("flex items-center w-full", spacingMap[spacing])
+        : clsx(
+            "inline-flex flex-col items-center h-full min-h-[1em]",
+            verticalSpacingMap[spacing]
+        );
+
+    // FIX: Accessibility Semantics
+    // 1. Decorative -> hidden.
+    // 2. Has Children (Label) -> No role (content is readable).
+    // 3. Default -> Separator role.
+    const hasChildren = !!children;
+
+    const ariaProps = decorative
+        ? { "aria-hidden": "true" as const }
+        : hasChildren
+        ? {}
+        : {
+            role: "separator",
+            "aria-orientation": orientation
         };
 
+    if (!children) {
         return (
             <div
-                ref={ref}
-                className={clsx(
-                    "grow shrink-0 border-0",
-                    variantMap[variant],
-                    colorMap[color],
-                    className
-                )}
-                style={{
-                    ...borderStyle,
-                    [isHorizontal ? "borderTopWidth" : "borderLeftWidth"]: `${actualThickness}px`,
-                }}
-                aria-hidden="true"
-                {...props}
-            />
-        );
-    }
-);
-DividerLine.displayName = "Divider.Line";
-
-const DividerLabel = forwardRef<HTMLSpanElement, DividerLabelProps>(
-    ({ color = "ground", className, children, ...props }, ref) => {
-        return (
-            <span
-                ref={ref}
-                className={clsx(
-                    "px-3 py-1 text-sm font-medium whitespace-nowrap font-secondary",
-                    labelColorMap[color],
-                    className
-                )}
-                {...props}
-            >
-                {children}
-            </span>
-        );
-    }
-);
-DividerLabel.displayName = "Divider.Label";
-
-const DividerRoot = forwardRef<HTMLDivElement, DividerRootProps>(
-    (
-        {
-            orientation = "horizontal",
-            spacing = "md",
-            decorative = false,
-            className,
-            children,
-            ...props
-        },
-        ref
-    ) => {
-        const isHorizontal = orientation === "horizontal";
-
-        const layoutClasses = isHorizontal
-            ? clsx("flex items-center w-full", spacingMap[spacing])
-            : clsx(
-                "inline-flex flex-col items-center h-full min-h-[1em]",
-                verticalSpacingMap[spacing]
-            );
-
-        const ariaProps = decorative
-            ? { "aria-hidden": "true" as const }
-            : {
-                role: "separator",
-                "aria-orientation": orientation
-            };
-
-        if (!children) {
-            return (
-                <div
-                    ref={ref}
-                    className={clsx(layoutClasses, className)}
-                    {...ariaProps}
-                    {...props}
-                >
-                    <DividerLine orientation={orientation} />
-                </div>
-            );
-        }
-
-        return (
-            <div
-                ref={ref}
                 className={clsx(layoutClasses, className)}
                 {...ariaProps}
                 {...props}
             >
-                {children}
+                <DividerLine orientation={orientation} />
             </div>
         );
     }
-);
-DividerRoot.displayName = "Divider";
+
+    return (
+        <div
+            className={clsx(layoutClasses, className)}
+            {...ariaProps}
+            {...props}
+        >
+            {children}
+        </div>
+    );
+};
 
 // ============================================================================
 // Compound Component Export
@@ -341,3 +356,4 @@ export type {
     DividerSpacing,
     DividerVariant,
 };
+```
