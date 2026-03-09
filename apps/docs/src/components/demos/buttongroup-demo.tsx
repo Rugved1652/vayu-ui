@@ -10,7 +10,7 @@ export default function ButtonGroupDemo() {
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Horizontal (Outline)
                 </p>
-                <ButtonGroup.Root aria-label="Text alignment options">
+                <ButtonGroup aria-label="Text alignment options">
                     <Button variant="outline">
                         <Button.Text>Left</Button.Text>
                     </Button>
@@ -20,7 +20,7 @@ export default function ButtonGroupDemo() {
                     <Button variant="outline">
                         <Button.Text>Right</Button.Text>
                     </Button>
-                </ButtonGroup.Root>
+                </ButtonGroup>
             </div>
 
             {/* ── Primary Variant ── */}
@@ -28,14 +28,14 @@ export default function ButtonGroupDemo() {
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Primary
                 </p>
-                <ButtonGroup.Root aria-label="Save options">
+                <ButtonGroup aria-label="Save options">
                     <Button variant="primary">
                         <Button.Text>Save</Button.Text>
                     </Button>
                     <Button variant="primary">
                         <Button.Text>Save &amp; Close</Button.Text>
                     </Button>
-                </ButtonGroup.Root>
+                </ButtonGroup>
             </div>
 
             {/* ── Vertical ── */}
@@ -43,7 +43,7 @@ export default function ButtonGroupDemo() {
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Vertical
                 </p>
-                <ButtonGroup.Root 
+                <ButtonGroup 
                     orientation="vertical" 
                     aria-label="Vertical actions"
                     className="w-fit"
@@ -57,7 +57,7 @@ export default function ButtonGroupDemo() {
                     <Button variant="outline">
                         <Button.Text>Bottom</Button.Text>
                     </Button>
-                </ButtonGroup.Root>
+                </ButtonGroup>
             </div>
 
             {/* ── Full Width ── */}
@@ -65,14 +65,14 @@ export default function ButtonGroupDemo() {
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Full Width
                 </p>
-                <ButtonGroup.Root fullWidth aria-label="Confirmation actions">
+                <ButtonGroup fullWidth aria-label="Confirmation actions">
                     <Button variant="secondary">
                         <Button.Text>Cancel</Button.Text>
                     </Button>
                     <Button variant="primary">
                         <Button.Text>Confirm</Button.Text>
                     </Button>
-                </ButtonGroup.Root>
+                </ButtonGroup>
             </div>
 
             {/* ── Mixed Variants ── */}
@@ -80,7 +80,7 @@ export default function ButtonGroupDemo() {
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     Mixed Variants
                 </p>
-                <ButtonGroup.Root aria-label="Mixed action buttons">
+                <ButtonGroup aria-label="Mixed action buttons">
                     <Button variant="outline">
                         <Button.Text>Back</Button.Text>
                     </Button>
@@ -90,7 +90,7 @@ export default function ButtonGroupDemo() {
                     <Button variant="primary">
                         <Button.Text>Submit</Button.Text>
                     </Button>
-                </ButtonGroup.Root>
+                </ButtonGroup>
             </div>
 
             {/* ── With Icons ── */}
@@ -98,7 +98,7 @@ export default function ButtonGroupDemo() {
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
                     With Icons
                 </p>
-                <ButtonGroup.Root aria-label="Formatting options">
+                <ButtonGroup aria-label="Formatting options">
                     <Button variant="outline">
                         <Button.Icon>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -125,7 +125,7 @@ export default function ButtonGroupDemo() {
                             </svg>
                         </Button.Icon>
                     </Button>
-                </ButtonGroup.Root>
+                </ButtonGroup>
             </div>
         </div>
     );
