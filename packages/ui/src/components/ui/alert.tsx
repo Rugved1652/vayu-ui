@@ -1,7 +1,8 @@
 "use client";
 
 import React, { HTMLAttributes, ButtonHTMLAttributes, forwardRef } from "react";
-import { cn } from "./utils"; // Assuming cn is clsx + tailwind-merge
+import { cn } from "./utils";
+import { XIcon } from "../icons/x-icon";
 
 // ============================================================================
 // Types & Interfaces
@@ -172,29 +173,10 @@ AlertDescription.displayName = "Alert.Description";
 // Alert Dismiss Component
 // ============================================================================
 
-// PERFORMANCE: Hoist static SVG definition outside the component
-// so it is not re-created on every render.
-const DefaultDismissIcon = (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="w-4 h-4"
-    >
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-);
-
 const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
     variant = "info",
     alertTitle,
     className,
-    children,
     onClick,
     ...props
 }, ref) => {
@@ -211,7 +193,7 @@ const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
                 "absolute top-4 right-4 rounded p-1 transition-colors",
                 "hover:bg-black/10 dark:hover:bg-white/10",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                "ring-offset-info-100 dark:ring-offset-info-950", // Dynamic offset for dark mode
+                "ring-offset-info-100 dark:ring-offset-info-950",
                 variantIconStyles[variant],
                 variantFocusStyles[variant],
                 className
@@ -219,7 +201,7 @@ const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
             aria-label={ariaLabel}
             {...props}
         >
-            {children || DefaultDismissIcon}
+            <XIcon />
         </button>
     );
 });

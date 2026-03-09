@@ -115,19 +115,15 @@ export default function AvatarGroupDemo() {
                 </div>
             </div>
 
-            {/* ── Custom Overflow ── */}
+            {/* ── With Overflow ── */}
             <div className="flex flex-col gap-3">
                 <p className="text-xs font-secondary text-neutral-500 dark:text-neutral-400">
-                    Custom Overflow
+                    With Overflow
                 </p>
                 <AvatarGroup
                     users={users}
                     maxDisplay={3}
-                    renderOverflow={(count) => (
-                        <span className="text-xs font-bold text-primary-600 dark:text-primary-400">
-                            +{count} more
-                        </span>
-                    )}
+                    onOverflowClick={(hiddenUsers) => console.log("Hidden users:", hiddenUsers)}
                 />
             </div>
 

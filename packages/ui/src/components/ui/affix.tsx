@@ -1,6 +1,6 @@
 "use client";
 
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import React, {
     forwardRef,
     HTMLAttributes,
@@ -231,7 +231,7 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
 
                 <div
                     ref={mergeRefs(ref, innerRef)}
-                    className={clsx(
+                    className={cn(
                         "transition-shadow duration-medium",
                         isAffixed && "shadow-outer",
                         className

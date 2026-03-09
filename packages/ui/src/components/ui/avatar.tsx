@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, forwardRef, HTMLAttributes } from "react";
-import { clsx } from "clsx";
+import { cn } from "./utils";
 
 // ============================================================================
 // Types
@@ -117,7 +117,7 @@ const AvatarRoot = forwardRef<HTMLSpanElement, AvatarRootProps>(
         const isInteractive = onClick !== undefined;
         const role = isInteractive ? "button" : "img";
 
-        const avatarClasses = clsx(
+        const avatarClasses = cn(
             "relative inline-flex items-center justify-center",
             "rounded-full",
             "bg-ground-100 dark:bg-ground-800",
@@ -204,7 +204,7 @@ const AvatarImage = forwardRef<HTMLImageElement, AvatarImageProps>(
                     ref={ref}
                     src={currentSrc}
                     alt={alt}
-                    className={clsx(
+                    className={cn(
                         "absolute inset-0 w-full h-full object-cover rounded-full",
                         "motion-safe:transition-opacity motion-safe:duration-300",
                         imageLoading ? "opacity-0" : "opacity-100",
@@ -249,7 +249,7 @@ const AvatarInitials = forwardRef<HTMLSpanElement, AvatarInitialsProps>(
         return (
             <span
                 ref={ref}
-                className={clsx(
+                className={cn(
                     "absolute inset-0 flex items-center justify-center",
                     "text-white font-primary font-semibold select-none rounded-full",
                     className
@@ -289,7 +289,7 @@ const AvatarFallback = forwardRef<HTMLImageElement, AvatarFallbackProps>(
                 ref={ref}
                 src={src}
                 alt=""
-                className={clsx(
+                className={cn(
                     "absolute inset-0 w-full h-full object-cover rounded-full",
                     "opacity-80 dark:opacity-60",
                     className
@@ -321,7 +321,7 @@ const AvatarStatus = forwardRef<HTMLSpanElement, AvatarStatusProps>(
         return (
             <span
                 ref={ref}
-                className={clsx(
+                className={cn(
                     "absolute -bottom-0.5 -right-0.5",
                     "w-5 h-5 rounded-full",
                     "border-2 border-white dark:border-ground-950",

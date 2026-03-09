@@ -1,5 +1,6 @@
 import React, { HTMLAttributes, ButtonHTMLAttributes, forwardRef } from "react";
 import { cn } from "@/lib/cn";
+import { XIcon } from "vayu-ui";
 
 // ============================================================================
 // Types & Interfaces
@@ -171,30 +172,12 @@ AlertDescription.displayName = "Alert.Description";
 // ============================================================================
 
 const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
-    variant = "info", // ✅ FIX: Accept variant
-    alertTitle, // ✅ FIX: Accept title for better labeling
+    variant = "info",
+    alertTitle,
     className = "",
-    children,
     onClick,
     ...props
 }, ref) => {
-    const defaultIcon = (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="w-4 h-4"
-        >
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-    );
-
-    // ✅ FIX: More descriptive aria-label
     const ariaLabel = alertTitle
         ? `Dismiss ${variant} alert: ${alertTitle}`
         : `Dismiss ${variant} alert`;
@@ -208,14 +191,14 @@ const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
                 "absolute top-4 right-4 rounded-md p-1 transition-colors",
                 "hover:bg-black/10 dark:hover:bg-white/10",
                 "focus-visible:outline-none focus-visible:ring-2 ring-offset-2",
-                variantIconStyles[variant], // ✅ FIX: Icon color
-                variantFocusStyles[variant], // ✅ FIX: Variant-specific focus ring
+                variantIconStyles[variant],
+                variantFocusStyles[variant],
                 className
             )}
             aria-label={ariaLabel}
             {...props}
         >
-            {children || defaultIcon}
+            <XIcon />
         </button>
     );
 });

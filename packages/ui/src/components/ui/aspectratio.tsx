@@ -1,4 +1,4 @@
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import React, { forwardRef, HTMLAttributes } from "react";
 
 // ============================================================================
@@ -137,7 +137,7 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
         return (
             <div
                 ref={ref}
-                className={clsx(
+                className={cn(
                     "relative w-full",
                     preset?.tw,
                     OVERFLOW_CLASS[overflow],
@@ -155,7 +155,7 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
                 {...props}
             >
                 <div
-                    className={clsx(
+                    className={cn(
                         "absolute inset-0 w-full h-full",
                         OBJECT_FIT_CLASS[objectFit],
                         "[&>img]:w-full [&>img]:h-full [&>video]:w-full [&>video]:h-full"

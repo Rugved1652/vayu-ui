@@ -1,15 +1,11 @@
 "use client";
 
 import { Avatar } from "./avatar";
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import {
-    Children,
-    cloneElement,
     CSSProperties,
     forwardRef,
     HTMLAttributes,
-    isValidElement,
-    ReactElement,
     useMemo,
 } from "react";
 
@@ -35,7 +31,6 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
     maxDisplay?: number;
     layout?: AvatarGroupLayout;
     spacing?: "tight" | "normal" | "loose" | number;
-    renderOverflow?: (count: number) => React.ReactNode;
     onAvatarClick?: (user: UserData, index: number) => void;
     onOverflowClick?: (hiddenUsers: UserData[]) => void;
 }
@@ -53,7 +48,6 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
             layout = "stack",
             spacing = "normal",
             className,
-            renderOverflow,
             onAvatarClick,
             onOverflowClick,
             children,
@@ -99,7 +93,7 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
         return (
             <div
                 ref={ref}
-                className={clsx(
+                className={cn(
                     "flex items-center",
                     layout === "grid" && "flex-wrap gap-2",
                     layout === "stack" && "pl-2", // compensator for negative margin
@@ -113,7 +107,7 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                 {visibleUsers.map((user, index) => (
                     <div
                         key={user.id || index}
-                        className={clsx(
+                        className={cn(
                             "relative transition-all duration-200 ease-in-out",
                             layout === "stack" && "hover:z-10 hover:scale-110 hover:ml-2 hover:mr-2 first:ml-0", // Hover effects for stack
                             layout === "stack" && "rounded-full ring-2 ring-white dark:ring-ground-950", // Border separation
@@ -145,7 +139,7 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                 {/* Overflow */}
                 {hasOverflow && (
                     <div
-                        className={clsx(
+                        className={cn(
                             "relative flex items-center justify-center rounded-full bg-ground-200 dark:bg-ground-800 text-ground-600 dark:text-ground-300 font-medium text-xs ring-2 ring-white dark:ring-ground-950",
                             layout === "stack" && "hover:z-10",
                             onOverflowClick && "cursor-pointer hover:bg-ground-300 dark:hover:bg-ground-700",
@@ -160,7 +154,7 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                         }}
                         onClick={() => onOverflowClick?.(hiddenUsers)}
                     >
-                        {renderOverflow ? renderOverflow(hiddenUsers.length) : `+${hiddenUsers.length}`}
+                        {`+${hiddenUsers.length}`}
                     </div>
                 )}
             </div>

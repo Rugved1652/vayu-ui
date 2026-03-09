@@ -119,7 +119,6 @@ npx vayu-ui add avatargroup
   spacing="normal"
   onAvatarClick={(user, index) => console.log(user)}
   onOverflowClick={(hiddenUsers) => console.log(hiddenUsers)}
-  renderOverflow={(count) => <span>+{count} more</span>}
 />
 ```
 
@@ -138,7 +137,6 @@ npx vayu-ui add avatargroup
 | `maxDisplay` | `number` | `5` | Max visible before overflow |
 | `layout` | `'stack' \| 'grid'` | `'stack'` | Layout mode |
 | `spacing` | `'tight' \| 'normal' \| 'loose' \| number` | `'normal'` | Negative margin for stack |
-| `renderOverflow` | `(count: number) => ReactNode` | — | Custom overflow indicator |
 | `onAvatarClick` | `(user: UserData, index: number) => void` | — | Click handler for avatars |
 | `onOverflowClick` | `(hiddenUsers: UserData[]) => void` | — | Click handler for overflow button |
 
