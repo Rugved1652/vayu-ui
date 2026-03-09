@@ -6,6 +6,16 @@ description: Displays a badge or label component for status, counts, or categori
 import BadgeDemo from '@/components/demos/badge-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add badge
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -18,133 +28,317 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
     ```tsx
     import { Badge } from "vayu-ui";
 
-    export default function BadgeExample() {
-      return (
-        <Badge variant="primary">Primary Badge</Badge>
-      );
-    }
+    // Variants
+    <Badge variant="primary">Primary</Badge>
+    <Badge variant="secondary">Secondary</Badge>
+    <Badge variant="success">Success</Badge>
+    <Badge variant="warning">Warning</Badge>
+    <Badge variant="error">Error</Badge>
+    <Badge variant="info">Info</Badge>
+
+    // Sizes
+    <Badge size="sm">Small</Badge>
+    <Badge size="md">Medium</Badge>
+    <Badge size="lg">Large</Badge>
+
+    // Interactive (Clickable)
+    <Badge onClick={() => alert("Clicked!")}>
+        Click Me
+    </Badge>
+
+    // Dismissible
+    <Badge variant="secondary" onDismiss={() => console.log("Dismissed")}>
+        Removable Tag
+    </Badge>
+
+    // Interactive + Dismissible
+    <Badge
+        variant="primary"
+        onClick={() => alert("Badge clicked!")}
+        onDismiss={() => console.log("Dismissed")}
+    >
+        Filter
+    </Badge>
     ```
   </Tab>
 </Tabs>
+
+## Features
+
+- Six semantic variants for different use cases
+- Three sizes (sm, md, lg) meeting WCAG 2.2 minimum target sizes
+- Interactive mode with automatic `button` element rendering
+- Dismissible mode with built-in close button
+- Combined interactive + dismissible with split-button pattern
+- Polymorphic `as` prop for custom element types
+- Full keyboard navigation and screen reader support
+
+## Anatomy
+
+```tsx
+<Badge
+  variant="primary"
+  size="md"
+  onClick={() => {}}
+  onDismiss={() => {}}
+  dismissLabel="Remove"
+>
+  Badge Content
+</Badge>
+```
+
+| Element | Description |
+| :------ | :---------- |
+| **Root** | Container element (auto-detects `span` or `button` based on props) |
+| **Dismiss Button** | Close icon button (only rendered when `onDismiss` is provided) |
 
 ## Props
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `variant` | `'primary' \| 'neutral' \| 'outline' \| 'destructive' \| 'success' \| 'warning' \| 'info'` | `'primary'` | Visual style variant |
+| `variant` | `'primary' \| 'secondary' \| 'warning' \| 'success' \| 'error' \| 'info'` | `'primary'` | Visual style variant |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the badge |
-| `interactive` | `boolean` | `false` | Enables hover/click styles and keyboard interaction |
+| `as` | `'span' \| 'div' \| 'a'` | - | Forces a specific HTML tag |
+| `onClick` | `() => void` | - | Makes badge interactive (renders as `button`) |
+| `onDismiss` | `() => void` | - | Adds a dismiss button |
+| `dismissLabel` | `string` | `'Remove'` | Accessible label for the dismiss button |
 | `className` | `string` | - | Additional CSS classes |
+
+### Variants
+
+| Variant | Use Case |
+| :------ | :------- |
+| `primary` | Main actions, featured items, primary status |
+| `secondary` | Neutral labels, tags, categories |
+| `success` | Success states, completed actions, positive status |
+| `warning` | Warnings, pending states, attention needed |
+| `error` | Errors, destructive actions, critical alerts |
+| `info` | Information, helpful tips, neutral highlights |
+
+### Sizes
+
+| Size | Height | Use Case |
+| :--- | :----- | :------- |
+| `sm` | 24px | Dense layouts, inline with text, compact lists |
+| `md` | 28px | Default, most common use cases |
+| `lg` | 32px | Emphasized badges, hero sections |
+
+### Behavior Patterns
+
+| Pattern | Props | Behavior |
+| :------ | :---- | :------- |
+| **Static** | Default | Non-interactive `<span>` element |
+| **Interactive** | `onClick` | Renders as `<button>`, hover/active states |
+| **Dismissible** | `onDismiss` | Static badge with close button |
+| **Interactive + Dismissible** | `onClick` + `onDismiss` | Split-button pattern (two separate buttons) |
 
 ## Accessibility
 
-- Full keyboard navigation support (Enter/Space to activate interactive badges)
-- Proper ARIA `role="button"` when interactive
-- Visible focus indicators using `focus-visible:ring`
-- Screen reader compatible
-- Respects `prefers-reduced-motion`
+The Badge component follows WCAG 2.2 Level AA guidelines:
+
+### Keyboard Navigation
+
+- **Tab**: Move focus to/from interactive badges
+- **Enter/Space**: Activate interactive badges
+- **Tab**: Navigate between main action and dismiss button in split-button pattern
+
+### Screen Reader Support
+
+| Element | Role | ARIA Attributes |
+| :------ | :--- | :-------------- |
+| Interactive Badge | `button` | `type="button"` (prevents form submission) |
+| Dismiss Button | `button` | `aria-label="{dismissLabel}"` |
+| Split Button Container | `group` | `role="group"` |
+
+### Touch Targets
+
+- Minimum touch target size of **24×24px** (WCAG 2.5.5)
+- All sizes meet or exceed this requirement
+
+### Best Practices
+
+1. **Use semantic variants**: Choose `success`, `warning`, or `error` for status indicators
+2. **Provide `dismissLabel`**: Use descriptive labels like "Remove tag" for better accessibility
+3. **Avoid nesting**: The split-button pattern prevents nested buttons (WCAG compliance)
+4. **Use `onClick` for actions**: Only add `onClick` when the badge performs an action
 
 ## Source Code
 
 ```tsx title="packages/ui/src/components/ui/badge.tsx"
-"use client";
-
-import { cva, type VariantProps } from "class-variance-authority";
-import { clsx } from "clsx";
-import { forwardRef, HTMLAttributes, KeyboardEvent } from "react";
-
-// ============================================================================
-// Variants (CVA)
-// ============================================================================
-
-const badgeVariants = cva(
-    "inline-flex items-center justify-center font-medium rounded-full transition-colors",
-    {
-        variants: {
-            variant: {
-                primary:
-                    "bg-primary-500 text-white border border-transparent shadow-outer dark:bg-primary-600 dark:text-white",
-                neutral:
-                    "bg-ground-100 text-ground-900 border border-transparent dark:bg-ground-800 dark:text-ground-100",
-                outline:
-                    "bg-transparent text-ground-900 border border-ground-300 dark:text-ground-100 dark:border-ground-700",
-                destructive:
-                    "bg-error-500 text-white border border-transparent shadow-outer dark:bg-error-900 dark:text-error-100",
-                success:
-                    "bg-success-500 text-white border border-transparent shadow-outer dark:bg-success-900 dark:text-success-100",
-                warning:
-                    "bg-warning-500 text-white border border-transparent shadow-outer dark:bg-warning-900 dark:text-warning-100",
-                info:
-                    "bg-info-500 text-white border border-transparent shadow-outer dark:bg-info-900 dark:text-info-100",
-            },
-            size: {
-                sm: "text-[10px] px-1.5 h-4 min-w-[16px] gap-1",
-                md: "text-xs px-2.5 h-6 min-w-[24px] gap-1.5",
-                lg: "text-sm px-3 h-7 min-w-[28px] gap-2",
-            },
-            interactive: {
-                true: "cursor-pointer hover:opacity-80 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500",
-                false: "",
-            },
-        },
-        defaultVariants: {
-            variant: "primary",
-            size: "md",
-            interactive: false,
-        },
-    }
-);
+import React, {
+  forwardRef,
+  ComponentPropsWithoutRef,
+  ReactNode,
+  ElementType,
+} from "react";
+import { cn } from "./utils";
+import { XIcon } from "../icons";
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type BadgeVariant = VariantProps<typeof badgeVariants>["variant"];
-export type BadgeSize = VariantProps<typeof badgeVariants>["size"];
+type BadgeVariant =
+  | "primary"
+  | "secondary"
+  | "warning"
+  | "success"
+  | "error"
+  | "info";
 
-export interface BadgeProps
-    extends HTMLAttributes<HTMLSpanElement>,
-        VariantProps<typeof badgeVariants> {}
+type BadgeSize = "sm" | "md" | "lg";
+
+interface BadgeProps
+  extends Omit<ComponentPropsWithoutRef<"span">, "onClick"> {
+  variant?: BadgeVariant;
+  size?: BadgeSize;
+  /** Forces a specific HTML tag */
+  as?: "span" | "div" | "a";
+  /** Makes the badge interactive (renders as <button>) */
+  onClick?: () => void;
+  /** Adds a dismiss button */
+  onDismiss?: () => void;
+  /** Accessible label for the dismiss button */
+  dismissLabel?: string;
+  children?: ReactNode;
+}
+
+// ============================================================================
+// Styles Configuration (Theme Aware)
+// ============================================================================
+
+const variants: Record<BadgeVariant, string> = {
+  primary: cn(
+    "bg-primary-500 text-primary-950",
+    "dark:bg-primary-600 dark:text-primary-950"
+  ),
+  secondary: cn(
+    "bg-ground-100 text-ground-800 border border-ground-200",
+    "dark:bg-ground-800 dark:text-ground-100 dark:border-ground-700"
+  ),
+  warning: cn(
+    "bg-warning-400 text-warning-950",
+    "dark:bg-warning-500 dark:text-warning-950"
+  ),
+  success: cn(
+    "bg-success-600 text-white",
+    "dark:bg-success-700 dark:text-white"
+  ),
+  error: cn(
+    "bg-error-600 text-white",
+    "dark:bg-error-700 dark:text-white"
+  ),
+  info: cn(
+    "bg-info-600 text-white",
+    "dark:bg-info-700 dark:text-white"
+  ),
+};
+
+const sizes: Record<BadgeSize, string> = {
+  sm: "text-[10px] h-6 px-2.5 min-w-[24px]",
+  md: "text-xs h-7 px-3 min-w-[28px]",
+  lg: "text-sm h-8 px-4 min-w-[32px]",
+};
 
 // ============================================================================
 // Component
 // ============================================================================
 
-const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-    (
-        {
-            className,
-            variant = "primary",
-            size = "md",
-            interactive = false,
-            onKeyDown,
-            onClick,
-            ...props
-        },
-        ref
-    ) => {
-        const handleKeyDown = (event: KeyboardEvent<HTMLSpanElement>) => {
-            if (interactive && (event.key === "Enter" || event.key === " ")) {
-                event.preventDefault();
-                onClick?.(event as unknown as React.MouseEvent<HTMLSpanElement>);
-            }
-            onKeyDown?.(event);
-        };
+export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
+  (
+    {
+      className,
+      variant = "primary",
+      size = "md",
+      as,
+      onClick,
+      onDismiss,
+      dismissLabel = "Remove",
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const isInteractive = !!onClick;
+    const isDismissible = !!onDismiss;
 
-        return (
-            <span
-                ref={ref}
-                role={interactive ? "button" : undefined}
-                tabIndex={interactive ? 0 : undefined}
-                onKeyDown={interactive ? handleKeyDown : onKeyDown}
-                className={clsx(badgeVariants({ variant, size, interactive }), className)}
-                {...props}
-            />
-        );
+    const Component = as || (isInteractive ? "button" : "span");
+
+    const baseStyles = cn(
+      "inline-flex items-center justify-center gap-1.5",
+      "font-primary font-medium",
+      "rounded-full",
+      "transition-colors duration-150",
+      "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 dark:focus:ring-offset-ground-950",
+      sizes[size],
+      variants[variant],
+      isInteractive && "cursor-pointer hover:opacity-90 active:scale-95",
+      className
+    );
+
+    // Dismissible AND Interactive (Split Button Pattern)
+    if (isDismissible && isInteractive) {
+      return (
+        <span
+          ref={ref}
+          className={cn(baseStyles, "p-0 overflow-hidden")}
+          role="group"
+          {...props}
+        >
+          <button
+            type="button"
+            onClick={onClick}
+            className="flex-1 h-full px-3 focus:outline-none focus:ring-inset focus:ring-2 hover:opacity-90 transition-opacity"
+          >
+            {children}
+          </button>
+          <span
+            className="h-full w-px bg-current opacity-20"
+            aria-hidden="true"
+          />
+          <button
+            type="button"
+            onClick={onDismiss}
+            className="px-2 h-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors focus:outline-none focus:ring-inset focus:ring-2"
+            aria-label={dismissLabel}
+          >
+            <XIcon />
+          </button>
+        </span>
+      );
     }
+
+    // Dismissible Only
+    if (isDismissible) {
+      return (
+        <span ref={ref} className={cn(baseStyles, "pr-1.5")} {...props}>
+          <span>{children}</span>
+          <button
+            type="button"
+            onClick={onDismiss}
+            className="ml-1 -mr-1 p-0.5 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-inset"
+            aria-label={dismissLabel}
+          >
+            <XIcon />
+          </button>
+        </span>
+      );
+    }
+
+    // Standard (Interactive or Static)
+    return (
+      <Component
+        ref={ref as any}
+        className={baseStyles}
+        {...(Component === "button" && { type: "button" })}
+        onClick={onClick}
+        {...props}
+      >
+        {children}
+      </Component>
+    );
+  }
 );
 
 Badge.displayName = "Badge";
-
-export { Badge, badgeVariants };
 ```
