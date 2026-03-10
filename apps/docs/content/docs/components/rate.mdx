@@ -6,6 +6,16 @@ description: A fully accessible rating component with star icons, half-star supp
 import RateDemo from '@/components/demos/rate-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add rate
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -16,49 +26,78 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
-    import React, { useState } from "react";
     import { Rate } from "vayu-ui";
     import { Heart } from "lucide-react";
 
-    export default function RateDemo() {
-      const [value, setValue] = useState(3);
-
+    export default function RateExample() {
       return (
-        <div className="w-full max-w-md space-y-8">
+        <div className="space-y-8">
           {/* Basic Usage */}
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">Basic Usage</h3>
-            <Rate value={value} onChange={setValue} />
-            <p className="text-sm text-ground-500">Current value: {value}</p>
-          </div>
+          <Rate defaultValue={3} />
+
+          {/* Controlled */}
+          <Rate value={rating} onChange={setRating} />
 
           {/* With Labels */}
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">With Labels</h3>
-            <Rate 
-              defaultValue={3} 
-              labels={['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']}
-            >
-              <Rate.Container>
-                <Rate.Label>Product Rating</Rate.Label>
-                <Rate.Stars />
-                <Rate.TextLabel />
-              </Rate.Container>
-              <Rate.Description>Rate the product quality.</Rate.Description>
-            </Rate>
-          </div>
+          <Rate
+            defaultValue={3}
+            labels={['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']}
+          >
+            <Rate.Container>
+              <Rate.Label>Product Rating</Rate.Label>
+              <Rate.Stars />
+              <Rate.TextLabel />
+            </Rate.Container>
+          </Rate>
 
           {/* Custom Icon */}
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">Custom Icon</h3>
-            <Rate defaultValue={3} icon={<Heart />} color="error" />
-          </div>
+          <Rate defaultValue={3} icon={<Heart />} color="error" />
         </div>
       );
     }
     ```
   </Tab>
 </Tabs>
+
+## Anatomy
+
+```tsx
+{/* Simple usage */}
+<Rate defaultValue={3} />
+
+{/* With compound components */}
+<Rate
+  defaultValue={3}
+  labels={['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']}
+>
+  <Rate.Label>Rate this product</Rate.Label>
+  <Rate.Description>Share your experience with others.</Rate.Description>
+  <Rate.Container>
+    <Rate.Stars />
+    <Rate.Value />
+    <Rate.TextLabel />
+  </Rate.Container>
+  <Rate.ErrorText>Please provide a rating</Rate.ErrorText>
+</Rate>
+```
+
+## Accessibility
+
+- Full keyboard navigation support (Arrow keys, Home, End)
+- Proper ARIA roles (`role="slider"`) with `aria-valuemin`, `aria-valuemax`, `aria-valuenow`
+- Visible focus indicators with ring styling
+- Screen reader compatible with `aria-live` regions for dynamic text labels
+- Proper `aria-readonly` and `aria-disabled` attributes
+- Respects `prefers-reduced-motion` for animations
+
+### Keyboard Interactions
+
+| Key | Action |
+| :--- | :--- |
+| `ArrowRight` / `ArrowUp` | Increase rating by step (0.5 or 1) |
+| `ArrowLeft` / `ArrowDown` | Decrease rating by step (0.5 or 1) |
+| `Home` | Set rating to minimum (0) |
+| `End` | Set rating to maximum (count) |
 
 ## Props
 
@@ -75,7 +114,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 | `allowHalf` | `boolean` | `true` | Whether to allow half stars. |
 | `allowClear` | `boolean` | `true` | Whether to allow clearing the value by clicking again. |
 | `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Size of the rating stars. |
-| `color` | `'primary' \| 'secondary' \| 'warning' \| 'error' \| 'info' \| 'success'` | `'warning'` | Color theme of the stars. |
+| `color` | `'primary' \| 'warning' \| 'error' \| 'info' \| 'success'` | `'warning'` | Color theme of the stars. |
 | `variant` | `'default' \| 'outlined' \| 'filled'` | `'default'` | Visual style variant. |
 | `icon` | `ReactElement` | `<Star />` | Custom icon element. |
 | `error` | `boolean` | `false` | Whether to show error state. |
@@ -134,26 +173,6 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 | `children` | `ReactNode` | - | Error message content. |
 | `className` | `string` | - | Additional CSS classes. |
 | `id` | `string` | - | ID for the error element. |
-
-## Accessibility
-
-The Rate component is built with WCAG 2.2 AA compliance in mind:
-
-- **Keyboard Navigation**: Full support for Arrow keys (Left/Right/Up/Down), Home, and End keys
-- **Focus Visible**: Clear focus indicator with ring styling when the component receives keyboard focus
-- **ARIA Roles**: Uses `role="slider"` with proper `aria-valuemin`, `aria-valuemax`, and `aria-valuenow` attributes
-- **Screen Reader Support**: Proper `aria-label` and `aria-labelledby` support, with `aria-live` regions for dynamic text labels
-- **Read-only and Disabled States**: Proper `aria-readonly` and `aria-disabled` attributes
-- **Reduced Motion**: Respects `prefers-reduced-motion` for animations
-
-### Keyboard Interactions
-
-| Key | Action |
-| :--- | :--- |
-| `ArrowRight` / `ArrowUp` | Increase rating by step (0.5 or 1) |
-| `ArrowLeft` / `ArrowDown` | Decrease rating by step (0.5 or 1) |
-| `Home` | Set rating to minimum (0) |
-| `End` | Set rating to maximum (count) |
 
 ## Source Code
 
@@ -237,54 +256,30 @@ const useRate = () => {
 // ============================================================================
 
 const sizeClasses = {
-    sm: {
-        icon: 16,
-        gap: "gap-0.5",
-        label: "text-sm",
-        value: "text-xs",
-    },
-    md: {
-        icon: 24,
-        gap: "gap-1",
-        label: "text-base",
-        value: "text-sm",
-    },
-    lg: {
-        icon: 32,
-        gap: "gap-1.5",
-        label: "text-lg",
-        value: "text-base",
-    },
-    xl: {
-        icon: 40,
-        gap: "gap-2",
-        label: "text-xl",
-        value: "text-lg",
-    },
+    sm: { icon: 16, gap: "gap-0.5", label: "text-sm", value: "text-xs" },
+    md: { icon: 24, gap: "gap-1", label: "text-base", value: "text-sm" },
+    lg: { icon: 32, gap: "gap-1.5", label: "text-lg", value: "text-base" },
+    xl: { icon: 40, gap: "gap-2", label: "text-xl", value: "text-lg" },
 };
 
 const colorClasses = {
     primary: {
-        filled:
-            "text-primary-500 fill-primary-500 dark:text-primary-400 dark:fill-primary-400",
+        filled: "text-primary-500 fill-primary-500 dark:text-primary-400 dark:fill-primary-400",
         empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-primary-500 dark:text-primary-400",
     },
     secondary: {
-        filled:
-            "text-secondary-500 fill-secondary-500 dark:text-secondary-400 dark:fill-secondary-400",
+        filled: "text-secondary-500 fill-secondary-500 dark:text-secondary-400 dark:fill-secondary-400",
         empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-secondary-500 dark:text-secondary-400",
     },
     warning: {
-        filled:
-            "text-warning-500 fill-warning-500 dark:text-warning-400 dark:fill-warning-400",
+        filled: "text-warning-500 fill-warning-500 dark:text-warning-400 dark:fill-warning-400",
         empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-warning-500 dark:text-warning-400",
     },
     error: {
-        filled:
-            "text-error-500 fill-error-500 dark:text-error-400 dark:fill-error-400",
+        filled: "text-error-500 fill-error-500 dark:text-error-400 dark:fill-error-400",
         empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-error-500 dark:text-error-400",
     },
@@ -294,8 +289,7 @@ const colorClasses = {
         outlined: "text-info-500 dark:text-info-400",
     },
     success: {
-        filled:
-            "text-success-500 fill-success-500 dark:text-success-400 dark:fill-success-400",
+        filled: "text-success-500 fill-success-500 dark:text-success-400 dark:fill-success-400",
         empty: "text-ground-300 dark:text-ground-700",
         outlined: "text-success-500 dark:text-success-400",
     },
@@ -355,9 +349,7 @@ const RateRoot: React.FC<RateRootProps> = ({
     const isDisabled = disabled || readOnly;
 
     const getFillPercentage = (starIndex: number): number => {
-        if (activeValue >= starIndex) {
-            return 100;
-        }
+        if (activeValue >= starIndex) return 100;
         const valueForThisStar = activeValue - (starIndex - 1);
         if (valueForThisStar > 0 && valueForThisStar < 1) {
             return valueForThisStar * 100;
@@ -379,7 +371,6 @@ const RateRoot: React.FC<RateRootProps> = ({
         if (isDisabled) return;
 
         let newValue = clickValue;
-
         if (allowClear && clickValue === currentValue) {
             newValue = 0;
         }
@@ -524,12 +515,12 @@ const RateStars: React.FC<RateStarsProps> = ({
     return (
         <div
             className={`
-        flex items-center ${sizeClasses[size].gap}
-        ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
-        ${!isDisabled && !readOnly && isFocused ? "ring-2 ring-primary-500 ring-offset-2 rounded" : ""}
-        transition-all duration-200
-        ${className}
-      `}
+                flex items-center ${sizeClasses[size].gap}
+                ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+                ${!isDisabled && !readOnly && isFocused ? "ring-2 ring-primary-500 ring-offset-2 rounded" : ""}
+                transition-all duration-200
+                ${className}
+            `}
             onMouseLeave={handleMouseLeave}
             role="slider"
             aria-label={ariaLabel || "Rating"}

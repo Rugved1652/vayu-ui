@@ -1,5 +1,5 @@
 "use client"
-import Link from "next/link";
+
 import {
     Breadcrumb,
     BreadcrumbEllipsis,
@@ -58,15 +58,13 @@ export default function BreadcrumbDemo() {
                     </Breadcrumb>
                 </div>
 
-                {/* With Dropdown (Ellipsis) */}
+                {/* With Ellipsis (Collapsed) */}
                 <div className="space-y-2">
                     <h3 className="text-lg font-medium">Collapsed</h3>
                     <Breadcrumb>
                         <BreadcrumbList>
                             <BreadcrumbItem>
-                                <BreadcrumbLink asChild>
-                                    <Link href="/">Home</Link>
-                                </BreadcrumbLink>
+                                <BreadcrumbLink href="/">Home</BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
@@ -74,9 +72,7 @@ export default function BreadcrumbDemo() {
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
-                                <BreadcrumbLink asChild>
-                                    <Link href="/docs/components">Components</Link>
-                                </BreadcrumbLink>
+                                <BreadcrumbLink href="/docs/components">Components</BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>

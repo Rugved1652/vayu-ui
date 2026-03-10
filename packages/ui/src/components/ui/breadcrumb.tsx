@@ -1,139 +1,133 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 import { clsx } from "clsx";
-import { Slot } from "@radix-ui/react-slot";
+import Link from "next/link";
 
 // ============================================================================
 // Breadcrumb Root
 // ============================================================================
 
-const Breadcrumb = forwardRef<HTMLElement, React.ComponentPropsWithoutRef<"nav"> & {
-    separator?: React.ReactNode;
-}>(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />);
-Breadcrumb.displayName = "Breadcrumb";
+type BreadcrumbProps = React.ComponentPropsWithoutRef<"nav">;
+
+const Breadcrumb = ({ ...props }: BreadcrumbProps) => {
+  return <nav aria-label="breadcrumb" {...props} />;
+};
 
 // ============================================================================
 // Breadcrumb List
 // ============================================================================
 
-const BreadcrumbList = forwardRef<HTMLOListElement, React.OlHTMLAttributes<HTMLOListElement>>(
-    ({ className, ...props }, ref) => (
-        <ol
-            ref={ref}
-            className={clsx(
-                "flex flex-wrap items-center gap-1.5 break-words text-sm text-ground-600 sm:gap-2.5 dark:text-ground-400",
-                className
-            )}
-            {...props}
-        />
-    )
+type BreadcrumbListProps = React.OlHTMLAttributes<HTMLOListElement>;
+
+const BreadcrumbList = ({ className, ...props }: BreadcrumbListProps) => (
+  <ol
+    className={clsx(
+      "flex flex-wrap items-center gap-1.5 wrap-break-word text-sm text-ground-600 sm:gap-2.5 dark:text-ground-400",
+      className
+    )}
+    {...props}
+  />
 );
-BreadcrumbList.displayName = "BreadcrumbList";
 
 // ============================================================================
 // Breadcrumb Item
 // ============================================================================
 
-const BreadcrumbItem = forwardRef<HTMLLIElement, React.LiHTMLAttributes<HTMLLIElement>>(
-    ({ className, ...props }, ref) => (
-        <li
-            ref={ref}
-            className={clsx("inline-flex items-center gap-1.5", className)}
-            {...props}
-        />
-    )
+type BreadcrumbItemProps = React.LiHTMLAttributes<HTMLLIElement>;
+
+const BreadcrumbItem = ({ className, ...props }: BreadcrumbItemProps) => (
+  <li
+    className={clsx("inline-flex items-center gap-1.5", className)}
+    {...props}
+  />
 );
-BreadcrumbItem.displayName = "BreadcrumbItem";
 
 // ============================================================================
 // Breadcrumb Link
 // ============================================================================
 
-interface BreadcrumbLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-    asChild?: boolean;
-}
+import type { LinkProps } from "next/link";
 
-const BreadcrumbLink = forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
-    ({ asChild, className, ...props }, ref) => {
-        const Comp = asChild ? Slot : "a";
+type BreadcrumbLinkProps = Omit<LinkProps, "className"> & {
+  className?: string;
+  children?: React.ReactNode;
+};
 
-        return (
-            <Comp
-                ref={ref}
-                className={clsx(
-                    "rounded transition-colors duration-(--transition-fast) ease-in-out hover:text-ground-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-ground-600 dark:focus-visible:ring-offset-ground-950 dark:hover:text-ground-100",
-                    className
-                )}
-                {...props}
-            />
-        );
-    }
-);
-BreadcrumbLink.displayName = "BreadcrumbLink";
+const BreadcrumbLink = ({ className, ...props }: BreadcrumbLinkProps) => {
+  return (
+    <Link
+      className={clsx(
+        // WCAG 2.2 AA: Minimum target size is 24x24px.
+        // py-2 (8px top/bottom) + text height (~16px) ensures vertical size >= 24px.
+        // px-3 provides horizontal spacing.
+        // -mx-1 prevents the increased padding from shifting the visual layout alignment.
+        "rounded px-3 py-2 -mx-1 text-ground-600 transition-colors duration-(--transition-fast) ease-in-out hover:text-ground-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-ground-400 dark:focus-visible:ring-ground-600 dark:focus-visible:ring-offset-ground-950 dark:hover:text-ground-100",
+        className
+      )}
+      {...props}
+    />
+  );
+};
 
 // ============================================================================
 // Breadcrumb Page
 // ============================================================================
 
-const BreadcrumbPage = forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
-    ({ className, ...props }, ref) => (
-        <span
-            ref={ref}
-            role="link"
-            aria-disabled="true"
-            aria-current="page"
-            className={clsx("font-normal text-ground-950 dark:text-ground-100", className)}
-            {...props}
-        />
-    )
+type BreadcrumbPageProps = React.HTMLAttributes<HTMLSpanElement>;
+
+const BreadcrumbPage = ({ className, ...props }: BreadcrumbPageProps) => (
+  <span
+    aria-current="page"
+    className={clsx(
+      // Matching padding of BreadcrumbLink for consistent layout and target size.
+      "px-3 py-2 -mx-1 font-normal text-ground-950 dark:text-ground-100",
+      className
+    )}
+    {...props}
+  />
 );
-BreadcrumbPage.displayName = "BreadcrumbPage";
 
 // ============================================================================
 // Breadcrumb Separator
 // ============================================================================
 
-const BreadcrumbSeparator = forwardRef<HTMLLIElement, React.LiHTMLAttributes<HTMLLIElement>>(
-    ({ children, className, ...props }, ref) => (
-        <li
-            ref={ref}
-            role="presentation"
-            aria-hidden="true"
-            className={clsx("[&>svg]:size-3.5", className)}
-            {...props}
-        >
-            {children ?? <ChevronRight />}
-        </li>
-    )
+type BreadcrumbSeparatorProps = React.LiHTMLAttributes<HTMLLIElement>;
+
+const BreadcrumbSeparator = ({ children, className, ...props }: BreadcrumbSeparatorProps) => (
+  <li
+    role="presentation"
+    aria-hidden="true"
+    className={clsx("[&>svg]:size-3.5", className)}
+    {...props}
+  >
+    {children ?? <ChevronRight />}
+  </li>
 );
-BreadcrumbSeparator.displayName = "BreadcrumbSeparator";
 
 // ============================================================================
 // Breadcrumb Ellipsis
 // ============================================================================
 
-const BreadcrumbEllipsis = forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
-    ({ className, ...props }, ref) => (
-        <span
-            ref={ref}
-            role="presentation"
-            aria-hidden="true"
-            className={clsx("flex h-9 w-9 items-center justify-center", className)}
-            {...props}
-        >
-            <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">More</span>
-        </span>
-    )
+type BreadcrumbEllipsisProps = React.HTMLAttributes<HTMLSpanElement>;
+
+const BreadcrumbEllipsis = ({ className, ...props }: BreadcrumbEllipsisProps) => (
+  <span
+    role="presentation"
+    aria-hidden="true"
+    className={clsx("flex h-9 w-9 items-center justify-center", className)}
+    {...props}
+  >
+    <MoreHorizontal className="h-4 w-4" />
+    <span className="sr-only">More</span>
+  </span>
 );
-BreadcrumbEllipsis.displayName = "BreadcrumbEllipsis";
 
 export {
-    Breadcrumb,
-    BreadcrumbList,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-    BreadcrumbEllipsis,
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
 };

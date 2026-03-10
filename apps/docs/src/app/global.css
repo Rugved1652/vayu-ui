@@ -32,16 +32,16 @@
               400–600 → interactive elements & primary actions
               700–950 → text on light bg / inverted surfaces in dark
   */
-  --color-primary-100: var(--color-lime-100);
-  --color-primary-200: var(--color-lime-200);
-  --color-primary-300: var(--color-lime-300);
-  --color-primary-400: var(--color-lime-400);
-  --color-primary-500: var(--color-lime-500);
-  --color-primary-600: var(--color-lime-600);
-  --color-primary-700: var(--color-lime-700);
-  --color-primary-800: var(--color-lime-800);
-  --color-primary-900: var(--color-lime-900);
-  --color-primary-950: var(--color-lime-950);
+  --color-primary-100: var(--color-blue-100);
+  --color-primary-200: var(--color-blue-200);
+  --color-primary-300: var(--color-blue-300);
+  --color-primary-400: var(--color-blue-400);
+  --color-primary-500: var(--color-blue-500);
+  --color-primary-600: var(--color-blue-600);
+  --color-primary-700: var(--color-blue-700);
+  --color-primary-800: var(--color-blue-800);
+  --color-primary-900: var(--color-blue-900);
+  --color-primary-950: var(--color-blue-950);
 
   /* ============================================================
      GROUND — Zinc
@@ -218,7 +218,7 @@
      ============================================================ */
 
   /* Border radius — 2px keeps the system sharp and utilitarian */
-  --radius: 12px;
+  --radius: 4px;
 
   /* ============================================================
      SHADOWS  (Tailwind v4 namespace mapping)
@@ -641,3 +641,4 @@
   border-top-width: 0;
   margin-top: 0;
 }
+

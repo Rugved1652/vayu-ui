@@ -65,7 +65,7 @@ const TextAreaRoot = ({
 }: TextAreaRootProps) => {
     const [isFocused, setIsFocused] = useState(false);
     const [charCount, setCharCount] = useState(0);
-    
+
     // Generate unique IDs for accessibility
     const generatedId = useId();
     const inputId = `textarea-input-${generatedId}`;
@@ -89,7 +89,7 @@ const TextAreaRoot = ({
                 errorTextId,
             }}
         >
-            <div 
+            <div
                 className={`w-full flex flex-col gap-1 ${className}`}
                 role="group"
             >
@@ -115,7 +115,7 @@ const TextAreaLabel = ({
 
     return (
         <div className="flex items-center justify-between px-2">
-            <label 
+            <label
                 htmlFor={inputId}
                 className={`font-primary text-ground-800 dark:text-ground-100 text-sm font-medium ${className}`}
                 {...props}
@@ -123,7 +123,7 @@ const TextAreaLabel = ({
                 {children}
             </label>
             {showCharCount && (
-                <span 
+                <span
                     className="text-xs font-secondary text-ground-500 dark:text-ground-400"
                     aria-live="polite"
                     aria-atomic="true"
@@ -210,22 +210,20 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
 
         const variantStyles = {
             default: {
-                wrapper: `bg-white dark:bg-ground-900 border-2 ${
-                    error
+                wrapper: `bg-white dark:bg-ground-900 border-2 ${error
                         ? "border-error-500 dark:border-error-600"
                         : isFocused
                             ? "border-primary-500 dark:border-primary-600"
                             : "border-ground-300 dark:border-ground-700"
-                } hover:border-primary-400 dark:hover:border-primary-600`,
+                    } hover:border-primary-400 dark:hover:border-primary-600`,
             },
             outline: {
-                wrapper: `bg-transparent border-2 ${
-                    error
+                wrapper: `bg-transparent border-2 ${error
                         ? "border-error-500 dark:border-error-600"
                         : isFocused
                             ? "border-primary-500 dark:border-primary-600"
                             : "border-ground-300 dark:border-ground-700"
-                } hover:border-primary-400 dark:hover:border-primary-600`,
+                    } hover:border-primary-400 dark:hover:border-primary-600`,
             },
         };
 
@@ -239,18 +237,15 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
 
         return (
             <div
-                className={`${styles.wrapper} ${config.wrapper} flex gap-3 w-full rounded outline-0 transition-colors ${
-                    disabled ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`${styles.wrapper} ${config.wrapper} flex gap-3 w-full rounded outline-0 transition-colors ${disabled ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
             >
                 <textarea
                     ref={ref}
                     id={inputId}
-                    className={`w-full bg-transparent outline-0 font-secondary text-ground-900 dark:text-ground-100 placeholder:text-ground-500 ${
-                        config.text
-                    } ${getResizeClass()} ${
-                        disabled ? "cursor-not-allowed" : ""
-                    } focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${className}`}
+                    className={`w-full bg-transparent outline-0 font-secondary text-ground-900 dark:text-ground-100 placeholder:text-ground-500 ${config.text
+                        } ${getResizeClass()} ${disabled ? "cursor-not-allowed" : ""
+                        } focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${className}`}
                     rows={rows}
                     value={value}
                     onChange={handleChange}
@@ -287,7 +282,7 @@ const TextAreaSupportText = ({ children, className = "" }: TextAreaSupportTextPr
 
     if (typeof children === "string") {
         return (
-            <p 
+            <p
                 id={supportTextId}
                 className={`text-xs font-secondary text-ground-600 dark:text-ground-400 px-2 ${className}`}
             >
@@ -297,7 +292,7 @@ const TextAreaSupportText = ({ children, className = "" }: TextAreaSupportTextPr
     }
 
     return (
-        <ul 
+        <ul
             id={supportTextId}
             className={`text-xs font-secondary text-ground-600 dark:text-ground-400 px-2 list-disc list-inside space-y-1 ${className}`}
         >
@@ -319,19 +314,19 @@ const TextAreaErrorText = ({ children, className = "" }: TextAreaErrorTextProps)
 
     if (typeof children === "string") {
         return (
-            <p 
+            <p
                 id={errorTextId}
                 role="alert"
                 className={`text-xs font-secondary text-error-600 dark:text-error-400 px-2 flex items-center gap-1 ${className}`}
             >
-                <AlertCircle className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
+                <AlertCircle className="w-3 h-3 shrink-0" aria-hidden="true" />
                 {children}
             </p>
         );
     }
 
     return (
-        <ul 
+        <ul
             id={errorTextId}
             role="alert"
             className={`text-xs font-secondary text-error-600 dark:text-error-400 px-2 list-disc list-inside space-y-1 ${className}`}
@@ -352,7 +347,7 @@ const TextAreaCharCount = ({ className = "" }: TextAreaCharCountProps) => {
     const { charCount, maxLength } = useTextAreaContext();
 
     return (
-        <span 
+        <span
             className={`text-xs font-secondary text-ground-500 dark:text-ground-400 px-2 ${className}`}
             aria-live="polite"
             aria-atomic="true"
