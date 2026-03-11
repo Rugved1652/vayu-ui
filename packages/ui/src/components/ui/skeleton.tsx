@@ -1,5 +1,4 @@
-"use client";
-import React, { createContext, ReactNode, useContext, useState, useEffect } from "react";
+import React from "react";
 
 /**
  * Skeleton Component - Compound Pattern with Accessibility
@@ -13,6 +12,7 @@ import React, { createContext, ReactNode, useContext, useState, useEffect } from
  * - Pre-built patterns (Card, Avatar, List, Table, Grid)
  * - Screen reader friendly loading states
  * - WCAG 2.2 AA compliant with motion preferences
+ * - Server-side rendering compatible
  */
 
 // ============================================================================
@@ -22,26 +22,6 @@ import React, { createContext, ReactNode, useContext, useState, useEffect } from
 type SkeletonVariant = "text" | "circular" | "rectangular" | "rounded";
 type SkeletonAnimation = "pulse" | "wave" | "none";
 type SkeletonSize = "sm" | "md" | "lg" | "xl";
-
-// ============================================================================
-// Context
-// ============================================================================
-
-interface SkeletonContextType {
-    animation: SkeletonAnimation;
-    size: SkeletonSize;
-    id?: string;
-}
-
-const SkeletonContext = createContext<SkeletonContextType | undefined>(undefined);
-
-const useSkeleton = () => {
-    const context = useContext(SkeletonContext);
-    if (!context) {
-        throw new Error("Skeleton compound components must be used within Skeleton");
-    }
-    return context;
-};
 
 // ============================================================================
 // Size & Animation Configuration
@@ -77,74 +57,67 @@ const sizeClasses = {
 // WCAG 2.2 AA: Respects prefers-reduced-motion
 const animationClasses = {
     pulse: "animate-pulse motion-reduce:animate-none",
-    wave: "relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full motion-reduce:before:animate-none before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-ground-950/10 before:to-transparent",
+    wave: "skeleton-wave motion-reduce:animate-none",
     none: "",
 };
 
 // ============================================================================
-// Main Skeleton Component
+// Helper Functions
 // ============================================================================
 
-interface SkeletonRootProps {
-    children?: ReactNode;
-    animation?: SkeletonAnimation;
-    size?: SkeletonSize;
-    className?: string;
-    id?: string;
-    "aria-label"?: string;
-    "aria-live"?: "polite" | "assertive" | "off";
-    "announce"?: boolean;
-    "announcementDelay"?: number;
+function getVariantClasses(variant: SkeletonVariant, size: SkeletonSize): string {
+    const variantMap = {
+        text: `${sizeClasses[size].text} w-full rounded`,
+        circular: `${sizeClasses[size].circular} rounded-full`,
+        rectangular: `${sizeClasses[size].rectangular} w-full rounded`,
+        rounded: `${sizeClasses[size].rounded} w-full rounded-lg`,
+    };
+    return variantMap[variant];
 }
 
-const SkeletonRoot: React.FC<SkeletonRootProps> = ({
+function getSkeletonStyles(width?: string | number, height?: string | number): React.CSSProperties {
+    return {
+        width: width ? (typeof width === "number" ? `${width}px` : width) : undefined,
+        height: height ? (typeof height === "number" ? `${height}px` : height) : undefined,
+    };
+}
+
+// ============================================================================
+// Main Skeleton Component (Root)
+// ============================================================================
+
+interface SkeletonRootProps extends React.HTMLAttributes<HTMLDivElement> {
+    animation?: SkeletonAnimation;
+    size?: SkeletonSize;
+    "aria-label"?: string;
+    "aria-live"?: "polite" | "assertive" | "off";
+}
+
+function SkeletonRoot({
     children,
     animation = "pulse",
     size = "md",
     className = "",
-    id,
     "aria-label": ariaLabel = "Loading",
     "aria-live": ariaLive = "polite",
-    announce = true,
-    announcementDelay = 500,
-}) => {
-    const [shouldAnnounce, setShouldAnnounce] = useState(false);
-    const skeletonId = id || `skeleton-${Math.random().toString(36).substring(2, 9)}`;
-
-    // WCAG 2.2 AA: Delay loading announcements to avoid interrupting screen readers
-    useEffect(() => {
-        if (announce) {
-            const timer = setTimeout(() => {
-                setShouldAnnounce(true);
-            }, announcementDelay);
-            return () => clearTimeout(timer);
-        }
-    }, [announce, announcementDelay]);
-
-    const contextValue: SkeletonContextType = {
-        animation,
-        size,
-        id: skeletonId,
-    };
-
+    ...props
+}: SkeletonRootProps) {
     return (
-        <SkeletonContext.Provider value={contextValue}>
-            <div
-                id={skeletonId}
-                className={className}
-                role="status"
-                aria-live={ariaLive}
-                aria-busy="true"
-                aria-label={shouldAnnounce ? ariaLabel : undefined}
-            >
-                {shouldAnnounce && (
-                    <span className="sr-only">{ariaLabel}</span>
-                )}
-                {children}
-            </div>
-        </SkeletonContext.Provider>
+        <div
+            className={className}
+            role="status"
+            aria-live={ariaLive}
+            aria-busy="true"
+            aria-label={ariaLabel}
+            data-animation={animation}
+            data-size={size}
+            {...props}
+        >
+            <span className="sr-only">{ariaLabel}</span>
+            {children}
+        </div>
     );
-};
+}
 
 // ============================================================================
 // Skeleton Item (Single Element)
@@ -159,47 +132,25 @@ interface SkeletonItemProps extends React.HTMLAttributes<HTMLDivElement> {
     count?: number;
 }
 
-const SkeletonItem: React.FC<SkeletonItemProps> = ({
+function SkeletonItem({
     variant = "text",
-    animation: customAnimation,
+    animation = "pulse",
     width,
     height,
-    size: customSize,
+    size = "md",
     className = "",
     count = 1,
     ...props
-}) => {
-    const context = useContext(SkeletonContext);
-    const animation = customAnimation || context?.animation || "pulse";
-    const size = customSize || context?.size || "md";
-
-    const variantClasses = {
-        text: `${sizeClasses[size].text} w-full rounded`,
-        circular: `${sizeClasses[size].circular} rounded-full`,
-        rectangular: `${sizeClasses[size].rectangular} w-full rounded`,
-        rounded: `${sizeClasses[size].rounded} w-full rounded`,
-    };
-
-    // WCAG 2.2 AA: Uses ground tokens for skeleton color
-    const baseClasses = "bg-ground-200 dark:bg-ground-900 border border-transparent";
-
-    const baseStyles = {
-        width: width
-            ? typeof width === "number"
-                ? `${width}px`
-                : width
-            : undefined,
-        height: height
-            ? typeof height === "number"
-                ? `${height}px`
-                : height
-            : undefined,
-    };
+}: SkeletonItemProps) {
+    // WCAG 2.2 AA: Uses ground tokens for skeleton color with sufficient contrast
+    const baseClasses = "bg-ground-200 dark:bg-ground-800 border border-transparent";
+    const variantClass = getVariantClasses(variant, size);
+    const styles = getSkeletonStyles(width, height);
 
     const skeletonElement = (
         <div
-            className={`${baseClasses} ${variantClasses[variant]} ${animationClasses[animation]} ${className}`}
-            style={baseStyles}
+            className={`${baseClasses} ${variantClass} ${animationClasses[animation]} ${className}`}
+            style={styles}
             aria-hidden="true"
             tabIndex={-1}
             {...props}
@@ -217,7 +168,7 @@ const SkeletonItem: React.FC<SkeletonItemProps> = ({
     }
 
     return skeletonElement;
-};
+}
 
 // ============================================================================
 // Skeleton Text
@@ -227,17 +178,30 @@ interface SkeletonTextProps extends React.HTMLAttributes<HTMLDivElement> {
     lines?: number;
     width?: string | number;
     lastLineWidth?: string | number;
+    animation?: SkeletonAnimation;
+    size?: SkeletonSize;
 }
 
-const SkeletonText: React.FC<SkeletonTextProps> = ({
+function SkeletonText({
     lines = 1,
     width,
     lastLineWidth,
+    animation = "pulse",
+    size = "md",
     className = "",
     ...props
-}) => {
+}: SkeletonTextProps) {
     if (lines === 1) {
-        return <SkeletonItem variant="text" width={width} className={className} {...props} />;
+        return (
+            <SkeletonItem
+                variant="text"
+                width={width}
+                animation={animation}
+                size={size}
+                className={className}
+                {...props}
+            />
+        );
     }
 
     return (
@@ -247,12 +211,14 @@ const SkeletonText: React.FC<SkeletonTextProps> = ({
                     key={index}
                     variant="text"
                     width={index === lines - 1 && lastLineWidth ? lastLineWidth : width}
+                    animation={animation}
+                    size={size}
                     {...props}
                 />
             ))}
         </div>
     );
-};
+}
 
 // ============================================================================
 // Skeleton Circle
@@ -260,11 +226,25 @@ const SkeletonText: React.FC<SkeletonTextProps> = ({
 
 interface SkeletonCircleProps extends React.HTMLAttributes<HTMLDivElement> {
     size?: SkeletonSize;
+    animation?: SkeletonAnimation;
 }
 
-const SkeletonCircle: React.FC<SkeletonCircleProps> = ({ className = "", size, ...props }) => {
-    return <SkeletonItem variant="circular" className={className} size={size} {...props} />;
-};
+function SkeletonCircle({
+    className = "",
+    size = "md",
+    animation = "pulse",
+    ...props
+}: SkeletonCircleProps) {
+    return (
+        <SkeletonItem
+            variant="circular"
+            className={className}
+            size={size}
+            animation={animation}
+            {...props}
+        />
+    );
+}
 
 // ============================================================================
 // Skeleton Rectangle
@@ -274,25 +254,31 @@ interface SkeletonRectangleProps extends React.HTMLAttributes<HTMLDivElement> {
     width?: string | number;
     height?: string | number;
     rounded?: boolean;
+    animation?: SkeletonAnimation;
+    size?: SkeletonSize;
 }
 
-const SkeletonRectangle: React.FC<SkeletonRectangleProps> = ({
+function SkeletonRectangle({
     width,
     height,
     rounded = false,
+    animation = "pulse",
+    size = "md",
     className = "",
     ...props
-}) => {
+}: SkeletonRectangleProps) {
     return (
         <SkeletonItem
-            variant="rounded"
+            variant={rounded ? "rounded" : "rectangular"}
             width={width}
             height={height}
             className={className}
+            animation={animation}
+            size={size}
             {...props}
         />
     );
-};
+}
 
 // ============================================================================
 // Skeleton Card
@@ -303,16 +289,20 @@ interface SkeletonCardProps extends React.HTMLAttributes<HTMLDivElement> {
     imageHeight?: number;
     lines?: number;
     titleWidth?: string | number;
+    animation?: SkeletonAnimation;
+    size?: SkeletonSize;
 }
 
-const SkeletonCard: React.FC<SkeletonCardProps> = ({
+function SkeletonCard({
     className = "",
     showImage = true,
     imageHeight = 200,
     lines = 3,
     titleWidth = "60%",
+    animation = "pulse",
+    size = "md",
     ...props
-}) => {
+}: SkeletonCardProps) {
     return (
         <div
             className={`bg-ground-50 dark:bg-ground-950 rounded p-4 border border-ground-200 dark:border-ground-900 shadow-outer ${className}`}
@@ -320,18 +310,24 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({
             {...props}
         >
             {showImage && (
-                <SkeletonRectangle height={imageHeight} className="mb-4" />
+                <SkeletonRectangle
+                    height={imageHeight}
+                    className="mb-4"
+                    animation={animation}
+                    size={size}
+                />
             )}
             <SkeletonItem
                 variant="text"
                 size="lg"
                 width={titleWidth}
                 className="mb-3"
+                animation={animation}
             />
-            <SkeletonText lines={lines} />
+            <SkeletonText lines={lines} animation={animation} size={size} />
         </div>
     );
-};
+}
 
 // ============================================================================
 // Skeleton Avatar
@@ -343,31 +339,44 @@ interface SkeletonAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
     titleWidth?: string | number;
     subtitleWidth?: string | number;
     size?: SkeletonSize;
+    animation?: SkeletonAnimation;
 }
 
-const SkeletonAvatar: React.FC<SkeletonAvatarProps> = ({
+function SkeletonAvatar({
     className = "",
     showText = true,
     textLines = 2,
     titleWidth = "40%",
     subtitleWidth = "60%",
-    size,
+    size = "md",
+    animation = "pulse",
     ...props
-}) => {
+}: SkeletonAvatarProps) {
     return (
         <div className={`flex items-center gap-3 ${className}`} aria-hidden="true" {...props}>
-            <SkeletonCircle size={size} />
+            <SkeletonCircle size={size} animation={animation} />
             {showText && (
                 <div className="flex-1">
-                    <SkeletonItem variant="text" width={titleWidth} className="mb-2" />
+                    <SkeletonItem
+                        variant="text"
+                        width={titleWidth}
+                        className="mb-2"
+                        animation={animation}
+                        size={size}
+                    />
                     {textLines > 1 && (
-                        <SkeletonItem variant="text" size="sm" width={subtitleWidth} />
+                        <SkeletonItem
+                            variant="text"
+                            size="sm"
+                            width={subtitleWidth}
+                            animation={animation}
+                        />
                     )}
                 </div>
             )}
         </div>
     );
-};
+}
 
 // ============================================================================
 // Skeleton List
@@ -376,14 +385,18 @@ const SkeletonAvatar: React.FC<SkeletonAvatarProps> = ({
 interface SkeletonListProps extends React.HTMLAttributes<HTMLDivElement> {
     items?: number;
     showAvatar?: boolean;
+    animation?: SkeletonAnimation;
+    size?: SkeletonSize;
 }
 
-const SkeletonList: React.FC<SkeletonListProps> = ({
+function SkeletonList({
     className = "",
     items = 5,
     showAvatar = true,
+    animation = "pulse",
+    size = "md",
     ...props
-}) => {
+}: SkeletonListProps) {
     return (
         <div className={`space-y-4 ${className}`} aria-hidden="true" {...props}>
             {Array.from({ length: items }).map((_, index) => (
@@ -391,16 +404,27 @@ const SkeletonList: React.FC<SkeletonListProps> = ({
                     key={index}
                     className="flex items-center gap-3 p-3 bg-ground-50 dark:bg-ground-950 rounded border border-ground-200 dark:border-ground-900"
                 >
-                    {showAvatar && <SkeletonCircle />}
+                    {showAvatar && <SkeletonCircle size={size} animation={animation} />}
                     <div className="flex-1">
-                        <SkeletonItem variant="text" width="70%" className="mb-2" />
-                        <SkeletonItem variant="text" size="sm" width="40%" />
+                        <SkeletonItem
+                            variant="text"
+                            width="70%"
+                            className="mb-2"
+                            animation={animation}
+                            size={size}
+                        />
+                        <SkeletonItem
+                            variant="text"
+                            size="sm"
+                            width="40%"
+                            animation={animation}
+                        />
                     </div>
                 </div>
             ))}
         </div>
     );
-};
+}
 
 // ============================================================================
 // Skeleton Table
@@ -410,15 +434,19 @@ interface SkeletonTableProps extends React.HTMLAttributes<HTMLDivElement> {
     rows?: number;
     columns?: number;
     showHeader?: boolean;
+    animation?: SkeletonAnimation;
+    size?: SkeletonSize;
 }
 
-const SkeletonTable: React.FC<SkeletonTableProps> = ({
+function SkeletonTable({
     className = "",
     rows = 5,
     columns = 4,
     showHeader = true,
+    animation = "pulse",
+    size = "md",
     ...props
-}) => {
+}: SkeletonTableProps) {
     return (
         <div
             className={`bg-ground-50 dark:bg-ground-950 rounded border border-ground-200 dark:border-ground-900 overflow-hidden ${className}`}
@@ -431,7 +459,13 @@ const SkeletonTable: React.FC<SkeletonTableProps> = ({
                     style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
                 >
                     {Array.from({ length: columns }).map((_, index) => (
-                        <SkeletonItem key={index} variant="text" width="60%" />
+                        <SkeletonItem
+                            key={index}
+                            variant="text"
+                            width="60%"
+                            animation={animation}
+                            size={size}
+                        />
                     ))}
                 </div>
             )}
@@ -442,13 +476,19 @@ const SkeletonTable: React.FC<SkeletonTableProps> = ({
                     style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
                 >
                     {Array.from({ length: columns }).map((_, colIndex) => (
-                        <SkeletonItem key={colIndex} variant="text" size="sm" width="80%" />
+                        <SkeletonItem
+                            key={colIndex}
+                            variant="text"
+                            size="sm"
+                            width="80%"
+                            animation={animation}
+                        />
                     ))}
                 </div>
             ))}
         </div>
     );
-};
+}
 
 // ============================================================================
 // Skeleton Grid
@@ -458,15 +498,19 @@ interface SkeletonGridProps extends React.HTMLAttributes<HTMLDivElement> {
     items?: number;
     columns?: number;
     itemHeight?: number;
+    animation?: SkeletonAnimation;
+    size?: SkeletonSize;
 }
 
-const SkeletonGrid: React.FC<SkeletonGridProps> = ({
+function SkeletonGrid({
     className = "",
     items = 6,
     columns = 3,
     itemHeight = 200,
+    animation = "pulse",
+    size = "md",
     ...props
-}) => {
+}: SkeletonGridProps) {
     return (
         <div
             className={`grid gap-4 ${className}`}
@@ -475,11 +519,17 @@ const SkeletonGrid: React.FC<SkeletonGridProps> = ({
             {...props}
         >
             {Array.from({ length: items }).map((_, index) => (
-                <SkeletonCard key={index} imageHeight={itemHeight} lines={2} />
+                <SkeletonCard
+                    key={index}
+                    imageHeight={itemHeight}
+                    lines={2}
+                    animation={animation}
+                    size={size}
+                />
             ))}
         </div>
     );
-};
+}
 
 // ============================================================================
 // Skeleton Group (Container)
@@ -489,12 +539,12 @@ interface SkeletonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
     spacing?: "sm" | "md" | "lg";
 }
 
-const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
+function SkeletonGroup({
     children,
     className = "",
     spacing = "md",
     ...props
-}) => {
+}: SkeletonGroupProps) {
     const spacingClasses = {
         sm: "space-y-2",
         md: "space-y-4",
@@ -506,13 +556,14 @@ const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
             {children}
         </div>
     );
-};
+}
 
 // ============================================================================
 // Export Compound Component
 // ============================================================================
 
-export const Skeleton = Object.assign(SkeletonRoot, {
+const Skeleton = Object.assign(SkeletonRoot, {
+    Root: SkeletonRoot,
     Item: SkeletonItem,
     Text: SkeletonText,
     Circle: SkeletonCircle,
@@ -524,6 +575,8 @@ export const Skeleton = Object.assign(SkeletonRoot, {
     Grid: SkeletonGrid,
     Group: SkeletonGroup,
 });
+
+export { Skeleton };
 
 // ============================================================================
 // Type Exports
