@@ -5,7 +5,6 @@ import {
     CheckCircle,
     Eye,
     EyeClosed,
-    HelpCircle,
     Loader2,
     Search,
     X,
@@ -17,7 +16,9 @@ import React, {
     forwardRef,
     useCallback,
     useContext,
+    useEffect,
     useId,
+    useMemo,
     useRef,
     useState,
 } from "react";
@@ -35,7 +36,6 @@ type InputType =
     | "url"
     | "search";
 type InputSize = "sm" | "md" | "lg";
-type InputVariant = "default" | "filled" | "flushed";
 type ValidationState = "default" | "error" | "warning" | "success";
 
 interface TextInputContextValue {
@@ -53,7 +53,6 @@ interface TextInputContextValue {
     hasValue: boolean;
     inputType: InputType;
     size: InputSize;
-    variant: InputVariant;
     setValue: (value: string) => void;
     setFocused: (focused: boolean) => void;
     clearValue: () => void;
@@ -85,7 +84,6 @@ interface TextInputRootProps {
     onChange?: (value: string) => void;
     inputType?: InputType;
     size?: InputSize;
-    variant?: InputVariant;
     validationState?: ValidationState;
     disabled?: boolean;
     readOnly?: boolean;
@@ -103,7 +101,6 @@ const TextInputRoot = forwardRef<HTMLDivElement, TextInputRootProps>(
             onChange,
             inputType = "text",
             size = "md",
-            variant = "default",
             validationState = "default",
             disabled = false,
             readOnly = false,
@@ -142,7 +139,7 @@ const TextInputRoot = forwardRef<HTMLDivElement, TextInputRootProps>(
 
         const hasValue = value.trim() !== "";
 
-        const contextValue: TextInputContextValue = {
+        const contextValue = useMemo<TextInputContextValue>(() => ({
             inputId,
             errorId,
             descriptionId,
@@ -157,12 +154,28 @@ const TextInputRoot = forwardRef<HTMLDivElement, TextInputRootProps>(
             hasValue,
             inputType,
             size,
-            variant,
             setValue,
             setFocused: setIsFocused,
             clearValue,
             inputRef: inputRef as React.RefObject<HTMLInputElement>,
-        };
+        }), [
+            inputId,
+            errorId,
+            descriptionId,
+            labelId,
+            value,
+            isFocused,
+            disabled,
+            readOnly,
+            required,
+            loading,
+            validationState,
+            hasValue,
+            inputType,
+            size,
+            setValue,
+            clearValue,
+        ]);
 
         return (
             <TextInputContext.Provider value={contextValue}>
@@ -201,9 +214,12 @@ const Label: React.FC<LabelProps> = ({
         >
             {children}
             {isRequired && (
-                <span className="text-error-500 ml-1" aria-hidden="true">
-                    *
-                </span>
+                <>
+                    <span className="text-error-500 ml-1" aria-hidden="true">
+                        *
+                    </span>
+                    <span className="sr-only">required</span>
+                </>
             )}
             {optional && (
                 <span className="text-ground-500 text-sm font-secondary font-normal ml-2">
@@ -232,7 +248,6 @@ const Field: React.FC<FieldProps> = ({ children, className = "" }) => {
         isDisabled,
         hasValue,
         size,
-        variant,
         setFocused,
     } = useTextInput();
 
@@ -240,12 +255,6 @@ const Field: React.FC<FieldProps> = ({ children, className = "" }) => {
         sm: "px-3 py-1.5 text-sm",
         md: "px-3 py-2.5 text-base",
         lg: "px-4 py-3 text-lg",
-    };
-
-    const variantClasses = {
-        default: "bg-ground-50 dark:bg-ground-900 border border-ground-300 dark:border-ground-700 rounded",
-        filled: "border-0 rounded bg-ground-100 dark:bg-ground-800",
-        flushed: "border-0 border-b-2 rounded-none px-0",
     };
 
     const stateClasses = {
@@ -265,9 +274,8 @@ const Field: React.FC<FieldProps> = ({ children, className = "" }) => {
         <div
             className={`
                 flex items-center gap-2 w-full transition-all duration-200
-                bg-white dark:bg-ground-900
+                bg-ground-50 dark:bg-ground-900 border rounded
                 ${sizeClasses[size]}
-                ${variantClasses[variant]}
                 ${isFocused || validationState !== "default" ? stateClasses[validationState] : stateClasses.default}
                 ${isDisabled ? "opacity-60 cursor-not-allowed bg-ground-50 dark:bg-ground-800" : ""}
                 ${className}
@@ -288,14 +296,16 @@ Field.displayName = "TextInput.Field";
 
 interface InputProps extends Omit<
     InputHTMLAttributes<HTMLInputElement>,
-    "type" | "value" | "onChange" | "size"
+    "value" | "onChange" | "size" | "defaultValue"
 > {
     leftIcon?: ReactNode;
     rightIcon?: ReactNode;
+    /** Override the input type from context */
+    type?: InputType;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-    ({ className = "", leftIcon, rightIcon, ...props }, ref) => {
+    ({ className = "", leftIcon, rightIcon, type: typeOverride, ...props }, ref) => {
         const {
             inputId,
             labelId,
@@ -310,6 +320,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             validationState,
             inputRef,
         } = useTextInput();
+
+        const resolvedType = typeOverride ?? inputType;
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             setValue(e.target.value);
@@ -333,14 +345,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                 <input
                     ref={mergedRef}
                     id={inputId}
-                    type={inputType}
+                    type={resolvedType}
                     value={value}
                     onChange={handleChange}
                     disabled={isDisabled}
                     readOnly={isReadOnly}
                     required={isRequired}
                     aria-labelledby={labelId}
-                    aria-describedby={`${descriptionId} ${validationState === "error" ? errorId : ""}`}
+                    aria-describedby={validationState === "error" ? `${descriptionId} ${errorId}` : descriptionId}
                     aria-invalid={validationState === "error"}
                     aria-required={isRequired}
                     className={`
@@ -374,11 +386,13 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         const [showPassword, setShowPassword] = useState(false);
         const { inputType } = useTextInput();
 
-        if (inputType !== "password") {
-            console.warn(
-                "PasswordInput should only be used with inputType='password'"
-            );
-        }
+        useEffect(() => {
+            if (inputType !== "password") {
+                console.warn(
+                    "PasswordInput should only be used with inputType='password'"
+                );
+            }
+        }, [inputType]);
 
         return (
             <>
@@ -388,7 +402,6 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
                     onClick={() => setShowPassword(!showPassword)}
                     className="text-ground-400 hover:text-ground-600 dark:hover:text-ground-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1"
                     aria-label={showPassword ? "Hide password" : "Show password"}
-                    tabIndex={-1}
                 >
                     {showPassword ? (
                         <EyeClosed className="w-5 h-5" />
@@ -427,6 +440,11 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
             if (e.metaKey || e.ctrlKey) return;
 
             const key = e.key;
+            const input = e.currentTarget;
+            const selectionStart = input.selectionStart ?? 0;
+            const selectionEnd = input.selectionEnd ?? 0;
+            const hasSelection = selectionStart !== selectionEnd;
+
             const allowedKeys = [
                 "Backspace",
                 "Delete",
@@ -441,27 +459,41 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 
             if (allowedKeys.includes(key)) return;
 
-            if (numberType === "integer" || numberType === "natural") {
-                if (numberType === "natural") {
-                    if (!/^\d$/.test(key)) {
-                        e.preventDefault();
-                    }
-                } else {
-                    if (!/^[\d-]$/.test(key)) {
-                        e.preventDefault();
-                    }
+            // For digit keys, always allow
+            if (/^\d$/.test(key)) return;
+
+            // Handle minus sign for types that allow negative numbers
+            if (key === "-" && (numberType === "integer" || numberType === "decimal")) {
+                // Only allow minus at the beginning
+                const hasMinusSign = value.includes("-");
+                const isAtStart = selectionStart === 0;
+
+                // Allow if: no existing minus AND at start, OR if selecting text that includes the minus
+                if (hasMinusSign && !hasSelection) {
+                    e.preventDefault();
+                    return;
                 }
-            } else if (numberType === "decimal" || numberType === "positive") {
-                if (numberType === "positive") {
-                    if (!/^[\d.]$/.test(key)) {
-                        e.preventDefault();
-                    }
-                } else {
-                    if (!/^[\d.\-]$/.test(key)) {
-                        e.preventDefault();
-                    }
+                if (!isAtStart && !hasSelection) {
+                    e.preventDefault();
+                    return;
                 }
+                return;
             }
+
+            // Handle decimal point for decimal types
+            if (key === "." && (numberType === "decimal" || numberType === "positive")) {
+                const hasDecimalPoint = value.includes(".");
+
+                // Allow if no existing decimal point, or if selection might include it
+                if (hasDecimalPoint && !hasSelection) {
+                    e.preventDefault();
+                    return;
+                }
+                return;
+            }
+
+            // Block all other characters
+            e.preventDefault();
         };
 
         const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -532,34 +564,14 @@ NumberInput.displayName = "TextInput.NumberInput";
 interface SearchInputProps extends Omit<
     InputHTMLAttributes<HTMLInputElement>,
     "type" | "value" | "onChange" | "size"
-> {
-    onClear?: () => void;
-}
+> {}
 
 const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
-    ({ onClear, ...props }, ref) => {
-        const { clearValue, hasValue } = useTextInput();
-
-        const handleClear = () => {
-            clearValue();
-            onClear?.();
-        };
-
+    ({ ...props }, ref) => {
         return (
             <>
                 <Search className="w-5 h-5 text-ground-400" />
                 <Input ref={ref} type="search" {...props} />
-                {hasValue && (
-                    <button
-                        type="button"
-                        onClick={handleClear}
-                        className="text-ground-400 hover:text-ground-600 dark:hover:text-ground-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1"
-                        aria-label="Clear search"
-                        tabIndex={-1}
-                    >
-                        <X className="w-4 h-4" />
-                    </button>
-                )}
             </>
         );
     }
@@ -700,52 +712,6 @@ const LoadingSpinner: React.FC = () => {
 LoadingSpinner.displayName = "TextInput.LoadingSpinner";
 
 // ============================================================================
-// Tooltip Component
-// ============================================================================
-
-interface TooltipProps {
-    content: string;
-    children?: ReactNode;
-    className?: string;
-}
-
-const Tooltip: React.FC<TooltipProps> = ({
-    content,
-    children,
-    className = "",
-}) => {
-    const [showTooltip, setShowTooltip] = useState(false);
-
-    return (
-        <div className="relative inline-flex">
-            <button
-                type="button"
-                onMouseEnter={() => setShowTooltip(true)}
-                onMouseLeave={() => setShowTooltip(false)}
-                onFocus={() => setShowTooltip(true)}
-                onBlur={() => setShowTooltip(false)}
-                className="text-ground-400 hover:text-ground-600 dark:hover:text-ground-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1"
-                aria-label="More information"
-                tabIndex={-1}
-            >
-                {children || <HelpCircle className="w-5 h-5" />}
-            </button>
-            {showTooltip && (
-                <div
-                    role="tooltip"
-                    className={`absolute bottom-full right-0 mb-2 px-3 py-2 bg-ground-900 dark:bg-ground-700 text-white text-sm font-secondary rounded shadow-outer whitespace-nowrap z-50 ${className}`}
-                >
-                    {content}
-                    <div className="absolute top-full right-4 -mt-1 w-2 h-2 bg-ground-900 dark:bg-ground-700 transform rotate-45" />
-                </div>
-            )}
-        </div>
-    );
-};
-
-Tooltip.displayName = "TextInput.Tooltip";
-
-// ============================================================================
 // Character Count Component
 // ============================================================================
 
@@ -822,7 +788,6 @@ const ClearButton: React.FC<ClearButtonProps> = ({
             onClick={handleClear}
             className={`text-ground-400 hover:text-ground-600 dark:hover:text-ground-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1 ${className}`}
             aria-label="Clear input"
-            tabIndex={-1}
         >
             <X className="w-4 h-4" />
         </button>
@@ -849,7 +814,6 @@ export const TextInput = {
     SuccessMessage,
     Icon,
     LoadingSpinner,
-    Tooltip,
     CharacterCount,
     ClearButton,
 };
@@ -858,7 +822,6 @@ export { useTextInput };
 export type {
     InputSize,
     InputType,
-    InputVariant,
     NumberType,
     TextInputContextValue,
     ValidationState,
