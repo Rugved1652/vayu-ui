@@ -1,4 +1,3 @@
-"use client"
 import { Skeleton } from "vayu-ui";
 
 export default function SkeletonDemo() {
@@ -69,13 +68,13 @@ export default function SkeletonDemo() {
                     </div>
                 </div>
 
-                {/* With Root Context */}
+                {/* With Root Wrapper */}
                 <div>
                     <h3 className="text-sm font-medium text-ground-500 uppercase tracking-wider mb-2">
-                        With Root Context
+                        With Root Wrapper
                     </h3>
-                    <Skeleton.Root animation="wave" size="lg">
-                        <Skeleton.Text lines={2} />
+                    <Skeleton.Root animation="wave" aria-label="Loading content">
+                        <Skeleton.Text lines={2} animation="wave" />
                     </Skeleton.Root>
                 </div>
             </div>
