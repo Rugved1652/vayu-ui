@@ -1,10 +1,20 @@
 ---
 title: Typography
-description: Text styles and variants for headings, paragraphs, and other text elements.
+description: Text styles and variants for headings, paragraphs, and other text elements with WCAG 2.2 AA compliance.
 ---
 
 import TypographyDemo from '@/components/demos/typography-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add typography
+```
 
 ## Usage
 
@@ -18,58 +28,37 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
     ```tsx
     import Typography from "@/components/ui/typography";
 
-    export default function TypographyDemo() {
+    export default function TypographyExample() {
       return (
-        <div className="flex flex-col gap-8 w-full max-w-2xl">
-          <div className="flex flex-col gap-4 pb-8 border-b border-neutral-200 dark:border-neutral-800">
-            <Typography.H1>Heading 1</Typography.H1>
-            <Typography.H2>Heading 2</Typography.H2>
-            <Typography.H3>Heading 3</Typography.H3>
-            <Typography.H4>Heading 4</Typography.H4>
-            <Typography.H5>Heading 5</Typography.H5>
-            <Typography.H6>Heading 6</Typography.H6>
-          </div>
+        <div className="flex flex-col gap-8">
+          {/* Headings */}
+          <Typography.H1>Main Heading</Typography.H1>
+          <Typography.H2>Section Title</Typography.H2>
+          <Typography.H3>Subsection</Typography.H3>
 
-          <div className="flex flex-col gap-4 pb-8 border-b border-neutral-200 dark:border-neutral-800">
-            <Typography.P>
-              This is a paragraph example. It has a relaxed line height and proper
-              spacing for optimal readability. Typography is the art and technique
-              of arranging type to make written language legible, readable, and
-              appealing when displayed.
-            </Typography.P>
-            <Typography.P variant="secondary">
-              This is a secondary paragraph. It uses a lighter text color to
-              indicate less emphasis.
-            </Typography.P>
-          </div>
+          {/* Paragraphs */}
+          <Typography.P>
+            This is a paragraph with optimal readability.
+          </Typography.P>
+          <Typography.P variant="secondary">
+            Secondary paragraph with less emphasis.
+          </Typography.P>
 
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2">
-              <Typography.Label>Label:</Typography.Label>
-              <Typography.P className="text-sm">Input label example</Typography.P>
-            </div>
-            
-            <div>
-              <Typography.P>
-                Inline code example: <Typography.Code>npm install vayu-ui</Typography.Code>
-              </Typography.P>
-            </div>
+          {/* Other Components */}
+          <Typography.Label htmlFor="email">Email</Typography.Label>
+          <Typography.Code codeLang="bash">npm install vayu-ui</Typography.Code>
+          <Typography.Link href="/components">Internal Link</Typography.Link>
+          <Typography.Link href="https://example.com" target="_blank">
+            External Link
+          </Typography.Link>
+          <Typography.CTA>Call to Action</Typography.CTA>
 
-            <div>
-              <Typography.Link href="#">This is a link example</Typography.Link>
-            </div>
-
-            <Typography.CTA>This is a Call to Action text</Typography.CTA>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <Typography.H4>Variants</Typography.H4>
-            <Typography.P variant="error">Error text variant</Typography.P>
-            <Typography.P variant="success">Success text variant</Typography.P>
-            <Typography.P variant="warning">Warning text variant</Typography.P>
-            <Typography.P variant="info">Info text variant</Typography.P>
-            <Typography.H3 variant="gradient">Gradient Heading</Typography.H3>
-          </div>
+          {/* Color Variants */}
+          <Typography.P variant="error">Error message</Typography.P>
+          <Typography.P variant="success">Success message</Typography.P>
+          <Typography.P variant="warning">Warning message</Typography.P>
+          <Typography.P variant="info">Info message</Typography.P>
+          <Typography.H3 variant="gradient">Gradient Heading</Typography.H3>
         </div>
       );
     }
@@ -77,36 +66,93 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
 </Tabs>
 
+## Anatomy
+
+```tsx
+<Typography.H1 variant="primary" ariaLabel="Main heading">
+  Heading Text
+</Typography.H1>
+
+<Typography.P variant="secondary" ellipsis lang="en">
+  Paragraph content
+</Typography.P>
+
+<Typography.Link href="/path" ariaDescribedby="link-desc">
+  Link text
+</Typography.Link>
+
+<Typography.Code codeLang="typescript">
+  const x: string = "hello";
+</Typography.Code>
+```
+
+## Accessibility
+
+- **WCAG 2.2 AA compliant** - All color variants meet 4.5:1 contrast ratio for normal text
+- **External link announcements** - Screen readers announce "(opens in a new tab)" for external links
+- **44px minimum touch targets** - Links meet WCAG 2.5.8 target size requirements
+- **Focus indicators** - Visible focus rings on all interactive elements (links, code)
+- **ARIA support** - Full support for `ariaLabel`, `ariaDescribedby`, `ariaHidden`, and `role` props
+- **Language support** - `lang` attribute for content language, `codeLang` for code blocks
+- **Semantic HTML** - Proper heading hierarchy (H1-H6), paragraph, label, and anchor elements
+- **Next.js Link integration** - Internal links use Next.js Link for client-side navigation
+
 ## Props
 
-All typography components share these base props.
+### Base Props (All Components)
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `variant` | `'primary' \| 'secondary' \| 'tertiary' \| 'error' \| 'warning' \| 'info' \| 'success' \| 'gradient'` | `'primary'` | The visual style variant of the text. |
-| `ellipsis` | `boolean` | `false` | Whether to truncate text with specific width constraints. |
+| `ellipsis` | `boolean` | `false` | Whether to truncate text with ellipsis. |
 | `font` | `'primary' \| 'secondary'` | - | The font family to use. |
 | `className` | `string` | - | Additional CSS classes. |
 | `children` | `ReactNode` | - | The content of the component. |
+| `id` | `string` | - | HTML id attribute. |
+| `ariaLabel` | `string` | - | ARIA label for accessibility. |
+| `ariaDescribedby` | `string` | - | ARIA describedby reference. |
+| `ariaHidden` | `boolean` | - | Hide element from screen readers. |
+| `lang` | `string` | - | HTML lang attribute for content language. |
+| `role` | `AriaRole` | - | ARIA role for semantic meaning. |
 
-### Components available
+### Typography.Label
 
-- `Typography.H1`
-- `Typography.H2`
-- `Typography.H3`
-- `Typography.H4`
-- `Typography.H5`
-- `Typography.H6`
-- `Typography.P`
-- `Typography.Label`
-- `Typography.Link`
-- `Typography.CTA`
-- `Typography.Code`
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `htmlFor` | `string` | - | Associates label with form control. |
+
+### Typography.Link
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `href` | `string` | - | URL or path for the link. |
+| `target` | `string` | - | Link target (e.g., `_blank`). |
+
+### Typography.Code
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `codeLang` | `string` | - | Programming language for code (e.g., `"typescript"`). |
+
+### Components Available
+
+- `Typography.H1` - Main page heading (h1)
+- `Typography.H2` - Section heading (h2)
+- `Typography.H3` - Subsection heading (h3)
+- `Typography.H4` - Component heading (h4)
+- `Typography.H5` - Subcomponent heading (h5)
+- `Typography.H6` - Minor heading (h6)
+- `Typography.P` - Paragraph text
+- `Typography.Label` - Form label
+- `Typography.Link` - Anchor link (Next.js Link for internal)
+- `Typography.Code` - Inline code snippet
+- `Typography.CTA` - Call to action text
 
 ## Source Code
 
 ```tsx title="src/components/ui/typography.tsx"
 import React from "react";
+import NextLink from "next/link";
 
 interface BaseTypographyProps {
     children: React.ReactNode;
@@ -122,6 +168,12 @@ interface BaseTypographyProps {
     | "gradient";
     ellipsis?: boolean;
     font?: "primary" | "secondary";
+    id?: string;
+    ariaLabel?: string;
+    ariaDescribedby?: string;
+    ariaHidden?: boolean;
+    lang?: string;
+    role?: React.AriaRole;
 }
 
 type H1Props = BaseTypographyProps & React.HTMLAttributes<HTMLHeadingElement>;
@@ -131,33 +183,35 @@ type H4Props = BaseTypographyProps & React.HTMLAttributes<HTMLHeadingElement>;
 type H5Props = BaseTypographyProps & React.HTMLAttributes<HTMLHeadingElement>;
 type H6Props = BaseTypographyProps & React.HTMLAttributes<HTMLHeadingElement>;
 type PProps = BaseTypographyProps & React.HTMLAttributes<HTMLParagraphElement>;
-type LabelProps = BaseTypographyProps & React.HTMLAttributes<HTMLLabelElement>;
-type LinkProps = BaseTypographyProps & React.HTMLAttributes<HTMLAnchorElement>;
-type CTAProps = BaseTypographyProps &
-    React.HTMLAttributes<HTMLParagraphElement>;
-type CodeProps = BaseTypographyProps & React.HTMLAttributes<HTMLElement>;
+type LabelProps = BaseTypographyProps & React.HTMLAttributes<HTMLLabelElement> & {
+    htmlFor?: string;
+};
+type LinkProps = BaseTypographyProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+type CTAProps = BaseTypographyProps & React.HTMLAttributes<HTMLParagraphElement>;
+type CodeProps = BaseTypographyProps & React.HTMLAttributes<HTMLElement> & {
+    codeLang?: string;
+};
 
-// Helper to map variant to Tailwind CSS classes
+// WCAG 2.2 AA compliant color variants (4.5:1 contrast ratio)
 const getVariantClasses = (variant: BaseTypographyProps["variant"]) => {
     switch (variant) {
         case "primary":
             return "text-ground-900 dark:text-ground-50";
         case "secondary":
-            return "text-primary-600 dark:text-primary-400";
         case "tertiary":
-            return "text-primary-600 dark:text-primary-400";
+            return "text-primary-700 dark:text-primary-300";
         case "error":
-            return "text-red-600";
+            return "text-red-700 dark:text-red-400";
         case "warning":
-            return "text-yellow-600";
+            return "text-amber-700 dark:text-amber-400";
         case "info":
-            return "text-blue-600";
+            return "text-blue-700 dark:text-blue-300";
         case "success":
-            return "text-green-600";
+            return "text-green-700 dark:text-green-400";
         case "gradient":
-            return "bg-gradient-to-r from-primary-200 via-primary-400 to-primary-700 dark:from-primary-300 dark:via-primary-500 dark:to-primary-600 bg-clip-text text-transparent";
+            return "bg-linear-to-r from-primary-700 via-primary-600 to-primary-800 dark:from-primary-300 dark:via-primary-400 dark:to-primary-300 bg-clip-text text-transparent";
         default:
-            return "text-primary";
+            return "text-ground-900 dark:text-ground-50";
     }
 };
 
@@ -174,249 +228,110 @@ const getClassNames = (
 };
 
 const Typography = {
-    H1: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font,
-        ...props
-    }: H1Props) => (
-        <h1
-            className={`text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
+    H1: ({ children, className = "", variant = "primary", ellipsis, font, id, ariaLabel, ariaDescribedby, ariaHidden, lang, role, ...props }: H1Props) => (
+        <h1 id={id} aria-label={ariaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role}
+            className={`text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight ${getClassNames(className, variant, ellipsis, font)}`}
+            {...props}>
             {children}
         </h1>
     ),
-
-    H2: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font = "primary",
-        ...props
-    }: H2Props) => (
-        <h2
-            className={`tracking-tight text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
+    H2: ({ children, className = "", variant = "primary", ellipsis, font = "primary", id, ariaLabel, ariaDescribedby, ariaHidden, lang, role, ...props }: H2Props) => (
+        <h2 id={id} aria-label={ariaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role}
+            className={`tracking-tight text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight ${getClassNames(className, variant, ellipsis, font)}`}
+            {...props}>
             {children}
         </h2>
     ),
-
-    H3: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font,
-        ...props
-    }: H3Props) => (
-        <h3
-            className={`text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
+    H3: ({ children, className = "", variant = "primary", ellipsis, font, id, ariaLabel, ariaDescribedby, ariaHidden, lang, role, ...props }: H3Props) => (
+        <h3 id={id} aria-label={ariaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role}
+            className={`text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight ${getClassNames(className, variant, ellipsis, font)}`}
+            {...props}>
             {children}
         </h3>
     ),
-
-    H4: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font,
-        ...props
-    }: H4Props) => (
-        <h4
-            className={`text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
+    H4: ({ children, className = "", variant = "primary", ellipsis, font, id, ariaLabel, ariaDescribedby, ariaHidden, lang, role, ...props }: H4Props) => (
+        <h4 id={id} aria-label={ariaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role}
+            className={`text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight ${getClassNames(className, variant, ellipsis, font)}`}
+            {...props}>
             {children}
         </h4>
     ),
-
-    H5: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font,
-        ...props
-    }: H5Props) => (
-        <h5
-            className={`text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
+    H5: ({ children, className = "", variant = "primary", ellipsis, font, id, ariaLabel, ariaDescribedby, ariaHidden, lang, role, ...props }: H5Props) => (
+        <h5 id={id} aria-label={ariaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role}
+            className={`text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight ${getClassNames(className, variant, ellipsis, font)}`}
+            {...props}>
             {children}
         </h5>
     ),
-
-    H6: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font,
-        ...props
-    }: H6Props) => (
-        <h6
-            className={`text-base sm:text-lg lg:text-xl font-semibold tracking-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
+    H6: ({ children, className = "", variant = "primary", ellipsis, font, id, ariaLabel, ariaDescribedby, ariaHidden, lang, role, ...props }: H6Props) => (
+        <h6 id={id} aria-label={ariaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role}
+            className={`text-base sm:text-lg lg:text-xl font-semibold tracking-tight ${getClassNames(className, variant, ellipsis, font)}`}
+            {...props}>
             {children}
         </h6>
     ),
-
-    P: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font = "secondary",
-        ...props
-    }: PProps) => (
-        <p
-            className={`text-para text-paragraph text-para-size leading-relaxed ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
+    P: ({ children, className = "", variant = "primary", ellipsis, font = "secondary", id, ariaLabel, ariaDescribedby, ariaHidden, lang, role, ...props }: PProps) => (
+        <p id={id} aria-label={ariaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role}
+            className={`text-para text-paragraph text-para-size leading-relaxed ${getClassNames(className, variant, ellipsis, font)}`}
+            {...props}>
             {children}
         </p>
     ),
-
-    Label: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font,
-        ...props
-    }: LabelProps) => (
-        <label
-            className={`text-base leading-relaxed ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
+    Label: ({ children, className = "", variant = "primary", ellipsis, font, id, htmlFor, ariaLabel, ariaDescribedby, ariaHidden, lang, role, ...props }: LabelProps) => (
+        <label id={id} htmlFor={htmlFor} aria-label={ariaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role}
+            className={`text-base leading-relaxed ${getClassNames(className, variant, ellipsis, font)}`}
+            {...props}>
             {children}
         </label>
     ),
-    Code: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font,
-        ...props
-    }: CodeProps) => (
-        <code
-            className={`relative rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
+    Code: ({ children, className = "", variant = "primary", ellipsis, font, id, ariaLabel, ariaDescribedby, ariaHidden, lang, codeLang, role, ...props }: CodeProps) => (
+        <code id={id} aria-label={ariaLabel || (codeLang ? `${codeLang} code` : undefined)}
+            aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang}
+            data-code-lang={codeLang} role={role || "code"}
+            className={`relative rounded bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${getClassNames(className, variant, ellipsis, font)}`}
+            {...props}>
             {children}
         </code>
     ),
-    Link: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font,
-        ...props
-    }: LinkProps) => (
-        <a
-            className={`text-link ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
-            {children}
-        </a>
-    ),
-    CTA: ({
-        children,
-        className = "",
-        variant = "primary",
-        ellipsis,
-        font,
-        ...props
-    }: CTAProps) => (
-        <p
-            className={`text-cta ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
-            {...props}
-        >
+    Link: ({ children, className = "", variant = "primary", ellipsis, font, id, ariaLabel, ariaDescribedby, ariaHidden, lang, role, ...props }: LinkProps) => {
+        const { href, target, ...restProps } = props;
+        const isExternal = href && (href.startsWith('http://') || href.startsWith('https://'));
+        const hasTargetBlank = target === '_blank';
+        const externalLinkText = isExternal && hasTargetBlank ? " (opens in a new tab)" : isExternal ? " (external link)" : "";
+        const computedAriaLabel = ariaLabel ? `${ariaLabel}${externalLinkText}` : isExternal || hasTargetBlank ? `${children}${externalLinkText}` : ariaLabel;
+        const linkClassName = `text-link underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 min-h-11 min-w-11 inline-flex items-center ${getClassNames(className, variant, ellipsis, font)}`;
+
+        if (isExternal || hasTargetBlank) {
+            return (
+                <a id={id} href={href} target={target} aria-label={computedAriaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role} rel={hasTargetBlank ? "noopener noreferrer" : undefined} className={linkClassName} {...restProps}>
+                    {children}
+                    {isExternal && (
+                        <span className="inline-block ml-1 align-middle" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                <polyline points="15 3 21 3 21 9" />
+                                <line x1="10" y1="14" x2="21" y2="3" />
+                            </svg>
+                        </span>
+                    )}
+                </a>
+            );
+        }
+        return (
+            <NextLink id={id} href={href || "#"} aria-label={computedAriaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role} className={linkClassName} {...restProps}>
+                {children}
+            </NextLink>
+        );
+    },
+    CTA: ({ children, className = "", variant = "primary", ellipsis, font, id, ariaLabel, ariaDescribedby, ariaHidden, lang, role, ...props }: CTAProps) => (
+        <p id={id} aria-label={ariaLabel} aria-describedby={ariaDescribedby} aria-hidden={ariaHidden} lang={lang} role={role}
+            className={`text-cta ${getClassNames(className, variant, ellipsis, font)}`}
+            {...props}>
             {children}
         </p>
     ),
 };
 
-// Export types for use in other components
-export type {
-    CodeProps,
-    CTAProps,
-    H1Props,
-    H2Props,
-    H3Props,
-    H4Props,
-    H5Props,
-    H6Props,
-    LabelProps,
-    LinkProps,
-    PProps,
-};
-
+export type { CodeProps, CTAProps, H1Props, H2Props, H3Props, H4Props, H5Props, H6Props, LabelProps, LinkProps, PProps };
 export default Typography;
 ```
