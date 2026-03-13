@@ -112,57 +112,6 @@ export default function TypographyDemo() {
                     </Typography.H3>
                 </div>
             </section>
-
-            {/* Accessibility Features Section */}
-            <section>
-                <Typography.H2 className="mb-6 text-neutral-900 dark:text-neutral-50">
-                    Accessibility Features (WCAG 2.2 AA)
-                </Typography.H2>
-                <div className="space-y-3 bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-neutral-800">
-                    <div className="flex items-start gap-3">
-                        <span className="text-green-500 dark:text-green-400 mt-1">✓</span>
-                        <Typography.P className="text-sm">
-                            <strong>4.5:1 contrast ratio</strong> for all text variants (normal text)
-                        </Typography.P>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-green-500 dark:text-green-400 mt-1">✓</span>
-                        <Typography.P className="text-sm">
-                            <strong>External link announcements</strong> - screen readers announce &quot;(opens in a new tab)&quot;
-                        </Typography.P>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-green-500 dark:text-green-400 mt-1">✓</span>
-                        <Typography.P className="text-sm">
-                            <strong>44px minimum touch targets</strong> for all interactive elements
-                        </Typography.P>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-green-500 dark:text-green-400 mt-1">✓</span>
-                        <Typography.P className="text-sm">
-                            <strong>Focus indicators</strong> with visible focus rings on links and code
-                        </Typography.P>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-green-500 dark:text-green-400 mt-1">✓</span>
-                        <Typography.P className="text-sm">
-                            <strong>ARIA support</strong> - ariaLabel, ariaDescribedby, ariaHidden, role props
-                        </Typography.P>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-green-500 dark:text-green-400 mt-1">✓</span>
-                        <Typography.P className="text-sm">
-                            <strong>Language support</strong> with lang attribute and codeLang for code blocks
-                        </Typography.P>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-green-500 dark:text-green-400 mt-1">✓</span>
-                        <Typography.P className="text-sm">
-                            <strong>Semantic HTML</strong> with proper heading hierarchy
-                        </Typography.P>
-                    </div>
-                </div>
-            </section>
         </div>
     );
 }

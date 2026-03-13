@@ -1,5 +1,6 @@
 import React from "react";
 import NextLink from "next/link";
+import { cn } from "./utils";
 
 interface BaseTypographyProps {
     children: React.ReactNode;
@@ -68,22 +69,10 @@ const getVariantClasses = (variant: BaseTypographyProps["variant"]) => {
             // Gradient text - visually decorative but accessible
             // The text color is transparent, so we rely on the background gradient
             // Ensure sufficient contrast with the gradient colors
-            return "bg-gradient-to-r from-primary-700 via-primary-600 to-primary-800 dark:from-primary-300 dark:via-primary-400 dark:to-primary-300 bg-clip-text text-transparent";
+            return "bg-linear-to-r from-primary-700 via-primary-600 to-primary-800 dark:from-primary-300 dark:via-primary-400 dark:to-primary-300 bg-clip-text text-transparent";
         default:
             return "text-ground-900 dark:text-ground-50";
     }
-};
-
-const getClassNames = (
-    className: string,
-    variant: BaseTypographyProps["variant"],
-    ellipsis?: boolean,
-    font?: "primary" | "secondary"
-) => {
-    const base = getVariantClasses(variant);
-    const ellipsisClass = ellipsis ? "truncate" : "";
-    const fontClass = font ? `font-${font}` : "";
-    return `${base} ${ellipsisClass} ${fontClass} ${className}`;
 };
 
 const Typography = {
@@ -108,12 +97,13 @@ const Typography = {
             aria-hidden={ariaHidden}
             lang={lang}
             role={role}
-            className={`text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
+            className={cn(
+                "text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight",
+                getVariantClasses(variant),
+                ellipsis && "truncate",
+                font && `font-${font}`,
+                className
+            )}
             {...props}
         >
             {children}
@@ -141,12 +131,13 @@ const Typography = {
             aria-hidden={ariaHidden}
             lang={lang}
             role={role}
-            className={`tracking-tight text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
+            className={cn(
+                "tracking-tight text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight",
+                getVariantClasses(variant),
+                ellipsis && "truncate",
+                font && `font-${font}`,
+                className
+            )}
             {...props}
         >
             {children}
@@ -174,12 +165,13 @@ const Typography = {
             aria-hidden={ariaHidden}
             lang={lang}
             role={role}
-            className={`text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
+            className={cn(
+                "text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight",
+                getVariantClasses(variant),
+                ellipsis && "truncate",
+                font && `font-${font}`,
+                className
+            )}
             {...props}
         >
             {children}
@@ -207,12 +199,13 @@ const Typography = {
             aria-hidden={ariaHidden}
             lang={lang}
             role={role}
-            className={`text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
+            className={cn(
+                "text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight",
+                getVariantClasses(variant),
+                ellipsis && "truncate",
+                font && `font-${font}`,
+                className
+            )}
             {...props}
         >
             {children}
@@ -240,12 +233,13 @@ const Typography = {
             aria-hidden={ariaHidden}
             lang={lang}
             role={role}
-            className={`text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
+            className={cn(
+                "text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight",
+                getVariantClasses(variant),
+                ellipsis && "truncate",
+                font && `font-${font}`,
+                className
+            )}
             {...props}
         >
             {children}
@@ -273,12 +267,13 @@ const Typography = {
             aria-hidden={ariaHidden}
             lang={lang}
             role={role}
-            className={`text-base sm:text-lg lg:text-xl font-semibold tracking-tight ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
+            className={cn(
+                "text-base sm:text-lg lg:text-xl font-semibold tracking-tight",
+                getVariantClasses(variant),
+                ellipsis && "truncate",
+                font && `font-${font}`,
+                className
+            )}
             {...props}
         >
             {children}
@@ -306,12 +301,13 @@ const Typography = {
             aria-hidden={ariaHidden}
             lang={lang}
             role={role}
-            className={`text-para text-paragraph text-para-size leading-relaxed ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
+            className={cn(
+                "text-para text-paragraph text-para-size leading-relaxed",
+                getVariantClasses(variant),
+                ellipsis && "truncate",
+                font && `font-${font}`,
+                className
+            )}
             {...props}
         >
             {children}
@@ -341,12 +337,13 @@ const Typography = {
             aria-hidden={ariaHidden}
             lang={lang}
             role={role}
-            className={`text-base leading-relaxed ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
+            className={cn(
+                "text-base leading-relaxed",
+                getVariantClasses(variant),
+                ellipsis && "truncate",
+                font && `font-${font}`,
+                className
+            )}
             {...props}
         >
             {children}
@@ -375,12 +372,13 @@ const Typography = {
             lang={lang}
             data-code-lang={codeLang}
             role={role || "code"}
-            className={`relative rounded bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
+            className={cn(
+                "relative rounded bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
+                getVariantClasses(variant),
+                ellipsis && "truncate",
+                font && `font-${font}`,
+                className
+            )}
             {...props}
         >
             {children}
@@ -412,12 +410,13 @@ const Typography = {
                 ? `${children}${externalLinkText}`
                 : ariaLabel;
 
-        const linkClassName = `text-link underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 min-h-11 min-w-11 inline-flex items-center ${getClassNames(
-            className,
-            variant,
-            ellipsis,
-            font
-        )}`;
+        const linkClassName = cn(
+            "text-link underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 min-h-11 min-w-11 inline-flex items-center",
+            getVariantClasses(variant),
+            ellipsis && "truncate",
+            font && `font-${font}`,
+            className
+        );
 
         // For external links or links with target="_blank", use native anchor tag
         if (isExternal || hasTargetBlank) {
@@ -501,12 +500,13 @@ const Typography = {
             aria-hidden={ariaHidden}
             lang={lang}
             role={role}
-            className={`text-cta ${getClassNames(
-                className,
-                variant,
-                ellipsis,
-                font
-            )}`}
+            className={cn(
+                "text-cta",
+                getVariantClasses(variant),
+                ellipsis && "truncate",
+                font && `font-${font}`,
+                className
+            )}
             {...props}
         >
             {children}

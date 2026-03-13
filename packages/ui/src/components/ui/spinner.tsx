@@ -2,7 +2,7 @@
 
 "use client";
 
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { forwardRef, HTMLAttributes } from "react";
 
@@ -69,7 +69,7 @@ const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(
         ref={ref}
         role="status"
         aria-label={ariaLabel || "Loading"}
-        className={clsx(spinnerVariants({ size }), className)}
+        className={cn(spinnerVariants({ size }), className)}
         {...props}
       >
         <span className="sr-only">{ariaLabel || "Loading..."}</span>
