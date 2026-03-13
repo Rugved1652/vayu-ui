@@ -1,58 +1,35 @@
-// packages/ui/src/components/ui/spinner.tsx
-
-"use client";
-
+import { HTMLAttributes } from "react";
 import { cn } from "./utils";
-import { cva, type VariantProps } from "class-variance-authority";
-import { forwardRef, HTMLAttributes } from "react";
-
-// ============================================================================
-// CVA Variants
-// ============================================================================
-
-const spinnerVariants = cva(
-  [
-    "rounded-full",
-    "border-2",
-    "border-t-transparent",
-    "animate-spin",
-    "border-primary-500",
-    "dark:border-primary-400",
-    "dark:border-t-transparent",
-  ],
-  {
-    variants: {
-      size: {
-        sm: "w-4 h-4",
-        md: "w-6 h-6",
-        lg: "w-8 h-8",
-      },
-    },
-    defaultVariants: {
-      size: "md",
-    },
-  }
-);
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type SpinnerSize = VariantProps<typeof spinnerVariants>["size"];
+type SpinnerSize = "sm" | "md" | "lg";
 
-export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
-  /** Size of the spinner */
-  size?: SpinnerSize;
-  /** Accessible label for screen readers */
-  "aria-label"?: string;
+interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
+    /** Size of the spinner */
+    size?: SpinnerSize;
+    /** Accessible label for screen readers */
+    "aria-label"?: string;
 }
+
+// ============================================================================
+// Size Configuration
+// ============================================================================
+
+const sizeClasses: Record<SpinnerSize, string> = {
+    sm: "w-4 h-4",
+    md: "w-6 h-6",
+    lg: "w-8 h-8",
+};
 
 // ============================================================================
 // Component
 // ============================================================================
 
 /**
- * Spinner — A loading indicator component to show active states.
+ * Spinner — A WCAG 2.2 AA compliant loading indicator component.
  *
  * Displays an animated circular spinner using design system tokens.
  * Fully accessible with proper ARIA attributes for screen readers.
@@ -62,22 +39,31 @@ export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
  * <Spinner size="md" aria-label="Loading content" />
  * ```
  */
-const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(
-  ({ className, size = "md", "aria-label": ariaLabel, ...props }, ref) => {
+function Spinner({
+    className,
+    size = "md",
+    "aria-label": ariaLabel = "Loading",
+    ...props
+}: SpinnerProps) {
     return (
-      <span
-        ref={ref}
-        role="status"
-        aria-label={ariaLabel || "Loading"}
-        className={cn(spinnerVariants({ size }), className)}
-        {...props}
-      >
-        <span className="sr-only">{ariaLabel || "Loading..."}</span>
-      </span>
+        <span
+            role="status"
+            aria-live="polite"
+            aria-busy="true"
+            aria-label={ariaLabel}
+            className={cn(
+                "rounded-full border-2 border-t-transparent",
+                "animate-spin motion-reduce:animate-none",
+                "border-primary-500 dark:border-primary-400 dark:border-t-transparent",
+                sizeClasses[size],
+                className
+            )}
+            {...props}
+        >
+            <span className="sr-only">{ariaLabel}</span>
+        </span>
     );
-  }
-);
+}
 
-Spinner.displayName = "Spinner";
-
-export { Spinner, spinnerVariants };
+export { Spinner };
+export type { SpinnerProps, SpinnerSize };
