@@ -1,5 +1,7 @@
 import { accordionRegistry } from "./Components/accordion.registry";
 import { affixRegistry } from "./Components/affix.registry";
+import { buttongroupRegistry } from "./Components/buttongroup.registry";
+import { skeletonRegistry } from "./Components/skeleton.registry";
 import type { RegistryItem } from "./index";
 
 export const components: RegistryItem[] = [
@@ -353,21 +355,7 @@ affixRegistry,
       storybookPath: "Components/Button",
     },
   },
-  {
-    name: "Buttongroup",
-    slug: "buttongroup",
-    type: "component",
-    category: "action",
-    since: "1.0.0",
-    description:
-      "Groups multiple <Button> elements together with connected styling.",
-    targetPath: "src/components/ui",
-    fileName: "buttongroup.tsx",
-    dependencies: ["clsx"],
-    registryDependencies: [],
-    tags: ["component"],
-    peerComponents: ["Button"],
-  },
+  buttongroupRegistry,
   {
     name: "Card",
     slug: "card",
@@ -1041,19 +1029,7 @@ affixRegistry,
     registryDependencies: [],
     tags: ["component"],
   },
-  {
-    name: "Skeleton",
-    slug: "skeleton",
-    type: "component",
-    category: "feedback",
-    since: "1.0.0",
-    description: "Skeleton Component — Compound Pattern with Accessibility",
-    targetPath: "src/components/ui",
-    fileName: "skeleton.tsx",
-    dependencies: [],
-    registryDependencies: [],
-    tags: ["component"],
-  },
+  skeletonRegistry,
   {
     name: "Slider",
     slug: "slider",

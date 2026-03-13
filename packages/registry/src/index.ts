@@ -8,6 +8,7 @@ export type VayuComponentDoc = {
   component: string;
   slug: string;
   category: string;
+  complexity?: "simple" | "compound" | "layout";
 
   // Descriptions
   description: string;
@@ -46,11 +47,25 @@ export type VayuComponentDoc = {
 
   // Design tokens
   design_tokens: {
-    colors?: string[];
-    radius?: string[];
-    border?: string[];
-    spacing?: string[];
-    typography?: string[];
+    used?: {
+      colors?: string[];
+      radius?: string[];
+      border?: string[];
+      spacing?: string[];
+      typography?: string[];
+    };
+    recommended?: {
+      colors?: string[];
+      radius?: string[];
+      typography?: string[];
+    };
+    allowed?: {
+      colors?: string[];
+      radius?: string[];
+      border?: string[];
+      spacing?: string[];
+      typography?: string[];
+    };
   };
 
   // Examples (array format)
@@ -77,6 +92,13 @@ export type VayuComponentDoc = {
   // Related components
   related_components: string[];
 
+  // Relationships
+  relationships?: {
+    used_with: string[];
+    often_inside: string[];
+    often_contains: string[];
+  };
+
   // Validation
   validation_rules: string[];
 
@@ -88,6 +110,14 @@ export type VayuComponentDoc = {
     file: string;
     language: string;
     framework: string;
+  };
+
+  // Meta
+  meta?: {
+    doc_url: string;
+    source_file: string;
+    extracted: string[];
+    inferred: string[];
   };
 };
 

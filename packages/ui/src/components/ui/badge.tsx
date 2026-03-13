@@ -1,8 +1,7 @@
-import React, {
+import {
   forwardRef,
   ComponentPropsWithoutRef,
   ReactNode,
-  ElementType,
 } from "react";
 import { cn } from "./utils"; // Adjust import path as needed
 import { XIcon } from "../icons";

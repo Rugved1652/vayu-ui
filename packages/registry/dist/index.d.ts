@@ -2,6 +2,7 @@ type VayuComponentDoc = {
     component: string;
     slug: string;
     category: string;
+    complexity?: "simple" | "compound" | "layout";
     description: string;
     ai_summary: string;
     intent: string[];
@@ -22,11 +23,25 @@ type VayuComponentDoc = {
         patterns: string[];
     };
     design_tokens: {
-        colors?: string[];
-        radius?: string[];
-        border?: string[];
-        spacing?: string[];
-        typography?: string[];
+        used?: {
+            colors?: string[];
+            radius?: string[];
+            border?: string[];
+            spacing?: string[];
+            typography?: string[];
+        };
+        recommended?: {
+            colors?: string[];
+            radius?: string[];
+            typography?: string[];
+        };
+        allowed?: {
+            colors?: string[];
+            radius?: string[];
+            border?: string[];
+            spacing?: string[];
+            typography?: string[];
+        };
     };
     examples: ComponentExample[];
     accessibility: {
@@ -42,12 +57,23 @@ type VayuComponentDoc = {
         components?: string[];
     };
     related_components: string[];
+    relationships?: {
+        used_with: string[];
+        often_inside: string[];
+        often_contains: string[];
+    };
     validation_rules: string[];
     installation: string[];
     source: {
         file: string;
         language: string;
         framework: string;
+    };
+    meta?: {
+        doc_url: string;
+        source_file: string;
+        extracted: string[];
+        inferred: string[];
     };
 };
 type ComponentProp = {
