@@ -7,6 +7,7 @@ import React, {
     createContext,
     useContext,
     useId,
+    useEffect,
 } from "react";
 
 export type TextAreaResize = "none" | "vertical" | "horizontal" | "both";
@@ -27,6 +28,10 @@ interface TextAreaContextValue {
     inputId: string;
     supportTextId: string;
     errorTextId: string;
+    labelId: string;
+    setLabelId: (id: string) => void;
+    hasSupportText: boolean;
+    setHasSupportText: (has: boolean) => void;
 }
 
 const TextAreaContext = createContext<TextAreaContextValue | undefined>(
@@ -65,12 +70,14 @@ const TextAreaRoot = ({
 }: TextAreaRootProps) => {
     const [isFocused, setIsFocused] = useState(false);
     const [charCount, setCharCount] = useState(0);
+    const [hasSupportText, setHasSupportText] = useState(false);
 
     // Generate unique IDs for accessibility
     const generatedId = useId();
     const inputId = `textarea-input-${generatedId}`;
     const supportTextId = `textarea-support-${generatedId}`;
     const errorTextId = `textarea-error-${generatedId}`;
+    const labelId = `textarea-label-${generatedId}`;
 
     return (
         <TextAreaContext.Provider
@@ -87,11 +94,16 @@ const TextAreaRoot = ({
                 inputId,
                 supportTextId,
                 errorTextId,
+                labelId,
+                setLabelId: () => {}, // No-op since we're using generated ID
+                hasSupportText,
+                setHasSupportText,
             }}
         >
             <div
                 className={`w-full flex flex-col gap-1 ${className}`}
                 role="group"
+                aria-labelledby={labelId}
             >
                 {children}
             </div>
@@ -111,11 +123,12 @@ const TextAreaLabel = ({
     className = "",
     ...props
 }: TextAreaLabelProps) => {
-    const { charCount, maxLength, inputId } = useTextAreaContext();
+    const { charCount, maxLength, inputId, labelId } = useTextAreaContext();
 
     return (
         <div className="flex items-center justify-between px-2">
             <label
+                id={labelId}
                 htmlFor={inputId}
                 className={`font-primary text-ground-800 dark:text-ground-100 text-sm font-medium ${className}`}
                 {...props}
@@ -167,6 +180,7 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
             inputId,
             supportTextId,
             errorTextId,
+            hasSupportText,
         } = useTextAreaContext();
 
         const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -230,10 +244,15 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
         const styles = variantStyles[variant];
 
         // Build aria-describedby from context and any additional IDs
+        // Only include support text ID if SupportText component is rendered
         const describedBy = [
+            hasSupportText && supportTextId,
             error && errorTextId,
             ariaDescribedBy,
         ].filter(Boolean).join(" ") || undefined;
+
+        // Determine if field is required from restProps
+        const isRequired = restProps.required === true;
 
         return (
             <div
@@ -261,6 +280,8 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
                     disabled={disabled}
                     aria-invalid={error}
                     aria-describedby={describedBy}
+                    aria-errormessage={error ? errorTextId : undefined}
+                    aria-required={isRequired}
                     aria-disabled={disabled}
                     {...restProps}
                 />
@@ -278,7 +299,13 @@ interface TextAreaSupportTextProps {
 }
 
 const TextAreaSupportText = ({ children, className = "" }: TextAreaSupportTextProps) => {
-    const { supportTextId } = useTextAreaContext();
+    const { supportTextId, setHasSupportText } = useTextAreaContext();
+
+    // Register that support text exists for aria-describedby
+    useEffect(() => {
+        setHasSupportText(true);
+        return () => setHasSupportText(false);
+    }, [setHasSupportText]);
 
     if (typeof children === "string") {
         return (

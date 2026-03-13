@@ -8,9 +8,9 @@ export default function TabsDemo() {
                 Tabs Example
             </h2>
 
-            {/* Default usage - Horizontal */}
+            {/* Default usage - Horizontal with aria-labelledby */}
             <Tabs defaultValue="account" className="mb-8">
-                <Tabs.List className="grid w-full grid-cols-2">
+                <Tabs.List aria-labelledby="tabs-demo-label" className="grid w-full grid-cols-2">
                     <Tabs.Trigger value="account">Account</Tabs.Trigger>
                     <Tabs.Trigger value="password">Password</Tabs.Trigger>
                 </Tabs.List>
@@ -32,10 +32,10 @@ export default function TabsDemo() {
                 </Tabs.Content>
             </Tabs>
 
-            {/* Vertical orientation */}
+            {/* Vertical orientation with aria-label */}
             <h3 className="text-lg font-medium mb-4">Vertical Tabs</h3>
             <Tabs defaultValue="profile" orientation="vertical" className="mb-8">
-                <Tabs.List className="min-w-[200px]">
+                <Tabs.List aria-label="Settings navigation" className="min-w-50">
                     <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
                     <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
                     <Tabs.Trigger value="notifications">Notifications</Tabs.Trigger>
@@ -66,10 +66,10 @@ export default function TabsDemo() {
                 </Tabs.Content>
             </Tabs>
 
-            {/* With disabled tab */}
+            {/* With disabled tab and aria-label */}
             <h3 className="text-lg font-medium mb-4">Disabled Tab</h3>
             <Tabs defaultValue="enabled">
-                <Tabs.List className="grid w-full grid-cols-2">
+                <Tabs.List aria-label="Tab options" className="grid w-full grid-cols-2">
                     <Tabs.Trigger value="enabled">Enabled Tab</Tabs.Trigger>
                     <Tabs.Trigger value="disabled" disabled>Disabled Tab</Tabs.Trigger>
                 </Tabs.List>

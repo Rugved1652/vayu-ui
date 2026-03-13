@@ -1,7 +1,7 @@
 "use client";
 
 import { Tooltip } from "vayu-ui";
-import { Info, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { Info, AlertTriangle, CheckCircle, XCircle, Accessibility } from "lucide-react";
 
 export default function TooltipDemo() {
     return (
@@ -66,7 +66,7 @@ export default function TooltipDemo() {
                 </div>
             </div>
 
-            {/* Disabled & no arrow */}
+            {/* Options */}
             <div>
                 <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
                     Options
@@ -86,6 +86,32 @@ export default function TooltipDemo() {
                         <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
                             800ms Delay
                         </button>
+                    </Tooltip>
+                </div>
+            </div>
+
+            {/* Accessibility (WCAG 2.2) */}
+            <div>
+                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
+                    Accessibility (WCAG 2.2)
+                </p>
+                <div className="flex flex-wrap items-center gap-4">
+                    <Tooltip
+                        content="You can hover over this tooltip without it disappearing (WCAG 2.5.7)"
+                        hideDelay={300}
+                    >
+                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors flex items-center gap-2">
+                            <Accessibility className="w-4 h-4" aria-hidden="true" />
+                            Hoverable
+                        </button>
+                    </Tooltip>
+                    <Tooltip
+                        content="No minimum touch target enforced (useful for inline text)"
+                        ensureTouchTarget={false}
+                    >
+                        <span className="text-sm text-primary-600 dark:text-primary-400 underline cursor-help">
+                            Inline text
+                        </span>
                     </Tooltip>
                 </div>
             </div>

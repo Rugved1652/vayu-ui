@@ -36,6 +36,8 @@ interface TooltipProps
     position?: TooltipPosition;
     /** Show delay in ms. */
     delay?: number;
+    /** Hide delay in ms (time before tooltip disappears after mouse leaves). */
+    hideDelay?: number;
     children: React.ReactNode;
     /** Colour variant. */
     variant?: TooltipVariant;
@@ -43,6 +45,8 @@ interface TooltipProps
     disabled?: boolean;
     /** Show the directional arrow. */
     showArrow?: boolean;
+    /** Minimum size for touch targets (WCAG 2.5.8). Default: true */
+    ensureTouchTarget?: boolean;
 }
 
 // ============================================================================
@@ -69,11 +73,13 @@ const arrowBgClasses: Record<TooltipVariant, string> = {
     info: "bg-info-600",
 };
 
+// Arrow size: 8px (w-2 h-2), rotated 45deg = diagonal ~11.3px
+// Offset by half the diagonal to properly connect to tooltip body
 const arrowPositionClasses: Record<TooltipPosition, string> = {
-    top: "-bottom-1 left-1/2 -translate-x-1/2",
-    bottom: "-top-1 left-1/2 -translate-x-1/2",
-    left: "-right-1 top-1/2 -translate-y-1/2",
-    right: "-left-1 top-1/2 -translate-y-1/2",
+    top: "-bottom-[5px] left-1/2 -translate-x-1/2",
+    bottom: "-top-[5px] left-1/2 -translate-x-1/2",
+    left: "-right-[5px] top-1/2 -translate-y-1/2",
+    right: "-left-[5px] top-1/2 -translate-y-1/2",
 };
 
 // ============================================================================
@@ -86,11 +92,13 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             content,
             position = "top",
             delay = 200,
+            hideDelay = 150,
             children,
             className,
             variant = "default",
             disabled = false,
             showArrow = true,
+            ensureTouchTarget = true,
             ...props
         },
         ref
@@ -101,7 +109,10 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
         const triggerRef = useRef<HTMLDivElement>(null);
         const tooltipRef = useRef<HTMLDivElement>(null);
-        const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+        const showTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+            undefined
+        );
+        const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
             undefined
         );
 
@@ -120,7 +131,8 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
             const tr = triggerRef.current.getBoundingClientRect();
             const tt = tooltipRef.current.getBoundingClientRect();
-            const gap = 8;
+            // Gap accounts for arrow size (8px arrow, ~6px visible after offset)
+            const gap = showArrow ? 6 : 8;
             const pad = 8;
 
             let top = 0;
@@ -154,12 +166,17 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
                 top = window.innerHeight - tt.height - pad;
 
             setCoords({ top, left });
-        }, [position]);
+        }, [position, showArrow]);
 
+        // Use double RAF to ensure tooltip is rendered before calculating position
         useLayoutEffect(() => {
             if (!isVisible) return;
 
-            calculatePosition();
+            const rafId = requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    calculatePosition();
+                });
+            });
 
             window.addEventListener("scroll", calculatePosition, {
                 passive: true,
@@ -170,46 +187,70 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             });
 
             return () => {
+                cancelAnimationFrame(rafId);
                 window.removeEventListener("scroll", calculatePosition, true);
                 window.removeEventListener("resize", calculatePosition);
             };
         }, [isVisible, calculatePosition]);
 
         // ------------------------------------------------------------------
-        // Show / hide
+        // Show / hide with hover support (WCAG 2.5.7)
         // ------------------------------------------------------------------
+        const clearAllTimeouts = useCallback(() => {
+            if (showTimeoutRef.current) {
+                clearTimeout(showTimeoutRef.current);
+                showTimeoutRef.current = undefined;
+            }
+            if (hideTimeoutRef.current) {
+                clearTimeout(hideTimeoutRef.current);
+                hideTimeoutRef.current = undefined;
+            }
+        }, []);
+
         const show = useCallback(() => {
+            clearAllTimeouts();
             if (disabled) return;
-            timeoutRef.current = setTimeout(
-                () => setIsVisible(true),
-                delay
-            );
-        }, [disabled, delay]);
+            showTimeoutRef.current = setTimeout(() => setIsVisible(true), delay);
+        }, [disabled, delay, clearAllTimeouts]);
 
         const hide = useCallback(() => {
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-            setIsVisible(false);
-        }, []);
+            clearAllTimeouts();
+            hideTimeoutRef.current = setTimeout(() => {
+                setIsVisible(false);
+            }, hideDelay);
+        }, [hideDelay, clearAllTimeouts]);
+
+        // Cancel hide when hovering over tooltip (WCAG 2.5.7)
+        const handleTooltipMouseEnter = useCallback(() => {
+            clearAllTimeouts();
+        }, [clearAllTimeouts]);
+
+        const handleTooltipMouseLeave = useCallback(() => {
+            hide();
+        }, [hide]);
 
         // Escape to dismiss
         useEffect(() => {
             if (!isVisible) return;
 
             const handleKeyDown = (e: KeyboardEvent) => {
-                if (e.key === "Escape") hide();
+                if (e.key === "Escape") {
+                    clearAllTimeouts();
+                    setIsVisible(false);
+                }
             };
 
             document.addEventListener("keydown", handleKeyDown);
             return () =>
                 document.removeEventListener("keydown", handleKeyDown);
-        }, [isVisible, hide]);
+        }, [isVisible, clearAllTimeouts]);
 
-        // Clean up timer on unmount
+        // Clean up timers on unmount
         useEffect(() => {
             return () => {
-                if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                clearAllTimeouts();
             };
-        }, []);
+        }, [clearAllTimeouts]);
 
         // ------------------------------------------------------------------
         // Ref merge
@@ -263,7 +304,12 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
                     onMouseLeave={hide}
                     onFocus={show}
                     onBlur={hide}
-                    className={clsx("inline-block", className)}
+                    className={clsx(
+                        "inline-block",
+                        // WCAG 2.5.8: Ensure minimum touch target size of 24x24
+                        ensureTouchTarget && "min-h-6 min-w-6",
+                        className
+                    )}
                     aria-describedby={
                         isVisible ? tooltipId : undefined
                     }
@@ -279,7 +325,15 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
                             ref={tooltipRef}
                             id={tooltipId}
                             role="tooltip"
-                            className="fixed z-50 pointer-events-none animate-fade-in"
+                            onMouseEnter={handleTooltipMouseEnter}
+                            onMouseLeave={handleTooltipMouseLeave}
+                            className={clsx(
+                                "fixed z-50",
+                                // WCAG 2.5.7: Allow pointer events for hoverable tooltips
+                                "pointer-events-auto",
+                                // Respect prefers-reduced-motion (WCAG 2.3.3)
+                                "motion-reduce:animate-none animate-fade-in"
+                            )}
                             style={{
                                 top: `${coords.top}px`,
                                 left: `${coords.left}px`,

@@ -6,6 +6,16 @@ description: A multi-line text input component with support for labels, validati
 import TextAreaDemo from '@/components/demos/textarea-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add textarea
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -21,8 +31,8 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
     export default function App() {
       return (
         <TextArea.Root maxLength={200}>
-            <TextArea.Label showCharCount>Bio</TextArea.Label>
-            <TextArea.Input placeholder="Tell us about yourself" />
+          <TextArea.Label showCharCount>Bio</TextArea.Label>
+          <TextArea.Input placeholder="Tell us about yourself" />
         </TextArea.Root>
       );
     }
@@ -30,72 +40,87 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
 </Tabs>
 
+## Anatomy
+
+```tsx
+<TextArea.Root>
+  <TextArea.Label>Label</TextArea.Label>
+  <TextArea.Input placeholder="Enter text..." />
+  <TextArea.SupportText>Helper text goes here</TextArea.SupportText>
+  <TextArea.ErrorText>Error message</TextArea.ErrorText>
+  <TextArea.CharCount />
+</TextArea.Root>
+```
+
 ## Props
 
 ### TextArea.Root
 
 | Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `"default" \| "outline"` | `"default"` | Visual variant |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the text area |
-| `error` | `boolean` | `false` | Whether to show error state style |
-| `maxLength` | `number` | - | Maximum number of characters allowed (for shared context) |
-| `disabled` | `boolean` | `false` | Whether the text area is disabled |
-| `className` | `string` | - | Additional class names |
-| `children` | `ReactNode` | - | Component children |
+| :--- | :--- | :--- | :--- |
+| `variant` | `"default" \| "outline"` | `"default"` | Visual variant of the text area. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the text area. |
+| `error` | `boolean` | `false` | Whether to show error state styling. |
+| `maxLength` | `number` | - | Maximum number of characters allowed. |
+| `disabled` | `boolean` | `false` | Whether the text area is disabled. |
+| `className` | `string` | - | Additional CSS classes. |
+| `children` | `ReactNode` | - | Component children. |
 
 ### TextArea.Label
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `showCharCount` | `boolean` | `false` | Whether to show character count next to label |
-| `children` | `ReactNode` | - | Label content |
-| `className` | `string` | - | Additional CSS classes |
+| `showCharCount` | `boolean` | `false` | Whether to show character count next to the label. |
+| `children` | `ReactNode` | - | Label content. |
+| `className` | `string` | - | Additional CSS classes. |
 
 ### TextArea.Input
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `resize` | `"none" \| "vertical" \| "horizontal" \| "both"` | `"vertical"` | Resize behavior |
-| `rows` | `number` | `4` | Number of visible text lines |
-| `value` | `string \| number \| readonly string[]` | - | Controlled value |
-| `onChange` | `(event: React.ChangeEvent<HTMLTextAreaElement>) => void` | - | Change event handler |
-| `className` | `string` | - | Additional CSS classes |
-| `...props` | `TextareaHTMLAttributes` | - | Standard HTML textarea attributes |
+| `resize` | `"none" \| "vertical" \| "horizontal" \| "both"` | `"vertical"` | Resize behavior of the textarea. |
+| `rows` | `number` | `4` | Number of visible text lines. |
+| `value` | `string \| number \| readonly string[]` | - | Controlled value. |
+| `onChange` | `(event: React.ChangeEvent<HTMLTextAreaElement>) => void` | - | Change event handler. |
+| `className` | `string` | - | Additional CSS classes. |
+| `...props` | `TextareaHTMLAttributes` | - | Standard HTML textarea attributes. |
 
 ### TextArea.SupportText
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `children` | `string \| string[]` | - | Helper text or list of helper texts |
-| `className` | `string` | - | Additional CSS classes |
+| `children` | `string \| string[]` | - | Helper text or list of helper texts. |
+| `className` | `string` | - | Additional CSS classes. |
 
 ### TextArea.ErrorText
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `children` | `string \| string[]` | - | Error message or list of error messages |
-| `className` | `string` | - | Additional CSS classes |
+| `children` | `string \| string[]` | - | Error message or list of error messages. |
+| `className` | `string` | - | Additional CSS classes. |
 
 ### TextArea.CharCount
 
-Displays character count based on context.
+Displays character count based on context from `TextArea.Root`.
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes |
+| `className` | `string` | - | Additional CSS classes. |
 
 ## Accessibility
 
 - Full keyboard navigation support with Tab to focus
-- Visible focus indicators with ring styling
+- Visible focus indicators with `focus-visible:ring-2` styling
 - Proper `aria-invalid` attribute when in error state
-- `aria-describedby` links input to support/error text
+- `aria-required` attribute when `required` prop is set
+- `aria-describedby` links input to support and error text
+- `aria-errormessage` specifically points to error text when invalid
 - `role="alert"` on error messages for screen reader announcements
-- `aria-live` regions for character count updates
-- Semantic HTML with proper `label`/`input` associations via `htmlFor`/`id`
+- `aria-live="polite"` regions for character count updates
 - `aria-disabled` attribute when disabled
-- Respects `prefers-reduced-motion` for transitions
+- Semantic HTML with proper `label`/`input` associations via `htmlFor`/`id`
+- `role="group"` with `aria-labelledby` on root for proper grouping
+- Support for `prefers-reduced-motion` for transitions
 
 ## Source Code
 
@@ -109,6 +134,7 @@ import React, {
     createContext,
     useContext,
     useId,
+    useEffect,
 } from "react";
 
 export type TextAreaResize = "none" | "vertical" | "horizontal" | "both";
@@ -129,6 +155,10 @@ interface TextAreaContextValue {
     inputId: string;
     supportTextId: string;
     errorTextId: string;
+    labelId: string;
+    setLabelId: (id: string) => void;
+    hasSupportText: boolean;
+    setHasSupportText: (has: boolean) => void;
 }
 
 const TextAreaContext = createContext<TextAreaContextValue | undefined>(
@@ -167,12 +197,14 @@ const TextAreaRoot = ({
 }: TextAreaRootProps) => {
     const [isFocused, setIsFocused] = useState(false);
     const [charCount, setCharCount] = useState(0);
-    
+    const [hasSupportText, setHasSupportText] = useState(false);
+
     // Generate unique IDs for accessibility
     const generatedId = useId();
     const inputId = `textarea-input-${generatedId}`;
     const supportTextId = `textarea-support-${generatedId}`;
     const errorTextId = `textarea-error-${generatedId}`;
+    const labelId = `textarea-label-${generatedId}`;
 
     return (
         <TextAreaContext.Provider
@@ -189,11 +221,16 @@ const TextAreaRoot = ({
                 inputId,
                 supportTextId,
                 errorTextId,
+                labelId,
+                setLabelId: () => {},
+                hasSupportText,
+                setHasSupportText,
             }}
         >
-            <div 
+            <div
                 className={`w-full flex flex-col gap-1 ${className}`}
                 role="group"
+                aria-labelledby={labelId}
             >
                 {children}
             </div>
@@ -213,11 +250,12 @@ const TextAreaLabel = ({
     className = "",
     ...props
 }: TextAreaLabelProps) => {
-    const { charCount, maxLength, inputId } = useTextAreaContext();
+    const { charCount, maxLength, inputId, labelId } = useTextAreaContext();
 
     return (
         <div className="flex items-center justify-between px-2">
-            <label 
+            <label
+                id={labelId}
                 htmlFor={inputId}
                 className={`font-primary text-ground-800 dark:text-ground-100 text-sm font-medium ${className}`}
                 {...props}
@@ -225,7 +263,7 @@ const TextAreaLabel = ({
                 {children}
             </label>
             {showCharCount && (
-                <span 
+                <span
                     className="text-xs font-secondary text-ground-500 dark:text-ground-400"
                     aria-live="polite"
                     aria-atomic="true"
@@ -269,6 +307,7 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
             inputId,
             supportTextId,
             errorTextId,
+            hasSupportText,
         } = useTextAreaContext();
 
         const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -335,9 +374,12 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
 
         // Build aria-describedby from context and any additional IDs
         const describedBy = [
+            hasSupportText && supportTextId,
             error && errorTextId,
             ariaDescribedBy,
         ].filter(Boolean).join(" ") || undefined;
+
+        const isRequired = restProps.required === true;
 
         return (
             <div
@@ -368,6 +410,8 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
                     disabled={disabled}
                     aria-invalid={error}
                     aria-describedby={describedBy}
+                    aria-errormessage={error ? errorTextId : undefined}
+                    aria-required={isRequired}
                     aria-disabled={disabled}
                     {...restProps}
                 />
@@ -385,11 +429,16 @@ interface TextAreaSupportTextProps {
 }
 
 const TextAreaSupportText = ({ children, className = "" }: TextAreaSupportTextProps) => {
-    const { supportTextId } = useTextAreaContext();
+    const { supportTextId, setHasSupportText } = useTextAreaContext();
+
+    useEffect(() => {
+        setHasSupportText(true);
+        return () => setHasSupportText(false);
+    }, [setHasSupportText]);
 
     if (typeof children === "string") {
         return (
-            <p 
+            <p
                 id={supportTextId}
                 className={`text-xs font-secondary text-ground-600 dark:text-ground-400 px-2 ${className}`}
             >
@@ -399,7 +448,7 @@ const TextAreaSupportText = ({ children, className = "" }: TextAreaSupportTextPr
     }
 
     return (
-        <ul 
+        <ul
             id={supportTextId}
             className={`text-xs font-secondary text-ground-600 dark:text-ground-400 px-2 list-disc list-inside space-y-1 ${className}`}
         >
@@ -421,19 +470,19 @@ const TextAreaErrorText = ({ children, className = "" }: TextAreaErrorTextProps)
 
     if (typeof children === "string") {
         return (
-            <p 
+            <p
                 id={errorTextId}
                 role="alert"
                 className={`text-xs font-secondary text-error-600 dark:text-error-400 px-2 flex items-center gap-1 ${className}`}
             >
-                <AlertCircle className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
+                <AlertCircle className="w-3 h-3 shrink-0" aria-hidden="true" />
                 {children}
             </p>
         );
     }
 
     return (
-        <ul 
+        <ul
             id={errorTextId}
             role="alert"
             className={`text-xs font-secondary text-error-600 dark:text-error-400 px-2 list-disc list-inside space-y-1 ${className}`}
@@ -454,7 +503,7 @@ const TextAreaCharCount = ({ className = "" }: TextAreaCharCountProps) => {
     const { charCount, maxLength } = useTextAreaContext();
 
     return (
-        <span 
+        <span
             className={`text-xs font-secondary text-ground-500 dark:text-ground-400 px-2 ${className}`}
             aria-live="polite"
             aria-atomic="true"

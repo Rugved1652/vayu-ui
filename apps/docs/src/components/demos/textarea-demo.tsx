@@ -1,9 +1,11 @@
-"use client"
+"use client";
 import { TextArea } from "vayu-ui";
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function TextAreaDemo() {
-    const [value, setValue] = useState("");
+    const [bio, setBio] = useState("");
+    const [feedback, setFeedback] = useState("");
+    const [message, setMessage] = useState("");
 
     return (
         <div className="w-full max-w-md not-prose space-y-6">
@@ -17,14 +19,28 @@ export default function TextAreaDemo() {
                 <TextArea.Input placeholder="Enter a description..." />
             </TextArea.Root>
 
-            {/* With Character Count */}
+            {/* With Character Count in Label */}
             <TextArea.Root maxLength={200}>
                 <TextArea.Label showCharCount>Bio</TextArea.Label>
                 <TextArea.Input
                     placeholder="Tell us about yourself"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
                 />
+            </TextArea.Root>
+
+            {/* Required field with support text */}
+            <TextArea.Root>
+                <TextArea.Label>Comments</TextArea.Label>
+                <TextArea.Input
+                    placeholder="Share your thoughts..."
+                    required
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                />
+                <TextArea.SupportText>
+                    Your feedback helps us improve our services.
+                </TextArea.SupportText>
             </TextArea.Root>
 
             {/* Variants */}
@@ -49,17 +65,17 @@ export default function TextAreaDemo() {
                 <div className="space-y-4">
                     <TextArea.Root size="sm">
                         <TextArea.Label>Small</TextArea.Label>
-                        <TextArea.Input placeholder="Small size" />
+                        <TextArea.Input placeholder="Small size" rows={3} />
                     </TextArea.Root>
 
                     <TextArea.Root size="md">
                         <TextArea.Label>Medium</TextArea.Label>
-                        <TextArea.Input placeholder="Medium size" />
+                        <TextArea.Input placeholder="Medium size" rows={4} />
                     </TextArea.Root>
 
                     <TextArea.Root size="lg">
                         <TextArea.Label>Large</TextArea.Label>
-                        <TextArea.Input placeholder="Large size" />
+                        <TextArea.Input placeholder="Large size" rows={5} />
                     </TextArea.Root>
                 </div>
             </div>
@@ -68,10 +84,19 @@ export default function TextAreaDemo() {
             <div className="space-y-2">
                 <p className="text-sm font-medium text-ground-600">States</p>
                 <div className="space-y-4">
+                    {/* Error with support text and error text */}
                     <TextArea.Root error>
                         <TextArea.Label>Error State</TextArea.Label>
-                        <TextArea.Input placeholder="Invalid input" defaultValue="Invalid content" />
-                        <TextArea.ErrorText>Please enter a valid description.</TextArea.ErrorText>
+                        <TextArea.Input
+                            placeholder="Invalid input"
+                            defaultValue="Bad"
+                        />
+                        <TextArea.SupportText>
+                            Description must be at least 10 characters.
+                        </TextArea.SupportText>
+                        <TextArea.ErrorText>
+                            Please enter a valid description.
+                        </TextArea.ErrorText>
                     </TextArea.Root>
 
                     <TextArea.Root disabled>
@@ -90,6 +115,10 @@ export default function TextAreaDemo() {
                         <TextArea.Input resize="none" placeholder="Fixed size" />
                     </TextArea.Root>
                     <TextArea.Root>
+                        <TextArea.Label>Vertical Resize (default)</TextArea.Label>
+                        <TextArea.Input resize="vertical" placeholder="Resizes vertically" />
+                    </TextArea.Root>
+                    <TextArea.Root>
                         <TextArea.Label>Horizontal Resize</TextArea.Label>
                         <TextArea.Input resize="horizontal" placeholder="Resizes horizontally" />
                     </TextArea.Root>
@@ -100,13 +129,34 @@ export default function TextAreaDemo() {
                 </div>
             </div>
 
-            {/* With Support Text */}
-            <TextArea.Root>
-                <TextArea.Label>Feedback</TextArea.Label>
-                <TextArea.Input placeholder="Share your thoughts..." />
+            {/* Standalone Character Count */}
+            <TextArea.Root maxLength={100}>
+                <TextArea.Label>Message</TextArea.Label>
+                <TextArea.Input
+                    placeholder="Type your message..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                />
+                <TextArea.CharCount />
+            </TextArea.Root>
+
+            {/* Multiple support/error texts as arrays */}
+            <TextArea.Root error>
+                <TextArea.Label>Feedback Guidelines</TextArea.Label>
+                <TextArea.Input placeholder="Enter your feedback" />
                 <TextArea.SupportText>
-                    We value your opinion. Please be specific.
+                    {[
+                        "Be specific and constructive",
+                        "Include examples when possible",
+                        "Keep it respectful",
+                    ]}
                 </TextArea.SupportText>
+                <TextArea.ErrorText>
+                    {[
+                        "Minimum 20 characters required",
+                        "Must include specific details",
+                    ]}
+                </TextArea.ErrorText>
             </TextArea.Root>
         </div>
     );

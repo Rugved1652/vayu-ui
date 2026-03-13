@@ -6,6 +6,16 @@ description: A set of layered sections of content—known as tab panels—that a
 import TabsDemo from '@/components/demos/tab-demo';
 import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add tabs
+```
+
 ## Usage
 
 <FumaTabs items={['Preview', 'Code']}>
@@ -18,11 +28,12 @@ import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
     ```tsx
     import { Tabs } from "vayu-ui";
 
-    export default function TabsDemo() {
+    export default function TabsExample() {
       return (
         <div className="w-full max-w-md">
+          {/* Horizontal tabs with aria-labelledby */}
           <Tabs defaultValue="account" className="mb-8">
-            <Tabs.List className="grid w-full grid-cols-2">
+            <Tabs.List aria-label="Account settings" className="grid w-full grid-cols-2">
               <Tabs.Trigger value="account">Account</Tabs.Trigger>
               <Tabs.Trigger value="password">Password</Tabs.Trigger>
             </Tabs.List>
@@ -46,7 +57,7 @@ import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
 
           {/* Vertical orientation */}
           <Tabs defaultValue="profile" orientation="vertical" className="mb-8">
-            <Tabs.List className="min-w-[200px]">
+            <Tabs.List aria-label="Settings navigation" className="min-w-50">
               <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
               <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
               <Tabs.Trigger value="notifications">Notifications</Tabs.Trigger>
@@ -79,7 +90,7 @@ import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
 
           {/* With disabled tab */}
           <Tabs defaultValue="enabled">
-            <Tabs.List className="grid w-full grid-cols-2">
+            <Tabs.List aria-label="Tab options" className="grid w-full grid-cols-2">
               <Tabs.Trigger value="enabled">Enabled Tab</Tabs.Trigger>
               <Tabs.Trigger value="disabled" disabled>Disabled Tab</Tabs.Trigger>
             </Tabs.List>
@@ -98,6 +109,32 @@ import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
   </Tab>
 </FumaTabs>
 
+## Anatomy
+
+```tsx
+<Tabs defaultValue="tab1">
+  <Tabs.List aria-label="Example tabs">
+    <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
+    <Tabs.Trigger value="tab2">Tab 2</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="tab1">Content 1</Tabs.Content>
+  <Tabs.Content value="tab2">Content 2</Tabs.Content>
+</Tabs>
+```
+
+## Accessibility
+
+The Tabs component is built with accessibility in mind and follows WCAG 2.2 AA guidelines:
+
+- **Keyboard Navigation**: Use arrow keys to move between tabs, Home/End to jump to first/last tab
+- **Focus Management**: Visible focus indicators with focus ring on interactive elements
+- **ARIA Attributes**: Proper roles (`tablist`, `tab`, `tabpanel`), states (`aria-selected`, `aria-disabled`), and properties (`aria-controls`, `aria-labelledby`)
+- **Roving Tabindex**: Only the active tab is in the tab order, arrow keys move focus between tabs
+- **Screen Reader Support**: Use `aria-label` or `aria-labelledby` on `Tabs.List` to provide an accessible name
+- **Disabled States**: Disabled tabs include both `disabled` attribute and `aria-disabled` for full screen reader support
+- **Semantic HTML**: Uses native button and div elements with correct semantic meaning
+- **Reduced Motion**: Animations respect `prefers-reduced-motion` setting
+
 ## Props
 
 ### Tabs
@@ -108,6 +145,7 @@ import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
 | `value` | `string` | - | The controlled value of the tab to activate. |
 | `onValueChange` | `(value: string) => void` | - | Event handler called when the value changes. |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | The orientation of the tabs. |
+| `autoFocus` | `boolean` | `false` | Automatically move focus to the tab panel when activated. |
 | `className` | `string` | - | Additional CSS classes. |
 | `children` | `ReactNode` | - | The tab list and content components. |
 
@@ -115,6 +153,8 @@ import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
 
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
+| `aria-label` | `string` | - | Accessible label for the tab list. Required for WCAG 2.2 AA. |
+| `aria-labelledby` | `string` | - | Alternative to aria-label, references an element that labels the tab list. |
 | `className` | `string` | - | Additional CSS classes. |
 | `children` | `ReactNode` | - | The tab triggers. |
 
@@ -132,20 +172,9 @@ import { Tab, Tabs as FumaTabs } from 'fumadocs-ui/components/tabs';
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `value` | `string` | - | A unique value for the content. Must match a trigger. |
+| `forceMount` | `boolean` | `false` | Whether to force mount the content when inactive. |
 | `className` | `string` | - | Additional CSS classes. |
 | `children` | `ReactNode` | - | The content to display. |
-| `forceMount` | `boolean` | `false` | Whether to force mount the content when inactive. |
-
-## Accessibility
-
-The Tabs component is built with accessibility in mind and follows WCAG 2.2 AA guidelines:
-
-- **Keyboard Navigation**: Use arrow keys to move between tabs, Home/End to jump to first/last tab
-- **Focus Management**: Visible focus indicators with focus ring on interactive elements
-- **ARIA Attributes**: Proper roles, states, and properties for screen readers
-- **Semantic HTML**: Uses native button and div elements with correct semantic meaning
-- **Screen Reader Support**: All interactive elements have appropriate labels
-- **Reduced Motion**: Animations respect `prefers-reduced-motion` setting
 
 ## Source Code
 
@@ -153,6 +182,7 @@ The Tabs component is built with accessibility in mind and follows WCAG 2.2 AA g
 "use client";
 import React, {
     createContext,
+    useCallback,
     useContext,
     useEffect,
     useRef,
@@ -166,6 +196,7 @@ interface TabsContextValue {
     activeTab: string;
     setActiveTab: (value: string) => void;
     orientation: TabsOrientation;
+    autoFocus?: boolean;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -185,10 +216,16 @@ interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
     value?: string;
     onValueChange?: (value: string) => void;
     orientation?: TabsOrientation;
+    /** Automatically move focus to the tab panel when a tab is activated */
+    autoFocus?: boolean;
     children: React.ReactNode;
 }
 
 interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Accessible label for the tab list. Required for WCAG 2.2 AA compliance. */
+    "aria-label"?: string;
+    /** Alternative to aria-label, references an element that labels the tab list */
+    "aria-labelledby"?: string;
     children: React.ReactNode;
 }
 
@@ -212,7 +249,7 @@ interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
  * @example
  * ```tsx
  * <Tabs defaultValue="tab1">
- *   <Tabs.List>
+ *   <Tabs.List aria-label="Settings">
  *     <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
  *     <Tabs.Trigger value="tab2">Tab 2</Tabs.Trigger>
  *   </Tabs.List>
@@ -228,6 +265,7 @@ const TabsBase = React.forwardRef<HTMLDivElement, TabsProps>(
             value,
             onValueChange,
             orientation = "horizontal",
+            autoFocus = false,
             className,
             children,
             ...props
@@ -244,17 +282,18 @@ const TabsBase = React.forwardRef<HTMLDivElement, TabsProps>(
             }
         }, [value, isControlled]);
 
-        const handleTabChange = (newValue: string) => {
+        const handleTabChange = useCallback((newValue: string) => {
             if (!isControlled) {
                 setActiveTab(newValue);
             }
             onValueChange?.(newValue);
-        };
+        }, [isControlled, onValueChange]);
 
         const contextValue: TabsContextValue = {
             activeTab: isControlled ? value! : activeTab,
             setActiveTab: handleTabChange,
             orientation,
+            autoFocus,
         };
 
         return (
@@ -280,20 +319,9 @@ TabsBase.displayName = "Tabs";
 
 // TabsList Component
 const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
-    ({ className, children, ...props }, ref) => {
+    ({ className, children, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, ...props }, ref) => {
         const { orientation } = useTabsContext();
         const listRef = useRef<HTMLDivElement>(null);
-
-        // Merge refs
-        useEffect(() => {
-            if (ref) {
-                if (typeof ref === "function") {
-                    ref(listRef.current);
-                } else {
-                    ref.current = listRef.current;
-                }
-            }
-        }, [ref]);
 
         // Handle keyboard navigation (ARIA authoring practices)
         useEffect(() => {
@@ -353,16 +381,31 @@ const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
             }
         }, [orientation]);
 
+        // Callback ref to merge with forwarded ref
+        const setRefs = useCallback(
+            (node: HTMLDivElement | null) => {
+                listRef.current = node;
+                if (typeof ref === "function") {
+                    ref(node);
+                } else if (ref) {
+                    ref.current = node;
+                }
+            },
+            [ref]
+        );
+
         return (
             <div
-                ref={listRef}
+                ref={setRefs}
                 role="tablist"
                 aria-orientation={orientation}
+                aria-label={ariaLabel}
+                aria-labelledby={ariaLabelledBy}
                 className={cn(
                     "inline-flex items-center",
                     orientation === "horizontal"
                         ? "border-b border-ground-200 dark:border-ground-700"
-                        : "flex-col border-r border-ground-200 dark:border-ground-700 pr-4 min-w-[160px]",
+                        : "flex-col border-r border-ground-200 dark:border-ground-700 pr-4 min-w-40",
                     className
                 )}
                 {...props}
@@ -401,6 +444,7 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
                 type="button"
                 role="tab"
                 aria-selected={isActive}
+                aria-disabled={disabled}
                 aria-controls={`tabpanel-${value}`}
                 data-state={isActive ? "active" : "inactive"}
                 data-disabled={disabled}
@@ -441,8 +485,33 @@ TabsTrigger.displayName = "Tabs.Trigger";
 // TabsContent Component
 const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
     ({ value, className, children, forceMount = false, ...props }, ref) => {
-        const { activeTab } = useTabsContext();
+        const { activeTab, autoFocus } = useTabsContext();
+        const panelRef = useRef<HTMLDivElement>(null);
         const isActive = activeTab === value;
+
+        // Auto-focus the panel when it becomes active (if autoFocus is enabled)
+        useEffect(() => {
+            if (isActive && autoFocus && panelRef.current) {
+                // Small delay to ensure the panel is visible
+                const timer = setTimeout(() => {
+                    panelRef.current?.focus();
+                }, 0);
+                return () => clearTimeout(timer);
+            }
+        }, [isActive, autoFocus]);
+
+        // Callback ref to merge with forwarded ref
+        const setRefs = useCallback(
+            (node: HTMLDivElement | null) => {
+                panelRef.current = node;
+                if (typeof ref === "function") {
+                    ref(node);
+                } else if (ref) {
+                    ref.current = node;
+                }
+            },
+            [ref]
+        );
 
         if (!isActive && !forceMount) {
             return null;
@@ -450,11 +519,11 @@ const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
 
         return (
             <div
-                ref={ref}
+                ref={setRefs}
                 role="tabpanel"
                 aria-labelledby={`tab-${value}`}
                 id={`tabpanel-${value}`}
-                tabIndex={0}
+                tabIndex={isActive ? 0 : undefined}
                 data-state={isActive ? "active" : "inactive"}
                 hidden={!isActive && forceMount}
                 className={cn(
@@ -486,3 +555,4 @@ const Tabs = TabsBase as React.ForwardRefExoticComponent<
 };
 
 export default Tabs;
+```

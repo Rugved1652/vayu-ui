@@ -6,6 +6,16 @@ description: An accessible one-time password input component with compound compo
 import OTPInputDemo from '@/components/demos/otpinput-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add otpinput
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -57,6 +67,19 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 </OTPInput.Root>
 ```
 
+## Accessibility
+
+- **Keyboard Navigation**: Full keyboard support — Tab to focus, type to enter digits, Backspace to delete
+- **ARIA Roles**: Uses `role="group"` with proper `aria-label` for screen readers
+- **Focus Indicators**: Visible focus ring on active slot using design tokens
+- **Screen Reader Support**: Hidden input with `aria-label` for accessibility
+- **Autofill Support**: `autoComplete="one-time-code"` enables SMS OTP autofill
+- **Input Mode**: `inputMode="numeric"` shows numeric keyboard on mobile devices
+- **Disabled State**: Properly communicates disabled state via `aria-disabled`
+- **Error States**: Supports `aria-invalid` and `aria-errormessage` for validation feedback
+- **Help Text**: Supports `aria-describedby` for linking help text
+- **Reduced Motion**: Animations respect `prefers-reduced-motion` preference
+
 ## Props
 
 ### OTPInput.Root
@@ -70,7 +93,9 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 | `label`           | `string`                    | `"One-time password"`| Accessible label for the input.                  |
 | `autoFocus`       | `boolean`                   | `false`              | Whether to auto-focus on mount.                  |
 | `disabled`        | `boolean`                   | `false`              | Whether the input is disabled.                   |
-| `containerClassName` | `string`                 | —                    | Additional classes for the container.            |
+| `hasError`        | `boolean`                   | `false`              | Whether the input has an error.                  |
+| `errorMessageId`  | `string`                    | —                    | ID of the element containing the error message.  |
+| `aria-describedby`| `string`                    | —                    | ID of the element describing the input.          |
 | `className`       | `string`                    | —                    | Additional CSS classes.                          |
 
 ### OTPInput.Group
@@ -93,17 +118,6 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 | :---------- | :----------- | :------ | :----------------------------------- |
 | `children`  | `ReactNode`  | —       | Custom separator content.            |
 | `className` | `string`     | —       | Additional CSS classes.              |
-
-## Accessibility
-
-- **Keyboard Navigation**: Full keyboard support — Tab to focus, type to enter digits, Backspace to delete
-- **ARIA Roles**: Uses `role="group"` with proper `aria-label` for screen readers
-- **Focus Indicators**: Visible focus ring on active slot using design tokens
-- **Screen Reader Support**: Hidden input with `aria-label` for accessibility
-- **Autofill Support**: `autoComplete="one-time-code"` enables SMS OTP autofill
-- **Input Mode**: `inputMode="numeric"` shows numeric keyboard on mobile devices
-- **Disabled State**: Properly communicates disabled state via `aria-disabled`
-- **Reduced Motion**: Animations respect `prefers-reduced-motion` preference
 
 ## Source Code
 
@@ -131,6 +145,7 @@ interface OTPInputContextValue {
     maxLength: number;
     disabled: boolean;
     id: string;
+    hasError: boolean;
 }
 
 const OTPInputContext = createContext<OTPInputContextValue | undefined>(undefined);
@@ -152,10 +167,26 @@ interface OTPInputRootProps
     value?: string;
     onChange?: (value: string) => void;
     maxLength?: number;
-    containerClassName?: string;
+    /**
+     * Callback when the complete code is entered
+     */
     onComplete?: (code: string) => void;
+    /**
+     * Accessible label for the input
+     */
     label?: string;
+    /**
+     * Render prop for slots and separators
+     */
     children?: React.ReactNode;
+    /**
+     * Whether the input has an error
+     */
+    hasError?: boolean;
+    /**
+     * ID of the element that describes the error message
+     */
+    errorMessageId?: string;
 }
 
 const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
@@ -164,7 +195,6 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
             value: controlledValue,
             onChange,
             maxLength = 6,
-            containerClassName,
             onComplete,
             label = "One-time password",
             className,
@@ -172,6 +202,9 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
             autoFocus,
             disabled,
             id: providedId,
+            hasError = false,
+            errorMessageId,
+            "aria-describedby": ariaDescribedBy,
             ...props
         },
         ref
@@ -189,12 +222,10 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             const newValue = e.target.value.replace(/\D/g, "").slice(0, maxLength);
-            if (newValue.length <= maxLength) {
-                setInternalValue(newValue);
-                onChange?.(newValue);
-                if (newValue.length === maxLength) {
-                    onComplete?.(newValue);
-                }
+            setInternalValue(newValue);
+            onChange?.(newValue);
+            if (newValue.length === maxLength) {
+                onComplete?.(newValue);
             }
         };
 
@@ -206,6 +237,7 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
             }
         };
 
+        // Forward ref to the hidden input
         React.useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
 
         useEffect(() => {
@@ -214,9 +246,19 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
             }
         }, [autoFocus]);
 
+        // Combine aria-describedby references
+        const describedBy = [ariaDescribedBy, errorMessageId].filter(Boolean).join(" ") || undefined;
+
         return (
             <OTPInputContext.Provider
-                value={{ value, isFocused, maxLength, disabled: disabled ?? false, id }}
+                value={{
+                    value,
+                    isFocused,
+                    maxLength,
+                    disabled: disabled ?? false,
+                    id,
+                    hasError,
+                }}
             >
                 <div
                     role="group"
@@ -227,17 +269,13 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
                         disabled && "opacity-50 cursor-not-allowed"
                     )}
                     onClick={() => !disabled && inputRef.current?.focus()}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                            !disabled && inputRef.current?.focus();
-                        }
-                    }}
-                    tabIndex={disabled ? -1 : 0}
                 >
+                    {/* Visual Container */}
                     <div className={clsx("flex items-center gap-2", className)}>
                         {children}
                     </div>
 
+                    {/* Hidden Input for managing state and focus */}
                     <input
                         ref={inputRef}
                         id={id}
@@ -249,9 +287,12 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
                         maxLength={maxLength}
                         disabled={disabled}
                         aria-label={label}
+                        aria-invalid={hasError}
+                        aria-errormessage={errorMessageId}
+                        aria-describedby={describedBy}
                         autoComplete="one-time-code"
                         inputMode="numeric"
-                        pattern={`[0-9]*{${maxLength}}`}
+                        pattern={`[0-9]*`}
                         className="absolute inset-0 opacity-0 w-full h-full pointer-events-none"
                         style={{ caretColor: "transparent" }}
                         {...props}
@@ -273,7 +314,12 @@ interface OTPInputGroupProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const OTPInputGroup = forwardRef<HTMLDivElement, OTPInputGroupProps>(
     ({ className, children, ...props }, ref) => (
-        <div ref={ref} role="presentation" className={clsx("flex items-center", className)} {...props}>
+        <div
+            ref={ref}
+            role="presentation"
+            className={clsx("flex items-center", className)}
+            {...props}
+        >
             {children}
         </div>
     )
@@ -290,7 +336,7 @@ interface OTPInputSlotProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
     ({ index, className, ...props }, ref) => {
-        const { value, isFocused, maxLength, disabled, id } = useOTPInput();
+        const { value, isFocused, maxLength, disabled, hasError } = useOTPInput();
         const char = value[index];
         const isActive = isFocused && index === Math.min(value.length, maxLength - 1);
         const hasValue = char !== undefined && char !== "";
@@ -301,23 +347,51 @@ const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
                 role="presentation"
                 aria-hidden="true"
                 className={clsx(
+                    // Base styles with design tokens
                     "relative flex size-10 items-center justify-center",
-                    "border-y border-r border-ground-300 dark:border-ground-700",
-                    "text-sm text-ground-700 dark:text-ground-300",
-                    "transition-all duration-150",
+                    "border-y border-r",
+                    "text-sm transition-all duration-150",
+                    // Border colors
+                    hasError
+                        ? "border-red-500 dark:border-red-400"
+                        : "border-ground-300 dark:border-ground-700",
+                    // Text colors
+                    hasError
+                        ? "text-red-600 dark:text-red-400"
+                        : "text-ground-700 dark:text-ground-300",
+                    // First and last rounded corners
                     "first:rounded-l first:border-l",
                     "last:rounded-r",
-                    isActive && ["z-10", "ring-2 ring-ground-950 dark:ring-ground-100", "ring-offset-background"],
-                    hasValue && "bg-ground-50 dark:bg-ground-900",
+                    // Active/focus state with ring
+                    isActive && [
+                        "z-10",
+                        hasError
+                            ? "ring-2 ring-red-500 dark:ring-red-400"
+                            : "ring-2 ring-ground-950 dark:ring-ground-100",
+                        "ring-offset-background",
+                    ],
+                    // Filled state
+                    hasValue && !hasError && "bg-ground-50 dark:bg-ground-900",
+                    hasValue && hasError && "bg-red-50 dark:bg-red-950",
+                    // Disabled state
                     disabled && "opacity-50",
                     className
                 )}
                 {...props}
             >
                 <span className="font-secondary">{char}</span>
-                {isActive && !disabled && (
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
-                        <div className="h-4 w-0.5 bg-ground-950 dark:bg-ground-50 animate-caret-blink" />
+                {/* Fake Caret - only show when slot is empty */}
+                {isActive && !hasValue && !disabled && (
+                    <div
+                        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                        aria-hidden="true"
+                    >
+                        <div
+                            className={clsx(
+                                "h-4 w-0.5 bg-ground-950 dark:bg-ground-50",
+                                "animate-caret-blink motion-reduce:hidden"
+                            )}
+                        />
                     </div>
                 )}
             </div>
@@ -336,8 +410,16 @@ interface OTPInputSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const OTPInputSeparator = forwardRef<HTMLDivElement, OTPInputSeparatorProps>(
     ({ className, children, ...props }, ref) => (
-        <div ref={ref} role="presentation" aria-hidden="true" className={clsx("flex items-center justify-center px-2", className)} {...props}>
-            {children ?? <div className="h-1.5 w-1.5 bg-ground-400 dark:bg-ground-600" />}
+        <div
+            ref={ref}
+            role="presentation"
+            aria-hidden="true"
+            className={clsx("flex items-center justify-center px-2", className)}
+            {...props}
+        >
+            {children ?? (
+                <div className="h-1.5 w-1.5 bg-ground-400 dark:bg-ground-600" />
+            )}
         </div>
     )
 );

@@ -21,6 +21,7 @@ interface OTPInputContextValue {
     maxLength: number;
     disabled: boolean;
     id: string;
+    hasError: boolean;
 }
 
 const OTPInputContext = createContext<OTPInputContextValue | undefined>(undefined);
@@ -55,6 +56,14 @@ interface OTPInputRootProps
      * Render prop for slots and separators
      */
     children?: React.ReactNode;
+    /**
+     * Whether the input has an error
+     */
+    hasError?: boolean;
+    /**
+     * ID of the element that describes the error message
+     */
+    errorMessageId?: string;
 }
 
 const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
@@ -63,7 +72,6 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
             value: controlledValue,
             onChange,
             maxLength = 6,
-            containerClassName,
             onComplete,
             label = "One-time password",
             className,
@@ -71,6 +79,9 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
             autoFocus,
             disabled,
             id: providedId,
+            hasError = false,
+            errorMessageId,
+            "aria-describedby": ariaDescribedBy,
             ...props
         },
         ref
@@ -88,12 +99,10 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             const newValue = e.target.value.replace(/\D/g, "").slice(0, maxLength);
-            if (newValue.length <= maxLength) {
-                setInternalValue(newValue);
-                onChange?.(newValue);
-                if (newValue.length === maxLength) {
-                    onComplete?.(newValue);
-                }
+            setInternalValue(newValue);
+            onChange?.(newValue);
+            if (newValue.length === maxLength) {
+                onComplete?.(newValue);
             }
         };
 
@@ -114,6 +123,9 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
             }
         }, [autoFocus]);
 
+        // Combine aria-describedby references
+        const describedBy = [ariaDescribedBy, errorMessageId].filter(Boolean).join(" ") || undefined;
+
         return (
             <OTPInputContext.Provider
                 value={{
@@ -122,6 +134,7 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
                     maxLength,
                     disabled: disabled ?? false,
                     id,
+                    hasError,
                 }}
             >
                 <div
@@ -133,12 +146,6 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
                         disabled && "opacity-50 cursor-not-allowed"
                     )}
                     onClick={() => !disabled && inputRef.current?.focus()}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                            !disabled && inputRef.current?.focus();
-                        }
-                    }}
-                    tabIndex={disabled ? -1 : 0}
                 >
                     {/* Visual Container */}
                     <div className={clsx("flex items-center gap-2", className)}>
@@ -156,11 +163,13 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
                         onBlur={handleBlur}
                         maxLength={maxLength}
                         disabled={disabled}
-                        disabled={disabled}
                         aria-label={label}
+                        aria-invalid={hasError}
+                        aria-errormessage={errorMessageId}
+                        aria-describedby={describedBy}
                         autoComplete="one-time-code"
                         inputMode="numeric"
-                        pattern={`[0-9]*{${maxLength}}`}
+                        pattern={`[0-9]*`}
                         className="absolute inset-0 opacity-0 w-full h-full pointer-events-none"
                         style={{ caretColor: "transparent" }}
                         {...props}
@@ -204,7 +213,7 @@ interface OTPInputSlotProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
     ({ index, className, ...props }, ref) => {
-        const { value, isFocused, maxLength, disabled, id } = useOTPInput();
+        const { value, isFocused, maxLength, disabled, hasError } = useOTPInput();
         const char = value[index];
         const isActive = isFocused && index === Math.min(value.length, maxLength - 1);
         const hasValue = char !== undefined && char !== "";
@@ -217,20 +226,30 @@ const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
                 className={clsx(
                     // Base styles with design tokens
                     "relative flex size-10 items-center justify-center",
-                    "border-y border-r border-ground-300 dark:border-ground-700",
-                    "text-sm text-ground-700 dark:text-ground-300",
-                    "transition-all duration-150",
-                    // First and last rounded corners using system radius
+                    "border-y border-r",
+                    "text-sm transition-all duration-150",
+                    // Border colors
+                    hasError
+                        ? "border-red-500 dark:border-red-400"
+                        : "border-ground-300 dark:border-ground-700",
+                    // Text colors
+                    hasError
+                        ? "text-red-600 dark:text-red-400"
+                        : "text-ground-700 dark:text-ground-300",
+                    // First and last rounded corners
                     "first:rounded-l first:border-l",
                     "last:rounded-r",
                     // Active/focus state with ring
                     isActive && [
                         "z-10",
-                        "ring-2 ring-ground-950 dark:ring-ground-100",
+                        hasError
+                            ? "ring-2 ring-red-500 dark:ring-red-400"
+                            : "ring-2 ring-ground-950 dark:ring-ground-100",
                         "ring-offset-background",
                     ],
                     // Filled state
-                    hasValue && "bg-ground-50 dark:bg-ground-900",
+                    hasValue && !hasError && "bg-ground-50 dark:bg-ground-900",
+                    hasValue && hasError && "bg-red-50 dark:bg-red-950",
                     // Disabled state
                     disabled && "opacity-50",
                     className
@@ -238,8 +257,8 @@ const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
                 {...props}
             >
                 <span className="font-secondary">{char}</span>
-                {/* Fake Caret */}
-                {isActive && !disabled && (
+                {/* Fake Caret - only show when slot is empty */}
+                {isActive && !hasValue && !disabled && (
                     <div
                         className="absolute inset-0 flex items-center justify-center pointer-events-none"
                         aria-hidden="true"
@@ -247,7 +266,7 @@ const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
                         <div
                             className={clsx(
                                 "h-4 w-0.5 bg-ground-950 dark:bg-ground-50",
-                                "animate-caret-blink"
+                                "animate-caret-blink motion-reduce:hidden"
                             )}
                         />
                     </div>

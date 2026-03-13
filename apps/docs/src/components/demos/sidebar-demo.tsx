@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import {
     Sidebar,
     SidebarContent,
@@ -10,9 +9,9 @@ import {
     SidebarMenuItem,
     SidebarProvider,
     SidebarToggle,
+    MobileMenuButton,
 } from "vayu-ui";
 import {
-    LayoutDashboard,
     Settings,
     User,
     ShoppingBag,
@@ -27,8 +26,9 @@ import { Avatar } from "vayu-ui";
 
 export default function SidebarDemo() {
     return (
-        <div className="h-[600px] w-full border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden flex bg-white dark:bg-neutral-950 relative">
+        <div className="h-150 w-full border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden flex bg-white dark:bg-neutral-950 relative">
             <SidebarProvider>
+                <MobileMenuButton />
                 <Sidebar>
                     <SidebarHeader>
                         <div className="flex items-center gap-3">
@@ -110,7 +110,10 @@ export default function SidebarDemo() {
                                     john@example.com
                                 </span>
                             </div>
-                            <button className="ml-auto text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                            <button
+                                className="ml-auto text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
+                                aria-label="Logout"
+                            >
                                 <LogOut size={18} />
                             </button>
                         </div>

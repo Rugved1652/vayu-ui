@@ -1,302 +1,139 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// Vayu UI Registry — Type Definitions
-// Every field is intentionally scoped: agents fetch only what they need.
-// ─────────────────────────────────────────────────────────────────────────────
+// ============================================================================
+// VedUI Registry Types
+// Designed for AI-native UI development with 16 MCP tools
+// ============================================================================
 
-// ── Primitive helpers ─────────────────────────────────────────────────────────
+export type VayuComponentDoc = {
+  // Basic metadata
+  component: string;
+  slug: string;
+  category: string;
 
-/** Semantic version string e.g. "1.0.0" */
-type SemVer = string;
+  // Descriptions
+  description: string;
+  ai_summary: string;
 
-/** ISO 8601 date string e.g. "2024-11-01" */
-type ISODate = string;
+  // AI-focused fields
+  intent: string[];
+  ai_keywords: string[];
 
-/** CSS variable name e.g. "--color-primary-600" */
-type CSSVar = `--${string}`;
+  // Usage guidance
+  when_to_use: string[];
+  when_not_to_use: string[];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 1. PROP
-// ─────────────────────────────────────────────────────────────────────────────
+  // Composition (compound components)
+  composition: {
+    root: string;
+    slots: string[];
+    structure: string[];
+    rules: string[];
+  };
 
-export interface ComponentProp {
-    /** TypeScript type expression e.g. '"solid" | "outline"' or 'boolean' */
-    type: string;
-    required: boolean;
-    /** Stringified default e.g. '"solid"' or 'false' */
-    default?: string;
-    /** One-line description of what it controls */
-    description: string;
-    /** Which sub-component(s) this prop applies to (for compound components) */
-    component?: string;
-    /** Mark props that still exist but should no longer be used */
-    deprecated?: {
-        since: SemVer;
-        replacedBy: string;
-        message: string;
-    };
-}
+  // Props (array per key for multiple components)
+  props: Record<string, ComponentProp[]>;
 
-/** Props map — keyed by prop name for O(1) lookup */
-export type PropsMap = Record<string, ComponentProp>;
+  // Variants
+  variants: ComponentVariant[];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 2. EVENT
-// ─────────────────────────────────────────────────────────────────────────────
+  // States
+  states: string[];
 
-export interface ComponentEvent {
-    /** Full TypeScript function signature e.g. "(value: string) => void" */
-    signature: string;
-    /** When this fires */
-    description: string;
-    /** Matching controlled value prop e.g. onChange → "value" */
-    controlledBy?: string;
-}
+  // Responsive
+  responsive: {
+    allowed: boolean;
+    patterns: string[];
+  };
 
-/** Events map — keyed by handler name e.g. "onChange" */
-export type EventsMap = Record<string, ComponentEvent>;
+  // Design tokens
+  design_tokens: {
+    colors?: string[];
+    radius?: string[];
+    border?: string[];
+    spacing?: string[];
+    typography?: string[];
+  };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 3. STATE
-// ─────────────────────────────────────────────────────────────────────────────
+  // Examples (array format)
+  examples: ComponentExample[];
 
-export interface ComponentState {
-    /** What prop or interaction causes this state */
-    trigger: string;
-    /** What visually changes */
-    visualChange: string;
-    /** ARIA attribute applied in this state if any */
-    ariaAttr?: string;
-}
+  // Accessibility
+  accessibility: {
+    pattern: string;
+    standards: string[];
+    keyboard_support: string[];
+    aria_attributes: string[];
+  };
 
-export type StatesMap = Record<
-    'default' | 'hover' | 'focus' | 'active' | 'disabled' | 'loading' | 'error' | 'empty' | 'checked' | 'indeterminate' | string,
-    ComponentState
->;
+  // Anti-patterns
+  anti_patterns: string[];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 4. EXAMPLE
-// ─────────────────────────────────────────────────────────────────────────────
+  // Dependencies
+  dependencies: {
+    icons?: string[];
+    utilities?: string[];
+    components?: string[];
+  };
 
-export interface ComponentExample {
-    /** Ready-to-paste TSX. Should compile without modification. */
-    code: string;
-    /** One-line explanation for this example */
-    description: string;
-}
+  // Related components
+  related_components: string[];
 
-/** Examples map — keyed by variant/use-case slug e.g. "loading", "withIcon" */
-export type ExamplesMap = Record<string, ComponentExample>;
+  // Validation
+  validation_rules: string[];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 5. A11Y
-// ─────────────────────────────────────────────────────────────────────────────
+  // Installation
+  installation: string[];
 
-export interface ComponentA11y {
-    /** WAI-ARIA role applied to the root element */
-    role?: string;
-    /** ARIA attrs the consumer must/should set. Key = attr name, value = guidance */
-    requiredAttrs?: Record<string, string>;
-    /** ARIA attrs managed internally — consumer should NOT override */
-    managedAttrs?: string[];
-    /** Keyboard interaction map. Key = key name, value = what it does */
-    keyboard?: Record<string, string>;
-    /** Focus management description */
-    focusManagement?: string;
-    /** Live region behaviour if any */
-    liveRegion?: string;
-    /** Additional notes or guidance */
-    notes?: string[];
-}
+  // Source info
+  source: {
+    file: string;
+    language: string;
+    framework: string;
+  };
+};
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 6. DESIGN TOKEN
-// ─────────────────────────────────────────────────────────────────────────────
+export type ComponentProp = {
+  name: string;
+  type: string;
+  required?: boolean;
+  default?: unknown;
+  description?: string;
+};
 
-export interface DesignToken {
-    var: CSSVar;
-    /** Resolved value in the default theme */
-    value: string;
-    /** Which component visual property this token drives */
-    controls: string;
-    /** Whether this token is safe to override in consumer CSS */
-    overridable: boolean;
-}
+export type ComponentVariant = {
+  name: string;
+  values: string[];
+  default?: string;
+  description?: string;
+};
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 7. COMPOSITION (Compound Component Pattern)
-// ─────────────────────────────────────────────────────────────────────────────
+export type ComponentExample = {
+  name: string;
+  description?: string;
+  code: string;
+};
 
-export interface ComponentComposition {
-    /** Sub-components exposed on this component. Key = name, value = description */
-    parts: Record<string, string>;
-    /** Canonical compound usage example */
-    example: string;
-    /** Are parts required or can the simple API be used instead? */
-    partsRequired: boolean;
-}
+// Registry type
+export type Registry = Record<string, VayuComponentDoc>;
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 8. DO-NOT RULE
-// ─────────────────────────────────────────────────────────────────────────────
-
-export type DoNotCategory = 'setup' | 'api' | 'a11y' | 'styling' | 'nesting' | 'perf' | 'ux';
-
-export interface DoNotRule {
-    rule: string;
-    category: DoNotCategory;
-    why?: string;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 9. DARK MODE
-// ─────────────────────────────────────────────────────────────────────────────
-
-export interface DarkModeInfo {
-    /** Does the component switch automatically via CSS variables? */
-    automatic: boolean;
-    /** If not automatic, what class does the consumer need? */
-    manualClass?: string;
-    /** Token pairs that swap in dark mode. Key = light token, value = dark token */
-    tokenSwaps?: Record<CSSVar, CSSVar>;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 10. CHANGELOG
-// ─────────────────────────────────────────────────────────────────────────────
-
-export type ChangeType = 'added' | 'changed' | 'deprecated' | 'removed' | 'fixed';
-
-export interface ChangelogEntry {
-    version: SemVer;
-    date: ISODate;
-    type: ChangeType;
-    description: string;
-    breaking: boolean;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 11. TESTING
-// ─────────────────────────────────────────────────────────────────────────────
-
-export interface TestingInfo {
-    /** data-testid values. Key = element description, value = testid string */
-    testIds: Record<string, string>;
-    /** Storybook story path e.g. "Components/Button/Solid" */
-    storybookPath?: string;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 12. ITEM TYPE
-// ─────────────────────────────────────────────────────────────────────────────
-
-export type ItemType = "hook" | "component";
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 13. REGISTRY ITEM — the complete component/hook definition
-// ─────────────────────────────────────────────────────────────────────────────
-
-export interface RegistryItem {
-    // ── Identity ───────────────────────────────────────────────────────────────
-
-    /** PascalCase component/hook name e.g. "Button" */
-    name: string;
-    /** CLI identifier e.g. "button", "use-debounce" */
-    slug: string;
-    /** hook or component */
-    type: ItemType;
-    /** Grouping for list/filter */
-    category: 'animation' | 'action' | 'input' | 'layout' | 'overlay' | 'display' | 'navigation' | 'feedback' | 'utility';
-    /** One sentence — what it is and primary use case */
-    description: string;
-    /** Version this item was introduced */
-    since: SemVer;
-
-    // ── File / Install ──────────────────────────────────────────────────────────
-
-    /** Where the file will be written in the user's project */
-    targetPath: string;
-    /** The filename e.g. "button.tsx" */
-    fileName: string;
-    /** npm packages this item needs */
-    dependencies: string[];
-    /** Other items from Vayu UI this one needs */
-    registryDependencies: string[];
-    /** Tags for filtering/searching */
-    tags: string[];
-
-    // ── Props & Events ─────────────────────────────────────────────────────────
-
-    props?: PropsMap;
-    events?: EventsMap;
-
-    // ── Variants & States ──────────────────────────────────────────────────────
-
-    variants?: string[];
-    states?: StatesMap;
-
-    // ── Examples ───────────────────────────────────────────────────────────────
-
-    examples?: ExamplesMap;
-
-    // ── Design & Tokens ────────────────────────────────────────────────────────
-
-    tokens?: DesignToken[];
-    darkMode?: DarkModeInfo;
-
-    // ── Accessibility ──────────────────────────────────────────────────────────
-
-    a11y?: ComponentA11y;
-
-    // ── Compound Pattern ───────────────────────────────────────────────────────
-
-    composition?: ComponentComposition;
-
-    // ── Relationships ──────────────────────────────────────────────────────────
-
-    /** Components frequently used alongside this one */
-    peerComponents?: string[];
-
-    // ── Rules ──────────────────────────────────────────────────────────────────
-
-    doNot?: DoNotRule[];
-
-    // ── Quality & Testing ──────────────────────────────────────────────────────
-
-    testing?: TestingInfo;
-
-    // ── Versioning ─────────────────────────────────────────────────────────────
-
-    changelog?: ChangelogEntry[];
-
-    /** Set true to hide from list_components() and find_component() */
-    internal?: boolean;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 14. REGISTRY — top-level store (keyed by component name)
-// ─────────────────────────────────────────────────────────────────────────────
-
-export type Registry = Record<string, RegistryItem>;
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Helpers used by commands
-// ─────────────────────────────────────────────────────────────────────────────
+// ============================================================================
+// Registry Data & Helpers
+// ============================================================================
 
 import { registry as registryData } from "./registryData";
 
-export function findItem(slug: string): RegistryItem | undefined {
-    return Object.values(registryData).find((item) => item.slug === slug);
+export function findItem(slug: string): VayuComponentDoc | undefined {
+  return Object.values(registryData).find((item) => item.slug === slug);
 }
 
-export function findWithDependencies(slug: string): RegistryItem[] {
-    const item = findItem(slug);
-    if (!item) return [];
+export function findWithDependencies(slug: string): VayuComponentDoc[] {
+  const item = findItem(slug);
+  if (!item) return [];
 
-    const deps = item.registryDependencies.flatMap((depSlug) =>
-        findWithDependencies(depSlug)
-    );
+  const deps = (item.dependencies?.components ?? []).flatMap((depSlug) =>
+    findWithDependencies(depSlug)
+  );
 
-    return [...deps, item];
+  return [...deps, item];
 }
 
 export const registry = registryData;

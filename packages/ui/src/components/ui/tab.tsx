@@ -1,6 +1,7 @@
 "use client";
 import React, {
     createContext,
+    useCallback,
     useContext,
     useEffect,
     useRef,
@@ -14,6 +15,7 @@ interface TabsContextValue {
     activeTab: string;
     setActiveTab: (value: string) => void;
     orientation: TabsOrientation;
+    autoFocus?: boolean;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -33,10 +35,16 @@ interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
     value?: string;
     onValueChange?: (value: string) => void;
     orientation?: TabsOrientation;
+    /** Automatically move focus to the tab panel when a tab is activated */
+    autoFocus?: boolean;
     children: React.ReactNode;
 }
 
 interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Accessible label for the tab list. Required for WCAG 2.2 AA compliance. */
+    "aria-label"?: string;
+    /** Alternative to aria-label, references an element that labels the tab list */
+    "aria-labelledby"?: string;
     children: React.ReactNode;
 }
 
@@ -76,6 +84,7 @@ const TabsBase = React.forwardRef<HTMLDivElement, TabsProps>(
             value,
             onValueChange,
             orientation = "horizontal",
+            autoFocus = false,
             className,
             children,
             ...props
@@ -92,17 +101,18 @@ const TabsBase = React.forwardRef<HTMLDivElement, TabsProps>(
             }
         }, [value, isControlled]);
 
-        const handleTabChange = (newValue: string) => {
+        const handleTabChange = useCallback((newValue: string) => {
             if (!isControlled) {
                 setActiveTab(newValue);
             }
             onValueChange?.(newValue);
-        };
+        }, [isControlled, onValueChange]);
 
         const contextValue: TabsContextValue = {
             activeTab: isControlled ? value! : activeTab,
             setActiveTab: handleTabChange,
             orientation,
+            autoFocus,
         };
 
         return (
@@ -128,20 +138,9 @@ TabsBase.displayName = "Tabs";
 
 // TabsList Component
 const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
-    ({ className, children, ...props }, ref) => {
+    ({ className, children, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, ...props }, ref) => {
         const { orientation } = useTabsContext();
         const listRef = useRef<HTMLDivElement>(null);
-
-        // Merge refs
-        useEffect(() => {
-            if (ref) {
-                if (typeof ref === "function") {
-                    ref(listRef.current);
-                } else {
-                    ref.current = listRef.current;
-                }
-            }
-        }, [ref]);
 
         // Handle keyboard navigation (ARIA authoring practices)
         useEffect(() => {
@@ -201,16 +200,31 @@ const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
             }
         }, [orientation]);
 
+        // Callback ref to merge with forwarded ref
+        const setRefs = useCallback(
+            (node: HTMLDivElement | null) => {
+                listRef.current = node;
+                if (typeof ref === "function") {
+                    ref(node);
+                } else if (ref) {
+                    ref.current = node;
+                }
+            },
+            [ref]
+        );
+
         return (
             <div
-                ref={listRef}
+                ref={setRefs}
                 role="tablist"
                 aria-orientation={orientation}
+                aria-label={ariaLabel}
+                aria-labelledby={ariaLabelledBy}
                 className={cn(
                     "inline-flex items-center",
                     orientation === "horizontal"
                         ? "border-b border-ground-200 dark:border-ground-700"
-                        : "flex-col border-r border-ground-200 dark:border-ground-700 pr-4 min-w-[160px]",
+                        : "flex-col border-r border-ground-200 dark:border-ground-700 pr-4 min-w-40",
                     className
                 )}
                 {...props}
@@ -249,6 +263,7 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
                 type="button"
                 role="tab"
                 aria-selected={isActive}
+                aria-disabled={disabled}
                 aria-controls={`tabpanel-${value}`}
                 data-state={isActive ? "active" : "inactive"}
                 data-disabled={disabled}
@@ -289,8 +304,33 @@ TabsTrigger.displayName = "Tabs.Trigger";
 // TabsContent Component
 const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
     ({ value, className, children, forceMount = false, ...props }, ref) => {
-        const { activeTab } = useTabsContext();
+        const { activeTab, autoFocus } = useTabsContext();
+        const panelRef = useRef<HTMLDivElement>(null);
         const isActive = activeTab === value;
+
+        // Auto-focus the panel when it becomes active (if autoFocus is enabled)
+        useEffect(() => {
+            if (isActive && autoFocus && panelRef.current) {
+                // Small delay to ensure the panel is visible
+                const timer = setTimeout(() => {
+                    panelRef.current?.focus();
+                }, 0);
+                return () => clearTimeout(timer);
+            }
+        }, [isActive, autoFocus]);
+
+        // Callback ref to merge with forwarded ref
+        const setRefs = useCallback(
+            (node: HTMLDivElement | null) => {
+                panelRef.current = node;
+                if (typeof ref === "function") {
+                    ref(node);
+                } else if (ref) {
+                    ref.current = node;
+                }
+            },
+            [ref]
+        );
 
         if (!isActive && !forceMount) {
             return null;
@@ -298,11 +338,11 @@ const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
 
         return (
             <div
-                ref={ref}
+                ref={setRefs}
                 role="tabpanel"
                 aria-labelledby={`tab-${value}`}
                 id={`tabpanel-${value}`}
-                tabIndex={0}
+                tabIndex={isActive ? 0 : undefined}
                 data-state={isActive ? "active" : "inactive"}
                 hidden={!isActive && forceMount}
                 className={cn(

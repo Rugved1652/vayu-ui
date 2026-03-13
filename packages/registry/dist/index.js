@@ -1732,7 +1732,7 @@ function findItem(slug) {
 function findWithDependencies(slug) {
   const item = findItem(slug);
   if (!item) return [];
-  const deps = item.registryDependencies.flatMap(
+  const deps = (item.dependencies?.components ?? []).flatMap(
     (depSlug) => findWithDependencies(depSlug)
   );
   return [...deps, item];

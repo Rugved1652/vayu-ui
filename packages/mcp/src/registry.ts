@@ -1,26 +1,25 @@
 // ============================================================================
-// Vayu UI Registry (MCP)
+// VedUI Registry (MCP)
 // ----------------------------------------------------------------------------
 // Reuse the canonical registry & helpers from the published registry package
 // (`vayu-ui-registry`) so there is a single source of truth.
 // ============================================================================
 
-import type { RegistryItem, ItemType } from "vayu-ui-registry";
+import type { VayuComponentDoc, Registry } from "vayu-ui-registry";
 import {
   registry as cliRegistry,
   findItem as cliFindItem,
   findWithDependencies as cliFindWithDependencies,
 } from "vayu-ui-registry";
 
-export type { RegistryItem, ItemType };
+export type { VayuComponentDoc, Registry };
 
-export const registry: RegistryItem[] = cliRegistry;
+export const registry: Registry = cliRegistry;
 
-export function findItem(slug: string): RegistryItem | undefined {
+export function findItem(slug: string): VayuComponentDoc | undefined {
   return cliFindItem(slug);
 }
 
-export function findWithDependencies(slug: string): RegistryItem[] {
+export function findWithDependencies(slug: string): VayuComponentDoc[] {
   return cliFindWithDependencies(slug);
 }
-
