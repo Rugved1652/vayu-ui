@@ -3,7 +3,7 @@
 "use client";
 import React, { useState } from "react";
 import { Rate } from "vayu-ui";
-import { Heart } from "lucide-react";
+import { Heart, HomeIcon, Star, StarHalf } from "lucide-react";
 
 export default function RateDemo() {
     const [value, setValue] = useState(3);
@@ -111,7 +111,20 @@ export default function RateDemo() {
             {/* Custom Icon */}
             <div className="space-y-2">
                 <h3 className="text-lg font-medium font-primary">Custom Icon</h3>
-                <Rate defaultValue={3} icon={<Heart />} color="error" />
+                <Rate defaultValue={3} icon={<HomeIcon />} />
+            </div>
+
+            {/* Custom Filled & Half Icons */}
+            <div className="space-y-2">
+                <h3 className="text-lg font-medium font-primary">Custom Filled & Half Icons</h3>
+                <Rate
+                    defaultValue={3.5}
+                    allowHalf
+                    icon={<Star className="text-ground-400" />}
+                    filledIcon={<Star className="fill-warning-500 text-warning-500" strokeWidth={0} />}
+                    halfIcon={<StarHalf className="fill-warning-500 text-warning-500" strokeWidth={0} />}
+                />
+                <p className="text-xs text-ground-400 font-secondary">Using custom icons for empty, filled, and half states</p>
             </div>
 
             {/* Error State */}

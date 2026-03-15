@@ -1,13 +1,13 @@
 // packages/ui/src/components/ui/rate.tsx
 
 "use client";
-import { Star } from "lucide-react";
 import React, {
     createContext,
     ReactElement,
     ReactNode,
     useContext,
     useState,
+    useId,
 } from "react";
 
 /**
@@ -18,11 +18,12 @@ import React, {
  * - Full keyboard navigation (Arrow keys, Home, End)
  * - ARIA labels and proper slider semantics
  * - Half-star support with visual feedback
- * - Multiple color variants and sizes
+ * - Multiple sizes
  * - Custom icons support
  * - Read-only and disabled states
  * - Custom text labels for ratings
  * - Screen reader friendly
+ * - Zero external dependencies (Self-contained SVG Icon)
  */
 
 // ============================================================================
@@ -30,14 +31,41 @@ import React, {
 // ============================================================================
 
 type RateSize = "sm" | "md" | "lg" | "xl";
-type RateColor =
-    | "primary"
-    | "secondary"
-    | "warning"
-    | "error"
-    | "info"
-    | "success";
-type RateVariant = "default" | "outlined" | "filled";
+
+// ============================================================================
+// Internal Default Icon (Dependency Free)
+// ============================================================================
+
+interface DefaultIconProps extends React.SVGProps<SVGSVGElement> {
+    size?: number;
+}
+
+const DefaultStar: React.FC<DefaultIconProps> = ({
+    size = 24,
+    className,
+    strokeWidth = 2,
+    style,
+    ...props
+}) => {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+            style={style}
+            {...props}
+        >
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+    );
+};
 
 // ============================================================================
 // Context
@@ -49,19 +77,23 @@ interface RateContextType {
     activeValue: number;
     hoverValue: number | null;
     setHoverValue: (value: number | null) => void;
-    handleClick: (value: number) => void;
+    handleClick: (clickValue: number) => void;
     handleHover: (value: number) => void;
     handleMouseLeave: () => void;
     isDisabled: boolean;
     readOnly: boolean;
     allowHalf: boolean;
     size: RateSize;
-    color: RateColor;
-    variant: RateVariant;
     icon: ReactElement;
+    filledIcon: ReactElement;
+    halfIcon: ReactElement;
     error: boolean;
     labels?: string[];
     getFillPercentage: (starIndex: number) => number;
+    inputId: string;
+    isControlled: boolean;
+    setInternalValue: (value: number) => void;
+    onChange?: (value: number) => void;
 }
 
 const RateContext = createContext<RateContextType | undefined>(undefined);
@@ -75,7 +107,7 @@ const useRate = () => {
 };
 
 // ============================================================================
-// Size & Color Classes
+// Size Classes
 // ============================================================================
 
 const sizeClasses = {
@@ -105,44 +137,6 @@ const sizeClasses = {
     },
 };
 
-const colorClasses = {
-    primary: {
-        filled:
-            "text-primary-500 fill-primary-500 dark:text-primary-400 dark:fill-primary-400",
-        empty: "text-ground-300 dark:text-ground-700",
-        outlined: "text-primary-500 dark:text-primary-400",
-    },
-    secondary: {
-        filled:
-            "text-secondary-500 fill-secondary-500 dark:text-secondary-400 dark:fill-secondary-400",
-        empty: "text-ground-300 dark:text-ground-700",
-        outlined: "text-secondary-500 dark:text-secondary-400",
-    },
-    warning: {
-        filled:
-            "text-warning-500 fill-warning-500 dark:text-warning-400 dark:fill-warning-400",
-        empty: "text-ground-300 dark:text-ground-700",
-        outlined: "text-warning-500 dark:text-warning-400",
-    },
-    error: {
-        filled:
-            "text-error-500 fill-error-500 dark:text-error-400 dark:fill-error-400",
-        empty: "text-ground-300 dark:text-ground-700",
-        outlined: "text-error-500 dark:text-error-400",
-    },
-    info: {
-        filled: "text-info-500 fill-info-500 dark:text-info-400 dark:fill-info-400",
-        empty: "text-ground-300 dark:text-ground-700",
-        outlined: "text-info-500 dark:text-info-400",
-    },
-    success: {
-        filled:
-            "text-success-500 fill-success-500 dark:text-success-400 dark:fill-success-400",
-        empty: "text-ground-300 dark:text-ground-700",
-        outlined: "text-success-500 dark:text-success-400",
-    },
-};
-
 // ============================================================================
 // Main Rate Component
 // ============================================================================
@@ -158,19 +152,17 @@ interface RateRootProps {
     allowHalf?: boolean;
     allowClear?: boolean;
     size?: RateSize;
-    color?: RateColor;
-    variant?: RateVariant;
+    /** Icon for empty/outline state */
     icon?: ReactElement;
+    /** Icon for filled state (defaults to icon) */
+    filledIcon?: ReactElement;
+    /** Icon for half-filled state (defaults to filledIcon) */
+    halfIcon?: ReactElement;
     error?: boolean;
     labels?: string[];
     className?: string;
-    /**
-     * Accessible label for the rating
-     */
+    id?: string;
     "aria-label"?: string;
-    /**
-     * ID of element that labels the rating
-     */
     "aria-labelledby"?: string;
 }
 
@@ -185,22 +177,30 @@ const RateRoot: React.FC<RateRootProps> = ({
     allowHalf = true,
     allowClear = true,
     size = "md",
-    color = "warning",
-    variant = "default",
-    icon = <Star />,
+    icon = <DefaultStar />,
+    filledIcon,
+    halfIcon,
     error = false,
     labels,
     className = "",
+    id,
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledby,
 }) => {
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [hoverValue, setHoverValue] = useState<number | null>(null);
 
+    const generatedId = useId();
+    const inputId = id || generatedId;
+
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : internalValue;
     const activeValue = hoverValue ?? currentValue;
     const isDisabled = disabled || readOnly;
+
+    // Fallback chain: halfIcon -> filledIcon -> icon
+    const resolvedFilledIcon = filledIcon || icon;
+    const resolvedHalfIcon = halfIcon || resolvedFilledIcon;
 
     const getFillPercentage = (starIndex: number): number => {
         if (activeValue >= starIndex) {
@@ -251,12 +251,16 @@ const RateRoot: React.FC<RateRootProps> = ({
         readOnly,
         allowHalf,
         size,
-        color: error ? "error" : color,
-        variant,
         icon,
+        filledIcon: resolvedFilledIcon,
+        halfIcon: resolvedHalfIcon,
         error,
         labels,
         getFillPercentage,
+        inputId,
+        isControlled,
+        setInternalValue,
+        onChange,
     };
 
     return (
@@ -264,7 +268,6 @@ const RateRoot: React.FC<RateRootProps> = ({
             <div
                 className={`w-full ${className}`}
                 role="group"
-                aria-label={ariaLabel || "Rating"}
                 aria-labelledby={ariaLabelledby}
             >
                 {children ? children : <RateStars />}
@@ -283,10 +286,11 @@ interface RateLabelProps {
 }
 
 const RateLabel: React.FC<RateLabelProps> = ({ children, className = "" }) => {
-    const { size } = useRate();
+    const { size, inputId } = useRate();
 
     return (
         <label
+            htmlFor={inputId}
             className={`block font-primary text-ground-700 dark:text-ground-300 font-medium mb-1 ${sizeClasses[size].label} ${className}`}
         >
             {children}
@@ -325,9 +329,6 @@ const RateDescription: React.FC<RateDescriptionProps> = ({
 
 interface RateStarsProps {
     className?: string;
-    /**
-     * Accessible label for the rating slider
-     */
     "aria-label"?: string;
 }
 
@@ -335,27 +336,38 @@ const RateStars: React.FC<RateStarsProps> = ({
     className = "",
     "aria-label": ariaLabel,
 }) => {
-    const { count, activeValue, isDisabled, readOnly, size, handleMouseLeave } =
-        useRate();
+    const {
+        count,
+        currentValue,
+        isDisabled,
+        readOnly,
+        size,
+        handleMouseLeave,
+        allowHalf,
+        inputId,
+        isControlled,
+        setInternalValue,
+        onChange,
+    } = useRate();
+
     const [isFocused, setIsFocused] = useState(false);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        const context = useRate();
-        if (context.isDisabled) return;
+        if (isDisabled) return;
 
-        let newValue = context.currentValue;
-        const step = context.allowHalf ? 0.5 : 1;
+        let newValue = currentValue;
+        const step = allowHalf ? 0.5 : 1;
 
         switch (e.key) {
             case "ArrowRight":
             case "ArrowUp":
                 e.preventDefault();
-                newValue = Math.min(context.currentValue + step, context.count);
+                newValue = Math.min(currentValue + step, count);
                 break;
             case "ArrowLeft":
             case "ArrowDown":
                 e.preventDefault();
-                newValue = Math.max(context.currentValue - step, 0);
+                newValue = Math.max(currentValue - step, 0);
                 break;
             case "Home":
                 e.preventDefault();
@@ -363,30 +375,37 @@ const RateStars: React.FC<RateStarsProps> = ({
                 break;
             case "End":
                 e.preventDefault();
-                newValue = context.count;
+                newValue = count;
                 break;
             default:
                 return;
         }
 
-        context.handleClick(newValue);
+        // Update state directly for keyboard navigation to avoid 'click' toggle logic
+        if (newValue !== currentValue) {
+            if (!isControlled) {
+                setInternalValue(newValue);
+            }
+            onChange?.(newValue);
+        }
     };
 
     return (
         <div
             className={`
-        flex items-center ${sizeClasses[size].gap}
-        ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
-        ${!isDisabled && !readOnly && isFocused ? "ring-2 ring-primary-500 ring-offset-2 rounded" : ""}
-        transition-all duration-200
-        ${className}
-      `}
+                flex items-center ${sizeClasses[size].gap}
+                ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+                ${!isDisabled && !readOnly && isFocused ? "ring-2 ring-primary-500 ring-offset-2 rounded" : ""}
+                transition-all duration-200
+                ${className}
+            `}
             onMouseLeave={handleMouseLeave}
+            id={inputId}
             role="slider"
             aria-label={ariaLabel || "Rating"}
             aria-valuemin={0}
             aria-valuemax={count}
-            aria-valuenow={activeValue}
+            aria-valuenow={currentValue}
             aria-readonly={readOnly}
             aria-disabled={isDisabled}
             tabIndex={isDisabled ? -1 : 0}
@@ -412,23 +431,34 @@ interface RateStarProps {
 const RateStar: React.FC<RateStarProps> = ({ index }) => {
     const {
         size,
-        color,
-        variant,
         icon,
+        filledIcon,
+        halfIcon,
         isDisabled,
         allowHalf,
         getFillPercentage,
         handleHover,
         handleClick,
+        error,
     } = useRate();
 
     const starIndex = index;
     const leftHalfValue = starIndex - 0.5;
     const rightHalfValue = starIndex;
     const fillPercentage = getFillPercentage(starIndex);
-    const currentColor = colorClasses[color];
 
-    const renderIcon = (className: string, isFilled: boolean) => {
+    // Determine which icon to use for the filled layer
+    // Use halfIcon for partial fills, filledIcon for full fills
+    const isPartialFill = fillPercentage > 0 && fillPercentage < 100;
+    const activeFilledIcon = isPartialFill ? halfIcon : filledIcon;
+
+    // Hardcoded Default Styles (Warning/Gold) with Error state support
+    const emptyClasses = "text-ground-300 dark:text-ground-700";
+    const filledClasses = error
+        ? "text-error-500 fill-error-500 dark:text-error-400 dark:fill-error-400"
+        : "text-warning-500 fill-warning-500 dark:text-warning-400 dark:fill-warning-400";
+
+    const renderIcon = (iconElement: ReactElement, className: string, isFilled: boolean) => {
         const iconProps = {
             size: sizeClasses[size].icon,
             className: `${className} transition-all duration-200`,
@@ -437,10 +467,11 @@ const RateStar: React.FC<RateStarProps> = ({ index }) => {
                 height: sizeClasses[size].icon,
                 flexShrink: 0,
             },
-            strokeWidth: variant === "outlined" ? 2 : isFilled ? 0 : 2,
+            // Standard visual: Filled stars remove stroke for a solid look, empty have stroke
+            strokeWidth: isFilled ? 0 : 2,
         };
 
-        return React.cloneElement(icon, iconProps);
+        return React.cloneElement(iconElement, iconProps);
     };
 
     return (
@@ -454,7 +485,7 @@ const RateStar: React.FC<RateStarProps> = ({ index }) => {
         >
             {/* Empty Icon (Background) */}
             <div className="absolute top-0 left-0">
-                {renderIcon(currentColor.empty, false)}
+                {renderIcon(icon, emptyClasses, false)}
             </div>
 
             {/* Filled Icon (Foreground) */}
@@ -462,9 +493,7 @@ const RateStar: React.FC<RateStarProps> = ({ index }) => {
                 className="absolute top-0 left-0 h-full overflow-hidden"
                 style={{ width: `${fillPercentage}%` }}
             >
-                {variant === "outlined"
-                    ? renderIcon(currentColor.outlined, false)
-                    : renderIcon(currentColor.filled, true)}
+                {renderIcon(activeFilledIcon, filledClasses, true)}
             </div>
 
             {/* Interactive Hover Zones */}
@@ -617,7 +646,6 @@ export const Rate = Object.assign(RateRoot, {
 // ============================================================================
 
 export type {
-    RateColor,
     RateContainerProps,
     RateDescriptionProps,
     RateErrorTextProps,
@@ -628,5 +656,4 @@ export type {
     RateStarsProps,
     RateTextLabelProps,
     RateValueProps,
-    RateVariant,
 };
