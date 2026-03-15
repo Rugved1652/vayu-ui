@@ -10,6 +10,7 @@ import {
     useRef,
     useState,
     AnchorHTMLAttributes,
+    useCallback,
 } from "react";
 
 // ============================================================================
@@ -19,6 +20,8 @@ import {
 interface NavbarContextValue {
     mobileOpen: boolean;
     setMobileOpen: (open: boolean) => void;
+    /** Closes the menu and returns focus to the toggle button */
+    closeMenu: () => void;
     menuId: string;
     triggerId: string;
 }
@@ -36,19 +39,41 @@ function useNavbar() {
 }
 
 // ============================================================================
+// Helper: Calculate Scrollbar Width
+// ============================================================================
+
+function getScrollbarWidth() {
+    if (typeof window === "undefined") return 0;
+    return window.innerWidth - document.documentElement.clientWidth;
+}
+
+// ============================================================================
 // Navbar Root
 // ============================================================================
 
 export interface NavbarProps extends HTMLAttributes<HTMLElement> {
-    /** Stick to the top of the viewport */
     sticky?: boolean;
+    mainContentSelector?: string;
 }
 
-function NavbarRoot({ sticky = false, className, children, ...props }: NavbarProps) {
+function NavbarRoot({ 
+    sticky = false, 
+    className, 
+    children, 
+    mainContentSelector = "main", 
+    ...props 
+}: NavbarProps) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const id = useId();
     const menuId = `navbar-menu-${id}`;
     const triggerId = `navbar-trigger-${id}`;
+
+    // FIX: Unified close function to handle state + focus return (WCAG 2.4.3)
+    const closeMenu = useCallback(() => {
+        setMobileOpen(false);
+        // Return focus to the trigger button
+        document.getElementById(triggerId)?.focus();
+    }, [triggerId]);
 
     // Close mobile menu on Escape
     useEffect(() => {
@@ -56,36 +81,50 @@ function NavbarRoot({ sticky = false, className, children, ...props }: NavbarPro
 
         const handleEscape = (e: globalThis.KeyboardEvent) => {
             if (e.key === "Escape") {
-                setMobileOpen(false);
-                // Return focus to the trigger button on close
-                document.getElementById(triggerId)?.focus();
+                closeMenu(); // Use unified close function
             }
         };
         
         document.addEventListener("keydown", handleEscape);
         return () => document.removeEventListener("keydown", handleEscape);
-    }, [mobileOpen, triggerId]);
+    }, [mobileOpen, closeMenu]);
 
-    // Lock body scroll when mobile menu is open
+    // Lock body scroll & Inert background
     useEffect(() => {
-        const originalStyle = window.getComputedStyle(document.body).overflow;
+        const mainContent = document.querySelector(mainContentSelector);
+        
         if (mobileOpen) {
+            const scrollbarWidth = getScrollbarWidth();
+            document.body.style.paddingRight = `${scrollbarWidth}px`;
             document.body.style.overflow = "hidden";
+            
+            if (mainContent) {
+                (mainContent as HTMLElement).inert = true;
+            }
         } else {
             document.body.style.overflow = "";
+            document.body.style.paddingRight = "";
+            
+            if (mainContent) {
+                (mainContent as HTMLElement).inert = false;
+            }
         }
+
         return () => {
-            document.body.style.overflow = originalStyle;
+            document.body.style.overflow = "";
+            document.body.style.paddingRight = "";
+            if (mainContent) {
+                (mainContent as HTMLElement).inert = false;
+            }
         };
-    }, [mobileOpen]);
+    }, [mobileOpen, mainContentSelector]);
 
     return (
-        <NavbarContext.Provider value={{ mobileOpen, setMobileOpen, menuId, triggerId }}>
+        <NavbarContext.Provider value={{ mobileOpen, setMobileOpen, closeMenu, menuId, triggerId }}>
             <nav
                 aria-label="Main navigation"
                 className={clsx(
                     "relative z-40 w-full",
-                    // Default styling only
                     "bg-white dark:bg-ground-950 border-b border-ground-200 dark:border-ground-800",
                     sticky && "sticky top-0",
                     className
@@ -180,7 +219,6 @@ NavbarItems.displayName = "Navbar.Items";
 // ============================================================================
 
 export interface NavbarItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-    /** Highlights the item as the current page */
     active?: boolean;
 }
 
@@ -256,7 +294,7 @@ function NavbarToggle({ className, ...props }: NavbarToggleProps) {
                 <span
                     className={clsx(
                         "block h-0.5 w-5 bg-current transition-all rounded-full",
-                        mobileOpen ? "rotate-45 translate-y-[3px]" : "-translate-y-1"
+                        mobileOpen ? "rotate-45 translate-y-0.75" : "-translate-y-1"
                     )}
                 />
                 <span
@@ -268,7 +306,7 @@ function NavbarToggle({ className, ...props }: NavbarToggleProps) {
                 <span
                     className={clsx(
                         "block h-0.5 w-5 bg-current transition-all rounded-full",
-                        mobileOpen ? "-rotate-45 -translate-y-[3px]" : "translate-y-1"
+                        mobileOpen ? "-rotate-45 -translate-y-0.75" : "translate-y-1"
                     )}
                 />
             </span>
@@ -285,36 +323,44 @@ NavbarToggle.displayName = "Navbar.Toggle";
 export interface NavbarMobileMenuProps extends HTMLAttributes<HTMLDivElement> {}
 
 function NavbarMobileMenu({ className, children, ...props }: NavbarMobileMenuProps) {
-    const { mobileOpen, setMobileOpen, menuId } = useNavbar();
+    const { mobileOpen, closeMenu, menuId } = useNavbar();
     const menuRef = useRef<HTMLDivElement>(null);
+    const closeBtnRef = useRef<HTMLButtonElement>(null);
 
-    // Basic Focus Trap: Keep focus inside the mobile menu while open
+    // Robust Focus Trap & Initial Focus
     useEffect(() => {
         if (!mobileOpen) return;
 
+        // Initial focus to close button
+        const timer = setTimeout(() => {
+            closeBtnRef.current?.focus();
+        }, 50);
+
         const menu = menuRef.current;
         if (!menu) return;
-
-        // Focus the menu container initially to capture tab
-        menu.focus();
 
         const handleTab = (e: globalThis.KeyboardEvent) => {
             if (e.key !== "Tab") return;
 
             const focusableEls = menu.querySelectorAll<HTMLElement>(
-                'a[href], button:not([disabled])'
+                'a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])'
             );
-            const firstFocusable = focusableEls[0];
-            const lastFocusable = focusableEls[focusableEls.length - 1];
+            
+            const visibleFocusable = Array.from(focusableEls).filter(el => 
+                el.offsetParent !== null || el.getAttribute('tabindex') === '0'
+            );
+
+            if (visibleFocusable.length === 0) return;
+
+            const firstFocusable = visibleFocusable[0];
+            const lastFocusable = visibleFocusable[visibleFocusable.length - 1];
 
             if (e.shiftKey) {
-                // Shift + Tab
-                if (document.activeElement === firstFocusable) {
+                if (document.activeElement === firstFocusable || document.activeElement === menu) {
                     e.preventDefault();
                     lastFocusable?.focus();
                 }
             } else {
-                // Tab
                 if (document.activeElement === lastFocusable) {
                     e.preventDefault();
                     firstFocusable?.focus();
@@ -323,7 +369,10 @@ function NavbarMobileMenu({ className, children, ...props }: NavbarMobileMenuPro
         };
 
         menu.addEventListener("keydown", handleTab);
-        return () => menu.removeEventListener("keydown", handleTab);
+        return () => {
+            clearTimeout(timer);
+            menu.removeEventListener("keydown", handleTab);
+        };
     }, [mobileOpen]);
 
     return (
@@ -331,11 +380,11 @@ function NavbarMobileMenu({ className, children, ...props }: NavbarMobileMenuPro
             {/* Backdrop */}
             <div
                 className={clsx(
-                    "fixed inset-0 z-40 bg-ground-950/50 transition-opacity md:hidden",
+                    "fixed inset-0 z-40 bg-ground-950/50 transition-opacity duration-300 md:hidden",
                     mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
                 )}
                 aria-hidden="true"
-                onClick={() => setMobileOpen(false)}
+                onClick={closeMenu} // FIX: Use closeMenu for focus return
             />
 
             {/* Panel */}
@@ -343,7 +392,6 @@ function NavbarMobileMenu({ className, children, ...props }: NavbarMobileMenuPro
                 ref={menuRef}
                 id={menuId}
                 role="dialog"
-                tabIndex={-1} // Required for focus trapping
                 aria-modal="true"
                 aria-label="Navigation menu"
                 className={clsx(
@@ -359,8 +407,9 @@ function NavbarMobileMenu({ className, children, ...props }: NavbarMobileMenuPro
                 {/* Close button */}
                 <div className="flex items-center justify-end p-4 border-b border-ground-200 dark:border-ground-800">
                     <button
+                        ref={closeBtnRef}
                         type="button"
-                        onClick={() => setMobileOpen(false)}
+                        onClick={closeMenu} // FIX: Use closeMenu
                         aria-label="Close navigation menu"
                         className={clsx(
                             "flex items-center justify-center w-9 h-9 rounded transition-colors",
@@ -391,17 +440,16 @@ NavbarMobileMenu.displayName = "Navbar.MobileMenu";
 // ============================================================================
 
 export interface NavbarMobileItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-    /** Highlights the item as the current page */
     active?: boolean;
 }
 
 function NavbarMobileItem({ active = false, className, children, href = "#", ...props }: NavbarMobileItemProps) {
-    const { setMobileOpen } = useNavbar();
+    const { closeMenu } = useNavbar();
 
     return (
         <a
             href={href}
-            onClick={() => setMobileOpen(false)}
+            onClick={closeMenu} // FIX: Use closeMenu for focus return
             className={clsx(
                 "px-4 py-3 rounded text-sm font-medium font-secondary transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",

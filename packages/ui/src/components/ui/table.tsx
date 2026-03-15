@@ -1,6 +1,8 @@
 import React from "react";
 import { cn } from "../ui/utils";
 
+// --- Interfaces ---
+
 interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
     children: React.ReactNode;
     className?: string;
@@ -13,11 +15,11 @@ interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
      */
     "aria-describedby"?: string;
     /**
-     * Total number of columns (for large tables)
+     * Total number of columns (for large/virtualized tables)
      */
     "aria-colcount"?: number;
     /**
-     * Total number of rows (for large tables)
+     * Total number of rows (for large/virtualized tables)
      */
     "aria-rowcount"?: number;
 }
@@ -26,10 +28,10 @@ interface TableCaptionProps extends React.HTMLAttributes<HTMLTableCaptionElement
     children: React.ReactNode;
     className?: string;
     /**
-     * Whether caption should be hidden from screen readers
+     * Visually hides the caption while keeping it accessible to screen readers
      * @default false
      */
-    hidden?: boolean;
+    visuallyHidden?: boolean;
 }
 
 interface TableHeadProps extends React.HTMLAttributes<HTMLTableSectionElement> {
@@ -41,7 +43,7 @@ interface TableBodyProps extends React.HTMLAttributes<HTMLTableSectionElement> {
     children: React.ReactNode;
     className?: string;
     /**
-     * Whether this body contains empty data
+     * Whether this body contains empty data (adds aria-live region)
      */
     empty?: boolean;
 }
@@ -55,7 +57,7 @@ interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
     children: React.ReactNode;
     className?: string;
     /**
-     * Row index for accessibility
+     * Row index for accessibility (useful if rows are virtualized/filtered)
      */
     "aria-rowindex"?: number;
     /**
@@ -63,7 +65,7 @@ interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
      */
     selected?: boolean;
     /**
-     * Whether row can be selected
+     * Whether row can be selected (adds keyboard focus)
      */
     selectable?: boolean;
 }
@@ -81,15 +83,16 @@ interface TableHeaderProps extends React.ThHTMLAttributes<HTMLTableCellElement> 
      */
     "aria-colindex"?: number;
     /**
-     * Sorting state (ascending, descending, none)
+     * Sorting state
      */
     "aria-sort"?: "ascending" | "descending" | "none" | "other";
     /**
-     * Whether column is sortable
+     * Whether column is sortable (adds visual indicator and interaction cues)
      */
     sortable?: boolean;
 }
 
+// Removed manual rowspan/colspan from interface to avoid conflict with React.TdHTMLAttributes
 interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
     children: React.ReactNode;
     className?: string;
@@ -105,48 +108,18 @@ interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
      * Whether cell is a header cell
      */
     headers?: string;
-    /**
-     * Whether cell spans multiple rows
-     */
-    rowspan?: number;
-    /**
-     * Whether cell spans multiple columns
-     */
-    colspan?: number;
 }
+
+// --- Components ---
 
 /**
  * Table Component - Compound Pattern with WCAG 2.2 AA Compliance
- * A flexible, accessible table component with full dark/light mode support.
- * Built with semantic HTML and WCAG 2.2 AA accessibility guidelines.
  *
- * WCAG 2.2 AA Features:
- * - Proper semantic HTML table structure
- * - Scope attributes for header cells
- * - ARIA labels and descriptions
- * - Keyboard navigation support
- * - Sort indicators for sortable columns
- * - Row/column indices for large tables
- * - Focus management for interactive rows
- *
- * @example
- * ```tsx
- * <Table aria-label="User List">
- *   <Table.Caption>User List</Table.Caption>
- *   <Table.Head>
- *     <Table.Row>
- *       <Table.Header scope="col">Name</Table.Header>
- *       <Table.Header scope="col" sortable aria-sort="none">Email</Table.Header>
- *     </Table.Row>
- *   </Table.Head>
- *   <Table.Body>
- *     <Table.Row aria-rowindex="1">
- *       <Table.Cell>John Doe</Table.Cell>
- *       <Table.Cell>john@example.com</Table.Cell>
- *     </Table.Row>
- *   </Table.Body>
- * </Table>
- * ```
+ * Fixes applied:
+ * - Removed redundant region role on wrapper to prevent double announcement.
+ * - Fixed "tabindex" class bug in TableRow (now uses proper attribute).
+ * - Fixed sort icon visibility for unsorted sortable columns.
+ * - Fixed prop naming (visuallyHidden vs hidden).
  */
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
     ({ children, className, "aria-label": ariaLabel, "aria-describedby": ariaDescribedby, "aria-colcount": ariaColcount, "aria-rowcount": ariaRowcount, ...props }, ref) => {
@@ -156,17 +129,12 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
                     "w-full overflow-x-auto rounded border",
                     "border-ground-200 bg-ground-50",
                     "dark:border-ground-700 dark:bg-ground-950",
-                    "shadow-outer",
-                    className
+                    "shadow-outer"
                 )}
-                role="region"
-                aria-label={ariaLabel}
-                aria-describedby={ariaDescribedby}
             >
                 <table
                     ref={ref}
-                    className="w-full border-collapse text-sm font-secondary"
-                    role="table"
+                    className={cn("w-full border-collapse text-sm font-secondary", className)}
                     aria-label={ariaLabel}
                     aria-describedby={ariaDescribedby}
                     aria-colcount={ariaColcount}
@@ -182,22 +150,17 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
 
 Table.displayName = "Table";
 
-/**
- * TableCaption
- * Provides a title or description for the table
- * WCAG 2.2 AA: Captions help screen reader users understand table context
- */
 const TableCaption = React.forwardRef<
     HTMLTableCaptionElement,
     TableCaptionProps
->(({ children, className, hidden = false, ...props }, ref) => {
+>(({ children, className, visuallyHidden = false, ...props }, ref) => {
     return (
         <caption
             ref={ref}
             className={cn(
                 "px-4 py-3 text-left font-primary text-base font-semibold",
                 "text-ground-900 dark:text-ground-50",
-                hidden && "sr-only",
+                visuallyHidden && "sr-only", // Renamed from 'hidden' for clarity
                 className
             )}
             {...props}
@@ -209,11 +172,6 @@ const TableCaption = React.forwardRef<
 
 TableCaption.displayName = "Table.Caption";
 
-/**
- * TableHead
- * Contains header rows with column labels
- * WCAG 2.2 AA: Proper header structure for screen readers
- */
 const TableHead = React.forwardRef<HTMLTableSectionElement, TableHeadProps>(
     ({ children, className, ...props }, ref) => {
         return (
@@ -235,11 +193,6 @@ const TableHead = React.forwardRef<HTMLTableSectionElement, TableHeadProps>(
 
 TableHead.displayName = "Table.Head";
 
-/**
- * TableBody
- * Contains main data rows of table
- * WCAG 2.2 AA: Proper body structure for screen readers
- */
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
     ({ children, className, empty = false, ...props }, ref) => {
         return (
@@ -250,7 +203,6 @@ const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
                     "divide-y divide-ground-200 dark:divide-ground-800",
                     className
                 )}
-                role="rowgroup"
                 aria-live={empty ? "polite" : undefined}
                 {...props}
             >
@@ -262,11 +214,6 @@ const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
 
 TableBody.displayName = "Table.Body";
 
-/**
- * TableFooter
- * Contains summary or total rows at the bottom of table
- * WCAG 2.2 AA: Footer structure for summary information
- */
 const TableFooter = React.forwardRef<HTMLTableSectionElement, TableFooterProps>(
     ({ children, className, ...props }, ref) => {
         return (
@@ -278,7 +225,6 @@ const TableFooter = React.forwardRef<HTMLTableSectionElement, TableFooterProps>(
                     "dark:border-ground-700 dark:bg-ground-900",
                     className
                 )}
-                role="rowgroup"
                 {...props}
             >
                 {children}
@@ -289,11 +235,6 @@ const TableFooter = React.forwardRef<HTMLTableSectionElement, TableFooterProps>(
 
 TableFooter.displayName = "Table.Footer";
 
-/**
- * TableRow
- * Individual row within the table
- * WCAG 2.2 AA: Proper row structure and focus management
- */
 const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
     ({ children, className, "aria-rowindex": ariaRowindex, selected = false, selectable = false, ...props }, ref) => {
         return (
@@ -304,12 +245,12 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
                     "hover:bg-ground-100 dark:hover:bg-ground-900",
                     selected && "bg-ground-200 dark:bg-ground-800",
                     selectable && "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-600 dark:focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
-                    selectable && "tabindex-0",
                     className
                 )}
                 role="row"
                 aria-rowindex={ariaRowindex}
-                aria-selected={selected}
+                aria-selected={selectable ? selected : undefined}
+                tabIndex={selectable ? 0 : undefined} // FIX: Moved from className to proper attribute
                 {...props}
             >
                 {children}
@@ -320,20 +261,26 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
 
 TableRow.displayName = "Table.Row";
 
-/**
- * TableHeader
- * Header cell (th) for column labels
- * WCAG 2.2 AA: Proper scope and ARIA attributes for accessibility
- */
 const TableHeader = React.forwardRef<HTMLTableCellElement, TableHeaderProps>(
     ({ children, className, scope = "col", "aria-colindex": ariaColindex, "aria-sort": ariaSort, sortable = false, ...props }, ref) => {
+        // Determine icon based on state
+        const renderSortIcon = () => {
+            if (!sortable) return null;
+            
+            // Use aria-hidden on the visual icon since the state is exposed via aria-sort
+            if (ariaSort === "ascending") return <span className="ml-2" aria-hidden="true">↑</span>;
+            if (ariaSort === "descending") return <span className="ml-2" aria-hidden="true">↓</span>;
+            // Unsorted but sortable (shows affordance)
+            return <span className="ml-2 opacity-50" aria-hidden="true">↕</span>;
+        };
+
         return (
             <th
                 ref={ref}
                 className={cn(
                     "px-4 py-3 text-left font-primary font-semibold text-sm whitespace-nowrap",
                     "text-ground-700 dark:text-ground-300",
-                    sortable && "cursor-pointer hover:bg-ground-200 dark:hover:bg-ground-800 transition-colors transition-fast",
+                    sortable && "cursor-pointer hover:bg-ground-200 dark:hover:bg-ground-800 transition-colors transition-fast select-none",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-600 dark:focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
                     className
                 )}
@@ -343,12 +290,10 @@ const TableHeader = React.forwardRef<HTMLTableCellElement, TableHeaderProps>(
                 tabIndex={sortable ? 0 : undefined}
                 {...props}
             >
-                {children}
-                {sortable && ariaSort !== "none" && (
-                    <span className="ml-2 inline-block" aria-hidden="true">
-                        {ariaSort === "ascending" ? "↑" : ariaSort === "descending" ? "↓" : "↕"}
-                    </span>
-                )}
+                <div className="inline-flex items-center">
+                    {children}
+                    {renderSortIcon()}
+                </div>
             </th>
         );
     }
@@ -356,13 +301,9 @@ const TableHeader = React.forwardRef<HTMLTableCellElement, TableHeaderProps>(
 
 TableHeader.displayName = "Table.Header";
 
-/**
- * TableCell
- * Data cell (td) containing table content
- * WCAG 2.2 AA: Proper cell structure with ARIA attributes
- */
 const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
-    ({ children, className, "aria-colindex": ariaColindex, "aria-rowindex": ariaRowindex, headers, rowspan, colspan, ...props }, ref) => {
+    ({ children, className, "aria-colindex": ariaColindex, "aria-rowindex": ariaRowindex, headers, ...props }, ref) => {
+        // Note: rowSpan and colSpan are passed via ...props automatically from React.TdHTMLAttributes
         return (
             <td
                 ref={ref}
@@ -374,8 +315,6 @@ const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
                 aria-colindex={ariaColindex}
                 aria-rowindex={ariaRowindex}
                 headers={headers}
-                rowSpan={rowspan}
-                colSpan={colspan}
                 {...props}
             >
                 {children}
@@ -386,16 +325,8 @@ const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
 
 TableCell.displayName = "Table.Cell";
 
-// Attach compound components
-(Table as any).Caption = TableCaption;
-(Table as any).Head = TableHead;
-(Table as any).Body = TableBody;
-(Table as any).Footer = TableFooter;
-(Table as any).Row = TableRow;
-(Table as any).Header = TableHeader;
-(Table as any).Cell = TableCell;
+// --- Compound Component Typing & Exports ---
 
-// Type for compound component
 type TableComponent = React.ForwardRefExoticComponent<
     TableProps & React.RefAttributes<HTMLTableElement>
 > & {
@@ -410,9 +341,16 @@ type TableComponent = React.ForwardRefExoticComponent<
 
 const TableWithCompounds = Table as TableComponent;
 
+TableWithCompounds.Caption = TableCaption;
+TableWithCompounds.Head = TableHead;
+TableWithCompounds.Body = TableBody;
+TableWithCompounds.Footer = TableFooter;
+TableWithCompounds.Row = TableRow;
+TableWithCompounds.Header = TableHeader;
+TableWithCompounds.Cell = TableCell;
+
 export default TableWithCompounds;
 
-// Named exports for alternative import style
 export {
     TableBody,
     TableCaption,

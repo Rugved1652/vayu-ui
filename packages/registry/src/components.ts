@@ -1,6 +1,7 @@
 import { accordionRegistry } from "./Components/accordion.registry";
 import { affixRegistry } from "./Components/affix.registry";
 import { buttongroupRegistry } from "./Components/buttongroup.registry";
+import { cardRegistry } from "./Components/card.registry";
 import { skeletonRegistry } from "./Components/skeleton.registry";
 import type { RegistryItem } from "./index";
 
@@ -356,19 +357,7 @@ affixRegistry,
     },
   },
   buttongroupRegistry,
-  {
-    name: "Card",
-    slug: "card",
-    type: "component",
-    category: "layout",
-    since: "1.0.0",
-    description: "Component from Vayu UI",
-    targetPath: "src/components/ui",
-    fileName: "card.tsx",
-    dependencies: ["clsx"],
-    registryDependencies: [],
-    tags: ["component"],
-  },
+  cardRegistry,
   {
     name: "Carousel",
     slug: "carousel",

@@ -5,7 +5,7 @@ import { Card } from "vayu-ui";
 export default function CardDemo() {
     return (
         <div className="not-prose flex flex-col gap-10 w-full max-w-lg">
-            {/* Elevated (default) */}
+            {/* Default Card */}
             <div>
                 <h2
                     id="card-demo-label"
@@ -13,9 +13,6 @@ export default function CardDemo() {
                 >
                     Card Example
                 </h2>
-                <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
-                    Elevated
-                </h3>
                 <Card>
                     <Card.Media
                         src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80"
@@ -24,16 +21,12 @@ export default function CardDemo() {
                     <Card.Header
                         title="Design Tokens"
                         subtitle="A unified color palette for every surface."
-                        action={<Card.Badge color="primary">New</Card.Badge>}
                     />
                     <Card.Content>
                         Ground, primary, secondary, and semantic colors work
                         seamlessly across light and dark mode.
                     </Card.Content>
-                    <Card.Footer align="between">
-                        <span className="text-xs font-secondary text-ground-400">
-                            Feb 2026
-                        </span>
+                    <Card.Footer>
                         <button className="text-sm font-secondary font-semibold text-primary-600 dark:text-primary-400 hover:underline">
                             Read more →
                         </button>
@@ -41,16 +34,12 @@ export default function CardDemo() {
                 </Card>
             </div>
 
-            {/* Outlined */}
+            {/* Interactive Card */}
             <div>
                 <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
-                    Outlined &amp; Interactive
+                    Interactive
                 </h3>
-                <Card
-                    variant="outlined"
-                    interactive
-                    onClick={() => alert("Clicked!")}
-                >
+                <Card interactive onClick={() => alert("Clicked!")}>
                     <Card.Header
                         title="Click Me"
                         subtitle="This card is focusable and keyboard-accessible."
@@ -62,16 +51,14 @@ export default function CardDemo() {
                 </Card>
             </div>
 
-            {/* Filled + linked */}
+            {/* Linked Card */}
             <div>
                 <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
-                    Filled &amp; Linked
+                    Linked
                 </h3>
                 <Card
-                    variant="filled"
                     href="https://github.com"
                     target="_blank"
-                    size="sm"
                 >
                     <Card.Header
                         title="GitHub"
@@ -80,12 +67,12 @@ export default function CardDemo() {
                 </Card>
             </div>
 
-            {/* Ghost + disabled */}
+            {/* Disabled Card */}
             <div>
                 <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
-                    Ghost &amp; Disabled
+                    Disabled
                 </h3>
-                <Card variant="ghost" disabled interactive>
+                <Card disabled interactive>
                     <Card.Header
                         title="Disabled Card"
                         subtitle="Pointer events are blocked and opacity is reduced."
@@ -96,37 +83,30 @@ export default function CardDemo() {
                 </Card>
             </div>
 
-            {/* Size variants */}
+            {/* Card with Avatar */}
             <div>
                 <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
-                    Size Variants
+                    With Avatar &amp; Action
                 </h3>
-                <div className="flex flex-col gap-4">
-                    <Card size="sm" variant="outlined">
-                        <Card.Header title="Small Card" subtitle="size=&quot;sm&quot;" />
-                    </Card>
-                    <Card size="md" variant="outlined">
-                        <Card.Header title="Medium Card" subtitle="size=&quot;md&quot; (default)" />
-                    </Card>
-                    <Card size="lg" variant="outlined">
-                        <Card.Header title="Large Card" subtitle="size=&quot;lg&quot;" />
-                    </Card>
-                </div>
-            </div>
-
-            {/* Badge colors */}
-            <div>
-                <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
-                    Badge Colors
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                    <Card.Badge color="primary">Primary</Card.Badge>
-                    <Card.Badge color="secondary">Secondary</Card.Badge>
-                    <Card.Badge color="success">Success</Card.Badge>
-                    <Card.Badge color="warning">Warning</Card.Badge>
-                    <Card.Badge color="error">Error</Card.Badge>
-                    <Card.Badge color="info">Info</Card.Badge>
-                </div>
+                <Card>
+                    <Card.Header
+                        avatar={
+                            <div className="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold">
+                                JD
+                            </div>
+                        }
+                        title="John Doe"
+                        subtitle="Software Engineer"
+                        action={
+                            <button className="text-sm text-primary-600 dark:text-primary-400 hover:underline">
+                                Follow
+                            </button>
+                        }
+                    />
+                    <Card.Content>
+                        Building beautiful user interfaces with modern web technologies.
+                    </Card.Content>
+                </Card>
             </div>
         </div>
     );
