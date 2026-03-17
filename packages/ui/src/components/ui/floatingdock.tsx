@@ -1,6 +1,6 @@
 "use client";
 
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import React, {
     ComponentType,
     ElementType,
@@ -71,7 +71,7 @@ const FloatingDock = forwardRef<HTMLElement, FloatingDockProps>(
             <nav
                 ref={ref}
                 aria-label={ariaLabel}
-                className={clsx(
+                className={cn(
                     "fixed top-3 left-1/2 -translate-x-1/2 sm:w-auto w-[90%] z-50",
                     className
                 )}
@@ -141,7 +141,7 @@ const FloatingDock = forwardRef<HTMLElement, FloatingDockProps>(
                                 <span
                                     id={tooltipId}
                                     role="tooltip"
-                                    className={clsx(
+                                    className={cn(
                                         "absolute top-12 left-1/2 -translate-x-1/2 px-3 py-1 bg-ground-900/90 backdrop-blur-lg border border-ground-700/50 rounded-lg text-xs whitespace-nowrap transition-opacity pointer-events-none shadow-lg text-ground-50",
                                         isHovered
                                             ? "opacity-100"

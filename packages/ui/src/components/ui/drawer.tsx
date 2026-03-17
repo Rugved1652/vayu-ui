@@ -19,7 +19,6 @@ import { X } from "lucide-react";
 // ============================================================================
 
 type DrawerSide = "left" | "right" | "top" | "bottom";
-
 interface DrawerContextType {
     open: boolean;
     setOpen: (open: boolean) => void;

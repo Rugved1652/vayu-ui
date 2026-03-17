@@ -8,10 +8,31 @@ import React, {
     forwardRef,
     HTMLAttributes,
     useLayoutEffect,
+    useCallback,
 } from "react";
 import { X } from "lucide-react";
 import { Button } from "./button";
 
+// --- Utility: Merge Refs ---
+// Fixes bug where asChild overwritten the child's existing ref
+function useMergeRefs<T = any>(
+    ...refs: Array<React.MutableRefObject<T> | React.LegacyRef<T> | undefined>
+): React.RefCallback<T> {
+    return useCallback(
+        (node) => {
+            refs.forEach((ref) => {
+                if (typeof ref === "function") {
+                    ref(node);
+                } else if (ref != null) {
+                    (ref as React.MutableRefObject<T | null>).current = node;
+                }
+            });
+        },
+        [refs]
+    );
+}
+
+// --- Context Setup ---
 interface PopoverContextType {
     open: boolean;
     setOpen: (open: boolean) => void;
@@ -30,6 +51,7 @@ const usePopover = () => {
     return context;
 };
 
+// --- Types ---
 export type PopoverVariant = "default" | "bordered" | "elevated";
 
 export interface PopoverProps extends HTMLAttributes<HTMLDivElement> {
@@ -39,6 +61,26 @@ export interface PopoverProps extends HTMLAttributes<HTMLDivElement> {
     onOpenChange?: (open: boolean) => void;
     modal?: boolean;
 }
+
+export interface PopoverTriggerProps extends HTMLAttributes<HTMLElement> {
+    children: React.ReactNode;
+    asChild?: boolean;
+    disabled?: boolean;
+}
+
+export interface PopoverContentProps extends HTMLAttributes<HTMLDivElement> {
+    children: React.ReactNode;
+    align?: "start" | "center" | "end";
+    side?: "top" | "right" | "bottom" | "left";
+    sideOffset?: number;
+    alignOffset?: number;
+    variant?: PopoverVariant;
+    showArrow?: boolean;
+    closeButton?: boolean;
+    avoidCollisions?: boolean;
+}
+
+// --- Components ---
 
 const PopoverRoot = forwardRef<HTMLDivElement, PopoverProps>(
     (
@@ -109,12 +151,6 @@ const PopoverRoot = forwardRef<HTMLDivElement, PopoverProps>(
 
 PopoverRoot.displayName = "Popover";
 
-export interface PopoverTriggerProps extends HTMLAttributes<HTMLElement> {
-    children: React.ReactNode;
-    asChild?: boolean;
-    disabled?: boolean;
-}
-
 const PopoverTrigger = forwardRef<HTMLElement, PopoverTriggerProps>(
     (
         {
@@ -141,9 +177,12 @@ const PopoverTrigger = forwardRef<HTMLElement, PopoverTriggerProps>(
             }
         };
 
+        // Merge internal triggerRef with the ref passed from parent (fixes ref overwriting bug)
+        const mergedRefs = useMergeRefs(triggerRef, ref);
+
         if (asChild && React.isValidElement(children)) {
             return React.cloneElement(children as React.ReactElement<any>, {
-                ref: triggerRef,
+                ref: mergedRefs,
                 onClick: (e: React.MouseEvent) => {
                     (children as React.ReactElement<any>).props.onClick?.(e);
                     handleClick();
@@ -157,7 +196,7 @@ const PopoverTrigger = forwardRef<HTMLElement, PopoverTriggerProps>(
 
         return (
             <Button
-                ref={triggerRef as React.RefObject<HTMLButtonElement>}
+                ref={mergedRefs as React.RefObject<HTMLButtonElement>}
                 onClick={handleClick}
                 onKeyDown={handleKeyDown}
                 type="button"
@@ -175,18 +214,6 @@ const PopoverTrigger = forwardRef<HTMLElement, PopoverTriggerProps>(
 );
 
 PopoverTrigger.displayName = "Popover.Trigger";
-
-export interface PopoverContentProps extends HTMLAttributes<HTMLDivElement> {
-    children: React.ReactNode;
-    align?: "start" | "center" | "end";
-    side?: "top" | "right" | "bottom" | "left";
-    sideOffset?: number;
-    alignOffset?: number;
-    variant?: PopoverVariant;
-    showArrow?: boolean;
-    closeButton?: boolean;
-    avoidCollisions?: boolean;
-}
 
 const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
     (
@@ -220,137 +247,175 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                 "bg-ground-50 dark:bg-ground-900 border border-ground-200 dark:border-ground-700 shadow-outer shadow-lg",
         };
 
+        // Extracted positioning logic to be reused on scroll, resize, and content change
+        const updatePosition = useCallback(() => {
+            if (!triggerRef.current || !contentRef.current) return;
+
+            const triggerRect = triggerRef.current.getBoundingClientRect();
+            const contentRect = contentRef.current.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            let finalSide = side;
+            let top = 0;
+            let left = 0;
+
+            if (avoidCollisions) {
+                const spaceAbove = triggerRect.top;
+                const spaceBelow = viewportHeight - triggerRect.bottom;
+                const spaceLeft = triggerRect.left;
+                const spaceRight = viewportWidth - triggerRect.right;
+
+                if (
+                    side === "bottom" &&
+                    spaceBelow < contentRect.height + sideOffset &&
+                    spaceAbove > spaceBelow
+                ) {
+                    finalSide = "top";
+                } else if (
+                    side === "top" &&
+                    spaceAbove < contentRect.height + sideOffset &&
+                    spaceBelow > spaceAbove
+                ) {
+                    finalSide = "bottom";
+                } else if (
+                    side === "right" &&
+                    spaceRight < contentRect.width + sideOffset &&
+                    spaceLeft > spaceRight
+                ) {
+                    finalSide = "left";
+                } else if (
+                    side === "left" &&
+                    spaceLeft < contentRect.width + sideOffset &&
+                    spaceRight > spaceLeft
+                ) {
+                    finalSide = "right";
+                }
+            }
+
+            setCurrentSide(finalSide);
+
+            switch (finalSide) {
+                case "top":
+                    top = triggerRect.top - contentRect.height - sideOffset;
+                    break;
+                case "bottom":
+                    top = triggerRect.bottom + sideOffset;
+                    break;
+                case "left":
+                    left = triggerRect.left - contentRect.width - sideOffset;
+                    top = triggerRect.top;
+                    break;
+                case "right":
+                    left = triggerRect.right + sideOffset;
+                    top = triggerRect.top;
+                    break;
+            }
+
+            if (finalSide === "top" || finalSide === "bottom") {
+                switch (align) {
+                    case "start":
+                        left = triggerRect.left + alignOffset;
+                        break;
+                    case "center":
+                        left =
+                            triggerRect.left +
+                            triggerRect.width / 2 -
+                            contentRect.width / 2 +
+                            alignOffset;
+                        break;
+                    case "end":
+                        left = triggerRect.right - contentRect.width - alignOffset;
+                        break;
+                }
+
+                if (avoidCollisions) {
+                    if (left < 0) left = 8;
+                    if (left + contentRect.width > viewportWidth)
+                        left = viewportWidth - contentRect.width - 8;
+                }
+            }
+
+            if (finalSide === "left" || finalSide === "right") {
+                switch (align) {
+                    case "start":
+                        top = triggerRect.top + alignOffset;
+                        break;
+                    case "center":
+                        top =
+                            triggerRect.top +
+                            triggerRect.height / 2 -
+                            contentRect.height / 2 +
+                            alignOffset;
+                        break;
+                    case "end":
+                        top = triggerRect.bottom - contentRect.height - alignOffset;
+                        break;
+                }
+
+                if (avoidCollisions) {
+                    if (top < 0) top = 8;
+                    if (top + contentRect.height > viewportHeight)
+                        top = viewportHeight - contentRect.height - 8;
+                }
+            }
+
+            setPosition({ top, left });
+
+            if (showArrow) {
+                const arrowSize = 8;
+                let arrowTop = 0;
+                let arrowLeft = 0;
+
+                if (finalSide === "top" || finalSide === "bottom") {
+                    arrowLeft =
+                        triggerRect.left + triggerRect.width / 2 - left - arrowSize;
+                    arrowTop = finalSide === "bottom" ? -arrowSize : contentRect.height;
+                } else {
+                    arrowTop = triggerRect.top + triggerRect.height / 2 - top - arrowSize;
+                    arrowLeft = finalSide === "right" ? -arrowSize : contentRect.width;
+                }
+
+                setArrowPosition({ top: arrowTop, left: arrowLeft });
+            }
+        }, [align, side, sideOffset, alignOffset, avoidCollisions, showArrow, triggerRef, contentRef]);
+
+        // Fix: Handle scroll and window resize
+        useEffect(() => {
+            if (!open) return;
+
+            const handleUpdate = () => updatePosition();
+
+            window.addEventListener("resize", handleUpdate);
+            // capture: true ensures we catch scroll events inside scrollable containers
+            window.addEventListener("scroll", handleUpdate, true);
+
+            return () => {
+                window.removeEventListener("resize", handleUpdate);
+                window.removeEventListener("scroll", handleUpdate, true);
+            };
+        }, [open, updatePosition]);
+
+        // Fix: Handle content resize (dynamic children)
+        useEffect(() => {
+            if (!open || !contentRef.current) return;
+
+            const observer = new ResizeObserver(() => {
+                updatePosition();
+            });
+
+            observer.observe(contentRef.current);
+
+            return () => observer.disconnect();
+        }, [open, contentRef, updatePosition]);
+
+        // Initial positioning
         useLayoutEffect(() => {
             if (open && triggerRef.current && contentRef.current) {
                 setIsPositioned(false);
-
-                const triggerRect = triggerRef.current.getBoundingClientRect();
-                const contentRect = contentRef.current.getBoundingClientRect();
-                const viewportWidth = window.innerWidth;
-                const viewportHeight = window.innerHeight;
-
-                let finalSide = side;
-                let top = 0;
-                let left = 0;
-
-                if (avoidCollisions) {
-                    const spaceAbove = triggerRect.top;
-                    const spaceBelow = viewportHeight - triggerRect.bottom;
-                    const spaceLeft = triggerRect.left;
-                    const spaceRight = viewportWidth - triggerRect.right;
-
-                    if (
-                        side === "bottom" &&
-                        spaceBelow < contentRect.height + sideOffset &&
-                        spaceAbove > spaceBelow
-                    ) {
-                        finalSide = "top";
-                    } else if (
-                        side === "top" &&
-                        spaceAbove < contentRect.height + sideOffset &&
-                        spaceBelow > spaceAbove
-                    ) {
-                        finalSide = "bottom";
-                    } else if (
-                        side === "right" &&
-                        spaceRight < contentRect.width + sideOffset &&
-                        spaceLeft > spaceRight
-                    ) {
-                        finalSide = "left";
-                    } else if (
-                        side === "left" &&
-                        spaceLeft < contentRect.width + sideOffset &&
-                        spaceRight > spaceLeft
-                    ) {
-                        finalSide = "right";
-                    }
-                }
-
-                setCurrentSide(finalSide);
-
-                switch (finalSide) {
-                    case "top":
-                        top = triggerRect.top - contentRect.height - sideOffset;
-                        break;
-                    case "bottom":
-                        top = triggerRect.bottom + sideOffset;
-                        break;
-                    case "left":
-                        left = triggerRect.left - contentRect.width - sideOffset;
-                        top = triggerRect.top;
-                        break;
-                    case "right":
-                        left = triggerRect.right + sideOffset;
-                        top = triggerRect.top;
-                        break;
-                }
-
-                if (finalSide === "top" || finalSide === "bottom") {
-                    switch (align) {
-                        case "start":
-                            left = triggerRect.left + alignOffset;
-                            break;
-                        case "center":
-                            left =
-                                triggerRect.left +
-                                triggerRect.width / 2 -
-                                contentRect.width / 2 +
-                                alignOffset;
-                            break;
-                        case "end":
-                            left = triggerRect.right - contentRect.width - alignOffset;
-                            break;
-                    }
-
-                    if (avoidCollisions) {
-                        if (left < 0) left = 8;
-                        if (left + contentRect.width > viewportWidth)
-                            left = viewportWidth - contentRect.width - 8;
-                    }
-                }
-
-                if (finalSide === "left" || finalSide === "right") {
-                    switch (align) {
-                        case "start":
-                            top = triggerRect.top + alignOffset;
-                            break;
-                        case "center":
-                            top =
-                                triggerRect.top +
-                                triggerRect.height / 2 -
-                                contentRect.height / 2 +
-                                alignOffset;
-                            break;
-                        case "end":
-                            top = triggerRect.bottom - contentRect.height - alignOffset;
-                            break;
-                    }
-
-                    if (avoidCollisions) {
-                        if (top < 0) top = 8;
-                        if (top + contentRect.height > viewportHeight)
-                            top = viewportHeight - contentRect.height - 8;
-                    }
-                }
-
-                setPosition({ top, left });
-
-                if (showArrow) {
-                    const arrowSize = 8;
-                    let arrowTop = 0;
-                    let arrowLeft = 0;
-
-                    if (finalSide === "top" || finalSide === "bottom") {
-                        arrowLeft =
-                            triggerRect.left + triggerRect.width / 2 - left - arrowSize;
-                        arrowTop = finalSide === "bottom" ? -arrowSize : contentRect.height;
-                    } else {
-                        arrowTop = triggerRect.top + triggerRect.height / 2 - top - arrowSize;
-                        arrowLeft = finalSide === "right" ? -arrowSize : contentRect.width;
-                    }
-
-                    setArrowPosition({ top: arrowTop, left: arrowLeft });
-                }
+                
+                // Calculate immediately
+                updatePosition();
 
                 requestAnimationFrame(() => {
                     setIsPositioned(true);
@@ -359,7 +424,7 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
             } else {
                 setIsPositioned(false);
             }
-        }, [open, align, side, sideOffset, alignOffset, avoidCollisions, showArrow]);
+        }, [open, updatePosition]);
 
         if (!open) return null;
 
