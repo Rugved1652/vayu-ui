@@ -304,6 +304,14 @@
   /* Control speed via --marquee-duration on the parent element.
      e.g. style="--marquee-duration: 30s" for a slower scroll.   */
   --animate-marquee-scroll: marquee-scroll var(--marquee-duration, 20s) linear infinite;
+
+  /* --- Marquee Ping-pong (bounces back and forth) --- */
+  --keyframes-marquee-ping-pong: marquee-ping-pong;
+  @keyframes marquee-ping-pong {
+    0%   { transform: translateX(0);    }
+    100% { transform: translateX(-50%); }
+  }
+  --animate-marquee-ping-pong: marquee-ping-pong var(--marquee-duration, 20s) ease-in-out infinite alternate;
 }
 
 

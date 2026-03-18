@@ -6,6 +6,16 @@ description: A sidebar component that slides in from any direction for navigatio
 import DrawerDemo from '@/components/demos/drawer-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add drawer
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -45,6 +55,31 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
     ```
   </Tab>
 </Tabs>
+
+## Anatomy
+
+```tsx
+<Drawer side="right">
+  <Drawer.Trigger asChild>
+    <Button>Open Drawer</Button>
+  </Drawer.Trigger>
+  <Drawer.Overlay />
+  <Drawer.Content>
+    <Drawer.Header>
+      <Drawer.Title>Title</Drawer.Title>
+      <Drawer.Description>Description goes here.</Drawer.Description>
+    </Drawer.Header>
+    <div className="py-4">
+      {/* Content */}
+    </div>
+    <Drawer.Footer>
+      <Drawer.Close asChild>
+        <Button>Close</Button>
+      </Drawer.Close>
+    </Drawer.Footer>
+  </Drawer.Content>
+</Drawer>
+```
 
 ## Props
 

@@ -1,46 +1,52 @@
 
-
 > vayu-ui-cli@0.0.0 build
 > shx rm -rf dist && tsup
 
-[1G[0K[34mCLI[39m Building entry: src/index.ts, src/registry/templates.ts, src/commands/add.ts, src/commands/create.ts, src/commands/init.ts, src/commands/list.ts, src/commands/update.ts, src/utils/installer.ts
-[34mCLI[39m Using tsconfig: tsconfig.json
-[34mCLI[39m tsup v8.5.1
-[34mCLI[39m Using tsup config: /Users/rugvedpatel/Desktop/Workspace/VedUI/packages/cli/tsup.config.ts
-[34mCLI[39m Target: es2022
-[34mCLI[39m Cleaning output folder
-[34mESM[39m Build start
-[32mESM[39m [1mdist/registry/templates.js     [22m[32m183.00 B[39m
-[32mESM[39m [1mdist/utils/installer.js        [22m[32m343.00 B[39m
-[32mESM[39m [1mdist/index.js                  [22m[32m178.00 B[39m
-[32mESM[39m [1mdist/chunk-67SZWWI6.js         [22m[32m1.31 KB[39m
-[32mESM[39m [1mdist/commands/create.js        [22m[32m5.00 KB[39m
-[32mESM[39m [1mdist/commands/list.js          [22m[32m2.61 KB[39m
-[32mESM[39m [1mdist/commands/update.js        [22m[32m8.27 KB[39m
-[32mESM[39m [1mdist/chunk-Q2PTTYRI.js         [22m[32m195.00 B[39m
-[32mESM[39m [1mdist/chunk-2DSS6QGO.js         [22m[32m3.98 KB[39m
-[32mESM[39m [1mdist/commands/add.js           [22m[32m3.77 KB[39m
-[32mESM[39m [1mdist/commands/init.js          [22m[32m10.90 KB[39m
-[32mESM[39m [1mdist/registry/templates.js.map [22m[32m71.00 B[39m
-[32mESM[39m [1mdist/utils/installer.js.map    [22m[32m71.00 B[39m
-[32mESM[39m [1mdist/index.js.map              [22m[32m71.00 B[39m
-[32mESM[39m [1mdist/chunk-67SZWWI6.js.map     [22m[32m3.34 KB[39m
-[32mESM[39m [1mdist/commands/list.js.map      [22m[32m4.47 KB[39m
-[32mESM[39m [1mdist/commands/update.js.map    [22m[32m17.48 KB[39m
-[32mESM[39m [1mdist/chunk-Q2PTTYRI.js.map     [22m[32m634.00 B[39m
-[32mESM[39m [1mdist/commands/create.js.map    [22m[32m9.64 KB[39m
-[32mESM[39m [1mdist/chunk-2DSS6QGO.js.map     [22m[32m9.14 KB[39m
-[32mESM[39m [1mdist/commands/add.js.map       [22m[32m7.90 KB[39m
-[32mESM[39m [1mdist/commands/init.js.map      [22m[32m17.72 KB[39m
-[32mESM[39m ⚡️ Build success in 78ms
+CLI Building entry: src/index.ts, src/commands/add.ts, src/commands/create.ts, src/commands/init.ts, src/commands/list.ts, src/commands/update.ts, src/registry/templates.ts, src/utils/installer.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: /Users/rugvedpatel/Desktop/Workspace/VedUI/packages/cli/tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+ESM dist/index.js                  178.00 B
+ESM dist/commands/add.js           3.77 KB
+ESM dist/utils/installer.js        343.00 B
+ESM dist/registry/templates.js     183.00 B
+ESM dist/commands/create.js        5.00 KB
+ESM dist/commands/init.js          10.90 KB
+ESM dist/commands/list.js          2.61 KB
+ESM dist/commands/update.js        8.27 KB
+ESM dist/chunk-Q2PTTYRI.js         195.00 B
+ESM dist/chunk-67SZWWI6.js         1.31 KB
+ESM dist/chunk-2DSS6QGO.js         3.98 KB
+ESM dist/index.js.map              71.00 B
+ESM dist/commands/add.js.map       7.90 KB
+ESM dist/utils/installer.js.map    71.00 B
+ESM dist/commands/create.js.map    9.64 KB
+ESM dist/registry/templates.js.map 71.00 B
+ESM dist/commands/update.js.map    17.48 KB
+ESM dist/chunk-Q2PTTYRI.js.map     634.00 B
+ESM dist/commands/init.js.map      17.72 KB
+ESM dist/chunk-67SZWWI6.js.map     3.34 KB
+ESM dist/chunk-2DSS6QGO.js.map     9.14 KB
+ESM dist/commands/list.js.map      4.47 KB
+ESM ⚡️ Build success in 54ms
 DTS Build start
-DTS ⚡️ Build success in 5746ms
-DTS dist/index.d.ts              101.00 B
-DTS dist/registry/templates.d.ts 846.00 B
-DTS dist/commands/add.d.ts       557.00 B
-DTS dist/commands/create.d.ts    678.00 B
-DTS dist/commands/init.d.ts      518.00 B
-DTS dist/commands/list.d.ts      500.00 B
-DTS dist/commands/update.d.ts    681.00 B
-DTS dist/utils/installer.d.ts    993.00 B
-[1G[0K⠙[1G[0K
+src/index.ts(8,15): error TS2305: Module '"vayu-ui-registry"' has no exported member 'ItemType'.
+src/index.ts(8,25): error TS2724: '"vayu-ui-registry"' has no exported member named 'RegistryItem'. Did you mean 'Registry'?
+
+Error: error occurred in dts build
+    at Worker.<anonymous> (/Users/rugvedpatel/Desktop/Workspace/VedUI/packages/cli/node_modules/tsup/dist/index.js:1545:26)
+    at Worker.emit (node:events:519:28)
+    at MessagePort.<anonymous> (node:internal/worker:270:53)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:827:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+DTS Build error
+npm error Lifecycle script `build` failed with error:
+npm error code 1
+npm error path /Users/rugvedpatel/Desktop/Workspace/VedUI/packages/cli
+npm error workspace vayu-ui-cli@0.0.0
+npm error location /Users/rugvedpatel/Desktop/Workspace/VedUI/packages/cli
+npm error command failed
+npm error command sh -c shx rm -rf dist && tsup

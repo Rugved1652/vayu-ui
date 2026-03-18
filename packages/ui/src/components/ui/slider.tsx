@@ -1,7 +1,6 @@
 "use client";
 
 import { clsx } from "clsx";
-import { cva, type VariantProps } from "class-variance-authority";
 import {
     forwardRef,
     HTMLAttributes,
@@ -14,122 +13,20 @@ import {
 } from "react";
 
 // ============================================================================
-// CVA Variants
+// Styles
 // ============================================================================
 
-const sliderTrackVariants = cva(
-    [
-        "relative",
-        "w-full",
-        "grow",
-        "overflow-hidden",
-        "rounded-full",
-        "bg-ground-200",
-        "dark:bg-ground-800",
-    ],
-    {
-        variants: {
-            size: {
-                sm: "h-1",
-                md: "h-1.5",
-                lg: "h-2",
-            },
-        },
-        defaultVariants: {
-            size: "md",
-        },
-    }
-);
+const sliderRootStyles = "relative flex w-full touch-none select-none items-center py-4 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed";
 
-const sliderRangeVariants = cva(
-    ["absolute", "h-full", "bg-primary-500", "dark:bg-primary-500"],
-    {
-        variants: {
-            size: {
-                sm: "",
-                md: "",
-                lg: "",
-            },
-        },
-        defaultVariants: {
-            size: "md",
-        },
-    }
-);
+const sliderTrackStyles = "relative w-full grow overflow-hidden rounded-full h-1.5 bg-ground-200 dark:bg-ground-800";
 
-const sliderThumbVariants = cva(
-    [
-        "absolute",
-        "block",
-        "rounded-full",
-        "border-2",
-        "border-primary-500",
-        "dark:border-primary-400",
-        "bg-white",
-        "dark:bg-ground-950",
-        "shadow-outer",
-        "transition-transform",
-        "duration-150",
-        "ease-in-out",
-        "focus-visible:outline-none",
-        "focus-visible:ring-2",
-        "focus-visible:ring-primary-500",
-        "dark:focus-visible:ring-primary-400",
-        "focus-visible:ring-offset-2",
-        "focus-visible:ring-offset-white",
-        "dark:focus-visible:ring-offset-ground-950",
-        "disabled:pointer-events-none",
-        "disabled:opacity-50",
-    ],
-    {
-        variants: {
-            size: {
-                sm: "h-4 w-4",
-                md: "h-5 w-5",
-                lg: "h-6 w-6",
-            },
-            isDragging: {
-                true: "scale-110 cursor-grabbing",
-                false: "cursor-grab",
-            },
-        },
-        defaultVariants: {
-            size: "md",
-            isDragging: false,
-        },
-    }
-);
+const sliderRangeStyles = "absolute h-full bg-primary-500 dark:bg-primary-500";
 
-const sliderRootVariants = cva(
-    [
-        "relative",
-        "flex",
-        "w-full",
-        "touch-none",
-        "select-none",
-        "items-center",
-        "data-[disabled]:opacity-50",
-        "data-[disabled]:cursor-not-allowed",
-    ],
-    {
-        variants: {
-            size: {
-                sm: "py-3",
-                md: "py-4",
-                lg: "py-5",
-            },
-        },
-        defaultVariants: {
-            size: "md",
-        },
-    }
-);
+const sliderThumbStyles = "absolute block h-5 w-5 rounded-full border-2 border-primary-500 dark:border-primary-400 bg-white dark:bg-ground-950 shadow-outer transition-transform duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-ground-950 disabled:pointer-events-none disabled:opacity-50";
 
 // ============================================================================
 // Types
 // ============================================================================
-
-export type SliderSize = VariantProps<typeof sliderTrackVariants>["size"];
 
 export interface SliderProps
     extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue"> {
@@ -145,8 +42,6 @@ export interface SliderProps
     step?: number;
     /** Disable interaction */
     disabled?: boolean;
-    /** Size of the slider */
-    size?: SliderSize;
     /** Name for form submission */
     name?: string;
     /** Accessible label for the slider */
@@ -185,7 +80,6 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
             max = 100,
             step = 1,
             disabled = false,
-            size = "md",
             name,
             label,
             onValueChange,
@@ -349,10 +243,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
             <div
                 ref={ref}
                 id={sliderId}
-                className={clsx(
-                    sliderRootVariants({ size }),
-                    className
-                )}
+                className={clsx(sliderRootStyles, className)}
                 data-disabled={disabled ? "" : undefined}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
@@ -366,13 +257,13 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 {/* Track */}
                 <div
                     ref={trackRef}
-                    className={sliderTrackVariants({ size })}
+                    className={sliderTrackStyles}
                     aria-hidden="true"
                 >
                     {/* Range Fill */}
                     {values.length > 1 ? (
                         <div
-                            className={sliderRangeVariants({ size })}
+                            className={sliderRangeStyles}
                             style={{
                                 left: `${((values[0] - min) / (max - min)) * 100}%`,
                                 right: `${100 - ((values[values.length - 1] - min) / (max - min)) * 100}%`,
@@ -380,7 +271,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                         />
                     ) : (
                         <div
-                            className={sliderRangeVariants({ size })}
+                            className={sliderRangeStyles}
                             style={{
                                 width: `${((values[0] - min) / (max - min)) * 100}%`,
                             }}
@@ -393,7 +284,10 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                     <div
                         key={index}
                         id={`${sliderId}-thumb-${index}`}
-                        className={sliderThumbVariants({ size, isDragging })}
+                        className={clsx(
+                            sliderThumbStyles,
+                            isDragging ? "scale-110 cursor-grabbing" : "cursor-grab"
+                        )}
                         style={{
                             left: `${((val - min) / (max - min)) * 100}%`,
                             transform: "translateX(-50%)",
@@ -433,8 +327,8 @@ Slider.displayName = "Slider";
 
 export {
     Slider,
-    sliderTrackVariants,
-    sliderRangeVariants,
-    sliderThumbVariants,
-    sliderRootVariants,
+    sliderRootStyles,
+    sliderTrackStyles,
+    sliderRangeStyles,
+    sliderThumbStyles,
 };

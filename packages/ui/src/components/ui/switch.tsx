@@ -1,220 +1,146 @@
 "use client";
 
-import { clsx } from "clsx";
-import { cva, type VariantProps } from "class-variance-authority";
-import { forwardRef, InputHTMLAttributes, ReactNode, useId } from "react";
-
-// ============================================================================
-// CVA Variants
-// ============================================================================
-
-const switchTrackVariants = cva(
-  [
-    "rounded-full",
-    "border-2",
-    "border-transparent",
-    "cursor-pointer",
-    "transition-colors",
-    "duration-200",
-    "ease-in-out",
-    "bg-ground-200",
-    "dark:bg-ground-700",
-    "peer-checked:bg-primary-500",
-    "peer-focus-visible:ring-2",
-    "peer-focus-visible:ring-offset-2",
-    "peer-focus-visible:ring-primary-600",
-    "peer-disabled:opacity-50",
-    "peer-disabled:cursor-not-allowed",
-  ],
-  {
-    variants: {
-      size: {
-        sm: "w-8 h-4",
-        md: "w-11 h-6",
-        lg: "w-14 h-7",
-      },
-      error: {
-        true: "ring-2 ring-error-500",
-        false: "",
-      },
-    },
-    defaultVariants: {
-      size: "md",
-      error: false,
-    },
-  }
-);
-
-const switchThumbVariants = cva(
-  [
-    "block",
-    "rounded-full",
-    "shadow-outer",
-    "ring-0",
-    "transition-transform",
-    "duration-200",
-    "ease-in-out",
-    "pointer-events-none",
-    "bg-ground-50",
-  ],
-  {
-    variants: {
-      size: {
-        sm: "w-3 h-3 translate-x-0.5 peer-checked:translate-x-4 mt-0.5",
-        md: "w-5 h-5 translate-x-0.5 peer-checked:translate-x-5 mt-0.5",
-        lg: "w-6 h-6 translate-x-0.5 peer-checked:translate-x-7 mt-0.5",
-      },
-    },
-    defaultVariants: {
-      size: "md",
-    },
-  }
-);
-
-const labelVariants = cva(
-  [
-    "font-medium",
-    "font-primary",
-    "bg-transparent",
-    "select-none",
-    "cursor-pointer",
-  ],
-  {
-    variants: {
-      size: {
-        sm: "text-xs",
-        md: "text-sm",
-        lg: "text-base",
-      },
-      disabled: {
-        true: "opacity-50 cursor-not-allowed",
-        false: "",
-      },
-      error: {
-        true: "text-error-600 dark:text-error-500",
-        false: "text-ground-900 dark:text-ground-100",
-      },
-    },
-    defaultVariants: {
-      size: "md",
-      disabled: false,
-      error: false,
-    },
-  }
-);
-
-const descriptionVariants = cva(
-  ["font-secondary", "select-none", "text-ground-500 dark:text-ground-400"],
-  {
-    variants: {
-      size: {
-        sm: "text-[10px]",
-        md: "text-xs",
-        lg: "text-sm",
-      },
-      disabled: {
-        true: "opacity-50",
-        false: "",
-      },
-    },
-    defaultVariants: {
-      size: "md",
-      disabled: false,
-    },
-  }
-);
-
-// ============================================================================
-// Types
-// ============================================================================
-
-export type SwitchSize = VariantProps<typeof switchTrackVariants>["size"];
+import { cn } from "./utils";
+import { forwardRef, InputHTMLAttributes, ReactNode, useId, useState } from "react";
 
 export interface SwitchProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
-  /** Size of the switch track and typography */
-  size?: SwitchSize;
-  /** Primary label displayed next to the switch */
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "checked" | "onChange"> {
+  /** Label text displayed next to the switch */
   label?: ReactNode;
-  /** Secondary helper text displayed below the label */
+  /** Description text below the label */
   description?: ReactNode;
-  /** Visual error state indicator */
+  /** Shows error styling */
   error?: boolean;
+  /** Controlled state value */
+  checked?: boolean;
+  /** Default state for uncontrolled mode */
+  defaultChecked?: boolean;
+  /** Callback when state changes */
+  onCheckedChange?: (checked: boolean) => void;
 }
 
-// ============================================================================
-// Component
-// ============================================================================
-
-/**
- * Switch — A toggle control for binary on/off states.
- *
- * Built on native `input[type="checkbox"]` with `role="switch"` for
- * full WCAG 2.2 AA accessibility compliance.
- *
- * @example
- * ```tsx
- * <Switch
- *   label="Enable notifications"
- *   description="Receive email alerts"
- *   defaultChecked
- * />
- * ```
- */
 const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       className,
-      size = "md",
       label,
       description,
       error = false,
       disabled,
       id: idProp,
+      checked: controlledChecked,
+      defaultChecked = false,
+      onCheckedChange,
       ...props
     },
     ref
   ) => {
     const generatedId = useId();
-    const id = idProp || generatedId;
-    const descriptionId = `${id}-description`;
+    const id = idProp ?? generatedId;
+    const labelId = `${id}-label`;
+    const descriptionId = description ? `${id}-description` : undefined;
+
+    // State management
+    const [internalChecked, setInternalChecked] = useState(defaultChecked);
+    const isControlled = controlledChecked !== undefined;
+    const checked = isControlled ? controlledChecked : internalChecked;
+
+    const handleChange = () => {
+      if (disabled) return;
+
+      const newValue = !checked;
+
+      if (!isControlled) {
+        setInternalChecked(newValue);
+      }
+
+      onCheckedChange?.(newValue);
+    };
 
     return (
-      <div className={clsx("inline-flex items-start gap-3", className)}>
-        <div className="relative inline-flex items-center shrink-0">
+      <div className={cn("flex items-start gap-3", className)}>
+        {/* Switch Control */}
+        <label
+          htmlFor={id}
+          className={cn(
+            "inline-flex items-center",
+            disabled ? "cursor-not-allowed" : "cursor-pointer"
+          )}
+        >
+          {/* Hidden Input - Accessibility API */}
           <input
             ref={ref}
             id={id}
             type="checkbox"
             role="switch"
             disabled={disabled}
-            aria-invalid={error}
-            aria-describedby={description ? descriptionId : undefined}
+            aria-checked={checked}
+            aria-invalid={error || undefined}
+            aria-labelledby={label ? labelId : undefined}
+            aria-describedby={descriptionId}
             className="peer sr-only"
+            checked={checked}
+            onChange={handleChange}
             {...props}
           />
-          <div
-            className={switchTrackVariants({ size, error })}
-            aria-hidden="true"
-          >
-            <span className={switchThumbVariants({ size })} />
-          </div>
-        </div>
 
+          {/* Visual Track */}
+          <span
+            aria-hidden="true"
+            className={cn(
+              // Base
+              "relative inline-flex items-center",
+              "w-11 h-6 p-0.5 rounded-full",
+              "transition-colors duration-200 ease-in-out",
+              // Background colors
+              checked ? "bg-primary-600" : "bg-ground-300 dark:bg-ground-700",
+              // Focus visible ring (WCAG 2.2)
+              "peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-primary-500 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-ground-50 dark:peer-focus-visible:ring-offset-ground-950",
+              // Disabled state
+              "peer-disabled:opacity-50",
+              // Error state (only when not checked and not disabled)
+              error && !disabled && !checked && "ring-2 ring-error-500"
+            )}
+          >
+            {/* Thumb - JS conditional since peer-checked doesn't work on nested elements */}
+            <span
+              className={cn(
+                "pointer-events-none",
+                "w-5 h-5 rounded-full",
+                "bg-white shadow-sm",
+                "transition-transform duration-200 ease-in-out",
+                )}
+              style={{ transform: checked ? "translateX(20px)" : "translateX(0)" }}
+            />
+          </span>
+        </label>
+
+        {/* Label & Description */}
         {(label || description) && (
-          <div className="flex flex-col cursor-default">
+          <div className="flex flex-col gap-0.5">
             {label && (
               <label
+                id={labelId}
                 htmlFor={id}
-                className={labelVariants({ size, disabled: !!disabled, error })}
+                className={cn(
+                  "text-sm font-medium select-none",
+                  "text-ground-900 dark:text-ground-100",
+                  disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
+                  error && !disabled && "text-error-600 dark:text-error-400"
+                )}
               >
                 {label}
               </label>
             )}
+
             {description && (
               <p
                 id={descriptionId}
-                className={descriptionVariants({ size, disabled: !!disabled })}
+                className={cn(
+                  "text-xs select-none",
+                  "text-ground-500 dark:text-ground-400",
+                  disabled && "opacity-50"
+                )}
               >
                 {description}
               </p>
@@ -228,4 +154,4 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
 Switch.displayName = "Switch";
 
-export { Switch, switchTrackVariants, switchThumbVariants, labelVariants, descriptionVariants };
+export { Switch };

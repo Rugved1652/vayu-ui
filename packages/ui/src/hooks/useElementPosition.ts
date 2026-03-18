@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, RefObject } from "react";
+import { useEffect, useLayoutEffect, useState, RefObject, useCallback } from "react";
 
 interface Position {
     top: number;
@@ -19,35 +19,48 @@ export const useElementPosition = (
         height: 0,
     });
 
+    const updatePosition = useCallback(() => {
+        if (!triggerRef.current) return;
+
+        const rect = triggerRef.current.getBoundingClientRect();
+        // For position: fixed elements, getBoundingClientRect returns viewport-relative
+        // coordinates, so we don't add scroll offsets
+        setPosition({
+            top: rect.bottom,
+            left: rect.left,
+            width: rect.width,
+            height: rect.height,
+        });
+    }, [triggerRef]);
+
+    // Use useLayoutEffect for initial positioning to prevent flash
+    useLayoutEffect(() => {
+        if (isOpen) {
+            updatePosition();
+        }
+    }, [isOpen, updatePosition]);
+
     useEffect(() => {
         if (!isOpen || !triggerRef.current) return;
-
-        const updatePosition = () => {
-            if (!triggerRef.current) return;
-
-            const rect = triggerRef.current.getBoundingClientRect();
-            setPosition({
-                top: rect.bottom + window.scrollY,
-                left: rect.left + window.scrollX,
-                width: rect.width,
-                height: rect.height,
-            });
-        };
-
-        updatePosition();
 
         const handleUpdate = () => {
             requestAnimationFrame(updatePosition);
         };
 
+        // Scroll listener with capture phase to catch scroll events in nested scrollable containers
         window.addEventListener("scroll", handleUpdate, true);
         window.addEventListener("resize", handleUpdate);
+
+        // ResizeObserver to handle trigger element resize
+        const resizeObserver = new ResizeObserver(handleUpdate);
+        resizeObserver.observe(triggerRef.current);
 
         return () => {
             window.removeEventListener("scroll", handleUpdate, true);
             window.removeEventListener("resize", handleUpdate);
+            resizeObserver.disconnect();
         };
-    }, [isOpen, triggerRef]);
+    }, [isOpen, triggerRef, updatePosition]);
 
     return position;
 };

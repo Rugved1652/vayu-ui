@@ -2,7 +2,7 @@
 
 import { Stepper, Button } from "vayu-ui";
 import { useState } from "react";
-import { User, MapPin, CreditCard, CheckCircle } from "lucide-react";
+import { User, MapPin, CreditCard, CheckCircle, Loader2, AlertCircle } from "lucide-react";
 
 export default function StepperDemo() {
     const [activeStep, setActiveStep] = useState(1);
@@ -32,10 +32,11 @@ export default function StepperDemo() {
 
     return (
         <div className="w-full max-w-3xl not-prose space-y-12">
+            {/* Horizontal Stepper */}
             <div className="space-y-6">
-                <h2 id="stepper-demo-label" className="font-primary text-xl font-semibold text-ground-900 dark:text-ground-100">
+                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300 uppercase tracking-wide">
                     Horizontal Stepper
-                </h2>
+                </h3>
 
                 <div className="flex items-center gap-2">
                     <Button
@@ -56,7 +57,7 @@ export default function StepperDemo() {
                 </div>
 
                 <Stepper.Root activeStep={activeStep} onStepClick={setActiveStep}>
-                    {steps.map((step, index) => (
+                    {steps.map((step) => (
                         <Stepper.Step key={step.title}>
                             <Stepper.Indicator icon={step.icon} />
                             <Stepper.Content>
@@ -68,10 +69,11 @@ export default function StepperDemo() {
                 </Stepper.Root>
             </div>
 
+            {/* Vertical Stepper */}
             <div className="space-y-6">
-                <h2 className="font-primary text-xl font-semibold text-ground-900 dark:text-ground-100">
+                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300 uppercase tracking-wide">
                     Vertical Stepper
-                </h2>
+                </h3>
 
                 <Stepper.Root activeStep={activeStep} orientation="vertical" onStepClick={setActiveStep}>
                     {steps.map((step, index) => (
@@ -82,6 +84,76 @@ export default function StepperDemo() {
                                 <Stepper.Description>
                                     Complete the {step.title.toLowerCase()} step to continue.
                                 </Stepper.Description>
+                            </Stepper.Content>
+                        </Stepper.Step>
+                    ))}
+                </Stepper.Root>
+            </div>
+
+            {/* With Icons */}
+            <div className="space-y-6">
+                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300 uppercase tracking-wide">
+                    With Custom Icons
+                </h3>
+
+                <Stepper.Root activeStep={activeStep}>
+                    {steps.map((step) => (
+                        <Stepper.Step key={step.title}>
+                            <Stepper.Indicator icon={step.icon} />
+                            <Stepper.Content>
+                                <Stepper.Title>{step.title}</Stepper.Title>
+                            </Stepper.Content>
+                        </Stepper.Step>
+                    ))}
+                </Stepper.Root>
+            </div>
+
+            {/* Loading and Error States */}
+            <div className="space-y-6">
+                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300 uppercase tracking-wide">
+                    Loading & Error States
+                </h3>
+
+                <Stepper.Root activeStep={1}>
+                    <Stepper.Step>
+                        <Stepper.Indicator icon={<CheckCircle className="w-5 h-5" />} />
+                        <Stepper.Content>
+                            <Stepper.Title>Completed</Stepper.Title>
+                        </Stepper.Content>
+                    </Stepper.Step>
+                    <Stepper.Step status="loading">
+                        <Stepper.Indicator icon={<Loader2 className="w-5 h-5 animate-spin" />} />
+                        <Stepper.Content>
+                            <Stepper.Title>Loading</Stepper.Title>
+                        </Stepper.Content>
+                    </Stepper.Step>
+                    <Stepper.Step status="error">
+                        <Stepper.Indicator icon={<AlertCircle className="w-5 h-5" />} />
+                        <Stepper.Content>
+                            <Stepper.Title>Error</Stepper.Title>
+                        </Stepper.Content>
+                    </Stepper.Step>
+                    <Stepper.Step>
+                        <Stepper.Indicator>4</Stepper.Indicator>
+                        <Stepper.Content>
+                            <Stepper.Title>Pending</Stepper.Title>
+                        </Stepper.Content>
+                    </Stepper.Step>
+                </Stepper.Root>
+            </div>
+
+            {/* Non-clickable */}
+            <div className="space-y-6">
+                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300 uppercase tracking-wide">
+                    Non-Clickable (Display Only)
+                </h3>
+
+                <Stepper.Root activeStep={2}>
+                    {steps.map((step, index) => (
+                        <Stepper.Step key={step.title}>
+                            <Stepper.Indicator>{index + 1}</Stepper.Indicator>
+                            <Stepper.Content>
+                                <Stepper.Title>{step.title}</Stepper.Title>
                             </Stepper.Content>
                         </Stepper.Step>
                     ))}

@@ -10,6 +10,7 @@ import {
     isValidElement,
     ReactNode,
     useContext,
+    useCallback,
 } from "react";
 import { clsx } from "clsx";
 
@@ -24,9 +25,30 @@ interface StepperContextValue {
     activeStep: number;
     orientation: StepperOrientation;
     onStepClick?: (step: number) => void;
+    totalSteps: number;
 }
 
 const StepperContext = createContext<StepperContextValue | undefined>(undefined);
+
+// Custom hook for type-safe context access
+function useStepperContext() {
+    const context = useContext(StepperContext);
+    if (!context) {
+        throw new Error("Stepper components must be used within a Stepper.Root");
+    }
+    return context;
+}
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+function getStatus(activeStep: number, stepIndex: number, propStatus?: StepperStatus): StepperStatus {
+    if (propStatus) return propStatus;
+    if (activeStep > stepIndex) return "completed";
+    if (activeStep === stepIndex) return "active";
+    return "inactive";
+}
 
 // ============================================================================
 // Root
@@ -39,30 +61,20 @@ interface StepperRootProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const StepperRoot = forwardRef<HTMLDivElement, StepperRootProps>(
-    (
-        {
-            activeStep,
-            orientation = "horizontal",
-            onStepClick,
-            className,
-            children,
-            ...props
-        },
-        ref
-    ) => {
+    ({ activeStep, orientation = "horizontal", onStepClick, className, children, ...props }, ref) => {
         const elements = Children.toArray(children);
+        const totalSteps = elements.length;
+        const completedSteps = Math.min(activeStep, totalSteps);
 
         return (
-            <StepperContext.Provider
-                value={{ activeStep, orientation, onStepClick }}
-            >
+            <StepperContext.Provider value={{ activeStep, orientation, onStepClick, totalSteps }}>
                 <div
                     ref={ref}
                     role="list"
-                    aria-label="Progress steps"
+                    aria-label={`Progress steps, ${completedSteps} of ${totalSteps} completed`}
                     className={clsx(
-                        "flex w-full gap-2",
-                        orientation === "vertical" ? "flex-col" : "flex-row",
+                        "flex w-full",
+                        orientation === "vertical" ? "flex-col" : "flex-row items-start",
                         className
                     )}
                     {...props}
@@ -70,10 +82,10 @@ const StepperRoot = forwardRef<HTMLDivElement, StepperRootProps>(
                     {elements.map((child, index) => {
                         if (!isValidElement(child)) return null;
                         return cloneElement(child, {
-                            // @ts-ignore
                             index,
+                            isFirst: index === 0,
                             isLast: index === elements.length - 1,
-                        });
+                        } as React.HTMLAttributes<HTMLDivElement>);
                     })}
                 </div>
             </StepperContext.Provider>
@@ -88,59 +100,110 @@ StepperRoot.displayName = "Stepper.Root";
 
 interface StepProps extends HTMLAttributes<HTMLDivElement> {
     index?: number;
+    isFirst?: boolean;
     isLast?: boolean;
     status?: StepperStatus;
 }
 
 const Step = forwardRef<HTMLDivElement, StepProps>(
-    (
-        {
-            index = 0,
-            isLast = false,
-            status: propStatus,
-            className,
-            children,
-            onClick,
-            onKeyDown,
-            ...props
-        },
-        ref
-    ) => {
-        const { activeStep, orientation, onStepClick } = useContext(StepperContext)!;
-
-        // Derive status if not explicitly provided
-        let status: StepperStatus = propStatus || "inactive";
-        if (!propStatus) {
-            if (activeStep > index) status = "completed";
-            else if (activeStep === index) status = "active";
-            else status = "inactive";
-        }
-
+    ({ index = 0, isFirst = false, isLast = false, status: propStatus, className, children, onClick, onKeyDown, ...props }, ref) => {
+        const { activeStep, orientation, onStepClick, totalSteps } = useStepperContext();
+        const status = getStatus(activeStep, index, propStatus);
         const isClickable = !!onStepClick;
 
-        const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-            if (onStepClick) {
-                onStepClick(index);
-            }
+        const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+            if (onStepClick) onStepClick(index);
             onClick?.(e);
-        };
+        }, [onStepClick, index, onClick]);
 
-        const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-            if (isClickable && (e.key === "Enter" || e.key === " ")) {
-                e.preventDefault();
-                onStepClick?.(index);
+        const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+            if (!isClickable) {
+                onKeyDown?.(e);
+                return;
+            }
+
+            // Get all clickable steps for arrow navigation
+            const container = e.currentTarget.parentElement;
+            const clickableSteps = container?.querySelectorAll('[role="listitem"][tabindex="0"]') || [];
+            const currentIndex = Array.from(clickableSteps).indexOf(e.currentTarget);
+
+            switch (e.key) {
+                case "Enter":
+                case " ":
+                    e.preventDefault();
+                    onStepClick(index);
+                    break;
+                case "ArrowLeft":
+                    if (orientation === "horizontal" && currentIndex > 0) {
+                        e.preventDefault();
+                        (clickableSteps[currentIndex - 1] as HTMLElement)?.focus();
+                    }
+                    break;
+                case "ArrowRight":
+                    if (orientation === "horizontal" && currentIndex < clickableSteps.length - 1) {
+                        e.preventDefault();
+                        (clickableSteps[currentIndex + 1] as HTMLElement)?.focus();
+                    }
+                    break;
+                case "ArrowUp":
+                    if (orientation === "vertical" && currentIndex > 0) {
+                        e.preventDefault();
+                        (clickableSteps[currentIndex - 1] as HTMLElement)?.focus();
+                    }
+                    break;
+                case "ArrowDown":
+                    if (orientation === "vertical" && currentIndex < clickableSteps.length - 1) {
+                        e.preventDefault();
+                        (clickableSteps[currentIndex + 1] as HTMLElement)?.focus();
+                    }
+                    break;
+                case "Home":
+                    e.preventDefault();
+                    (clickableSteps[0] as HTMLElement)?.focus();
+                    break;
+                case "End":
+                    e.preventDefault();
+                    (clickableSteps[clickableSteps.length - 1] as HTMLElement)?.focus();
+                    break;
             }
             onKeyDown?.(e);
-        };
+        }, [isClickable, onStepClick, index, orientation, onKeyDown]);
+
+        // Clone children to pass status
+        const renderedChildren = Children.map(children, (child) => {
+            if (!isValidElement(child)) return null;
+            return cloneElement(child, { status } as React.HTMLAttributes<HTMLElement>);
+        });
+
+        // Connector color logic
+        const isCompleted = status === "completed" || status === "active";
+        const leftConnectorActive = index > 0 && activeStep >= index;
+        const rightConnectorActive = isCompleted;
+
+        // Horizontal connector classes
+        const horizontalConnectorClasses = (isActive: boolean) => clsx(
+            "h-0.5 flex-1 transition-colors duration-300",
+            isActive
+                ? "bg-primary-500"
+                : "bg-ground-200 dark:bg-ground-700"
+        );
+
+        // Vertical connector classes
+        const verticalConnectorClasses = clsx(
+            "w-0.5 flex-1 min-h-[24px] transition-colors duration-300",
+            isCompleted
+                ? "bg-primary-500"
+                : "bg-ground-200 dark:bg-ground-700"
+        );
 
         return (
             <div
                 ref={ref}
                 role="listitem"
                 className={clsx(
-                    "relative flex",
-                    orientation === "vertical" ? "flex-col" : "items-center flex-1",
-                    !isLast && orientation === "horizontal" && "flex-1",
+                    "group relative",
+                    orientation === "horizontal" && "flex flex-col items-center flex-1 min-w-0",
+                    orientation === "vertical" && "flex flex-row",
                     isClickable && "cursor-pointer",
                     className
                 )}
@@ -148,49 +211,71 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
                 onKeyDown={handleKeyDown}
                 tabIndex={isClickable ? 0 : -1}
                 aria-current={status === "active" ? "step" : undefined}
-                aria-label={`Step ${index + 1}${status === "active" ? ", current" : status === "completed" ? ", completed" : ""}`}
+                aria-posinset={index + 1}
+                aria-setsize={totalSteps}
                 {...props}
             >
-                {/* Horizontal Connector Line */}
-                {!isLast && orientation === "horizontal" && (
-                    <div
-                        className={clsx(
-                            "absolute top-5 left-[calc(50%+20px)] right-[calc(-50%+20px)] h-0.5 -translate-y-1/2 transition-colors duration-300",
-                            status === "completed"
-                                ? "bg-primary-500"
-                                : "bg-ground-200 dark:bg-ground-800"
-                        )}
-                        aria-hidden="true"
-                    />
-                )}
+                {/* Screen reader announcement */}
+                <span className="sr-only">
+                    Step {index + 1} of {totalSteps}, {status}.
+                </span>
 
-                <div
-                    className={clsx(
-                        "flex",
-                        orientation === "vertical" ? "flex-row gap-4" : "flex-col items-center gap-2"
-                    )}
-                >
-                    {/* Render children with context props */}
-                    {Children.map(children, (child) => {
-                        if (!isValidElement(child)) return null;
-                        return cloneElement(child, {
-                            // @ts-ignore
-                            status,
-                        });
-                    })}
-                </div>
+                {orientation === "horizontal" ? (
+                    // === HORIZONTAL LAYOUT ===
+                    <>
+                        {/* Connector Row */}
+                        <div className="flex items-center w-full mb-3">
+                            {/* Left space - connector or invisible spacer */}
+                            {isFirst ? (
+                                <div className="flex-1" />
+                            ) : (
+                                <div className={horizontalConnectorClasses(leftConnectorActive)} />
+                            )}
 
-                {/* Vertical Connector Line */}
-                {!isLast && orientation === "vertical" && (
-                    <div
-                        className={clsx(
-                            "absolute left-5 top-10 bottom-0 w-0.5 -translate-x-1/2 my-2 transition-colors duration-300",
-                            status === "completed"
-                                ? "bg-primary-500"
-                                : "bg-ground-200 dark:bg-ground-800"
-                        )}
-                        aria-hidden="true"
-                    />
+                            {/* Indicator */}
+                            <div className="relative z-10 shrink-0">
+                                {Children.map(renderedChildren, child => 
+                                    isValidElement(child) && child.type === StepIndicator ? child : null
+                                )}
+                            </div>
+
+                            {/* Right space - connector or invisible spacer */}
+                            {isLast ? (
+                                <div className="flex-1" />
+                            ) : (
+                                <div className={horizontalConnectorClasses(rightConnectorActive)} />
+                            )}
+                        </div>
+
+                        {/* Content below indicator */}
+                        <div className="w-full">
+                            {Children.map(renderedChildren, child => 
+                                isValidElement(child) && child.type !== StepIndicator ? child : null
+                            )}
+                        </div>
+                    </>
+                ) : (
+                    // === VERTICAL LAYOUT ===
+                    <>
+                        {/* Left Column: Indicator + Vertical Connector */}
+                        <div className="flex flex-col items-center shrink-0">
+                            {Children.map(renderedChildren, child => 
+                                isValidElement(child) && child.type === StepIndicator ? child : null
+                            )}
+
+                            {/* Vertical Connector - only show if not last step */}
+                            {!isLast && (
+                                <div className={verticalConnectorClasses} />
+                            )}
+                        </div>
+
+                        {/* Right Column: Content */}
+                        <div className="flex-1">
+                            {Children.map(renderedChildren, child => 
+                                isValidElement(child) && child.type !== StepIndicator ? child : null
+                            )}
+                        </div>
+                    </>
                 )}
             </div>
         );
@@ -208,18 +293,19 @@ interface StepIndicatorProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const StepIndicator = forwardRef<HTMLDivElement, StepIndicatorProps>(
-    ({ status, icon, className, children, ...props }, ref) => {
+    ({ status = "inactive", icon, className, children, ...props }, ref) => {
         return (
             <div
                 ref={ref}
                 aria-hidden="true"
                 className={clsx(
-                    "relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 font-secondary font-semibold text-sm",
+                    "relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-150 font-secondary font-semibold text-sm shrink-0",
                     // Focus ring for parent's focus-visible state
                     "group-focus-visible:ring-2 group-focus-visible:ring-primary-500 group-focus-visible:ring-offset-2",
+                    // Status styles with WCAG AA contrast
                     status === "active" && "border-primary-500 bg-primary-500 text-ground-950 ring-4 ring-primary-500/20",
                     status === "completed" && "border-primary-500 bg-primary-500 text-ground-950",
-                    status === "inactive" && "border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900 text-ground-500 dark:text-ground-400",
+                    status === "inactive" && "border-ground-400 dark:border-ground-600 bg-ground-50 dark:bg-ground-900 text-ground-600 dark:text-ground-400",
                     status === "error" && "border-error-500 bg-error-500 text-white",
                     status === "loading" && "border-primary-500 text-primary-500 animate-pulse",
                     className
@@ -240,7 +326,7 @@ const StepIndicator = forwardRef<HTMLDivElement, StepIndicatorProps>(
 StepIndicator.displayName = "Stepper.Indicator";
 
 // ============================================================================
-// StepContent (Label + Description)
+// StepContent
 // ============================================================================
 
 interface StepContentProps extends HTMLAttributes<HTMLDivElement> {
@@ -249,25 +335,28 @@ interface StepContentProps extends HTMLAttributes<HTMLDivElement> {
 
 const StepContent = forwardRef<HTMLDivElement, StepContentProps>(
     ({ status, className, children, ...props }, ref) => {
-        const { orientation } = useContext(StepperContext)!;
+        const { orientation } = useStepperContext();
+
+        // Clone children to pass status
+        const renderedChildren = Children.map(children, (child) => {
+            if (!isValidElement(child)) return null;
+            return cloneElement(child, { status } as React.HTMLAttributes<HTMLElement>);
+        });
+
         return (
             <div
                 ref={ref}
                 className={clsx(
-                    "flex flex-col",
+                    "flex flex-col gap-1",
+                    // Horizontal: Center text under indicator
                     orientation === "horizontal" && "items-center text-center",
-                    orientation === "vertical" && "pt-1 pb-6",
+                    // Vertical: Align text to the right of indicator, with padding
+                    orientation === "vertical" && "pb-8 pl-4 pt-2 flex-1",
                     className
                 )}
                 {...props}
             >
-                {Children.map(children, (child) => {
-                    if (!isValidElement(child)) return null;
-                    return cloneElement(child, {
-                        // @ts-ignore
-                        status,
-                    });
-                })}
+                {renderedChildren}
             </div>
         );
     }
@@ -283,14 +372,16 @@ interface StepTitleProps extends HTMLAttributes<HTMLHeadingElement> {
 }
 
 const StepTitle = forwardRef<HTMLHeadingElement, StepTitleProps>(
-    ({ status, className, children, ...props }, ref) => {
+    ({ status = "inactive", className, children, ...props }, ref) => {
         return (
             <h3
                 ref={ref}
                 className={clsx(
-                    "font-secondary text-sm font-semibold transition-colors duration-200",
-                    status === "active" ? "text-ground-900 dark:text-ground-100" : "text-ground-600 dark:text-ground-400",
-                    status === "completed" && "text-ground-900 dark:text-ground-100",
+                    "font-secondary text-sm font-semibold transition-colors duration-150",
+                    // WCAG AA contrast: 4.5:1 minimum
+                    (status === "active" || status === "completed")
+                        ? "text-ground-900 dark:text-ground-100"
+                        : "text-ground-600 dark:text-ground-400",
                     className
                 )}
                 {...props}
@@ -311,12 +402,15 @@ interface StepDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
 }
 
 const StepDescription = forwardRef<HTMLParagraphElement, StepDescriptionProps>(
-    ({ status, className, children, ...props }, ref) => {
+    ({ className, children, ...props }, ref) => {
+        const { orientation } = useStepperContext();
+
         return (
             <p
                 ref={ref}
                 className={clsx(
-                    "font-secondary text-xs text-ground-500 dark:text-ground-400 max-w-[200px]",
+                    "font-secondary text-xs text-ground-500 dark:text-ground-400",
+                    orientation === "horizontal" && "line-clamp-2",
                     className
                 )}
                 {...props}

@@ -53,27 +53,6 @@ export default function SliderDemo() {
                 />
             </div>
 
-            {/* Size Variants */}
-            <div className="space-y-3">
-                <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
-                    Size Variants
-                </label>
-                <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                        <span className="text-xs font-secondary text-ground-500 w-8">sm</span>
-                        <Slider defaultValue={[30]} size="sm" label="Small slider" className="flex-1" />
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <span className="text-xs font-secondary text-ground-500 w-8">md</span>
-                        <Slider defaultValue={[50]} size="md" label="Medium slider" className="flex-1" />
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <span className="text-xs font-secondary text-ground-500 w-8">lg</span>
-                        <Slider defaultValue={[70]} size="lg" label="Large slider" className="flex-1" />
-                    </div>
-                </div>
-            </div>
-
             {/* Controlled */}
             <div className="space-y-3">
                 <div className="flex justify-between items-center">

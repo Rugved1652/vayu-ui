@@ -20,6 +20,9 @@ interface MenubarContextValue {
     activeMenu: string | null;
     setActiveMenu: (id: string | null) => void;
     closeAllMenus: () => void;
+    registerTrigger: (id: string, ref: React.RefObject<HTMLButtonElement>) => void;
+    unregisterTrigger: (id: string) => void;
+    getAllTriggers: () => Array<{ id: string; ref: React.RefObject<HTMLButtonElement> }>;
 }
 
 interface MenuContextValue {
@@ -27,6 +30,9 @@ interface MenuContextValue {
     setIsOpen: (open: boolean) => void;
     level: number;
     parentId: string;
+    menuRef: React.RefObject<HTMLDivElement | null>;
+    triggerRef: React.RefObject<HTMLButtonElement | null>;
+    handleTypeahead: (key: string) => void;
 }
 
 interface MenubarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -122,9 +128,22 @@ export const Menubar = ({
     ...props
 }: MenubarProps) => {
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
+    const triggersRef = useRef<Map<string, React.RefObject<HTMLButtonElement>>>(new Map());
 
     const closeAllMenus = useCallback(() => {
         setActiveMenu(null);
+    }, []);
+
+    const registerTrigger = useCallback((id: string, ref: React.RefObject<HTMLButtonElement>) => {
+        triggersRef.current.set(id, ref);
+    }, []);
+
+    const unregisterTrigger = useCallback((id: string) => {
+        triggersRef.current.delete(id);
+    }, []);
+
+    const getAllTriggers = useCallback(() => {
+        return Array.from(triggersRef.current.entries()).map(([id, ref]) => ({ id, ref }));
     }, []);
 
     // Close menus when clicking outside
@@ -157,7 +176,15 @@ export const Menubar = ({
 
     return (
         <MenubarContext.Provider
-            value={{ orientation, activeMenu, setActiveMenu, closeAllMenus }}
+            value={{ 
+                orientation, 
+                activeMenu, 
+                setActiveMenu, 
+                closeAllMenus,
+                registerTrigger,
+                unregisterTrigger,
+                getAllTriggers,
+            }}
         >
             <div
                 data-menubar
@@ -189,19 +216,59 @@ const Menu = ({
     className = "",
     ...props
 }: MenuProps) => {
-    const { orientation, activeMenu, setActiveMenu } = useMenubarContext();
+    const { orientation, activeMenu, setActiveMenu, registerTrigger, unregisterTrigger, getAllTriggers } = useMenubarContext();
     const menuId = useId();
+    const triggerId = useId();
     const [isOpen, setIsOpen] = useState(false);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const level = 0;
+    const typeaheadRef = useRef<{ buffer: string; timeout: ReturnType<typeof setTimeout> | null }>({
+        buffer: '',
+        timeout: null
+    });
 
     const position = useElementPosition(triggerRef, isOpen);
+
+    // Register this trigger
+    useEffect(() => {
+        registerTrigger(menuId, triggerRef);
+        return () => unregisterTrigger(menuId);
+    }, [menuId, registerTrigger, unregisterTrigger]);
 
     // Sync with global active menu state
     useEffect(() => {
         setIsOpen(activeMenu === menuId);
     }, [activeMenu, menuId]);
+
+    // Typeahead navigation
+    const handleTypeahead = useCallback((key: string) => {
+        if (!menuRef.current) return;
+
+        // Clear previous timeout
+        if (typeaheadRef.current.timeout) {
+            clearTimeout(typeaheadRef.current.timeout);
+        }
+
+        // Add key to buffer
+        typeaheadRef.current.buffer += key.toLowerCase();
+
+        // Find matching items
+        const items = menuRef.current.querySelectorAll<HTMLElement>(
+            '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+        );
+
+        // Find first item that starts with the buffer
+        const match = Array.from(items).find(item =>
+            item.textContent?.toLowerCase().startsWith(typeaheadRef.current.buffer)
+        );
+        match?.focus();
+
+        // Reset buffer after 500ms
+        typeaheadRef.current.timeout = setTimeout(() => {
+            typeaheadRef.current.buffer = '';
+        }, 500);
+    }, []);
 
     const handleTriggerClick = () => {
         if (disabled) return;
@@ -212,21 +279,71 @@ const Menu = ({
         }
     };
 
+    const focusFirstItem = useCallback(() => {
+        requestAnimationFrame(() => {
+            const firstItem = menuRef.current?.querySelector<HTMLElement>(
+                '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+            );
+            firstItem?.focus();
+        });
+    }, []);
+
+    const focusLastItem = useCallback(() => {
+        requestAnimationFrame(() => {
+            const items = menuRef.current?.querySelectorAll<HTMLElement>(
+                '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+            );
+            const lastItem = items?.[items.length - 1];
+            lastItem?.focus();
+        });
+    }, []);
+
+    // Focus first item when menu opens
+    useEffect(() => {
+        if (isOpen) {
+            focusFirstItem();
+        }
+    }, [isOpen, focusFirstItem]);
+
+    const navigateToAdjacentMenu = useCallback((direction: 'next' | 'prev') => {
+        const triggers = getAllTriggers();
+        const currentIndex = triggers.findIndex(t => t.id === menuId);
+        
+        if (currentIndex === -1) return;
+
+        const targetIndex = direction === 'next' 
+            ? (currentIndex + 1) % triggers.length
+            : currentIndex === 0 ? triggers.length - 1 : currentIndex - 1;
+
+        const targetTrigger = triggers[targetIndex];
+        if (targetTrigger && targetTrigger.ref.current) {
+            // Focus the target trigger
+            targetTrigger.ref.current.focus();
+            // If current menu was open, open the target menu too
+            if (isOpen) {
+                setActiveMenu(targetTrigger.id);
+            }
+        }
+    }, [getAllTriggers, menuId, isOpen, setActiveMenu]);
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (disabled) return;
 
         switch (e.key) {
             case "Enter":
             case " ":
+                e.preventDefault();
+                setActiveMenu(menuId);
+                break;
             case "ArrowDown":
                 e.preventDefault();
                 setActiveMenu(menuId);
-                setTimeout(() => {
-                    const firstItem = menuRef.current?.querySelector<HTMLElement>(
-                        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
-                    );
-                    firstItem?.focus();
-                }, 0);
+                focusFirstItem();
+                break;
+            case "ArrowUp":
+                e.preventDefault();
+                setActiveMenu(menuId);
+                focusLastItem();
                 break;
             case "Escape":
                 e.preventDefault();
@@ -236,31 +353,45 @@ const Menu = ({
             case "ArrowRight":
                 if (orientation === "horizontal") {
                     e.preventDefault();
-                    const nextTrigger =
-                        triggerRef.current?.parentElement?.nextElementSibling?.querySelector(
-                            "button[aria-haspopup]"
-                        );
-                    (nextTrigger as HTMLElement)?.focus();
+                    navigateToAdjacentMenu('next');
                 }
                 break;
             case "ArrowLeft":
                 if (orientation === "horizontal") {
                     e.preventDefault();
-                    const prevTrigger =
-                        triggerRef.current?.parentElement?.previousElementSibling?.querySelector(
-                            "button[aria-haspopup]"
-                        );
-                    (prevTrigger as HTMLElement)?.focus();
+                    navigateToAdjacentMenu('prev');
+                }
+                break;
+            case "Home":
+                if (orientation === "horizontal") {
+                    e.preventDefault();
+                    const triggers = getAllTriggers();
+                    triggers[0]?.ref.current?.focus();
+                }
+                break;
+            case "End":
+                if (orientation === "horizontal") {
+                    e.preventDefault();
+                    const triggers = getAllTriggers();
+                    triggers[triggers.length - 1]?.ref.current?.focus();
                 }
                 break;
         }
     };
 
+    // Handle printable characters for typeahead
+    const handleMenuKeyDown = useCallback((e: React.KeyboardEvent) => {
+        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            handleTypeahead(e.key);
+        }
+    }, [handleTypeahead]);
+
     return (
-        <MenuContext.Provider value={{ isOpen, setIsOpen, level, parentId: menuId }}>
-            <div className={`relative ${className}`} {...props}>
+        <MenuContext.Provider value={{ isOpen, setIsOpen, level, parentId: menuId, menuRef, triggerRef, handleTypeahead }}>
+            <div className={`relative ${className}`} data-menu-id={menuId} {...props}>
                 <button
                     ref={triggerRef}
+                    id={triggerId}
                     className={`
                         text-ground-900 dark:text-ground-100
                         hover:bg-ground-100 dark:hover:bg-ground-800
@@ -277,6 +408,8 @@ const Menu = ({
                     disabled={disabled}
                     aria-haspopup="true"
                     aria-expanded={isOpen}
+                    aria-controls={isOpen ? menuId : undefined}
+                    aria-disabled={disabled || undefined}
                     data-state={isOpen ? "open" : "closed"}
                 >
                     {trigger}
@@ -286,6 +419,7 @@ const Menu = ({
                     <Portal>
                         <div
                             ref={menuRef}
+                            id={menuId}
                             data-menu-portal
                             className={`
                                 fixed min-w-[200px] z-50
@@ -301,6 +435,9 @@ const Menu = ({
                             }}
                             role="menu"
                             aria-orientation="vertical"
+                            aria-labelledby={triggerId}
+                            onKeyDown={handleMenuKeyDown}
+                            tabIndex={-1}
                         >
                             {children}
                         </div>
@@ -322,14 +459,48 @@ const SubMenu = ({
 }: MenuProps) => {
     const parentContext = useMenuContext();
     const submenuId = useId();
+    const triggerId = useId();
     const [isOpen, setIsOpen] = useState(false);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const level = parentContext.level + 1;
     const openTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
     const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const typeaheadRef = useRef<{ buffer: string; timeout: ReturnType<typeof setTimeout> | null }>({
+        buffer: '',
+        timeout: null
+    });
 
     const position = useElementPosition(triggerRef, isOpen);
+
+    // Typeahead navigation
+    const handleTypeahead = useCallback((key: string) => {
+        if (!menuRef.current) return;
+
+        // Clear previous timeout
+        if (typeaheadRef.current.timeout) {
+            clearTimeout(typeaheadRef.current.timeout);
+        }
+
+        // Add key to buffer
+        typeaheadRef.current.buffer += key.toLowerCase();
+
+        // Find matching items
+        const items = menuRef.current.querySelectorAll<HTMLElement>(
+            '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+        );
+
+        // Find first item that starts with the buffer
+        const match = Array.from(items).find(item =>
+            item.textContent?.toLowerCase().startsWith(typeaheadRef.current.buffer)
+        );
+        match?.focus();
+
+        // Reset buffer after 500ms
+        typeaheadRef.current.timeout = setTimeout(() => {
+            typeaheadRef.current.buffer = '';
+        }, 500);
+    }, []);
 
     const handleMouseEnter = () => {
         if (disabled) return;
@@ -346,6 +517,25 @@ const SubMenu = ({
         }, 150);
     };
 
+    const focusFirstItem = useCallback(() => {
+        requestAnimationFrame(() => {
+            const firstItem = menuRef.current?.querySelector<HTMLElement>(
+                '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+            );
+            firstItem?.focus();
+        });
+    }, []);
+
+    const focusLastItem = useCallback(() => {
+        requestAnimationFrame(() => {
+            const items = menuRef.current?.querySelectorAll<HTMLElement>(
+                '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+            );
+            const lastItem = items?.[items.length - 1];
+            lastItem?.focus();
+        });
+    }, []);
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (disabled) return;
 
@@ -354,26 +544,79 @@ const SubMenu = ({
             case " ":
             case "ArrowRight":
                 e.preventDefault();
+                e.stopPropagation(); // Stop propagation to prevent parent menu from handling
                 setIsOpen(true);
-                setTimeout(() => {
-                    const firstItem = menuRef.current?.querySelector<HTMLElement>(
-                        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
-                    );
-                    firstItem?.focus();
-                }, 0);
+                focusFirstItem();
                 break;
             case "ArrowLeft":
                 e.preventDefault();
+                e.stopPropagation();
                 setIsOpen(false);
                 triggerRef.current?.focus();
+                break;
+            case "ArrowDown":
+                e.preventDefault();
+                e.stopPropagation();
+                // Navigate to next item in parent menu
+                const parentMenu = triggerRef.current?.closest('[role="menu"]');
+                const items = parentMenu?.querySelectorAll<HTMLElement>(
+                    '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+                );
+                if (items && items.length > 0) {
+                    const currentIndex = Array.from(items).indexOf(triggerRef.current!);
+                    const nextIndex = (currentIndex + 1) % items.length;
+                    items[nextIndex]?.focus();
+                }
+                break;
+            case "ArrowUp":
+                e.preventDefault();
+                e.stopPropagation();
+                // Navigate to previous item in parent menu
+                const parentMenuUp = triggerRef.current?.closest('[role="menu"]');
+                const itemsUp = parentMenuUp?.querySelectorAll<HTMLElement>(
+                    '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+                );
+                if (itemsUp && itemsUp.length > 0) {
+                    const currentIndex = Array.from(itemsUp).indexOf(triggerRef.current!);
+                    const prevIndex = currentIndex <= 0 ? itemsUp.length - 1 : currentIndex - 1;
+                    itemsUp[prevIndex]?.focus();
+                }
                 break;
             case "Escape":
                 e.preventDefault();
+                e.stopPropagation();
                 setIsOpen(false);
                 triggerRef.current?.focus();
                 break;
+            case "Home":
+                e.preventDefault();
+                e.stopPropagation();
+                const parentMenuHome = triggerRef.current?.closest('[role="menu"]');
+                const itemsHome = parentMenuHome?.querySelectorAll<HTMLElement>(
+                    '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+                );
+                itemsHome?.[0]?.focus();
+                break;
+            case "End":
+                e.preventDefault();
+                e.stopPropagation();
+                const parentMenuEnd = triggerRef.current?.closest('[role="menu"]');
+                const itemsEnd = parentMenuEnd?.querySelectorAll<HTMLElement>(
+                    '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+                );
+                if (itemsEnd && itemsEnd.length > 0) {
+                    itemsEnd[itemsEnd.length - 1]?.focus();
+                }
+                break;
         }
     };
+
+    // Handle printable characters for typeahead on submenu
+    const handleMenuKeyDown = useCallback((e: React.KeyboardEvent) => {
+        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            handleTypeahead(e.key);
+        }
+    }, [handleTypeahead]);
 
     return (
         <MenuContext.Provider
@@ -382,6 +625,9 @@ const SubMenu = ({
                 setIsOpen,
                 level,
                 parentId: submenuId,
+                menuRef,
+                triggerRef,
+                handleTypeahead,
             }}
         >
             <div
@@ -392,6 +638,7 @@ const SubMenu = ({
             >
                 <button
                     ref={triggerRef}
+                    id={triggerId}
                     className={`
                         text-ground-900 dark:text-ground-100
                         hover:bg-ground-100 dark:hover:bg-ground-800
@@ -408,7 +655,10 @@ const SubMenu = ({
                     role="menuitem"
                     aria-haspopup="true"
                     aria-expanded={isOpen}
+                    aria-controls={isOpen ? submenuId : undefined}
+                    aria-disabled={disabled || undefined}
                     data-state={isOpen ? "open" : "closed"}
+                    tabIndex={0}
                 >
                     <span>{trigger}</span>
                     <svg
@@ -431,6 +681,7 @@ const SubMenu = ({
                     <Portal>
                         <div
                             ref={menuRef}
+                            id={submenuId}
                             data-menu-portal
                             className={`
                                 fixed min-w-[200px] z-50
@@ -446,6 +697,9 @@ const SubMenu = ({
                             }}
                             role="menu"
                             aria-orientation="vertical"
+                            aria-labelledby={triggerId}
+                            onKeyDown={handleMenuKeyDown}
+                            tabIndex={-1}
                         >
                             {children}
                         </div>
@@ -468,7 +722,8 @@ const MenuItem = ({
     className = "",
     ...props
 }: MenuItemProps) => {
-    const { closeAllMenus } = useMenubarContext();
+    const { closeAllMenus, orientation, getAllTriggers, activeMenu } = useMenubarContext();
+    const menuContext = useMenuContext();
     const itemRef = useRef<HTMLButtonElement>(null);
 
     const handleClick = () => {
@@ -477,47 +732,118 @@ const MenuItem = ({
         closeAllMenus();
     };
 
+    const navigateToAdjacentMenu = useCallback((direction: 'next' | 'prev') => {
+        const triggers = getAllTriggers();
+        const currentIndex = triggers.findIndex(t => t.id === activeMenu);
+        
+        if (currentIndex === -1) return;
+
+        const targetIndex = direction === 'next' 
+            ? (currentIndex + 1) % triggers.length
+            : currentIndex === 0 ? triggers.length - 1 : currentIndex - 1;
+
+        const targetTrigger = triggers[targetIndex];
+        if (targetTrigger && targetTrigger.ref.current) {
+            // Close current menu and open target menu
+            closeAllMenus();
+            requestAnimationFrame(() => {
+                targetTrigger.ref.current?.click();
+            });
+        }
+    }, [getAllTriggers, activeMenu, closeAllMenus]);
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (disabled) return;
+
+        const menuEl = itemRef.current?.closest('[role="menu"]');
+        const items = menuEl?.querySelectorAll<HTMLElement>(
+            '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+        );
 
         switch (e.key) {
             case "Enter":
             case " ":
                 e.preventDefault();
+                e.stopPropagation();
                 handleClick();
                 break;
             case "ArrowDown":
                 e.preventDefault();
-                const nextItem =
-                    itemRef.current?.parentElement?.nextElementSibling?.querySelector<HTMLElement>(
-                        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
-                    );
-                nextItem?.focus();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    const currentIndex = Array.from(items).indexOf(itemRef.current!);
+                    const nextIndex = (currentIndex + 1) % items.length;
+                    items[nextIndex]?.focus();
+                }
                 break;
             case "ArrowUp":
                 e.preventDefault();
-                const prevItem =
-                    itemRef.current?.parentElement?.previousElementSibling?.querySelector<HTMLElement>(
-                        '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
-                    );
-                prevItem?.focus();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    const currentIndex = Array.from(items).indexOf(itemRef.current!);
+                    const prevIndex = currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
+                    items[prevIndex]?.focus();
+                }
+                break;
+            case "Home":
+                e.preventDefault();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    items[0]?.focus();
+                }
+                break;
+            case "End":
+                e.preventDefault();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    items[items.length - 1]?.focus();
+                }
+                break;
+            case "ArrowRight":
+                // Only navigate to next menubar menu if at level 0 and horizontal orientation
+                if (orientation === "horizontal" && menuContext.level === 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigateToAdjacentMenu('next');
+                }
+                break;
+            case "ArrowLeft":
+                // Only navigate to previous menubar menu if at level 0 and horizontal orientation
+                if (orientation === "horizontal" && menuContext.level === 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigateToAdjacentMenu('prev');
+                }
+                // If in submenu (level > 0), close submenu and return to parent
+                else if (menuContext.level > 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    menuContext.triggerRef.current?.focus();
+                }
+                break;
+            case "Escape":
+                e.preventDefault();
+                e.stopPropagation();
+                closeAllMenus();
+                // Focus the trigger of the top-level menu
+                const topLevelTrigger = menuEl?.closest('[data-menu-id]')?.querySelector<HTMLButtonElement>('[aria-haspopup="true"]');
+                topLevelTrigger?.focus();
                 break;
         }
     };
 
     const itemClasses = danger
-        ? "text-error-600 dark:text-error-400 hover:bg-error-50 dark:hover:bg-error-950"
-        : "text-ground-900 dark:text-ground-100 hover:bg-ground-100 dark:hover:bg-ground-800";
+        ? "text-error-600 dark:text-error-400 hover:bg-error-50 dark:hover:bg-error-950 focus-visible:bg-error-50 focus-visible:text-error-600 dark:focus-visible:bg-error-950 dark:focus-visible:text-error-400"
+        : "text-ground-900 dark:text-ground-100 hover:bg-ground-100 dark:hover:bg-ground-800 focus-visible:bg-primary-50 focus-visible:text-primary-600 dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400";
 
     return (
         <button
             ref={itemRef}
             className={`
                 ${itemClasses}
-                w-full px-3 py-2 text-left text-sm
+                w-full px-3 py-2 text-left text-sm min-h-10
                 duration-[var(--transition-fast)]
-                focus:outline-none focus-visible:bg-primary-50 focus-visible:text-primary-600
-                dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400
+                focus:outline-none
                 disabled:opacity-50 disabled:cursor-not-allowed
                 flex items-center justify-between gap-2
                 ${className}
@@ -526,7 +852,8 @@ const MenuItem = ({
             onKeyDown={handleKeyDown}
             disabled={disabled}
             role="menuitem"
-            tabIndex={disabled ? -1 : 0}
+            aria-disabled={disabled || undefined}
+            tabIndex={0}
             {...props}
         >
             <div className="flex items-center gap-2">
@@ -589,6 +916,8 @@ const MenuCheckboxItem = ({
     className = "",
     ...props
 }: MenuCheckboxItemProps) => {
+    const { orientation, getAllTriggers, activeMenu, closeAllMenus } = useMenubarContext();
+    const menuContext = useMenuContext();
     const itemRef = useRef<HTMLButtonElement>(null);
 
     const handleClick = () => {
@@ -596,30 +925,96 @@ const MenuCheckboxItem = ({
         onCheckedChange?.(!checked);
     };
 
+    const navigateToAdjacentMenu = useCallback((direction: 'next' | 'prev') => {
+        const triggers = getAllTriggers();
+        const currentIndex = triggers.findIndex(t => t.id === activeMenu);
+        
+        if (currentIndex === -1) return;
+
+        const targetIndex = direction === 'next' 
+            ? (currentIndex + 1) % triggers.length
+            : currentIndex === 0 ? triggers.length - 1 : currentIndex - 1;
+
+        const targetTrigger = triggers[targetIndex];
+        if (targetTrigger && targetTrigger.ref.current) {
+            closeAllMenus();
+            requestAnimationFrame(() => {
+                targetTrigger.ref.current?.click();
+            });
+        }
+    }, [getAllTriggers, activeMenu, closeAllMenus]);
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (disabled) return;
+
+        const menuEl = itemRef.current?.closest('[role="menu"]');
+        const items = menuEl?.querySelectorAll<HTMLElement>(
+            '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+        );
 
         switch (e.key) {
             case "Enter":
             case " ":
                 e.preventDefault();
+                e.stopPropagation();
                 handleClick();
                 break;
             case "ArrowDown":
                 e.preventDefault();
-                const nextItem =
-                    itemRef.current?.parentElement?.nextElementSibling?.querySelector<HTMLElement>(
-                        '[role="menuitemcheckbox"]:not([disabled]), [role="menuitem"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
-                    );
-                nextItem?.focus();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    const currentIndex = Array.from(items).indexOf(itemRef.current!);
+                    const nextIndex = (currentIndex + 1) % items.length;
+                    items[nextIndex]?.focus();
+                }
                 break;
             case "ArrowUp":
                 e.preventDefault();
-                const prevItem =
-                    itemRef.current?.parentElement?.previousElementSibling?.querySelector<HTMLElement>(
-                        '[role="menuitemcheckbox"]:not([disabled]), [role="menuitem"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
-                    );
-                prevItem?.focus();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    const currentIndex = Array.from(items).indexOf(itemRef.current!);
+                    const prevIndex = currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
+                    items[prevIndex]?.focus();
+                }
+                break;
+            case "Home":
+                e.preventDefault();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    items[0]?.focus();
+                }
+                break;
+            case "End":
+                e.preventDefault();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    items[items.length - 1]?.focus();
+                }
+                break;
+            case "ArrowRight":
+                if (orientation === "horizontal" && menuContext.level === 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigateToAdjacentMenu('next');
+                }
+                break;
+            case "ArrowLeft":
+                if (orientation === "horizontal" && menuContext.level === 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigateToAdjacentMenu('prev');
+                } else if (menuContext.level > 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    menuContext.triggerRef.current?.focus();
+                }
+                break;
+            case "Escape":
+                e.preventDefault();
+                e.stopPropagation();
+                closeAllMenus();
+                const topLevelTrigger = menuEl?.closest('[data-menu-id]')?.querySelector<HTMLButtonElement>('[aria-haspopup="true"]');
+                topLevelTrigger?.focus();
                 break;
         }
     };
@@ -630,7 +1025,7 @@ const MenuCheckboxItem = ({
             className={`
                 text-ground-900 dark:text-ground-100
                 hover:bg-ground-100 dark:hover:bg-ground-800
-                w-full px-3 py-2 text-left text-sm
+                w-full px-3 py-2 text-left text-sm min-h-10
                 duration-[var(--transition-fast)]
                 focus:outline-none focus-visible:bg-primary-50 focus-visible:text-primary-600
                 dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400
@@ -643,7 +1038,8 @@ const MenuCheckboxItem = ({
             disabled={disabled}
             role="menuitemcheckbox"
             aria-checked={checked}
-            tabIndex={disabled ? -1 : 0}
+            aria-disabled={disabled || undefined}
+            tabIndex={0}
             {...props}
         >
             <div className="flex items-center gap-2">
@@ -719,6 +1115,8 @@ const MenuRadioItem = ({
     className = "",
     ...props
 }: MenuRadioItemProps) => {
+    const { orientation, getAllTriggers, activeMenu, closeAllMenus } = useMenubarContext();
+    const menuContext = useMenuContext();
     const radioContext = useContext(MenuRadioGroupContext);
     const itemRef = useRef<HTMLButtonElement>(null);
 
@@ -729,30 +1127,96 @@ const MenuRadioItem = ({
         radioContext?.onValueChange?.(value);
     };
 
+    const navigateToAdjacentMenu = useCallback((direction: 'next' | 'prev') => {
+        const triggers = getAllTriggers();
+        const currentIndex = triggers.findIndex(t => t.id === activeMenu);
+        
+        if (currentIndex === -1) return;
+
+        const targetIndex = direction === 'next' 
+            ? (currentIndex + 1) % triggers.length
+            : currentIndex === 0 ? triggers.length - 1 : currentIndex - 1;
+
+        const targetTrigger = triggers[targetIndex];
+        if (targetTrigger && targetTrigger.ref.current) {
+            closeAllMenus();
+            requestAnimationFrame(() => {
+                targetTrigger.ref.current?.click();
+            });
+        }
+    }, [getAllTriggers, activeMenu, closeAllMenus]);
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (disabled) return;
+
+        const menuEl = itemRef.current?.closest('[role="menu"]');
+        const items = menuEl?.querySelectorAll<HTMLElement>(
+            '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+        );
 
         switch (e.key) {
             case "Enter":
             case " ":
                 e.preventDefault();
+                e.stopPropagation();
                 handleClick();
                 break;
             case "ArrowDown":
                 e.preventDefault();
-                const nextItem =
-                    itemRef.current?.parentElement?.nextElementSibling?.querySelector<HTMLElement>(
-                        '[role="menuitemradio"]:not([disabled])'
-                    );
-                nextItem?.focus();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    const currentIndex = Array.from(items).indexOf(itemRef.current!);
+                    const nextIndex = (currentIndex + 1) % items.length;
+                    items[nextIndex]?.focus();
+                }
                 break;
             case "ArrowUp":
                 e.preventDefault();
-                const prevItem =
-                    itemRef.current?.parentElement?.previousElementSibling?.querySelector<HTMLElement>(
-                        '[role="menuitemradio"]:not([disabled])'
-                    );
-                prevItem?.focus();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    const currentIndex = Array.from(items).indexOf(itemRef.current!);
+                    const prevIndex = currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
+                    items[prevIndex]?.focus();
+                }
+                break;
+            case "Home":
+                e.preventDefault();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    items[0]?.focus();
+                }
+                break;
+            case "End":
+                e.preventDefault();
+                e.stopPropagation();
+                if (items && items.length > 0) {
+                    items[items.length - 1]?.focus();
+                }
+                break;
+            case "ArrowRight":
+                if (orientation === "horizontal" && menuContext.level === 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigateToAdjacentMenu('next');
+                }
+                break;
+            case "ArrowLeft":
+                if (orientation === "horizontal" && menuContext.level === 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigateToAdjacentMenu('prev');
+                } else if (menuContext.level > 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    menuContext.triggerRef.current?.focus();
+                }
+                break;
+            case "Escape":
+                e.preventDefault();
+                e.stopPropagation();
+                closeAllMenus();
+                const topLevelTrigger = menuEl?.closest('[data-menu-id]')?.querySelector<HTMLButtonElement>('[aria-haspopup="true"]');
+                topLevelTrigger?.focus();
                 break;
         }
     };
@@ -763,7 +1227,7 @@ const MenuRadioItem = ({
             className={`
                 text-ground-900 dark:text-ground-100
                 hover:bg-ground-100 dark:hover:bg-ground-800
-                w-full px-3 py-2 text-left text-sm
+                w-full px-3 py-2 text-left text-sm min-h-10
                 duration-[var(--transition-fast)]
                 focus:outline-none focus-visible:bg-primary-50 focus-visible:text-primary-600
                 dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400
@@ -776,7 +1240,8 @@ const MenuRadioItem = ({
             disabled={disabled}
             role="menuitemradio"
             aria-checked={isChecked}
-            tabIndex={disabled ? -1 : 0}
+            aria-disabled={disabled || undefined}
+            tabIndex={0}
             {...props}
         >
             <div className="flex items-center gap-2">

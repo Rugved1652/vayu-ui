@@ -6,6 +6,16 @@ description: A fixed top-center navigation dock with tooltips, logo slot, divide
 import FloatingDockDemo from '@/components/demos/floatingdock-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init    # Add Theme CSS if not added
+```
+
+```bash
+npx vayu-ui add floatingdock
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -16,57 +26,338 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { FloatingDock } from "@/components/ui/floatingdock"
-    import { Home, Search, Settings } from "lucide-react"
+    "use client";
 
-    const items = [
-      { label: "logo", logoText: "App", href: "/" },
-      { label: "divider" },
-      { icon: Home, label: "Home", href: "/" },
-      { icon: Search, label: "Search", onClick: () => {} },
-      { label: "divider" },
-      { icon: Settings, label: "Settings", href: "/settings" },
-    ]
+    import { FloatingDock } from "vayu-ui"
+    import { Home, Search, Bell, Settings, User, Mail, Heart } from "lucide-react"
 
     export function Example() {
-      return <FloatingDock items={items} aria-label="Main navigation" />
+      const handleClick = (label: string) => {
+        console.log(`Clicked: ${label}`)
+      }
+
+      return (
+        <FloatingDock aria-label="Main navigation">
+          <FloatingDock.Container>
+            <FloatingDock.Logo href="/">App</FloatingDock.Logo>
+            <FloatingDock.Divider />
+            <FloatingDock.Item icon={Home} label="Home" href="/" />
+            <FloatingDock.Item icon={Search} label="Search" onClick={() => handleClick("Search")} />
+            <FloatingDock.Item icon={Mail} label="Messages" onClick={() => handleClick("Messages")} />
+            <FloatingDock.Item icon={Bell} label="Notifications" onClick={() => handleClick("Notifications")} />
+            <FloatingDock.Item icon={Heart} label="Favorites" onClick={() => handleClick("Favorites")} />
+            <FloatingDock.Divider />
+            <FloatingDock.Item icon={User} label="Profile" onClick={() => handleClick("Profile")} />
+            <FloatingDock.Item icon={Settings} label="Settings" onClick={() => handleClick("Settings")} />
+          </FloatingDock.Container>
+        </FloatingDock>
+      )
     }
     ```
   </Tab>
 </Tabs>
 
-## Installation
+## Anatomy
 
-```tsx title="src/components/ui/floatingdock.tsx"
-// Copy the full component code
+```tsx
+<FloatingDock aria-label="Navigation">
+  <FloatingDock.Container>
+    <FloatingDock.Logo href="/">Logo</FloatingDock.Logo>
+    <FloatingDock.Divider />
+    <FloatingDock.Item icon={Home} label="Home" href="/" />
+    <FloatingDock.Item icon={Settings} label="Settings" onClick={() => {}} />
+  </FloatingDock.Container>
+</FloatingDock>
 ```
 
-## Features
+## Accessibility
 
-- Fixed to top-center with glassmorphism backdrop
-- `<nav>` element with `aria-label`
-- Tooltips with `role="tooltip"`, `useId`, and `aria-describedby`
-- Focus & hover trigger tooltips for keyboard access
-- `role="separator"` on dividers
-- Configurable logo with `logoText` prop
-- Custom link component (e.g. Next.js `Link`)
-- `forwardRef` for ref forwarding
+- Full keyboard navigation support (Tab to move between items, Enter/Space to activate)
+- Proper ARIA roles and attributes (`aria-label` on nav, `role="separator"` on dividers)
+- WAI-ARIA navigation pattern compliance
+- Visible focus indicators using focus-visible ring
+- Screen reader compatible with proper labeling
+- `aria-hidden="true"` on decorative icons
+- Tooltips with `role="tooltip"` and `aria-describedby`
 
-## DockItem
+## Props
 
-| Property    | Type                 | Description                                     |
-| :---------- | :------------------- | :----------------------------------------------- |
-| `icon`      | `ComponentType`      | Icon component (e.g. Lucide)                     |
-| `label`     | `string`             | Tooltip text. Use `"divider"` or `"logo"` for special items |
-| `href`      | `string`             | URL — renders as link                            |
-| `onClick`   | `() => void`         | Click handler — renders as button                |
-| `logoText`  | `string`             | Logo text (only when `label === "logo"`)          |
+### FloatingDock
 
-## FloatingDock Props
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | `React.ReactNode` | - | Typically FloatingDock.Container with nested items. Required. |
+| `aria-label` | `string` | `"Floating dock"` | Accessible name for the navigation. |
+| `className` | `string` | - | Additional classes for the nav wrapper. |
 
-| Prop             | Type          | Default           | Description                   |
-| :--------------- | :------------ | :---------------- | :---------------------------- |
-| `items`          | `DockItem[]`  | —                 | Items to render               |
-| `aria-label`     | `string`      | `"Floating dock"` | Accessible name for `<nav>`   |
-| `linkComponent`  | `ElementType` | `"a"`             | Custom link component         |
-| `className`      | `string`      | —                 | Class on the nav wrapper      |
+### FloatingDock.Container
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | `React.ReactNode` | - | FloatingDock.Item, FloatingDock.Logo, and FloatingDock.Divider components. Required. |
+| `linkComponent` | `ElementType` | `Link` | Custom link component for routing (defaults to Next.js Link). |
+| `className` | `string` | - | Additional classes for the container. |
+
+### FloatingDock.Item
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `icon` | `ComponentType<{ className?: string; strokeWidth?: number }>` | - | Icon component (e.g. Lucide icon). |
+| `label` | `string` | - | Tooltip text and aria-label for the item. Required. |
+| `href` | `string` | - | URL — renders item as a link. |
+| `onClick` | `() => void` | - | Click handler — renders item as a button. |
+| `className` | `string` | - | Additional classes for the item. |
+
+### FloatingDock.Logo
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | `React.ReactNode` | - | Logo content (text or image). Required. |
+| `href` | `string` | - | URL for the logo link. |
+| `className` | `string` | - | Additional classes for the logo. |
+
+### FloatingDock.Divider
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `className` | `string` | - | Additional classes for the divider. |
+
+## Source Code
+
+```tsx title="src/components/ui/floatingdock.tsx"
+import React, { Children, HTMLAttributes, ElementType, ComponentType, isValidElement } from "react";
+import Link from "next/link";
+import { cn } from "./utils";
+import { Tooltip } from "./tooltip";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+interface DockBaseProps extends HTMLAttributes<HTMLElement> {
+    children: React.ReactNode;
+    "aria-label"?: string;
+}
+
+interface DockItemProps extends HTMLAttributes<HTMLElement> {
+    icon?: ComponentType<{ className?: string; strokeWidth?: number }>;
+    label: string;
+    href?: string;
+    onClick?: () => void; // Note: Requires client-side boundary where used
+}
+
+interface DockLogoProps extends HTMLAttributes<HTMLElement> {
+    href?: string;
+    children: React.ReactNode;
+}
+
+// Internal prop injected via cloneElement
+interface InjectedDockProps {
+    linkComponent?: ElementType;
+}
+
+// ============================================================================
+// Components
+// ============================================================================
+
+/**
+ * Root Dock Component (Server-Safe)
+ * Does not use Context or forwardRef.
+ */
+const Dock = ({
+    children,
+    className,
+    "aria-label": ariaLabel = "Floating dock",
+    ...props
+}: DockBaseProps) => {
+    // Note: We wrap children handling in a generic div/nav structure
+    return (
+        <nav
+            aria-label={ariaLabel}
+            className={cn(
+                "fixed top-3 left-1/2 -translate-x-1/2 z-50",
+                className
+            )}
+            {...props}
+        >
+            {children}
+        </nav>
+    );
+};
+
+/**
+ * Container for Dock Items
+ * Handles the glassmorphism background and layout.
+ */
+const DockContainer = ({
+    children,
+    className,
+    linkComponent: LinkComponent = Link,
+    ...props
+}: HTMLAttributes<HTMLDivElement> & { linkComponent?: ElementType }) => {
+
+    // We clone children to inject the linkComponent prop so we don't need Context
+    const renderedChildren = Children.map(children, (child) => {
+        if (isValidElement(child)) {
+            // Inject linkComponent into DockItem and DockLogo
+            return React.cloneElement(child as React.ReactElement<InjectedDockProps>, {
+                linkComponent: LinkComponent,
+            });
+        }
+        return child;
+    });
+
+    return (
+        <div
+            className={cn(
+                "flex items-center gap-2 px-3 py-3",
+                "bg-ground-50/80 dark:bg-ground-950/80 backdrop-blur-xl",
+                "border border-ground-200/50 dark:border-ground-800/50",
+                "rounded-2xl shadow-2xl shadow-ground-500/10 dark:shadow-ground-950/20",
+                className
+            )}
+            {...props}
+        >
+            {renderedChildren}
+        </div>
+    );
+};
+
+/**
+ * Interactive Item
+ */
+const DockItem = ({
+    icon: Icon,
+    label,
+    href,
+    onClick,
+    className,
+    linkComponent: LinkComponent = Link,
+    ...props
+}: DockItemProps & InjectedDockProps) => {
+
+    // Common class logic
+    const itemClasses = cn(
+        "group relative p-3 rounded-xl cursor-pointer",
+        "transition-all duration-300 ease-out",
+        // WCAG Focus Indicator (CSS only)
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
+        // Animations (Respects prefers-reduced-motion)
+        "motion-safe:hover:scale-110 motion-safe:hover:-translate-y-2",
+        "bg-transparent hover:bg-ground-200/50 dark:hover:bg-ground-800/50",
+        className
+    );
+
+    const content = (
+        <>
+            {Icon && (
+                <Icon
+                    className="w-5 h-5 text-ground-600 dark:text-ground-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
+                    strokeWidth={1.5}
+                    aria-hidden="true"
+                />
+            )}
+        </>
+    );
+
+    if (href) {
+        return (
+            <Tooltip content={label} position="bottom">
+                <LinkComponent
+                    href={href}
+                    className={itemClasses}
+                    onClick={onClick}
+                    aria-label={label}
+                    {...props}
+                >
+                    {content}
+                </LinkComponent>
+            </Tooltip>
+        );
+    }
+
+    return (
+        <Tooltip content={label} position="bottom">
+            <button
+                type="button"
+                className={itemClasses}
+                onClick={onClick}
+                aria-label={label}
+                {...props}
+            >
+                {content}
+            </button>
+        </Tooltip>
+    );
+};
+
+/**
+ * Logo Item
+ */
+const DockLogo = ({
+    href,
+    children,
+    className,
+    linkComponent: LinkComponent = Link,
+    ...props
+}: DockLogoProps & InjectedDockProps) => {
+
+    const logoClasses = cn(
+        "px-4 py-2 text-xl font-bold tracking-wider font-mono",
+        "text-ground-900 dark:text-ground-100",
+        "hover:text-primary-600 transition-colors",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-lg",
+        className
+    );
+
+    if (href) {
+        return (
+            <LinkComponent
+                href={href}
+                className={logoClasses}
+                aria-label="Home"
+                {...props}
+            >
+                {children}
+            </LinkComponent>
+        );
+    }
+
+    return (
+        <div className={logoClasses} {...props}>
+            {children}
+        </div>
+    );
+};
+
+/**
+ * Divider
+ */
+const DockDivider = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => {
+    return (
+        <div
+            role="separator"
+            aria-orientation="vertical"
+            className={cn(
+                "w-px h-8 mx-1 self-center",
+                "bg-ground-200/50 dark:bg-ground-800/50",
+                className
+            )}
+            {...props}
+        />
+    );
+};
+
+// ============================================================================
+// Exports
+// ============================================================================
+
+const FloatingDock = Object.assign(Dock, {
+    Container: DockContainer,
+    Item: DockItem,
+    Logo: DockLogo,
+    Divider: DockDivider,
+});
+
+export { FloatingDock };
+```

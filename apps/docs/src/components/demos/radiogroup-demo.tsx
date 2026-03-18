@@ -1,17 +1,15 @@
 "use client";
 
 import { RadioGroup } from "vayu-ui";
-import { CreditCard, Landmark, Wallet } from "lucide-react";
 import { useState } from "react";
 
 export default function RadioGroupDemo() {
     const [plan, setPlan] = useState("pro");
-    const [payment, setPayment] = useState("card");
-    const [size, setSize] = useState("md");
+    const [priority, setPriority] = useState("");
 
     return (
         <div className="not-prose flex flex-col gap-10 w-full max-w-md">
-            {/* Default Variant */}
+            {/* Basic RadioGroup */}
             <RadioGroup
                 label="Subscription Plan"
                 description="Choose the plan that fits your needs."
@@ -36,42 +34,13 @@ export default function RadioGroupDemo() {
                 />
             </RadioGroup>
 
-            {/* Card Variant */}
-            <RadioGroup
-                label="Payment Method"
-                variant="card"
-                value={payment}
-                onChange={setPayment}
-                color="success"
-            >
-                <RadioGroup.Item
-                    value="card"
-                    label="Credit Card"
-                    description="Pay with Visa, Mastercard, or AMEX."
-                    icon={<CreditCard className="w-5 h-5" />}
-                />
-                <RadioGroup.Item
-                    value="bank"
-                    label="Bank Transfer"
-                    description="Direct transfer from your bank account."
-                    icon={<Landmark className="w-5 h-5" />}
-                />
-                <RadioGroup.Item
-                    value="wallet"
-                    label="Digital Wallet"
-                    description="Apple Pay, Google Pay, or PayPal."
-                    icon={<Wallet className="w-5 h-5" />}
-                />
-            </RadioGroup>
-
-            {/* Button Variant */}
+            {/* Horizontal Orientation */}
             <RadioGroup
                 label="Size"
-                variant="button"
+                description="Select your preferred size."
                 orientation="horizontal"
-                value={size}
-                onChange={setSize}
-                color="info"
+                value={priority}
+                onChange={setPriority}
             >
                 <RadioGroup.Item value="sm" label="Small" />
                 <RadioGroup.Item value="md" label="Medium" />
@@ -82,9 +51,9 @@ export default function RadioGroupDemo() {
             {/* Error State */}
             <RadioGroup
                 label="Priority"
+                description="Select a priority level for your ticket."
                 error
                 errorText="Please select a priority level."
-                color="error"
             >
                 <RadioGroup.Item value="low" label="Low" />
                 <RadioGroup.Item value="medium" label="Medium" />
