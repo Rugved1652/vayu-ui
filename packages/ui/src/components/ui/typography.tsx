@@ -41,37 +41,36 @@ type CodeProps = BaseTypographyProps & React.HTMLAttributes<HTMLElement> & {
 };
 
 // Helper to map variant to Tailwind CSS classes with WCAG 2.2 AA contrast compliance
+// Uses semantic design tokens from the design system
 // WCAG 2.2 AA requires: 4.5:1 for normal text, 3:1 for large text (18pt+ or 14pt bold)
 const getVariantClasses = (variant: BaseTypographyProps["variant"]) => {
     switch (variant) {
         case "primary":
-            // High contrast default - meets 7:1+ (AAA)
-            return "text-ground-900 dark:text-ground-50";
+            // High contrast default - canvas-content provides optimal readability
+            return "text-canvas-content";
         case "secondary":
-            // WCAG 2.2 AA compliant - 4.5:1+ contrast
-            return "text-primary-700 dark:text-primary-300";
+            // De-emphasized text - muted-content for secondary labels
+            return "text-muted-content";
         case "tertiary":
-            // WCAG 2.2 AA compliant - 4.5:1+ contrast
-            return "text-primary-700 dark:text-primary-300";
+            // Subtle text - surface-content for less emphasis
+            return "text-surface-content/70";
         case "error":
-            // WCAG 2.2 AA compliant - red-700/red-400 meets 4.5:1
-            return "text-red-700 dark:text-red-400";
+            // Destructive semantic color for error states
+            return "text-destructive";
         case "warning":
-            // WCAG 2.2 AA compliant - amber-700/amber-400 meets 4.5:1
-            return "text-amber-700 dark:text-amber-400";
+            // Warning semantic color for caution states
+            return "text-warning";
         case "info":
-            // WCAG 2.2 AA compliant - blue-700/blue-300 meets 4.5:1
-            return "text-blue-700 dark:text-blue-300";
+            // Info semantic color for informational states
+            return "text-info";
         case "success":
-            // WCAG 2.2 AA compliant - green-700/green-400 meets 4.5:1
-            return "text-green-700 dark:text-green-400";
+            // Success semantic color for positive states
+            return "text-success";
         case "gradient":
-            // Gradient text - visually decorative but accessible
-            // The text color is transparent, so we rely on the background gradient
-            // Ensure sufficient contrast with the gradient colors
-            return "bg-linear-to-r from-primary-700 via-primary-600 to-primary-800 dark:from-primary-300 dark:via-primary-400 dark:to-primary-300 bg-clip-text text-transparent";
+            // Gradient text using brand colors - visually decorative but accessible
+            return "bg-linear-to-r from-brand via-brand/80 to-brand bg-clip-text text-transparent";
         default:
-            return "text-ground-900 dark:text-ground-50";
+            return "text-canvas-content";
     }
 };
 

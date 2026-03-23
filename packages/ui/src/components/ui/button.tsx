@@ -100,64 +100,63 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
             large: "px-6 py-3 text-lg gap-3 min-h-[44px]",
         };
 
-        // Variant styles
+        // Variant styles using semantic design tokens
         const variantClasses = {
             primary: clsx(
-                "bg-primary-600 text-white",
-                "border border-primary-700",
-                "hover:bg-primary-700 active:bg-primary-800",
-                "shadow-outer",
-                "dark:bg-primary-500 dark:text-white",
-                "dark:border-primary-600",
-                "dark:hover:bg-primary-600 dark:active:bg-primary-700"
+                "bg-brand text-brand-content",
+                "border border-brand/80",
+                "hover:bg-brand/90 active:bg-brand/80",
+                "shadow-control",
+                "dark:bg-brand dark:text-brand-content",
+                "dark:border-brand/80",
+                "dark:hover:bg-brand/90 dark:active:bg-brand/80"
             ),
             secondary: clsx(
-                "bg-ground-100 hover:bg-ground-200 active:bg-ground-300",
-                "text-ground-800 font-medium",
-                "border border-ground-300 hover:border-ground-400",
-                "shadow-outer",
-                "dark:bg-ground-800 dark:hover:bg-ground-700",
-                "dark:text-ground-100 dark:border-ground-600"
+                "bg-muted hover:bg-muted/80 active:bg-muted/70",
+                "text-surface-content font-medium",
+                "border border-border hover:border-border/80",
+                "shadow-control",
+                "dark:bg-muted dark:hover:bg-muted/80",
+                "dark:text-surface-content dark:border-border"
             ),
-            // FIX: Improved contrast for WCAG compliance (ground-400 -> ground-500)
             outline: clsx(
-                "bg-transparent hover:bg-ground-100 active:bg-ground-200",
-                "text-ground-800 font-medium",
-                "border-2 border-ground-500 hover:border-ground-600",
-                "dark:hover:bg-ground-800 dark:active:bg-ground-700",
-                "dark:text-ground-100 dark:border-ground-400"
+                "bg-transparent hover:bg-muted/50 active:bg-muted/70",
+                "text-surface-content font-medium",
+                "border-2 border-border hover:border-border/80",
+                "dark:hover:bg-muted/50 dark:active:bg-muted/70",
+                "dark:text-surface-content dark:border-border"
             ),
             ghost: clsx(
-                "bg-transparent hover:bg-ground-100 active:bg-ground-200",
-                "text-ground-700 hover:text-ground-900 font-medium",
+                "bg-transparent hover:bg-muted/50 active:bg-muted/70",
+                "text-muted-content hover:text-surface-content font-medium",
                 "border border-transparent",
-                "dark:hover:bg-ground-800 dark:active:bg-ground-700",
-                "dark:text-ground-300 dark:hover:text-ground-100"
+                "dark:hover:bg-muted/50 dark:active:bg-muted/70",
+                "dark:text-muted-content dark:hover:text-surface-content"
             ),
             destructive: clsx(
-                "bg-error-600 text-white",
-                "border border-error-700",
-                "hover:bg-error-700 active:bg-error-800",
-                "shadow-outer",
-                "dark:bg-error-500 dark:text-white",
-                "dark:border-error-600",
-                "dark:hover:bg-error-600 dark:active:bg-error-700"
+                "bg-destructive text-destructive-content",
+                "border border-destructive/80",
+                "hover:bg-destructive/90 active:bg-destructive/80",
+                "shadow-control",
+                "dark:bg-destructive dark:text-destructive-content",
+                "dark:border-destructive/80",
+                "dark:hover:bg-destructive/90 dark:active:bg-destructive/80"
             ),
         };
 
         const buttonClasses = clsx(
             "relative inline-flex items-center justify-center",
-            "rounded",
-            "font-secondary font-medium",
+            "rounded-control",
+            "font-medium",
             "transition-all duration-150 ease-in-out",
             "outline-none focus-visible:outline-none",
             "focus-visible:ring-2 focus-visible:ring-offset-2",
-            variant === "primary" && "focus-visible:ring-primary-600 dark:focus-visible:ring-primary-500",
-            variant === "secondary" && "focus-visible:ring-ground-500 dark:focus-visible:ring-ground-400",
-            variant === "outline" && "focus-visible:ring-ground-600 dark:focus-visible:ring-ground-400",
-            variant === "ghost" && "focus-visible:ring-ground-600 dark:focus-visible:ring-ground-400",
-            variant === "destructive" && "focus-visible:ring-error-600 dark:focus-visible:ring-error-500",
-            "focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
+            variant === "primary" && "focus-visible:ring-brand",
+            variant === "secondary" && "focus-visible:ring-focus",
+            variant === "outline" && "focus-visible:ring-focus",
+            variant === "ghost" && "focus-visible:ring-focus",
+            variant === "destructive" && "focus-visible:ring-destructive",
+            "focus-visible:ring-offset-canvas",
             sizeClasses[size],
             variantClasses[variant],
             fullWidth ? "w-full" : "w-auto",
@@ -284,11 +283,11 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
         };
 
         const badgeVariantClasses = {
-            primary: "bg-primary-600 text-white dark:bg-primary-500",
-            danger: "bg-error-600 text-white dark:bg-error-500",
-            warning: "bg-warning-700 text-white dark:bg-warning-600",
-            info: "bg-info-600 text-white dark:bg-info-500",
-            success: "bg-success-600 text-white dark:bg-success-500",
+            primary: "bg-brand text-brand-content",
+            danger: "bg-destructive text-destructive-content",
+            warning: "bg-warning text-warning-content",
+            info: "bg-info text-info-content",
+            success: "bg-success text-success-content",
         };
 
         const badgePositionClasses = {
@@ -315,8 +314,8 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
                 className={clsx(
                     "inline-flex items-center justify-center",
                     "rounded-full font-semibold leading-none",
-                    "border-2 border-white dark:border-ground-950",
-                    "shadow-outer",
+                    "border-2 border-canvas",
+                    "shadow-control",
                     // FIX: Added z-10 to ensure badge sits above button content
                     "z-10",
                     badgeSizeClasses[size],

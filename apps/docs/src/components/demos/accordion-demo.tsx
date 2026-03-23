@@ -1,5 +1,5 @@
 "use client"
-import { Accordion, Typography } from "vayu-ui";
+import { Accordion, Divider, Typography } from "vayu-ui";
 
 export default function AccordionDemo() {
     return (
@@ -39,7 +39,7 @@ export default function AccordionDemo() {
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
-            <hr className="my-8 border-t border-border" />
+            <Divider className="my-8" />
             <Typography.H5 id="multi-accordion-label" className="mb-4">
                 Multiple Items Can Be Open
             </Typography.H5>
