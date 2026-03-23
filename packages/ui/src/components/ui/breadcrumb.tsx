@@ -1,7 +1,7 @@
 import React from "react";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
-import { clsx } from "clsx";
 import Link from "next/link";
+import { cn } from "./utils";
 
 // ============================================================================
 // Breadcrumb Root
@@ -21,8 +21,8 @@ type BreadcrumbListProps = React.OlHTMLAttributes<HTMLOListElement>;
 
 const BreadcrumbList = ({ className, ...props }: BreadcrumbListProps) => (
   <ol
-    className={clsx(
-      "flex flex-wrap items-center gap-1.5 wrap-break-word text-sm text-ground-600 sm:gap-2.5 dark:text-ground-400",
+    className={cn(
+      "flex flex-wrap items-center gap-1.5 wrap-break-word text-sm text-muted-content sm:gap-2.5",
       className
     )}
     {...props}
@@ -37,7 +37,7 @@ type BreadcrumbItemProps = React.LiHTMLAttributes<HTMLLIElement>;
 
 const BreadcrumbItem = ({ className, ...props }: BreadcrumbItemProps) => (
   <li
-    className={clsx("inline-flex items-center gap-1.5", className)}
+    className={cn("inline-flex items-center gap-1.5", className)}
     {...props}
   />
 );
@@ -56,12 +56,12 @@ type BreadcrumbLinkProps = Omit<LinkProps, "className"> & {
 const BreadcrumbLink = ({ className, ...props }: BreadcrumbLinkProps) => {
   return (
     <Link
-      className={clsx(
+      className={cn(
         // WCAG 2.2 AA: Minimum target size is 24x24px.
         // py-2 (8px top/bottom) + text height (~16px) ensures vertical size >= 24px.
         // px-3 provides horizontal spacing.
         // -mx-1 prevents the increased padding from shifting the visual layout alignment.
-        "rounded px-3 py-2 -mx-1 text-ground-600 transition-colors duration-(--transition-fast) ease-in-out hover:text-ground-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-ground-400 dark:focus-visible:ring-ground-600 dark:focus-visible:ring-offset-ground-950 dark:hover:text-ground-100",
+        "rounded px-3 py-2 -mx-1 text-muted-content transition-colors duration-(--transition-fast) ease-in-out hover:text-canvas-content focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
         className
       )}
       {...props}
@@ -78,9 +78,9 @@ type BreadcrumbPageProps = React.HTMLAttributes<HTMLSpanElement>;
 const BreadcrumbPage = ({ className, ...props }: BreadcrumbPageProps) => (
   <span
     aria-current="page"
-    className={clsx(
+    className={cn(
       // Matching padding of BreadcrumbLink for consistent layout and target size.
-      "px-3 py-2 -mx-1 font-normal text-ground-950 dark:text-ground-100",
+      "px-3 py-2 -mx-1 font-normal text-canvas-content",
       className
     )}
     {...props}
@@ -97,7 +97,7 @@ const BreadcrumbSeparator = ({ children, className, ...props }: BreadcrumbSepara
   <li
     role="presentation"
     aria-hidden="true"
-    className={clsx("[&>svg]:size-3.5", className)}
+    className={cn("[&>svg]:size-3.5", className)}
     {...props}
   >
     {children ?? <ChevronRight />}
@@ -114,7 +114,7 @@ const BreadcrumbEllipsis = ({ className, ...props }: BreadcrumbEllipsisProps) =>
   <span
     role="presentation"
     aria-hidden="true"
-    className={clsx("flex h-9 w-9 items-center justify-center", className)}
+    className={cn("flex h-9 w-9 items-center justify-center", className)}
     {...props}
   >
     <MoreHorizontal className="h-4 w-4" />

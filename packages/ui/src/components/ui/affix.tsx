@@ -232,8 +232,8 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
                 <div
                     ref={mergeRefs(ref, innerRef)}
                     className={cn(
-                        "transition-shadow duration-medium",
-                        isAffixed && "shadow-outer",
+                        "transition-shadow transition-medium",
+                        isAffixed && "shadow-elevated",
                         className
                     )}
                     style={{ ...affixStyle, ...style }}

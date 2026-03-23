@@ -33,6 +33,12 @@ interface AspectRatioProps
     "aria-label"?: string;
     /** Marks the container as decorative (hidden from screen readers). */
     decorative?: boolean;
+    /** Adds rounded corners using design system tokens. */
+    rounded?: boolean;
+    /** Adds subtle shadow using design system tokens. */
+    shadow?: boolean;
+    /** Border using design system tokens. */
+    bordered?: boolean;
     children: React.ReactNode;
 }
 
@@ -80,6 +86,9 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
             overflow = "hidden",
             objectFit = "cover",
             decorative = false,
+            rounded = false,
+            shadow = false,
+            bordered = false,
             className,
             style,
             children,
@@ -89,49 +98,40 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
     ) => {
         const isPreset = typeof ratio === "string";
         const preset = isPreset ? PRESET_MAP[ratio] : null;
-        // FIX: Safety check for 0 to avoid Infinity padding
+        // Safety check for 0 to avoid Infinity padding
         const numericRatio = preset ? preset.value : (ratio as number);
 
         // Accessibility Logic
-        // 1. If decorative, we MUST hide it and ensure no label exists (conflict).
-        // 2. If not decorative, we check if an aria-label was passed.
-        //    - If yes, we apply role="region" (or "group").
-        //    - If no, we apply no role (generic container).
-        
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        let ariaLabel: string | undefined = undefined;
-        // We extract aria-label from props to handle logic safely
-        // Note: In strict TS, props rest picks this up, so we just use it for logic checks.
+        // 1. If decorative, hide from accessibility tree
+        // 2. If aria-label provided, use role="region" for meaningful content
+        // 3. Default: generic container with no semantic role
         const passedAriaLabel = props["aria-label"];
 
         const getAriaProps = () => {
             if (decorative) {
-                // Decorative: hide from tree. Do not allow aria-label.
-                return { 
-                    role: "presentation", 
-                    "aria-hidden": true, 
-                    "aria-label": undefined 
+                return {
+                    role: "presentation" as const,
+                    "aria-hidden": true as const,
+                    "aria-label": undefined,
                 };
             }
 
             if (passedAriaLabel) {
-                // Meaningful content with label: Use region/group
-                return { 
-                    role: "region", 
-                    "aria-hidden": undefined 
+                return {
+                    role: "region" as const,
+                    "aria-hidden": undefined,
                 };
             }
 
-            // Default: Just a layout container. No semantic role.
-            return { 
-                role: undefined, 
-                "aria-hidden": undefined 
+            return {
+                role: undefined,
+                "aria-hidden": undefined,
             };
         };
 
         const ariaProps = getAriaProps();
 
-        // Calculate Padding Bottom safely
+        // Calculate Padding Bottom safely for custom ratios
         const paddingBottom = numericRatio > 0 ? `${100 / numericRatio}%` : undefined;
 
         return (
@@ -141,6 +141,10 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
                     "relative w-full",
                     preset?.tw,
                     OVERFLOW_CLASS[overflow],
+                    // Design system tokens
+                    rounded && "rounded-surface",
+                    shadow && "shadow-surface",
+                    bordered && "border border-border",
                     className
                 )}
                 style={

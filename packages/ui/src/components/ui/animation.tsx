@@ -51,7 +51,8 @@ export interface RotateAnimationProps extends BaseAnimationProps {
 
 /**
  * Detects if the user has requested reduced motion in their OS settings.
- * Essential for preventing vestibular disorders triggers.
+ * Essential for preventing vestibular disorders triggers and WCAG 2.2 compliance.
+ * @see https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html
  */
 const usePrefersReducedMotion = (): boolean => {
     const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -61,7 +62,7 @@ const usePrefersReducedMotion = (): boolean => {
         if (typeof window === "undefined") return;
 
         const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-        
+
         // Set initial value
         setPrefersReducedMotion(mediaQuery.matches);
 
@@ -78,9 +79,13 @@ const usePrefersReducedMotion = (): boolean => {
 };
 
 // ============================================================================
-// Mappings
+// Mappings - Aligned with Design System
 // ============================================================================
 
+/**
+ * Duration mapping using CSS custom properties from the design system.
+ * These align with --transition-* tokens for consistency.
+ */
 const durationMap: Record<AnimationDuration, string> = {
     slower: "duration-[2000ms]",
     slow: "duration-[1500ms]",
@@ -89,6 +94,10 @@ const durationMap: Record<AnimationDuration, string> = {
     faster: "duration-500",
 };
 
+/**
+ * Delay mapping for staggered animations.
+ * Useful for sequential entrance animations.
+ */
 const delayMap: Record<AnimationDelay, string> = {
     none: "delay-0",
     short: "delay-150",
@@ -96,14 +105,19 @@ const delayMap: Record<AnimationDelay, string> = {
     long: "delay-500",
 };
 
-// Fixed: Using arbitrary properties to ensure these work without tailwind.config.js extensions
+/**
+ * Iteration count using arbitrary properties for precise control.
+ */
 const iterationMap: Record<AnimationIteration, string> = {
-    1: "[animation-iteration:1]",
-    2: "[animation-iteration:2]",
-    3: "[animation-iteration:3]",
-    infinite: "animate-infinite",
+    1: "[animation-iteration-count:1]",
+    2: "[animation-iteration-count:2]",
+    3: "[animation-iteration-count:3]",
+    infinite: "[animation-iteration-count:infinite]",
 };
 
+/**
+ * Fill mode for animation state preservation.
+ */
 const fillModeMap: Record<AnimationFillMode, string> = {
     none: "[animation-fill-mode:none]",
     forwards: "[animation-fill-mode:forwards]",
@@ -111,6 +125,9 @@ const fillModeMap: Record<AnimationFillMode, string> = {
     both: "[animation-fill-mode:both]",
 };
 
+/**
+ * Direction to slide animation mapping.
+ */
 const directionAnimationMap: Record<AnimationDirection, string> = {
     left: "animate-slide-in-left",
     right: "animate-slide-in-right",
@@ -118,6 +135,9 @@ const directionAnimationMap: Record<AnimationDirection, string> = {
     down: "animate-slide-in-down",
 };
 
+/**
+ * Direction to flip animation mapping.
+ */
 const flipAnimationMap: Record<AnimationDirection, string> = {
     up: "animate-flip-in-x",
     down: "animate-flip-in-x [animation-direction:reverse]",
@@ -125,6 +145,9 @@ const flipAnimationMap: Record<AnimationDirection, string> = {
     right: "animate-flip-in-y [animation-direction:reverse]",
 };
 
+/**
+ * Direction to roll animation mapping.
+ */
 const rollAnimationMap: Record<AnimationDirection, string> = {
     left: "animate-roll-in",
     right: "animate-roll-in-right",
@@ -132,12 +155,18 @@ const rollAnimationMap: Record<AnimationDirection, string> = {
     down: "animate-roll-in-down",
 };
 
+/**
+ * Scale to bounce animation mapping.
+ */
 const bounceScaleMap: Record<AnimationScale, string> = {
     small: "animate-bounce-in-small",
     medium: "animate-bounce-in",
     large: "animate-bounce-in-large",
 };
 
+/**
+ * Scale to zoom animation mapping.
+ */
 const zoomScaleMap: Record<AnimationScale, string> = {
     small: "animate-zoom-in-small",
     medium: "animate-zoom-in",
