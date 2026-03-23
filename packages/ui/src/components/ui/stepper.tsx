@@ -3,7 +3,6 @@
 import { Check } from "lucide-react";
 import {
     Children,
-    cloneElement,
     createContext,
     forwardRef,
     HTMLAttributes,
@@ -21,6 +20,11 @@ import { clsx } from "clsx";
 type StepperOrientation = "horizontal" | "vertical";
 type StepperStatus = "active" | "completed" | "inactive" | "loading" | "error";
 
+// ============================================================================
+// Contexts
+// ============================================================================
+
+// 1. Root Context: Global state
 interface StepperContextValue {
     activeStep: number;
     orientation: StepperOrientation;
@@ -30,11 +34,42 @@ interface StepperContextValue {
 
 const StepperContext = createContext<StepperContextValue | undefined>(undefined);
 
-// Custom hook for type-safe context access
 function useStepperContext() {
     const context = useContext(StepperContext);
     if (!context) {
         throw new Error("Stepper components must be used within a Stepper.Root");
+    }
+    return context;
+}
+
+// 2. Step Index Context: Provides index/position to Step (replaces cloneElement in Root)
+interface StepIndexContextValue {
+    index: number;
+    isFirst: boolean;
+    isLast: boolean;
+}
+
+const StepIndexContext = createContext<StepIndexContextValue | undefined>(undefined);
+
+function useStepIndexContext() {
+    const context = useContext(StepIndexContext);
+    if (!context) {
+        throw new Error("Step components must be used within a Stepper.Root");
+    }
+    return context;
+}
+
+// 3. Step Status Context: Provides status to children (replaces cloneElement in Step/Content)
+interface StepStatusContextValue {
+    status: StepperStatus;
+}
+
+const StepStatusContext = createContext<StepStatusContextValue | undefined>(undefined);
+
+function useStepStatusContext() {
+    const context = useContext(StepStatusContext);
+    if (!context) {
+        throw new Error("Step children must be used within a Stepper.Step");
     }
     return context;
 }
@@ -81,11 +116,21 @@ const StepperRoot = forwardRef<HTMLDivElement, StepperRootProps>(
                 >
                     {elements.map((child, index) => {
                         if (!isValidElement(child)) return null;
-                        return cloneElement(child, {
-                            index,
-                            isFirst: index === 0,
-                            isLast: index === elements.length - 1,
-                        } as React.HTMLAttributes<HTMLDivElement>);
+                        
+                        // Instead of cloneElement, we wrap the child in a Context Provider
+                        // to pass down the index and position info.
+                        return (
+                            <StepIndexContext.Provider
+                                key={index}
+                                value={{
+                                    index,
+                                    isFirst: index === 0,
+                                    isLast: index === elements.length - 1,
+                                }}
+                            >
+                                {child}
+                            </StepIndexContext.Provider>
+                        );
                     })}
                 </div>
             </StepperContext.Provider>
@@ -99,15 +144,15 @@ StepperRoot.displayName = "Stepper.Root";
 // ============================================================================
 
 interface StepProps extends HTMLAttributes<HTMLDivElement> {
-    index?: number;
-    isFirst?: boolean;
-    isLast?: boolean;
     status?: StepperStatus;
 }
 
 const Step = forwardRef<HTMLDivElement, StepProps>(
-    ({ index = 0, isFirst = false, isLast = false, status: propStatus, className, children, onClick, onKeyDown, ...props }, ref) => {
+    ({ status: propStatus, className, children, onClick, onKeyDown, ...props }, ref) => {
+        // Consume index from Context instead of props
+        const { index, isFirst, isLast } = useStepIndexContext();
         const { activeStep, orientation, onStepClick, totalSteps } = useStepperContext();
+        
         const status = getStatus(activeStep, index, propStatus);
         const isClickable = !!onStepClick;
 
@@ -122,7 +167,6 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
                 return;
             }
 
-            // Get all clickable steps for arrow navigation
             const container = e.currentTarget.parentElement;
             const clickableSteps = container?.querySelectorAll('[role="listitem"][tabindex="0"]') || [];
             const currentIndex = Array.from(clickableSteps).indexOf(e.currentTarget);
@@ -169,18 +213,11 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
             onKeyDown?.(e);
         }, [isClickable, onStepClick, index, orientation, onKeyDown]);
 
-        // Clone children to pass status
-        const renderedChildren = Children.map(children, (child) => {
-            if (!isValidElement(child)) return null;
-            return cloneElement(child, { status } as React.HTMLAttributes<HTMLElement>);
-        });
-
         // Connector color logic
         const isCompleted = status === "completed" || status === "active";
         const leftConnectorActive = index > 0 && activeStep >= index;
         const rightConnectorActive = isCompleted;
 
-        // Horizontal connector classes
         const horizontalConnectorClasses = (isActive: boolean) => clsx(
             "h-0.5 flex-1 transition-colors duration-300",
             isActive
@@ -188,7 +225,6 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
                 : "bg-ground-200 dark:bg-ground-700"
         );
 
-        // Vertical connector classes
         const verticalConnectorClasses = clsx(
             "w-0.5 flex-1 min-h-[24px] transition-colors duration-300",
             isCompleted
@@ -197,87 +233,79 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
         );
 
         return (
-            <div
-                ref={ref}
-                role="listitem"
-                className={clsx(
-                    "group relative",
-                    orientation === "horizontal" && "flex flex-col items-center flex-1 min-w-0",
-                    orientation === "vertical" && "flex flex-row",
-                    isClickable && "cursor-pointer",
-                    className
-                )}
-                onClick={handleClick}
-                onKeyDown={handleKeyDown}
-                tabIndex={isClickable ? 0 : -1}
-                aria-current={status === "active" ? "step" : undefined}
-                aria-posinset={index + 1}
-                aria-setsize={totalSteps}
-                {...props}
-            >
-                {/* Screen reader announcement */}
-                <span className="sr-only">
-                    Step {index + 1} of {totalSteps}, {status}.
-                </span>
+            <StepStatusContext.Provider value={{ status }}>
+                <div
+                    ref={ref}
+                    role="listitem"
+                    className={clsx(
+                        "group relative",
+                        orientation === "horizontal" && "flex flex-col items-center flex-1 min-w-0",
+                        orientation === "vertical" && "flex flex-row",
+                        isClickable && "cursor-pointer",
+                        className
+                    )}
+                    onClick={handleClick}
+                    onKeyDown={handleKeyDown}
+                    tabIndex={isClickable ? 0 : -1}
+                    aria-current={status === "active" ? "step" : undefined}
+                    aria-posinset={index + 1}
+                    aria-setsize={totalSteps}
+                    {...props}
+                >
+                    {/* Screen reader announcement */}
+                    <span className="sr-only">
+                        Step {index + 1} of {totalSteps}, {status}.
+                    </span>
 
-                {orientation === "horizontal" ? (
-                    // === HORIZONTAL LAYOUT ===
-                    <>
-                        {/* Connector Row */}
-                        <div className="flex items-center w-full mb-3">
-                            {/* Left space - connector or invisible spacer */}
-                            {isFirst ? (
-                                <div className="flex-1" />
-                            ) : (
-                                <div className={horizontalConnectorClasses(leftConnectorActive)} />
-                            )}
+                    {orientation === "horizontal" ? (
+                        <>
+                            <div className="flex items-center w-full mb-3">
+                                {isFirst ? (
+                                    <div className="flex-1" />
+                                ) : (
+                                    <div className={horizontalConnectorClasses(leftConnectorActive)} />
+                                )}
 
-                            {/* Indicator */}
-                            <div className="relative z-10 shrink-0">
-                                {Children.map(renderedChildren, child => 
-                                    isValidElement(child) && child.type === StepIndicator ? child : null
+                                <div className="relative z-10 shrink-0">
+                                    {Children.map(children, child => 
+                                        isValidElement(child) && child.type === StepIndicator ? child : null
+                                    )}
+                                </div>
+
+                                {isLast ? (
+                                    <div className="flex-1" />
+                                ) : (
+                                    <div className={horizontalConnectorClasses(rightConnectorActive)} />
                                 )}
                             </div>
 
-                            {/* Right space - connector or invisible spacer */}
-                            {isLast ? (
-                                <div className="flex-1" />
-                            ) : (
-                                <div className={horizontalConnectorClasses(rightConnectorActive)} />
-                            )}
-                        </div>
+                            <div className="w-full">
+                                {Children.map(children, child => 
+                                    isValidElement(child) && child.type !== StepIndicator ? child : null
+                                )}
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="flex flex-col items-center shrink-0">
+                                {Children.map(children, child => 
+                                    isValidElement(child) && child.type === StepIndicator ? child : null
+                                )}
 
-                        {/* Content below indicator */}
-                        <div className="w-full">
-                            {Children.map(renderedChildren, child => 
-                                isValidElement(child) && child.type !== StepIndicator ? child : null
-                            )}
-                        </div>
-                    </>
-                ) : (
-                    // === VERTICAL LAYOUT ===
-                    <>
-                        {/* Left Column: Indicator + Vertical Connector */}
-                        <div className="flex flex-col items-center shrink-0">
-                            {Children.map(renderedChildren, child => 
-                                isValidElement(child) && child.type === StepIndicator ? child : null
-                            )}
+                                {!isLast && (
+                                    <div className={verticalConnectorClasses} />
+                                )}
+                            </div>
 
-                            {/* Vertical Connector - only show if not last step */}
-                            {!isLast && (
-                                <div className={verticalConnectorClasses} />
-                            )}
-                        </div>
-
-                        {/* Right Column: Content */}
-                        <div className="flex-1">
-                            {Children.map(renderedChildren, child => 
-                                isValidElement(child) && child.type !== StepIndicator ? child : null
-                            )}
-                        </div>
-                    </>
-                )}
-            </div>
+                            <div className="flex-1">
+                                {Children.map(children, child => 
+                                    isValidElement(child) && child.type !== StepIndicator ? child : null
+                                )}
+                            </div>
+                        </>
+                    )}
+                </div>
+            </StepStatusContext.Provider>
         );
     }
 );
@@ -288,21 +316,21 @@ Step.displayName = "Stepper.Step";
 // ============================================================================
 
 interface StepIndicatorProps extends HTMLAttributes<HTMLDivElement> {
-    status?: StepperStatus;
     icon?: ReactNode;
 }
 
 const StepIndicator = forwardRef<HTMLDivElement, StepIndicatorProps>(
-    ({ status = "inactive", icon, className, children, ...props }, ref) => {
+    ({ icon, className, children, ...props }, ref) => {
+        // Consume status from Context
+        const { status } = useStepStatusContext();
+
         return (
             <div
                 ref={ref}
                 aria-hidden="true"
                 className={clsx(
                     "relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-150 font-secondary font-semibold text-sm shrink-0",
-                    // Focus ring for parent's focus-visible state
                     "group-focus-visible:ring-2 group-focus-visible:ring-primary-500 group-focus-visible:ring-offset-2",
-                    // Status styles with WCAG AA contrast
                     status === "active" && "border-primary-500 bg-primary-500 text-ground-950 ring-4 ring-primary-500/20",
                     status === "completed" && "border-primary-500 bg-primary-500 text-ground-950",
                     status === "inactive" && "border-ground-400 dark:border-ground-600 bg-ground-50 dark:bg-ground-900 text-ground-600 dark:text-ground-400",
@@ -329,34 +357,26 @@ StepIndicator.displayName = "Stepper.Indicator";
 // StepContent
 // ============================================================================
 
-interface StepContentProps extends HTMLAttributes<HTMLDivElement> {
-    status?: StepperStatus;
-}
+interface StepContentProps extends HTMLAttributes<HTMLDivElement> {}
 
 const StepContent = forwardRef<HTMLDivElement, StepContentProps>(
-    ({ status, className, children, ...props }, ref) => {
+    ({ className, children, ...props }, ref) => {
         const { orientation } = useStepperContext();
-
-        // Clone children to pass status
-        const renderedChildren = Children.map(children, (child) => {
-            if (!isValidElement(child)) return null;
-            return cloneElement(child, { status } as React.HTMLAttributes<HTMLElement>);
-        });
-
+        
+        // No need to clone children here anymore. 
+        // The children (Title, Description) will consume StepStatusContext directly.
         return (
             <div
                 ref={ref}
                 className={clsx(
                     "flex flex-col gap-1",
-                    // Horizontal: Center text under indicator
                     orientation === "horizontal" && "items-center text-center",
-                    // Vertical: Align text to the right of indicator, with padding
                     orientation === "vertical" && "pb-8 pl-4 pt-2 flex-1",
                     className
                 )}
                 {...props}
             >
-                {renderedChildren}
+                {children}
             </div>
         );
     }
@@ -367,18 +387,18 @@ StepContent.displayName = "Stepper.Content";
 // StepTitle
 // ============================================================================
 
-interface StepTitleProps extends HTMLAttributes<HTMLHeadingElement> {
-    status?: StepperStatus;
-}
+interface StepTitleProps extends HTMLAttributes<HTMLHeadingElement> {}
 
 const StepTitle = forwardRef<HTMLHeadingElement, StepTitleProps>(
-    ({ status = "inactive", className, children, ...props }, ref) => {
+    ({ className, children, ...props }, ref) => {
+        // Consume status from Context
+        const { status } = useStepStatusContext();
+
         return (
             <h3
                 ref={ref}
                 className={clsx(
                     "font-secondary text-sm font-semibold transition-colors duration-150",
-                    // WCAG AA contrast: 4.5:1 minimum
                     (status === "active" || status === "completed")
                         ? "text-ground-900 dark:text-ground-100"
                         : "text-ground-600 dark:text-ground-400",
@@ -397,9 +417,7 @@ StepTitle.displayName = "Stepper.Title";
 // StepDescription
 // ============================================================================
 
-interface StepDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
-    status?: StepperStatus;
-}
+interface StepDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {}
 
 const StepDescription = forwardRef<HTMLParagraphElement, StepDescriptionProps>(
     ({ className, children, ...props }, ref) => {

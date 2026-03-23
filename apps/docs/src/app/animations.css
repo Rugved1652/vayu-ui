@@ -1,0 +1,129 @@
+ @keyframes marquee-scroll {
+    0%   { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes marquee-ping-pong {
+    0%   { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-20px); }
+  }
+  
+  @keyframes float-particle {
+    0%        { opacity: 0; }
+    10%, 90%  { opacity: 1; }
+    100%      { opacity: 0; transform: translateY(-100vh) translateX(20px); }
+  }
+  
+  @keyframes orbit {
+    from { transform: rotate(0); }
+    to   { transform: rotate(360deg); }
+  }
+  
+  @keyframes morph-blob {
+    0%, 100% { transform: scale(1); }
+    33%      { transform: scale(1.1); }
+    66%      { transform: scale(0.8); }
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  
+  @keyframes slide-in-left {
+    from { transform: translateX(-100%); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes slide-in-right {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes slide-in-up {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes slide-in-down {
+    from { transform: translateY(-100%); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes bounce-in {
+    0%   { opacity: 0; transform: scale(.3); }
+    60%  { opacity: 1; transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+  
+  @keyframes flip-in-x {
+    from { transform: rotateX(90deg); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes flip-in-y {
+    from { transform: rotateY(90deg); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes rotate-in {
+    from { transform: rotate(-200deg); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes zoom-in {
+    from { transform: scale(.3); opacity: 0; }
+    to   { opacity: 1; }
+  }
+  
+  @keyframes roll-in {
+    from { transform: translateX(-100%) rotate(-120deg); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes roll-in-right {
+    from { transform: translateX(100%) rotate(120deg); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes roll-in-up {
+    from { transform: translateY(100%) rotate(120deg); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes roll-in-down {
+    from { transform: translateY(-100%) rotate(-120deg); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+  
+  @keyframes jack-in-the-box {
+    from { opacity: 0; transform: scale(.1) rotate(30deg); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  
+  @keyframes hinge {
+    to { transform: translateY(700px); opacity: 0; }
+  }
+  
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes reverse-spin {
+    to { transform: rotate(0); }
+  }
+  
+  @keyframes toast-enter {
+    from { opacity: 0; transform: translateX(100%); }
+    to   { opacity: 1; transform: none; }
+  }
+  
+  @keyframes toast-exit {
+    from { opacity: 1; }
+    to   { opacity: 0; transform: translateX(100%); }
+  }

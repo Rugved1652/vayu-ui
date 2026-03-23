@@ -1,166 +1,331 @@
+"use client";
 import { Marquee, MarqueeItem } from "vayu-ui";
 
 export default function MarqueeDemo() {
     return (
-        <div className="flex flex-col gap-10 not-prose">
-            {/* Default with Controls */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-primary font-medium text-ground-900 dark:text-ground-100">
-                    Default (with Pause Control)
-                </h3>
-                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg border border-ground-200 dark:border-ground-700 bg-white dark:bg-ground-900 p-4">
-                    <Marquee label="Technologies carousel">
-                        {["React", "Next.js", "Tailwind", "TypeScript", "Vercel"].map((item) => (
-                            <MarqueeItem key={item} className="mx-4">
-                                <div className="px-4 py-2 bg-ground-100 dark:bg-ground-800 rounded-md border border-ground-200 dark:border-ground-700">
-                                    <p className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
-                                        {item}
-                                    </p>
-                                </div>
-                            </MarqueeItem>
-                        ))}
-                    </Marquee>
+        <div className="space-y-12 w-full not-prose p-8 bg-ground-50 dark:bg-ground-900 min-h-screen">
+            <div className="  space-y-12">
+                {/* Header */}
+                <div className="space-y-2">
+                    <h1 className="text-3xl font-bold text-ground-900 dark:text-ground-50">
+                        Marquee Component
+                    </h1>
+                    <p className="text-ground-600 dark:text-ground-400">
+                        WCAG 2.2 AA compliant scrolling content component with
+                        pause controls
+                    </p>
                 </div>
-            </div>
 
-            {/* Fast Reverse - No Controls */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-primary font-medium text-ground-900 dark:text-ground-100">
-                    Fast Speed, Right Direction (No Controls)
-                </h3>
-                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg border border-ground-200 dark:border-ground-700 bg-white dark:bg-ground-900 p-4">
+                {/* Basic Example */}
+                <section className="space-y-4">
+                    <div className="space-y-1">
+                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                            Basic Marquee
+                        </h2>
+                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                            Default settings with pause control (WCAG 2.2.2)
+                        </p>
+                    </div>
+                    <Marquee label="Featured technologies">
+                        <MarqueeItem>
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700">
+                                <span className="text-ground-900 dark:text-ground-50 font-medium">
+                                    React
+                                </span>
+                            </div>
+                        </MarqueeItem>
+                        <MarqueeItem>
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700">
+                                <span className="text-ground-900 dark:text-ground-50 font-medium">
+                                    TypeScript
+                                </span>
+                            </div>
+                        </MarqueeItem>
+                        <MarqueeItem>
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700">
+                                <span className="text-ground-900 dark:text-ground-50 font-medium">
+                                    Tailwind CSS v4
+                                </span>
+                            </div>
+                        </MarqueeItem>
+                        <MarqueeItem>
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700">
+                                <span className="text-ground-900 dark:text-ground-50 font-medium">
+                                    Next.js
+                                </span>
+                            </div>
+                        </MarqueeItem>
+                        <MarqueeItem>
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700">
+                                <span className="text-ground-900 dark:text-ground-50 font-medium">
+                                    Vite
+                                </span>
+                            </div>
+                        </MarqueeItem>
+                    </Marquee>
+                </section>
+
+                {/* Speed Variants */}
+                <section className="space-y-4">
+                    <div className="space-y-1">
+                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                            Speed Variants
+                        </h2>
+                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                            Slow (40s), Normal (20s), Fast (10s)
+                        </p>
+                    </div>
+                    <div className="space-y-4">
+                        <Marquee speed="slow" label="Slow scrolling content">
+                            {[...Array(6)].map((_, i) => (
+                                <MarqueeItem key={i}>
+                                    <div className="px-6 py-3 rounded-lg bg-blue-100 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-700">
+                                        <span className="text-blue-900 dark:text-blue-100 font-medium">
+                                            Slow {i + 1}
+                                        </span>
+                                    </div>
+                                </MarqueeItem>
+                            ))}
+                        </Marquee>
+                        <Marquee speed="fast" label="Fast scrolling content">
+                            {[...Array(6)].map((_, i) => (
+                                <MarqueeItem key={i}>
+                                    <div className="px-6 py-3 rounded-lg bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700">
+                                        <span className="text-red-900 dark:text-red-100 font-medium">
+                                            Fast {i + 1}
+                                        </span>
+                                    </div>
+                                </MarqueeItem>
+                            ))}
+                        </Marquee>
+                    </div>
+                </section>
+
+                {/* Direction */}
+                <section className="space-y-4">
+                    <div className="space-y-1">
+                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                            Direction Control
+                        </h2>
+                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                            Left to right or right to left scrolling
+                        </p>
+                    </div>
+                    <div className="space-y-4">
+                        <Marquee
+                            direction="left"
+                            label="Left scrolling content"
+                        >
+                            {[...Array(6)].map((_, i) => (
+                                <MarqueeItem key={i}>
+                                    <div className="px-6 py-3 rounded-lg bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700">
+                                        <span className="text-green-900 dark:text-green-100 font-medium">
+                                            → Left {i + 1}
+                                        </span>
+                                    </div>
+                                </MarqueeItem>
+                            ))}
+                        </Marquee>
+                        <Marquee
+                            direction="right"
+                            label="Right scrolling content"
+                        >
+                            {[...Array(6)].map((_, i) => (
+                                <MarqueeItem key={i}>
+                                    <div className="px-6 py-3 rounded-lg bg-purple-100 dark:bg-purple-900/30 border border-purple-300 dark:border-purple-700">
+                                        <span className="text-purple-900 dark:text-purple-100 font-medium">
+                                            ← Right {i + 1}
+                                        </span>
+                                    </div>
+                                </MarqueeItem>
+                            ))}
+                        </Marquee>
+                    </div>
+                </section>
+
+                {/* Loop Modes */}
+                <section className="space-y-4">
+                    <div className="space-y-1">
+                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                            Loop Modes
+                        </h2>
+                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                            Infinite, finite, single, or ping-pong patterns
+                        </p>
+                    </div>
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <p className="text-sm font-medium text-ground-700 dark:text-ground-300">
+                                Ping-pong (alternating direction)
+                            </p>
+                            <Marquee
+                                loopMode="ping-pong"
+                                label="Ping-pong scrolling content"
+                            >
+                                {[...Array(6)].map((_, i) => (
+                                    <MarqueeItem key={i}>
+                                        <div className="px-6 py-3 rounded-lg bg-amber-100 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700">
+                                            <span className="text-amber-900 dark:text-amber-100 font-medium">
+                                                Ping-pong {i + 1}
+                                            </span>
+                                        </div>
+                                    </MarqueeItem>
+                                ))}
+                            </Marquee>
+                        </div>
+                        <div className="space-y-2">
+                            <p className="text-sm font-medium text-ground-700 dark:text-ground-300">
+                                Finite (3 loops then stops)
+                            </p>
+                            <Marquee
+                                loopMode="finite"
+                                loopCount={3}
+                                label="Finite scrolling content"
+                            >
+                                {[...Array(6)].map((_, i) => (
+                                    <MarqueeItem key={i}>
+                                        <div className="px-6 py-3 rounded-lg bg-teal-100 dark:bg-teal-900/30 border border-teal-300 dark:border-teal-700">
+                                            <span className="text-teal-900 dark:text-teal-100 font-medium">
+                                                Finite {i + 1}
+                                            </span>
+                                        </div>
+                                    </MarqueeItem>
+                                ))}
+                            </Marquee>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Without Controls */}
+                <section className="space-y-4">
+                    <div className="space-y-1">
+                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                            No Controls (Not Recommended)
+                        </h2>
+                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                            Without pause control - fails WCAG 2.2.2 Level A
+                        </p>
+                    </div>
                     <Marquee
-                        speed="fast"
-                        direction="right"
                         showControls={false}
-                        label="Development process carousel"
+                        label="Uncontrollable scrolling content"
                     >
-                        {["Design", "Develop", "Ship", "Scale", "Iterate"].map((item) => (
-                            <MarqueeItem key={item} className="mx-4">
-                                <div className="px-4 py-2 bg-ground-900 text-white dark:bg-white dark:text-ground-900 rounded-md">
-                                    <p className="text-sm font-secondary font-medium">{item}</p>
-                                </div>
-                            </MarqueeItem>
-                        ))}
-                    </Marquee>
-                </div>
-            </div>
-
-            {/* Slow - No Gradient */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-primary font-medium text-ground-900 dark:text-ground-100">
-                    Slow Speed, No Gradient Fade
-                </h3>
-                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg border border-ground-200 dark:border-ground-700 bg-white dark:bg-ground-900 p-4">
-                    <Marquee
-                        speed="slow"
-                        gradient={false}
-                        label="Image gallery carousel"
-                    >
-                        {Array.from({ length: 5 }).map((_, i) => (
-                            <MarqueeItem key={i} className="mx-4">
-                                <div className="w-[100px] h-[60px] bg-ground-200 dark:bg-ground-800 rounded-lg flex items-center justify-center">
-                                    <span className="text-xs font-secondary text-ground-500">
-                                        Image {i + 1}
+                        {[...Array(6)].map((_, i) => (
+                            <MarqueeItem key={i}>
+                                <div className="px-6 py-3 rounded-lg bg-ground-200 dark:bg-ground-700 border border-ground-300 dark:border-ground-600">
+                                    <span className="text-ground-900 dark:text-ground-100 font-medium">
+                                        No Control {i + 1}
                                     </span>
                                 </div>
                             </MarqueeItem>
                         ))}
                     </Marquee>
-                </div>
-            </div>
+                </section>
 
-            {/* No Pause on Hover */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-primary font-medium text-ground-900 dark:text-ground-100">
-                    No Pause on Hover
-                </h3>
-                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg border border-ground-200 dark:border-ground-700 bg-white dark:bg-ground-900 p-4">
-                    <Marquee
-                        pauseOnHover={false}
-                        speed="fast"
-                        label="Continuous scrolling text"
-                    >
-                        {["Breaking News", "Live Updates", "Trending Now", "Top Stories"].map((item) => (
-                            <MarqueeItem key={item} className="mx-4">
-                                <div className="px-4 py-2">
-                                    <p className="text-sm font-secondary font-semibold text-primary-600 dark:text-primary-400">
-                                        {item}
-                                    </p>
+                {/* Without Gradient */}
+                <section className="space-y-4">
+                    <div className="space-y-1">
+                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                            No Edge Gradient
+                        </h2>
+                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                            Without gradient fade on edges
+                        </p>
+                    </div>
+                    <Marquee gradient={false} label="Content without gradient">
+                        {[...Array(6)].map((_, i) => (
+                            <MarqueeItem key={i}>
+                                <div className="px-6 py-3 rounded-lg bg-pink-100 dark:bg-pink-900/30 border border-pink-300 dark:border-pink-700">
+                                    <span className="text-pink-900 dark:text-pink-100 font-medium">
+                                        Item {i + 1}
+                                    </span>
                                 </div>
                             </MarqueeItem>
                         ))}
                     </Marquee>
-                </div>
-            </div>
+                </section>
 
-            {/* Ping-pong Mode */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-primary font-medium text-ground-900 dark:text-ground-100">
-                    Ping-pong Mode (Bounces Back and Forth)
-                </h3>
-                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg border border-ground-200 dark:border-ground-700 bg-white dark:bg-ground-900 p-4">
+                {/* Logo Showcase Example */}
+                <section className="space-y-4">
+                    <div className="space-y-1">
+                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                            Logo Showcase Example
+                        </h2>
+                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                            Typical use case for partner logos or testimonials
+                        </p>
+                    </div>
                     <Marquee
-                        loopMode="ping-pong"
-                        speed="normal"
-                        label="Ping-pong scrolling content"
-                    >
-                        {["React", "Next.js", "Tailwind", "TypeScript"].map((item) => (
-                            <MarqueeItem key={item} className="mx-4">
-                                <div className="px-4 py-2 bg-linear-to-r from-primary-500 to-primary-600 text-white rounded-md">
-                                    <p className="text-sm font-secondary font-medium">{item}</p>
-                                </div>
-                            </MarqueeItem>
-                        ))}
-                    </Marquee>
-                </div>
-            </div>
-
-            {/* Single Pass Mode */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-primary font-medium text-ground-900 dark:text-ground-100">
-                    Single Pass Mode (Scrolls Once and Stops)
-                </h3>
-                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg border border-ground-200 dark:border-ground-700 bg-white dark:bg-ground-900 p-4">
-                    <Marquee
-                        loopMode="single"
                         speed="slow"
-                        showControls={false}
-                        label="Single pass scrolling content"
+                        pauseOnHover={true}
+                        label="Partner companies"
                     >
-                        {["One-time", "Announcement", "Message"].map((item) => (
-                            <MarqueeItem key={item} className="mx-4">
-                                <div className="px-4 py-2 bg-amber-100 dark:bg-amber-900 border border-amber-300 dark:border-amber-700 rounded-md">
-                                    <p className="text-sm font-secondary font-medium text-amber-800 dark:text-amber-200">{item}</p>
+                        {[
+                            "Acme Corp",
+                            "TechVision",
+                            "DataFlow Inc",
+                            "CloudNine",
+                            "DevTools Pro",
+                            "AppMakers",
+                        ].map((company, i) => (
+                            <MarqueeItem key={i}>
+                                <div className="px-8 py-4 rounded-xl bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700 shadow-sm">
+                                    <span className="text-lg font-semibold text-ground-900 dark:text-ground-50">
+                                        {company}
+                                    </span>
                                 </div>
                             </MarqueeItem>
                         ))}
                     </Marquee>
-                </div>
-            </div>
+                </section>
 
-            {/* Finite Loop Mode */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-primary font-medium text-ground-900 dark:text-ground-100">
-                    Finite Loop Mode (Loops 3 Times)
-                </h3>
-                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg border border-ground-200 dark:border-ground-700 bg-white dark:bg-ground-900 p-4">
-                    <Marquee
-                        loopMode="finite"
-                        loopCount={3}
-                        speed="fast"
-                        showControls={false}
-                        label="Finite loop scrolling content"
-                    >
-                        {["Limited", "Time", "Offer", "3x Only"].map((item) => (
-                            <MarqueeItem key={item} className="mx-4">
-                                <div className="px-4 py-2 bg-rose-500 text-white rounded-md">
-                                    <p className="text-sm font-secondary font-medium">{item}</p>
-                                </div>
-                            </MarqueeItem>
-                        ))}
-                    </Marquee>
-                </div>
+                {/* Accessibility Notes */}
+                <section className="space-y-4 p-6 rounded-lg bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800">
+                    <div className="space-y-2">
+                        <h2 className="text-xl font-semibold text-primary-900 dark:text-primary-100">
+                            WCAG 2.2 AA Compliance
+                        </h2>
+                        <div className="space-y-3 text-sm text-primary-800 dark:text-primary-200">
+                            <div className="flex gap-2">
+                                <span className="font-semibold shrink-0">
+                                    2.2.2 (Level A):
+                                </span>
+                                <span>
+                                    Pause control provided by default for all
+                                    moving content
+                                </span>
+                            </div>
+                            <div className="flex gap-2">
+                                <span className="font-semibold shrink-0">
+                                    2.3.3:
+                                </span>
+                                <span>
+                                    Respects prefers-reduced-motion setting -
+                                    animations disabled for users who prefer
+                                    reduced motion
+                                </span>
+                            </div>
+                            <div className="flex gap-2">
+                                <span className="font-semibold shrink-0">
+                                    2.4.7 (Level AA):
+                                </span>
+                                <span>
+                                    Focus indicator visible on pause control
+                                    button
+                                </span>
+                            </div>
+                            <div className="flex gap-2">
+                                <span className="font-semibold shrink-0">
+                                    4.1.2 (Level A):
+                                </span>
+                                <span>
+                                    Proper ARIA labels (role="region",
+                                    aria-roledescription, aria-label)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     );

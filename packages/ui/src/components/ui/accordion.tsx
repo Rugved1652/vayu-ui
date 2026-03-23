@@ -146,7 +146,7 @@ const Accordion: React.FC<AccordionProps> & {
         <AccordionContext.Provider value={contextValue}>
             <div
                 className={cn(
-                    "border border-ground-200 dark:border-ground-800 rounded-xl overflow-hidden bg-white dark:bg-ground-950",
+                    "border border-border rounded-surface overflow-hidden bg-surface",
                     className
                 )}
             >
@@ -176,7 +176,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     return (
         <div
             className={cn(
-                "group border-b border-ground-200 dark:border-ground-800 last:border-b-0",
+                "group border-b border-border last:border-b-0",
                 className
             )}
         >
@@ -241,7 +241,7 @@ const AccordionHeader: React.FC<AccordionHeaderProps> = ({
     };
 
     return (
-        <h3 className="rounded-xl">
+        <h3 className="rounded-surface">
             <button
                 id={headerId}
                 type="button"
@@ -258,11 +258,11 @@ const AccordionHeader: React.FC<AccordionHeaderProps> = ({
                 className={cn(
                     "outline-none",
                     "w-full text-left px-5 py-4 flex items-center justify-between transition-all duration-200",
-                    "font-secondary font-medium text-ground-900 dark:text-ground-100",
-                    "hover:bg-ground-50 dark:hover:bg-ground-900",
-                    "focus:outline-none focus:ring-2 first:focus:rounded-t-xl focus:ring-inset focus:ring-primary-500",
-                    "rounded-xl",
-                    isOpen ? "bg-ground-50 dark:bg-ground-900/50" : "",
+                    "font-secondary font-medium text-surface-content",
+                    "hover:bg-muted",
+                    "focus:outline-none focus:ring-2 first:focus:rounded-t-surface focus:ring-inset focus:ring-focus",
+                    "rounded-surface",
+                    isOpen ? "bg-muted" : "",
                     className
                 )}
             >
@@ -270,8 +270,8 @@ const AccordionHeader: React.FC<AccordionHeaderProps> = ({
                 <span
                     aria-hidden="true"
                     className={cn(
-                        "ml-3 shrink-0 text-ground-400 dark:text-ground-500 transition-transform duration-300",
-                        isOpen ? "rotate-180 text-primary-600 dark:text-primary-400" : ""
+                        "ml-3 shrink-0 text-muted-content transition-transform duration-300",
+                        isOpen ? "rotate-180 text-brand" : ""
                     )}
                 >
                     <ChevronDownIcon />
@@ -353,8 +353,8 @@ const AccordionBody: React.FC<AccordionBodyProps> = ({
             <div
                 ref={contentRef}
                 className={cn(
-                    "px-5 pb-5 pt-1 my-2",
-                    "font-secondary text-base leading-relaxed text-ground-600 dark:text-ground-400 bg-ground-50 dark:bg-ground-900/50",
+                    "px-5 py-3",
+                    "font-secondary text-base leading-relaxed text-muted-content bg-muted",
                     className
                 )}
             >

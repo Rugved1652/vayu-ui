@@ -14,3 +14,7 @@ apps/**/package-lock.json
 apps/docs/.source
 apps/docs/.next
 
+# CSS is handled by Stylelint — keep compact @keyframes formatting
+**/*.css
+**/*.scss
+
