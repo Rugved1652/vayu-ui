@@ -213,8 +213,8 @@ export default function AspectRatioDemo() {
                     Pass an <Typography.Code codeLang="tsx">aria-label</Typography.Code> to create a named landmark region for screen readers.
                 </Typography.P>
                 <AspectRatio
-                    ratio="video"
-                    aria-label="Featured article image"
+                    ratio="ultrawide"
+                    aria-label="Featured article images"
                     rounded
                     shadow
                 >
@@ -248,8 +248,8 @@ export default function AspectRatioDemo() {
                             className="object-cover"
                             unoptimized
                         />
-                        <div className="absolute inset-0 bg-linear-to-t from-canvas/80 to-transparent flex flex-col justify-end p-4">
-                            <Typography.H5 className="text-canvas-content dark:text-canvas-content mb-2">
+                        <div className="absolute inset-0 bg-linear-to-t from-canvas/20 dark:from-canvas/80  to-transparent flex flex-col justify-end p-4">
+                            <Typography.H5 className="text-canvas-content mb-2">
                                 Mountain Vista
                             </Typography.H5>
                             <Typography.P variant="secondary" className="text-sm text-canvas-content/80 dark:text-canvas-content/80 mb-3">
@@ -268,14 +268,14 @@ export default function AspectRatioDemo() {
                             className="object-cover"
                             unoptimized
                         />
-                        <div className="absolute inset-0 bg-linear-to-t from-canvas/80 to-transparent flex flex-col justify-end p-4">
+                        <div className="absolute inset-0 bg-linear-to-t from-canvas/20 dark:from-canvas/80  to-transparent flex flex-col justify-end p-4">
                             <Typography.H5 className="text-canvas-content dark:text-canvas-content mb-2">
                                 Waterfall Wonder
                             </Typography.H5>
                             <Typography.P variant="secondary" className="text-sm text-canvas-content/80 dark:text-canvas-content/80 mb-3">
                                 Discover hidden gems
                             </Typography.P>
-                            <Button variant="outline" size="small" className="w-fit">
+                            <Button variant="primary" size="small" className="w-fit">
                                 <Button.Text>Explore</Button.Text>
                             </Button>
                         </div>

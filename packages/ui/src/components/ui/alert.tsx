@@ -30,24 +30,24 @@ interface AlertDismissProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 // ============================================================================
 
 const variantStyles: Record<AlertVariant, string> = {
-    info: "bg-info-100 border-info-200 text-info-900 dark:bg-info-950 dark:border-info-800 dark:text-info-100",
-    success: "bg-success-100 border-success-200 text-success-900 dark:bg-success-950 dark:border-success-800 dark:text-success-100",
-    warning: "bg-warning-100 border-warning-200 text-warning-900 dark:bg-warning-950 dark:border-warning-800 dark:text-warning-100",
-    error: "bg-error-100 border-error-200 text-error-900 dark:bg-error-950 dark:border-error-800 dark:text-error-100",
+    info: "bg-info/10 border-info/30 text-canvas-content dark:bg-info/15 dark:border-info/40 dark:text-canvas-content",
+    success: "bg-success/10 border-success/30 text-canvas-content dark:bg-success/15 dark:border-success/40 dark:text-canvas-content",
+    warning: "bg-warning/10 border-warning/30 text-canvas-content dark:bg-warning/15 dark:border-warning/40 dark:text-canvas-content",
+    error: "bg-destructive/10 border-destructive/30 text-canvas-content dark:bg-destructive/15 dark:border-destructive/40 dark:text-canvas-content",
 };
 
 const variantIconStyles: Record<AlertVariant, string> = {
-    info: "text-info-600 dark:text-info-400",
-    success: "text-success-600 dark:text-success-400",
-    warning: "text-warning-600 dark:text-warning-400",
-    error: "text-error-600 dark:text-error-400",
+    info: "text-info",
+    success: "text-success",
+    warning: "text-warning",
+    error: "text-destructive",
 };
 
 const variantFocusStyles: Record<AlertVariant, string> = {
-    info: "focus-visible:ring-info-500 dark:focus-visible:ring-info-400",
-    success: "focus-visible:ring-success-500 dark:focus-visible:ring-success-400",
-    warning: "focus-visible:ring-warning-500 dark:focus-visible:ring-warning-400",
-    error: "focus-visible:ring-error-500 dark:focus-visible:ring-error-400",
+    info: "focus-visible:ring-info",
+    success: "focus-visible:ring-success",
+    warning: "focus-visible:ring-warning",
+    error: "focus-visible:ring-destructive",
 };
 
 const variantRole: Record<AlertVariant, "alert" | "status"> = {
@@ -81,7 +81,7 @@ const AlertRoot = forwardRef<HTMLDivElement, AlertRootProps>(({
             aria-live={variantLive[variant]}
             aria-atomic="true"
             className={cn(
-                "relative flex gap-3 p-4 border rounded w-full",
+                "relative flex gap-3 p-4 border rounded-surface w-full font-secondary",
                 variantStyles[variant],
                 className
             )}
@@ -134,7 +134,7 @@ const AlertTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElem
         <h5
             ref={ref}
             className={cn(
-                "font-primary font-semibold mb-1 leading-none tracking-tight",
+                "font-primary font-semibold mb-1 text-h5 leading-none tracking-tight",
                 className
             )}
             {...props}
@@ -158,7 +158,7 @@ const AlertDescription = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElemen
         <div
             ref={ref}
             className={cn(
-                "font-secondary text-para [&_p]:leading-relaxed",
+                "font-secondary text-para leading-relaxed",
                 className
             )}
             {...props}
@@ -193,7 +193,7 @@ const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
                 "absolute top-4 right-4 rounded p-1 transition-colors",
                 "hover:bg-black/10 dark:hover:bg-white/10",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                "ring-offset-info-100 dark:ring-offset-info-950",
+                "ring-offset-surface dark:ring-offset-surface",
                 variantIconStyles[variant],
                 variantFocusStyles[variant],
                 className

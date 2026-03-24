@@ -69,10 +69,10 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
 
         const innerRef = useRef<HTMLDivElement>(null);
         const placeholderRef = useRef<HTMLDivElement>(null);
-        
+
         // Performance: Track previous state to avoid unnecessary callback triggers
         const prevAffixedRef = useRef(false);
-        
+
         // Performance: Refs for animation frame to prevent scroll jank
         const frameId = useRef<number | null>(null);
         const isTicking = useRef(false);
@@ -126,7 +126,7 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
                     if (shouldAffix) {
                         setPlaceholderHeight(elHeight);
                         const containerVisibleBottom = target.clientHeight;
-                        
+
                         setAffixStyle({
                             position: "absolute",
                             top: scrollTop + (containerVisibleBottom - elHeight) - offset,
@@ -141,7 +141,7 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
                         updateAffixed(false);
                     }
                 }
-            } 
+            }
             // --- Mode 2: Window (Fixed) ---
             else {
                 const containerTop = 0;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Alert } from "vayu-ui";
+import { Alert, Typography, Divider, Button } from "vayu-ui";
 import { Info, CheckCircle, TriangleAlert, XCircle } from "lucide-react";
 
 export default function AlertDemo() {
@@ -10,9 +10,9 @@ export default function AlertDemo() {
 
     return (
         <div className="w-full max-w-md not-prose">
-            <h2 id="alert-demo-label" className="text-xl font-primary font-semibold mb-4">
+            <Typography.H5 id="alert-demo-label" className="mb-4">
                 Alert Example
-            </h2>
+            </Typography.H5>
 
             <div className="flex flex-col gap-4">
                 {/* Info Alert */}
@@ -27,6 +27,8 @@ export default function AlertDemo() {
                         </Alert.Description>
                     </Alert.Content>
                 </Alert>
+
+                <Divider spacing="sm" />
 
                 {/* Success Alert with Dismiss */}
                 {showSuccess && (
@@ -44,6 +46,8 @@ export default function AlertDemo() {
                     </Alert>
                 )}
 
+                <Divider spacing="sm" />
+
                 {/* Warning Alert */}
                 <Alert variant="warning">
                     <Alert.Icon variant="warning">
@@ -56,6 +60,8 @@ export default function AlertDemo() {
                         </Alert.Description>
                     </Alert.Content>
                 </Alert>
+
+                <Divider spacing="sm" />
 
                 {/* Error Alert with Dismiss */}
                 {showError && (
@@ -74,12 +80,13 @@ export default function AlertDemo() {
                 )}
 
                 {(!showSuccess || !showError) && (
-                    <button
+                    <Button
+                        variant="ghost"
+                        size="small"
                         onClick={() => { setShowSuccess(true); setShowError(true); }}
-                        className="mt-2 font-secondary text-para text-ground-500 hover:text-ground-900 dark:hover:text-ground-100 hover:underline transition-colors"
                     >
-                        Reset Alerts
-                    </button>
+                        <Button.Text>Reset Alerts</Button.Text>
+                    </Button>
                 )}
             </div>
         </div>

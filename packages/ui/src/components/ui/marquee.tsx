@@ -155,7 +155,7 @@ const Marquee = forwardRef<HTMLDivElement, MarqueeProps>(
                     className={clsx(
                         "flex-1 overflow-hidden relative",
                         gradient &&
-                            "[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
+                        "[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
                     )}
                 >
                     <div
@@ -164,7 +164,7 @@ const Marquee = forwardRef<HTMLDivElement, MarqueeProps>(
                             getAnimationClass(),
                             "[animation-duration:var(--duration)]",
                             loopMode !== "ping-pong" && "[animation-direction:var(--direction)]",
-                            pauseOnHover && "hover:animate-paused",
+                            pauseOnHover && "hover:[animation-play-state:paused]",
                             isPaused && "animate-paused",
                             // WCAG 2.3.3 - Respect reduced motion preference
                             "motion-reduce:animate-none"

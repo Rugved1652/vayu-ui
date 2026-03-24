@@ -47,7 +47,7 @@ export default function AffixDemo() {
               offset={20}
               zIndex={50}
               role="navigation"
-              ariaLabel="Sticky Top Navigation"
+              aria-label="Sticky Top Navigation"
               onAffixed={(affixed) => setIsTopAffixed(affixed)}
             >
               <div className="bg-brand text-brand-content p-4 rounded-control shadow-elevated flex justify-between items-center">
@@ -149,7 +149,7 @@ export default function AffixDemo() {
               className="bg-linear-to-r from-brand to-info"
               style={{ borderRadius: "9999px" }}
               role="region"
-              ariaLabel="Special Offer Banner"
+              aria-label="Special Offer Banner"
             >
               <div className="p-4 text-brand-content text-center font-bold shadow-elevated">
                 <Typography.P>Custom Styled Banner (Rounded via style prop!)</Typography.P>
@@ -160,6 +160,6 @@ export default function AffixDemo() {
         </section>
 
       </main>
-    </div>
+    </div >
   );
 }
