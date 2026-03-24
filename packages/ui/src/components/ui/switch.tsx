@@ -90,16 +90,16 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             className={cn(
               // Base
               "relative inline-flex items-center",
-              "w-11 h-6 p-0.5 rounded-full",
+              "w-11 h-6 p-0.5 rounded-control",
               "transition-colors duration-200 ease-in-out",
-              // Background colors
-              checked ? "bg-primary-600" : "bg-ground-300 dark:bg-ground-700",
+              // Background colors (semantic tokens)
+              checked ? "bg-brand" : "bg-muted",
               // Focus visible ring (WCAG 2.2)
-              "peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-primary-500 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-ground-50 dark:peer-focus-visible:ring-offset-ground-950",
+              "peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-focus peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-canvas",
               // Disabled state
               "peer-disabled:opacity-50",
               // Error state (only when not checked and not disabled)
-              error && !disabled && !checked && "ring-2 ring-error-500"
+              error && !disabled && !checked && "ring-2 ring-destructive"
             )}
           >
             {/* Thumb - JS conditional since peer-checked doesn't work on nested elements */}
@@ -107,7 +107,7 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
               className={cn(
                 "pointer-events-none",
                 "w-5 h-5 rounded-full",
-                "bg-white shadow-sm",
+                "bg-elevated shadow-control",
                 "transition-transform duration-200 ease-in-out",
                 )}
               style={{ transform: checked ? "translateX(20px)" : "translateX(0)" }}
@@ -124,9 +124,9 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                 htmlFor={id}
                 className={cn(
                   "text-sm font-medium select-none",
-                  "text-ground-900 dark:text-ground-100",
+                  "text-surface-content",
                   disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
-                  error && !disabled && "text-error-600 dark:text-error-400"
+                  error && !disabled && "text-destructive"
                 )}
               >
                 {label}
@@ -138,7 +138,7 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
                 id={descriptionId}
                 className={cn(
                   "text-xs select-none",
-                  "text-ground-500 dark:text-ground-400",
+                  "text-muted-content",
                   disabled && "opacity-50"
                 )}
               >

@@ -142,8 +142,8 @@ function SkeletonItem({
     count = 1,
     ...props
 }: SkeletonItemProps) {
-    // WCAG 2.2 AA: Uses ground tokens for skeleton color with sufficient contrast
-    const baseClasses = "bg-ground-200 dark:bg-ground-800 border border-transparent";
+    // WCAG 2.2 AA: Uses semantic design tokens for skeleton color with sufficient contrast
+    const baseClasses = "bg-muted border border-transparent";
     const variantClass = getVariantClasses(variant, size);
     const styles = getSkeletonStyles(width, height);
 
@@ -305,7 +305,7 @@ function SkeletonCard({
 }: SkeletonCardProps) {
     return (
         <div
-            className={`bg-ground-50 dark:bg-ground-950 rounded p-4 border border-ground-200 dark:border-ground-900 shadow-outer ${className}`}
+            className={`bg-surface rounded-surface p-4 border border-border shadow-surface ${className}`}
             aria-hidden="true"
             {...props}
         >
@@ -402,7 +402,7 @@ function SkeletonList({
             {Array.from({ length: items }).map((_, index) => (
                 <div
                     key={index}
-                    className="flex items-center gap-3 p-3 bg-ground-50 dark:bg-ground-950 rounded border border-ground-200 dark:border-ground-900"
+                    className="flex items-center gap-3 p-3 bg-surface rounded-surface border border-border"
                 >
                     {showAvatar && <SkeletonCircle size={size} animation={animation} />}
                     <div className="flex-1">
@@ -449,13 +449,13 @@ function SkeletonTable({
 }: SkeletonTableProps) {
     return (
         <div
-            className={`bg-ground-50 dark:bg-ground-950 rounded border border-ground-200 dark:border-ground-900 overflow-hidden ${className}`}
+            className={`bg-surface rounded-surface border border-border overflow-hidden ${className}`}
             aria-hidden="true"
             {...props}
         >
             {showHeader && (
                 <div
-                    className="grid gap-4 p-4 border-b border-ground-200 dark:border-ground-900 bg-ground-100 dark:bg-ground-900/50"
+                    className="grid gap-4 p-4 border-b border-border bg-muted/50"
                     style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
                 >
                     {Array.from({ length: columns }).map((_, index) => (
@@ -472,7 +472,7 @@ function SkeletonTable({
             {Array.from({ length: rows }).map((_, rowIndex) => (
                 <div
                     key={rowIndex}
-                    className="grid gap-4 p-4 border-b border-ground-200 dark:border-ground-900 last:border-b-0"
+                    className="grid gap-4 p-4 border-b border-border last:border-b-0"
                     style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
                 >
                     {Array.from({ length: columns }).map((_, colIndex) => (

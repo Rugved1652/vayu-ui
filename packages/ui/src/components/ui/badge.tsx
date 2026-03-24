@@ -11,11 +11,11 @@ import { XIcon } from "../icons";
 // ============================================================================
 
 type BadgeVariant =
-  | "primary"
-  | "secondary"
+  | "brand"
+  | "muted"
   | "warning"
   | "success"
-  | "error"
+  | "destructive"
   | "info";
 
 type BadgeSize = "sm" | "md" | "lg";
@@ -40,40 +40,41 @@ interface BadgeProps
 // ============================================================================
 
 const variants: Record<BadgeVariant, string> = {
-  // Lime is bright, requires dark text for WCAG AA compliance
-  primary: cn(
-    "bg-primary-500 text-primary-950",
-    "dark:bg-primary-600 dark:text-primary-950"
+  // Brand color for primary actions and emphasis
+  brand: cn(
+    "bg-brand text-brand-content",
+    "dark:bg-brand dark:text-brand-content"
   ),
 
-  // Neutral ground colors
-  secondary: cn(
-    "bg-ground-100 text-ground-800 border border-ground-200",
-    "dark:bg-ground-800 dark:text-ground-100 dark:border-ground-700"
+  // Muted for de-emphasized UI elements
+  muted: cn(
+    "bg-muted text-muted-content",
+    "border border-border",
+    "dark:bg-muted dark:text-muted-content dark:border-border"
   ),
 
-  // Warning is yellow, requires dark text
+  // Warning for caution states
   warning: cn(
-    "bg-warning-400 text-warning-950",
-    "dark:bg-warning-500 dark:text-warning-950"
+    "bg-warning text-warning-content",
+    "dark:bg-warning dark:text-warning-content"
   ),
 
-  // Success (Green) allows white text on darker shades
+  // Success for positive states
   success: cn(
-    "bg-success-600 text-white",
-    "dark:bg-success-700 dark:text-white"
+    "bg-success text-success-content",
+    "dark:bg-success dark:text-success-content"
   ),
 
-  // Error (Red)
-  error: cn(
-    "bg-error-600 text-white",
-    "dark:bg-error-700 dark:text-white"
+  // Destructive for error/delete actions
+  destructive: cn(
+    "bg-destructive text-destructive-content",
+    "dark:bg-destructive dark:text-destructive-content"
   ),
 
-  // Info (Blue)
+  // Info for informational states
   info: cn(
-    "bg-info-600 text-white",
-    "dark:bg-info-700 dark:text-white"
+    "bg-info text-info-content",
+    "dark:bg-info dark:text-info-content"
   ),
 };
 
@@ -108,7 +109,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
   (
     {
       className,
-      variant = "primary",
+      variant = "brand",
       size = "md",
       as,
       onClick,
@@ -138,7 +139,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       // Transitions
       "transition-colors duration-150",
       // Focus Management (WCAG 2.4.7)
-      "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 dark:focus:ring-offset-ground-950",
+      "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focus dark:focus:ring-offset-canvas",
       
       sizes[size],
       variants[variant],

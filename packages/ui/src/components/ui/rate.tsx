@@ -291,7 +291,7 @@ const RateLabel: React.FC<RateLabelProps> = ({ children, className = "" }) => {
     return (
         <label
             htmlFor={inputId}
-            className={`block font-primary text-ground-700 dark:text-ground-300 font-medium mb-1 ${sizeClasses[size].label} ${className}`}
+            className={`block font-primary text-surface-content font-medium mb-1 ${sizeClasses[size].label} ${className}`}
         >
             {children}
         </label>
@@ -316,7 +316,7 @@ const RateDescription: React.FC<RateDescriptionProps> = ({
     return (
         <p
             id={id}
-            className={`text-xs font-secondary text-ground-500 dark:text-ground-400 mb-2 ${className}`}
+            className={`text-xs font-secondary text-muted-content mb-2 ${className}`}
         >
             {children}
         </p>
@@ -395,7 +395,7 @@ const RateStars: React.FC<RateStarsProps> = ({
             className={`
                 flex items-center ${sizeClasses[size].gap}
                 ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
-                ${!isDisabled && !readOnly && isFocused ? "ring-2 ring-primary-500 ring-offset-2 rounded" : ""}
+                ${!isDisabled && !readOnly && isFocused ? "ring-2 ring-focus ring-offset-2 ring-offset-canvas rounded" : ""}
                 transition-all duration-200
                 ${className}
             `}
@@ -453,10 +453,10 @@ const RateStar: React.FC<RateStarProps> = ({ index }) => {
     const activeFilledIcon = isPartialFill ? halfIcon : filledIcon;
 
     // Hardcoded Default Styles (Warning/Gold) with Error state support
-    const emptyClasses = "text-ground-300 dark:text-ground-700";
+    const emptyClasses = "text-muted";
     const filledClasses = error
-        ? "text-error-500 fill-error-500 dark:text-error-400 dark:fill-error-400"
-        : "text-warning-500 fill-warning-500 dark:text-warning-400 dark:fill-warning-400";
+        ? "text-destructive fill-destructive"
+        : "text-warning fill-warning";
 
     const renderIcon = (iconElement: ReactElement, className: string, isFilled: boolean) => {
         const iconProps = {
@@ -540,7 +540,7 @@ const RateValue: React.FC<RateValueProps> = ({
 
     return (
         <span
-            className={`${sizeClasses[size].value} font-secondary font-medium text-ground-700 dark:text-ground-300 ${className}`}
+            className={`${sizeClasses[size].value} font-secondary font-medium text-surface-content ${className}`}
         >
             {activeValue.toFixed(decimalPlaces)}
             {showTotal && ` / ${count}`}
@@ -568,7 +568,7 @@ const RateTextLabel: React.FC<RateTextLabelProps> = ({ className = "" }) => {
 
     return (
         <span
-            className={`${sizeClasses[size].value} font-secondary font-medium text-ground-600 dark:text-ground-400 ${className}`}
+            className={`${sizeClasses[size].value} font-secondary font-medium text-muted-content ${className}`}
             role="status"
             aria-live="polite"
         >
@@ -617,7 +617,7 @@ const RateErrorText: React.FC<RateErrorTextProps> = ({
     return (
         <p
             id={id}
-            className={`text-xs font-secondary text-error-500 dark:text-error-400 mt-1 ${className}`}
+            className={`text-xs font-secondary text-destructive mt-1 ${className}`}
             role="alert"
             aria-live="polite"
         >

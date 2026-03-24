@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from "react";
-import { clsx } from "clsx";
+import { cn } from "./utils";
 
 // ============================================================================
 // Types & Enums
@@ -9,11 +9,11 @@ type DividerOrientation = "horizontal" | "vertical";
 type DividerVariant = "solid" | "dashed" | "dotted";
 type DividerSpacing = "none" | "sm" | "md" | "lg" | "xl" | "2xl";
 type DividerColor =
-    | "ground"
-    | "primary"
+    | "default"
+    | "brand"
     | "success"
     | "warning"
-    | "error"
+    | "destructive"
     | "info";
 type DividerSize = "thin" | "normal" | "thick" | "bold";
 
@@ -64,24 +64,24 @@ const variantMap: Record<DividerVariant, string> = {
     dotted: "border-dotted",
 };
 
-// FIX: Using ground-400 for 3:1 contrast ratio (WCAG 1.4.11)
+// Semantic design tokens for border colors
 const colorMap: Record<DividerColor, string> = {
-    ground: "border-ground-400 dark:border-ground-600",
-    primary: "border-primary-300 dark:border-primary-600",
-    success: "border-success-400 dark:border-success-600",
-    warning: "border-warning-500 dark:border-warning-600",
-    error: "border-error-400 dark:border-error-600",
-    info: "border-info-400 dark:border-info-600",
+    default: "border-border",
+    brand: "border-brand",
+    success: "border-success",
+    warning: "border-warning",
+    destructive: "border-destructive",
+    info: "border-info",
 };
 
-// WCAG-compliant text colors (4.5:1 contrast minimum)
+// Semantic design tokens for label colors
 const labelColorMap: Record<DividerColor, string> = {
-    ground: "text-ground-600 dark:text-ground-300",
-    primary: "text-primary-700 dark:text-primary-300",
-    success: "text-success-700 dark:text-success-300",
-    warning: "text-warning-800 dark:text-warning-200",
-    error: "text-error-700 dark:text-error-300",
-    info: "text-info-700 dark:text-info-300",
+    default: "text-muted-content",
+    brand: "text-brand",
+    success: "text-success",
+    warning: "text-warning",
+    destructive: "text-destructive",
+    info: "text-info",
 };
 
 const sizeMap: Record<DividerSize, number> = {
@@ -97,7 +97,7 @@ const sizeMap: Record<DividerSize, number> = {
 
 const DividerLine = ({
     variant = "solid",
-    color = "ground",
+    color = "default",
     size = "normal",
     thickness,
     opacity = 1,
@@ -116,7 +116,7 @@ const DividerLine = ({
 
     return (
         <div
-            className={clsx(
+            className={cn(
                 "grow shrink-0 border-0",
                 variantMap[variant],
                 colorMap[color],
@@ -133,14 +133,14 @@ const DividerLine = ({
 };
 
 const DividerLabel = ({
-    color = "ground",
+    color = "default",
     className,
     children,
     ...props
 }: DividerLabelProps) => {
     return (
         <span
-            className={clsx(
+            className={cn(
                 "px-3 py-1 text-sm font-medium whitespace-nowrap font-secondary",
                 labelColorMap[color],
                 className
@@ -163,8 +163,8 @@ const DividerRoot = ({
     const isHorizontal = orientation === "horizontal";
 
     const layoutClasses = isHorizontal
-        ? clsx("flex items-center w-full", spacingMap[spacing])
-        : clsx(
+        ? cn("flex items-center w-full", spacingMap[spacing])
+        : cn(
             "inline-flex flex-col items-center h-full min-h-[1em]",
             verticalSpacingMap[spacing]
         );
@@ -187,7 +187,7 @@ const DividerRoot = ({
     if (!children) {
         return (
             <div
-                className={clsx(layoutClasses, className)}
+                className={cn(layoutClasses, className)}
                 {...ariaProps}
                 {...props}
             >
@@ -198,7 +198,7 @@ const DividerRoot = ({
 
     return (
         <div
-            className={clsx(layoutClasses, className)}
+            className={cn(layoutClasses, className)}
             {...ariaProps}
             {...props}
         >

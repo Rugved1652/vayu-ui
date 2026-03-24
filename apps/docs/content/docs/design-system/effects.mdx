@@ -1,0 +1,429 @@
+---
+title: Effects
+description: Add depth and polish to your UI with Vayu UI's semantic radius, shadow, and blur utilities.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Square, Circle, Layers, Sparkles } from 'lucide-react';
+
+# Effects
+
+Effects add depth and visual interest to your UI. Vayu UI provides semantic utilities for radius, shadows, and blur — each designed for specific use cases.
+
+## Border Radius
+
+Border radius controls the roundness of corners. Vayu UI uses semantic radius values that correspond to element types.
+
+### The Radius Scale
+
+| Class | Value | Usage |
+| :--- | :--- | :--- |
+| `rounded-control` | 4px | Buttons, inputs, small interactive elements |
+| `rounded-surface` | 6px | Cards, containers, panels |
+| `rounded-overlay` | 8px | Modals, popovers, dropdowns |
+| `rounded-full` | 9999px | Pills, avatars, circular elements |
+
+### Base Scale
+
+These are the underlying values:
+
+| Class | Value |
+| :--- | :--- |
+| `rounded-sm` | 4px |
+| `rounded-md` | 6px |
+| `rounded-lg` | 8px |
+
+<Tabs items={['Preview', 'Usage']}>
+  <Tab value="Preview">
+    <div className="grid grid-cols-4 gap-4 p-6 bg-canvas rounded-surface">
+      <div className="flex flex-col items-center">
+        <div className="w-16 h-16 bg-brand rounded-control mb-2"></div>
+        <span className="text-h6 text-muted-content">Control (4px)</span>
+      </div>
+      <div className="flex flex-col items-center">
+        <div className="w-16 h-16 bg-brand rounded-surface mb-2"></div>
+        <span className="text-h6 text-muted-content">Surface (6px)</span>
+      </div>
+      <div className="flex flex-col items-center">
+        <div className="w-16 h-16 bg-brand rounded-overlay mb-2"></div>
+        <span className="text-h6 text-muted-content">Overlay (8px)</span>
+      </div>
+      <div className="flex flex-col items-center">
+        <div className="w-16 h-16 bg-brand rounded-full mb-2"></div>
+        <span className="text-h6 text-muted-content">Full (9999px)</span>
+      </div>
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Button with control radius
+    <button className="bg-brand text-brand-content rounded-control px-4 py-2">
+      Click Me
+    </button>
+
+    // Card with surface radius
+    <div className="bg-surface rounded-surface p-6">
+      Card content
+    </div>
+
+    // Modal with overlay radius
+    <div className="bg-elevated rounded-overlay p-6">
+      Modal content
+    </div>
+
+    // Avatar with full radius
+    <img src="/avatar.jpg" className="w-10 h-10 rounded-full" />
+
+    // Badge with full radius
+    <span className="bg-brand text-brand-content rounded-full px-2 py-0.5 text-sm">
+      New
+    </span>
+    ```
+  </Tab>
+</Tabs>
+
+### When to Use Each
+
+| Element Type | Radius Class | Why |
+| :--- | :--- | :--- |
+| Buttons | `rounded-control` | Small, interactive, tactile feel |
+| Inputs | `rounded-control` | Matches button radius for form consistency |
+| Tags/Chips | `rounded-control` | Small, contained elements |
+| Cards | `rounded-surface` | Medium size, content containers |
+| Panels | `rounded-surface` | Grouped content areas |
+| Modals | `rounded-overlay` | Larger, floating elements |
+| Dropdowns | `rounded-overlay` | Popup menus, overlays |
+| Avatars | `rounded-full` | Circular profile images |
+| Badges | `rounded-full` | Pill-shaped indicators |
+
+---
+
+## Shadows
+
+Shadows create depth and hierarchy. Vayu UI provides semantic shadows that correspond to element types and their position in the layer hierarchy.
+
+### The Shadow Scale
+
+| Class | Usage | Visual Weight |
+| :--- | :--- | :--- |
+| `shadow-control` | Buttons, inputs | Subtle lift for interactive elements |
+| `shadow-surface` | Cards, list items | Light separation from canvas |
+| `shadow-elevated` | Modals, popovers | Strong depth for floating elements |
+| `shadow-focus` | Focus rings | Emphasis for keyboard navigation |
+| `shadow-inner` | Pressed states | Inset effect for active states |
+
+### Visual Comparison
+
+<Tabs items={['All Shadows', 'In Context']}>
+  <Tab value="All Shadows">
+    <div className="grid grid-cols-3 gap-6 p-6 bg-canvas rounded-surface">
+      <div className="flex flex-col items-center">
+        <div className="w-20 h-20 bg-surface rounded-surface shadow-control mb-3"></div>
+        <span className="text-h6 font-primary">Control</span>
+        <span className="text-h6 text-muted-content">Buttons, inputs</span>
+      </div>
+      <div className="flex flex-col items-center">
+        <div className="w-20 h-20 bg-surface rounded-surface shadow-surface mb-3"></div>
+        <span className="text-h6 font-primary">Surface</span>
+        <span className="text-h6 text-muted-content">Cards, containers</span>
+      </div>
+      <div className="flex flex-col items-center">
+        <div className="w-20 h-20 bg-surface rounded-surface shadow-elevated mb-3"></div>
+        <span className="text-h6 font-primary">Elevated</span>
+        <span className="text-h6 text-muted-content">Modals, popovers</span>
+      </div>
+    </div>
+  </Tab>
+  <Tab value="In Context">
+    <div className="p-6 bg-canvas rounded-surface space-y-4">
+      {/* Button with control shadow */}
+      <button className="bg-brand text-brand-content rounded-control shadow-control px-4 py-2">
+        Primary Button
+      </button>
+
+      {/* Card with surface shadow */}
+      <div className="bg-surface rounded-surface shadow-surface p-4">
+        <h4 className="font-primary text-h4 mb-2">Card Title</h4>
+        <p className="text-para text-muted-content">This card has a subtle shadow.</p>
+      </div>
+
+      {/* Simulated modal with elevated shadow */}
+      <div className="bg-elevated rounded-overlay shadow-elevated p-4 max-w-xs">
+        <h4 className="font-primary text-h4 mb-2">Modal</h4>
+        <p className="text-para text-muted-content">This modal has a stronger shadow.</p>
+      </div>
+    </div>
+  </Tab>
+</Tabs>
+
+### Usage Examples
+
+```tsx
+// Button with control shadow
+<button className="bg-brand text-brand-content rounded-control shadow-control px-4 py-2">
+  Primary Action
+</button>
+
+// Card with surface shadow
+<div className="bg-surface text-surface-content rounded-surface shadow-surface p-6">
+  Card content
+</div>
+
+// Modal with elevated shadow
+<div className="bg-elevated text-elevated-content rounded-overlay shadow-elevated p-6">
+  Modal content
+</div>
+
+// Focus ring
+<button className="rounded-control px-4 py-2 focus:ring-2 focus:shadow-focus">
+  Focus Me
+</button>
+
+// Pressed button with inner shadow
+<button className="rounded-control shadow-inner px-4 py-2 active:shadow-inner">
+  Press Me
+</button>
+```
+
+### Drop Shadows
+
+For icons and illustrations that need to float:
+
+| Class | Usage |
+| :--- | :--- |
+| `drop-shadow-subtle` | Icons, small illustrations |
+| `drop-shadow-elevated` | Floating icons, larger illustrations |
+
+```tsx
+// Icon with subtle drop shadow
+<Icon className="drop-shadow-subtle" />
+
+// Floating illustration
+<img src="/hero.svg" className="drop-shadow-elevated" />
+```
+
+### Text Shadows
+
+For text that needs to stand out against backgrounds:
+
+| Class | Usage |
+| :--- | :--- |
+| `text-shadow-subtle` | Small labels |
+| `text-shadow-surface` | Headings |
+| `text-shadow-overlay` | Hero text on images |
+
+```tsx
+// Hero text with overlay shadow
+<h1 className="text-h1 font-primary text-shadow-overlay">
+  Hero Title
+</h1>
+```
+
+---
+
+## Blur
+
+Blur effects create glassmorphism and depth. Use them sparingly for emphasis.
+
+### The Blur Scale
+
+| Class | Value | Usage |
+| :--- | :--- | :--- |
+| `blur-control` | 8px | Subtle UI effects, hover states |
+| `blur-surface` | 12px | Glass cards, frosted panels |
+| `blur-overlay` | 20px | Modal backdrops, heavy glass effects |
+
+### Glassmorphism Example
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <div
+      className="relative h-48 rounded-surface overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%)'
+      }}
+    >
+      {/* Glass card */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 p-4 rounded-surface"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)'
+        }}
+      >
+        <h4 className="font-primary text-white text-h4 mb-2">Glass Card</h4>
+        <p className="text-white/80 text-para">
+          Frosted glass effect with blur
+        </p>
+      </div>
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    // Glass card
+    <div className="bg-white/20 backdrop-blur-surface border border-white/30 rounded-surface p-4">
+      <h4 className="font-primary text-white text-h4">Glass Card</h4>
+      <p className="text-white/80 text-para">
+        Frosted glass effect
+      </p>
+    </div>
+
+    // Glass navbar
+    <nav className="bg-surface/80 backdrop-blur-surface border-b border-border sticky top-0">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+    </nav>
+
+    // Modal backdrop
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-overlay">
+      <div className="bg-elevated rounded-overlay p-6">
+        Modal content
+      </div>
+    </div>
+    ```
+  </Tab>
+</Tabs>
+
+### When to Use Blur
+
+| Use Case | Blur Class | Notes |
+| :--- | :--- | :--- |
+| Glass cards | `backdrop-blur-surface` | Use with semi-transparent background |
+| Frosted navbar | `backdrop-blur-surface` | Sticky navigation with depth |
+| Modal backdrop | `backdrop-blur-overlay` | Stronger blur for focus |
+| Hover effects | `backdrop-blur-control` | Subtle, use sparingly |
+
+### Performance Note
+
+Blur effects can impact performance, especially on lower-end devices. Use them sparingly and test on target devices.
+
+```tsx
+// Good: Single blur on a container
+<div className="backdrop-blur-surface">
+  {/* Content */}
+</div>
+
+// Avoid: Multiple nested blurs
+<div className="backdrop-blur-surface">
+  <div className="backdrop-blur-surface">
+    <div className="backdrop-blur-surface">
+      {/* Too many blur layers */}
+    </div>
+  </div>
+</div>
+```
+
+---
+
+## Combining Effects
+
+### Card with All Effects
+
+```tsx
+export function GlassCard({ title, description }) {
+  return (
+    <div className="bg-surface/80 backdrop-blur-surface rounded-surface shadow-surface border border-border p-6">
+      <h3 className="font-primary text-h3 mb-2">{title}</h3>
+      <p className="text-para text-muted-content">{description}</p>
+    </div>
+  );
+}
+```
+
+### Interactive Button
+
+```tsx
+export function Button({ children, variant = 'primary' }) {
+  return (
+    <button className={`
+      rounded-control shadow-control
+      transition-all duration-200
+      hover:shadow-surface
+      active:shadow-inner
+      focus:ring-2 focus:shadow-focus
+      px-4 py-2
+      ${variant === 'primary' ? 'bg-brand text-brand-content' : ''}
+      ${variant === 'secondary' ? 'bg-surface text-surface-content border border-border' : ''}
+    `}>
+      {children}
+    </button>
+  );
+}
+```
+
+### Modal with Backdrop
+
+```tsx
+export function Modal({ isOpen, onClose, children }) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Blurred backdrop */}
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-overlay"
+        onClick={onClose}
+      />
+
+      {/* Modal content */}
+      <div className="relative bg-elevated text-elevated-content rounded-overlay shadow-elevated p-6 max-w-md">
+        {children}
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+## Quick Reference
+
+### Radius
+
+| Class | Value | Use For |
+| :--- | :--- | :--- |
+| `rounded-control` | 4px | Buttons, inputs |
+| `rounded-surface` | 6px | Cards, containers |
+| `rounded-overlay` | 8px | Modals, dropdowns |
+| `rounded-full` | 9999px | Avatars, badges |
+
+### Shadows
+
+| Class | Use For |
+| :--- | :--- |
+| `shadow-control` | Buttons, inputs |
+| `shadow-surface` | Cards, list items |
+| `shadow-elevated` | Modals, popovers |
+| `shadow-focus` | Focus rings |
+| `shadow-inner` | Pressed states |
+
+### Blur
+
+| Class | Value | Use For |
+| :--- | :--- | :--- |
+| `blur-control` | 8px | Hover effects |
+| `blur-surface` | 12px | Glass cards |
+| `blur-overlay` | 20px | Modal backdrops |
+
+### CSS Variables
+
+```css
+/* Radius */
+--radius-control: 4px;
+--radius-surface: 6px;
+--radius-overlay: 8px;
+--radius-full: 9999px;
+
+/* Shadows */
+--shadow-control: 0 1px 2px rgb(var(--shadow-color) / 0.05);
+--shadow-surface: 0 1px 2px rgb(var(--shadow-color) / 0.05);
+--shadow-elevated: 0 4px 6px -1px rgb(var(--shadow-color) / 0.1);
+--shadow-focus: 0 10px 15px -3px rgb(var(--shadow-color) / 0.1);
+--shadow-inner: inset 0 2px 4px rgb(var(--shadow-color) / 0.1);
+
+/* Blur */
+--blur-control: 8px;
+--blur-surface: 12px;
+--blur-overlay: 20px;
+```

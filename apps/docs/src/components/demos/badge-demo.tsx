@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Badge } from "vayu-ui"; // Update path to match your project
+import { Badge, Button, Divider, Typography } from "vayu-ui";
 
 export default function BadgeDemoPage() {
   // State for Dismissible Demos
@@ -29,63 +29,77 @@ export default function BadgeDemoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-ground-50 dark:bg-ground-950 p-8 md:p-16 font-secondary">
+    <div className="min-h-screen bg-canvas p-8 md:p-16 font-secondary">
       <div className="max-w-4xl mx-auto space-y-12">
-        
+
         {/* Header */}
         <div className="space-y-4">
-          <h1 className="text-h1 font-primary text-ground-950 dark:text-ground-50">
+          <Typography.H1 variant="primary">
             Badge Component
-          </h1>
-          <p className="text-para text-ground-600 dark:text-ground-400 max-w-2xl">
-            A flexible, accessible Badge component. Supports variants, interactive modes (onClick), 
+          </Typography.H1>
+          <Typography.P variant="secondary" className="max-w-2xl">
+            A flexible, accessible Badge component. Supports variants, interactive modes (onClick),
             and dismissible states. Compliant with WCAG 2.2 target sizes.
-          </p>
+          </Typography.P>
         </div>
+
+        <Divider spacing="lg">
+          <Divider.Line color="ground" />
+        </Divider>
 
         {/* Section 1: Variants */}
         <section className="space-y-4">
-          <h2 className="text-h3 font-primary border-b border-ground-200 dark:border-ground-800 pb-2">
+          <Typography.H3 variant="primary" className="border-b border-border pb-2">
             Variants
-          </h2>
+          </Typography.H3>
           <div className="flex flex-wrap gap-4 items-center">
-            <Badge variant="primary">Primary</Badge>
-            <Badge variant="secondary">Secondary</Badge>
+            <Badge variant="brand">Brand</Badge>
+            <Badge variant="muted">Muted</Badge>
             <Badge variant="success">Success</Badge>
             <Badge variant="warning">Warning</Badge>
-            <Badge variant="error">Error</Badge>
+            <Badge variant="destructive">Destructive</Badge>
             <Badge variant="info">Info</Badge>
           </div>
         </section>
 
+        <Divider spacing="lg">
+          <Divider.Line color="ground" />
+        </Divider>
+
         {/* Section 2: Sizes */}
         <section className="space-y-4">
-          <h2 className="text-h3 font-primary border-b border-ground-200 dark:border-ground-800 pb-2">
+          <Typography.H3 variant="primary" className="border-b border-border pb-2">
             Sizes
-          </h2>
+          </Typography.H3>
           <div className="flex flex-wrap gap-4 items-center">
-            <Badge size="sm" variant="primary">Small (24px)</Badge>
-            <Badge size="md" variant="primary">Medium (28px)</Badge>
-            <Badge size="lg" variant="primary">Large (32px)</Badge>
+            <Badge size="sm" variant="brand">Small (24px)</Badge>
+            <Badge size="md" variant="brand">Medium (28px)</Badge>
+            <Badge size="lg" variant="brand">Large (32px)</Badge>
           </div>
         </section>
 
+        <Divider spacing="lg">
+          <Divider.Line color="ground" />
+        </Divider>
+
         {/* Section 3: Interactive (Clickable) */}
         <section className="space-y-4">
-          <h2 className="text-h3 font-primary border-b border-ground-200 dark:border-ground-800 pb-2">
+          <Typography.H3 variant="primary" className="border-b border-border pb-2">
             Interactive
-          </h2>
-          <p className="text-sm text-ground-500">Click to trigger an alert.</p>
+          </Typography.H3>
+          <Typography.P variant="secondary" className="text-sm">
+            Click to trigger an alert.
+          </Typography.P>
           <div className="flex flex-wrap gap-4 items-center">
-            <Badge 
-              variant="info" 
+            <Badge
+              variant="info"
               onClick={() => alert("Badge clicked!")}
             >
               Click Me
             </Badge>
-            
-            <Badge 
-              variant="secondary" 
+
+            <Badge
+              variant="muted"
               onClick={() => alert("Action triggered!")}
             >
               Action
@@ -93,19 +107,25 @@ export default function BadgeDemoPage() {
           </div>
         </section>
 
+        <Divider spacing="lg">
+          <Divider.Line color="ground" />
+        </Divider>
+
         {/* Section 4: Dismissible (Stateful) */}
         <section className="space-y-4">
-          <h2 className="text-h3 font-primary border-b border-ground-200 dark:border-ground-800 pb-2">
+          <Typography.H3 variant="primary" className="border-b border-border pb-2">
             Dismissible
-          </h2>
-          <p className="text-sm text-ground-500">Click the X to remove tags.</p>
-          
+          </Typography.H3>
+          <Typography.P variant="secondary" className="text-sm">
+            Click the X to remove tags.
+          </Typography.P>
+
           {tags.length > 0 ? (
             <div className="flex flex-wrap gap-3">
               {tags.map((tag) => (
                 <Badge
                   key={tag}
-                  variant="secondary"
+                  variant="muted"
                   onDismiss={() => removeTag(tag)}
                   dismissLabel={`Remove ${tag}`}
                 >
@@ -114,27 +134,33 @@ export default function BadgeDemoPage() {
               ))}
             </div>
           ) : (
-            <div className="p-4 border border-dashed border-ground-300 dark:border-ground-700 rounded-lg text-center">
-              <p className="text-sm text-ground-500">All tags removed.</p>
+            <div className="p-4 border border-dashed border-border rounded-lg text-center bg-surface">
+              <Typography.P variant="secondary" className="text-sm">
+                All tags removed.
+              </Typography.P>
             </div>
           )}
         </section>
 
+        <Divider spacing="lg">
+          <Divider.Line color="ground" />
+        </Divider>
+
         {/* Section 5: Interactive & Dismissible (Complex) */}
         <section className="space-y-4">
-          <h2 className="text-h3 font-primary border-b border-ground-200 dark:border-ground-800 pb-2">
+          <Typography.H3 variant="primary" className="border-b border-border pb-2">
             Interactive + Dismissible
-          </h2>
-          <p className="text-sm text-ground-500">
+          </Typography.H3>
+          <Typography.P variant="secondary" className="text-sm">
             Click text to trigger filter, click X to remove.
-          </p>
+          </Typography.P>
 
           {filters.length > 0 ? (
             <div className="flex flex-wrap gap-3">
               {filters.map((filter) => (
                 <Badge
                   key={filter.id}
-                  variant="primary"
+                  variant="brand"
                   onClick={() => alert(`Filter applied: ${filter.label}`)}
                   onDismiss={() => removeFilter(filter.id)}
                 >
@@ -143,20 +169,19 @@ export default function BadgeDemoPage() {
               ))}
             </div>
           ) : (
-            <div className="p-4 border border-dashed border-ground-300 dark:border-ground-700 rounded-lg text-center">
-              <p className="text-sm text-ground-500">No filters active.</p>
+            <div className="p-4 border border-dashed border-border rounded-lg text-center bg-surface">
+              <Typography.P variant="secondary" className="text-sm">
+                No filters active.
+              </Typography.P>
             </div>
           )}
         </section>
 
         {/* Reset Button */}
         <div className="pt-8">
-          <button
-            onClick={resetDemo}
-            className="px-4 py-2 text-sm font-primary bg-ground-900 text-ground-50 rounded-md hover:bg-ground-800 transition-colors"
-          >
-            Reset Demos
-          </button>
+          <Button variant="secondary" onClick={resetDemo}>
+            <Button.Text>Reset Demos</Button.Text>
+          </Button>
         </div>
 
       </div>

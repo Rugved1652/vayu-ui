@@ -143,41 +143,41 @@ const Icons = {
 
 const typeStyles = {
   success: {
-    border: "border-l-success-500",
-    icon: "text-success-600 dark:text-success-400",
-    progress: "bg-success-500 dark:bg-success-400",
+    border: "border-l-success",
+    icon: "text-success",
+    progress: "bg-success",
     role: "status" as const,
     live: "polite" as const,
     label: "Success",
   },
   error: {
-    border: "border-l-error-500",
-    icon: "text-error-600 dark:text-error-400",
-    progress: "bg-error-500 dark:bg-error-400",
+    border: "border-l-destructive",
+    icon: "text-destructive",
+    progress: "bg-destructive",
     role: "alert" as const,
     live: "assertive" as const,
     label: "Error",
   },
   warning: {
-    border: "border-l-warning-500",
-    icon: "text-warning-600 dark:text-warning-400",
-    progress: "bg-warning-500 dark:bg-warning-400",
+    border: "border-l-warning",
+    icon: "text-warning",
+    progress: "bg-warning",
     role: "alert" as const,
     live: "assertive" as const,
     label: "Warning",
   },
   info: {
-    border: "border-l-info-500",
-    icon: "text-info-600 dark:text-info-400",
-    progress: "bg-info-500 dark:bg-info-400",
+    border: "border-l-info",
+    icon: "text-info",
+    progress: "bg-info",
     role: "status" as const,
     live: "polite" as const,
     label: "Information",
   },
   loading: {
-    border: "border-l-ground-400 dark:border-l-ground-500",
-    icon: "text-ground-500 dark:text-ground-400",
-    progress: "bg-ground-400 dark:bg-ground-500",
+    border: "border-l-muted",
+    icon: "text-muted-content",
+    progress: "bg-muted-content",
     role: "status" as const,
     live: "polite" as const,
     label: "Loading",
@@ -557,10 +557,9 @@ const ToastStack: React.FC<ToastStackProps> = ({ position, toasts, onRemove }) =
         <div
           className={cn(
             "pointer-events-auto mt-1 self-center rounded-full px-2.5 py-1",
-            "bg-ground-800 text-ground-50 dark:bg-ground-200 dark:text-ground-900",
-            "text-xs font-medium shadow-sm cursor-pointer",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-500 focus-visible:ring-offset-2",
-            "dark:focus-visible:ring-offset-ground-950"
+            "bg-surface-content text-surface",
+            "text-xs font-medium shadow-control cursor-pointer",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2"
           )}
           role="button"
           tabIndex={0}
@@ -699,10 +698,10 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, 
     <div
       ref={itemRef}
       className={cn(
-        "pointer-events-auto relative w-full overflow-hidden rounded-lg shadow-lg",
+        "pointer-events-auto relative w-full overflow-hidden rounded-surface shadow-elevated",
         !toast.customContent && "border border-l-4",
-        !toast.customContent && "bg-ground-50 dark:bg-ground-950",
-        !toast.customContent && "border-ground-200 dark:border-ground-700",
+        !toast.customContent && "bg-surface",
+        !toast.customContent && "border-border",
         !toast.customContent && config.border,
         "transition-all duration-300 ease-out",
         isExiting && "animate-toast-exit",
@@ -734,12 +733,12 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, 
 
           <div className="flex-1 min-w-0 font-secondary">
             {toast.title && (
-              <div className="font-semibold font-primary text-sm text-ground-900 dark:text-ground-100 mb-1 leading-tight">
+              <div className="font-semibold font-primary text-sm text-surface-content mb-1 leading-tight">
                 {toast.title}
               </div>
             )}
             {toast.description && (
-              <div className="text-sm text-ground-600 dark:text-ground-400 leading-relaxed">
+              <div className="text-sm text-muted-content leading-relaxed">
                 {toast.description}
               </div>
             )}
@@ -750,9 +749,8 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, 
                   handleClose();
                 }}
                 className={cn(
-                  "mt-2 text-sm font-medium text-ground-900 dark:text-ground-100 underline-offset-2 hover:underline",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-500 focus-visible:ring-offset-1",
-                  "dark:focus-visible:ring-offset-ground-950",
+                  "mt-2 text-sm font-medium text-surface-content underline-offset-2 hover:underline",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1",
                   "min-h-6 min-w-6"
                 )}
               >
@@ -765,13 +763,12 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, 
             <button
               onClick={handleClose}
               className={cn(
-                "shrink-0 flex items-center justify-center rounded-md p-1.5",
+                "shrink-0 flex items-center justify-center rounded-control p-1.5",
                 "min-h-7 min-w-7",
-                "text-ground-400 dark:text-ground-500",
-                "hover:text-ground-700 dark:hover:text-ground-200",
-                "hover:bg-ground-100 dark:hover:bg-ground-800",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-500 focus-visible:ring-offset-1",
-                "dark:focus-visible:ring-offset-ground-950",
+                "text-muted-content",
+                "hover:text-surface-content",
+                "hover:bg-muted",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1",
                 "transition-colors"
               )}
               aria-label={`Dismiss ${config.label.toLowerCase()} notification`}
@@ -785,7 +782,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, 
       {/* Countdown progress bar */}
       {hasDuration && !toast.customContent && (
         <div
-          className="h-[3px] w-full bg-ground-100 dark:bg-ground-800"
+          className="h-[3px] w-full bg-muted"
           role="progressbar"
           aria-label="Time remaining before auto-dismiss"
           aria-valuemin={0}
@@ -815,7 +812,7 @@ const ToastTitle = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
     <div
       ref={ref}
       className={cn(
-        "font-semibold font-primary text-sm text-ground-900 dark:text-ground-100",
+        "font-semibold font-primary text-sm text-surface-content",
         className
       )}
       {...props}
@@ -829,7 +826,7 @@ const ToastDescription = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
     <div
       ref={ref}
       className={cn(
-        "text-sm font-secondary text-ground-600 dark:text-ground-400",
+        "text-sm font-secondary text-muted-content",
         className
       )}
       {...props}
@@ -843,12 +840,11 @@ const ToastClose = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTML
     <button
       ref={ref}
       className={cn(
-        "p-1.5 min-h-[28px] min-w-[28px] rounded-md",
-        "text-ground-400 dark:text-ground-500",
-        "hover:text-ground-700 dark:hover:text-ground-200",
-        "hover:bg-ground-100 dark:hover:bg-ground-800",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-500 focus-visible:ring-offset-1",
-        "dark:focus-visible:ring-offset-ground-950",
+        "p-1.5 min-h-[28px] min-w-[28px] rounded-control",
+        "text-muted-content",
+        "hover:text-surface-content",
+        "hover:bg-muted",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1",
         "transition-colors",
         className
       )}

@@ -126,10 +126,10 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
         return (
             <div
                 className={cn(
-                    "w-full overflow-x-auto rounded border",
-                    "border-ground-200 bg-ground-50",
-                    "dark:border-ground-700 dark:bg-ground-950",
-                    "shadow-outer"
+                    "w-full overflow-x-auto rounded-surface border",
+                    "border-border bg-surface",
+                    "dark:border-border dark:bg-surface",
+                    "shadow-surface"
                 )}
             >
                 <table
@@ -159,7 +159,7 @@ const TableCaption = React.forwardRef<
             ref={ref}
             className={cn(
                 "px-4 py-3 text-left font-primary text-base font-semibold",
-                "text-ground-900 dark:text-ground-50",
+                "text-canvas-content",
                 visuallyHidden && "sr-only", // Renamed from 'hidden' for clarity
                 className
             )}
@@ -179,8 +179,8 @@ const TableHead = React.forwardRef<HTMLTableSectionElement, TableHeadProps>(
                 ref={ref}
                 className={cn(
                     "border-b-2",
-                    "border-ground-200 bg-ground-100",
-                    "dark:border-ground-700 dark:bg-ground-900",
+                    "border-border bg-muted",
+                    "dark:border-border dark:bg-muted",
                     className
                 )}
                 {...props}
@@ -199,8 +199,8 @@ const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
             <tbody
                 ref={ref}
                 className={cn(
-                    "bg-ground-50 dark:bg-ground-950",
-                    "divide-y divide-ground-200 dark:divide-ground-800",
+                    "bg-surface dark:bg-surface",
+                    "divide-y divide-border dark:divide-border",
                     className
                 )}
                 aria-live={empty ? "polite" : undefined}
@@ -221,8 +221,8 @@ const TableFooter = React.forwardRef<HTMLTableSectionElement, TableFooterProps>(
                 ref={ref}
                 className={cn(
                     "border-t-2 font-semibold",
-                    "border-ground-200 bg-ground-100",
-                    "dark:border-ground-700 dark:bg-ground-900",
+                    "border-border bg-muted",
+                    "dark:border-border dark:bg-muted",
                     className
                 )}
                 {...props}
@@ -241,10 +241,10 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
             <tr
                 ref={ref}
                 className={cn(
-                    "transition-colors transition-fast",
-                    "hover:bg-ground-100 dark:hover:bg-ground-900",
-                    selected && "bg-ground-200 dark:bg-ground-800",
-                    selectable && "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-600 dark:focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
+                    "transition-colors transition-medium",
+                    "hover:bg-muted dark:hover:bg-muted",
+                    selected && "bg-muted dark:bg-muted",
+                    selectable && "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
                     className
                 )}
                 role="row"
@@ -279,9 +279,9 @@ const TableHeader = React.forwardRef<HTMLTableCellElement, TableHeaderProps>(
                 ref={ref}
                 className={cn(
                     "px-4 py-3 text-left font-primary font-semibold text-sm whitespace-nowrap",
-                    "text-ground-700 dark:text-ground-300",
-                    sortable && "cursor-pointer hover:bg-ground-200 dark:hover:bg-ground-800 transition-colors transition-fast select-none",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-600 dark:focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
+                    "text-muted-content",
+                    sortable && "cursor-pointer hover:bg-muted transition-colors transition-medium select-none",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
                     className
                 )}
                 scope={scope}
@@ -309,7 +309,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
                 ref={ref}
                 className={cn(
                     "px-4 py-3 text-sm",
-                    "text-ground-900 dark:text-ground-100",
+                    "text-surface-content",
                     className
                 )}
                 aria-colindex={ariaColindex}

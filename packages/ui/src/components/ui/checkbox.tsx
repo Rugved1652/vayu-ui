@@ -208,32 +208,29 @@ const CheckboxIndicator = forwardRef<HTMLInputElement, CheckboxIndicatorProps>(
                     className={clsx(
                         "pointer-events-none",
                         "relative flex items-center justify-center",
-                        "h-5 w-5 rounded border-2 transition-all duration-200",
-                        
-                        // Base unchecked state
-                        "bg-white border-ground-400",
-                        "dark:bg-ground-800 dark:border-ground-500",
+                        "h-5 w-5 rounded-control border-2 transition-all duration-200",
+
+                        // Base unchecked state - using semantic tokens
+                        "bg-surface border-field",
 
                         // Focus state (WCAG 2.2 AA)
                         "peer-focus-visible:outline-none",
-                        "peer-focus-visible:ring-[3px] peer-focus-visible:ring-primary-500/50",
-                        "peer-focus-visible:border-primary-500",
+                        "peer-focus-visible:ring-2 peer-focus-visible:ring-focus/20",
+                        "peer-focus-visible:border-focus",
 
                         // Checked state (not indeterminate)
-                        !indeterminate && "peer-checked:bg-primary-600 peer-checked:border-primary-600",
-                        !indeterminate && "dark:peer-checked:bg-primary-500 dark:peer-checked:border-primary-500",
+                        !indeterminate && "peer-checked:bg-brand peer-checked:border-brand",
 
                         // Indeterminate state (overrides checked)
-                        indeterminate && "bg-primary-600 border-primary-600",
-                        indeterminate && "dark:bg-primary-500 dark:border-primary-500",
+                        indeterminate && "bg-brand border-brand",
 
                         // Error state
-                        error && !checked && !indeterminate && "border-error-500 dark:border-error-400",
+                        error && !checked && !indeterminate && "border-destructive",
 
                         // Hover state
-                        !disabled && !indeterminate && "hover:border-primary-500 dark:hover:border-primary-400",
-                        !disabled && "peer-checked:hover:bg-primary-700 dark:peer-checked:hover:bg-primary-600",
-                        !disabled && indeterminate && "hover:bg-primary-700 dark:hover:bg-primary-600",
+                        !disabled && !indeterminate && "hover:border-brand",
+                        !disabled && "peer-checked:hover:bg-brand/90",
+                        !disabled && indeterminate && "hover:bg-brand/90",
 
                         // Disabled state
                         disabled && "opacity-50 cursor-not-allowed"
@@ -243,13 +240,13 @@ const CheckboxIndicator = forwardRef<HTMLInputElement, CheckboxIndicatorProps>(
                     {indeterminate ? (
                         <MinusIcon
                             size={14}
-                            className="text-white pointer-events-none"
+                            className="text-brand-content pointer-events-none"
                         />
                     ) : (
                         <CheckIcon
                             size={14}
                             className={clsx(
-                                "text-white pointer-events-none transition-opacity duration-200",
+                                "text-brand-content pointer-events-none transition-opacity duration-200",
                                 checked ? "opacity-100" : "opacity-0"
                             )}
                         />
@@ -275,7 +272,7 @@ const CheckboxLabel = forwardRef<HTMLLabelElement, CheckboxLabelProps>(
                 ref={ref}
                 htmlFor={checkboxId}
                 className={clsx(
-                    "text-sm font-medium text-ground-900 dark:text-ground-100",
+                    "text-sm font-medium text-surface-content",
                     "select-none",
                     disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
                     className
@@ -303,7 +300,7 @@ const CheckboxDescription = forwardRef<HTMLParagraphElement, CheckboxDescription
                 ref={ref}
                 id={descriptionId}
                 className={clsx(
-                    "text-sm text-ground-600 dark:text-ground-400",
+                    "text-sm text-muted-content",
                     disabled && "opacity-50",
                     className
                 )}
@@ -330,7 +327,7 @@ const CheckboxError = forwardRef<HTMLParagraphElement, CheckboxErrorProps>(
                 ref={ref}
                 id={errorId}
                 className={clsx(
-                    "text-sm text-error-600 dark:text-error-400 font-medium",
+                    "text-sm text-destructive font-medium",
                     className
                 )}
                 role="alert"

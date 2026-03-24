@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useToast, Toast, ToastProvider, Button } from "vayu-ui";
+import { useToast, Toast, ToastProvider, Button, Typography, Divider } from "vayu-ui";
 
 function ToastDemoContent() {
     const toast = useToast();
@@ -9,9 +9,9 @@ function ToastDemoContent() {
 
     const showCustomToast = () => {
         const id = toast.custom(
-            <div className="w-full max-w-sm border border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-950 p-4 shadow-lg rounded-lg">
+            <div className="w-full max-w-sm border border-border bg-surface p-4 shadow-elevated rounded-surface">
                 <div className="flex items-start gap-4">
-                    <div className="bg-primary-100 dark:bg-primary-900/30 p-2 rounded text-primary-600 dark:text-primary-400">
+                    <div className="bg-brand/10 p-2 rounded-control text-brand">
                         👋
                     </div>
                     <div className="flex-1">
@@ -22,7 +22,7 @@ function ToastDemoContent() {
                                 console.log("Undo action triggered");
                                 toast.removeToast(id);
                             }}
-                            className="mt-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline underline-offset-2"
+                            className="mt-2 text-sm font-medium text-brand hover:underline underline-offset-2"
                         >
                             Undo
                         </button>
@@ -35,10 +35,9 @@ function ToastDemoContent() {
     };
 
     return (
-        <div className="flex flex-col not-prose items-center justify-center gap-8 p-8 border border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
-            <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
-                Standard Variants
-            </h2>
+        <div className="flex flex-col not-prose items-center justify-center gap-8 p-8 border border-border bg-surface rounded-surface">
+            {/* Standard Variants Section */}
+            <Typography.H3 variant="primary">Standard Variants</Typography.H3>
             <div className="flex gap-4 flex-wrap justify-center">
                 <Button
                     variant="outline"
@@ -47,7 +46,7 @@ function ToastDemoContent() {
                         position: "bottom-left"
                     })}
                 >
-                    Success
+                    <Button.Text>Success</Button.Text>
                 </Button>
                 <Button
                     variant="destructive"
@@ -55,7 +54,7 @@ function ToastDemoContent() {
                         description: "Please try again later."
                     })}
                 >
-                    Error
+                    <Button.Text>Error</Button.Text>
                 </Button>
                 <Button
                     variant="outline"
@@ -63,7 +62,7 @@ function ToastDemoContent() {
                         description: "This action cannot be undone."
                     })}
                 >
-                    Warning
+                    <Button.Text>Warning</Button.Text>
                 </Button>
                 <Button
                     variant="secondary"
@@ -71,13 +70,16 @@ function ToastDemoContent() {
                         description: "A new update is available."
                     })}
                 >
-                    Info
+                    <Button.Text>Info</Button.Text>
                 </Button>
             </div>
 
-            <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
-                With Actions
-            </h2>
+            <Divider spacing="md">
+                <Divider.Line color="ground" />
+            </Divider>
+
+            {/* With Actions Section */}
+            <Typography.H3 variant="primary">With Actions</Typography.H3>
             <div className="flex gap-4 flex-wrap justify-center">
                 <Button
                     variant="outline"
@@ -89,7 +91,7 @@ function ToastDemoContent() {
                         },
                     })}
                 >
-                    With Action
+                    <Button.Text>With Action</Button.Text>
                 </Button>
                 <Button
                     variant="outline"
@@ -101,13 +103,16 @@ function ToastDemoContent() {
                         },
                     })}
                 >
-                    With View Action
+                    <Button.Text>With View Action</Button.Text>
                 </Button>
             </div>
 
-            <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
-                Promise & Loading
-            </h2>
+            <Divider spacing="md">
+                <Divider.Line color="ground" />
+            </Divider>
+
+            {/* Promise & Loading Section */}
+            <Typography.H3 variant="primary">Promise & Loading</Typography.H3>
             <div className="flex gap-4 flex-wrap justify-center">
                 <Button
                     onClick={() => {
@@ -119,7 +124,7 @@ function ToastDemoContent() {
                         });
                     }}
                 >
-                    Promise (Success)
+                    <Button.Text>Promise (Success)</Button.Text>
                 </Button>
                 <Button
                     variant="outline"
@@ -132,7 +137,7 @@ function ToastDemoContent() {
                         }).catch(() => {});
                     }}
                 >
-                    Promise (Error)
+                    <Button.Text>Promise (Error)</Button.Text>
                 </Button>
                 <Button
                     variant="secondary"
@@ -148,25 +153,28 @@ function ToastDemoContent() {
                         }, 3000);
                     }}
                 >
-                    Manual Loading
+                    <Button.Text>Manual Loading</Button.Text>
                 </Button>
             </div>
 
-            <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
-                Duration Control
-            </h2>
+            <Divider spacing="md">
+                <Divider.Line color="ground" />
+            </Divider>
+
+            {/* Duration Control Section */}
+            <Typography.H3 variant="primary">Duration Control</Typography.H3>
             <div className="flex gap-4 flex-wrap justify-center">
                 <Button
                     variant="outline"
                     onClick={() => toast.info("Quick toast", { duration: 2000 })}
                 >
-                    2 Second
+                    <Button.Text>2 Second</Button.Text>
                 </Button>
                 <Button
                     variant="outline"
                     onClick={() => toast.info("Long toast", { duration: 10000 })}
                 >
-                    10 Second
+                    <Button.Text>10 Second</Button.Text>
                 </Button>
                 <Button
                     variant="outline"
@@ -175,61 +183,43 @@ function ToastDemoContent() {
                         description: "Click to dismiss",
                     })}
                 >
-                    Persistent
+                    <Button.Text>Persistent</Button.Text>
                 </Button>
             </div>
 
-            <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
-                Positions
-            </h2>
+            <Divider spacing="md">
+                <Divider.Line color="ground" />
+            </Divider>
+
+            {/* Positions Section */}
+            <Typography.H3 variant="primary">Positions</Typography.H3>
             <div className="grid grid-cols-3 gap-2">
-                <Button
-                    size="small"
-                    variant="outline"
-                    onClick={() => toast.info("Top Left", { position: "top-left" })}
-                >
-                    Top Left
+                <Button size="small" variant="outline" onClick={() => toast.info("Top Left", { position: "top-left" })}>
+                    <Button.Text>Top Left</Button.Text>
                 </Button>
-                <Button
-                    size="small"
-                    variant="outline"
-                    onClick={() => toast.info("Top Center", { position: "top-center" })}
-                >
-                    Top Center
+                <Button size="small" variant="outline" onClick={() => toast.info("Top Center", { position: "top-center" })}>
+                    <Button.Text>Top Center</Button.Text>
                 </Button>
-                <Button
-                    size="small"
-                    variant="outline"
-                    onClick={() => toast.info("Top Right", { position: "top-right" })}
-                >
-                    Top Right
+                <Button size="small" variant="outline" onClick={() => toast.info("Top Right", { position: "top-right" })}>
+                    <Button.Text>Top Right</Button.Text>
                 </Button>
-                <Button
-                    size="small"
-                    variant="outline"
-                    onClick={() => toast.info("Bottom Left", { position: "bottom-left" })}
-                >
-                    Bottom Left
+                <Button size="small" variant="outline" onClick={() => toast.info("Bottom Left", { position: "bottom-left" })}>
+                    <Button.Text>Bottom Left</Button.Text>
                 </Button>
-                <Button
-                    size="small"
-                    variant="outline"
-                    onClick={() => toast.info("Bottom Center", { position: "bottom-center" })}
-                >
-                    Bottom Center
+                <Button size="small" variant="outline" onClick={() => toast.info("Bottom Center", { position: "bottom-center" })}>
+                    <Button.Text>Bottom Center</Button.Text>
                 </Button>
-                <Button
-                    size="small"
-                    variant="outline"
-                    onClick={() => toast.info("Bottom Right", { position: "bottom-right" })}
-                >
-                    Bottom Right
+                <Button size="small" variant="outline" onClick={() => toast.info("Bottom Right", { position: "bottom-right" })}>
+                    <Button.Text>Bottom Right</Button.Text>
                 </Button>
             </div>
 
-            <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
-                Stack Test
-            </h2>
+            <Divider spacing="md">
+                <Divider.Line color="ground" />
+            </Divider>
+
+            {/* Stack Test Section */}
+            <Typography.H3 variant="primary">Stack Test</Typography.H3>
             <div className="flex gap-4">
                 <Button
                     variant="outline"
@@ -241,25 +231,28 @@ function ToastDemoContent() {
                         }
                     }}
                 >
-                    Add 5 Toasts
+                    <Button.Text>Add 5 Toasts</Button.Text>
                 </Button>
             </div>
 
-            <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
-                Custom Toast (Compound)
-            </h2>
+            <Divider spacing="md">
+                <Divider.Line color="ground" />
+            </Divider>
+
+            {/* Custom Toast Section */}
+            <Typography.H3 variant="primary">Custom Toast (Compound)</Typography.H3>
             <div className="flex gap-4">
-                <Button
-                    variant="outline"
-                    onClick={showCustomToast}
-                >
-                    Show Custom Toast
+                <Button variant="outline" onClick={showCustomToast}>
+                    <Button.Text>Show Custom Toast</Button.Text>
                 </Button>
             </div>
 
-            <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
-                Non-Dismissible
-            </h2>
+            <Divider spacing="md">
+                <Divider.Line color="ground" />
+            </Divider>
+
+            {/* Non-Dismissible Section */}
+            <Typography.H3 variant="primary">Non-Dismissible</Typography.H3>
             <div className="flex gap-4">
                 <Button
                     variant="outline"
@@ -269,13 +262,16 @@ function ToastDemoContent() {
                         duration: 5000,
                     })}
                 >
-                    Non-Dismissible
+                    <Button.Text>Non-Dismissible</Button.Text>
                 </Button>
             </div>
 
-            <h2 className="text-xl font-primary font-semibold text-ground-800 dark:text-ground-100">
-                With Custom Icon
-            </h2>
+            <Divider spacing="md">
+                <Divider.Line color="ground" />
+            </Divider>
+
+            {/* Custom Icon Section */}
+            <Typography.H3 variant="primary">With Custom Icon</Typography.H3>
             <div className="flex gap-4">
                 <Button
                     variant="outline"
@@ -288,7 +284,7 @@ function ToastDemoContent() {
                         ),
                     })}
                 >
-                    Custom Icon
+                    <Button.Text>Custom Icon</Button.Text>
                 </Button>
             </div>
         </div>

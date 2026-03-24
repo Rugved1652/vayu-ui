@@ -1,22 +1,21 @@
 "use client";
-import { Navbar } from "vayu-ui";
-import { Button } from "vayu-ui";
+import { Navbar, Button, Typography, Divider } from "vayu-ui";
 
 export default function NavbarDemo() {
     return (
         <div className="flex flex-col not-prose gap-10 w-full">
             {/* Default Variant */}
             <div className="flex flex-col gap-3">
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+                <Typography.P variant="secondary" className="text-xs">
                     Default
-                </p>
-                <div className="rounded overflow-hidden border border-ground-200 dark:border-ground-800">
+                </Typography.P>
+                <div className="rounded-surface overflow-hidden border border-border">
                     <Navbar>
                         <Navbar.Container>
                             <Navbar.Brand>
-                                <span className="text-lg font-bold font-primary text-ground-900 dark:text-white">
+                                <Typography.H5 variant="primary" font="primary" className="text-lg font-bold">
                                     Acme
-                                </span>
+                                </Typography.H5>
                             </Navbar.Brand>
 
                             <Navbar.Items>
@@ -43,7 +42,7 @@ export default function NavbarDemo() {
                             <Navbar.MobileItem>Products</Navbar.MobileItem>
                             <Navbar.MobileItem>About</Navbar.MobileItem>
                             <Navbar.MobileItem>Contact</Navbar.MobileItem>
-                            <Navbar.Separator />
+                            <Divider spacing="sm" decorative />
                             <div className="flex flex-col gap-2 px-4">
                                 <Button variant="ghost" size="small" fullWidth>
                                     <Button.Text>Sign in</Button.Text>
@@ -59,16 +58,16 @@ export default function NavbarDemo() {
 
             {/* Sticky Variant */}
             <div className="flex flex-col gap-3">
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+                <Typography.P variant="secondary" className="text-xs">
                     Sticky
-                </p>
-                <div className="rounded overflow-hidden border border-ground-200 dark:border-ground-800 h-48 relative">
+                </Typography.P>
+                <div className="rounded-surface overflow-hidden border border-border h-48 relative">
                     <Navbar sticky>
                         <Navbar.Container>
                             <Navbar.Brand>
-                                <span className="text-lg font-bold font-primary text-ground-900 dark:text-white">
+                                <Typography.H5 variant="primary" font="primary" className="text-lg font-bold">
                                     Sticky Nav
-                                </span>
+                                </Typography.H5>
                             </Navbar.Brand>
 
                             <Navbar.Items>
@@ -90,7 +89,7 @@ export default function NavbarDemo() {
                             <Navbar.MobileItem active>Dashboard</Navbar.MobileItem>
                             <Navbar.MobileItem>Analytics</Navbar.MobileItem>
                             <Navbar.MobileItem>Settings</Navbar.MobileItem>
-                            <Navbar.Separator />
+                            <Divider spacing="sm" decorative />
                             <div className="px-4">
                                 <Button variant="primary" size="small" fullWidth>
                                     <Button.Text>New Project</Button.Text>
@@ -98,9 +97,13 @@ export default function NavbarDemo() {
                             </div>
                         </Navbar.MobileMenu>
                     </Navbar>
-                    <div className="p-4 text-sm text-ground-500 dark:text-ground-400 font-secondary">
-                        <p>Scroll this container to see the sticky behavior...</p>
-                        <p className="mt-2">The navbar will stick to the top of its container.</p>
+                    <div className="p-4">
+                        <Typography.P variant="secondary" className="text-sm">
+                            Scroll this container to see the sticky behavior...
+                        </Typography.P>
+                        <Typography.P variant="secondary" className="text-sm mt-2">
+                            The navbar will stick to the top of its container.
+                        </Typography.P>
                     </div>
                 </div>
             </div>

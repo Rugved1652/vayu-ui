@@ -1,24 +1,25 @@
 "use client"
-import { TextInput } from "vayu-ui";
-import { Mail, Lock, User, DollarSign } from "lucide-react";
+import { TextInput, Typography, Divider, Button } from "vayu-ui";
+import { Mail, Lock, User, DollarSign, Save, Send, RefreshCw } from "lucide-react";
 import { useState } from "react";
 
 export default function TextInputDemo() {
     const [bioValue, setBioValue] = useState("");
     const [searchValue, setSearchValue] = useState("");
+    const [formValue, setFormValue] = useState("");
 
     return (
         <div className="w-full max-w-md not-prose">
-            <h2 className="text-xl font-primary font-semibold mb-6 text-ground-900 dark:text-ground-50">
+            <Typography.H2 variant="primary">
                 TextInput Examples
-            </h2>
+            </Typography.H2>
 
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-8 mt-6">
                 {/* Basic Input */}
                 <section>
-                    <h3 className="text-sm font-secondary font-medium text-ground-600 dark:text-ground-400 mb-3 uppercase tracking-wide">
+                    <Typography.H5 variant="secondary" className="uppercase tracking-wide mb-3">
                         Basic Input
-                    </h3>
+                    </Typography.H5>
                     <TextInput.Root>
                         <TextInput.Label>Email Address</TextInput.Label>
                         <TextInput.Field>
@@ -27,15 +28,17 @@ export default function TextInputDemo() {
                             </TextInput.Icon>
                             <TextInput.Input placeholder="Enter your email" />
                         </TextInput.Field>
-                        <TextInput.Description>We'll never share your email.</TextInput.Description>
+                        <TextInput.Description>We&apos;ll never share your email.</TextInput.Description>
                     </TextInput.Root>
                 </section>
 
+                <Divider spacing="md" decorative />
+
                 {/* Required & Optional Fields */}
                 <section>
-                    <h3 className="text-sm font-secondary font-medium text-ground-600 dark:text-ground-400 mb-3 uppercase tracking-wide">
+                    <Typography.H5 variant="secondary" className="uppercase tracking-wide mb-3">
                         Required & Optional Fields
-                    </h3>
+                    </Typography.H5>
                     <div className="flex flex-col gap-4">
                         <TextInput.Root required>
                             <TextInput.Label>Full Name</TextInput.Label>
@@ -55,11 +58,13 @@ export default function TextInputDemo() {
                     </div>
                 </section>
 
+                <Divider spacing="md" decorative />
+
                 {/* Password Input with Toggle */}
                 <section>
-                    <h3 className="text-sm font-secondary font-medium text-ground-600 dark:text-ground-400 mb-3 uppercase tracking-wide">
+                    <Typography.H5 variant="secondary" className="uppercase tracking-wide mb-3">
                         Password (with visibility toggle)
-                    </h3>
+                    </Typography.H5>
                     <TextInput.Root inputType="password">
                         <TextInput.Label>Password</TextInput.Label>
                         <TextInput.Field>
@@ -72,24 +77,29 @@ export default function TextInputDemo() {
                     </TextInput.Root>
                 </section>
 
+                <Divider spacing="md" decorative />
+
                 {/* Search Input with Clear */}
                 <section>
-                    <h3 className="text-sm font-secondary font-medium text-ground-600 dark:text-ground-400 mb-3 uppercase tracking-wide">
+                    <Typography.H5 variant="secondary" className="uppercase tracking-wide mb-3">
                         Search (with clear button)
-                    </h3>
+                    </Typography.H5>
                     <TextInput.Root value={searchValue} onChange={setSearchValue}>
                         <TextInput.Label>Search</TextInput.Label>
                         <TextInput.Field>
                             <TextInput.SearchInput placeholder="Search users..." />
+                            <TextInput.ClearButton />
                         </TextInput.Field>
                     </TextInput.Root>
                 </section>
 
+                <Divider spacing="md" decorative />
+
                 {/* Number Inputs */}
                 <section>
-                    <h3 className="text-sm font-secondary font-medium text-ground-600 dark:text-ground-400 mb-3 uppercase tracking-wide">
+                    <Typography.H5 variant="secondary" className="uppercase tracking-wide mb-3">
                         Number Inputs
-                    </h3>
+                    </Typography.H5>
                     <div className="flex flex-col gap-4">
                         <TextInput.Root inputType="number">
                             <TextInput.Label>Age (Natural numbers only)</TextInput.Label>
@@ -122,11 +132,13 @@ export default function TextInputDemo() {
                     </div>
                 </section>
 
+                <Divider spacing="md" decorative />
+
                 {/* Validation States */}
                 <section>
-                    <h3 className="text-sm font-secondary font-medium text-ground-600 dark:text-ground-400 mb-3 uppercase tracking-wide">
+                    <Typography.H5 variant="secondary" className="uppercase tracking-wide mb-3">
                         Validation States
-                    </h3>
+                    </Typography.H5>
                     <div className="flex flex-col gap-4">
                         <TextInput.Root validationState="error" defaultValue="invalid-email">
                             <TextInput.Label>Email</TextInput.Label>
@@ -158,11 +170,13 @@ export default function TextInputDemo() {
                     </div>
                 </section>
 
+                <Divider spacing="md" decorative />
+
                 {/* With Character Count */}
                 <section>
-                    <h3 className="text-sm font-secondary font-medium text-ground-600 dark:text-ground-400 mb-3 uppercase tracking-wide">
+                    <Typography.H5 variant="secondary" className="uppercase tracking-wide mb-3">
                         Character Count
-                    </h3>
+                    </Typography.H5>
                     <TextInput.Root value={bioValue} onChange={setBioValue}>
                         <TextInput.Label>Bio</TextInput.Label>
                         <TextInput.Field>
@@ -173,11 +187,13 @@ export default function TextInputDemo() {
                     </TextInput.Root>
                 </section>
 
+                <Divider spacing="md" decorative />
+
                 {/* Input Sizes */}
                 <section>
-                    <h3 className="text-sm font-secondary font-medium text-ground-600 dark:text-ground-400 mb-3 uppercase tracking-wide">
+                    <Typography.H5 variant="secondary" className="uppercase tracking-wide mb-3">
                         Sizes
-                    </h3>
+                    </Typography.H5>
                     <div className="flex flex-col gap-4">
                         <TextInput.Root size="sm">
                             <TextInput.Label>Small</TextInput.Label>
@@ -200,11 +216,13 @@ export default function TextInputDemo() {
                     </div>
                 </section>
 
+                <Divider spacing="md" decorative />
+
                 {/* States */}
                 <section>
-                    <h3 className="text-sm font-secondary font-medium text-ground-600 dark:text-ground-400 mb-3 uppercase tracking-wide">
+                    <Typography.H5 variant="secondary" className="uppercase tracking-wide mb-3">
                         States
-                    </h3>
+                    </Typography.H5>
                     <div className="flex flex-col gap-4">
                         <TextInput.Root loading>
                             <TextInput.Label>Loading</TextInput.Label>
@@ -225,6 +243,44 @@ export default function TextInputDemo() {
                                 <TextInput.Input />
                             </TextInput.Field>
                         </TextInput.Root>
+                    </div>
+                </section>
+
+                <Divider spacing="md" decorative />
+
+                {/* With Form Actions */}
+                <section>
+                    <Typography.H5 variant="secondary" className="uppercase tracking-wide mb-3">
+                        With Form Actions
+                    </Typography.H5>
+                    <div className="flex flex-col gap-4">
+                        <TextInput.Root value={formValue} onChange={setFormValue}>
+                            <TextInput.Label>Project Name</TextInput.Label>
+                            <TextInput.Field>
+                                <TextInput.Input placeholder="Enter project name" />
+                            </TextInput.Field>
+                            <TextInput.Description>Choose a unique name for your project.</TextInput.Description>
+                        </TextInput.Root>
+                        <div className="flex gap-3 mt-2">
+                            <Button variant="primary" size="medium">
+                                <Button.Icon size="medium">
+                                    <Save className="w-5 h-5" />
+                                </Button.Icon>
+                                <Button.Text>Save</Button.Text>
+                            </Button>
+                            <Button variant="secondary" size="medium">
+                                <Button.Icon size="medium">
+                                    <RefreshCw className="w-5 h-5" />
+                                </Button.Icon>
+                                <Button.Text>Reset</Button.Text>
+                            </Button>
+                            <Button variant="outline" size="medium">
+                                <Button.Icon size="medium">
+                                    <Send className="w-5 h-5" />
+                                </Button.Icon>
+                                <Button.Text>Submit</Button.Text>
+                            </Button>
+                        </div>
                     </div>
                 </section>
             </div>

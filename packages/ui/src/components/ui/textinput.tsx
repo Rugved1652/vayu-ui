@@ -22,6 +22,7 @@ import React, {
     useRef,
     useState,
 } from "react";
+import { cn } from "./utils";
 
 // ============================================================================
 // Types & Interfaces
@@ -179,7 +180,7 @@ const TextInputRoot = forwardRef<HTMLDivElement, TextInputRootProps>(
 
         return (
             <TextInputContext.Provider value={contextValue}>
-                <div ref={ref} className={`w-full ${className}`}>
+                <div ref={ref} className={cn("w-full", className)}>
                     {children}
                 </div>
             </TextInputContext.Provider>
@@ -210,19 +211,22 @@ const Label: React.FC<LabelProps> = ({
         <label
             id={labelId}
             htmlFor={inputId}
-            className={`block font-primary font-medium text-ground-950 dark:text-ground-50 mb-1.5 ${className}`}
+            className={cn(
+                "block font-primary font-medium text-surface-content mb-1.5",
+                className
+            )}
         >
             {children}
             {isRequired && (
                 <>
-                    <span className="text-error-500 ml-1" aria-hidden="true">
+                    <span className="text-destructive ml-1" aria-hidden="true">
                         *
                     </span>
                     <span className="sr-only">required</span>
                 </>
             )}
             {optional && (
-                <span className="text-ground-500 text-sm font-secondary font-normal ml-2">
+                <span className="text-muted-content text-sm font-secondary font-normal ml-2">
                     (optional)
                 </span>
             )}
@@ -259,27 +263,25 @@ const Field: React.FC<FieldProps> = ({ children, className = "" }) => {
 
     const stateClasses = {
         default: isFocused
-            ? "border-primary-400 dark:border-primary-400 ring-2 ring-primary-200 dark:ring-primary-900/30"
+            ? "border-focus ring-2 ring-focus/20"
             : hasValue
-                ? "border-primary-200 dark:border-primary-800"
-                : "border-ground-300 dark:border-ground-700",
-        error: "border-error-500 ring-2 ring-error-100 dark:ring-error-900/30",
-        warning:
-            "border-warning-500 ring-2 ring-warning-100 dark:ring-warning-900/30",
-        success:
-            "border-success-500 ring-2 ring-success-100 dark:ring-success-900/30",
+                ? "border-field"
+                : "border-field",
+        error: "border-destructive ring-2 ring-destructive/20",
+        warning: "border-warning ring-2 ring-warning/20",
+        success: "border-success ring-2 ring-success/20",
     };
 
     return (
         <div
-            className={`
-                flex items-center gap-2 w-full transition-all duration-200
-                bg-ground-50 dark:bg-ground-900 border rounded
-                ${sizeClasses[size]}
-                ${isFocused || validationState !== "default" ? stateClasses[validationState] : stateClasses.default}
-                ${isDisabled ? "opacity-60 cursor-not-allowed bg-ground-50 dark:bg-ground-800" : ""}
-                ${className}
-            `}
+            className={cn(
+                "flex items-center gap-2 w-full transition-all duration-200",
+                "bg-surface border rounded-control",
+                sizeClasses[size],
+                isFocused || validationState !== "default" ? stateClasses[validationState] : stateClasses.default,
+                isDisabled && "opacity-60 cursor-not-allowed bg-muted",
+                className
+            )}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
         >
@@ -340,7 +342,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         return (
             <>
                 {leftIcon && (
-                    <span className="text-ground-400 shrink-0">{leftIcon}</span>
+                    <span className="text-muted-content shrink-0">{leftIcon}</span>
                 )}
                 <input
                     ref={mergedRef}
@@ -355,18 +357,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                     aria-describedby={validationState === "error" ? `${descriptionId} ${errorId}` : descriptionId}
                     aria-invalid={validationState === "error"}
                     aria-required={isRequired}
-                    className={`
-                        flex-1 bg-transparent outline-none font-secondary
-                        text-ground-900 dark:text-ground-50
-                        placeholder:text-ground-400 dark:placeholder:text-ground-500
-                        disabled:cursor-not-allowed
-                        focus-visible:ring-0
-                        ${className}
-                    `}
+                    className={cn(
+                        "flex-1 bg-transparent outline-none font-secondary",
+                        "text-surface-content",
+                        "placeholder:text-muted-content",
+                        "disabled:cursor-not-allowed",
+                        "focus-visible:ring-0",
+                        className
+                    )}
                     {...props}
                 />
                 {rightIcon && (
-                    <span className="text-ground-400 shrink-0">{rightIcon}</span>
+                    <span className="text-muted-content shrink-0">{rightIcon}</span>
                 )}
             </>
         );
@@ -400,7 +402,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
                 <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-ground-400 hover:text-ground-600 dark:hover:text-ground-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1"
+                    className="text-muted-content hover:text-surface-content transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded p-1"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                     {showPassword ? (
@@ -570,7 +572,7 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     ({ ...props }, ref) => {
         return (
             <>
-                <Search className="w-5 h-5 text-ground-400" />
+                <Search className="w-5 h-5 text-muted-content" />
                 <Input ref={ref} type="search" {...props} />
             </>
         );
@@ -597,7 +599,10 @@ const Description: React.FC<HelperTextProps> = ({
     return (
         <p
             id={descriptionId}
-            className={`mt-1.5 text-sm font-secondary text-ground-600 dark:text-ground-400 ${className}`}
+            className={cn(
+                "mt-1.5 text-sm font-secondary text-muted-content",
+                className
+            )}
         >
             {children}
         </p>
@@ -619,7 +624,10 @@ const ErrorMessage: React.FC<HelperTextProps> = ({
             id={errorId}
             role="alert"
             aria-live="polite"
-            className={`mt-1.5 text-sm font-secondary text-error-600 dark:text-error-400 flex items-center gap-1.5 ${className}`}
+            className={cn(
+                "mt-1.5 text-sm font-secondary text-destructive flex items-center gap-1.5",
+                className
+            )}
         >
             <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{children}</span>
@@ -641,7 +649,10 @@ const WarningMessage: React.FC<HelperTextProps> = ({
         <p
             role="status"
             aria-live="polite"
-            className={`mt-1.5 text-sm font-secondary text-warning-600 dark:text-warning-400 flex items-center gap-1.5 ${className}`}
+            className={cn(
+                "mt-1.5 text-sm font-secondary text-warning flex items-center gap-1.5",
+                className
+            )}
         >
             <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{children}</span>
@@ -663,7 +674,10 @@ const SuccessMessage: React.FC<HelperTextProps> = ({
         <p
             role="status"
             aria-live="polite"
-            className={`mt-1.5 text-sm font-secondary text-success-600 dark:text-success-400 flex items-center gap-1.5 ${className}`}
+            className={cn(
+                "mt-1.5 text-sm font-secondary text-success flex items-center gap-1.5",
+                className
+            )}
         >
             <CheckCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{children}</span>
@@ -684,7 +698,7 @@ interface IconProps {
 
 const Icon: React.FC<IconProps> = ({ children, className = "" }) => {
     return (
-        <span className={`text-ground-400 flex items-center ${className}`}>
+        <span className={cn("text-muted-content flex items-center", className)}>
             {children}
         </span>
     );
@@ -703,7 +717,7 @@ const LoadingSpinner: React.FC = () => {
 
     return (
         <Loader2
-            className="w-5 h-5 text-primary-500 animate-spin"
+            className="w-5 h-5 text-brand animate-spin"
             aria-label="Loading"
         />
     );
@@ -743,13 +757,15 @@ const CharacterCount: React.FC<CharacterCountProps> = ({
 
     return (
         <p
-            className={`mt-1.5 text-sm font-secondary text-right ${
+            className={cn(
+                "mt-1.5 text-sm font-secondary text-right",
                 remaining < 0
-                    ? "text-error-600 dark:text-error-400"
+                    ? "text-destructive"
                     : isNearLimit
-                        ? "text-warning-600 dark:text-warning-400"
-                        : "text-ground-600 dark:text-ground-400"
-            } ${className}`}
+                        ? "text-warning"
+                        : "text-muted-content",
+                className
+            )}
             aria-live="polite"
             aria-atomic="true"
         >
@@ -786,7 +802,10 @@ const ClearButton: React.FC<ClearButtonProps> = ({
         <button
             type="button"
             onClick={handleClear}
-            className={`text-ground-400 hover:text-ground-600 dark:hover:text-ground-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded p-1 ${className}`}
+            className={cn(
+                "text-muted-content hover:text-surface-content transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded p-1",
+                className
+            )}
             aria-label="Clear input"
         >
             <X className="w-4 h-4" />

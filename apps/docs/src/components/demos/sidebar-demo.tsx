@@ -10,6 +10,10 @@ import {
     SidebarProvider,
     SidebarToggle,
     MobileMenuButton,
+    Avatar,
+    Typography,
+    Divider,
+    Button,
 } from "vayu-ui";
 import {
     Settings,
@@ -22,26 +26,25 @@ import {
     Home,
     MessageSquare,
 } from "lucide-react";
-import { Avatar } from "vayu-ui";
 
 export default function SidebarDemo() {
     return (
-        <div className="h-150 w-full border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden flex bg-white dark:bg-neutral-950 relative">
+        <div className="h-150 w-full border border-border rounded-xl overflow-hidden flex bg-canvas relative">
             <SidebarProvider>
                 <MobileMenuButton />
                 <Sidebar>
                     <SidebarHeader>
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center shrink-0">
-                                <span className="text-white font-bold">V</span>
+                            <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center shrink-0">
+                                <span className="text-brand-content font-bold">V</span>
                             </div>
                             <div className="flex flex-col">
-                                <span className="font-bold text-sm text-neutral-900 dark:text-white">
+                                <Typography.Label className="font-bold text-sm text-sidebar-content">
                                     Vayu UI
-                                </span>
-                                <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                                </Typography.Label>
+                                <Typography.Label variant="secondary" className="text-xs">
                                     Dashboard
-                                </span>
+                                </Typography.Label>
                             </div>
                             <div className="ml-auto">
                                 <SidebarToggle />
@@ -103,46 +106,50 @@ export default function SidebarDemo() {
                                 <Avatar.Fallback />
                             </Avatar>
                             <div className="flex flex-col overflow-hidden">
-                                <span className="text-sm font-medium text-neutral-900 dark:text-white truncate">
+                                <Typography.Label className="text-sm font-medium text-sidebar-content truncate">
                                     John Doe
-                                </span>
-                                <span className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                                </Typography.Label>
+                                <Typography.Label variant="secondary" className="text-xs truncate">
                                     john@example.com
-                                </span>
+                                </Typography.Label>
                             </div>
-                            <button
-                                className="ml-auto text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded"
+                            <Button
+                                variant="ghost"
+                                size="small"
+                                className="ml-auto"
                                 aria-label="Logout"
                             >
-                                <LogOut size={18} />
-                            </button>
+                                <Button.Icon size="small">
+                                    <LogOut size={18} />
+                                </Button.Icon>
+                            </Button>
                         </div>
                     </SidebarFooter>
                 </Sidebar>
 
                 {/* Main Content Area */}
-                <main className="flex-1 overflow-y-auto bg-neutral-50 dark:bg-neutral-900 p-6">
+                <main className="flex-1 overflow-y-auto bg-canvas p-6">
                     <div className="max-w-4xl mx-auto space-y-6">
                         <div className="flex items-center justify-between">
-                            <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
+                            <Typography.H2 className="text-2xl font-bold text-canvas-content">
                                 Dashboard
-                            </h1>
+                            </Typography.H2>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[1, 2, 3].map((i) => (
                                 <div
                                     key={i}
-                                    className="bg-white dark:bg-neutral-950 p-6 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-sm"
+                                    className="bg-surface p-6 rounded-surface border border-border shadow-surface"
                                 >
-                                    <div className="h-4 w-24 bg-neutral-100 dark:bg-neutral-800 rounded mb-4" />
-                                    <div className="h-8 w-16 bg-neutral-100 dark:bg-neutral-800 rounded" />
+                                    <div className="h-4 w-24 bg-muted rounded mb-4" />
+                                    <div className="h-8 w-16 bg-muted rounded" />
                                 </div>
                             ))}
                         </div>
 
-                        <div className="h-64 bg-white dark:bg-neutral-950 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-sm" />
-                        <div className="h-64 bg-white dark:bg-neutral-950 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-sm" />
+                        <div className="h-64 bg-surface rounded-surface border border-border shadow-surface" />
+                        <div className="h-64 bg-surface rounded-surface border border-border shadow-surface" />
                     </div>
                 </main>
             </SidebarProvider>

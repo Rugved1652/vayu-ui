@@ -130,7 +130,7 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                             "relative flex items-center justify-center",
                             "motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out",
                             layout === "stack" && [
-                                "rounded-full ring-2 ring-white dark:ring-neutral-900",
+                                "rounded-full ring-2 ring-canvas",
                                 "motion-safe:hover:z-20 motion-safe:hover:scale-110 motion-safe:hover:ml-2 motion-safe:hover:mr-2 first:ml-0",
                             ],
                             onAvatarClick && "cursor-pointer"
@@ -163,13 +163,12 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                         type="button"
                         className={clsx(
                             "relative flex items-center justify-center rounded-full",
-                            "bg-neutral-200 dark:bg-neutral-700",
-                            "text-neutral-700 dark:text-neutral-200",
+                            "bg-muted text-muted-content",
                             "font-medium",
-                            "ring-2 ring-white dark:ring-neutral-900",
-                            onOverflowClick && "cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-600",
-                            "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
-                            "dark:focus:ring-primary-400 dark:ring-offset-neutral-900",
+                            "ring-2 ring-canvas",
+                            onOverflowClick && "cursor-pointer hover:bg-muted/80",
+                            "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
+                            "focus-visible:ring-offset-canvas",
                             onOverflowClick && "motion-safe:transition-all motion-safe:duration-200",
                             
                             // Sizes match Avatar exactly

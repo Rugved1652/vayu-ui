@@ -1,7 +1,9 @@
 "use client";
 
-import { Slider } from "vayu-ui";
+import { Slider, Typography, Divider, Button } from "vayu-ui";
 import { useState } from "react";
+
+const { H5, Label } = Typography;
 
 export default function SliderDemo() {
     const [volume, setVolume] = useState([50]);
@@ -10,17 +12,13 @@ export default function SliderDemo() {
 
     return (
         <div className="w-full max-w-md not-prose space-y-8">
-            <h2 id="slider-demo-label" className="text-xl font-primary font-semibold text-ground-900 dark:text-ground-100">
-                Slider Examples
-            </h2>
+            <H5 font="primary">Slider Examples</H5>
 
             {/* Default Single Value */}
             <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                    <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
-                        Volume
-                    </label>
-                    <span className="text-sm font-tertiary tabular-nums text-ground-600 dark:text-ground-400">
+                    <Label>Volume</Label>
+                    <span className="font-tertiary tabular-nums text-muted-content">
                         {volume[0]}%
                     </span>
                 </div>
@@ -33,13 +31,13 @@ export default function SliderDemo() {
                 />
             </div>
 
+            <Divider />
+
             {/* Range Slider */}
             <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                    <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
-                        Price Range
-                    </label>
-                    <span className="text-sm font-tertiary tabular-nums text-ground-600 dark:text-ground-400">
+                    <Label>Price Range</Label>
+                    <span className="font-tertiary tabular-nums text-muted-content">
                         ${range[0]} - ${range[1]}
                     </span>
                 </div>
@@ -53,13 +51,13 @@ export default function SliderDemo() {
                 />
             </div>
 
+            <Divider />
+
             {/* Controlled */}
             <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                    <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
-                        Brightness (Controlled)
-                    </label>
-                    <span className="text-sm font-tertiary tabular-nums text-ground-600 dark:text-ground-400">
+                    <Label>Brightness (Controlled)</Label>
+                    <span className="font-tertiary tabular-nums text-muted-content">
                         {brightness[0]}%
                     </span>
                 </div>
@@ -70,25 +68,32 @@ export default function SliderDemo() {
                     label="Brightness"
                     onValueChange={setBrightness}
                 />
+                <Button
+                    variant="ghost"
+                    size="small"
+                    onClick={() => setBrightness([75])}
+                >
+                    Reset to 75%
+                </Button>
             </div>
+
+            <Divider />
 
             {/* Disabled */}
             <div className="space-y-3">
-                <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
-                    Disabled
-                </label>
+                <Label>Disabled</Label>
                 <Slider defaultValue={[25]} disabled label="Disabled slider" />
             </div>
+
+            <Divider />
 
             {/* Custom Step */}
             <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                    <label className="text-sm font-secondary font-medium text-ground-700 dark:text-ground-300">
-                        Custom Step (25)
-                    </label>
+                    <Label>Custom Step (25)</Label>
                 </div>
                 <Slider defaultValue={[50]} max={100} step={25} label="Step slider" />
-                <div className="flex justify-between text-[10px] font-secondary text-ground-400 px-1">
+                <div className="flex justify-between font-tertiary text-muted-content px-1">
                     <span>0</span>
                     <span>25</span>
                     <span>50</span>

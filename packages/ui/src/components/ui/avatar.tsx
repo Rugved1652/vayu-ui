@@ -120,16 +120,16 @@ const AvatarRoot = forwardRef<HTMLSpanElement, AvatarRootProps>(
         const avatarClasses = cn(
             "relative inline-flex items-center justify-center",
             "rounded-full",
-            "bg-ground-100 dark:bg-ground-800",
-            "border-2 border-ground-300 dark:border-ground-600",
-            "shadow-outer",
+            "bg-muted dark:bg-muted",
+            "border-2 border-border dark:border-border",
+            "shadow-surface",
             // Motion Safe Transitions
             "motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out",
             // Focus Visible (WCAG 2.4.7)
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2",
-            "dark:focus-visible:ring-primary-500 dark:focus-visible:ring-offset-ground-950",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
+            "dark:focus-visible:ring-focus dark:focus-visible:ring-offset-canvas",
             // Interactive States
-            isInteractive && "cursor-pointer hover:shadow-lg active:scale-95",
+            isInteractive && "cursor-pointer hover:shadow-elevated active:scale-95",
             sizeClass,
             className
         );
@@ -216,14 +216,14 @@ const AvatarImage = forwardRef<HTMLImageElement, AvatarImageProps>(
                 />
                 {imageLoading && (
                     <span
-                        className="absolute inset-0 flex items-center justify-center bg-ground-100 dark:bg-ground-800 rounded-full"
+                        className="absolute inset-0 flex items-center justify-center bg-muted dark:bg-muted rounded-full"
                         role="status"
                         aria-live="polite"
                         aria-busy="true"
                     >
                         {/* Visual Loading Spinner - Hidden from SR by aria-busy on parent */}
                         <span
-                            className="w-4 h-4 border-2 border-primary-600 border-t-transparent rounded-full motion-safe:animate-spin"
+                            className="w-4 h-4 border-2 border-brand border-t-transparent rounded-full motion-safe:animate-spin"
                             aria-hidden="true"
                         ></span>
                     </span>
@@ -310,10 +310,10 @@ AvatarFallback.displayName = "Avatar.Fallback";
 const AvatarStatus = forwardRef<HTMLSpanElement, AvatarStatusProps>(
     ({ status, label, className, ...props }, ref) => {
         const statusConfig = {
-            online: { color: "bg-success-600 dark:bg-success-500", label: "Online" },
-            offline: { color: "bg-ground-500 dark:bg-ground-400", label: "Offline" },
-            away: { color: "bg-warning-600 dark:bg-warning-500", label: "Away" },
-            busy: { color: "bg-error-600 dark:bg-error-500", label: "Busy" },
+            online: { color: "bg-success", label: "Online" },
+            offline: { color: "bg-muted-content", label: "Offline" },
+            away: { color: "bg-warning", label: "Away" },
+            busy: { color: "bg-destructive", label: "Busy" },
         };
 
         const config = statusConfig[status];
@@ -324,8 +324,8 @@ const AvatarStatus = forwardRef<HTMLSpanElement, AvatarStatusProps>(
                 className={cn(
                     "absolute -bottom-0.5 -right-0.5",
                     "w-5 h-5 rounded-full",
-                    "border-2 border-white dark:border-ground-950",
-                    "z-10 shadow-outer",
+                    "border-2 border-canvas",
+                    "z-10 shadow-surface",
                     config.color,
                     className
                 )}

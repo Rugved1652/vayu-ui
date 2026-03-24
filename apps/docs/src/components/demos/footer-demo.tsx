@@ -1,26 +1,30 @@
 "use client";
 import React from "react";
-import { Footer } from "vayu-ui";
-import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
+import { Footer, Typography, Divider, Button } from "vayu-ui";
+import { Twitter, Github, Instagram, Linkedin } from "lucide-react";
 
 export default function FooterDemo() {
     return (
-        <div className="w-full space-y-12 p-6 border border-ground-200 dark:border-ground-800 rounded-xl bg-ground-50 dark:bg-ground-950 overflow-hidden">
+        <div className="w-full space-y-12 p-6 border border-border rounded-surface bg-canvas overflow-hidden">
 
             {/* Default Footer */}
             <div className="space-y-4">
-                <h3 className="text-sm font-medium text-ground-500 uppercase tracking-wider">Default Variant</h3>
-                <div className="border border-ground-200 dark:border-ground-800 rounded-lg overflow-hidden bg-white dark:bg-ground-900">
+                <Typography.Label variant="secondary" className="uppercase tracking-wider">
+                    Default Variant
+                </Typography.Label>
+                <div className="border border-border rounded-surface overflow-hidden bg-surface">
                     <Footer>
                         <Footer.Container>
                             <Footer.Grid>
                                 <Footer.Section>
                                     <Footer.Logo href="#">
-                                        <span className="text-xl font-bold bg-linear-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent">Vayu UI</span>
+                                        <Typography.H5 variant="gradient" className="font-bold">
+                                            Vayu UI
+                                        </Typography.H5>
                                     </Footer.Logo>
-                                    <p className="text-sm text-ground-500 dark:text-ground-400 mt-2">
+                                    <Typography.P variant="secondary" className="mt-2">
                                         Building beautiful user interfaces with modern web technologies.
-                                    </p>
+                                    </Typography.P>
                                     <Footer.Social className="mt-4">
                                         <Footer.SocialLink href="#" aria-label="Twitter"><Twitter size={18} /></Footer.SocialLink>
                                         <Footer.SocialLink href="#" aria-label="GitHub"><Github size={18} /></Footer.SocialLink>
@@ -50,7 +54,7 @@ export default function FooterDemo() {
                                 </Footer.Section>
                             </Footer.Grid>
 
-                            <Footer.Divider />
+                            <Divider />
 
                             <Footer.Bottom>
                                 <Footer.Copyright>
@@ -68,15 +72,19 @@ export default function FooterDemo() {
 
             {/* Centered Footer */}
             <div className="space-y-4">
-                <h3 className="text-sm font-medium text-ground-500 uppercase tracking-wider">Centered Variant</h3>
-                <div className="border border-ground-200 dark:border-ground-800 rounded-lg overflow-hidden bg-white dark:bg-ground-900">
+                <Typography.Label variant="secondary" className="uppercase tracking-wider">
+                    Centered Variant
+                </Typography.Label>
+                <div className="border border-border rounded-surface overflow-hidden bg-surface">
                     <Footer variant="centered">
                         <Footer.Container>
                             <Footer.Grid>
                                 <Footer.Section>
                                     <div className="flex flex-col items-center gap-4">
                                         <Footer.Logo href="#">
-                                            <span className="text-xl font-bold bg-linear-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent">Vayu UI</span>
+                                            <Typography.H5 variant="gradient" className="font-bold">
+                                                Vayu UI
+                                            </Typography.H5>
                                         </Footer.Logo>
                                         <nav className="flex flex-wrap justify-center gap-6 mt-4">
                                             <Footer.Link href="#">Home</Footer.Link>
@@ -92,7 +100,7 @@ export default function FooterDemo() {
                                     </div>
                                 </Footer.Section>
                             </Footer.Grid>
-                            <Footer.Divider />
+                            <Divider />
                             <Footer.Bottom>
                                 <Footer.Copyright>
                                     © {new Date().getFullYear()} Vayu UI. All rights reserved.
@@ -105,13 +113,17 @@ export default function FooterDemo() {
 
             {/* Minimal Footer */}
             <div className="space-y-4">
-                <h3 className="text-sm font-medium text-ground-500 uppercase tracking-wider">Minimal Variant</h3>
-                <div className="border border-ground-200 dark:border-ground-800 rounded-lg overflow-hidden bg-white dark:bg-ground-900">
+                <Typography.Label variant="secondary" className="uppercase tracking-wider">
+                    Minimal Variant
+                </Typography.Label>
+                <div className="border border-border rounded-surface overflow-hidden bg-surface">
                     <Footer variant="minimal">
                         <Footer.Container>
                             <Footer.Bottom>
                                 <Footer.Logo href="#">
-                                    <span className="font-bold">Vayu UI</span>
+                                    <Typography.Label className="font-bold">
+                                        Vayu UI
+                                    </Typography.Label>
                                 </Footer.Logo>
                                 <Footer.Copyright>
                                     © {new Date().getFullYear()} Vayu UI. Inc.
@@ -120,6 +132,47 @@ export default function FooterDemo() {
                                     <Footer.SocialLink href="#"><Github size={16} /></Footer.SocialLink>
                                     <Footer.SocialLink href="#"><Twitter size={16} /></Footer.SocialLink>
                                 </Footer.Social>
+                            </Footer.Bottom>
+                        </Footer.Container>
+                    </Footer>
+                </div>
+            </div>
+
+            {/* Footer with CTA Button */}
+            <div className="space-y-4">
+                <Typography.Label variant="secondary" className="uppercase tracking-wider">
+                    With CTA Button
+                </Typography.Label>
+                <div className="border border-border rounded-surface overflow-hidden bg-surface">
+                    <Footer>
+                        <Footer.Container>
+                            <div className="flex flex-col md:flex-row gap-8 items-center justify-between">
+                                <div className="flex flex-col gap-2">
+                                    <Typography.H5 variant="gradient" className="font-bold">
+                                        Ready to get started?
+                                    </Typography.H5>
+                                    <Typography.P variant="secondary">
+                                        Join thousands of developers building with Vayu UI.
+                                    </Typography.P>
+                                </div>
+                                <div className="flex gap-3">
+                                    <Button variant="primary" size="medium">
+                                        <Button.Text>Get Started</Button.Text>
+                                    </Button>
+                                    <Button variant="outline" size="medium">
+                                        <Button.Text>Documentation</Button.Text>
+                                    </Button>
+                                </div>
+                            </div>
+                            <Divider />
+                            <Footer.Bottom>
+                                <Footer.Copyright>
+                                    © {new Date().getFullYear()} Vayu UI. All rights reserved.
+                                </Footer.Copyright>
+                                <div className="flex gap-4">
+                                    <Footer.Link href="#">Privacy Policy</Footer.Link>
+                                    <Footer.Link href="#">Terms of Service</Footer.Link>
+                                </div>
                             </Footer.Bottom>
                         </Footer.Container>
                     </Footer>

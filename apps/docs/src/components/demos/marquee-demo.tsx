@@ -1,63 +1,65 @@
 "use client";
-import { Marquee, MarqueeItem } from "vayu-ui";
+import { Marquee, MarqueeItem, Typography, Divider } from "vayu-ui";
 
 export default function MarqueeDemo() {
     return (
-        <div className="space-y-12 w-full not-prose p-8 bg-ground-50 dark:bg-ground-900 min-h-screen">
-            <div className="  space-y-12">
+        <div className="space-y-12 w-full not-prose p-8 bg-canvas min-h-screen">
+            <div className="space-y-12">
                 {/* Header */}
                 <div className="space-y-2">
-                    <h1 className="text-3xl font-bold text-ground-900 dark:text-ground-50">
+                    <Typography.H1 variant="primary">
                         Marquee Component
-                    </h1>
-                    <p className="text-ground-600 dark:text-ground-400">
+                    </Typography.H1>
+                    <Typography.P variant="secondary">
                         WCAG 2.2 AA compliant scrolling content component with
                         pause controls
-                    </p>
+                    </Typography.P>
                 </div>
+
+                <Divider spacing="lg" decorative />
 
                 {/* Basic Example */}
                 <section className="space-y-4">
                     <div className="space-y-1">
-                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                        <Typography.H2 variant="primary">
                             Basic Marquee
-                        </h2>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                        </Typography.H2>
+                        <Typography.P variant="secondary">
                             Default settings with pause control (WCAG 2.2.2)
-                        </p>
+                        </Typography.P>
                     </div>
-                    <Marquee label="Featured technologies">
+                    <Marquee pauseOnHover label="Featured technologies">
                         <MarqueeItem>
-                            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700">
-                                <span className="text-ground-900 dark:text-ground-50 font-medium">
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-surface bg-surface border border-border">
+                                <span className="text-surface-content font-medium">
                                     React
                                 </span>
                             </div>
                         </MarqueeItem>
                         <MarqueeItem>
-                            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700">
-                                <span className="text-ground-900 dark:text-ground-50 font-medium">
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-surface bg-surface border border-border">
+                                <span className="text-surface-content font-medium">
                                     TypeScript
                                 </span>
                             </div>
                         </MarqueeItem>
                         <MarqueeItem>
-                            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700">
-                                <span className="text-ground-900 dark:text-ground-50 font-medium">
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-surface bg-surface border border-border">
+                                <span className="text-surface-content font-medium">
                                     Tailwind CSS v4
                                 </span>
                             </div>
                         </MarqueeItem>
                         <MarqueeItem>
-                            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700">
-                                <span className="text-ground-900 dark:text-ground-50 font-medium">
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-surface bg-surface border border-border">
+                                <span className="text-surface-content font-medium">
                                     Next.js
                                 </span>
                             </div>
                         </MarqueeItem>
                         <MarqueeItem>
-                            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700">
-                                <span className="text-ground-900 dark:text-ground-50 font-medium">
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-surface bg-surface border border-border">
+                                <span className="text-surface-content font-medium">
                                     Vite
                                 </span>
                             </div>
@@ -65,22 +67,24 @@ export default function MarqueeDemo() {
                     </Marquee>
                 </section>
 
+                <Divider spacing="lg" decorative />
+
                 {/* Speed Variants */}
                 <section className="space-y-4">
                     <div className="space-y-1">
-                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                        <Typography.H2 variant="primary">
                             Speed Variants
-                        </h2>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                        </Typography.H2>
+                        <Typography.P variant="secondary">
                             Slow (40s), Normal (20s), Fast (10s)
-                        </p>
+                        </Typography.P>
                     </div>
                     <div className="space-y-4">
                         <Marquee speed="slow" label="Slow scrolling content">
                             {[...Array(6)].map((_, i) => (
                                 <MarqueeItem key={i}>
-                                    <div className="px-6 py-3 rounded-lg bg-blue-100 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-700">
-                                        <span className="text-blue-900 dark:text-blue-100 font-medium">
+                                    <div className="px-6 py-3 rounded-surface bg-info/10 border border-info/30">
+                                        <span className="text-info font-medium">
                                             Slow {i + 1}
                                         </span>
                                     </div>
@@ -90,8 +94,8 @@ export default function MarqueeDemo() {
                         <Marquee speed="fast" label="Fast scrolling content">
                             {[...Array(6)].map((_, i) => (
                                 <MarqueeItem key={i}>
-                                    <div className="px-6 py-3 rounded-lg bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700">
-                                        <span className="text-red-900 dark:text-red-100 font-medium">
+                                    <div className="px-6 py-3 rounded-surface bg-destructive/10 border border-destructive/30">
+                                        <span className="text-destructive font-medium">
                                             Fast {i + 1}
                                         </span>
                                     </div>
@@ -101,15 +105,17 @@ export default function MarqueeDemo() {
                     </div>
                 </section>
 
+                <Divider spacing="lg" decorative />
+
                 {/* Direction */}
                 <section className="space-y-4">
                     <div className="space-y-1">
-                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                        <Typography.H2 variant="primary">
                             Direction Control
-                        </h2>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                        </Typography.H2>
+                        <Typography.P variant="secondary">
                             Left to right or right to left scrolling
-                        </p>
+                        </Typography.P>
                     </div>
                     <div className="space-y-4">
                         <Marquee
@@ -118,8 +124,8 @@ export default function MarqueeDemo() {
                         >
                             {[...Array(6)].map((_, i) => (
                                 <MarqueeItem key={i}>
-                                    <div className="px-6 py-3 rounded-lg bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700">
-                                        <span className="text-green-900 dark:text-green-100 font-medium">
+                                    <div className="px-6 py-3 rounded-surface bg-success/10 border border-success/30">
+                                        <span className="text-success font-medium">
                                             → Left {i + 1}
                                         </span>
                                     </div>
@@ -132,8 +138,8 @@ export default function MarqueeDemo() {
                         >
                             {[...Array(6)].map((_, i) => (
                                 <MarqueeItem key={i}>
-                                    <div className="px-6 py-3 rounded-lg bg-purple-100 dark:bg-purple-900/30 border border-purple-300 dark:border-purple-700">
-                                        <span className="text-purple-900 dark:text-purple-100 font-medium">
+                                    <div className="px-6 py-3 rounded-surface bg-brand/10 border border-brand/30">
+                                        <span className="text-brand font-medium">
                                             ← Right {i + 1}
                                         </span>
                                     </div>
@@ -143,29 +149,31 @@ export default function MarqueeDemo() {
                     </div>
                 </section>
 
+                <Divider spacing="lg" decorative />
+
                 {/* Loop Modes */}
                 <section className="space-y-4">
                     <div className="space-y-1">
-                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                        <Typography.H2 variant="primary">
                             Loop Modes
-                        </h2>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                        </Typography.H2>
+                        <Typography.P variant="secondary">
                             Infinite, finite, single, or ping-pong patterns
-                        </p>
+                        </Typography.P>
                     </div>
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <p className="text-sm font-medium text-ground-700 dark:text-ground-300">
+                            <Typography.P variant="secondary" className="font-medium text-surface-content">
                                 Ping-pong (alternating direction)
-                            </p>
+                            </Typography.P>
                             <Marquee
                                 loopMode="ping-pong"
                                 label="Ping-pong scrolling content"
                             >
                                 {[...Array(6)].map((_, i) => (
                                     <MarqueeItem key={i}>
-                                        <div className="px-6 py-3 rounded-lg bg-amber-100 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700">
-                                            <span className="text-amber-900 dark:text-amber-100 font-medium">
+                                        <div className="px-6 py-3 rounded-surface bg-warning/10 border border-warning/30">
+                                            <span className="text-warning font-medium">
                                                 Ping-pong {i + 1}
                                             </span>
                                         </div>
@@ -174,9 +182,9 @@ export default function MarqueeDemo() {
                             </Marquee>
                         </div>
                         <div className="space-y-2">
-                            <p className="text-sm font-medium text-ground-700 dark:text-ground-300">
+                            <Typography.P variant="secondary" className="font-medium text-surface-content">
                                 Finite (3 loops then stops)
-                            </p>
+                            </Typography.P>
                             <Marquee
                                 loopMode="finite"
                                 loopCount={3}
@@ -184,8 +192,8 @@ export default function MarqueeDemo() {
                             >
                                 {[...Array(6)].map((_, i) => (
                                     <MarqueeItem key={i}>
-                                        <div className="px-6 py-3 rounded-lg bg-teal-100 dark:bg-teal-900/30 border border-teal-300 dark:border-teal-700">
-                                            <span className="text-teal-900 dark:text-teal-100 font-medium">
+                                        <div className="px-6 py-3 rounded-surface bg-info/10 border border-info/30">
+                                            <span className="text-info font-medium">
                                                 Finite {i + 1}
                                             </span>
                                         </div>
@@ -196,15 +204,17 @@ export default function MarqueeDemo() {
                     </div>
                 </section>
 
+                <Divider spacing="lg" decorative />
+
                 {/* Without Controls */}
                 <section className="space-y-4">
                     <div className="space-y-1">
-                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                        <Typography.H2 variant="primary">
                             No Controls (Not Recommended)
-                        </h2>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                        </Typography.H2>
+                        <Typography.P variant="secondary">
                             Without pause control - fails WCAG 2.2.2 Level A
-                        </p>
+                        </Typography.P>
                     </div>
                     <Marquee
                         showControls={false}
@@ -212,8 +222,8 @@ export default function MarqueeDemo() {
                     >
                         {[...Array(6)].map((_, i) => (
                             <MarqueeItem key={i}>
-                                <div className="px-6 py-3 rounded-lg bg-ground-200 dark:bg-ground-700 border border-ground-300 dark:border-ground-600">
-                                    <span className="text-ground-900 dark:text-ground-100 font-medium">
+                                <div className="px-6 py-3 rounded-surface bg-muted border border-border">
+                                    <span className="text-surface-content font-medium">
                                         No Control {i + 1}
                                     </span>
                                 </div>
@@ -222,21 +232,23 @@ export default function MarqueeDemo() {
                     </Marquee>
                 </section>
 
+                <Divider spacing="lg" decorative />
+
                 {/* Without Gradient */}
                 <section className="space-y-4">
                     <div className="space-y-1">
-                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                        <Typography.H2 variant="primary">
                             No Edge Gradient
-                        </h2>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                        </Typography.H2>
+                        <Typography.P variant="secondary">
                             Without gradient fade on edges
-                        </p>
+                        </Typography.P>
                     </div>
                     <Marquee gradient={false} label="Content without gradient">
                         {[...Array(6)].map((_, i) => (
                             <MarqueeItem key={i}>
-                                <div className="px-6 py-3 rounded-lg bg-pink-100 dark:bg-pink-900/30 border border-pink-300 dark:border-pink-700">
-                                    <span className="text-pink-900 dark:text-pink-100 font-medium">
+                                <div className="px-6 py-3 rounded-surface bg-brand/10 border border-brand/30">
+                                    <span className="text-brand font-medium">
                                         Item {i + 1}
                                     </span>
                                 </div>
@@ -245,15 +257,17 @@ export default function MarqueeDemo() {
                     </Marquee>
                 </section>
 
+                <Divider spacing="lg" decorative />
+
                 {/* Logo Showcase Example */}
                 <section className="space-y-4">
                     <div className="space-y-1">
-                        <h2 className="text-xl font-semibold text-ground-900 dark:text-ground-50">
+                        <Typography.H2 variant="primary">
                             Logo Showcase Example
-                        </h2>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                        </Typography.H2>
+                        <Typography.P variant="secondary">
                             Typical use case for partner logos or testimonials
-                        </p>
+                        </Typography.P>
                     </div>
                     <Marquee
                         speed="slow"
@@ -269,8 +283,8 @@ export default function MarqueeDemo() {
                             "AppMakers",
                         ].map((company, i) => (
                             <MarqueeItem key={i}>
-                                <div className="px-8 py-4 rounded-xl bg-white dark:bg-ground-800 border border-ground-200 dark:border-ground-700 shadow-sm">
-                                    <span className="text-lg font-semibold text-ground-900 dark:text-ground-50">
+                                <div className="px-8 py-4 rounded-overlay bg-surface border border-border shadow-surface">
+                                    <span className="text-lg font-semibold text-surface-content">
                                         {company}
                                     </span>
                                 </div>
@@ -279,50 +293,31 @@ export default function MarqueeDemo() {
                     </Marquee>
                 </section>
 
+                <Divider spacing="lg" decorative />
+
                 {/* Accessibility Notes */}
-                <section className="space-y-4 p-6 rounded-lg bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800">
+                <section className="space-y-4 p-6 rounded-surface bg-muted border border-border">
                     <div className="space-y-2">
-                        <h2 className="text-xl font-semibold text-primary-900 dark:text-primary-100">
+                        <Typography.H3 variant="info">
                             WCAG 2.2 AA Compliance
-                        </h2>
-                        <div className="space-y-3 text-sm text-primary-800 dark:text-primary-200">
-                            <div className="flex gap-2">
-                                <span className="font-semibold shrink-0">
-                                    2.2.2 (Level A):
-                                </span>
-                                <span>
-                                    Pause control provided by default for all
-                                    moving content
-                                </span>
-                            </div>
-                            <div className="flex gap-2">
-                                <span className="font-semibold shrink-0">
-                                    2.3.3:
-                                </span>
-                                <span>
-                                    Respects prefers-reduced-motion setting -
-                                    animations disabled for users who prefer
-                                    reduced motion
-                                </span>
-                            </div>
-                            <div className="flex gap-2">
-                                <span className="font-semibold shrink-0">
-                                    2.4.7 (Level AA):
-                                </span>
-                                <span>
-                                    Focus indicator visible on pause control
-                                    button
-                                </span>
-                            </div>
-                            <div className="flex gap-2">
-                                <span className="font-semibold shrink-0">
-                                    4.1.2 (Level A):
-                                </span>
-                                <span>
-                                    Proper ARIA labels (role="region",
-                                    aria-roledescription, aria-label)
-                                </span>
-                            </div>
+                        </Typography.H3>
+                        <div className="space-y-3">
+                            <Typography.P variant="secondary">
+                                <span className="font-semibold text-surface-content">2.2.2 (Level A):</span>{" "}
+                                Pause control provided by default for all moving content
+                            </Typography.P>
+                            <Typography.P variant="secondary">
+                                <span className="font-semibold text-surface-content">2.3.3:</span>{" "}
+                                Respects prefers-reduced-motion setting - animations disabled for users who prefer reduced motion
+                            </Typography.P>
+                            <Typography.P variant="secondary">
+                                <span className="font-semibold text-surface-content">2.4.7 (Level AA):</span>{" "}
+                                Focus indicator visible on pause control button
+                            </Typography.P>
+                            <Typography.P variant="secondary">
+                                <span className="font-semibold text-surface-content">4.1.2 (Level A):</span>{" "}
+                                Proper ARIA labels (role="region", aria-roledescription, aria-label)
+                            </Typography.P>
                         </div>
                     </div>
                 </section>

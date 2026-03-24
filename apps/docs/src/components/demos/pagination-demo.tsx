@@ -1,5 +1,5 @@
 "use client";
-import { Pagination } from "vayu-ui";
+import { Pagination, Typography, Divider } from "vayu-ui";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -28,9 +28,9 @@ export default function PaginationDemo() {
         <div className="w-full max-w-2xl not-prose space-y-10">
             {/* Default with Info */}
             <div>
-                <h2 className="text-xl font-semibold mb-4 text-ground-900 dark:text-ground-100">
+                <Typography.H5 variant="primary" className="mb-4">
                     Default Pagination
-                </h2>
+                </Typography.H5>
                 <Pagination.Root aria-label="Default pagination">
                     <Pagination.Info
                         totalItems={totalItems}
@@ -47,11 +47,13 @@ export default function PaginationDemo() {
                 </Pagination.Root>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Extended Page Range */}
             <div>
-                <h2 className="text-xl font-semibold mb-4 text-ground-900 dark:text-ground-100">
+                <Typography.H5 variant="primary" className="mb-4">
                     Extended Page Range
-                </h2>
+                </Typography.H5>
                 <Pagination.Root>
                     <div className="flex justify-center">
                         <Pagination.Buttons
@@ -65,11 +67,13 @@ export default function PaginationDemo() {
                 </Pagination.Root>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Full Page Range */}
             <div>
-                <h2 className="text-xl font-semibold mb-4 text-ground-900 dark:text-ground-100">
+                <Typography.H5 variant="primary" className="mb-4">
                     Full Page Range
-                </h2>
+                </Typography.H5>
                 <Pagination.Root>
                     <div className="flex justify-center">
                         <Pagination.Buttons
@@ -82,11 +86,13 @@ export default function PaginationDemo() {
                 </Pagination.Root>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Compact */}
             <div>
-                <h2 className="text-xl font-semibold mb-4 text-ground-900 dark:text-ground-100">
+                <Typography.H5 variant="primary" className="mb-4">
                     Compact (Mobile-friendly)
-                </h2>
+                </Typography.H5>
                 <Pagination.Compact
                     currentPage={currentPage}
                     totalPages={totalPages}

@@ -198,11 +198,10 @@ const ModalTrigger = forwardRef<HTMLButtonElement, ModalTriggerProps>(
         type="button"
         onClick={handleClick}
         className={clsx(
-          "inline-flex items-center justify-center rounded px-4 py-2 text-sm font-medium transition-colors",
-          "bg-ground-100 text-ground-900 hover:bg-ground-200",
-          "dark:bg-ground-800 dark:text-ground-100 dark:hover:bg-ground-700",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
-          "dark:focus-visible:ring-offset-ground-950",
+          "inline-flex items-center justify-center rounded-control px-4 py-2 text-sm font-medium transition-colors",
+          "bg-surface text-surface-content hover:bg-muted",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
+          "focus-visible:ring-offset-canvas",
           className
         )}
         aria-expanded={open}
@@ -232,7 +231,7 @@ const ModalOverlay = forwardRef<HTMLDivElement, ModalOverlayProps>(
       <div
         ref={ref}
         className={clsx(
-          "fixed inset-0 z-50 bg-ground-950/50 backdrop-blur-sm",
+          "fixed inset-0 z-50 bg-canvas/80 backdrop-blur-surface",
           "transition-opacity duration-300 ease-in-out",
           className
         )}
@@ -363,9 +362,9 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
             style={{ maxWidth: sizeWidths[size] }}
             className={clsx(
               "relative w-full flex flex-col",
-              "bg-ground-50 dark:bg-ground-950",
-              "border border-ground-200 dark:border-ground-700",
-              "rounded-lg shadow-outer",
+              "bg-elevated",
+              "border border-border",
+              "rounded-overlay shadow-elevated",
               "focus:outline-none",
               className
             )}
@@ -411,7 +410,7 @@ const ModalBody = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
       ref={ref}
       className={clsx(
         "flex-1 overflow-y-auto p-6",
-        "text-sm font-secondary text-ground-700 dark:text-ground-300",
+        "text-sm font-secondary text-muted-content",
         className
       )}
       {...props}
@@ -452,7 +451,7 @@ const ModalTitle = forwardRef<
       id={titleId}
       ref={ref}
       className={clsx(
-        "text-lg font-semibold font-primary text-ground-900 dark:text-ground-100",
+        "text-lg font-semibold font-primary text-elevated-content",
         className
       )}
       {...props}
@@ -475,7 +474,7 @@ const ModalDescription = forwardRef<
       id={descriptionId}
       ref={ref}
       className={clsx(
-        "text-sm font-secondary text-ground-500 dark:text-ground-400 mt-1",
+        "text-sm font-secondary text-muted-content mt-1",
         className
       )}
       {...props}
@@ -519,11 +518,11 @@ const ModalClose = forwardRef<HTMLButtonElement, ModalCloseProps>(
           ref={ref}
           type="button"
           className={clsx(
-            "inline-flex items-center justify-center rounded-md p-1.5",
-            "text-ground-400 hover:text-ground-700 dark:text-ground-500 dark:hover:text-ground-200",
+            "inline-flex items-center justify-center rounded-control p-1.5",
+            "text-muted-content hover:text-elevated-content",
             "transition-colors",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
-            "dark:focus-visible:ring-offset-ground-950",
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
+            "focus-visible:ring-offset-elevated",
             className
           )}
           onClick={handleClick}

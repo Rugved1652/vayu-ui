@@ -1,0 +1,524 @@
+---
+title: Theming & Colors
+description: Learn how to use Vayu UI's semantic color system with the pairing pattern for consistent, accessible designs.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Palette, Layers, Contrast } from 'lucide-react';
+
+# Theming & Colors
+
+Welcome to the Vayu UI color system! This guide will teach you how to think about colors in a semantic, meaningful way. By the end, you'll understand why we never say "use blue" — we say "use brand".
+
+## The Golden Rule: The Pairing Pattern
+
+Before we dive into individual colors, memorize this pattern:
+
+```
+bg-[name] + text-[name]-content
+```
+
+Every background color has a paired text color that guarantees proper contrast. **Always use them together.**
+
+```tsx
+// ✅ Do: Use paired colors
+<div className="bg-surface text-surface-content">
+  This text will always be readable
+</div>
+
+// ❌ Don't: Mix arbitrary colors
+<div className="bg-surface text-blue-500">
+  Contrast is not guaranteed
+</div>
+```
+
+This pattern ensures:
+- **WCAG AA compliance** in both light and dark modes
+- **Consistent contrast** across your entire app
+- **Automatic dark mode support** without extra work
+
+---
+
+## The Layer Cake Model
+
+Think of your UI as a stack of layers, like a cake. Each layer has a purpose, and they stack from bottom to top:
+
+```
+┌─────────────────────────────────────┐  ← Elevated (Modals, Tooltips)
+│  ┌───────────────────────────────┐  │
+│  │         Surface (Cards)       │  │  ← Surface (Containers)
+│  │  ┌─────────────────────────┐  │  │
+│  │  │                         │  │  │
+│  │  │      Content Here       │  │  │
+│  │  │                         │  │  │
+│  │  └─────────────────────────┘  │  │
+│  └───────────────────────────────┘  │
+│                                     │  ← Canvas (App Background)
+└─────────────────────────────────────┘
+```
+
+### Why This Matters
+
+Each layer is slightly different from the one below it, creating visual separation. In light mode, layers get lighter as they go up. In dark mode, they get darker. This creates natural depth without you having to think about it.
+
+---
+
+## Base Layers
+
+These four layers form the foundation of every screen in your app.
+
+| Variable | Usage Context | Paired Text | Tailwind Classes |
+| :--- | :--- | :--- | :--- |
+| **Canvas** | App background, viewport, body | `canvas-content` | `bg-canvas text-canvas-content` |
+| **Surface** | Cards, sections, inputs, tables, panels | `surface-content` | `bg-surface text-surface-content` |
+| **Sidebar** | Navigation sidebar, drawer, rail nav | `sidebar-content` | `bg-sidebar text-sidebar-content` |
+| **Elevated** | Modals, popovers, dropdowns, tooltips | `elevated-content` | `bg-elevated text-elevated-content` |
+
+### Canvas
+
+The canvas is your app's foundation. It's the bottom-most layer.
+
+<Tabs items={['Light Mode', 'Dark Mode', 'Usage']}>
+  <Tab value="Light Mode">
+    <div className="p-6 rounded-lg border border-border" style={{ backgroundColor: '#fafafa' }}>
+      <p style={{ color: '#18181b' }}>Canvas is a soft off-white (#fafafa)</p>
+      <p className="text-sm mt-2" style={{ color: '#71717a' }}>Easier on the eyes than pure white</p>
+    </div>
+  </Tab>
+  <Tab value="Dark Mode">
+    <div className="p-6 rounded-lg border border-border" style={{ backgroundColor: '#09090b' }}>
+      <p style={{ color: '#fafafa' }}>Canvas is a rich near-black (#09090b)</p>
+      <p className="text-sm mt-2" style={{ color: '#a1a1aa' }}>Not pure black for eye comfort</p>
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // App shell
+    <body className="bg-canvas text-canvas-content">
+      <App />
+    </body>
+
+    // Page container
+    <main className="bg-canvas min-h-screen">
+      {children}
+    </main>
+    ```
+  </Tab>
+</Tabs>
+
+### Surface
+
+Surfaces are containers that sit on top of the canvas. Cards, panels, and form elements use this layer.
+
+<Tabs items={['Light Mode', 'Dark Mode', 'Usage']}>
+  <Tab value="Light Mode">
+    <div className="p-6 rounded-lg shadow-surface" style={{ backgroundColor: '#fff' }}>
+      <p style={{ color: '#18181b' }}>Surface is crisp white (#fff)</p>
+      <p className="text-sm mt-2" style={{ color: '#71717a' }}>Creates clear separation from canvas</p>
+    </div>
+  </Tab>
+  <Tab value="Dark Mode">
+    <div className="p-6 rounded-lg shadow-surface" style={{ backgroundColor: '#18181b' }}>
+      <p style={{ color: '#fafafa' }}>Surface is elevated (#18181b)</p>
+      <p className="text-sm mt-2" style={{ color: '#a1a1aa' }}>Lighter than canvas for depth</p>
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Card
+    <div className="bg-surface text-surface-content rounded-surface shadow-surface p-6">
+      <h3>Card Title</h3>
+      <p>Card content goes here</p>
+    </div>
+
+    // Form input
+    <input
+      className="bg-surface text-surface-content border border-field rounded-control px-3 py-2"
+      placeholder="Enter text..."
+    />
+    ```
+  </Tab>
+</Tabs>
+
+### Sidebar
+
+Sidebars are for navigation. They're visually distinct from the main content area.
+
+<Tabs items={['Light Mode', 'Dark Mode', 'Usage']}>
+  <Tab value="Light Mode">
+    <div className="p-6 rounded-lg" style={{ backgroundColor: '#f4f4f5' }}>
+      <p style={{ color: '#18181b' }}>Sidebar is neutral gray (#f4f4f5)</p>
+      <p className="text-sm mt-2" style={{ color: '#71717a' }}>Subtle difference from canvas</p>
+    </div>
+  </Tab>
+  <Tab value="Dark Mode">
+    <div className="p-6 rounded-lg" style={{ backgroundColor: '#0a0a0a' }}>
+      <p style={{ color: '#fafafa' }}>Sidebar is deeper black (#0a0a0a)</p>
+      <p className="text-sm mt-2" style={{ color: '#a1a1aa' }}>Darker than canvas for contrast</p>
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Navigation sidebar
+    <nav className="bg-sidebar text-sidebar-content w-64 min-h-screen p-4">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/settings">Settings</a>
+    </nav>
+
+    // Drawer
+    <aside className="bg-sidebar text-sidebar-content fixed inset-y-0 left-0 w-80">
+      {drawerContent}
+    </aside>
+    ```
+  </Tab>
+</Tabs>
+
+### Elevated
+
+Elevated surfaces appear above everything else. Think modals, tooltips, and dropdowns.
+
+<Tabs items={['Light Mode', 'Dark Mode', 'Usage']}>
+  <Tab value="Light Mode">
+    <div className="p-6 rounded-lg shadow-elevated" style={{ backgroundColor: '#fff' }}>
+      <p style={{ color: '#18181b' }}>Elevated is white (#fff)</p>
+      <p className="text-sm mt-2" style={{ color: '#71717a' }}>Same as surface, but with stronger shadow</p>
+    </div>
+  </Tab>
+  <Tab value="Dark Mode">
+    <div className="p-6 rounded-lg shadow-elevated" style={{ backgroundColor: '#27272a' }}>
+      <p style={{ color: '#fafafa' }}>Elevated is lightest layer (#27272a)</p>
+      <p className="text-sm mt-2" style={{ color: '#a1a1aa' }}>Stands out from all other layers</p>
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Modal dialog
+    <div className="bg-elevated text-elevated-content rounded-overlay shadow-elevated p-6">
+      <h2>Modal Title</h2>
+      <p>Modal content</p>
+    </div>
+
+    // Dropdown menu
+    <ul className="bg-elevated text-elevated-content rounded-overlay shadow-elevated">
+      <li>Option 1</li>
+      <li>Option 2</li>
+    </ul>
+
+    // Tooltip
+    <div className="bg-elevated text-elevated-content rounded-control shadow-elevated px-2 py-1 text-sm">
+      Tooltip text
+    </div>
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Semantic Colors
+
+Semantic colors convey meaning. Use these when you need to communicate state or intent.
+
+| Variable | Meaning | Paired Text | Use Cases |
+| :--- | :--- | :--- | :--- |
+| **Brand** | Primary identity | `brand-content` | CTAs, active states, links |
+| **Success** | Positive, completed | `success-content` | Confirmations, checkmarks |
+| **Warning** | Caution, pending | `warning-content` | Alerts, unsaved changes |
+| **Destructive** | Error, dangerous | `destructive-content` | Delete buttons, errors |
+| **Info** | Informational | `info-content` | Help text, notifications |
+| **Muted** | De-emphasized | `muted-content` | Disabled states, placeholders |
+
+### Brand (Primary)
+
+Your brand color is for primary actions and key interactive elements.
+
+<Tabs items={['Preview', 'Light Mode', 'Dark Mode', 'Usage']}>
+  <Tab value="Preview">
+    <div className="flex gap-4 items-center p-4 bg-canvas rounded-lg">
+      <button className="bg-brand text-brand-content px-4 py-2 rounded-control font-medium">
+        Primary Button
+      </button>
+      <a href="#" className="text-brand hover:underline">Link</a>
+      <span className="bg-brand text-brand-content px-2 py-1 rounded-control text-sm">Active</span>
+    </div>
+  </Tab>
+  <Tab value="Light Mode">
+    <div className="flex gap-4 items-center">
+      <div className="w-12 h-12 rounded-lg flex items-center justify-center text-brand-content" style={{ backgroundColor: '#6366f1' }}>
+        Aa
+      </div>
+      <div>
+        <p className="font-medium">Indigo (#6366f1)</p>
+        <p className="text-sm text-muted-content">Confident, professional</p>
+      </div>
+    </div>
+  </Tab>
+  <Tab value="Dark Mode">
+    <div className="flex gap-4 items-center">
+      <div className="w-12 h-12 rounded-lg flex items-center justify-center text-brand-content" style={{ backgroundColor: '#818cf8' }}>
+        Aa
+      </div>
+      <div>
+        <p className="font-medium">Lighter Indigo (#818cf8)</p>
+        <p className="text-sm text-muted-content">Brighter for dark backgrounds</p>
+      </div>
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Primary button
+    <button className="bg-brand text-brand-content rounded-control px-4 py-2">
+      Get Started
+    </button>
+
+    // Active navigation
+    <a className="bg-brand text-brand-content rounded-control px-3 py-1">
+      Dashboard
+    </a>
+
+    // Selected tab
+    <button className="border-b-2 border-brand text-brand">
+      Active Tab
+    </button>
+    ```
+  </Tab>
+</Tabs>
+
+### Success
+
+For positive outcomes, confirmations, and completed states.
+
+<Tabs items={['Preview', 'Usage']}>
+  <Tab value="Preview">
+    <div className="bg-success text-success-content rounded-surface p-4">
+      ✓ Your changes have been saved successfully.
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Success alert
+    <div className="bg-success text-success-content rounded-surface p-4">
+      Operation completed successfully.
+    </div>
+
+    // Success badge
+    <span className="bg-success text-success-content rounded-full px-2 py-0.5 text-sm">
+      Complete
+    </span>
+
+    // Checkmark icon
+    <CheckCircle className="text-success" />
+    ```
+  </Tab>
+</Tabs>
+
+### Warning
+
+For cautionary messages and pending states.
+
+<Tabs items={['Preview', 'Usage']}>
+  <Tab value="Preview">
+    <div className="bg-warning text-warning-content rounded-surface p-4">
+      ⚠ You have unsaved changes.
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Warning alert
+    <div className="bg-warning text-warning-content rounded-surface p-4">
+      Please review before continuing.
+    </div>
+
+    // Pending badge
+    <span className="bg-warning text-warning-content rounded-full px-2 py-0.5 text-sm">
+      Pending
+    </span>
+    ```
+  </Tab>
+</Tabs>
+
+### Destructive
+
+For errors, dangerous actions, and critical warnings.
+
+<Tabs items={['Preview', 'Usage']}>
+  <Tab value="Preview">
+    <div className="bg-destructive text-destructive-content rounded-surface p-4">
+      ✕ Something went wrong. Please try again.
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Delete button
+    <button className="bg-destructive text-destructive-content rounded-control px-4 py-2">
+      Delete Account
+    </button>
+
+    // Error message
+    <p className="text-destructive">This field is required.</p>
+
+    // Error alert
+    <div className="bg-destructive text-destructive-content rounded-surface p-4">
+      Failed to save changes.
+    </div>
+    ```
+  </Tab>
+</Tabs>
+
+### Info
+
+For informational messages and help content.
+
+<Tabs items={['Preview', 'Usage']}>
+  <Tab value="Preview">
+    <div className="bg-info text-info-content rounded-surface p-4">
+      ℹ Tip: You can drag and drop files to upload them.
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Info alert
+    <div className="bg-info text-info-content rounded-surface p-4">
+      New feature: Dark mode is now available.
+    </div>
+
+    // Help text
+    <p className="text-info text-sm">
+      Password must be at least 8 characters.
+    </p>
+    ```
+  </Tab>
+</Tabs>
+
+### Muted
+
+For de-emphasized content, disabled states, and placeholders.
+
+<Tabs items={['Preview', 'Usage']}>
+  <Tab value="Preview">
+    <div className="bg-muted text-muted-content rounded-surface p-4">
+      This content is less important.
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Disabled button
+    <button className="bg-muted text-muted-content rounded-control px-4 py-2" disabled>
+      Cannot Click
+    </button>
+
+    // Placeholder text
+    <input
+      className="bg-surface text-surface-content placeholder:text-muted-content"
+      placeholder="Enter your name..."
+    />
+
+    // Secondary label
+    <span className="text-muted-content text-sm">
+      Last updated 2 hours ago
+    </span>
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Structural Elements
+
+These colors define borders and focus states.
+
+| Variable | Usage | Tailwind Class |
+| :--- | :--- | :--- |
+| **Border** | Container borders, dividers | `border-border` |
+| **Field** | Form field borders (inputs, selects) | `border-field` |
+| **Focus** | Focus rings, keyboard navigation | `ring-focus`, `focus:ring-focus` |
+
+```tsx
+// Card with border
+<div className="bg-surface text-surface-content border border-border rounded-surface p-4">
+  Card content
+</div>
+
+// Input with field border
+<input className="border border-field rounded-control px-3 py-2 focus:ring-2 focus:ring-focus" />
+
+// Focus ring on button
+<button className="focus:ring-2 focus:ring-focus rounded-control px-4 py-2">
+  Click Me
+</button>
+```
+
+---
+
+## Dark Mode
+
+Dark mode is automatically handled when you use the pairing pattern. Simply add the `.dark` class to a parent element (typically `<html>` or `<body>`), and all colors will adapt.
+
+### How It Works
+
+```tsx
+// In your root layout
+<html className="dark">
+  <body className="bg-canvas text-canvas-content">
+    {/* All children use dark mode colors */}
+  </body>
+</html>
+```
+
+### Toggle Pattern
+
+```tsx
+"use client";
+import { useState, useEffect } from 'react';
+
+export function ThemeToggle() {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDark);
+  }, [isDark]);
+
+  return (
+    <button onClick={() => setIsDark(!isDark)}>
+      {isDark ? '☀️ Light' : '🌙 Dark'}
+    </button>
+  );
+}
+```
+
+### CSS Custom Variant
+
+The dark mode is configured using Tailwind's custom variant:
+
+```css
+@custom-variant dark (&:where(.dark, .dark *));
+```
+
+This means `dark:` classes apply when the element (or any parent) has the `.dark` class.
+
+---
+
+## Quick Reference
+
+### Complete Color Pairing Table
+
+| Background | Text Color | Example |
+| :--- | :--- | :--- |
+| `bg-canvas` | `text-canvas-content` | App shell |
+| `bg-surface` | `text-surface-content` | Cards, forms |
+| `bg-sidebar` | `text-sidebar-content` | Navigation |
+| `bg-elevated` | `text-elevated-content` | Modals, tooltips |
+| `bg-brand` | `text-brand-content` | Primary actions |
+| `bg-success` | `text-success-content` | Success states |
+| `bg-warning` | `text-warning-content` | Warning states |
+| `bg-destructive` | `text-destructive-content` | Error states |
+| `bg-info` | `text-info-content` | Info states |
+| `bg-muted` | `text-muted-content` | Disabled states |
+
+### Do's and Don'ts
+
+| Do ✅ | Don't ❌ |
+| :--- | :--- |
+| Use semantic names: `bg-brand` | Use literal names: `bg-indigo-500` |
+| Pair colors: `bg-surface text-surface-content` | Mix arbitrarily: `bg-surface text-blue-500` |
+| Use `muted` for secondary content | Use `gray` or random gray shades |
+| Let the system handle dark mode | Manually specify dark mode colors |

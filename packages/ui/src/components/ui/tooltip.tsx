@@ -1,6 +1,6 @@
 "use client";
 
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import React, {
     forwardRef,
     HTMLAttributes,
@@ -25,7 +25,7 @@ type TooltipVariant =
     | "secondary"
     | "success"
     | "warning"
-    | "error"
+    | "destructive"
     | "info";
 
 interface TooltipProps
@@ -53,24 +53,25 @@ interface TooltipProps
 // Config
 // ============================================================================
 
+// Semantic design tokens with WCAG AA contrast compliance
 const variantClasses: Record<TooltipVariant, string> = {
-    default: "bg-ground-800 dark:bg-ground-900 text-white",
-    primary: "bg-primary-600 text-white",
-    secondary: "bg-ground-700 dark:bg-ground-800 text-white",
-    success: "bg-success-600 text-white",
-    warning: "bg-warning-600 text-white",
-    error: "bg-error-600 text-white",
-    info: "bg-info-600 text-white",
+    default: "bg-elevated text-elevated-content",
+    primary: "bg-brand text-brand-content",
+    secondary: "bg-muted text-muted-content",
+    success: "bg-success text-success-content",
+    warning: "bg-warning text-warning-content",
+    destructive: "bg-destructive text-destructive-content",
+    info: "bg-info text-info-content",
 };
 
 const arrowBgClasses: Record<TooltipVariant, string> = {
-    default: "bg-ground-800 dark:bg-ground-900",
-    primary: "bg-primary-600",
-    secondary: "bg-ground-700 dark:bg-ground-800",
-    success: "bg-success-600",
-    warning: "bg-warning-600",
-    error: "bg-error-600",
-    info: "bg-info-600",
+    default: "bg-elevated",
+    primary: "bg-brand",
+    secondary: "bg-muted",
+    success: "bg-success",
+    warning: "bg-warning",
+    destructive: "bg-destructive",
+    info: "bg-info",
 };
 
 // Arrow size: 8px (w-2 h-2), rotated 45deg = diagonal ~11.3px
@@ -275,15 +276,15 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         const tooltipBody = useMemo(
             () => (
                 <div
-                    className={clsx(
-                        "relative font-secondary text-sm px-3 py-2 rounded shadow-outer",
+                    className={cn(
+                        "relative font-secondary text-sm px-3 py-2 rounded-surface shadow-elevated",
                         variantClasses[variant]
                     )}
                 >
                     {content}
                     {showArrow && (
                         <div
-                            className={clsx(
+                            className={cn(
                                 "absolute w-2 h-2 rotate-45",
                                 arrowBgClasses[variant],
                                 arrowPositionClasses[position]
@@ -304,7 +305,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
                     onMouseLeave={hide}
                     onFocus={show}
                     onBlur={hide}
-                    className={clsx(
+                    className={cn(
                         "inline-block",
                         // WCAG 2.5.8: Ensure minimum touch target size of 24x24
                         ensureTouchTarget && "min-h-6 min-w-6",
@@ -327,7 +328,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
                             role="tooltip"
                             onMouseEnter={handleTooltipMouseEnter}
                             onMouseLeave={handleTooltipMouseLeave}
-                            className={clsx(
+                            className={cn(
                                 "fixed z-50",
                                 // WCAG 2.5.7: Allow pointer events for hoverable tooltips
                                 "pointer-events-auto",

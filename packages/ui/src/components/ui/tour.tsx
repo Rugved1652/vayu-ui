@@ -536,7 +536,7 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                             {targetRect && placement !== "center" && (
                                 <div
                                     className={clsx(
-                                        "absolute border-2 border-primary-500 rounded-lg pointer-events-none",
+                                        "absolute border-2 border-brand rounded-surface pointer-events-none",
                                         "animate-in fade-in zoom-in-95 duration-300",
                                         highlightedAreaClassName
                                     )}
@@ -554,7 +554,7 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                                             targetRect.height +
                                             spotlightPad * 2,
                                         boxShadow:
-                                            "0 0 0 4px rgba(132, 204, 22, 0.2)",
+                                            "0 0 0 4px rgb(from var(--brand) r g b / 0.2)",
                                     }}
                                 />
                             )}
@@ -567,9 +567,9 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                             aria-modal="true"
                             aria-labelledby={dialogLabelId}
                             className={clsx(
-                                "absolute bg-white dark:bg-neutral-900 rounded-lg shadow-2xl",
-                                "border-2 border-neutral-200 dark:border-neutral-800 max-w-md w-full",
-                                "animate-in fade-in zoom-in-95 duration-300 transition-opacity duration-300",
+                                "absolute bg-elevated rounded-overlay shadow-elevated",
+                                "border-2 border-border max-w-md w-full",
+                                "animate-in fade-in zoom-in-95 duration-300 transition-opacity",
                                 isTransitioning
                                     ? "opacity-0"
                                     : "opacity-100"
@@ -584,7 +584,7 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                             {placement !== "center" &&
                                 arrowStyles[placement] && (
                                     <div
-                                        className="absolute w-4 h-4 bg-white dark:bg-neutral-900 border-2 border-neutral-200 dark:border-neutral-800 rotate-45"
+                                        className="absolute w-4 h-4 bg-elevated border-2 border-border rotate-45"
                                         style={arrowStyles[placement]}
                                         aria-hidden="true"
                                     />
@@ -595,26 +595,26 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2 mb-2">
                                         {showStepNumbers && (
-                                            <span className="px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-md text-xs font-secondary font-bold">
+                                            <span className="px-2 py-0.5 bg-brand/10 text-brand rounded-control text-xs font-secondary font-bold">
                                                 {currentStep + 1} /{" "}
                                                 {steps.length}
                                             </span>
                                         )}
                                         <Target
-                                            className="w-5 h-5 text-primary-600 dark:text-primary-400"
+                                            className="w-5 h-5 text-brand"
                                             aria-hidden="true"
                                         />
                                     </div>
                                     <h3
                                         id={dialogLabelId}
-                                        className="text-xl font-primary font-bold text-neutral-900 dark:text-white"
+                                        className="text-xl font-primary font-bold text-elevated-content"
                                     >
                                         {step.title}
                                     </h3>
                                 </div>
                                 <button
                                     onClick={close}
-                                    className="shrink-0 p-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-neutral-500 dark:text-neutral-400"
+                                    className="shrink-0 p-1 rounded-control hover:bg-muted transition-colors text-muted-content"
                                     aria-label="Close tour"
                                 >
                                     <X
@@ -627,7 +627,7 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                             {/* Body */}
                             <div className="px-6 pb-4">
                                 {typeof step.content === "string" ? (
-                                    <p className="font-secondary text-neutral-700 dark:text-neutral-300 leading-relaxed">
+                                    <p className="font-secondary text-elevated-content/80 leading-relaxed">
                                         {step.content}
                                     </p>
                                 ) : (
@@ -645,9 +645,9 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                                     aria-valuemax={steps.length}
                                     aria-label={`Tour progress: step ${currentStep + 1} of ${steps.length}`}
                                 >
-                                    <div className="h-1.5 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
+                                    <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-linear-to-r from-primary-600 to-primary-500 transition-all duration-300"
+                                            className="h-full bg-linear-to-r from-brand to-brand/80 transition-all duration-300"
                                             style={{
                                                 width: `${((currentStep + 1) / steps.length) * 100}%`,
                                             }}
@@ -657,13 +657,13 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                             )}
 
                             {/* Footer */}
-                            <div className="flex items-center justify-between p-6 pt-0 border-t-2 border-neutral-200 dark:border-neutral-800 mt-4">
+                            <div className="flex items-center justify-between p-6 pt-0 border-t-2 border-border mt-4">
                                 <div className="flex items-center gap-2">
                                     {step.showSkip !== false &&
                                         !isLast && (
                                             <button
                                                 onClick={skip}
-                                                className="px-3 py-1.5 text-sm font-secondary font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1"
+                                                className="px-3 py-1.5 text-sm font-secondary font-medium text-muted-content hover:text-elevated-content transition-colors flex items-center gap-1"
                                                 aria-label="Skip tour"
                                             >
                                                 <SkipForward
@@ -680,7 +680,7 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                                         {!isFirst && (
                                             <button
                                                 onClick={prevStep}
-                                                className="px-4 py-2 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 font-secondary font-medium transition-colors flex items-center gap-1"
+                                                className="px-4 py-2 bg-muted text-elevated-content rounded-control hover:bg-muted/80 font-secondary font-medium transition-colors flex items-center gap-1"
                                                 aria-label={
                                                     step.prevButtonText ??
                                                     "Previous step"
@@ -696,7 +696,7 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                                         )}
                                         <button
                                             onClick={nextStep}
-                                            className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 font-secondary font-medium transition-colors flex items-center gap-1"
+                                            className="px-4 py-2 bg-brand text-brand-content rounded-control hover:bg-brand/90 font-secondary font-medium transition-colors flex items-center gap-1"
                                             aria-label={
                                                 isLast
                                                     ? "Finish tour"

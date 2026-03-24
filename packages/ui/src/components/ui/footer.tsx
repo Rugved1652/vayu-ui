@@ -2,7 +2,7 @@
 // TRUE Server Component (No "use client" needed!)
 
 import React from "react";
-import { clsx } from "clsx";
+import { cn } from "./utils";
 
 // ==================== Types ====================
 
@@ -44,10 +44,9 @@ function FooterRoot({ children, variant = "default", className = "", ...props }:
     return (
         <footer
             data-variant={variant}
-            className={clsx(
+            className={cn(
                 "group/footer",
-                "bg-ground-50 dark:bg-ground-950",
-                "text-ground-900 dark:text-ground-100",
+                "bg-canvas text-canvas-content",
                 "font-secondary",
                 "transition-colors duration-300",
                 className
@@ -66,7 +65,7 @@ FooterRoot.displayName = "Footer";
 function FooterContainer({ children, className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
     return (
         <div
-            className={clsx(
+            className={cn(
                 "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12",
                 className
             )}
@@ -83,7 +82,7 @@ FooterContainer.displayName = "Footer.Container";
 function FooterGrid({ children, className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
     return (
         <div
-            className={clsx(
+            className={cn(
                 "grid gap-8",
                 "group-data-[variant=default]/footer:grid-cols-1 group-data-[variant=default]/footer:md:grid-cols-2 group-data-[variant=default]/footer:lg:grid-cols-4",
                 "group-data-[variant=centered]/footer:grid-cols-1 group-data-[variant=centered]/footer:text-center group-data-[variant=centered]/footer:justify-items-center",
@@ -103,11 +102,11 @@ FooterGrid.displayName = "Footer.Grid";
 function FooterSection({ children, title, className = "", ...props }: FooterSectionProps) {
     return (
         <section
-            className={clsx("flex flex-col gap-4", className)}
+            className={cn("flex flex-col gap-4", className)}
             {...props}
         >
             {title && (
-                <h3 className="font-primary font-semibold text-lg text-ground-900 dark:text-ground-50 uppercase tracking-wide transition-colors duration-300">
+                <h3 className="font-primary font-semibold text-lg text-surface-content uppercase tracking-wide transition-colors duration-300">
                     {title}
                 </h3>
             )}
@@ -127,20 +126,19 @@ FooterSection.displayName = "Footer.Section";
 function FooterLink({ children, external = false, className = "", href, ...props }: FooterLinkProps) {
     const isStringChild = typeof children === "string";
 
-    const computedAriaLabel = 
-        external && !props['aria-label'] && isStringChild 
-        ? `${children} (opens in new tab)` 
+    const computedAriaLabel =
+        external && !props['aria-label'] && isStringChild
+        ? `${children} (opens in new tab)`
         : props['aria-label'];
 
     return (
         <a
             href={href}
-            className={clsx(
-                "text-ground-600 dark:text-ground-400",
-                "hover:text-primary-600 dark:hover:text-primary-400",
+            className={cn(
+                "text-muted-content hover:text-brand",
                 "transition-colors duration-200",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
-                "focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+                "focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
                 "rounded-sm",
                 "inline-flex items-center gap-1.5",
                 "underline-offset-4 hover:underline",
@@ -180,13 +178,13 @@ FooterLink.displayName = "Footer.Link";
 function FooterLogo({ children, href = "/", className = "", ...props }: FooterLogoProps) {
     return (
         <div
-            className={clsx("flex items-center gap-3", className)}
+            className={cn("flex items-center gap-3", className)}
             {...props}
         >
             {href ? (
                 <a
                     href={href}
-                    className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950 rounded-sm"
+                    className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas rounded-sm"
                 >
                     {children}
                 </a>
@@ -205,7 +203,7 @@ function FooterSocial({ children, className = "", ...props }: FooterSocialProps)
     // when used inside FooterSection.
     return (
         <div
-            className={clsx("flex gap-4 items-center", className)}
+            className={cn("flex gap-4 items-center", className)}
             role="list"
             aria-label="Social media links"
             {...props}
@@ -224,15 +222,14 @@ function FooterSocialLink(
     return (
         <a
             href={href}
-            className={clsx(
-                "text-ground-600 dark:text-ground-400",
-                "hover:text-primary-600 dark:hover:text-primary-400",
-                "hover:bg-ground-100 dark:hover:bg-ground-900",
+            className={cn(
+                "text-muted-content hover:text-brand",
+                "hover:bg-muted/50",
                 "transition-all duration-200",
                 "p-2.5 rounded-full min-w-11 min-h-11",
                 "flex items-center justify-center",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
-                "focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+                "focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
                 className
             )}
             target="_blank"
@@ -251,8 +248,8 @@ FooterSocialLink.displayName = "Footer.SocialLink";
 function FooterCopyright({ children, className = "", ...props }: FooterCopyrightProps) {
     return (
         <div
-            className={clsx(
-                "text-ground-600 dark:text-ground-400",
+            className={cn(
+                "text-muted-content",
                 "text-sm transition-colors duration-300",
                 className
             )}
@@ -269,9 +266,8 @@ FooterCopyright.displayName = "Footer.Copyright";
 function FooterDivider({ className = "", ...props }: FooterDividerProps) {
     return (
         <hr
-            className={clsx(
-                // FIX: ground-300 for WCAG 1.4.11 Non-text Contrast
-                "border-ground-300 dark:border-ground-700",
+            className={cn(
+                "border-border",
                 "my-8 transition-colors duration-300",
                 className
             )}
@@ -288,7 +284,7 @@ FooterDivider.displayName = "Footer.Divider";
 function FooterBottom({ children, className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
     return (
         <div
-            className={clsx(
+            className={cn(
                 "flex flex-col md:flex-row gap-4",
                 "group-data-[variant=centered]/footer:justify-center group-data-[variant=centered]/footer:items-center group-data-[variant=centered]/footer:text-center",
                 "group-data-[variant=default]/footer:justify-between group-data-[variant=default]/footer:items-center",

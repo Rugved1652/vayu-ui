@@ -115,11 +115,11 @@ const Marquee = forwardRef<HTMLDivElement, MarqueeProps>(
                         onKeyDown={handleKeyDown}
                         className={clsx(
                             "shrink-0 w-9 h-9 flex items-center justify-center",
-                            "rounded-md border border-ground-300 dark:border-ground-600",
-                            "bg-white dark:bg-ground-800",
-                            "text-ground-600 dark:text-ground-400",
-                            "hover:bg-ground-100 dark:hover:bg-ground-700",
-                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
+                            "rounded-control border border-border",
+                            "bg-surface",
+                            "text-muted-content",
+                            "hover:bg-muted",
+                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
                             "transition-colors duration-200",
                             "cursor-pointer"
                         )}
@@ -167,7 +167,7 @@ const Marquee = forwardRef<HTMLDivElement, MarqueeProps>(
                             pauseOnHover && "hover:animate-paused",
                             isPaused && "animate-paused",
                             // WCAG 2.3.3 - Respect reduced motion preference
-                            "motion-reduce:animate-none motion-reduce:[animation:none]"
+                            "motion-reduce:animate-none"
                         )}
                         style={
                             {

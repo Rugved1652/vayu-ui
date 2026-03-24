@@ -54,7 +54,7 @@ function Spinner({
             className={cn(
                 "rounded-full border-2 border-t-transparent",
                 "animate-spin motion-reduce:animate-none",
-                "border-primary-500 dark:border-primary-400 dark:border-t-transparent",
+                "border-brand",
                 sizeClasses[size],
                 className
             )}

@@ -12,6 +12,7 @@ import React, {
 } from "react";
 import { X } from "lucide-react";
 import { Button } from "./button";
+import { cn } from "./utils";
 
 // --- Utility: Merge Refs ---
 // Fixes bug where asChild overwritten the child's existing ref
@@ -141,7 +142,7 @@ const PopoverRoot = forwardRef<HTMLDivElement, PopoverProps>(
 
         return (
             <PopoverContext.Provider value={{ open, setOpen, triggerRef, contentRef, modal }}>
-                <div ref={ref} className={`relative inline-block ${className}`} {...props}>
+                <div ref={ref} className={cn("relative inline-block", className)} {...props}>
                     {children}
                 </div>
             </PopoverContext.Provider>
@@ -204,7 +205,12 @@ const PopoverTrigger = forwardRef<HTMLElement, PopoverTriggerProps>(
                 aria-haspopup="dialog"
                 disabled={disabled}
                 variant="ghost"
-                className={`font-secondary text-ground-700 dark:text-ground-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950 ${className}`}
+                className={cn(
+                    "font-secondary",
+                    "text-muted-content hover:text-canvas-content",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+                    className
+                )}
                 {...props}
             >
                 {children}
@@ -239,12 +245,22 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
         const [isPositioned, setIsPositioned] = useState(false);
 
         const variantClasses = {
-            default:
-                "bg-ground-50 dark:bg-ground-900 border border-ground-200 dark:border-ground-700 shadow-outer",
-            bordered:
-                "bg-ground-50 dark:bg-ground-900 border-2 border-primary-500 shadow-outer",
-            elevated:
-                "bg-ground-50 dark:bg-ground-900 border border-ground-200 dark:border-ground-700 shadow-outer shadow-lg",
+            default: cn(
+                "bg-elevated text-elevated-content",
+                "border border-border",
+                "shadow-elevated"
+            ),
+            bordered: cn(
+                "bg-elevated text-elevated-content",
+                "border-2 border-brand",
+                "shadow-elevated"
+            ),
+            elevated: cn(
+                "bg-elevated text-elevated-content",
+                "border border-border",
+                "shadow-elevated",
+                "[box-shadow:0_10px_15px_-3px_rgb(var(--shadow)/0.15),0_4px_6px_-4px_rgb(var(--shadow)/0.15)]"
+            ),
         };
 
         // Extracted positioning logic to be reused on scroll, resize, and content change
@@ -432,7 +448,7 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
             <>
                 {modal && (
                     <div
-                        className="fixed inset-0 bg-ground-950/50 z-40"
+                        className="fixed inset-0 bg-canvas-content/50 z-40"
                         onClick={() => setOpen(false)}
                         aria-hidden="true"
                     />
@@ -450,13 +466,13 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                         visibility: isPositioned ? "visible" : "hidden",
                         zIndex: 50,
                     }}
-                    className={`
-                        rounded p-4
-                        ${isPositioned ? "animate-zoom-in-small" : ""}
-                        ${variantClasses[variant]}
-                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500
-                        ${className}
-                    `.trim()}
+                    className={cn(
+                        "rounded-overlay p-4",
+                        isPositioned && "animate-zoom-in-small",
+                        variantClasses[variant],
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-elevated",
+                        className
+                    )}
                     {...props}
                 >
                     {showArrow && (
@@ -469,17 +485,16 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                             className="w-4 h-4"
                         >
                             <div
-                                className={`
-                                    w-4 h-4 rotate-45
-                                    ${variant === "bordered"
-                                        ? "bg-ground-50 dark:bg-ground-900 border-2 border-primary-500"
-                                        : "bg-ground-50 dark:bg-ground-900 border border-ground-200 dark:border-ground-700"
-                                    }
-                                    ${currentSide === "bottom" && "border-b-0 border-r-0"}
-                                    ${currentSide === "top" && "border-t-0 border-l-0"}
-                                    ${currentSide === "left" && "border-l-0 border-b-0"}
-                                    ${currentSide === "right" && "border-r-0 border-t-0"}
-                                `}
+                                className={cn(
+                                    "w-4 h-4 rotate-45",
+                                    variant === "bordered"
+                                        ? "bg-elevated border-2 border-brand"
+                                        : "bg-elevated border border-border",
+                                    currentSide === "bottom" && "border-b-0 border-r-0",
+                                    currentSide === "top" && "border-t-0 border-l-0",
+                                    currentSide === "left" && "border-l-0 border-b-0",
+                                    currentSide === "right" && "border-r-0 border-t-0"
+                                )}
                             />
                         </div>
                     )}
@@ -489,7 +504,7 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                             onClick={() => setOpen(false)}
                             variant="ghost"
                             size="small"
-                            className="absolute top-2 right-2 p-1 text-ground-400 hover:text-ground-700 dark:text-ground-500 dark:hover:text-ground-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                            className="absolute top-2 right-2 p-1 text-muted-content hover:text-elevated-content focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                             aria-label="Close popover"
                         >
                             <Button.Icon>
@@ -498,7 +513,7 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                         </Button>
                     )}
 
-                    <div className="font-secondary text-ground-800 dark:text-ground-200">
+                    <div className="font-secondary text-elevated-content">
                         {children}
                     </div>
                 </div>

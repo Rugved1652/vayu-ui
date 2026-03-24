@@ -1,5 +1,6 @@
 "use client";
 import { TextArea } from "vayu-ui";
+import { Button, Typography, Divider } from "vayu-ui";
 import { useState } from "react";
 
 export default function TextAreaDemo() {
@@ -8,10 +9,10 @@ export default function TextAreaDemo() {
     const [message, setMessage] = useState("");
 
     return (
-        <div className="w-full max-w-md not-prose space-y-6">
-            <h2 id="textarea-demo-label" className="text-xl font-semibold">
+        <div className="w-full max-w-md not-prose space-y-8">
+            <Typography.H2 id="textarea-demo-label">
                 TextArea Example
-            </h2>
+            </Typography.H2>
 
             {/* Default usage */}
             <TextArea.Root>
@@ -43,9 +44,11 @@ export default function TextAreaDemo() {
                 </TextArea.SupportText>
             </TextArea.Root>
 
+            <Divider spacing="lg" />
+
             {/* Variants */}
-            <div className="space-y-2">
-                <p className="text-sm font-medium text-ground-600">Variants</p>
+            <div className="space-y-4">
+                <Typography.H4>Variants</Typography.H4>
                 <div className="space-y-4">
                     <TextArea.Root variant="default">
                         <TextArea.Label>Default Variant</TextArea.Label>
@@ -59,9 +62,11 @@ export default function TextAreaDemo() {
                 </div>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Sizes */}
-            <div className="space-y-2">
-                <p className="text-sm font-medium text-ground-600">Sizes</p>
+            <div className="space-y-4">
+                <Typography.H4>Sizes</Typography.H4>
                 <div className="space-y-4">
                     <TextArea.Root size="sm">
                         <TextArea.Label>Small</TextArea.Label>
@@ -80,9 +85,11 @@ export default function TextAreaDemo() {
                 </div>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* States */}
-            <div className="space-y-2">
-                <p className="text-sm font-medium text-ground-600">States</p>
+            <div className="space-y-4">
+                <Typography.H4>States</Typography.H4>
                 <div className="space-y-4">
                     {/* Error with support text and error text */}
                     <TextArea.Root error>
@@ -106,9 +113,11 @@ export default function TextAreaDemo() {
                 </div>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Resize Options */}
-            <div className="space-y-2">
-                <p className="text-sm font-medium text-ground-600">Resize Options</p>
+            <div className="space-y-4">
+                <Typography.H4>Resize Options</Typography.H4>
                 <div className="space-y-4">
                     <TextArea.Root>
                         <TextArea.Label>No Resize</TextArea.Label>
@@ -129,35 +138,66 @@ export default function TextAreaDemo() {
                 </div>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Standalone Character Count */}
-            <TextArea.Root maxLength={100}>
-                <TextArea.Label>Message</TextArea.Label>
-                <TextArea.Input
-                    placeholder="Type your message..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                />
-                <TextArea.CharCount />
-            </TextArea.Root>
+            <div className="space-y-4">
+                <Typography.H4>Character Count</Typography.H4>
+                <TextArea.Root maxLength={100}>
+                    <TextArea.Label>Message</TextArea.Label>
+                    <TextArea.Input
+                        placeholder="Type your message..."
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                    />
+                    <TextArea.CharCount />
+                </TextArea.Root>
+            </div>
+
+            <Divider spacing="lg" />
 
             {/* Multiple support/error texts as arrays */}
-            <TextArea.Root error>
-                <TextArea.Label>Feedback Guidelines</TextArea.Label>
-                <TextArea.Input placeholder="Enter your feedback" />
-                <TextArea.SupportText>
-                    {[
-                        "Be specific and constructive",
-                        "Include examples when possible",
-                        "Keep it respectful",
-                    ]}
-                </TextArea.SupportText>
-                <TextArea.ErrorText>
-                    {[
-                        "Minimum 20 characters required",
-                        "Must include specific details",
-                    ]}
-                </TextArea.ErrorText>
-            </TextArea.Root>
+            <div className="space-y-4">
+                <Typography.H4>Validation Guidelines</Typography.H4>
+                <TextArea.Root error>
+                    <TextArea.Label>Feedback Guidelines</TextArea.Label>
+                    <TextArea.Input placeholder="Enter your feedback" />
+                    <TextArea.SupportText>
+                        {[
+                            "Be specific and constructive",
+                            "Include examples when possible",
+                            "Keep it respectful",
+                        ]}
+                    </TextArea.SupportText>
+                    <TextArea.ErrorText>
+                        {[
+                            "Minimum 20 characters required",
+                            "Must include specific details",
+                        ]}
+                    </TextArea.ErrorText>
+                </TextArea.Root>
+            </div>
+
+            <Divider spacing="lg" />
+
+            {/* With Form Actions */}
+            <div className="space-y-4">
+                <Typography.H4>Form Actions</Typography.H4>
+                <TextArea.Root>
+                    <TextArea.Label>Your Message</TextArea.Label>
+                    <TextArea.Input
+                        placeholder="Write something..."
+                        rows={4}
+                    />
+                    <TextArea.SupportText>
+                        Press submit when you&apos;re done.
+                    </TextArea.SupportText>
+                </TextArea.Root>
+                <div className="flex gap-3">
+                    <Button variant="primary">Submit</Button>
+                    <Button variant="outline">Cancel</Button>
+                </div>
+            </div>
         </div>
     );
 }

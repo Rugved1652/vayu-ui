@@ -1,6 +1,6 @@
 "use client";
 
-import { Tooltip } from "vayu-ui";
+import { Tooltip, Button, Typography, Divider } from "vayu-ui";
 import { Info, AlertTriangle, CheckCircle, XCircle, Accessibility } from "lucide-react";
 
 export default function TooltipDemo() {
@@ -8,9 +8,9 @@ export default function TooltipDemo() {
         <div className="not-prose flex flex-col gap-8 w-full max-w-lg">
             {/* Positions */}
             <div>
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.Label variant="secondary" className="text-xs mb-3 block">
                     Positions
-                </p>
+                </Typography.Label>
                 <div className="flex flex-wrap items-center gap-4">
                     {(["top", "bottom", "left", "right"] as const).map(
                         (pos) => (
@@ -19,99 +19,115 @@ export default function TooltipDemo() {
                                 content={`Tooltip on ${pos}`}
                                 position={pos}
                             >
-                                <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors capitalize">
+                                <Button variant="outline" size="small" className="capitalize">
                                     {pos}
-                                </button>
+                                </Button>
                             </Tooltip>
                         )
                     )}
                 </div>
             </div>
 
+            <Divider spacing="sm" />
+
             {/* Variants */}
             <div>
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.Label variant="secondary" className="text-xs mb-3 block">
                     Variants
-                </p>
+                </Typography.Label>
                 <div className="flex flex-wrap items-center gap-4">
                     <Tooltip content="Default tooltip" variant="default">
-                        <button className="p-2 rounded bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
-                            <Info className="w-4 h-4 text-ground-600 dark:text-ground-400" aria-hidden="true" />
+                        <Button variant="ghost" size="small">
+                            <Button.Icon>
+                                <Info className="w-4 h-4" aria-hidden="true" />
+                            </Button.Icon>
                             <span className="sr-only">Info</span>
-                        </button>
+                        </Button>
                     </Tooltip>
                     <Tooltip content="Success!" variant="success">
-                        <button className="p-2 rounded bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
-                            <CheckCircle className="w-4 h-4 text-success-600" aria-hidden="true" />
+                        <Button variant="ghost" size="small">
+                            <Button.Icon>
+                                <CheckCircle className="w-4 h-4 text-success" aria-hidden="true" />
+                            </Button.Icon>
                             <span className="sr-only">Success</span>
-                        </button>
+                        </Button>
                     </Tooltip>
                     <Tooltip content="Warning — check this" variant="warning">
-                        <button className="p-2 rounded bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
-                            <AlertTriangle className="w-4 h-4 text-warning-600" aria-hidden="true" />
+                        <Button variant="ghost" size="small">
+                            <Button.Icon>
+                                <AlertTriangle className="w-4 h-4 text-warning" aria-hidden="true" />
+                            </Button.Icon>
                             <span className="sr-only">Warning</span>
-                        </button>
+                        </Button>
                     </Tooltip>
-                    <Tooltip content="Error occurred" variant="error">
-                        <button className="p-2 rounded bg-ground-100 dark:bg-ground-800 hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
-                            <XCircle className="w-4 h-4 text-error-600" aria-hidden="true" />
+                    <Tooltip content="Error occurred" variant="destructive">
+                        <Button variant="ghost" size="small">
+                            <Button.Icon>
+                                <XCircle className="w-4 h-4 text-destructive" aria-hidden="true" />
+                            </Button.Icon>
                             <span className="sr-only">Error</span>
-                        </button>
+                        </Button>
                     </Tooltip>
                     <Tooltip content="Primary action" variant="primary">
-                        <button className="px-3 py-1.5 text-sm font-secondary bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors">
+                        <Button variant="primary" size="small">
                             Primary
-                        </button>
+                        </Button>
                     </Tooltip>
                 </div>
             </div>
+
+            <Divider spacing="sm" />
 
             {/* Options */}
             <div>
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.Label variant="secondary" className="text-xs mb-3 block">
                     Options
-                </p>
+                </Typography.Label>
                 <div className="flex flex-wrap items-center gap-4">
                     <Tooltip content="This won't show" disabled>
-                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-400 rounded cursor-not-allowed">
+                        <Button variant="secondary" size="small" disabled>
                             Disabled
-                        </button>
+                        </Button>
                     </Tooltip>
                     <Tooltip content="No arrow" showArrow={false}>
-                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
+                        <Button variant="outline" size="small">
                             No Arrow
-                        </button>
+                        </Button>
                     </Tooltip>
                     <Tooltip content="Slow delay" delay={800}>
-                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
+                        <Button variant="outline" size="small">
                             800ms Delay
-                        </button>
+                        </Button>
                     </Tooltip>
                 </div>
             </div>
 
+            <Divider spacing="sm" />
+
             {/* Accessibility (WCAG 2.2) */}
             <div>
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.Label variant="secondary" className="text-xs mb-3 block">
                     Accessibility (WCAG 2.2)
-                </p>
+                </Typography.Label>
                 <div className="flex flex-wrap items-center gap-4">
                     <Tooltip
                         content="You can hover over this tooltip without it disappearing (WCAG 2.5.7)"
                         hideDelay={300}
                     >
-                        <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors flex items-center gap-2">
-                            <Accessibility className="w-4 h-4" aria-hidden="true" />
+                        <Button variant="outline" size="small">
+                            <Button.Icon>
+                                <Accessibility className="w-4 h-4" aria-hidden="true" />
+                            </Button.Icon>
                             Hoverable
-                        </button>
+                        </Button>
                     </Tooltip>
                     <Tooltip
                         content="No minimum touch target enforced (useful for inline text)"
                         ensureTouchTarget={false}
                     >
-                        <span className="text-sm text-primary-600 dark:text-primary-400 underline cursor-help">
+                        <Typography.Link className="cursor-help">
                             Inline text
-                        </span>
+                        </Typography.Link>
                     </Tooltip>
                 </div>
             </div>

@@ -116,7 +116,7 @@ const PaginationInfo: React.FC<PaginationInfoProps> = ({
     return (
         <p
             className={cn(
-                "text-sm font-secondary text-ground-600 dark:text-ground-400",
+                "text-sm font-secondary text-muted-content",
                 className
             )}
             role="status"
@@ -124,11 +124,11 @@ const PaginationInfo: React.FC<PaginationInfoProps> = ({
             {...props}
         >
             Showing{" "}
-            <span className="font-semibold text-ground-900 dark:text-white">{startItem}</span>
+            <span className="font-semibold text-canvas-content">{startItem}</span>
             {" "}to{" "}
-            <span className="font-semibold text-ground-900 dark:text-white">{endItem}</span>
+            <span className="font-semibold text-canvas-content">{endItem}</span>
             {" "}of{" "}
-            <span className="font-semibold text-ground-900 dark:text-white">{totalItems}</span>
+            <span className="font-semibold text-canvas-content">{totalItems}</span>
             {" "}results
         </p>
     );
@@ -158,25 +158,25 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
     const pages = getPaginationRange(currentPage, totalPages, siblingCount, pageRange);
 
     const baseClasses = cn(
-        "min-w-[36px] h-[36px] px-2.5 text-sm rounded",
+        "min-w-[36px] h-[36px] px-2.5 text-sm rounded-control",
         "font-secondary font-medium transition-all duration-150",
         "inline-flex items-center justify-center",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1",
-        "focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
-        "border border-ground-300 dark:border-ground-700"
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1",
+        "focus-visible:ring-offset-canvas",
+        "border border-border"
     );
 
     const inactiveClasses = cn(
-        "bg-white dark:bg-ground-900",
-        "text-ground-700 dark:text-ground-300",
-        "hover:bg-ground-50 dark:hover:bg-ground-800",
-        "hover:border-ground-400 dark:hover:border-ground-600"
+        "bg-surface",
+        "text-surface-content",
+        "hover:bg-muted/50",
+        "hover:border-field"
     );
 
     const activeClasses = cn(
-        "bg-primary-600 dark:bg-primary-500",
-        "text-white",
-        "border-primary-600 dark:border-primary-500"
+        "bg-brand",
+        "text-brand-content",
+        "border-brand"
     );
 
     const disabledClasses = "opacity-40 cursor-not-allowed pointer-events-none";
@@ -245,8 +245,8 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
                         <span
                             key={`ellipsis-${index}`}
                             className={cn(
-                                "min-w-[36px] h-[36px] px-2.5 text-sm rounded",
-                                "inline-flex items-center justify-center text-ground-400 dark:text-ground-500 border border-transparent"
+                                "min-w-[36px] h-[36px] px-2.5 text-sm rounded-control",
+                                "inline-flex items-center justify-center text-muted-content border border-transparent"
                             )}
                             aria-hidden="true"
                         >
@@ -298,14 +298,14 @@ const CompactPagination: React.FC<CompactPaginationProps> = ({
     ...props
 }) => {
     const buttonClasses = cn(
-        "h-[36px] px-3 text-sm rounded",
+        "h-[36px] px-3 text-sm rounded-control",
         "font-secondary font-medium transition-all duration-150",
         "inline-flex items-center justify-center gap-1.5",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1",
-        "focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
-        "border border-ground-300 dark:border-ground-700",
-        "bg-white dark:bg-ground-900 text-ground-700 dark:text-ground-300",
-        "hover:bg-ground-50 dark:hover:bg-ground-800 hover:border-ground-400 dark:hover:border-ground-600"
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1",
+        "focus-visible:ring-offset-canvas",
+        "border border-border",
+        "bg-surface text-surface-content",
+        "hover:bg-muted/50 hover:border-field"
     );
 
     const disabledButtonClasses = cn(buttonClasses, "opacity-40 cursor-not-allowed pointer-events-none");
@@ -331,12 +331,12 @@ const CompactPagination: React.FC<CompactPaginationProps> = ({
 
             {/* Status */}
             <span
-                className="text-sm font-secondary text-ground-600 dark:text-ground-400 tabular-nums"
+                className="text-sm font-secondary text-muted-content tabular-nums"
                 role="status"
                 aria-live="polite"
             >
                 Page{" "}
-                <span className="font-bold text-primary-600 dark:text-primary-400">
+                <span className="font-bold text-brand">
                     {currentPage}
                 </span>
                 {" "}of {totalPages}

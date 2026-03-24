@@ -98,8 +98,7 @@ export const spinnerRegistry = {
   design_tokens: {
     used: {
       colors: [
-        "border-primary-500",
-        "border-primary-400",
+        "border-brand",
         "border-t-transparent"
       ],
       border: [
@@ -120,8 +119,7 @@ export const spinnerRegistry = {
     },
     recommended: {
       colors: [
-        "border-primary-500",
-        "border-primary-400"
+        "border-brand"
       ],
       border: [
         "rounded-full",
@@ -130,16 +128,12 @@ export const spinnerRegistry = {
     },
     allowed: {
       colors: [
-        "border-primary-500",
-        "border-primary-400",
-        "border-info-500",
-        "border-info-400",
-        "border-success-500",
-        "border-success-400",
-        "border-warning-500",
-        "border-warning-400",
-        "border-error-500",
-        "border-error-400",
+        "border-brand",
+        "border-info",
+        "border-success",
+        "border-warning",
+        "border-destructive",
+        "border-muted",
         "border-t-transparent"
       ],
       border: [
@@ -183,7 +177,7 @@ export const spinnerRegistry = {
 
 <div className="flex items-center gap-3">
   <Spinner size="md" aria-label="Fetching user data" />
-  <span className="text-sm text-ground-600">Fetching user data...</span>
+  <span className="text-sm text-muted-content">Fetching user data...</span>
 </div>`
     },
     {
@@ -193,9 +187,9 @@ export const spinnerRegistry = {
 
 <button
   disabled
-  className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-ground-900 rounded"
+  className="inline-flex items-center gap-2 px-4 py-2 bg-brand text-brand-content rounded-control"
 >
-  <Spinner size="sm" className="border-ground-900 border-t-transparent" />
+  <Spinner size="sm" className="border-brand-content border-t-transparent" />
   Processing...
 </button>`
     },
@@ -205,10 +199,10 @@ export const spinnerRegistry = {
       code: `import { Spinner } from "vayu-ui";
 
 <div className="flex items-center gap-6">
-  <Spinner className="border-info-500 border-t-transparent" />
-  <Spinner className="border-success-500 border-t-transparent" />
-  <Spinner className="border-warning-500 border-t-transparent" />
-  <Spinner className="border-error-500 border-t-transparent" />
+  <Spinner className="border-info border-t-transparent" />
+  <Spinner className="border-success border-t-transparent" />
+  <Spinner className="border-warning border-t-transparent" />
+  <Spinner className="border-destructive border-t-transparent" />
 </div>`
     },
     {
@@ -216,7 +210,7 @@ export const spinnerRegistry = {
       description: "Centered full-page loading overlay",
       code: `import { Spinner } from "vayu-ui";
 
-<div className="fixed inset-0 flex items-center justify-center bg-ground-50/80 dark:bg-ground-950/80">
+<div className="fixed inset-0 flex items-center justify-center bg-canvas/80">
   <Spinner size="lg" aria-label="Loading page content" />
 </div>`
     }

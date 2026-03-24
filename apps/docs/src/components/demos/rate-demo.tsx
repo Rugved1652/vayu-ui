@@ -2,91 +2,71 @@
 
 "use client";
 import React, { useState } from "react";
-import { Rate } from "vayu-ui";
-import { Heart, HomeIcon, Star, StarHalf } from "lucide-react";
+import { Rate, Typography, Divider } from "vayu-ui";
+import { HomeIcon, Star, StarHalf } from "lucide-react";
+
+const { H5, Label, P } = Typography;
 
 export default function RateDemo() {
     const [value, setValue] = useState(3);
 
     return (
         <div className="w-full max-w-md not-prose space-y-8">
-            <h2 id="rate-demo-label" className="text-xl font-semibold mb-4 font-primary">
-                Rate Examples
-            </h2>
+            <H5 font="primary">Rate Examples</H5>
 
             {/* Basic Usage */}
-            <div className="space-y-2">
-                <h3 className="text-lg font-medium font-primary">Basic Usage</h3>
+            <div className="space-y-3">
+                <Label>Basic Usage</Label>
                 <Rate value={value} onChange={setValue} />
-                <p className="text-sm text-ground-500 font-secondary">Current value: {value}</p>
+                <P variant="secondary">Current value: {value}</P>
             </div>
 
+            <Divider spacing="sm" />
+
             {/* Read Only */}
-            <div className="space-y-2">
-                <h3 className="text-lg font-medium font-primary">Read Only</h3>
+            <div className="space-y-3">
+                <Label>Read Only</Label>
                 <Rate defaultValue={3.5} readOnly />
             </div>
 
+            <Divider spacing="sm" />
+
             {/* Disabled */}
-            <div className="space-y-2">
-                <h3 className="text-lg font-medium font-primary">Disabled</h3>
+            <div className="space-y-3">
+                <Label>Disabled</Label>
                 <Rate defaultValue={2} disabled />
             </div>
 
+            <Divider spacing="sm" />
+
             {/* Sizes */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-medium font-primary">Sizes</h3>
+            <div className="space-y-3">
+                <Label>Sizes</Label>
                 <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-ground-500 w-12 font-secondary">Small</span>
+                        <span className="text-sm text-muted-content w-12 font-secondary">Small</span>
                         <Rate defaultValue={3} size="sm" />
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-ground-500 w-12 font-secondary">Medium</span>
+                        <span className="text-sm text-muted-content w-12 font-secondary">Medium</span>
                         <Rate defaultValue={3} size="md" />
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-ground-500 w-12 font-secondary">Large</span>
+                        <span className="text-sm text-muted-content w-12 font-secondary">Large</span>
                         <Rate defaultValue={3} size="lg" />
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="text-sm text-ground-500 w-12 font-secondary">XLarge</span>
+                        <span className="text-sm text-muted-content w-12 font-secondary">XLarge</span>
                         <Rate defaultValue={3} size="xl" />
                     </div>
                 </div>
             </div>
 
-            {/* Colors */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-medium font-primary">Colors</h3>
-                <div className="flex flex-col gap-2">
-                    <Rate defaultValue={4} color="primary" />
-                    <Rate defaultValue={4} color="secondary" />
-                    <Rate defaultValue={4} color="warning" />
-                    <Rate defaultValue={4} color="error" />
-                    <Rate defaultValue={4} color="success" />
-                    <Rate defaultValue={4} color="info" />
-                </div>
-            </div>
-
-            {/* Variants */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-medium font-primary">Variants</h3>
-                <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm text-ground-500 w-20 font-secondary">Default</span>
-                        <Rate defaultValue={3.5} variant="default" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm text-ground-500 w-20 font-secondary">Outlined</span>
-                        <Rate defaultValue={3.5} variant="outlined" />
-                    </div>
-                </div>
-            </div>
+            <Divider spacing="sm" />
 
             {/* With Labels */}
-            <div className="space-y-2">
-                <h3 className="text-lg font-medium font-primary">With Labels</h3>
+            <div className="space-y-3">
+                <Label>With Labels</Label>
                 <Rate defaultValue={3} labels={['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']}>
                     <Rate.Container>
                         <Rate.Label>Product Rating</Rate.Label>
@@ -97,9 +77,11 @@ export default function RateDemo() {
                 </Rate>
             </div>
 
+            <Divider spacing="sm" />
+
             {/* With Value Display */}
-            <div className="space-y-2">
-                <h3 className="text-lg font-medium font-primary">With Value Display</h3>
+            <div className="space-y-3">
+                <Label>With Value Display</Label>
                 <Rate defaultValue={3.5}>
                     <Rate.Container>
                         <Rate.Stars />
@@ -108,28 +90,34 @@ export default function RateDemo() {
                 </Rate>
             </div>
 
+            <Divider spacing="sm" />
+
             {/* Custom Icon */}
-            <div className="space-y-2">
-                <h3 className="text-lg font-medium font-primary">Custom Icon</h3>
+            <div className="space-y-3">
+                <Label>Custom Icon</Label>
                 <Rate defaultValue={3} icon={<HomeIcon />} />
             </div>
 
+            <Divider spacing="sm" />
+
             {/* Custom Filled & Half Icons */}
-            <div className="space-y-2">
-                <h3 className="text-lg font-medium font-primary">Custom Filled & Half Icons</h3>
+            <div className="space-y-3">
+                <Label>Custom Filled & Half Icons</Label>
                 <Rate
                     defaultValue={3.5}
                     allowHalf
-                    icon={<Star className="text-ground-400" />}
-                    filledIcon={<Star className="fill-warning-500 text-warning-500" strokeWidth={0} />}
-                    halfIcon={<StarHalf className="fill-warning-500 text-warning-500" strokeWidth={0} />}
+                    icon={<Star className="text-muted-content" />}
+                    filledIcon={<Star className="fill-warning text-warning" strokeWidth={0} />}
+                    halfIcon={<StarHalf className="fill-warning text-warning" strokeWidth={0} />}
                 />
-                <p className="text-xs text-ground-400 font-secondary">Using custom icons for empty, filled, and half states</p>
+                <P variant="secondary">Using custom icons for empty, filled, and half states</P>
             </div>
 
+            <Divider spacing="sm" />
+
             {/* Error State */}
-            <div className="space-y-2">
-                <h3 className="text-lg font-medium font-primary">Error State</h3>
+            <div className="space-y-3">
+                <Label>Error State</Label>
                 <Rate defaultValue={0} error>
                     <Rate.Label>Rating Required</Rate.Label>
                     <Rate.Stars />
@@ -137,16 +125,20 @@ export default function RateDemo() {
                 </Rate>
             </div>
 
+            <Divider spacing="sm" />
+
             {/* Half Star Support */}
-            <div className="space-y-2">
-                <h3 className="text-lg font-medium font-primary">Half Star Support</h3>
+            <div className="space-y-3">
+                <Label>Half Star Support</Label>
                 <Rate defaultValue={3.5} allowHalf />
-                <p className="text-xs text-ground-400 font-secondary">Hover on the left or right half of a star to select half values</p>
+                <P variant="secondary">Hover on the left or right half of a star to select half values</P>
             </div>
 
-            {/* No Half Star */}
-            <div className="space-y-2">
-                <h3 className="text-lg font-medium font-primary">Full Star Only</h3>
+            <Divider spacing="sm" />
+
+            {/* Full Star Only */}
+            <div className="space-y-3">
+                <Label>Full Star Only</Label>
                 <Rate defaultValue={3} allowHalf={false} />
             </div>
         </div>

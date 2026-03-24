@@ -1,17 +1,16 @@
 "use client"
-import { Popover } from "vayu-ui";
-import { Button } from "vayu-ui";
+import { Popover, Button, Typography, Divider } from "vayu-ui";
 import React from "react";
 
 export default function PopoverDemo() {
     return (
         <div className="w-full max-w-2xl not-prose">
-            <h2 id="popover-demo-label" className="text-xl font-semibold mb-4">
+            <Typography.H2 variant="primary" className="mb-4">
                 Popover Example
-            </h2>
+            </Typography.H2>
 
-            <div className="flex flex-col gap-10 items-center justify-center p-8 bg-ground-100 dark:bg-ground-900 rounded w-full min-h-[400px]">
-                
+            <div className="flex flex-col gap-10 items-center justify-center p-8 bg-muted rounded-surface w-full min-h-[400px]">
+
                 {/* Basic Usage */}
                 <Popover>
                     <Popover.Trigger>
@@ -19,11 +18,19 @@ export default function PopoverDemo() {
                     </Popover.Trigger>
                     <Popover.Content>
                         <div className="p-2">
-                            <h4 className="font-medium mb-1 text-ground-800 dark:text-ground-200">Dimensions</h4>
-                            <p className="text-sm text-ground-500 dark:text-ground-400">Set the dimensions for the layer.</p>
+                            <Typography.H4 variant="primary" className="mb-1">
+                                Dimensions
+                            </Typography.H4>
+                            <Typography.P variant="secondary">
+                                Set the dimensions for the layer.
+                            </Typography.P>
                         </div>
                     </Popover.Content>
                 </Popover>
+
+                <Divider spacing="lg">
+                    <Divider.Label color="brand">Variants</Divider.Label>
+                </Divider>
 
                 {/* Variants */}
                 <div className="flex gap-4 flex-wrap justify-center">
@@ -32,8 +39,10 @@ export default function PopoverDemo() {
                             Default
                         </Popover.Trigger>
                         <Popover.Content variant="default">
-                            <div className="p-2 text-sm">
-                                Default variant with subtle border
+                            <div className="p-2">
+                                <Typography.P variant="secondary">
+                                    Default variant with subtle border
+                                </Typography.P>
                             </div>
                         </Popover.Content>
                     </Popover>
@@ -43,8 +52,10 @@ export default function PopoverDemo() {
                             Bordered
                         </Popover.Trigger>
                         <Popover.Content variant="bordered">
-                            <div className="p-2 text-sm">
-                                Bordered variant with primary accent
+                            <div className="p-2">
+                                <Typography.P variant="secondary">
+                                    Bordered variant with primary accent
+                                </Typography.P>
                             </div>
                         </Popover.Content>
                     </Popover>
@@ -54,12 +65,18 @@ export default function PopoverDemo() {
                             Elevated
                         </Popover.Trigger>
                         <Popover.Content variant="elevated">
-                            <div className="p-2 text-sm">
-                                Elevated variant with stronger shadow
+                            <div className="p-2">
+                                <Typography.P variant="secondary">
+                                    Elevated variant with stronger shadow
+                                </Typography.P>
                             </div>
                         </Popover.Content>
                     </Popover>
                 </div>
+
+                <Divider spacing="lg">
+                    <Divider.Label color="brand">Features</Divider.Label>
+                </Divider>
 
                 {/* Features */}
                 <div className="flex gap-4 flex-wrap justify-center">
@@ -68,8 +85,10 @@ export default function PopoverDemo() {
                             With Arrow
                         </Popover.Trigger>
                         <Popover.Content showArrow side="top">
-                            <div className="p-2 text-sm">
-                                This popover has an arrow pointing to the trigger.
+                            <div className="p-2">
+                                <Typography.P variant="secondary">
+                                    This popover has an arrow pointing to the trigger.
+                                </Typography.P>
                             </div>
                         </Popover.Content>
                     </Popover>
@@ -79,43 +98,61 @@ export default function PopoverDemo() {
                             With Close Button
                         </Popover.Trigger>
                         <Popover.Content closeButton variant="bordered">
-                            <div className="p-4 text-sm w-48">
-                                This popover has a close button and the bordered variant.
+                            <div className="p-4 w-48">
+                                <Typography.P variant="secondary">
+                                    This popover has a close button and the bordered variant.
+                                </Typography.P>
                             </div>
                         </Popover.Content>
                     </Popover>
                 </div>
+
+                <Divider spacing="lg">
+                    <Divider.Label color="brand">Positions</Divider.Label>
+                </Divider>
 
                 {/* Positions */}
                 <div className="flex gap-4 flex-wrap justify-center">
                     <Popover>
                         <Popover.Trigger>Top</Popover.Trigger>
                         <Popover.Content side="top" align="center">
-                            <div className="p-2 text-sm">Top Position</div>
+                            <div className="p-2">
+                                <Typography.P variant="secondary">Top Position</Typography.P>
+                            </div>
                         </Popover.Content>
                     </Popover>
 
                     <Popover>
                         <Popover.Trigger>Bottom</Popover.Trigger>
                         <Popover.Content side="bottom" align="center">
-                            <div className="p-2 text-sm">Bottom Position</div>
+                            <div className="p-2">
+                                <Typography.P variant="secondary">Bottom Position</Typography.P>
+                            </div>
                         </Popover.Content>
                     </Popover>
 
                     <Popover>
                         <Popover.Trigger>Left</Popover.Trigger>
                         <Popover.Content side="left" align="center">
-                            <div className="p-2 text-sm">Left Position</div>
+                            <div className="p-2">
+                                <Typography.P variant="secondary">Left Position</Typography.P>
+                            </div>
                         </Popover.Content>
                     </Popover>
 
                     <Popover>
                         <Popover.Trigger>Right</Popover.Trigger>
                         <Popover.Content side="right" align="center">
-                            <div className="p-2 text-sm">Right Position</div>
+                            <div className="p-2">
+                                <Typography.P variant="secondary">Right Position</Typography.P>
+                            </div>
                         </Popover.Content>
                     </Popover>
                 </div>
+
+                <Divider spacing="lg">
+                    <Divider.Label color="brand">Custom Trigger</Divider.Label>
+                </Divider>
 
                 {/* As Child Pattern */}
                 <div className="flex gap-4">
@@ -126,8 +163,10 @@ export default function PopoverDemo() {
                             </Button>
                         </Popover.Trigger>
                         <Popover.Content showArrow>
-                            <div className="p-2 text-sm">
-                                Using asChild pattern with custom trigger element
+                            <div className="p-2">
+                                <Typography.P variant="secondary">
+                                    Using asChild pattern with custom trigger element
+                                </Typography.P>
                             </div>
                         </Popover.Content>
                     </Popover>

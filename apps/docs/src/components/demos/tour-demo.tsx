@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Tour, type TourStep } from "vayu-ui";
+import { Tour, type TourStep, Typography, Button, Divider } from "vayu-ui";
 
 const steps: TourStep[] = [
     {
@@ -46,39 +46,43 @@ export default function TourDemo() {
                 onSkip={() => setOpen(false)}
             >
                 <div className="flex flex-col gap-4">
-                    <h3
+                    <Typography.H3
                         id="tour-title"
-                        className="text-lg font-primary font-bold text-ground-900 dark:text-ground-50"
+                        className="text-lg"
                     >
                         Tour Demo
-                    </h3>
+                    </Typography.H3>
 
                     <div className="grid grid-cols-2 gap-3">
                         <div
                             id="tour-card-1"
-                            className="p-4 rounded-lg border border-ground-200 dark:border-ground-800 bg-ground-50 dark:bg-ground-900"
+                            className="p-4 rounded-surface border border-border bg-surface"
                         >
-                            <p className="text-sm font-secondary text-ground-700 dark:text-ground-300">
+                            <Typography.P className="text-sm">
                                 Feature A
-                            </p>
+                            </Typography.P>
                         </div>
                         <div
                             id="tour-card-2"
-                            className="p-4 rounded-lg border border-ground-200 dark:border-ground-800 bg-ground-50 dark:bg-ground-900"
+                            className="p-4 rounded-surface border border-border bg-surface"
                         >
-                            <p className="text-sm font-secondary text-ground-700 dark:text-ground-300">
+                            <Typography.P className="text-sm">
                                 Feature B
-                            </p>
+                            </Typography.P>
                         </div>
                     </div>
 
-                    <button
+                    <Divider spacing="sm" decorative />
+
+                    <Button
                         id="tour-cta"
                         onClick={() => setOpen(true)}
-                        className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 font-secondary font-medium transition-colors w-fit"
+                        variant="primary"
+                        size="medium"
+                        className="w-fit"
                     >
-                        Start Tour
-                    </button>
+                        <Button.Text>Start Tour</Button.Text>
+                    </Button>
                 </div>
             </Tour>
         </div>

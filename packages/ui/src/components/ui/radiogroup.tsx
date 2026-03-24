@@ -1,6 +1,6 @@
 "use client";
 
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import React, {
     createContext,
     forwardRef,
@@ -117,7 +117,7 @@ const RadioGroupRoot = forwardRef<HTMLDivElement, RadioGroupProps>(
             >
                 <div
                     ref={ref}
-                    className={clsx("w-full", className)}
+                    className={cn("w-full", className)}
                     {...props}
                 >
                     {/* Label & Description */}
@@ -126,12 +126,12 @@ const RadioGroupRoot = forwardRef<HTMLDivElement, RadioGroupProps>(
                             {label && (
                                 <label
                                     id={labelId}
-                                    className="block font-primary text-ground-700 dark:text-ground-300 text-sm font-medium mb-1"
+                                    className="block font-secondary text-surface-content text-sm font-medium mb-1"
                                 >
                                     {label}
                                     {required && (
                                         <span
-                                            className="text-error-500 dark:text-error-400 ml-1"
+                                            className="text-destructive ml-1"
                                             aria-hidden="true"
                                         >
                                             *
@@ -142,7 +142,7 @@ const RadioGroupRoot = forwardRef<HTMLDivElement, RadioGroupProps>(
                             {description && (
                                 <p
                                     id={descriptionId}
-                                    className="text-xs font-secondary text-ground-500 dark:text-ground-400"
+                                    className="text-xs font-secondary text-muted-content"
                                 >
                                     {description}
                                 </p>
@@ -154,13 +154,13 @@ const RadioGroupRoot = forwardRef<HTMLDivElement, RadioGroupProps>(
                     <div
                         role="radiogroup"
                         aria-labelledby={label ? labelId : undefined}
-                        aria-describedby={clsx(
+                        aria-describedby={cn(
                             description && descriptionId,
                             error && errorText && errorId
                         ) || undefined}
                         aria-required={required || undefined}
                         aria-invalid={error || undefined}
-                        className={clsx(
+                        className={cn(
                             "flex gap-3",
                             orientation === "vertical"
                                 ? "flex-col"
@@ -176,7 +176,7 @@ const RadioGroupRoot = forwardRef<HTMLDivElement, RadioGroupProps>(
                             id={errorId}
                             role="alert"
                             aria-live="polite"
-                            className="text-xs font-secondary text-error-500 dark:text-error-400 mt-2"
+                            className="text-xs font-secondary text-destructive mt-2"
                         >
                             {errorText}
                         </p>
@@ -233,7 +233,7 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
             <label
                 ref={ref}
                 htmlFor={inputId}
-                className={clsx(
+                className={cn(
                     "flex items-center gap-3 cursor-pointer group py-1",
                     isDisabled && "cursor-not-allowed opacity-50",
                     className
@@ -250,7 +250,7 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     disabled={isDisabled}
-                    className={clsx(
+                    className={cn(
                         "sr-only",
                         "peer"
                     )}
@@ -259,23 +259,23 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
 
                 {/* Visual Radio Circle */}
                 <div
-                    className={clsx(
+                    className={cn(
                         "w-5 h-5 shrink-0",
                         "flex items-center justify-center",
                         "rounded-full border-2 transition-all duration-200",
                         isChecked
-                            ? "border-primary-600 bg-primary-600 dark:border-primary-500 dark:bg-primary-500"
-                            : "border-ground-300 dark:border-ground-600",
-                        !isDisabled && "group-hover:border-primary-400 dark:group-hover:border-primary-500",
+                            ? "border-brand bg-brand"
+                            : "border-field",
+                        !isDisabled && "group-hover:border-brand/70",
                         "peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2",
-                        "peer-focus-visible:ring-primary-500 dark:peer-focus-visible:ring-primary-400"
+                        "peer-focus-visible:ring-focus"
                     )}
                     aria-hidden="true"
                 >
                     {isChecked && (
                         <div
-                            className={clsx(
-                                "w-2.5 h-2.5 rounded-full bg-white"
+                            className={cn(
+                                "w-2.5 h-2.5 rounded-full bg-brand-content"
                             )}
                         />
                     )}
@@ -286,10 +286,10 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
                     <div className="flex-1 min-w-0">
                         {label && (
                             <span
-                                className={clsx(
+                                className={cn(
                                     "text-base font-secondary font-medium",
-                                    "text-ground-900 dark:text-white",
-                                    !isDisabled && "group-hover:text-ground-700 dark:group-hover:text-ground-200",
+                                    "text-surface-content",
+                                    !isDisabled && "group-hover:text-surface-content/80",
                                     "transition-colors block"
                                 )}
                             >
@@ -298,9 +298,9 @@ const RadioItem = forwardRef<HTMLLabelElement, RadioItemProps>(
                         )}
                         {description && (
                             <p
-                                className={clsx(
+                                className={cn(
                                     "text-sm font-secondary",
-                                    "text-ground-500 dark:text-ground-400",
+                                    "text-muted-content",
                                     "mt-0.5"
                                 )}
                             >

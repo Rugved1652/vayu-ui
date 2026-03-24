@@ -11,7 +11,7 @@ import React, {
     forwardRef,
     HTMLAttributes,
 } from "react";
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import { X } from "lucide-react";
 
 // ============================================================================
@@ -144,12 +144,10 @@ const DrawerTrigger = forwardRef<HTMLButtonElement, DrawerTriggerProps>(
                 ref={ref}
                 type="button"
                 onClick={handleClick}
-                className={clsx(
-                    "inline-flex items-center justify-center rounded px-4 py-2 text-sm font-medium transition-colors",
-                    "bg-ground-100 text-ground-900 hover:bg-ground-200",
-                    "dark:bg-ground-800 dark:text-ground-100 dark:hover:bg-ground-700",
-                    "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
-                    "dark:focus:ring-offset-ground-950",
+                className={cn(
+                    "inline-flex items-center justify-center rounded-control px-4 py-2 text-sm font-medium transition-colors",
+                    "bg-surface text-surface-content hover:bg-muted",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
                     className
                 )}
                 aria-expanded={open}
@@ -181,8 +179,8 @@ const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(
             <div
                 ref={ref}
                 data-state={open ? "open" : "closed"}
-                className={clsx(
-                    "fixed inset-0 z-40 bg-ground-950/50 backdrop-blur-sm",
+                className={cn(
+                    "fixed inset-0 z-40 bg-canvas/80 backdrop-blur-surface",
                     "data-[state=open]:animate-in data-[state=open]:fade-in-0",
                     "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
                     className
@@ -272,10 +270,10 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         if (!open) return null;
 
         const sideClasses = {
-            top: "inset-x-0 top-0 border-b border-ground-200 dark:border-ground-700 data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
-            bottom: "inset-x-0 bottom-0 border-t border-ground-200 dark:border-ground-700 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
-            left: "inset-y-0 left-0 h-full w-3/4 border-r border-ground-200 dark:border-ground-700 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
-            right: "inset-y-0 right-0 h-full w-3/4 border-l border-ground-200 dark:border-ground-700 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+            top: "inset-x-0 top-0 border-b border-border data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
+            bottom: "inset-x-0 bottom-0 border-t border-border data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
+            left: "inset-y-0 left-0 h-full w-3/4 border-r border-border data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+            right: "inset-y-0 right-0 h-full w-3/4 border-l border-border data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
         };
 
         return (
@@ -286,8 +284,8 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
                 aria-labelledby={titleId}
                 aria-describedby={descriptionId}
                 data-state={open ? "open" : "closed"}
-                className={clsx(
-                    "fixed z-50 flex flex-col bg-ground-50 dark:bg-ground-950 p-6 shadow-outer",
+                className={cn(
+                    "fixed z-50 flex flex-col bg-elevated p-6 shadow-elevated",
                     "transition ease-in-out duration-300",
                     "data-[state=open]:animate-in data-[state=closed]:animate-out",
                     sideClasses[side],
@@ -298,14 +296,12 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
             >
                 {children}
                 <DrawerClose
-                    className={clsx(
+                    className={cn(
                         "absolute right-4 top-4 rounded-sm opacity-70 transition-opacity",
-                        "hover:opacity-100 focus:outline-none focus:ring-2",
-                        "focus:ring-ground-900 focus:ring-offset-2 focus:ring-offset-ground-50",
+                        "hover:opacity-100 focus-visible:outline-none focus-visible:ring-2",
+                        "focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-elevated",
                         "disabled:pointer-events-none",
-                        "data-[state=open]:bg-ground-100",
-                        "dark:focus:ring-ground-300 dark:ring-offset-ground-950",
-                        "dark:data-[state=open]:bg-ground-800"
+                        "data-[state=open]:bg-muted"
                     )}
                     aria-label="Close drawer"
                 >
@@ -326,7 +322,7 @@ const DrawerHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     ({ className, ...props }, ref) => (
         <div
             ref={ref}
-            className={clsx("flex flex-col space-y-2 text-center sm:text-left", className)}
+            className={cn("flex flex-col space-y-2 text-center sm:text-left", className)}
             {...props}
         />
     )
@@ -341,7 +337,7 @@ const DrawerFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     ({ className, ...props }, ref) => (
         <div
             ref={ref}
-            className={clsx(
+            className={cn(
                 "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 mt-auto pt-4",
                 className
             )}
@@ -362,8 +358,8 @@ const DrawerTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingEle
             <h2
                 id={titleId}
                 ref={ref}
-                className={clsx(
-                    "text-lg font-semibold text-ground-900 dark:text-ground-100",
+                className={cn(
+                    "text-lg font-semibold text-elevated-content",
                     className
                 )}
                 {...props}
@@ -384,7 +380,7 @@ const DrawerDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLPa
             <p
                 id={descriptionId}
                 ref={ref}
-                className={clsx("text-sm text-ground-500 dark:text-ground-400", className)}
+                className={cn("text-sm text-muted-content", className)}
                 {...props}
             />
         );

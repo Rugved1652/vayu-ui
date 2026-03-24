@@ -1,6 +1,6 @@
 "use client"
 
-import { Table } from "vayu-ui";
+import { Table, Typography, Divider, Button } from "vayu-ui";
 
 const invoices = [
     {
@@ -38,13 +38,13 @@ const invoices = [
 export default function TableDemo() {
     return (
         <div className="w-full max-w-3xl not-prose">
-            <h2 id="table-demo-label" className="text-xl font-semibold mb-4">
+            <Typography.H3 id="table-demo-label" className="mb-4">
                 Table Example
-            </h2>
+            </Typography.H3>
 
             {/* Default table */}
             <div className="mb-8">
-                <h3 className="text-sm font-medium text-ground-600 dark:text-ground-400 mb-2">Default Table</h3>
+                <Typography.H5 variant="secondary" className="mb-2">Default Table</Typography.H5>
                 <Table className="max-w-[800px] w-full mx-auto" aria-label="Invoice List">
                     <Table.Caption>A list of your recent invoices.</Table.Caption>
                     <Table.Head>
@@ -74,9 +74,11 @@ export default function TableDemo() {
                 </Table>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Table with selected row */}
             <div className="mb-8">
-                <h3 className="text-sm font-medium text-ground-600 dark:text-ground-400 mb-2">Table with Selected Row</h3>
+                <Typography.H5 variant="secondary" className="mb-2">Table with Selected Row</Typography.H5>
                 <Table className="max-w-[800px] w-full mx-auto" aria-label="Invoice List with Selection">
                     <Table.Head>
                         <Table.Row>
@@ -99,9 +101,11 @@ export default function TableDemo() {
                 </Table>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Table with sortable columns */}
             <div className="mb-8">
-                <h3 className="text-sm font-medium text-ground-600 dark:text-ground-400 mb-2">Table with Sortable Columns</h3>
+                <Typography.H5 variant="secondary" className="mb-2">Table with Sortable Columns</Typography.H5>
                 <Table className="max-w-[800px] w-full mx-auto" aria-label="Invoice List with Sorting">
                     <Table.Head>
                         <Table.Row>
@@ -124,9 +128,11 @@ export default function TableDemo() {
                 </Table>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Table with selectable rows */}
-            <div>
-                <h3 className="text-sm font-medium text-ground-600 dark:text-ground-400 mb-2">Table with Selectable Rows</h3>
+            <div className="mb-8">
+                <Typography.H5 variant="secondary" className="mb-2">Table with Selectable Rows</Typography.H5>
                 <Table className="max-w-[800px] w-full mx-auto" aria-label="Invoice List with Selection">
                     <Table.Head>
                         <Table.Row>
@@ -143,6 +149,40 @@ export default function TableDemo() {
                                 <Table.Cell>{invoice.paymentStatus}</Table.Cell>
                                 <Table.Cell>{invoice.paymentMethod}</Table.Cell>
                                 <Table.Cell className="text-right">{invoice.totalAmount}</Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
+            </div>
+
+            <Divider spacing="lg" />
+
+            {/* Table with actions */}
+            <div>
+                <Typography.H5 variant="secondary" className="mb-2">Table with Actions</Typography.H5>
+                <Table className="max-w-[800px] w-full mx-auto" aria-label="Invoice List with Actions">
+                    <Table.Head>
+                        <Table.Row>
+                            <Table.Header>Invoice</Table.Header>
+                            <Table.Header>Status</Table.Header>
+                            <Table.Header>Method</Table.Header>
+                            <Table.Header className="text-right">Amount</Table.Header>
+                            <Table.Header>Actions</Table.Header>
+                        </Table.Row>
+                    </Table.Head>
+                    <Table.Body>
+                        {invoices.map((invoice) => (
+                            <Table.Row key={invoice.invoice}>
+                                <Table.Cell className="font-medium">{invoice.invoice}</Table.Cell>
+                                <Table.Cell>{invoice.paymentStatus}</Table.Cell>
+                                <Table.Cell>{invoice.paymentMethod}</Table.Cell>
+                                <Table.Cell className="text-right">{invoice.totalAmount}</Table.Cell>
+                                <Table.Cell>
+                                    <div className="flex gap-2">
+                                        <Button variant="outline" size="small">View</Button>
+                                        <Button variant="ghost" size="small">Edit</Button>
+                                    </div>
+                                </Table.Cell>
                             </Table.Row>
                         ))}
                     </Table.Body>

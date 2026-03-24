@@ -1,18 +1,19 @@
 "use client";
 
-import { Card } from "vayu-ui";
+import { Card, Typography, Button, Divider } from "vayu-ui";
 
 export default function CardDemo() {
     return (
         <div className="not-prose flex flex-col gap-10 w-full max-w-lg">
             {/* Default Card */}
             <div>
-                <h2
+                <Typography.H2
                     id="card-demo-label"
-                    className="text-xl font-primary font-semibold text-ground-900 dark:text-ground-50 mb-4"
+                    variant="primary"
+                    className="mb-4"
                 >
                     Card Example
-                </h2>
+                </Typography.H2>
                 <Card>
                     <Card.Media
                         src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80"
@@ -23,39 +24,47 @@ export default function CardDemo() {
                         subtitle="A unified color palette for every surface."
                     />
                     <Card.Content>
-                        Ground, primary, secondary, and semantic colors work
-                        seamlessly across light and dark mode.
+                        <Typography.P variant="secondary">
+                            Ground, primary, secondary, and semantic colors work
+                            seamlessly across light and dark mode.
+                        </Typography.P>
                     </Card.Content>
                     <Card.Footer>
-                        <button className="text-sm font-secondary font-semibold text-primary-600 dark:text-primary-400 hover:underline">
+                        <Button variant="ghost" size="small">
                             Read more →
-                        </button>
+                        </Button>
                     </Card.Footer>
                 </Card>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Interactive Card */}
             <div>
-                <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.H6 variant="secondary" className="mb-3">
                     Interactive
-                </h3>
+                </Typography.H6>
                 <Card interactive onClick={() => alert("Clicked!")}>
                     <Card.Header
                         title="Click Me"
                         subtitle="This card is focusable and keyboard-accessible."
                     />
                     <Card.Content>
-                        Interactive cards get <code>role=&quot;button&quot;</code>,{" "}
-                        <code>tabIndex=0</code>, and Enter / Space key support.
+                        <Typography.P variant="secondary">
+                            Interactive cards get <Typography.Code>role=&quot;button&quot;</Typography.Code>,{" "}
+                            <Typography.Code>tabIndex=0</Typography.Code>, and Enter / Space key support.
+                        </Typography.P>
                     </Card.Content>
                 </Card>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Linked Card */}
             <div>
-                <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.H6 variant="secondary" className="mb-3">
                     Linked
-                </h3>
+                </Typography.H6>
                 <Card
                     href="https://github.com"
                     target="_blank"
@@ -67,44 +76,52 @@ export default function CardDemo() {
                 </Card>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Disabled Card */}
             <div>
-                <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.H6 variant="secondary" className="mb-3">
                     Disabled
-                </h3>
+                </Typography.H6>
                 <Card disabled interactive>
                     <Card.Header
                         title="Disabled Card"
                         subtitle="Pointer events are blocked and opacity is reduced."
                     />
                     <Card.Content>
-                        This card cannot be interacted with.
+                        <Typography.P variant="secondary">
+                            This card cannot be interacted with.
+                        </Typography.P>
                     </Card.Content>
                 </Card>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Card with Avatar */}
             <div>
-                <h3 className="text-sm font-medium font-primary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.H6 variant="secondary" className="mb-3">
                     With Avatar &amp; Action
-                </h3>
+                </Typography.H6>
                 <Card>
                     <Card.Header
                         avatar={
-                            <div className="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center text-white font-semibold">
+                            <div className="w-10 h-10 rounded-full bg-brand flex items-center justify-center text-brand-content font-semibold">
                                 JD
                             </div>
                         }
                         title="John Doe"
                         subtitle="Software Engineer"
                         action={
-                            <button className="text-sm text-primary-600 dark:text-primary-400 hover:underline">
+                            <Button variant="ghost" size="small">
                                 Follow
-                            </button>
+                            </Button>
                         }
                     />
                     <Card.Content>
-                        Building beautiful user interfaces with modern web technologies.
+                        <Typography.P variant="secondary">
+                            Building beautiful user interfaces with modern web technologies.
+                        </Typography.P>
                     </Card.Content>
                 </Card>
             </div>

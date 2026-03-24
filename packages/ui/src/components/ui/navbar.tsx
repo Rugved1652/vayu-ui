@@ -1,6 +1,6 @@
 "use client";
 
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import {
     createContext,
     HTMLAttributes,
@@ -123,9 +123,9 @@ function NavbarRoot({
         <NavbarContext.Provider value={{ mobileOpen, setMobileOpen, closeMenu, menuId, triggerId }}>
             <nav
                 aria-label="Main navigation"
-                className={clsx(
+                className={cn(
                     "relative z-40 w-full",
-                    "bg-white dark:bg-ground-950 border-b border-ground-200 dark:border-ground-800",
+                    "bg-surface border-b border-border",
                     sticky && "sticky top-0",
                     className
                 )}
@@ -159,7 +159,7 @@ function NavbarContainer({ maxWidth = "xl", className, children, ...props }: Nav
 
     return (
         <div
-            className={clsx(
+            className={cn(
                 "mx-auto flex items-center justify-between px-4 py-3",
                 maxWidthClasses[maxWidth],
                 className
@@ -182,7 +182,7 @@ export interface NavbarBrandProps extends HTMLAttributes<HTMLDivElement> {}
 function NavbarBrand({ className, children, ...props }: NavbarBrandProps) {
     return (
         <div
-            className={clsx("flex items-center gap-2 shrink-0", className)}
+            className={cn("flex items-center gap-2 shrink-0", className)}
             {...props}
         >
             {children}
@@ -201,7 +201,7 @@ export interface NavbarItemsProps extends HTMLAttributes<HTMLUListElement> {}
 function NavbarItems({ className, children, ...props }: NavbarItemsProps) {
     return (
         <ul
-            className={clsx(
+            className={cn(
                 "hidden md:flex items-center gap-1 list-none m-0 p-0",
                 className
             )}
@@ -227,12 +227,12 @@ function NavbarItem({ active = false, className, children, href = "#", ...props 
         <li className="list-none">
             <a
                 href={href}
-                className={clsx(
-                    "px-3 py-2 rounded text-sm font-medium font-secondary transition-colors",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-ground-950",
+                className={cn(
+                    "px-3 py-2 rounded-control text-sm font-medium font-secondary transition-colors",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
                     active
-                        ? "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
-                        : "text-ground-700 dark:text-ground-300 hover:text-ground-900 dark:hover:text-white hover:bg-ground-100 dark:hover:bg-ground-800",
+                        ? "text-brand bg-brand/10"
+                        : "text-muted-content hover:text-surface-content hover:bg-muted",
                     className
                 )}
                 aria-current={active ? "page" : undefined}
@@ -255,7 +255,7 @@ export interface NavbarActionsProps extends HTMLAttributes<HTMLDivElement> {}
 function NavbarActions({ className, children, ...props }: NavbarActionsProps) {
     return (
         <div
-            className={clsx("hidden md:flex items-center gap-2 shrink-0", className)}
+            className={cn("hidden md:flex items-center gap-2 shrink-0", className)}
             {...props}
         >
             {children}
@@ -282,29 +282,29 @@ function NavbarToggle({ className, ...props }: NavbarToggleProps) {
             aria-expanded={mobileOpen}
             aria-controls={menuId}
             aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
-            className={clsx(
-                "md:hidden relative flex items-center justify-center w-10 h-10 rounded transition-colors",
-                "text-ground-700 dark:text-ground-300 hover:bg-ground-100 dark:hover:bg-ground-800",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-ground-950",
+            className={cn(
+                "md:hidden relative flex items-center justify-center w-10 h-10 rounded-control transition-colors",
+                "text-muted-content hover:text-surface-content hover:bg-muted",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
                 className
             )}
             {...props}
         >
             <span className="flex flex-col items-center justify-center w-5 h-5">
                 <span
-                    className={clsx(
+                    className={cn(
                         "block h-0.5 w-5 bg-current transition-all rounded-full",
                         mobileOpen ? "rotate-45 translate-y-0.75" : "-translate-y-1"
                     )}
                 />
                 <span
-                    className={clsx(
+                    className={cn(
                         "block h-0.5 w-5 bg-current transition-all rounded-full my-0.5",
                         mobileOpen ? "opacity-0" : "opacity-100"
                     )}
                 />
                 <span
-                    className={clsx(
+                    className={cn(
                         "block h-0.5 w-5 bg-current transition-all rounded-full",
                         mobileOpen ? "-rotate-45 -translate-y-0.75" : "translate-y-1"
                     )}
@@ -379,8 +379,8 @@ function NavbarMobileMenu({ className, children, ...props }: NavbarMobileMenuPro
         <>
             {/* Backdrop */}
             <div
-                className={clsx(
-                    "fixed inset-0 z-40 bg-ground-950/50 transition-opacity duration-300 md:hidden",
+                className={cn(
+                    "fixed inset-0 z-40 bg-canvas/80 backdrop-blur-sm transition-opacity duration-300 md:hidden",
                     mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
                 )}
                 aria-hidden="true"
@@ -394,10 +394,10 @@ function NavbarMobileMenu({ className, children, ...props }: NavbarMobileMenuPro
                 role="dialog"
                 aria-modal="true"
                 aria-label="Navigation menu"
-                className={clsx(
+                className={cn(
                     "fixed top-0 right-0 z-50 h-full w-72 max-w-[80vw] md:hidden",
-                    "bg-white dark:bg-ground-950 border-l border-ground-200 dark:border-ground-800",
-                    "shadow-outer",
+                    "bg-elevated border-l border-border",
+                    "shadow-elevated",
                     "transform transition-transform ease-in-out duration-300",
                     mobileOpen ? "translate-x-0" : "translate-x-full",
                     className
@@ -405,16 +405,16 @@ function NavbarMobileMenu({ className, children, ...props }: NavbarMobileMenuPro
                 {...props}
             >
                 {/* Close button */}
-                <div className="flex items-center justify-end p-4 border-b border-ground-200 dark:border-ground-800">
+                <div className="flex items-center justify-end p-4 border-b border-border">
                     <button
                         ref={closeBtnRef}
                         type="button"
                         onClick={closeMenu} // FIX: Use closeMenu
                         aria-label="Close navigation menu"
-                        className={clsx(
-                            "flex items-center justify-center w-9 h-9 rounded transition-colors",
-                            "text-ground-500 hover:text-ground-900 dark:hover:text-white hover:bg-ground-100 dark:hover:bg-ground-800",
-                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                        className={cn(
+                            "flex items-center justify-center w-9 h-9 rounded-control transition-colors",
+                            "text-muted-content hover:text-surface-content hover:bg-muted",
+                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-elevated"
                         )}
                     >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -450,12 +450,12 @@ function NavbarMobileItem({ active = false, className, children, href = "#", ...
         <a
             href={href}
             onClick={closeMenu} // FIX: Use closeMenu for focus return
-            className={clsx(
-                "px-4 py-3 rounded text-sm font-medium font-secondary transition-colors",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
+            className={cn(
+                "px-4 py-3 rounded-control text-sm font-medium font-secondary transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-elevated",
                 active
-                    ? "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
-                    : "text-ground-700 dark:text-ground-300 hover:text-ground-900 dark:hover:text-white hover:bg-ground-100 dark:hover:bg-ground-800",
+                    ? "text-brand bg-brand/10"
+                    : "text-muted-content hover:text-surface-content hover:bg-muted",
                 className
             )}
             aria-current={active ? "page" : undefined}
@@ -475,7 +475,7 @@ NavbarMobileItem.displayName = "Navbar.MobileItem";
 function NavbarSeparator({ className, ...props }: HTMLAttributes<HTMLHRElement>) {
     return (
         <hr
-            className={clsx("my-2 border-ground-200 dark:border-ground-800", className)}
+            className={cn("my-2 border-border", className)}
             {...props}
         />
     );

@@ -1,0 +1,457 @@
+---
+title: Typography
+description: Master Vayu UI's typography system with semantic font families and size scales for consistent, readable text.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Type, Heading1, Text, Code } from 'lucide-react';
+
+# Typography
+
+Good typography is invisible — readers focus on your content, not the font. Vayu UI's typography system makes it easy to create consistent, readable text across your entire application.
+
+## The Three Font Tiers
+
+Vayu UI uses three font families, each with a specific purpose:
+
+| Tier | Font | CSS Variable | Tailwind Class | Usage |
+| :--- | :--- | :--- | :--- | :--- |
+| **Primary** | Oswald | `--font-primary` | `font-primary` | Headings, labels, navigation |
+| **Secondary** | Mulish | `--font-secondary` | `font-secondary` | Body text, descriptions, captions |
+| **Tertiary** | Geist Mono | `--font-tertiary` | `font-tertiary` | Code, technical values, keyboard shortcuts |
+
+### Primary Font: Oswald
+
+Oswald is a condensed, bold sans-serif perfect for headlines and UI labels. It commands attention without being overwhelming.
+
+<Tabs items={['Preview', 'Usage']}>
+  <Tab value="Preview">
+    <div className="p-6 bg-surface rounded-surface">
+      <h1 className="font-primary text-h1 mb-2">Oswald Heading</h1>
+      <p className="font-primary text-h3">Used for emphasis and hierarchy</p>
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Page title
+    <h1 className="font-primary text-h1">Dashboard</h1>
+
+    // Section heading
+    <h2 className="font-primary text-h2">Recent Activity</h2>
+
+    // Navigation label
+    <span className="font-primary text-h5">Settings</span>
+
+    // Badge or label
+    <span className="font-primary text-h6 uppercase">New</span>
+    ```
+  </Tab>
+</Tabs>
+
+### Secondary Font: Mulish
+
+Mulish is a clean, rounded sans-serif designed for extended reading. Use it for all body text and descriptions.
+
+<Tabs items={['Preview', 'Usage']}>
+  <Tab value="Preview">
+    <div className="p-6 bg-surface rounded-surface">
+      <p className="font-secondary text-para">
+        Mulish is optimized for readability. Its rounded terminals and open apertures make it comfortable to read at any size, from small captions to large paragraphs.
+      </p>
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Body paragraph
+    <p className="font-secondary text-para">
+      This is a paragraph of body text. It's easy to read and works well for extended content.
+    </p>
+
+    // Description text
+    <p className="font-secondary text-para text-muted-content">
+      Enter your email address to receive updates about your account.
+    </p>
+
+    // Caption
+    <span className="font-secondary text-h6 text-muted-content">
+      Last updated 5 minutes ago
+    </span>
+    ```
+  </Tab>
+</Tabs>
+
+### Tertiary Font: Geist Mono
+
+Geist Mono is a modern monospace font for code snippets, keyboard shortcuts, and technical values.
+
+<Tabs items={['Preview', 'Usage']}>
+  <Tab value="Preview">
+    <div className="p-6 bg-surface rounded-surface">
+      <code className="font-tertiary text-para bg-muted px-2 py-1 rounded-control">
+        const greeting = "Hello, World!";
+      </code>
+    </div>
+  </Tab>
+  <Tab value="Usage">
+    ```tsx
+    // Inline code
+    <code className="font-tertiary text-para">npm install vayu-ui</code>
+
+    // Code block
+    <pre className="font-tertiary text-para bg-muted p-4 rounded-surface">
+      {`function greet(name) {
+  return \`Hello, \${name}!\`;
+}`}
+    </pre>
+
+    // Keyboard shortcut
+    <kbd className="font-tertiary text-h6 bg-muted px-2 py-0.5 rounded-control">
+      ⌘K
+    </kbd>
+
+    // Technical value
+    <span className="font-tertiary text-para">2024-01-15T14:30:00Z</span>
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Semantic Size Scale
+
+Vayu UI provides semantic text sizes. Instead of using arbitrary sizes like `text-2xl`, use semantic sizes that convey meaning.
+
+### The Size Scale
+
+| Class | Size | Computed | Usage |
+| :--- | :--- | :--- | :--- |
+| `text-h1` | 1.875rem | 30px | Hero headings, page titles |
+| `text-h2` | 1.5rem | 24px | Section headings |
+| `text-h3` | 1.25rem | 20px | Card headings, subsections |
+| `text-h4` | 1.125rem | 18px | Form labels, important inline text |
+| `text-h5` | 1rem | 16px | Navigation links, button text |
+| `text-h6` | 0.875rem | 14px | Secondary labels, captions |
+| `text-para` | 0.875rem | 14px | Body copy, paragraphs |
+
+### Size Hierarchy Preview
+
+<Tabs items={['All Sizes', 'In Context']}>
+  <Tab value="All Sizes">
+    <div className="space-y-6 p-6 bg-surface rounded-surface">
+      <div>
+        <span className="text-h1 font-primary">Heading 1</span>
+        <span className="text-muted-content text-sm ml-4">30px — Hero titles</span>
+      </div>
+      <div>
+        <span className="text-h2 font-primary">Heading 2</span>
+        <span className="text-muted-content text-sm ml-4">24px — Sections</span>
+      </div>
+      <div>
+        <span className="text-h3 font-primary">Heading 3</span>
+        <span className="text-muted-content text-sm ml-4">20px — Cards, subsections</span>
+      </div>
+      <div>
+        <span className="text-h4 font-primary">Heading 4</span>
+        <span className="text-muted-content text-sm ml-4">18px — Form labels</span>
+      </div>
+      <div>
+        <span className="text-h5 font-primary">Heading 5</span>
+        <span className="text-muted-content text-sm ml-4">16px — Nav, buttons</span>
+      </div>
+      <div>
+        <span className="text-h6 font-primary">Heading 6</span>
+        <span className="text-muted-content text-sm ml-4">14px — Captions, small labels</span>
+      </div>
+      <div>
+        <span className="text-para font-secondary">Paragraph text for body content and descriptions.</span>
+        <span className="text-muted-content text-sm ml-4">14px — Body text</span>
+      </div>
+    </div>
+  </Tab>
+  <Tab value="In Context">
+    <div className="p-6 bg-surface rounded-surface">
+      <h1 className="text-h1 font-primary mb-2">Dashboard Overview</h1>
+      <p className="text-para font-secondary text-muted-content mb-6">
+        Welcome back! Here's what's happening with your projects today.
+      </p>
+
+      <section className="mb-6">
+        <h2 className="text-h2 font-primary mb-4">Recent Activity</h2>
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-para font-secondary">New user signup</span>
+            <span className="text-h6 text-muted-content">2 minutes ago</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-para font-secondary">Deployment completed</span>
+            <span className="text-h6 text-muted-content">15 minutes ago</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3 className="text-h3 font-primary mb-3">Quick Stats</h3>
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-muted p-4 rounded-surface">
+            <span className="text-h4 font-primary">1,234</span>
+            <span className="text-h6 text-muted-content block">Users</span>
+          </div>
+          <div className="bg-muted p-4 rounded-surface">
+            <span className="text-h4 font-primary">567</span>
+            <span className="text-h6 text-muted-content block">Projects</span>
+          </div>
+          <div className="bg-muted p-4 rounded-surface">
+            <span className="text-h4 font-primary">89%</span>
+            <span className="text-h6 text-muted-content block">Uptime</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </Tab>
+</Tabs>
+
+---
+
+## Do's and Don'ts
+
+### Using Semantic Sizes
+
+| Do ✅ | Don't ❌ |
+| :--- | :--- |
+| `text-h1` for page titles | `text-3xl` for page titles |
+| `text-h2` for section headings | `text-2xl` for section headings |
+| `text-para` for body text | `text-base` or `text-sm` for body |
+| Let the system define hierarchy | Manually adjust font sizes |
+
+### Why Semantic Sizes Matter
+
+```tsx
+// ✅ Good: Semantic sizes convey meaning
+<h1 className="text-h1 font-primary">Page Title</h1>
+<h2 className="text-h2 font-primary">Section</h2>
+<p className="text-para font-secondary">Body content</p>
+
+// ❌ Bad: Arbitrary sizes don't convey meaning
+<h1 className="text-3xl font-primary">Page Title</h1>
+<h2 className="text-2xl font-primary">Section</h2>
+<p className="text-sm font-secondary">Body content</p>
+```
+
+When you use semantic sizes:
+- **Consistency** is automatic across your app
+- **Updates** are easy (change one variable, update everywhere)
+- **Accessibility** is built in (proper hierarchy for screen readers)
+- **Dark mode** works seamlessly
+
+---
+
+## Combining Fonts and Sizes
+
+### The Golden Combinations
+
+| Element | Font | Size | Full Class |
+| :--- | :--- | :--- | :--- |
+| Page Title | Primary | h1 | `font-primary text-h1` |
+| Section Heading | Primary | h2 | `font-primary text-h2` |
+| Card Title | Primary | h3 | `font-primary text-h3` |
+| Form Label | Primary | h4 | `font-primary text-h4` |
+| Button Text | Primary | h5 | `font-primary text-h5` |
+| Navigation | Primary | h5 | `font-primary text-h5` |
+| Caption | Primary | h6 | `font-primary text-h6` |
+| Body Text | Secondary | para | `font-secondary text-para` |
+| Description | Secondary | para | `font-secondary text-para text-muted-content` |
+| Code | Tertiary | para | `font-tertiary text-para` |
+
+### Complete Example
+
+```tsx
+export function BlogPost({ title, date, excerpt, content }) {
+  return (
+    <article className="bg-surface text-surface-content rounded-surface p-6">
+      {/* Page title */}
+      <h1 className="font-primary text-h1 mb-2">
+        {title}
+      </h1>
+
+      {/* Meta info */}
+      <div className="flex items-center gap-4 mb-6">
+        <time className="font-secondary text-h6 text-muted-content">
+          {date}
+        </time>
+        <span className="font-tertiary text-h6 text-muted-content">
+          5 min read
+        </span>
+      </div>
+
+      {/* Excerpt (lead paragraph) */}
+      <p className="font-secondary text-para text-surface-content mb-6">
+        {excerpt}
+      </p>
+
+      {/* Main content */}
+      <div className="prose">
+        <p className="font-secondary text-para mb-4">
+          {content}
+        </p>
+      </div>
+
+      {/* Code example */}
+      <pre className="font-tertiary text-para bg-muted p-4 rounded-surface mt-6">
+        <code>npm install vayu-ui</code>
+      </pre>
+    </article>
+  );
+}
+```
+
+---
+
+## Text Colors
+
+Combine typography with Vayu UI's color system for proper contrast.
+
+### Standard Text Colors
+
+| Class | Usage | When to Use |
+| :--- | :--- | :--- |
+| `text-surface-content` | Primary text | Headlines, important content |
+| `text-muted-content` | Secondary text | Descriptions, captions, placeholders |
+| `text-brand` | Brand accent | Links, active states |
+| `text-destructive` | Error text | Validation errors, warnings |
+| `text-success` | Success text | Confirmations, completed states |
+
+### Example with Colors
+
+```tsx
+<div className="bg-surface rounded-surface p-6">
+  {/* Primary text */}
+  <h2 className="font-primary text-h2 text-surface-content mb-2">
+    Account Settings
+  </h2>
+
+  {/* Secondary text */}
+  <p className="font-secondary text-para text-muted-content mb-4">
+    Manage your account preferences and security settings.
+  </p>
+
+  {/* Form label */}
+  <label className="font-primary text-h4 text-surface-content block mb-2">
+    Email Address
+  </label>
+
+  {/* Input with placeholder */}
+  <input
+    className="font-secondary text-para bg-surface border border-field rounded-control px-3 py-2 placeholder:text-muted-content"
+    placeholder="Enter your email..."
+  />
+
+  {/* Helper text */}
+  <p className="font-secondary text-h6 text-muted-content mt-1">
+    We'll never share your email with anyone.
+  </p>
+</div>
+```
+
+---
+
+## Font Loading
+
+Vayu UI expects these fonts to be loaded. Add them to your project's font configuration:
+
+### Using Next.js Font Optimization
+
+```tsx
+// app/layout.tsx
+import { Oswald, Mulish, Geist_Mono } from 'next/font/google';
+
+const oswald = Oswald({
+  subsets: ['latin'],
+  variable: '--font-primary',
+});
+
+const mulish = Mulish({
+  subsets: ['latin'],
+  variable: '--font-secondary',
+});
+
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-tertiary',
+});
+
+export default function RootLayout({ children }) {
+  return (
+    <html className={`${oswald.variable} ${mulish.variable} ${geistMono.variable}`}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+### Using CSS @font-face
+
+```css
+/* In your global CSS */
+@font-face {
+  font-family: 'Oswald';
+  src: url('/fonts/Oswald.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mulish';
+  src: url('/fonts/Mulish.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/GeistMono.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+```
+
+---
+
+## Quick Reference
+
+### Typography Cheat Sheet
+
+```tsx
+// Page structure
+<h1 className="font-primary text-h1">Page Title</h1>
+<h2 className="font-primary text-h2">Section</h2>
+<h3 className="font-primary text-h3">Card Title</h3>
+<h4 className="font-primary text-h4">Form Label</h4>
+<h5 className="font-primary text-h5">Button / Nav</h5>
+<h6 className="font-primary text-h6">Caption</h6>
+<p className="font-secondary text-para">Body text</p>
+<code className="font-tertiary text-para">code</code>
+
+// With colors
+<h1 className="font-primary text-h1 text-surface-content">Title</h1>
+<p className="font-secondary text-para text-muted-content">Description</p>
+<a className="font-secondary text-para text-brand">Link</a>
+<span className="font-tertiary text-h6">⌘K</span>
+```
+
+### CSS Variables
+
+```css
+/* Font families */
+--font-primary: "Oswald", sans-serif;
+--font-secondary: "Mulish", sans-serif;
+--font-tertiary: "Geist Mono", monospace;
+
+/* Font sizes */
+--text-h1: 1.875rem;  /* 30px */
+--text-h2: 1.5rem;    /* 24px */
+--text-h3: 1.25rem;   /* 20px */
+--text-h4: 1.125rem;  /* 18px */
+--text-h5: 1rem;      /* 16px */
+--text-h6: 0.875rem;  /* 14px */
+--text-para: 0.875rem; /* 14px */
+```

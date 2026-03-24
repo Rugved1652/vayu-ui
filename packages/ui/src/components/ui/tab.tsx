@@ -223,8 +223,8 @@ const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
                 className={cn(
                     "inline-flex items-center",
                     orientation === "horizontal"
-                        ? "border-b border-ground-200 dark:border-ground-700"
-                        : "flex-col border-r border-ground-200 dark:border-ground-700 pr-4 min-w-40",
+                        ? "border-b border-border"
+                        : "flex-col border-r border-border pr-4 min-w-40",
                     className
                 )}
                 {...props}
@@ -274,20 +274,20 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
                 onKeyDown={handleKeyDown}
                 className={cn(
                     "px-4 py-2 text-sm font-medium transition-all",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
                     "disabled:opacity-50 disabled:pointer-events-none",
                     orientation === "horizontal"
                         ? cn(
                             "border-b-2 -mb-px",
                             isActive
-                                ? "border-primary-600 text-primary-600 dark:border-primary-400 dark:text-primary-400"
-                                : "border-transparent text-ground-600 hover:text-ground-900 dark:text-ground-400 dark:hover:text-ground-200"
+                                ? "border-brand text-brand"
+                                : "border-transparent text-muted-content hover:text-canvas-content"
                         )
                         : cn(
                             "w-full text-left rounded",
                             isActive
-                                ? "bg-primary-50 text-primary-600 dark:bg-primary-950/30 dark:text-primary-400"
-                                : "text-ground-600 hover:bg-ground-50 dark:text-ground-400 dark:hover:bg-ground-800/50"
+                                ? "bg-brand/10 text-brand"
+                                : "text-muted-content hover:bg-muted"
                         ),
                     className
                 )}
@@ -346,7 +346,7 @@ const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
                 data-state={isActive ? "active" : "inactive"}
                 hidden={!isActive && forceMount}
                 className={cn(
-                    "mt-4 focus:outline-none animate-fade-in",
+                    "mt-4 focus:outline-none",
                     className
                 )}
                 {...props}

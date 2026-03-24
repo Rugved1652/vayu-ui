@@ -1,12 +1,12 @@
 "use client"
-import { Tabs } from "vayu-ui";
+import { Tabs, Typography, Divider, Button } from "vayu-ui";
 
 export default function TabsDemo() {
     return (
         <div className="w-full max-w-md not-prose">
-            <h2 id="tabs-demo-label" className="text-xl font-semibold mb-4">
+            <Typography.H2 id="tabs-demo-label" className="mb-4">
                 Tabs Example
-            </h2>
+            </Typography.H2>
 
             {/* Default usage - Horizontal with aria-labelledby */}
             <Tabs defaultValue="account" className="mb-8">
@@ -15,25 +15,33 @@ export default function TabsDemo() {
                     <Tabs.Trigger value="password">Password</Tabs.Trigger>
                 </Tabs.List>
                 <Tabs.Content value="account">
-                    <div className="p-4 mt-2 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
-                        <h3 className="mb-2 text-lg font-medium">Account</h3>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
-                            Make changes to your account here. Click save when you're done.
-                        </p>
+                    <div className="p-4 mt-2 rounded border border-border bg-surface">
+                        <Typography.H3 className="mb-2">Account</Typography.H3>
+                        <Typography.P variant="secondary">
+                            Make changes to your account here. Click save when you&apos;re done.
+                        </Typography.P>
+                        <Divider className="my-4" />
+                        <Button variant="primary" size="small">
+                            Save Changes
+                        </Button>
                     </div>
                 </Tabs.Content>
                 <Tabs.Content value="password">
-                    <div className="p-4 mt-2 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
-                        <h3 className="mb-2 text-lg font-medium">Password</h3>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
-                            Change your password here. After saving, you'll be logged out.
-                        </p>
+                    <div className="p-4 mt-2 rounded border border-border bg-surface">
+                        <Typography.H3 className="mb-2">Password</Typography.H3>
+                        <Typography.P variant="secondary">
+                            Change your password here. After saving, you&apos;ll be logged out.
+                        </Typography.P>
+                        <Divider className="my-4" />
+                        <Button variant="primary" size="small">
+                            Update Password
+                        </Button>
                     </div>
                 </Tabs.Content>
             </Tabs>
 
             {/* Vertical orientation with aria-label */}
-            <h3 className="text-lg font-medium mb-4">Vertical Tabs</h3>
+            <Typography.H3 className="mb-4">Vertical Tabs</Typography.H3>
             <Tabs defaultValue="profile" orientation="vertical" className="mb-8">
                 <Tabs.List aria-label="Settings navigation" className="min-w-50">
                     <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
@@ -41,43 +49,102 @@ export default function TabsDemo() {
                     <Tabs.Trigger value="notifications">Notifications</Tabs.Trigger>
                 </Tabs.List>
                 <Tabs.Content value="profile" className="pl-4">
-                    <div className="p-4 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
-                        <h4 className="mb-2 text-md font-medium">Profile Settings</h4>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                    <div className="p-4 rounded border border-border bg-surface">
+                        <Typography.H4 className="mb-2">Profile Settings</Typography.H4>
+                        <Typography.P variant="secondary">
                             Manage your personal information and preferences.
-                        </p>
+                        </Typography.P>
                     </div>
                 </Tabs.Content>
                 <Tabs.Content value="settings" className="pl-4">
-                    <div className="p-4 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
-                        <h4 className="mb-2 text-md font-medium">Application Settings</h4>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                    <div className="p-4 rounded border border-border bg-surface">
+                        <Typography.H4 className="mb-2">Application Settings</Typography.H4>
+                        <Typography.P variant="secondary">
                             Configure your application preferences and options.
-                        </p>
+                        </Typography.P>
                     </div>
                 </Tabs.Content>
                 <Tabs.Content value="notifications" className="pl-4">
-                    <div className="p-4 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
-                        <h4 className="mb-2 text-md font-medium">Notification Settings</h4>
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                    <div className="p-4 rounded border border-border bg-surface">
+                        <Typography.H4 className="mb-2">Notification Settings</Typography.H4>
+                        <Typography.P variant="secondary">
                             Choose which notifications you want to receive.
-                        </p>
+                        </Typography.P>
                     </div>
                 </Tabs.Content>
             </Tabs>
 
             {/* With disabled tab and aria-label */}
-            <h3 className="text-lg font-medium mb-4">Disabled Tab</h3>
+            <Typography.H3 className="mb-4">Disabled Tab</Typography.H3>
             <Tabs defaultValue="enabled">
                 <Tabs.List aria-label="Tab options" className="grid w-full grid-cols-2">
                     <Tabs.Trigger value="enabled">Enabled Tab</Tabs.Trigger>
                     <Tabs.Trigger value="disabled" disabled>Disabled Tab</Tabs.Trigger>
                 </Tabs.List>
                 <Tabs.Content value="enabled">
-                    <div className="p-4 mt-2 border rounded border-ground-200 dark:border-ground-700 bg-ground-50 dark:bg-ground-900">
-                        <p className="text-sm text-ground-600 dark:text-ground-400">
+                    <div className="p-4 mt-2 rounded border border-border bg-surface">
+                        <Typography.P variant="secondary">
                             This tab is active and can be selected.
-                        </p>
+                        </Typography.P>
+                    </div>
+                </Tabs.Content>
+            </Tabs>
+
+            {/* Tabs with Button Integration */}
+            <Divider className="my-8" />
+            <Typography.H3 className="mb-4">Tabs with Actions</Typography.H3>
+            <Tabs defaultValue="overview">
+                <Tabs.List aria-label="Content sections" className="grid w-full grid-cols-3">
+                    <Tabs.Trigger value="overview">Overview</Tabs.Trigger>
+                    <Tabs.Trigger value="details">Details</Tabs.Trigger>
+                    <Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.Content value="overview">
+                    <div className="p-4 mt-2 rounded border border-border bg-surface">
+                        <Typography.H4 className="mb-2">Overview Section</Typography.H4>
+                        <Typography.P variant="secondary" className="mb-4">
+                            Get a quick summary of your content and recent activity.
+                        </Typography.P>
+                        <div className="flex gap-2">
+                            <Button variant="primary" size="small">
+                                View Report
+                            </Button>
+                            <Button variant="outline" size="small">
+                                Export
+                            </Button>
+                        </div>
+                    </div>
+                </Tabs.Content>
+                <Tabs.Content value="details">
+                    <div className="p-4 mt-2 rounded border border-border bg-surface">
+                        <Typography.H4 className="mb-2">Details Section</Typography.H4>
+                        <Typography.P variant="secondary" className="mb-4">
+                            Dive deeper into your data with detailed analytics and insights.
+                        </Typography.P>
+                        <div className="flex gap-2">
+                            <Button variant="secondary" size="small">
+                                Analyze
+                            </Button>
+                            <Button variant="ghost" size="small">
+                                Download CSV
+                            </Button>
+                        </div>
+                    </div>
+                </Tabs.Content>
+                <Tabs.Content value="settings">
+                    <div className="p-4 mt-2 rounded border border-border bg-surface">
+                        <Typography.H4 className="mb-2">Settings Section</Typography.H4>
+                        <Typography.P variant="secondary" className="mb-4">
+                            Configure your preferences and customize your experience.
+                        </Typography.P>
+                        <div className="flex gap-2">
+                            <Button variant="primary" size="small">
+                                Save Settings
+                            </Button>
+                            <Button variant="destructive" size="small">
+                                Reset
+                            </Button>
+                        </div>
                     </div>
                 </Tabs.Content>
             </Tabs>

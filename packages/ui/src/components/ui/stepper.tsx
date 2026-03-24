@@ -221,15 +221,15 @@ const Step = forwardRef<HTMLDivElement, StepProps>(
         const horizontalConnectorClasses = (isActive: boolean) => clsx(
             "h-0.5 flex-1 transition-colors duration-300",
             isActive
-                ? "bg-primary-500"
-                : "bg-ground-200 dark:bg-ground-700"
+                ? "bg-brand"
+                : "bg-border"
         );
 
         const verticalConnectorClasses = clsx(
             "w-0.5 flex-1 min-h-[24px] transition-colors duration-300",
             isCompleted
-                ? "bg-primary-500"
-                : "bg-ground-200 dark:bg-ground-700"
+                ? "bg-brand"
+                : "bg-border"
         );
 
         return (
@@ -330,12 +330,12 @@ const StepIndicator = forwardRef<HTMLDivElement, StepIndicatorProps>(
                 aria-hidden="true"
                 className={clsx(
                     "relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-150 font-secondary font-semibold text-sm shrink-0",
-                    "group-focus-visible:ring-2 group-focus-visible:ring-primary-500 group-focus-visible:ring-offset-2",
-                    status === "active" && "border-primary-500 bg-primary-500 text-ground-950 ring-4 ring-primary-500/20",
-                    status === "completed" && "border-primary-500 bg-primary-500 text-ground-950",
-                    status === "inactive" && "border-ground-400 dark:border-ground-600 bg-ground-50 dark:bg-ground-900 text-ground-600 dark:text-ground-400",
-                    status === "error" && "border-error-500 bg-error-500 text-white",
-                    status === "loading" && "border-primary-500 text-primary-500 animate-pulse",
+                    "group-focus-visible:ring-2 group-focus-visible:ring-focus group-focus-visible:ring-offset-2",
+                    status === "active" && "border-brand bg-brand text-brand-content ring-4 ring-brand/20",
+                    status === "completed" && "border-brand bg-brand text-brand-content",
+                    status === "inactive" && "border-border bg-muted text-muted-content",
+                    status === "error" && "border-destructive bg-destructive text-destructive-content",
+                    status === "loading" && "border-brand text-brand animate-pulse",
                     className
                 )}
                 {...props}
@@ -400,8 +400,8 @@ const StepTitle = forwardRef<HTMLHeadingElement, StepTitleProps>(
                 className={clsx(
                     "font-secondary text-sm font-semibold transition-colors duration-150",
                     (status === "active" || status === "completed")
-                        ? "text-ground-900 dark:text-ground-100"
-                        : "text-ground-600 dark:text-ground-400",
+                        ? "text-surface-content"
+                        : "text-muted-content",
                     className
                 )}
                 {...props}
@@ -427,7 +427,7 @@ const StepDescription = forwardRef<HTMLParagraphElement, StepDescriptionProps>(
             <p
                 ref={ref}
                 className={clsx(
-                    "font-secondary text-xs text-ground-500 dark:text-ground-400",
+                    "font-secondary text-xs text-muted-content",
                     orientation === "horizontal" && "line-clamp-2",
                     className
                 )}

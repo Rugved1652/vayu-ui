@@ -1,6 +1,6 @@
 "use client";
 
-import { Stepper, Button } from "vayu-ui";
+import { Stepper, Button, Typography, Divider } from "vayu-ui";
 import { useState } from "react";
 import { User, MapPin, CreditCard, CheckCircle, Loader2, AlertCircle } from "lucide-react";
 
@@ -34,9 +34,9 @@ export default function StepperDemo() {
         <div className="w-full max-w-3xl not-prose space-y-12">
             {/* Horizontal Stepper */}
             <div className="space-y-6">
-                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300 uppercase tracking-wide">
+                <Typography.H6 variant="secondary" className="uppercase tracking-wide">
                     Horizontal Stepper
-                </h3>
+                </Typography.H6>
 
                 <div className="flex items-center gap-2">
                     <Button
@@ -69,11 +69,13 @@ export default function StepperDemo() {
                 </Stepper.Root>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Vertical Stepper */}
             <div className="space-y-6">
-                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300 uppercase tracking-wide">
+                <Typography.H6 variant="secondary" className="uppercase tracking-wide">
                     Vertical Stepper
-                </h3>
+                </Typography.H6>
 
                 <Stepper.Root activeStep={activeStep} orientation="vertical" onStepClick={setActiveStep}>
                     {steps.map((step, index) => (
@@ -90,11 +92,13 @@ export default function StepperDemo() {
                 </Stepper.Root>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* With Icons */}
             <div className="space-y-6">
-                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300 uppercase tracking-wide">
+                <Typography.H6 variant="secondary" className="uppercase tracking-wide">
                     With Custom Icons
-                </h3>
+                </Typography.H6>
 
                 <Stepper.Root activeStep={activeStep}>
                     {steps.map((step) => (
@@ -108,11 +112,13 @@ export default function StepperDemo() {
                 </Stepper.Root>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Loading and Error States */}
             <div className="space-y-6">
-                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300 uppercase tracking-wide">
+                <Typography.H6 variant="secondary" className="uppercase tracking-wide">
                     Loading & Error States
-                </h3>
+                </Typography.H6>
 
                 <Stepper.Root activeStep={1}>
                     <Stepper.Step>
@@ -142,11 +148,13 @@ export default function StepperDemo() {
                 </Stepper.Root>
             </div>
 
+            <Divider spacing="lg" />
+
             {/* Non-clickable */}
             <div className="space-y-6">
-                <h3 className="text-sm font-primary font-medium text-ground-700 dark:text-ground-300 uppercase tracking-wide">
+                <Typography.H6 variant="secondary" className="uppercase tracking-wide">
                     Non-Clickable (Display Only)
-                </h3>
+                </Typography.H6>
 
                 <Stepper.Root activeStep={2}>
                     {steps.map((step, index) => (

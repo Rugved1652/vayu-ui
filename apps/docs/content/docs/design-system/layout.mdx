@@ -1,0 +1,563 @@
+---
+title: Layout & Structure
+description: Learn how to properly stack layers and structure your application using Vayu UI's semantic layout system.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Layout, Layers, Moon, Sun } from 'lucide-react';
+
+# Layout & Structure
+
+Building a well-structured UI is like architecture — you need a solid foundation before adding walls and decorations. This guide teaches you how to stack Vayu UI's layers correctly to create clear visual hierarchy.
+
+## The Layer Hierarchy
+
+Vayu UI uses four primary layers, ordered from bottom to top:
+
+```
+┌──────────────────────────────────────────────────────┐
+│                     Elevated                         │  ← Highest: Modals, Popovers, Tooltips
+│  ┌────────────────────────────────────────────────┐  │
+│  │                    Sidebar                     │  │  ← Navigation: Sidebars, Drawers
+│  │  ┌──────────────────────────────────────────┐  │  │
+│  │  │               Surface                    │  │  │  ← Content: Cards, Forms, Tables
+│  │  │  ┌────────────────────────────────────┐  │  │  │
+│  │  │  │                                    │  │  │  │
+│  │  │  │           Canvas                   │  │  │  │  ← Foundation: App Background
+│  │  │  │                                    │  │  │  │
+│  │  │  └────────────────────────────────────┘  │  │  │
+│  │  └──────────────────────────────────────────┘  │  │
+│  └────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────┘
+```
+
+### Visual Order
+
+| Layer | Z-Index Concept | Visual Weight |
+| :--- | :--- | :--- |
+| **Canvas** | 0 (base) | Lowest — the background everything sits on |
+| **Sidebar** | 1 | Low — sits alongside main content |
+| **Surface** | 1 | Low — sits on top of canvas |
+| **Elevated** | 2+ | Highest — floats above everything |
+
+---
+
+## When to Use Each Layer
+
+### Canvas — The Foundation
+
+**Use for:** App shell, page background, viewport
+
+The canvas is your app's backdrop. It should always be the bottom-most layer.
+
+<Tabs items={['Example', 'Code']}>
+  <Tab value="Example">
+    <div className="p-8 rounded-lg" style={{ backgroundColor: '#fafafa' }}>
+      <p className="text-canvas-content mb-4">This entire area represents the canvas layer.</p>
+      <p className="text-muted-content text-sm">
+        Notice how it's slightly off-white, not pure white. This reduces eye strain.
+      </p>
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    // Root layout
+    export default function RootLayout({ children }) {
+      return (
+        <html>
+          <body className="bg-canvas text-canvas-content">
+            {children}
+          </body>
+        </html>
+      );
+    }
+
+    // Page wrapper
+    export default function Page() {
+      return (
+        <main className="bg-canvas min-h-screen">
+          <Content />
+        </main>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Surface — Content Containers
+
+**Use for:** Cards, panels, forms, tables, list items, input fields
+
+Surfaces sit on top of the canvas to group related content. Most of your UI components will use this layer.
+
+<Tabs items={['Example', 'Code']}>
+  <Tab value="Example">
+    <div className="bg-canvas p-6 rounded-lg">
+      <div className="bg-surface text-surface-content p-4 rounded-surface shadow-surface mb-4">
+        <h4 className="font-medium mb-2">Card Title</h4>
+        <p className="text-sm text-muted-content">This card sits on the canvas.</p>
+      </div>
+      <div className="bg-surface text-surface-content p-4 rounded-surface shadow-surface">
+        <h4 className="font-medium mb-2">Another Card</h4>
+        <p className="text-sm text-muted-content">Multiple surfaces create visual separation.</p>
+      </div>
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    // Card component
+    export function Card({ children }) {
+      return (
+        <div className="bg-surface text-surface-content rounded-surface shadow-surface p-6">
+          {children}
+        </div>
+      );
+    }
+
+    // Form container
+    export function Form({ children }) {
+      return (
+        <form className="bg-surface text-surface-content rounded-surface p-6">
+          {children}
+        </form>
+      );
+    }
+
+    // Table
+    export function Table({ children }) {
+      return (
+        <div className="bg-surface text-surface-content rounded-surface overflow-hidden">
+          <table>{children}</table>
+        </div>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Sidebar — Navigation Areas
+
+**Use for:** Side navigation, drawers, rail navigation, mobile menus
+
+Sidebars are distinct from both canvas and surface. They create a dedicated space for navigation.
+
+<Tabs items={['Example', 'Code']}>
+  <Tab value="Example">
+    <div className="flex rounded-lg overflow-hidden h-48">
+      <aside className="bg-sidebar text-sidebar-content w-40 p-4">
+        <nav className="space-y-2">
+          <a href="#" className="block px-3 py-2 rounded-control hover:bg-surface">Dashboard</a>
+          <a href="#" className="block px-3 py-2 rounded-control bg-brand text-brand-content">Projects</a>
+          <a href="#" className="block px-3 py-2 rounded-control hover:bg-surface">Settings</a>
+        </nav>
+      </aside>
+      <main className="bg-canvas flex-1 p-4">
+        <div className="bg-surface p-4 rounded-surface">
+          Main content area
+        </div>
+      </main>
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    // App layout with sidebar
+    export function AppLayout({ children }) {
+      return (
+        <div className="flex min-h-screen bg-canvas">
+          {/* Sidebar */}
+          <aside className="bg-sidebar text-sidebar-content w-64 p-4">
+            <nav>
+              <a href="/dashboard">Dashboard</a>
+              <a href="/projects">Projects</a>
+              <a href="/settings">Settings</a>
+            </nav>
+          </aside>
+
+          {/* Main content */}
+          <main className="flex-1 p-6">
+            {children}
+          </main>
+        </div>
+      );
+    }
+
+    // Mobile drawer
+    export function Drawer({ isOpen, onClose }) {
+      return (
+        <div className={`fixed inset-y-0 left-0 w-80 bg-sidebar text-sidebar-content transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform`}>
+          <nav>{/* Nav items */}</nav>
+        </div>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Elevated — Floating Elements
+
+**Use for:** Modals, dialogs, popovers, dropdowns, tooltips, notifications
+
+Elevated elements float above everything else. They command attention and require user interaction.
+
+<Tabs items={['Example', 'Code']}>
+  <Tab value="Example">
+    <div className="relative bg-canvas p-8 rounded-lg">
+      <div className="bg-surface p-4 rounded-surface">
+        <p>Main content behind the modal</p>
+      </div>
+
+      {/* Simulated modal overlay */}
+      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+        <div className="bg-elevated text-elevated-content rounded-overlay shadow-elevated p-6 max-w-sm">
+          <h3 className="font-medium mb-2">Modal Title</h3>
+          <p className="text-sm text-muted-content mb-4">This modal floats above all other content.</p>
+          <div className="flex gap-2">
+            <button className="bg-muted text-muted-content px-3 py-1.5 rounded-control">Cancel</button>
+            <button className="bg-brand text-brand-content px-3 py-1.5 rounded-control">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    // Modal component
+    export function Modal({ isOpen, onClose, children }) {
+      if (!isOpen) return null;
+
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-elevated text-elevated-content rounded-overlay shadow-elevated p-6 max-w-md">
+            {children}
+          </div>
+        </div>
+      );
+    }
+
+    // Dropdown menu
+    export function Dropdown({ items }) {
+      return (
+        <ul className="bg-elevated text-elevated-content rounded-overlay shadow-elevated py-1">
+          {items.map((item) => (
+            <li key={item.id}>
+              <button className="w-full px-4 py-2 hover:bg-surface text-left">
+                {item.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    // Tooltip
+    export function Tooltip({ content }) {
+      return (
+        <div className="bg-elevated text-elevated-content rounded-control shadow-elevated px-2 py-1 text-sm">
+          {content}
+        </div>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Stacking Layers Correctly
+
+### The Basic Pattern
+
+Every screen follows this pattern:
+
+```tsx
+export function Screen() {
+  return (
+    // 1. Canvas — always at the root
+    <div className="bg-canvas text-canvas-content min-h-screen">
+
+      {/* 2. Sidebar — optional, for navigation */}
+      <aside className="bg-sidebar text-sidebar-content">
+        <nav>{/* ... */}</nav>
+      </aside>
+
+      {/* 3. Surface — content containers */}
+      <main className="p-6">
+        <div className="bg-surface text-surface-content rounded-surface p-6">
+          {/* Content */}
+        </div>
+      </main>
+
+      {/* 4. Elevated — only when needed */}
+      <Modal>
+        <div className="bg-elevated text-elevated-content">
+          {/* Modal content */}
+        </div>
+      </Modal>
+
+    </div>
+  );
+}
+```
+
+### Common Layout Patterns
+
+#### Dashboard Layout
+
+```tsx
+export function DashboardLayout() {
+  return (
+    <div className="bg-canvas text-canvas-content min-h-screen flex">
+      {/* Sidebar */}
+      <aside className="bg-sidebar text-sidebar-content w-64 p-4">
+        <Logo />
+        <Navigation />
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 p-6 space-y-6">
+        {/* Header card */}
+        <header className="bg-surface text-surface-content rounded-surface p-4">
+          <h1>Welcome back!</h1>
+        </header>
+
+        {/* Stats grid */}
+        <div className="grid grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-surface text-surface-content rounded-surface p-4">
+              Stat Card {i}
+            </div>
+          ))}
+        </div>
+
+        {/* Content area */}
+        <div className="bg-surface text-surface-content rounded-surface p-6">
+          Main content
+        </div>
+      </main>
+    </div>
+  );
+}
+```
+
+#### Settings Page
+
+```tsx
+export function SettingsPage() {
+  return (
+    <div className="bg-canvas text-canvas-content min-h-screen p-6">
+      <div className="max-w-2xl mx-auto space-y-6">
+        {/* Page header */}
+        <div>
+          <h1 className="text-h1 font-primary">Settings</h1>
+          <p className="text-muted-content">Manage your account preferences</p>
+        </div>
+
+        {/* Settings sections */}
+        <section className="bg-surface text-surface-content rounded-surface p-6">
+          <h2 className="text-h3 font-primary mb-4">Profile</h2>
+          {/* Form fields */}
+        </section>
+
+        <section className="bg-surface text-surface-content rounded-surface p-6">
+          <h2 className="text-h3 font-primary mb-4">Security</h2>
+          {/* Form fields */}
+        </section>
+
+        <section className="bg-surface text-surface-content rounded-surface p-6">
+          <h2 className="text-h3 font-primary mb-4">Notifications</h2>
+          {/* Form fields */}
+        </section>
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+## Dark Mode Strategy
+
+Vayu UI uses a class-based dark mode strategy. Add `.dark` to a parent element, and all colors automatically adapt.
+
+### How It Works
+
+```tsx
+// Toggle dark mode
+<html className="dark">
+  {/* Everything inside uses dark mode colors */}
+</html>
+
+// Or in light mode
+<html>
+  {/* Everything uses light mode colors */}
+</html>
+```
+
+### Visual Comparison
+
+<Tabs items={['Light Mode', 'Dark Mode']}>
+  <Tab value="Light Mode">
+    <div className="space-y-4">
+      <div className="p-4 rounded-lg" style={{ backgroundColor: '#fafafa' }}>
+        <p className="font-medium mb-2" style={{ color: '#18181b' }}>Canvas (#fafafa)</p>
+        <p className="text-sm" style={{ color: '#71717a' }}>Soft off-white background</p>
+      </div>
+      <div className="p-4 rounded-lg" style={{ backgroundColor: '#fff' }}>
+        <p className="font-medium mb-2" style={{ color: '#18181b' }}>Surface (#fff)</p>
+        <p className="text-sm" style={{ color: '#71717a' }}>Pure white, elevated from canvas</p>
+      </div>
+      <div className="p-4 rounded-lg" style={{ backgroundColor: '#f4f4f5' }}>
+        <p className="font-medium mb-2" style={{ color: '#18181b' }}>Sidebar (#f4f4f5)</p>
+        <p className="text-sm" style={{ color: '#71717a' }}>Neutral gray for navigation</p>
+      </div>
+    </div>
+  </Tab>
+  <Tab value="Dark Mode">
+    <div className="space-y-4">
+      <div className="p-4 rounded-lg" style={{ backgroundColor: '#09090b' }}>
+        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>Canvas (#09090b)</p>
+        <p className="text-sm" style={{ color: '#a1a1aa' }}>Near-black, not pure black</p>
+      </div>
+      <div className="p-4 rounded-lg" style={{ backgroundColor: '#18181b' }}>
+        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>Surface (#18181b)</p>
+        <p className="text-sm" style={{ color: '#a1a1aa' }}>Elevated from canvas</p>
+      </div>
+      <div className="p-4 rounded-lg" style={{ backgroundColor: '#0a0a0a' }}>
+        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>Sidebar (#0a0a0a)</p>
+        <p className="text-sm" style={{ color: '#a1a1aa' }}>Darker for depth</p>
+      </div>
+    </div>
+  </Tab>
+</Tabs>
+
+### Implementing Dark Mode
+
+```tsx
+"use client";
+import { useState, useEffect } from 'react';
+
+export function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    // Check system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+
+    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+    setTheme(initialTheme as 'light' | 'dark');
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+```
+
+### The CSS Behind It
+
+The dark mode is defined in your CSS using `:root.dark`:
+
+```css
+:root {
+  --canvas: #fafafa;
+  --canvas-content: #18181b;
+  /* ... other light mode values */
+}
+
+:root.dark {
+  --canvas: #09090b;
+  --canvas-content: #fafafa;
+  /* ... other dark mode values */
+}
+```
+
+The Tailwind custom variant makes `dark:` classes work:
+
+```css
+@custom-variant dark (&:where(.dark, .dark *));
+```
+
+---
+
+## Best Practices
+
+### Do's
+
+| Do ✅ | Why |
+| :--- | :--- |
+| Start every page with `bg-canvas` | Establishes a consistent foundation |
+| Use `bg-surface` for content containers | Creates visual separation from canvas |
+| Reserve `bg-elevated` for overlays | Ensures modals and popups stand out |
+| Use the pairing pattern | Guarantees contrast in both modes |
+| Let the system handle dark mode | Avoid manual color switching |
+
+### Don'ts
+
+| Don't ❌ | Why |
+| :--- | :--- |
+| Skip layers (canvas → elevated) | Creates jarring visual jumps |
+| Use surface for modals | Won't stand out enough from content |
+| Manually specify colors for dark mode | Defeats the purpose of the system |
+| Nest surfaces too deeply | Creates visual noise |
+
+---
+
+## Quick Reference
+
+### Layer Decision Tree
+
+```
+Is it the app background?
+├── Yes → bg-canvas
+└── No → Is it navigation?
+    ├── Yes → bg-sidebar
+    └── No → Does it float above everything?
+        ├── Yes → bg-elevated
+        └── No → bg-surface (default for content)
+```
+
+### Complete Example
+
+```tsx
+export function App() {
+  return (
+    <div className="bg-canvas text-canvas-content min-h-screen">
+      {/* Sidebar */}
+      <aside className="bg-sidebar text-sidebar-content fixed inset-y-0 left-0 w-64 p-4">
+        <nav>{/* ... */}</nav>
+      </aside>
+
+      {/* Main content */}
+      <main className="ml-64 p-6">
+        {/* Cards */}
+        <div className="bg-surface text-surface-content rounded-surface p-6 mb-6">
+          Content card
+        </div>
+
+        {/* Form */}
+        <form className="bg-surface text-surface-content rounded-surface p-6">
+          <input className="bg-surface border border-field rounded-control" />
+          <button className="bg-brand text-brand-content rounded-control">
+            Submit
+          </button>
+        </form>
+      </main>
+
+      {/* Modal (when open) */}
+      <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+        <div className="bg-elevated text-elevated-content rounded-overlay p-6">
+          Modal content
+        </div>
+      </div>
+    </div>
+  );
+}
+```

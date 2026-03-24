@@ -1,11 +1,11 @@
 "use client";
 
-import { clsx } from "clsx";
 import React, {
     forwardRef,
     HTMLAttributes,
     AnchorHTMLAttributes,
 } from "react";
+import { cn } from "./utils";
 
 // ============================================================================
 // Card (Root)
@@ -40,15 +40,20 @@ const CardRoot = forwardRef<HTMLDivElement, CardProps>(
     ) => {
         const isClickable = interactive || !!href || !!onClick;
 
-        // Base styles: Elevated variant, fixed padding, rounded-lg
-        const baseStyles =
-            "flex flex-col transition-all duration-200 bg-white dark:bg-ground-900 border border-ground-200 dark:border-ground-800 shadow-outer hover:shadow-lg rounded-lg p-5 gap-3";
+        // Base styles using semantic design tokens
+        const baseStyles = cn(
+            "flex flex-col transition-all duration-200",
+            "bg-surface",
+            "border border-border",
+            "rounded-surface p-5 gap-3",
+            "shadow-surface hover:shadow-elevated"
+        );
 
-        // WCAG 2.2 AA: Focus visible styling
+        // WCAG 2.2 AA: Focus visible styling using semantic focus token
         const focusStyles =
-            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500";
+            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus";
 
-        const rootClasses = clsx(
+        const rootClasses = cn(
             baseStyles,
             isClickable && !disabled && "cursor-pointer",
             isClickable && !disabled && focusStyles,
@@ -138,7 +143,7 @@ const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
         return (
             <div
                 ref={ref}
-                className={clsx("flex items-start gap-3", className)}
+                className={cn("flex items-start gap-3", className)}
                 {...props}
             >
                 {avatar && (
@@ -148,12 +153,12 @@ const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
                 )}
                 <div className="flex-1 min-w-0">
                     {title && (
-                        <h3 className="text-lg font-primary font-semibold text-ground-900 dark:text-ground-50 leading-tight truncate">
+                        <h3 className="text-lg font-primary font-semibold text-surface-content leading-tight truncate">
                             {title}
                         </h3>
                     )}
                     {subtitle && (
-                        <p className="mt-0.5 text-sm font-secondary text-ground-500 dark:text-ground-400 leading-snug">
+                        <p className="mt-0.5 text-sm font-secondary text-muted-content leading-snug">
                             {subtitle}
                         </p>
                     )}
@@ -207,7 +212,7 @@ const CardMedia = forwardRef<HTMLDivElement, CardMediaProps>(
         return (
             <div
                 ref={ref}
-                className={clsx(
+                className={cn(
                     "relative -mx-[inherit] overflow-hidden first:-mt-[inherit] first:rounded-t-[inherit] last:-mb-[inherit] last:rounded-b-[inherit]",
                     className
                 )}
@@ -217,7 +222,7 @@ const CardMedia = forwardRef<HTMLDivElement, CardMediaProps>(
                 <img
                     src={src}
                     alt={alt}
-                    className={clsx("w-full h-full", fitClass)}
+                    className={cn("w-full h-full", fitClass)}
                     loading="lazy"
                 />
                 {overlay && (
@@ -243,8 +248,8 @@ const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
         return (
             <div
                 ref={ref}
-                className={clsx(
-                    "font-secondary text-sm text-ground-700 dark:text-ground-300 leading-relaxed",
+                className={cn(
+                    "font-secondary text-sm text-surface-content/80 leading-relaxed",
                     className
                 )}
                 {...props}
@@ -268,8 +273,8 @@ const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
         return (
             <div
                 ref={ref}
-                className={clsx(
-                    "flex items-center gap-2 pt-2 border-t border-ground-200 dark:border-ground-800 justify-end",
+                className={cn(
+                    "flex items-center gap-2 pt-2 border-t border-border justify-end",
                     className
                 )}
                 {...props}

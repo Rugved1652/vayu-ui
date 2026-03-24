@@ -18,11 +18,20 @@ import {
 
 const sliderRootStyles = "relative flex w-full touch-none select-none items-center py-4 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed";
 
-const sliderTrackStyles = "relative w-full grow overflow-hidden rounded-full h-1.5 bg-ground-200 dark:bg-ground-800";
+const sliderTrackStyles = "relative w-full grow overflow-hidden rounded-full h-1.5 bg-muted";
 
-const sliderRangeStyles = "absolute h-full bg-primary-500 dark:bg-primary-500";
+const sliderRangeStyles = "absolute h-full bg-brand";
 
-const sliderThumbStyles = "absolute block h-5 w-5 rounded-full border-2 border-primary-500 dark:border-primary-400 bg-white dark:bg-ground-950 shadow-outer transition-transform duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-ground-950 disabled:pointer-events-none disabled:opacity-50";
+const sliderThumbStyles = clsx(
+    "absolute block h-5 w-5 rounded-full",
+    "border-2 border-brand bg-surface",
+    "shadow-control",
+    "transition-transform duration-150 ease-in-out",
+    "cursor-grab active:cursor-grabbing",
+    "focus-visible:outline-none",
+    "focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+    "disabled:pointer-events-none disabled:opacity-50"
+);
 
 // ============================================================================
 // Types
@@ -286,7 +295,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                         id={`${sliderId}-thumb-${index}`}
                         className={clsx(
                             sliderThumbStyles,
-                            isDragging ? "scale-110 cursor-grabbing" : "cursor-grab"
+                            isDragging && activeThumb === index && "scale-110"
                         )}
                         style={{
                             left: `${((val - min) / (max - min)) * 100}%`,

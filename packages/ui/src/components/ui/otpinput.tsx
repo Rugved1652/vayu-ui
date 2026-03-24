@@ -226,30 +226,30 @@ const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
                 className={clsx(
                     // Base styles with design tokens
                     "relative flex size-10 items-center justify-center",
-                    "border-y border-r",
+                    "border-y border-r rounded-control",
                     "text-sm transition-all duration-150",
-                    // Border colors
+                    // Border colors using semantic tokens
                     hasError
-                        ? "border-red-500 dark:border-red-400"
-                        : "border-ground-300 dark:border-ground-700",
-                    // Text colors
+                        ? "border-destructive"
+                        : "border-field",
+                    // Text colors using semantic tokens
                     hasError
-                        ? "text-red-600 dark:text-red-400"
-                        : "text-ground-700 dark:text-ground-300",
+                        ? "text-destructive"
+                        : "text-surface-content",
                     // First and last rounded corners
                     "first:rounded-l first:border-l",
                     "last:rounded-r",
-                    // Active/focus state with ring
+                    // Active/focus state with ring using semantic tokens
                     isActive && [
                         "z-10",
                         hasError
-                            ? "ring-2 ring-red-500 dark:ring-red-400"
-                            : "ring-2 ring-ground-950 dark:ring-ground-100",
-                        "ring-offset-background",
+                            ? "ring-2 ring-destructive"
+                            : "ring-2 ring-focus",
+                        "ring-offset-canvas",
                     ],
-                    // Filled state
-                    hasValue && !hasError && "bg-ground-50 dark:bg-ground-900",
-                    hasValue && hasError && "bg-red-50 dark:bg-red-950",
+                    // Filled state using semantic tokens
+                    hasValue && !hasError && "bg-muted",
+                    hasValue && hasError && "bg-destructive/10",
                     // Disabled state
                     disabled && "opacity-50",
                     className
@@ -265,7 +265,7 @@ const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
                     >
                         <div
                             className={clsx(
-                                "h-4 w-0.5 bg-ground-950 dark:bg-ground-50",
+                                "h-4 w-0.5 bg-surface-content",
                                 "animate-caret-blink motion-reduce:hidden"
                             )}
                         />
@@ -295,7 +295,7 @@ const OTPInputSeparator = forwardRef<HTMLDivElement, OTPInputSeparatorProps>(
             {...props}
         >
             {children ?? (
-                <div className="h-1.5 w-1.5 bg-ground-400 dark:bg-ground-600" />
+                <div className="h-1.5 w-1.5 rounded-full bg-muted-content" />
             )}
         </div>
     )
