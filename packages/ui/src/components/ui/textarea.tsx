@@ -12,7 +12,6 @@ import React, {
 import { cn } from "./utils";
 
 export type TextAreaResize = "none" | "vertical" | "horizontal" | "both";
-export type TextAreaVariant = "default" | "outline";
 export type TextAreaSize = "sm" | "md" | "lg";
 
 // Context for sharing state between compound components
@@ -23,7 +22,6 @@ interface TextAreaContextValue {
     setCharCount: (count: number) => void;
     maxLength?: number;
     error?: boolean;
-    variant: TextAreaVariant;
     size: TextAreaSize;
     disabled?: boolean;
     inputId: string;
@@ -52,7 +50,6 @@ const useTextAreaContext = () => {
 // Root Component
 interface TextAreaRootProps {
     children: React.ReactNode;
-    variant?: TextAreaVariant;
     size?: TextAreaSize;
     error?: boolean;
     maxLength?: number;
@@ -62,7 +59,6 @@ interface TextAreaRootProps {
 
 const TextAreaRoot = ({
     children,
-    variant = "default",
     size = "md",
     error = false,
     maxLength,
@@ -89,7 +85,6 @@ const TextAreaRoot = ({
                 setCharCount,
                 maxLength,
                 error,
-                variant,
                 size,
                 disabled,
                 inputId,
@@ -178,7 +173,6 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
             setCharCount,
             maxLength,
             error,
-            variant,
             size,
             disabled,
             inputId,
@@ -226,34 +220,20 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
 
         const config = sizeConfig[size];
 
-        const variantStyles = {
-            default: cn(
-                "bg-surface",
-                "border-2",
-                error
-                    ? "border-destructive"
-                    : isFocused
-                        ? "border-focus"
-                        : "border-field",
-                !disabled && "hover:border-focus"
-            ),
-            outline: cn(
-                "bg-transparent",
-                "border-2",
-                error
-                    ? "border-destructive"
-                    : isFocused
-                        ? "border-focus"
-                        : "border-field",
-                !disabled && "hover:border-focus"
-            ),
-        };
-
-        const wrapperClasses = cn(
-            variantStyles[variant],
+        const combinedClasses = cn(
+            "w-full bg-surface border transition-all duration-200 outline-none",
+            "font-secondary text-surface-content placeholder:text-muted-content",
             config.wrapper,
-            "flex gap-3 w-full rounded-surface outline-0 transition-colors",
-            disabled && "opacity-50 cursor-not-allowed"
+            config.text,
+            getResizeClass(),
+            "rounded-control",
+            error
+                ? "border-destructive ring-2 ring-destructive/20"
+                : isFocused
+                    ? "border-focus ring-2 ring-focus/20"
+                    : "border-field",
+            disabled && "opacity-60 cursor-not-allowed bg-muted",
+            className
         );
 
         // Build aria-describedby from context and any additional IDs
@@ -268,40 +248,30 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
         const isRequired = restProps.required === true;
 
         return (
-            <div className={wrapperClasses}>
-                <textarea
-                    ref={ref}
-                    id={inputId}
-                    className={cn(
-                        "w-full bg-transparent outline-0 font-secondary",
-                        "text-surface-content placeholder:text-muted-content",
-                        config.text,
-                        getResizeClass(),
-                        disabled && "cursor-not-allowed",
-                        "focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
-                        className
-                    )}
-                    rows={rows}
-                    value={value}
-                    onChange={handleChange}
-                    onFocus={(e) => {
-                        setIsFocused(true);
-                        restProps.onFocus?.(e);
-                    }}
-                    onBlur={(e) => {
-                        setIsFocused(false);
-                        restProps.onBlur?.(e);
-                    }}
-                    maxLength={maxLength}
-                    disabled={disabled}
-                    aria-invalid={error}
-                    aria-describedby={describedBy}
-                    aria-errormessage={error ? errorTextId : undefined}
-                    aria-required={isRequired}
-                    aria-disabled={disabled}
-                    {...restProps}
-                />
-            </div>
+            <textarea
+                ref={ref}
+                id={inputId}
+                className={combinedClasses}
+                rows={rows}
+                value={value}
+                onChange={handleChange}
+                onFocus={(e) => {
+                    setIsFocused(true);
+                    restProps.onFocus?.(e);
+                }}
+                onBlur={(e) => {
+                    setIsFocused(false);
+                    restProps.onBlur?.(e);
+                }}
+                maxLength={maxLength}
+                disabled={disabled}
+                aria-invalid={error}
+                aria-describedby={describedBy}
+                aria-errormessage={error ? errorTextId : undefined}
+                aria-required={isRequired}
+                aria-disabled={disabled}
+                {...restProps}
+            />
         );
     }
 );

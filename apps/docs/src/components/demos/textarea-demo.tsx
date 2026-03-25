@@ -46,23 +46,6 @@ export default function TextAreaDemo() {
 
             <Divider spacing="lg" />
 
-            {/* Variants */}
-            <div className="space-y-4">
-                <Typography.H4>Variants</Typography.H4>
-                <div className="space-y-4">
-                    <TextArea.Root variant="default">
-                        <TextArea.Label>Default Variant</TextArea.Label>
-                        <TextArea.Input placeholder="Default style" />
-                    </TextArea.Root>
-
-                    <TextArea.Root variant="outline">
-                        <TextArea.Label>Outline Variant</TextArea.Label>
-                        <TextArea.Input placeholder="Outline style" />
-                    </TextArea.Root>
-                </div>
-            </div>
-
-            <Divider spacing="lg" />
 
             {/* Sizes */}
             <div className="space-y-4">

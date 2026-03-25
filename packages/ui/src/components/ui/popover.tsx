@@ -10,7 +10,6 @@ import React, {
     useLayoutEffect,
     useCallback,
 } from "react";
-import { X } from "lucide-react";
 import { Button } from "./button";
 import { cn } from "./utils";
 
@@ -53,7 +52,6 @@ const usePopover = () => {
 };
 
 // --- Types ---
-export type PopoverVariant = "default" | "bordered" | "elevated";
 
 export interface PopoverProps extends HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
@@ -75,11 +73,17 @@ export interface PopoverContentProps extends HTMLAttributes<HTMLDivElement> {
     side?: "top" | "right" | "bottom" | "left";
     sideOffset?: number;
     alignOffset?: number;
-    variant?: PopoverVariant;
     showArrow?: boolean;
-    closeButton?: boolean;
     avoidCollisions?: boolean;
 }
+
+// Arrow position classes (CSS-based like Tooltip)
+const arrowPositionClasses: Record<string, string> = {
+    top: "-bottom-[5px] left-1/2 -translate-x-1/2",
+    bottom: "-top-[5px] left-1/2 -translate-x-1/2",
+    left: "-right-[5px] top-1/2 -translate-y-1/2",
+    right: "-left-[5px] top-1/2 -translate-y-1/2",
+};
 
 // --- Components ---
 
@@ -229,10 +233,8 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
             side = "bottom",
             sideOffset = 8,
             alignOffset = 0,
-            variant = "default",
             className = "",
             showArrow = false,
-            closeButton = false,
             avoidCollisions = true,
             ...props
         },
@@ -241,27 +243,6 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
         const { open, setOpen, contentRef, triggerRef, modal } = usePopover();
         const [position, setPosition] = useState({ top: 0, left: 0 });
         const [currentSide, setCurrentSide] = useState(side);
-        const [arrowPosition, setArrowPosition] = useState({ top: 0, left: 0 });
-        const [isPositioned, setIsPositioned] = useState(false);
-
-        const variantClasses = {
-            default: cn(
-                "bg-elevated text-elevated-content",
-                "border border-border",
-                "shadow-elevated"
-            ),
-            bordered: cn(
-                "bg-elevated text-elevated-content",
-                "border-2 border-brand",
-                "shadow-elevated"
-            ),
-            elevated: cn(
-                "bg-elevated text-elevated-content",
-                "border border-border",
-                "shadow-elevated",
-                "[box-shadow:0_10px_15px_-3px_rgb(var(--shadow)/0.15),0_4px_6px_-4px_rgb(var(--shadow)/0.15)]"
-            ),
-        };
 
         // Extracted positioning logic to be reused on scroll, resize, and content change
         const updatePosition = useCallback(() => {
@@ -377,40 +358,7 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
             }
 
             setPosition({ top, left });
-
-            if (showArrow) {
-                const arrowSize = 8;
-                let arrowTop = 0;
-                let arrowLeft = 0;
-
-                if (finalSide === "top" || finalSide === "bottom") {
-                    arrowLeft =
-                        triggerRect.left + triggerRect.width / 2 - left - arrowSize;
-                    arrowTop = finalSide === "bottom" ? -arrowSize : contentRect.height;
-                } else {
-                    arrowTop = triggerRect.top + triggerRect.height / 2 - top - arrowSize;
-                    arrowLeft = finalSide === "right" ? -arrowSize : contentRect.width;
-                }
-
-                setArrowPosition({ top: arrowTop, left: arrowLeft });
-            }
-        }, [align, side, sideOffset, alignOffset, avoidCollisions, showArrow, triggerRef, contentRef]);
-
-        // Fix: Handle scroll and window resize
-        useEffect(() => {
-            if (!open) return;
-
-            const handleUpdate = () => updatePosition();
-
-            window.addEventListener("resize", handleUpdate);
-            // capture: true ensures we catch scroll events inside scrollable containers
-            window.addEventListener("scroll", handleUpdate, true);
-
-            return () => {
-                window.removeEventListener("resize", handleUpdate);
-                window.removeEventListener("scroll", handleUpdate, true);
-            };
-        }, [open, updatePosition]);
+        }, [align, side, sideOffset, alignOffset, avoidCollisions, triggerRef, contentRef]);
 
         // Fix: Handle content resize (dynamic children)
         useEffect(() => {
@@ -425,21 +373,33 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
             return () => observer.disconnect();
         }, [open, contentRef, updatePosition]);
 
-        // Initial positioning
+        // Initial positioning with double RAF pattern (same as Tooltip)
         useLayoutEffect(() => {
-            if (open && triggerRef.current && contentRef.current) {
-                setIsPositioned(false);
-                
-                // Calculate immediately
-                updatePosition();
+            if (!open) return;
 
+            const rafId = requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
-                    setIsPositioned(true);
-                    contentRef.current?.focus();
+                    if (triggerRef.current && contentRef.current) {
+                        updatePosition();
+                        contentRef.current?.focus();
+                    }
                 });
-            } else {
-                setIsPositioned(false);
-            }
+            });
+
+            // Scroll and resize handlers (consolidated like Tooltip)
+            window.addEventListener("scroll", updatePosition, {
+                passive: true,
+                capture: true,
+            });
+            window.addEventListener("resize", updatePosition, {
+                passive: true,
+            });
+
+            return () => {
+                cancelAnimationFrame(rafId);
+                window.removeEventListener("scroll", updatePosition, true);
+                window.removeEventListener("resize", updatePosition);
+            };
         }, [open, updatePosition]);
 
         if (!open) return null;
@@ -462,14 +422,12 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                         position: "fixed",
                         top: `${position.top}px`,
                         left: `${position.left}px`,
-                        opacity: isPositioned ? undefined : 0,
-                        visibility: isPositioned ? "visible" : "hidden",
                         zIndex: 50,
                     }}
                     className={cn(
+                        "bg-elevated text-elevated-content border border-border shadow-elevated",
                         "rounded-overlay p-4",
-                        isPositioned && "animate-zoom-in-small",
-                        variantClasses[variant],
+                        "animate-fade-in",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-elevated",
                         className
                     )}
@@ -477,40 +435,16 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
                 >
                     {showArrow && (
                         <div
-                            style={{
-                                position: "absolute",
-                                top: `${arrowPosition.top}px`,
-                                left: `${arrowPosition.left}px`,
-                            }}
-                            className="w-4 h-4"
-                        >
-                            <div
-                                className={cn(
-                                    "w-4 h-4 rotate-45",
-                                    variant === "bordered"
-                                        ? "bg-elevated border-2 border-brand"
-                                        : "bg-elevated border border-border",
-                                    currentSide === "bottom" && "border-b-0 border-r-0",
-                                    currentSide === "top" && "border-t-0 border-l-0",
-                                    currentSide === "left" && "border-l-0 border-b-0",
-                                    currentSide === "right" && "border-r-0 border-t-0"
-                                )}
-                            />
-                        </div>
-                    )}
-
-                    {closeButton && (
-                        <Button
-                            onClick={() => setOpen(false)}
-                            variant="ghost"
-                            size="small"
-                            className="absolute top-2 right-2 p-1 text-muted-content hover:text-elevated-content focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
-                            aria-label="Close popover"
-                        >
-                            <Button.Icon>
-                                <X className="w-4 h-4" />
-                            </Button.Icon>
-                        </Button>
+                            className={cn(
+                                "absolute w-2 h-2 rotate-45 bg-elevated border border-border",
+                                arrowPositionClasses[currentSide],
+                                currentSide === "bottom" && "border-b-0 border-r-0",
+                                currentSide === "top" && "border-t-0 border-l-0",
+                                currentSide === "left" && "border-l-0 border-b-0",
+                                currentSide === "right" && "border-r-0 border-t-0"
+                            )}
+                            aria-hidden="true"
+                        />
                     )}
 
                     <div className="font-secondary text-elevated-content">

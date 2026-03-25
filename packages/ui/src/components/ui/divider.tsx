@@ -178,11 +178,11 @@ const DividerRoot = ({
     const ariaProps = decorative
         ? { "aria-hidden": "true" as const }
         : hasChildren
-        ? {}
-        : {
-            role: "separator",
-            "aria-orientation": orientation
-        };
+            ? {}
+            : {
+                role: "separator",
+                "aria-orientation": orientation
+            };
 
     if (!children) {
         return (

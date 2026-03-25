@@ -52,9 +52,8 @@ function Spinner({
             aria-busy="true"
             aria-label={ariaLabel}
             className={cn(
-                "rounded-full border-2 border-t-transparent",
+                "rounded-full border-2 border-brand border-t-transparent",
                 "animate-spin motion-reduce:animate-none",
-                "border-brand",
                 sizeClasses[size],
                 className
             )}

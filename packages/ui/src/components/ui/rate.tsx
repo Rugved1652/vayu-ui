@@ -94,6 +94,8 @@ interface RateContextType {
     isControlled: boolean;
     setInternalValue: (value: number) => void;
     onChange?: (value: number) => void;
+    isContainerFocused: boolean;
+    setIsContainerFocused: (value: boolean) => void;
 }
 
 const RateContext = createContext<RateContextType | undefined>(undefined);
@@ -189,6 +191,7 @@ const RateRoot: React.FC<RateRootProps> = ({
 }) => {
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [hoverValue, setHoverValue] = useState<number | null>(null);
+    const [isContainerFocused, setIsContainerFocused] = useState(false);
 
     const generatedId = useId();
     const inputId = id || generatedId;
@@ -261,6 +264,8 @@ const RateRoot: React.FC<RateRootProps> = ({
         isControlled,
         setInternalValue,
         onChange,
+        isContainerFocused,
+        setIsContainerFocused,
     };
 
     return (
@@ -348,9 +353,8 @@ const RateStars: React.FC<RateStarsProps> = ({
         isControlled,
         setInternalValue,
         onChange,
+        setIsContainerFocused,
     } = useRate();
-
-    const [isFocused, setIsFocused] = useState(false);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (isDisabled) return;
@@ -393,9 +397,8 @@ const RateStars: React.FC<RateStarsProps> = ({
     return (
         <div
             className={`
-                flex items-center ${sizeClasses[size].gap}
+                flex items-center outline-0 ${sizeClasses[size].gap}
                 ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
-                ${!isDisabled && !readOnly && isFocused ? "ring-2 ring-focus ring-offset-2 ring-offset-canvas rounded" : ""}
                 transition-all duration-200
                 ${className}
             `}
@@ -410,8 +413,8 @@ const RateStars: React.FC<RateStarsProps> = ({
             aria-disabled={isDisabled}
             tabIndex={isDisabled ? -1 : 0}
             onKeyDown={handleKeyDown}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onFocus={() => setIsContainerFocused(true)}
+            onBlur={() => setIsContainerFocused(false)}
         >
             {Array.from({ length: count }).map((_, index) => (
                 <RateStar key={index} index={index + 1} />
@@ -435,11 +438,14 @@ const RateStar: React.FC<RateStarProps> = ({ index }) => {
         filledIcon,
         halfIcon,
         isDisabled,
+        readOnly,
         allowHalf,
         getFillPercentage,
         handleHover,
         handleClick,
         error,
+        isContainerFocused,
+        currentValue,
     } = useRate();
 
     const starIndex = index;
@@ -451,6 +457,11 @@ const RateStar: React.FC<RateStarProps> = ({ index }) => {
     // Use halfIcon for partial fills, filledIcon for full fills
     const isPartialFill = fillPercentage > 0 && fillPercentage < 100;
     const activeFilledIcon = isPartialFill ? halfIcon : filledIcon;
+
+    // Determine if this star should show the focus ring
+    // Focus appears on the star that corresponds to the current value (rounded up for partial fills)
+    const activeStarIndex = currentValue > 0 ? Math.ceil(currentValue) : 0;
+    const shouldShowFocusRing = isContainerFocused && !isDisabled && !readOnly && starIndex === activeStarIndex;
 
     // Hardcoded Default Styles (Warning/Gold) with Error state support
     const emptyClasses = "text-muted";
@@ -476,7 +487,7 @@ const RateStar: React.FC<RateStarProps> = ({ index }) => {
 
     return (
         <div
-            className="relative shrink-0"
+            className={`relative shrink-0 ${shouldShowFocusRing ? "ring-2 ring-focus ring-offset-2 ring-offset-canvas rounded" : ""}`}
             style={{
                 width: sizeClasses[size].icon,
                 height: sizeClasses[size].icon,

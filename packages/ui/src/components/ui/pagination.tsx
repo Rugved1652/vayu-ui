@@ -186,7 +186,8 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
         page: number | null,
         ariaLabel: string,
         isDisabled: boolean = false,
-        isActive: boolean = false
+        isActive: boolean = false,
+        key?: string
     ) => {
         const classes = cn(
             baseClasses,
@@ -199,7 +200,7 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
 
         if (isDisabled) {
             return (
-                <span className={classes} aria-disabled="true" aria-label={ariaLabel}>
+                <span key={key} className={classes} aria-disabled="true" aria-label={ariaLabel}>
                     {content}
                 </span>
             );
@@ -207,14 +208,14 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
 
         if (isActive) {
             return (
-                <span className={classes} aria-current="page" aria-label={ariaLabel}>
+                <span key={key} className={classes} aria-current="page" aria-label={ariaLabel}>
                     {content}
                 </span>
             );
         }
 
         return (
-            <Link href={hrefBuilder(page!)} className={classes} aria-label={ariaLabel}>
+            <Link key={key} href={hrefBuilder(page!)} className={classes} aria-label={ariaLabel}>
                 {content}
             </Link>
         );
@@ -256,7 +257,7 @@ const PaginationButtons: React.FC<PaginationButtonsProps> = ({
                 }
 
                 const isActive = page === currentPage;
-                return renderPageButton(page, page, `Go to page ${page}`, false, isActive);
+                return renderPageButton(page, page, `Go to page ${page}`, false, isActive, `page-${page}`);
             })}
 
             {/* Next Page */}

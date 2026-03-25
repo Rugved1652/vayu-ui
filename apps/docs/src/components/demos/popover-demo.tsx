@@ -9,7 +9,7 @@ export default function PopoverDemo() {
                 Popover Example
             </Typography.H2>
 
-            <div className="flex flex-col gap-10 items-center justify-center p-8 bg-muted rounded-surface w-full min-h-[400px]">
+            <div className="flex flex-col gap-10 items-center justify-center p-8 rounded-surface w-full min-h-[400px]">
 
                 {/* Basic Usage */}
                 <Popover>
@@ -29,52 +29,6 @@ export default function PopoverDemo() {
                 </Popover>
 
                 <Divider spacing="lg">
-                    <Divider.Label color="brand">Variants</Divider.Label>
-                </Divider>
-
-                {/* Variants */}
-                <div className="flex gap-4 flex-wrap justify-center">
-                    <Popover>
-                        <Popover.Trigger>
-                            Default
-                        </Popover.Trigger>
-                        <Popover.Content variant="default">
-                            <div className="p-2">
-                                <Typography.P variant="secondary">
-                                    Default variant with subtle border
-                                </Typography.P>
-                            </div>
-                        </Popover.Content>
-                    </Popover>
-
-                    <Popover>
-                        <Popover.Trigger>
-                            Bordered
-                        </Popover.Trigger>
-                        <Popover.Content variant="bordered">
-                            <div className="p-2">
-                                <Typography.P variant="secondary">
-                                    Bordered variant with primary accent
-                                </Typography.P>
-                            </div>
-                        </Popover.Content>
-                    </Popover>
-
-                    <Popover>
-                        <Popover.Trigger>
-                            Elevated
-                        </Popover.Trigger>
-                        <Popover.Content variant="elevated">
-                            <div className="p-2">
-                                <Typography.P variant="secondary">
-                                    Elevated variant with stronger shadow
-                                </Typography.P>
-                            </div>
-                        </Popover.Content>
-                    </Popover>
-                </div>
-
-                <Divider spacing="lg">
                     <Divider.Label color="brand">Features</Divider.Label>
                 </Divider>
 
@@ -92,16 +46,37 @@ export default function PopoverDemo() {
                             </div>
                         </Popover.Content>
                     </Popover>
+                </div>
+
+                <Divider spacing="lg">
+                    <Divider.Label color="brand">Alignment</Divider.Label>
+                </Divider>
+
+                {/* Alignment */}
+                <div className="flex gap-4 flex-wrap justify-center">
+                    <Popover>
+                        <Popover.Trigger>Start</Popover.Trigger>
+                        <Popover.Content side="bottom" align="start" >
+                            <div className="p-2">
+                                <Typography.P variant="secondary">align="start"</Typography.P>
+                            </div>
+                        </Popover.Content>
+                    </Popover>
 
                     <Popover>
-                        <Popover.Trigger>
-                            With Close Button
-                        </Popover.Trigger>
-                        <Popover.Content closeButton variant="bordered">
-                            <div className="p-4 w-48">
-                                <Typography.P variant="secondary">
-                                    This popover has a close button and the bordered variant.
-                                </Typography.P>
+                        <Popover.Trigger>Center</Popover.Trigger>
+                        <Popover.Content side="bottom" align="center" >
+                            <div className="p-2">
+                                <Typography.P variant="secondary">align="center" (default)</Typography.P>
+                            </div>
+                        </Popover.Content>
+                    </Popover>
+
+                    <Popover>
+                        <Popover.Trigger>End</Popover.Trigger>
+                        <Popover.Content side="bottom" align="end" >
+                            <div className="p-2">
+                                <Typography.P variant="secondary">align="end"</Typography.P>
                             </div>
                         </Popover.Content>
                     </Popover>
@@ -115,7 +90,7 @@ export default function PopoverDemo() {
                 <div className="flex gap-4 flex-wrap justify-center">
                     <Popover>
                         <Popover.Trigger>Top</Popover.Trigger>
-                        <Popover.Content side="top" align="center">
+                        <Popover.Content side="top" align="center" showArrow>
                             <div className="p-2">
                                 <Typography.P variant="secondary">Top Position</Typography.P>
                             </div>
@@ -124,7 +99,7 @@ export default function PopoverDemo() {
 
                     <Popover>
                         <Popover.Trigger>Bottom</Popover.Trigger>
-                        <Popover.Content side="bottom" align="center">
+                        <Popover.Content side="bottom" align="center" showArrow>
                             <div className="p-2">
                                 <Typography.P variant="secondary">Bottom Position</Typography.P>
                             </div>
@@ -133,7 +108,7 @@ export default function PopoverDemo() {
 
                     <Popover>
                         <Popover.Trigger>Left</Popover.Trigger>
-                        <Popover.Content side="left" align="center">
+                        <Popover.Content side="left" align="center" showArrow>
                             <div className="p-2">
                                 <Typography.P variant="secondary">Left Position</Typography.P>
                             </div>
@@ -142,7 +117,7 @@ export default function PopoverDemo() {
 
                     <Popover>
                         <Popover.Trigger>Right</Popover.Trigger>
-                        <Popover.Content side="right" align="center">
+                        <Popover.Content side="right" align="center" showArrow>
                             <div className="p-2">
                                 <Typography.P variant="secondary">Right Position</Typography.P>
                             </div>
