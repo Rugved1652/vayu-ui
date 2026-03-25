@@ -3,7 +3,6 @@
 import React, {
   createContext,
   forwardRef,
-  HTMLAttributes,
   ReactNode,
   useCallback,
   useContext,
@@ -124,7 +123,7 @@ const Root = forwardRef<HTMLDivElement, RootProps>(
   ({ children, track, playlist: initialPlaylist = [], defaultVolume = 0.8 }, ref) => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const rafRef = useRef<number | null>(null);
-    
+
     // --- State ---
     const [isPlaying, setIsPlaying] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -155,7 +154,7 @@ const Root = forwardRef<HTMLDivElement, RootProps>(
 
     // --- Core Actions ---
 
-    const play = useCallback(() => audioRef.current?.play().catch(() => {}), []);
+    const play = useCallback(() => audioRef.current?.play().catch(() => { }), []);
     const pause = useCallback(() => audioRef.current?.pause(), []);
     const togglePlay = useCallback(() => (isPlaying ? pause() : play()), [isPlaying, play, pause]);
 
@@ -174,7 +173,7 @@ const Root = forwardRef<HTMLDivElement, RootProps>(
       if (audioRef.current) audioRef.current.volume = v;
       if (v > 0 && isMuted) {
         setIsMuted(false);
-        if(audioRef.current) audioRef.current.muted = false;
+        if (audioRef.current) audioRef.current.muted = false;
       }
     }, [isMuted]);
 
@@ -195,8 +194,8 @@ const Root = forwardRef<HTMLDivElement, RootProps>(
       setIsPlaying(false);
       rafRef.current = requestAnimationFrame(() => {
         if (audioRef.current) {
-            audioRef.current.load();
-            audioRef.current.play().catch(() => {});
+          audioRef.current.load();
+          audioRef.current.play().catch(() => { });
         }
       });
     }, [playlist]);
@@ -242,21 +241,21 @@ const Root = forwardRef<HTMLDivElement, RootProps>(
 
     // --- Prop Getters with WCAG Keybinds ---
 
-    const getRootProps = useCallback((props = {}) => ({
+    const getRootProps = useCallback((props: Record<string, any> = {}) => ({
       role: "region",
       "aria-label": "Audio Player",
       tabIndex: -1, // Focusable region for global keys
       onKeyDown: (e: React.KeyboardEvent) => {
         // Global Hotkeys when focus is inside the player region
         if (e.target === e.currentTarget) {
-            switch(e.key) {
-                case " ": case "k": togglePlay(); e.preventDefault(); break;
-                case "m": toggleMute(); break;
-                case "ArrowLeft": seekBackward(); break;
-                case "ArrowRight": seekForward(); break;
-                case "ArrowUp": volumeUp(); e.preventDefault(); break;
-                case "ArrowDown": volumeDown(); e.preventDefault(); break;
-            }
+          switch (e.key) {
+            case " ": case "k": togglePlay(); e.preventDefault(); break;
+            case "m": toggleMute(); break;
+            case "ArrowLeft": seekBackward(); break;
+            case "ArrowRight": seekForward(); break;
+            case "ArrowUp": volumeUp(); e.preventDefault(); break;
+            case "ArrowDown": volumeDown(); e.preventDefault(); break;
+          }
         }
         // Allow propagation to children if needed
         props.onKeyDown?.(e);
@@ -283,7 +282,7 @@ const Root = forwardRef<HTMLDivElement, RootProps>(
       ...props,
     }), [nextTrack]);
 
-    const getProgressProps = useCallback((props = {}) => ({
+    const getProgressProps = useCallback((props: Record<string, any> = {}) => ({
       role: "slider",
       "aria-label": "Audio progress",
       "aria-valuemin": 0,
@@ -293,11 +292,11 @@ const Root = forwardRef<HTMLDivElement, RootProps>(
       tabIndex: 0,
       onKeyDown: (e: React.KeyboardEvent) => {
         // WCAG 2.1.1 Slider Interaction
-        switch(e.key) {
-            case "ArrowRight": seekForward(); e.preventDefault(); break;
-            case "ArrowLeft": seekBackward(); e.preventDefault(); break;
-            case "Home": seek(0); e.preventDefault(); break;
-            case "End": seek(duration); e.preventDefault(); break;
+        switch (e.key) {
+          case "ArrowRight": seekForward(); e.preventDefault(); break;
+          case "ArrowLeft": seekBackward(); e.preventDefault(); break;
+          case "Home": seek(0); e.preventDefault(); break;
+          case "End": seek(duration); e.preventDefault(); break;
         }
         props.onKeyDown?.(e);
       },
@@ -321,13 +320,13 @@ const Root = forwardRef<HTMLDivElement, RootProps>(
       isPlaying, isLoading, currentTime, duration, buffered, volume, isMuted,
       isSeeking, currentTrack, playlist, currentTrackIndex,
     }), [isPlaying, isLoading, currentTime, duration, buffered, volume, isMuted,
-        isSeeking, currentTrack, playlist, currentTrackIndex]);
+      isSeeking, currentTrack, playlist, currentTrackIndex]);
 
     const actionsValue = useMemo<AudioPlayerActions & AudioPlayerGetters>(() => ({
       formatTime, play, pause, togglePlay, seek, seekForward, seekBackward,
       setVolume, volumeUp, volumeDown, toggleMute, setSeeking,
       playTrack, nextTrack, previousTrack,
-      getRootProps, getPlayButtonProps, getPrevButtonProps, 
+      getRootProps, getPlayButtonProps, getPrevButtonProps,
       getNextButtonProps, getProgressProps, getVolumeProps,
     }), [
       play, pause, togglePlay, seek, seekForward, seekBackward,

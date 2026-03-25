@@ -1,7 +1,7 @@
 export * from "./accordion";
 export * from "./affix";
 export * from "./alert";
-export { default as Animation, type Direction as AnimationDirection, type BaseAnimationProps } from "./animation";
+export { default as Animation, type AnimationDirection, type BaseAnimationProps } from "./animation";
 export * from "./aspectratio";
 export * from "./audioplayer";
 export * from "./avatar";
@@ -40,7 +40,7 @@ export * from "./rate";
 export { ResizablePane, type Direction as ResizeDirection } from "./resizablepane";
 export * from "./richtexteditor";
 export * from "./roleguard";
-export { default as Select } from "./select";
+export * from "./select";
 export { Show, Case, Default } from "./show";
 export * from "./sidebar";
 export * from "./skeleton";

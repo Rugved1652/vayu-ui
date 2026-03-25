@@ -10,6 +10,7 @@ import {
     SidebarProvider,
     SidebarToggle,
     MobileMenuButton,
+    useSidebar,
     Avatar,
     Typography,
     Divider,
@@ -27,6 +28,32 @@ import {
     MessageSquare,
 } from "lucide-react";
 
+// Inner component to access sidebar context
+const SidebarHeaderContent = () => {
+    const { collapsed, mobile } = useSidebar();
+
+    return (
+        <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center shrink-0">
+                <span className="text-brand-content font-bold">V</span>
+            </div>
+            {(!collapsed || mobile) && (
+                <div className="flex flex-col">
+                    <Typography.Label className="font-bold text-sm text-sidebar-content">
+                        Vayu UI
+                    </Typography.Label>
+                    <Typography.Label variant="secondary" className="text-xs">
+                        Dashboard
+                    </Typography.Label>
+                </div>
+            )}
+            <div className="ml-auto">
+                <SidebarToggle />
+            </div>
+        </div>
+    );
+};
+
 export default function SidebarDemo() {
     return (
         <div className="h-150 w-full border border-border rounded-xl overflow-hidden flex bg-canvas relative">
@@ -34,22 +61,7 @@ export default function SidebarDemo() {
                 <MobileMenuButton />
                 <Sidebar>
                     <SidebarHeader>
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center shrink-0">
-                                <span className="text-brand-content font-bold">V</span>
-                            </div>
-                            <div className="flex flex-col">
-                                <Typography.Label className="font-bold text-sm text-sidebar-content">
-                                    Vayu UI
-                                </Typography.Label>
-                                <Typography.Label variant="secondary" className="text-xs">
-                                    Dashboard
-                                </Typography.Label>
-                            </div>
-                            <div className="ml-auto">
-                                <SidebarToggle />
-                            </div>
-                        </div>
+                        <SidebarHeaderContent />
                     </SidebarHeader>
 
                     <SidebarContent>

@@ -30,10 +30,10 @@ interface AlertDismissProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 // ============================================================================
 
 const variantStyles: Record<AlertVariant, string> = {
-    info: "bg-info/10 border-info/30 text-canvas-content dark:bg-info/15 dark:border-info/40 dark:text-canvas-content",
-    success: "bg-success/10 border-success/30 text-canvas-content dark:bg-success/15 dark:border-success/40 dark:text-canvas-content",
-    warning: "bg-warning/10 border-warning/30 text-canvas-content dark:bg-warning/15 dark:border-warning/40 dark:text-canvas-content",
-    error: "bg-destructive/10 border-destructive/30 text-canvas-content dark:bg-destructive/15 dark:border-destructive/40 dark:text-canvas-content",
+    info: "bg-info/10 border-info/30 text-canvas-content",
+    success: "bg-success/10 border-success/30 text-canvas-content",
+    warning: "bg-warning/10 border-warning/30 text-canvas-content",
+    error: "bg-destructive/10 border-destructive/30 text-canvas-content",
 };
 
 const variantIconStyles: Record<AlertVariant, string> = {
@@ -193,7 +193,7 @@ const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
                 "absolute top-4 right-4 rounded p-1 transition-colors",
                 "hover:bg-black/10 dark:hover:bg-white/10",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                "ring-offset-surface dark:ring-offset-surface",
+                "ring-offset-surface",
                 variantIconStyles[variant],
                 variantFocusStyles[variant],
                 className

@@ -11,7 +11,7 @@ CLI Cleaning output folder
 ESM Build start
 ESM dist/index.js     107.09 KB
 ESM dist/index.js.map 169.52 KB
-ESM ⚡️ Build success in 34ms
+ESM ⚡️ Build success in 12ms
 DTS Build start
-DTS ⚡️ Build success in 3369ms
+DTS ⚡️ Build success in 1349ms
 DTS dist/index.d.ts 2.59 KB

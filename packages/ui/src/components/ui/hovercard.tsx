@@ -1,6 +1,6 @@
 "use client";
 
-import { clsx } from "clsx";
+import { cn } from "./utils";
 import React, {
     forwardRef,
     HTMLAttributes,
@@ -87,6 +87,7 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
             top: 0,
             left: 0,
         });
+        const [positioned, setPositioned] = useState(false);
 
         const triggerRef = useRef<HTMLDivElement>(null);
         const contentRef = useRef<HTMLDivElement>(null);
@@ -216,6 +217,7 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
             }
 
             setPosition({ top, left });
+            setPositioned(true);
 
             // Arrow
             if (showArrow) {
@@ -225,20 +227,24 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
 
                 if (finalSide === "top" || finalSide === "bottom") {
                     aLeft = tr.left + tr.width / 2 - left - as;
-                    aTop =
-                        finalSide === "bottom" ? -as : cr.height;
+                    aTop = finalSide === "bottom" ? -as : cr.height - as;
                 } else {
                     aTop = tr.top + tr.height / 2 - top - as;
-                    aLeft =
-                        finalSide === "right" ? -as : cr.width;
+                    aLeft = finalSide === "right" ? -as : cr.width - as;
                 }
                 setArrowPosition({ top: aTop, left: aLeft });
             }
         }, [side, align, sideOffset, alignOffset, showArrow]);
 
+        // Use double RAF to ensure card is rendered before calculating position
         useLayoutEffect(() => {
             if (!isOpen) return;
-            reposition();
+
+            const rafId = requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    reposition();
+                });
+            });
 
             window.addEventListener("scroll", reposition, {
                 passive: true,
@@ -249,6 +255,7 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
             });
 
             return () => {
+                cancelAnimationFrame(rafId);
                 window.removeEventListener("scroll", reposition, true);
                 window.removeEventListener("resize", reposition);
             };
@@ -301,6 +308,25 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
             };
         }, []);
 
+        // Reset positioned state when card closes
+        useEffect(() => {
+            if (!isOpen) {
+                setPositioned(false);
+            }
+        }, [isOpen]);
+
+        // Body scroll lock when card is open
+        useEffect(() => {
+            if (!isOpen) return;
+
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+
+            return () => {
+                document.body.style.overflow = originalOverflow;
+            };
+        }, [isOpen]);
+
         // ------------------------------------------------------------------
         // Ref merge
         // ------------------------------------------------------------------
@@ -329,7 +355,7 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
                     onMouseLeave={close}
                     onFocus={open}
                     onBlur={close}
-                    className={clsx("inline-block", className)}
+                    className={cn("inline-block", className)}
                     aria-haspopup="true"
                     aria-expanded={isOpen}
                     aria-describedby={isOpen ? cardId : undefined}
@@ -352,9 +378,11 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
                                 top: `${position.top}px`,
                                 left: `${position.left}px`,
                                 zIndex: 50,
+                                opacity: positioned ? 1 : 0,
                             }}
-                            className={clsx(
-                                "bg-white dark:bg-neutral-900 border-2 border-neutral-200 dark:border-neutral-800 rounded-lg shadow-xl p-4 animate-in fade-in-0 zoom-in-95 duration-200",
+                            className={cn(
+                                "bg-elevated border border-border rounded-overlay shadow-elevated p-4",
+                                positioned && "animate-in fade-in-0 zoom-in-95 duration-200",
                                 contentClassName
                             )}
                         >
@@ -370,8 +398,8 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
                                     aria-hidden="true"
                                 >
                                     <div
-                                        className={clsx(
-                                            "w-4 h-4 rotate-45 bg-white dark:bg-neutral-900 border-2 border-neutral-200 dark:border-neutral-800",
+                                        className={cn(
+                                            "w-4 h-4 rotate-45 bg-elevated border border-border",
                                             arrowBorderClasses[currentSide]
                                         )}
                                     />
@@ -379,7 +407,7 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
                             )}
 
                             {/* Content */}
-                            <div className="relative z-10 font-secondary text-neutral-900 dark:text-white">
+                            <div className="relative z-10 font-secondary text-elevated-content">
                                 {content}
                             </div>
                         </div>,

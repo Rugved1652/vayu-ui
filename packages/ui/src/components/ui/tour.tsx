@@ -472,7 +472,7 @@ const TourRoot = forwardRef<HTMLDivElement, TourProps>(
                 </div>
 
                 {createPortal(
-                    <div className="fixed inset-0 z-[9999]">
+                    <div className="fixed inset-0 z-9999">
                         {/* Overlay mask */}
                         <div
                             className={clsx("absolute inset-0", maskClassName)}

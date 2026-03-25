@@ -143,7 +143,7 @@ function SkeletonItem({
     ...props
 }: SkeletonItemProps) {
     // WCAG 2.2 AA: Uses semantic design tokens for skeleton color with sufficient contrast
-    const baseClasses = "bg-muted border border-transparent";
+    const baseClasses = "bg-neutral-200 dark:bg-neutral-800 border border-transparent";
     const variantClass = getVariantClasses(variant, size);
     const styles = getSkeletonStyles(width, height);
 

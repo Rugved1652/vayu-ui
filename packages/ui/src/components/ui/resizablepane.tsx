@@ -339,7 +339,7 @@ const ResizablePaneHandle = forwardRef<HTMLDivElement, HandleProps>(
                     "transition-colors",
                     
                     // Focus Visible (WCAG 2.4.7)
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
                     
                     // 2. Layout & Hit Area
                     // We make the handle 24px wide/high to satisfy target size.
@@ -348,7 +348,7 @@ const ResizablePaneHandle = forwardRef<HTMLDivElement, HandleProps>(
                     
                     // 3. Visual Styling (Background)
                     // We use a subtle background for the hit area, or transparent if you want purely invisible hit area
-                    "bg-transparent hover:bg-ground-100/50 dark:hover:bg-ground-800/30",
+                    "bg-transparent hover:bg-muted/50 dark:hover:bg-muted/30",
                     
                     className
                 )}
@@ -357,8 +357,8 @@ const ResizablePaneHandle = forwardRef<HTMLDivElement, HandleProps>(
                 {/* The visual "Grip" - centered inside the 24px hit area */}
                 <div
                     className={clsx(
-                        "rounded-full bg-ground-300 dark:bg-ground-600",
-                        isHorizontal 
+                        "rounded-full bg-brand",
+                        isHorizontal
                             ? "w-0.5 h-8"  // Thin vertical line
                             : "h-0.5 w-8"   // Thin horizontal line
                     )}

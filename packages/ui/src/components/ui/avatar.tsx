@@ -120,14 +120,13 @@ const AvatarRoot = forwardRef<HTMLSpanElement, AvatarRootProps>(
         const avatarClasses = cn(
             "relative inline-flex items-center justify-center",
             "rounded-full",
-            "bg-muted dark:bg-muted",
-            "border-2 border-border dark:border-border",
+            "bg-muted",
+            "border-2 border-border",
             "shadow-surface",
             // Motion Safe Transitions
             "motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out",
             // Focus Visible (WCAG 2.4.7)
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
-            "dark:focus-visible:ring-focus dark:focus-visible:ring-offset-canvas",
             // Interactive States
             isInteractive && "cursor-pointer hover:shadow-elevated active:scale-95",
             sizeClass,
@@ -216,7 +215,7 @@ const AvatarImage = forwardRef<HTMLImageElement, AvatarImageProps>(
                 />
                 {imageLoading && (
                     <span
-                        className="absolute inset-0 flex items-center justify-center bg-muted dark:bg-muted rounded-full"
+                        className="absolute inset-0 flex items-center justify-center bg-muted rounded-full"
                         role="status"
                         aria-live="polite"
                         aria-busy="true"

@@ -112,7 +112,7 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                 className={clsx(
                     "flex items-center",
                     layout === "grid" && "flex-wrap gap-2",
-                    layout === "stack" && "pl-2", 
+                    layout === "stack" && "pl-2",
                     className
                 )}
                 role="group"
@@ -145,8 +145,6 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                             username={user.username}
                             onClick={onAvatarClick ? () => onAvatarClick(user, index) : undefined}
                             tabIndex={onAvatarClick ? 0 : undefined}
-                            // Remove Avatar's default border/shadow to avoid double rings
-                            className="border-transparent shadow-none dark:border-transparent"
                         >
                             {user.src ? (
                                 <Avatar.Image src={user.src} alt="" />
@@ -170,7 +168,7 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
                             "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
                             "focus-visible:ring-offset-canvas",
                             onOverflowClick && "motion-safe:transition-all motion-safe:duration-200",
-                            
+
                             // Sizes match Avatar exactly
                             size === "small" && "w-8 h-8 text-xs",
                             size === "medium" && "w-12 h-12 text-sm",

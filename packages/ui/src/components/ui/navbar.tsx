@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "./utils";
+import Link from "next/link";
 import {
     createContext,
     HTMLAttributes,
@@ -11,6 +12,8 @@ import {
     useState,
     AnchorHTMLAttributes,
     useCallback,
+    ElementType,
+    ComponentProps,
 } from "react";
 
 // ============================================================================
@@ -24,6 +27,11 @@ interface NavbarContextValue {
     closeMenu: () => void;
     menuId: string;
     triggerId: string;
+}
+
+// Internal prop for custom link component
+interface InjectedLinkProps {
+    linkComponent?: ElementType;
 }
 
 // ============================================================================
@@ -52,16 +60,14 @@ function getScrollbarWidth() {
 // ============================================================================
 
 export interface NavbarProps extends HTMLAttributes<HTMLElement> {
-    sticky?: boolean;
     mainContentSelector?: string;
 }
 
-function NavbarRoot({ 
-    sticky = false, 
-    className, 
-    children, 
-    mainContentSelector = "main", 
-    ...props 
+function NavbarRoot({
+    className,
+    children,
+    mainContentSelector = "main",
+    ...props
 }: NavbarProps) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const id = useId();
@@ -126,7 +132,6 @@ function NavbarRoot({
                 className={cn(
                     "relative z-40 w-full",
                     "bg-surface border-b border-border",
-                    sticky && "sticky top-0",
                     className
                 )}
                 {...props}
@@ -218,14 +223,17 @@ NavbarItems.displayName = "Navbar.Items";
 // Navbar Item (Desktop Link)
 // ============================================================================
 
-export interface NavbarItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface NavbarItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
     active?: boolean;
+    href?: string;
 }
 
-function NavbarItem({ active = false, className, children, href = "#", ...props }: NavbarItemProps) {
+function NavbarItem(allProps: NavbarItemProps & InjectedLinkProps) {
+    const { active = false, className, children, href = "#", linkComponent: LinkComponent = Link, ...props } = allProps;
+
     return (
         <li className="list-none">
-            <a
+            <LinkComponent
                 href={href}
                 className={cn(
                     "px-3 py-2 rounded-control text-sm font-medium font-secondary transition-colors",
@@ -239,7 +247,7 @@ function NavbarItem({ active = false, className, children, href = "#", ...props 
                 {...props}
             >
                 {children}
-            </a>
+            </LinkComponent>
         </li>
     );
 }
@@ -439,17 +447,25 @@ NavbarMobileMenu.displayName = "Navbar.MobileMenu";
 // Mobile Item (Link)
 // ============================================================================
 
-export interface NavbarMobileItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface NavbarMobileItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'onClick'> {
     active?: boolean;
+    href?: string;
+    onClick?: () => void;
 }
 
-function NavbarMobileItem({ active = false, className, children, href = "#", ...props }: NavbarMobileItemProps) {
+function NavbarMobileItem(allProps: NavbarMobileItemProps & InjectedLinkProps) {
+    const { active = false, className, children, href = "#", onClick, linkComponent: LinkComponent = Link, ...props } = allProps;
     const { closeMenu } = useNavbar();
 
+    const handleClick = () => {
+        closeMenu();
+        onClick?.();
+    };
+
     return (
-        <a
+        <LinkComponent
             href={href}
-            onClick={closeMenu} // FIX: Use closeMenu for focus return
+            onClick={handleClick}
             className={cn(
                 "px-4 py-3 rounded-control text-sm font-medium font-secondary transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-elevated",
@@ -462,7 +478,7 @@ function NavbarMobileItem({ active = false, className, children, href = "#", ...
             {...props}
         >
             {children}
-        </a>
+        </LinkComponent>
     );
 }
 

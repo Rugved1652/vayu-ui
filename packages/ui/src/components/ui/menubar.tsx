@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { useElementPosition } from "vayu-ui";
+import { cn } from "./utils";
 
 // ==================== Types ====================
 
@@ -20,9 +21,9 @@ interface MenubarContextValue {
     activeMenu: string | null;
     setActiveMenu: (id: string | null) => void;
     closeAllMenus: () => void;
-    registerTrigger: (id: string, ref: React.RefObject<HTMLButtonElement>) => void;
+    registerTrigger: (id: string, ref: React.RefObject<HTMLButtonElement | null>) => void;
     unregisterTrigger: (id: string) => void;
-    getAllTriggers: () => Array<{ id: string; ref: React.RefObject<HTMLButtonElement> }>;
+    getAllTriggers: () => Array<{ id: string; ref: React.RefObject<HTMLButtonElement | null> }>;
 }
 
 interface MenuContextValue {
@@ -55,7 +56,7 @@ interface MenuItemProps extends React.HTMLAttributes<HTMLButtonElement> {
     onSelect?: () => void;
 }
 
-interface MenuSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface MenuSeparatorProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 interface MenuLabelProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
@@ -128,13 +129,13 @@ export const Menubar = ({
     ...props
 }: MenubarProps) => {
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
-    const triggersRef = useRef<Map<string, React.RefObject<HTMLButtonElement>>>(new Map());
+    const triggersRef = useRef<Map<string, React.RefObject<HTMLButtonElement | null>>>(new Map());
 
     const closeAllMenus = useCallback(() => {
         setActiveMenu(null);
     }, []);
 
-    const registerTrigger = useCallback((id: string, ref: React.RefObject<HTMLButtonElement>) => {
+    const registerTrigger = useCallback((id: string, ref: React.RefObject<HTMLButtonElement | null>) => {
         triggersRef.current.set(id, ref);
     }, []);
 
@@ -176,10 +177,10 @@ export const Menubar = ({
 
     return (
         <MenubarContext.Provider
-            value={{ 
-                orientation, 
-                activeMenu, 
-                setActiveMenu, 
+            value={{
+                orientation,
+                activeMenu,
+                setActiveMenu,
                 closeAllMenus,
                 registerTrigger,
                 unregisterTrigger,
@@ -188,15 +189,15 @@ export const Menubar = ({
         >
             <div
                 data-menubar
-                className={`
-                    bg-white dark:bg-ground-900
-                    border border-ground-200 dark:border-ground-700
-                    rounded p-1
-                    ${orientation === "horizontal" ? "flex items-center gap-1" : "flex flex-col gap-1"}
-                    font-secondary
-                    duration-[var(--transition-fast)]
-                    ${className}
-                `}
+                className={cn(
+                    "bg-surface dark:bg-surface",
+                    "border border-border dark:border-border",
+                    "rounded-surface p-1",
+                    orientation === "horizontal" ? "flex items-center gap-1" : "flex flex-col gap-1",
+                    "font-secondary",
+                    "duration-(--transition-fast)",
+                    className
+                )}
                 role="menubar"
                 aria-orientation={orientation}
                 {...props}
@@ -308,10 +309,10 @@ const Menu = ({
     const navigateToAdjacentMenu = useCallback((direction: 'next' | 'prev') => {
         const triggers = getAllTriggers();
         const currentIndex = triggers.findIndex(t => t.id === menuId);
-        
+
         if (currentIndex === -1) return;
 
-        const targetIndex = direction === 'next' 
+        const targetIndex = direction === 'next'
             ? (currentIndex + 1) % triggers.length
             : currentIndex === 0 ? triggers.length - 1 : currentIndex - 1;
 
@@ -392,17 +393,17 @@ const Menu = ({
                 <button
                     ref={triggerRef}
                     id={triggerId}
-                    className={`
-                        text-ground-900 dark:text-ground-100
-                        hover:bg-ground-100 dark:hover:bg-ground-800
-                        data-[state=open]:bg-ground-100 dark:data-[state=open]:bg-ground-800
-                        px-3 py-2 rounded-sm
-                        duration-[var(--transition-fast)]
-                        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2
-                        dark:focus-visible:ring-offset-ground-900
-                        disabled:opacity-50 disabled:cursor-not-allowed
-                        text-sm font-medium
-                    `}
+                    className={cn(
+                        "text-surface-content dark:text-surface-content",
+                        "hover:bg-muted/80 dark:hover:bg-white/10",
+                        "data-[state=open]:bg-muted/80 dark:data-[state=open]:bg-white/10",
+                        "px-3 py-2 rounded-control",
+                        "duration-(--transition-fast)",
+                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
+                        "dark:focus-visible:ring-offset-surface",
+                        "disabled:opacity-50 disabled:cursor-not-allowed",
+                        "text-sm font-medium"
+                    )}
                     onClick={handleTriggerClick}
                     onKeyDown={handleKeyDown}
                     disabled={disabled}
@@ -421,14 +422,14 @@ const Menu = ({
                             ref={menuRef}
                             id={menuId}
                             data-menu-portal
-                            className={`
-                                fixed min-w-[200px] z-50
-                                bg-white dark:bg-ground-800
-                                border border-ground-200 dark:border-ground-700
-                                rounded shadow-outer
-                                py-1
-                                animate-fade-in
-                            `}
+                            className={cn(
+                                "fixed min-w-[200px] z-50",
+                                "bg-elevated dark:bg-elevated",
+                                "border border-border dark:border-border",
+                                "rounded-surface shadow-elevated",
+                                "py-1",
+                                "animate-fade-in"
+                            )}
                             style={{
                                 top: `${position.top}px`,
                                 left: `${position.left}px`,
@@ -639,17 +640,17 @@ const SubMenu = ({
                 <button
                     ref={triggerRef}
                     id={triggerId}
-                    className={`
-                        text-ground-900 dark:text-ground-100
-                        hover:bg-ground-100 dark:hover:bg-ground-800
-                        data-[state=open]:bg-ground-100 dark:data-[state=open]:bg-ground-800
-                        w-full px-3 py-2 text-left text-sm
-                        duration-[var(--transition-fast)]
-                        focus:outline-none focus-visible:bg-primary-50 focus-visible:text-primary-600
-                        dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400
-                        disabled:opacity-50 disabled:cursor-not-allowed
-                        flex items-center justify-between gap-2
-                    `}
+                    className={cn(
+                        "text-surface-content dark:text-surface-content",
+                        "hover:bg-muted/80 dark:hover:bg-white/10",
+                        "data-[state=open]:bg-muted/80 dark:data-[state=open]:bg-white/10",
+                        "w-full px-3 py-2 text-left text-sm",
+                        "duration-(--transition-fast)",
+                        "focus:outline-none focus-visible:bg-muted/80 focus-visible:text-brand",
+                        "dark:focus-visible:bg-white/10 dark:focus-visible:text-brand",
+                        "disabled:opacity-50 disabled:cursor-not-allowed",
+                        "flex items-center justify-between gap-2"
+                    )}
                     onKeyDown={handleKeyDown}
                     disabled={disabled}
                     role="menuitem"
@@ -662,7 +663,7 @@ const SubMenu = ({
                 >
                     <span>{trigger}</span>
                     <svg
-                        className="w-4 h-4 shrink-0 text-ground-500 dark:text-ground-400"
+                        className="w-4 h-4 shrink-0 text-muted-content dark:text-muted-content"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -683,16 +684,16 @@ const SubMenu = ({
                             ref={menuRef}
                             id={submenuId}
                             data-menu-portal
-                            className={`
-                                fixed min-w-[200px] z-50
-                                bg-white dark:bg-ground-800
-                                border border-ground-200 dark:border-ground-700
-                                rounded shadow-outer
-                                py-1
-                                animate-fade-in
-                            `}
+                            className={cn(
+                                "fixed min-w-[200px] z-50",
+                                "bg-elevated dark:bg-elevated",
+                                "border border-border dark:border-border",
+                                "rounded-surface shadow-elevated",
+                                "py-1",
+                                "animate-fade-in"
+                            )}
                             style={{
-                                top: `${position.top}px`,
+                                top: `${position.top - 42}px`,
                                 left: `${position.left + position.width}px`,
                             }}
                             role="menu"
@@ -735,10 +736,10 @@ const MenuItem = ({
     const navigateToAdjacentMenu = useCallback((direction: 'next' | 'prev') => {
         const triggers = getAllTriggers();
         const currentIndex = triggers.findIndex(t => t.id === activeMenu);
-        
+
         if (currentIndex === -1) return;
 
-        const targetIndex = direction === 'next' 
+        const targetIndex = direction === 'next'
             ? (currentIndex + 1) % triggers.length
             : currentIndex === 0 ? triggers.length - 1 : currentIndex - 1;
 
@@ -833,21 +834,31 @@ const MenuItem = ({
     };
 
     const itemClasses = danger
-        ? "text-error-600 dark:text-error-400 hover:bg-error-50 dark:hover:bg-error-950 focus-visible:bg-error-50 focus-visible:text-error-600 dark:focus-visible:bg-error-950 dark:focus-visible:text-error-400"
-        : "text-ground-900 dark:text-ground-100 hover:bg-ground-100 dark:hover:bg-ground-800 focus-visible:bg-primary-50 focus-visible:text-primary-600 dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400";
+        ? cn(
+            "text-destructive dark:text-destructive",
+            "hover:bg-destructive/10 dark:hover:bg-destructive/20",
+            "focus-visible:bg-destructive/10 focus-visible:text-destructive",
+            "dark:focus-visible:bg-destructive/20 dark:focus-visible:text-destructive"
+        )
+        : cn(
+            "text-surface-content dark:text-surface-content",
+            "hover:bg-muted/80 dark:hover:bg-white/10",
+            "focus-visible:bg-muted/80 focus-visible:text-brand",
+            "dark:focus-visible:bg-white/10 dark:focus-visible:text-brand"
+        );
 
     return (
         <button
             ref={itemRef}
-            className={`
-                ${itemClasses}
-                w-full px-3 py-2 text-left text-sm min-h-10
-                duration-[var(--transition-fast)]
-                focus:outline-none
-                disabled:opacity-50 disabled:cursor-not-allowed
-                flex items-center justify-between gap-2
-                ${className}
-            `}
+            className={cn(
+                itemClasses,
+                "w-full px-3 py-2 text-left text-sm min-h-10",
+                "duration-(--transition-fast)",
+                "focus:outline-none",
+                "disabled:opacity-50 disabled:cursor-not-allowed",
+                "flex items-center justify-between gap-2",
+                className
+            )}
             onClick={handleClick}
             onKeyDown={handleKeyDown}
             disabled={disabled}
@@ -858,14 +869,14 @@ const MenuItem = ({
         >
             <div className="flex items-center gap-2">
                 {icon && (
-                    <span className="w-4 h-4 flex-shrink-0" aria-hidden="true">
+                    <span className="w-4 h-4 shrink-0" aria-hidden="true">
                         {icon}
                     </span>
                 )}
                 <span>{children}</span>
             </div>
             {shortcut && (
-                <span className="text-xs text-ground-500 dark:text-ground-400" aria-label={`Shortcut: ${shortcut}`}>
+                <span className="text-xs text-muted-content dark:text-muted-content" aria-label={`Shortcut: ${shortcut}`}>
                     {shortcut}
                 </span>
             )}
@@ -878,7 +889,7 @@ const MenuItem = ({
 const MenuSeparator = ({ className = "", ...props }: MenuSeparatorProps) => {
     return (
         <div
-            className={`my-1 h-px bg-ground-200 dark:bg-ground-700 ${className}`}
+            className={cn("my-1 h-px bg-border dark:bg-border", className)}
             role="separator"
             aria-orientation="horizontal"
             {...props}
@@ -891,11 +902,11 @@ const MenuSeparator = ({ className = "", ...props }: MenuSeparatorProps) => {
 const MenuLabel = ({ children, className = "", ...props }: MenuLabelProps) => {
     return (
         <div
-            className={`
-                px-3 py-2 text-xs font-semibold uppercase tracking-wide
-                text-ground-500 dark:text-ground-400
-                ${className}
-            `}
+            className={cn(
+                "px-3 py-2 text-xs font-semibold uppercase tracking-wide",
+                "text-muted-content dark:text-muted-content",
+                className
+            )}
             role="presentation"
             {...props}
         >
@@ -928,10 +939,10 @@ const MenuCheckboxItem = ({
     const navigateToAdjacentMenu = useCallback((direction: 'next' | 'prev') => {
         const triggers = getAllTriggers();
         const currentIndex = triggers.findIndex(t => t.id === activeMenu);
-        
+
         if (currentIndex === -1) return;
 
-        const targetIndex = direction === 'next' 
+        const targetIndex = direction === 'next'
             ? (currentIndex + 1) % triggers.length
             : currentIndex === 0 ? triggers.length - 1 : currentIndex - 1;
 
@@ -1022,17 +1033,17 @@ const MenuCheckboxItem = ({
     return (
         <button
             ref={itemRef}
-            className={`
-                text-ground-900 dark:text-ground-100
-                hover:bg-ground-100 dark:hover:bg-ground-800
-                w-full px-3 py-2 text-left text-sm min-h-10
-                duration-[var(--transition-fast)]
-                focus:outline-none focus-visible:bg-primary-50 focus-visible:text-primary-600
-                dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400
-                disabled:opacity-50 disabled:cursor-not-allowed
-                flex items-center justify-between gap-2
-                ${className}
-            `}
+            className={cn(
+                "text-surface-content dark:text-surface-content",
+                "hover:bg-muted/80 dark:hover:bg-white/10",
+                "w-full px-3 py-2 text-left text-sm min-h-10",
+                "duration-(--transition-fast)",
+                "focus:outline-none focus-visible:bg-muted/80 focus-visible:text-brand",
+                "dark:focus-visible:bg-white/10 dark:focus-visible:text-brand",
+                "disabled:opacity-50 disabled:cursor-not-allowed",
+                "flex items-center justify-between gap-2",
+                className
+            )}
             onClick={handleClick}
             onKeyDown={handleKeyDown}
             disabled={disabled}
@@ -1043,10 +1054,10 @@ const MenuCheckboxItem = ({
             {...props}
         >
             <div className="flex items-center gap-2">
-                <span className="w-4 h-4 flex-shrink-0" aria-hidden="true">
+                <span className="w-4 h-4 shrink-0" aria-hidden="true">
                     {checked && (
                         <svg
-                            className="w-4 h-4 text-primary-600 dark:text-primary-400"
+                            className="w-4 h-4 text-brand dark:text-brand"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -1061,14 +1072,14 @@ const MenuCheckboxItem = ({
                     )}
                 </span>
                 {icon && (
-                    <span className="w-4 h-4 flex-shrink-0" aria-hidden="true">
+                    <span className="w-4 h-4 shrink-0" aria-hidden="true">
                         {icon}
                     </span>
                 )}
                 <span>{children}</span>
             </div>
             {shortcut && (
-                <span className="text-xs text-ground-500 dark:text-ground-400" aria-label={`Shortcut: ${shortcut}`}>
+                <span className="text-xs text-muted-content dark:text-muted-content" aria-label={`Shortcut: ${shortcut}`}>
                     {shortcut}
                 </span>
             )}
@@ -1130,10 +1141,10 @@ const MenuRadioItem = ({
     const navigateToAdjacentMenu = useCallback((direction: 'next' | 'prev') => {
         const triggers = getAllTriggers();
         const currentIndex = triggers.findIndex(t => t.id === activeMenu);
-        
+
         if (currentIndex === -1) return;
 
-        const targetIndex = direction === 'next' 
+        const targetIndex = direction === 'next'
             ? (currentIndex + 1) % triggers.length
             : currentIndex === 0 ? triggers.length - 1 : currentIndex - 1;
 
@@ -1224,17 +1235,17 @@ const MenuRadioItem = ({
     return (
         <button
             ref={itemRef}
-            className={`
-                text-ground-900 dark:text-ground-100
-                hover:bg-ground-100 dark:hover:bg-ground-800
-                w-full px-3 py-2 text-left text-sm min-h-10
-                duration-(--transition-fast)
-                focus:outline-none focus-visible:bg-primary-50 focus-visible:text-primary-600
-                dark:focus-visible:bg-primary-950 dark:focus-visible:text-primary-400
-                disabled:opacity-50 disabled:cursor-not-allowed
-                flex items-center justify-between gap-2
-                ${className}
-            `}
+            className={cn(
+                "text-surface-content dark:text-surface-content",
+                "hover:bg-muted/80 dark:hover:bg-white/10",
+                "w-full px-3 py-2 text-left text-sm min-h-10",
+                "duration-(--transition-fast)",
+                "focus:outline-none focus-visible:bg-muted/80 focus-visible:text-brand",
+                "dark:focus-visible:bg-white/10 dark:focus-visible:text-brand",
+                "disabled:opacity-50 disabled:cursor-not-allowed",
+                "flex items-center justify-between gap-2",
+                className
+            )}
             onClick={handleClick}
             onKeyDown={handleKeyDown}
             disabled={disabled}
@@ -1245,10 +1256,10 @@ const MenuRadioItem = ({
             {...props}
         >
             <div className="flex items-center gap-2">
-                <span className="w-4 h-4 flex-shrink-0" aria-hidden="true">
+                <span className="w-4 h-4 shrink-0" aria-hidden="true">
                     {isChecked && (
                         <svg
-                            className="w-4 h-4 text-primary-600 dark:text-primary-400"
+                            className="w-4 h-4 text-brand dark:text-brand"
                             fill="currentColor"
                             viewBox="0 0 24 24"
                         >
@@ -1257,14 +1268,14 @@ const MenuRadioItem = ({
                     )}
                 </span>
                 {icon && (
-                    <span className="w-4 h-4 flex-shrink-0" aria-hidden="true">
+                    <span className="w-4 h-4 shrink-0" aria-hidden="true">
                         {icon}
                     </span>
                 )}
                 <span>{children}</span>
             </div>
             {shortcut && (
-                <span className="text-xs text-ground-500 dark:text-ground-400" aria-label={`Shortcut: ${shortcut}`}>
+                <span className="text-xs text-muted-content dark:text-muted-content" aria-label={`Shortcut: ${shortcut}`}>
                     {shortcut}
                 </span>
             )}

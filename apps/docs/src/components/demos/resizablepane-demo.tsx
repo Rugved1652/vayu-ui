@@ -1,28 +1,28 @@
 "use client";
 
-import { ResizablePane } from "vayu-ui";
+import { ResizablePane, Typography } from "vayu-ui";
 
 export default function ResizablePaneDemo() {
     return (
         <div className="not-prose flex flex-col gap-8 w-full">
             {/* Horizontal */}
             <div>
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.P variant="secondary" className="text-xs mb-3">
                     Horizontal
-                </p>
-                <div className="h-48 border-2 border-ground-200 dark:border-ground-800 rounded-lg overflow-hidden">
+                </Typography.P>
+                <div className="h-48 border-2 border-border rounded-surface overflow-hidden">
                     <ResizablePane direction="horizontal">
                         <ResizablePane.Panel
                             defaultSize={30}
                             minSize={15}
                         >
-                            <div className="h-full p-4 bg-primary-50/50 dark:bg-primary-900/10">
-                                <p className="text-sm font-secondary font-semibold text-ground-700 dark:text-ground-300">
+                            <div className="h-full p-4 bg-brand/10 dark:bg-brand/5">
+                                <Typography.P className="text-sm font-semibold text-surface-content">
                                     Sidebar
-                                </p>
-                                <p className="text-xs text-ground-500 mt-1">
+                                </Typography.P>
+                                <Typography.P variant="secondary" className="text-xs mt-1">
                                     Drag the handle →
-                                </p>
+                                </Typography.P>
                             </div>
                         </ResizablePane.Panel>
                         <ResizablePane.Handle />
@@ -31,12 +31,12 @@ export default function ResizablePaneDemo() {
                             minSize={30}
                         >
                             <div className="h-full p-4">
-                                <p className="text-sm font-secondary font-semibold text-ground-700 dark:text-ground-300">
+                                <Typography.P className="text-sm font-semibold text-surface-content">
                                     Main Content
-                                </p>
-                                <p className="text-xs text-ground-500 mt-1">
+                                </Typography.P>
+                                <Typography.P variant="secondary" className="text-xs mt-1">
                                     Resizable panel with min 30%
-                                </p>
+                                </Typography.P>
                             </div>
                         </ResizablePane.Panel>
                     </ResizablePane>
@@ -45,19 +45,19 @@ export default function ResizablePaneDemo() {
 
             {/* Vertical */}
             <div>
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.P variant="secondary" className="text-xs mb-3">
                     Vertical
-                </p>
-                <div className="h-64 border-2 border-ground-200 dark:border-ground-800 rounded-lg overflow-hidden">
+                </Typography.P>
+                <div className="h-64 border-2 border-border rounded-surface overflow-hidden">
                     <ResizablePane direction="vertical">
                         <ResizablePane.Panel
                             defaultSize={40}
                             minSize={20}
                         >
-                            <div className="h-full p-4 bg-primary-50/50 dark:bg-primary-900/10">
-                                <p className="text-sm font-secondary font-semibold text-ground-700 dark:text-ground-300">
+                            <div className="h-full p-4 bg-brand/10 dark:bg-brand/5">
+                                <Typography.P className="text-sm font-semibold text-surface-content">
                                     Top Panel
-                                </p>
+                                </Typography.P>
                             </div>
                         </ResizablePane.Panel>
                         <ResizablePane.Handle />
@@ -66,9 +66,9 @@ export default function ResizablePaneDemo() {
                             minSize={20}
                         >
                             <div className="h-full p-4">
-                                <p className="text-sm font-secondary font-semibold text-ground-700 dark:text-ground-300">
+                                <Typography.P className="text-sm font-semibold text-surface-content">
                                     Bottom Panel
-                                </p>
+                                </Typography.P>
                             </div>
                         </ResizablePane.Panel>
                     </ResizablePane>
@@ -77,19 +77,19 @@ export default function ResizablePaneDemo() {
 
             {/* Three panels */}
             <div>
-                <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
+                <Typography.P variant="secondary" className="text-xs mb-3">
                     Three panels
-                </p>
-                <div className="h-48 border-2 border-ground-200 dark:border-ground-800 rounded-lg overflow-hidden">
+                </Typography.P>
+                <div className="h-48 border-2 border-border rounded-surface overflow-hidden">
                     <ResizablePane direction="horizontal">
                         <ResizablePane.Panel
                             defaultSize={25}
                             minSize={15}
                         >
-                            <div className="h-full p-4 bg-primary-50/50 dark:bg-primary-900/10">
-                                <p className="text-sm font-secondary font-semibold text-ground-700 dark:text-ground-300">
+                            <div className="h-full p-4 bg-brand/10 dark:bg-brand/5">
+                                <Typography.P className="text-sm font-semibold text-surface-content">
                                     Nav
-                                </p>
+                                </Typography.P>
                             </div>
                         </ResizablePane.Panel>
                         <ResizablePane.Handle aria-label="Resize navigation and content" />
@@ -98,9 +98,9 @@ export default function ResizablePaneDemo() {
                             minSize={25}
                         >
                             <div className="h-full p-4">
-                                <p className="text-sm font-secondary font-semibold text-ground-700 dark:text-ground-300">
+                                <Typography.P className="text-sm font-semibold text-surface-content">
                                     Content
-                                </p>
+                                </Typography.P>
                             </div>
                         </ResizablePane.Panel>
                         <ResizablePane.Handle aria-label="Resize content and aside" />
@@ -108,10 +108,10 @@ export default function ResizablePaneDemo() {
                             defaultSize={25}
                             minSize={15}
                         >
-                            <div className="h-full p-4 bg-primary-50/50 dark:bg-primary-900/10">
-                                <p className="text-sm font-secondary font-semibold text-ground-700 dark:text-ground-300">
+                            <div className="h-full p-4 bg-brand/10 dark:bg-brand/5">
+                                <Typography.P className="text-sm font-semibold text-surface-content">
                                     Aside
-                                </p>
+                                </Typography.P>
                             </div>
                         </ResizablePane.Panel>
                     </ResizablePane>

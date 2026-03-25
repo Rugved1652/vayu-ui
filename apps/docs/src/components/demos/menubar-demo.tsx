@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Menubar } from "vayu-ui";
+import { Menubar, Typography, Divider, Button } from "vayu-ui";
 import {
     File,
     FolderOpen,
@@ -26,11 +26,11 @@ export default function MenubarDemo() {
 
     return (
         <div className="w-full max-w-4xl not-prose">
-            <h2 id="menubar-demo-label" className="text-xl font-semibold mb-4">
+            <Typography.H4 id="menubar-demo-label" className="mb-4">
                 Menubar Example
-            </h2>
+            </Typography.H4>
 
-            <div className="flex justify-center items-start p-6 bg-white dark:bg-ground-900 rounded-lg border border-ground-200 dark:border-ground-700">
+            <div className="flex justify-center items-start p-6 bg-surface dark:bg-surface rounded-surface border border-border dark:border-border">
                 <Menubar>
                     <Menubar.Menu trigger="File">
                         <Menubar.Item icon={<File size={14} />} shortcut="⌘N">
@@ -137,28 +137,32 @@ export default function MenubarDemo() {
                 </Menubar>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
-                <div className="p-3 bg-ground-50 dark:bg-ground-800 rounded">
-                    <div className="font-medium mb-1">Status Bar</div>
-                    <div className={showStatusBar ? "text-success-600" : "text-error-600"}>
+            <Divider spacing="lg" />
+
+            <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="p-3 bg-muted/30 dark:bg-muted/30 rounded-surface">
+                    <Typography.Label className="font-medium mb-1">Status Bar</Typography.Label>
+                    <Typography.P variant={showStatusBar ? "success" : "error"} className="text-sm mt-1">
                         {showStatusBar ? "Visible" : "Hidden"}
-                    </div>
+                    </Typography.P>
                 </div>
-                <div className="p-3 bg-ground-50 dark:bg-ground-800 rounded">
-                    <div className="font-medium mb-1">Activity Bar</div>
-                    <div className="text-ground-400">
+                <div className="p-3 bg-muted/30 dark:bg-muted/30 rounded-surface">
+                    <Typography.Label className="font-medium mb-1">Activity Bar</Typography.Label>
+                    <Typography.P variant="secondary" className="text-sm mt-1">
                         {showActivityBar ? "Visible" : "Hidden"} (Disabled)
-                    </div>
+                    </Typography.P>
                 </div>
-                <div className="p-3 bg-ground-50 dark:bg-ground-800 rounded">
-                    <div className="font-medium mb-1">Panel</div>
-                    <div className={showPanel ? "text-success-600" : "text-error-600"}>
+                <div className="p-3 bg-muted/30 dark:bg-muted/30 rounded-surface">
+                    <Typography.Label className="font-medium mb-1">Panel</Typography.Label>
+                    <Typography.P variant={showPanel ? "success" : "error"} className="text-sm mt-1">
                         {showPanel ? "Visible" : "Hidden"}
-                    </div>
+                    </Typography.P>
                 </div>
-                <div className="p-3 bg-ground-50 dark:bg-ground-800 rounded">
-                    <div className="font-medium mb-1">Zoom Level</div>
-                    <div className="text-info-600">{zoomLevel}</div>
+                <div className="p-3 bg-muted/30 dark:bg-muted/30 rounded-surface">
+                    <Typography.Label className="font-medium mb-1">Zoom Level</Typography.Label>
+                    <Typography.P variant="info" className="text-sm mt-1">
+                        {zoomLevel}
+                    </Typography.P>
                 </div>
             </div>
         </div>

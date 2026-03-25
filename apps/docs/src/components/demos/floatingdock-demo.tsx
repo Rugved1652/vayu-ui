@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { FloatingDock } from "vayu-ui";
+import { FloatingDock, Typography } from "vayu-ui";
 import {
     Home,
     Search,
@@ -21,28 +21,28 @@ export default function FloatingDockDemo() {
 
     return (
         <div className="not-prose flex flex-col items-center gap-6 w-full">
-            <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
+            <Typography.P variant="secondary" className="text-xs text-center">
                 The dock is fixed to the top of the viewport. Hover or focus any item to see its tooltip.
-            </p>
+            </Typography.P>
 
             <FloatingDock aria-label="Demo navigation">
                 <FloatingDock.Container>
                     <FloatingDock.Logo href="/">Vayu UI</FloatingDock.Logo>
-                    <FloatingDock.Divider />
+                    <FloatingDock.Divider orientation="vertical" spacing="none" decorative />
                     <FloatingDock.Item icon={Search} label="Search" onClick={() => handleClick("Search")} />
                     <FloatingDock.Item icon={Mail} label="Messages" onClick={() => handleClick("Messages")} />
                     <FloatingDock.Item icon={Bell} label="Notifications" onClick={() => handleClick("Notifications")} />
                     <FloatingDock.Item icon={Heart} label="Favorites" onClick={() => handleClick("Favorites")} />
-                    <FloatingDock.Divider />
+                    <FloatingDock.Divider orientation="vertical" spacing="none" decorative />
                     <FloatingDock.Item icon={User} label="Profile" onClick={() => handleClick("Profile")} />
                     <FloatingDock.Item icon={Settings} label="Settings" onClick={() => handleClick("Settings")} />
                 </FloatingDock.Container>
             </FloatingDock>
 
             {lastAction && (
-                <p className="text-sm font-secondary text-primary-600 dark:text-primary-400">
+                <Typography.P className="text-sm text-brand text-center">
                     {lastAction}
-                </p>
+                </Typography.P>
             )}
         </div>
     );

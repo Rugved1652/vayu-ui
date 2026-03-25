@@ -2,6 +2,7 @@ import React, { Children, HTMLAttributes, ElementType, ComponentType, isValidEle
 import Link from "next/link";
 import { cn } from "./utils";
 import { Tooltip } from "./tooltip";
+import { Divider } from "./divider";
 
 // ============================================================================
 // Types
@@ -84,9 +85,9 @@ const DockContainer = ({
         <div
             className={cn(
                 "flex items-center gap-2 px-3 py-3",
-                "bg-ground-50/80 dark:bg-ground-950/80 backdrop-blur-xl",
-                "border border-ground-200/50 dark:border-ground-800/50",
-                "rounded-2xl shadow-2xl shadow-ground-500/10 dark:shadow-ground-950/20",
+                "bg-surface/80 backdrop-blur-surface",
+                "border border-border/50",
+                "rounded-overlay shadow-elevated",
                 className
             )}
             {...props}
@@ -99,25 +100,26 @@ const DockContainer = ({
 /**
  * Interactive Item
  */
-const DockItem = ({
-    icon: Icon,
-    label,
-    href,
-    onClick,
-    className,
-    linkComponent: LinkComponent = Link,
-    ...props
-}: DockItemProps & InjectedDockProps) => {
+const DockItem = (allProps: DockItemProps & InjectedDockProps) => {
+    const {
+        icon: Icon,
+        label,
+        href,
+        onClick,
+        className,
+        linkComponent: LinkComponent = Link,
+        ...props
+    } = allProps;
 
     // Common class logic
     const itemClasses = cn(
-        "group relative p-3 rounded-xl cursor-pointer",
+        "group relative p-3 rounded-surface cursor-pointer",
         "transition-all duration-300 ease-out",
         // WCAG Focus Indicator (CSS only)
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
         // Animations (Respects prefers-reduced-motion)
         "motion-safe:hover:scale-110 motion-safe:hover:-translate-y-2",
-        "bg-transparent hover:bg-ground-200/50 dark:hover:bg-ground-800/50",
+        "bg-transparent hover:bg-muted/50",
         className
     );
 
@@ -125,7 +127,7 @@ const DockItem = ({
         <>
             {Icon && (
                 <Icon
-                    className="w-5 h-5 text-ground-600 dark:text-ground-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
+                    className="w-5 h-5 text-muted-content group-hover:text-brand transition-colors"
                     strokeWidth={1.5}
                     aria-hidden="true"
                 />
@@ -167,19 +169,20 @@ const DockItem = ({
 /**
  * Logo Item
  */
-const DockLogo = ({
-    href,
-    children,
-    className,
-    linkComponent: LinkComponent = Link,
-    ...props
-}: DockLogoProps & InjectedDockProps) => {
+const DockLogo = (allProps: DockLogoProps & InjectedDockProps) => {
+    const {
+        href,
+        children,
+        className,
+        linkComponent: LinkComponent = Link,
+        ...props
+    } = allProps;
     
     const logoClasses = cn(
         "px-4 py-2 text-xl font-bold tracking-wider font-mono",
-        "text-ground-900 dark:text-ground-100",
-        "hover:text-primary-600 transition-colors",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-lg",
+        "text-canvas-content",
+        "hover:text-brand transition-colors",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded-surface",
         className
     );
 
@@ -203,24 +206,6 @@ const DockLogo = ({
     );
 };
 
-/**
- * Divider
- */
-const DockDivider = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => {
-    return (
-        <div
-            role="separator"
-            aria-orientation="vertical"
-            className={cn(
-                "w-px h-8 mx-1 self-center",
-                "bg-ground-200/50 dark:bg-ground-800/50",
-                className
-            )}
-            {...props}
-        />
-    );
-};
-
 // ============================================================================
 // Exports
 // ============================================================================
@@ -229,7 +214,7 @@ const FloatingDock = Object.assign(Dock, {
     Container: DockContainer,
     Item: DockItem,
     Logo: DockLogo,
-    Divider: DockDivider,
+    Divider: Divider,
 });
 
 export { FloatingDock };

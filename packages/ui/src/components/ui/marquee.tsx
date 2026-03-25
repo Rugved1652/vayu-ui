@@ -155,7 +155,7 @@ const Marquee = forwardRef<HTMLDivElement, MarqueeProps>(
                     className={clsx(
                         "flex-1 overflow-hidden relative",
                         gradient &&
-                        "[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
+                        "mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
                     )}
                 >
                     <div

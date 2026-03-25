@@ -55,58 +55,6 @@ export default function NavbarDemo() {
                     </Navbar>
                 </div>
             </div>
-
-            {/* Sticky Variant */}
-            <div className="flex flex-col gap-3">
-                <Typography.P variant="secondary" className="text-xs">
-                    Sticky
-                </Typography.P>
-                <div className="rounded-surface overflow-hidden border border-border h-48 relative">
-                    <Navbar sticky>
-                        <Navbar.Container>
-                            <Navbar.Brand>
-                                <Typography.H5 variant="primary" font="primary" className="text-lg font-bold">
-                                    Sticky Nav
-                                </Typography.H5>
-                            </Navbar.Brand>
-
-                            <Navbar.Items>
-                                <Navbar.Item active>Dashboard</Navbar.Item>
-                                <Navbar.Item>Analytics</Navbar.Item>
-                                <Navbar.Item>Settings</Navbar.Item>
-                            </Navbar.Items>
-
-                            <Navbar.Actions>
-                                <Button variant="primary" size="small">
-                                    <Button.Text>New Project</Button.Text>
-                                </Button>
-                            </Navbar.Actions>
-
-                            <Navbar.Toggle />
-                        </Navbar.Container>
-
-                        <Navbar.MobileMenu>
-                            <Navbar.MobileItem active>Dashboard</Navbar.MobileItem>
-                            <Navbar.MobileItem>Analytics</Navbar.MobileItem>
-                            <Navbar.MobileItem>Settings</Navbar.MobileItem>
-                            <Divider spacing="sm" decorative />
-                            <div className="px-4">
-                                <Button variant="primary" size="small" fullWidth>
-                                    <Button.Text>New Project</Button.Text>
-                                </Button>
-                            </div>
-                        </Navbar.MobileMenu>
-                    </Navbar>
-                    <div className="p-4">
-                        <Typography.P variant="secondary" className="text-sm">
-                            Scroll this container to see the sticky behavior...
-                        </Typography.P>
-                        <Typography.P variant="secondary" className="text-sm mt-2">
-                            The navbar will stick to the top of its container.
-                        </Typography.P>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }

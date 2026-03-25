@@ -47,7 +47,7 @@ interface SubmenuContextValue {
   id: string;
   isOpen: boolean;
   position: { x: number; y: number };
-  triggerRef: React.RefObject<HTMLDivElement>;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
   handleOpen: () => void;
   handleClose: () => void;
 }

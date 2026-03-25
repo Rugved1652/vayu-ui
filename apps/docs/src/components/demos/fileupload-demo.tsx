@@ -1,43 +1,61 @@
 "use client";
 
-import { FileUpload } from "vayu-ui";
+import { FileUpload, Divider, Typography } from "vayu-ui";
 
 export default function FileUploadDemo() {
     return (
-        <div className="not-prose flex flex-col gap-8 w-full max-w-lg">
-            {/* Default — images only */}
-            <FileUpload
-                label="Upload images"
-                description="PNG, JPG, or GIF • max 2 MB per file"
-                accept="image/*"
-                maxSize={2 * 1024 * 1024}
-                maxFiles={5}
-                autoUpload
-                onUpload={async () => {
-                    await new Promise((r) => setTimeout(r, 500));
-                }}
-            />
+        <div className="not-prose w-full max-w-xl flex flex-col gap-8">
+            {/* Basic Upload */}
+            <div className="flex flex-col gap-4">
+                <Typography.H6 variant="primary">Basic File Upload</Typography.H6>
+                <FileUpload>
+                    <FileUpload.DropZone>
+                        <FileUpload.DropZoneContent />
+                    </FileUpload.DropZone>
+                    <FileUpload.ErrorMessage />
+                    <FileUpload.List />
+                    <FileUpload.Actions />
+                </FileUpload>
+            </div>
 
-            {/* Bordered — documents */}
-            <FileUpload
-                label="Attach documents"
-                description="PDF, DOCX, or TXT"
-                accept=".pdf,.docx,.txt"
-                variant="bordered"
-                maxFiles={3}
-                showPreview
-            />
+            <Divider spacing="lg" />
 
-            {/* Minimal — single file */}
-            <FileUpload
-                label="Resume"
-                description="Single PDF, max 5 MB"
-                accept=".pdf"
-                variant="minimal"
-                size="sm"
-                multiple={false}
-                maxFiles={1}
-            />
+            {/* Image Upload */}
+            <div className="flex flex-col gap-4">
+                <Typography.H6 variant="primary">Image Upload</Typography.H6>
+                <FileUpload
+                    accept="image/*"
+                    maxSize={5 * 1024 * 1024}
+                    maxFiles={3}
+                    onUpload={(files) => console.log("Uploading:", files)}
+                >
+                    <FileUpload.DropZone>
+                        <FileUpload.DropZoneContent />
+                    </FileUpload.DropZone>
+                    <FileUpload.ErrorMessage />
+                    <FileUpload.List />
+                    <FileUpload.Actions />
+                </FileUpload>
+            </div>
+
+            <Divider spacing="lg" />
+
+            {/* Document Upload */}
+            <div className="flex flex-col gap-4">
+                <Typography.H6 variant="primary">Document Upload</Typography.H6>
+                <FileUpload
+                    accept=".pdf,.doc,.docx,.txt"
+                    maxSize={10 * 1024 * 1024}
+                    maxFiles={5}
+                >
+                    <FileUpload.DropZone>
+                        <FileUpload.DropZoneContent />
+                    </FileUpload.DropZone>
+                    <FileUpload.ErrorMessage />
+                    <FileUpload.List />
+                    <FileUpload.Actions />
+                </FileUpload>
+            </div>
         </div>
     );
 }

@@ -197,7 +197,7 @@ const PopoverTrigger = forwardRef<HTMLElement, PopoverTriggerProps>(
 
         return (
             <Button
-                ref={mergedRefs as React.RefObject<HTMLButtonElement>}
+                ref={mergedRefs as any}
                 onClick={handleClick}
                 onKeyDown={handleKeyDown}
                 type="button"

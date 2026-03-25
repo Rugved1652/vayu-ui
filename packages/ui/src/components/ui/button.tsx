@@ -107,9 +107,6 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
                 "border border-brand/80",
                 "hover:bg-brand/90 active:bg-brand/80",
                 "shadow-control",
-                "dark:bg-brand dark:text-brand-content",
-                "dark:border-brand/80",
-                "dark:hover:bg-brand/90 dark:active:bg-brand/80"
             ),
             secondary: clsx(
                 "bg-muted hover:bg-muted/80 active:bg-muted/70",

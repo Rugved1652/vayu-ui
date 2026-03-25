@@ -10,7 +10,7 @@ import { XIcon } from "../icons";
 // Types
 // ============================================================================
 
-type BadgeVariant =
+export type BadgeVariant =
   | "brand"
   | "muted"
   | "warning"
@@ -43,38 +43,32 @@ const variants: Record<BadgeVariant, string> = {
   // Brand color for primary actions and emphasis
   brand: cn(
     "bg-brand text-brand-content",
-    "dark:bg-brand dark:text-brand-content"
   ),
 
   // Muted for de-emphasized UI elements
   muted: cn(
     "bg-muted text-muted-content",
     "border border-border",
-    "dark:bg-muted dark:text-muted-content dark:border-border"
   ),
 
   // Warning for caution states
   warning: cn(
     "bg-warning text-warning-content",
-    "dark:bg-warning dark:text-warning-content"
   ),
 
   // Success for positive states
   success: cn(
     "bg-success text-success-content",
-    "dark:bg-success dark:text-success-content"
   ),
 
   // Destructive for error/delete actions
   destructive: cn(
     "bg-destructive text-destructive-content",
-    "dark:bg-destructive dark:text-destructive-content"
   ),
 
   // Info for informational states
   info: cn(
     "bg-info text-info-content",
-    "dark:bg-info dark:text-info-content"
   ),
 };
 
@@ -140,13 +134,13 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       "transition-colors duration-150",
       // Focus Management (WCAG 2.4.7)
       "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focus dark:focus:ring-offset-canvas",
-      
+
       sizes[size],
       variants[variant],
-      
+
       // Interactive styling
       isInteractive && "cursor-pointer hover:opacity-90 active:scale-95",
-      
+
       className
     );
 
@@ -154,7 +148,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
     // Case 1: Dismissible AND Interactive
     // -----------------------------------------------------------------------
     // We cannot nest buttons. We render a 'group' container with two sibling buttons.
-    
+
     if (isDismissible && isInteractive) {
       return (
         <span

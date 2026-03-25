@@ -223,4 +223,7 @@ export type {
     DividerSize,
     DividerSpacing,
     DividerVariant,
+    DividerLabelProps,
+    DividerLineProps,
+    DividerRootProps,
 };

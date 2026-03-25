@@ -25,8 +25,8 @@
   /* ═════════════════════════════════════════════════════════════════════════════════════════════
      SEMANTIC COLORS - Convey meaning and state
      ═════════════════════════════════════════════════════════════════════════════════════════════ */
-  --brand: #6366f1;                     /* Primary brand color | Use: primary Button, link, active state, CTA, selected tab */
-  --brand-content: #fff;                /* Primary brand text | Use: button text, active nav text, selected state text */
+  --brand: #6366f1;                     /* Primary brand color | Use: primary-accent, primary Button, link, active state, CTA, selected tab */
+  --brand-content: #fff;                /* Primary brand text | Use: primary-accent, button text, active nav text, selected state text */
   --success: #10b981;                   /* Success/positive actions | Use: success Alert, completed badge, checkmark, positive feedback */
   --success-content: #fff;              /* Success text | Use: success button text, completion message text */
   --warning: #f59e0b;                   /* Warning background | Use: warning Alert, caution badge, unsaved changes, pending state */

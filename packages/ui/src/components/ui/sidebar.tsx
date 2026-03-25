@@ -14,7 +14,7 @@ interface SidebarContextType {
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-const useSidebar = () => {
+export const useSidebar = () => {
     const context = useContext(SidebarContext);
     if (!context) {
         throw new Error("Sidebar components must be used within SidebarProvider");
@@ -126,7 +126,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 <div
                     role="presentation"
                     aria-hidden="true"
-                    className="fixed inset-0 bg-black/50 dark:bg-black/50 z-40"
+                    className="absolute inset-0 bg-black/50 dark:bg-black/50 z-40"
                     onClick={() => setMobileOpen(false)}
                 />
             )}
@@ -140,7 +140,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 className={`
                     bg-sidebar
                     border-r border-border z-50 transition-all duration-300 ease-in-out
-                    ${mobile ? "fixed inset-y-0 left-0 h-full" : "h-screen relative"}
+                    ${mobile ? "absolute inset-y-0 left-0 h-full" : "h-screen relative"}
                     ${collapsed && !mobile ? "w-20" : "w-72"}
                     ${mobile
                         ? mobileOpen
@@ -166,9 +166,8 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ children }) => {
 
     return (
         <div
-            className={`p-6 border-b border-border ${
-                collapsed && !mobile ? "px-4" : ""
-            }`}
+            className={`p-6 border-b border-border ${collapsed && !mobile ? "px-4 overflow-hidden" : ""
+                }`}
         >
             {children}
         </div>
@@ -196,9 +195,8 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = ({ children }) => {
 
     return (
         <div
-            className={`p-4 border-t border-border ${
-                collapsed && !mobile ? "px-2" : ""
-            }`}
+            className={`p-4 border-t border-border ${collapsed && !mobile ? "px-2" : ""
+                }`}
         >
             {children}
         </div>
@@ -271,11 +269,10 @@ export const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
         <>
             {icon && (
                 <span
-                    className={`${
-                        active
-                            ? "text-brand-content"
-                            : "text-muted-content group-hover:text-surface-content"
-                    } transition-colors shrink-0`}
+                    className={`${active
+                        ? "text-brand-content"
+                        : "text-muted-content group-hover:text-surface-content"
+                        } transition-colors shrink-0`}
                 >
                     {icon}
                 </span>
@@ -412,7 +409,7 @@ export const SidebarToggle: React.FC = () => {
             onClick={() => setCollapsed(!collapsed)}
             aria-label={collapsed ? "Expand sidebar navigation" : "Collapse sidebar navigation"}
             aria-expanded={!collapsed}
-            className="absolute top-10 -right-3 -translate-x-1/2 translate-y-0 w-6 h-6 bg-surface border border-border rounded-full
+            className="absolute top-10 -right-6 -translate-x-1/2 translate-y-0 w-6 h-6 bg-surface border border-border rounded-full
                 flex items-center justify-center text-muted-content hover:text-surface-content hover:bg-muted
                 transition-all duration-200 shadow-lg z-10
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
@@ -435,7 +432,7 @@ export const MobileMenuButton: React.FC = () => {
             aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileOpen}
             aria-controls="sidebar-navigation"
-            className="fixed top-4 left-4 z-[60] p-2 bg-surface rounded-lg text-surface-content border border-border
+            className="fixed top-4 left-4 z-60 p-2 bg-surface rounded-lg text-surface-content border border-border
                 hover:bg-muted transition-colors shadow-lg
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
         >
