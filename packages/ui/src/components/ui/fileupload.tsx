@@ -246,8 +246,8 @@ const DropZone: React.FC<{ children: React.ReactNode; className?: string }> = ({
         relative rounded-xl p-8 sm:p-12 cursor-pointer
         transition-all duration-300 ease-out
         border-2 border-dashed
-        ${errorMsg ? 'border-red-500/50 bg-red-500/5' : isDragging ? 'border-cyan-400 bg-cyan-400/10 scale-[1.01] shadow-[0_0_30px_rgba(0,212,170,0.2)]' : 'border-gray-700 hover:border-cyan-400 hover:bg-cyan-400/5'}
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900
+        ${errorMsg ? 'border-destructive/50 bg-destructive/5' : isDragging ? 'border-brand bg-brand/10 scale-[1.01] shadow-lg shadow-brand/20' : 'border-border hover:border-brand hover:bg-brand/5'}
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas
         ${className}
       `}
             role="button"
@@ -271,7 +271,7 @@ const DropZone: React.FC<{ children: React.ReactNode; className?: string }> = ({
             />
 
             <div className={`absolute inset-0 rounded-xl pointer-events-none transition-opacity ${isDragging ? 'opacity-100' : 'opacity-0'}`}>
-                <div className="absolute inset-0 bg-linear-to-r from-cyan-400/10 via-transparent to-cyan-400/10 animate-pulse" />
+                <div className="absolute inset-0 bg-linear-to-r from-brand/10 via-transparent to-brand/10 animate-pulse" />
             </div>
 
             <div className={`relative z-10 transition-transform duration-300 ${isDragging ? 'scale-105' : ''}`}>
@@ -283,18 +283,18 @@ const DropZone: React.FC<{ children: React.ReactNode; className?: string }> = ({
 
 const DropZoneContent: React.FC = () => (
     <div className="flex flex-col items-center text-center pointer-events-none">
-        <div className="mb-4 p-4 rounded-full bg-cyan-400/10">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-cyan-400">
+        <div className="mb-4 p-4 rounded-full bg-brand/10">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="17 8 12 3 7 8" />
                 <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
         </div>
-        <p className="text-lg font-semibold text-gray-100 mb-2">Drop files here</p>
-        <p id="upload-instructions" className="text-sm text-gray-400 mb-4">
-            or <span className="font-medium text-cyan-400 underline underline-offset-2">browse from your device</span>
+        <p className="text-lg font-semibold text-surface-content mb-2">Drop files here</p>
+        <p id="upload-instructions" className="text-sm text-muted-content mb-4">
+            or <span className="font-medium text-brand underline underline-offset-2">browse from your device</span>
         </p>
-        <p className="font-mono text-xs px-3 py-1.5 rounded-full bg-gray-900 text-gray-500">
+        <p className="font-mono text-xs px-3 py-1.5 rounded-full bg-muted text-muted-content">
             Max 10MB per file
         </p>
     </div>
@@ -305,7 +305,7 @@ const ErrorMessage: React.FC = () => {
     if (!errorMsg) return null;
 
     return (
-        <div className="flex items-center gap-2 mt-4 px-4 py-3 rounded-lg bg-red-500/10 text-red-400 text-sm border border-red-500/20" role="alert" aria-live="polite">
+        <div className="flex items-center gap-2 mt-4 px-4 py-3 rounded-lg bg-destructive/10 text-destructive text-sm border border-destructive/20" role="alert" aria-live="polite">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="12" y1="8" x2="12" y2="12" />
@@ -322,20 +322,20 @@ const Item: React.FC<{ file: FileWithMeta; index: number }> = ({ file, index }) 
 
     return (
         <li
-            className="flex items-center gap-3 p-3 rounded-lg bg-gray-800/50 border border-gray-700/50"
+            className="flex items-center gap-3 p-3 rounded-lg bg-surface border border-border"
             style={{ animation: `slideIn 0.3s ease-out ${index * 0.05}s forwards`, opacity: 0 }}
         >
-            <div className="shrink-0 p-2 rounded-lg bg-cyan-400/10 text-cyan-400">
+            <div className="shrink-0 p-2 rounded-lg bg-brand/10 text-brand">
                 {getFileIcon(file.file.name)}
             </div>
 
             <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm text-gray-100 truncate">{file.file.name}</p>
-                <p className="font-mono text-xs text-gray-500">{formatFileSize(file.file.size)}</p>
+                <p className="font-medium text-sm text-surface-content truncate">{file.file.name}</p>
+                <p className="font-mono text-xs text-muted-content">{formatFileSize(file.file.size)}</p>
 
                 {isUploading && (
                     <div
-                        className="mt-2 h-1 w-full bg-gray-700 rounded-full overflow-hidden"
+                        className="mt-2 h-1 w-full bg-muted rounded-full overflow-hidden"
                         role="progressbar"
                         aria-valuenow={Math.round(file.progress)}
                         aria-valuemin={0}
@@ -343,7 +343,7 @@ const Item: React.FC<{ file: FileWithMeta; index: number }> = ({ file, index }) 
                         aria-label={`${file.file.name} upload progress`}
                     >
                         <div
-                            className="h-full bg-linear-to-r from-cyan-500 to-teal-300 transition-all duration-200"
+                            className="h-full bg-linear-to-r from-brand to-brand/70 transition-all duration-200"
                             style={{ width: `${file.progress}%` }}
                         />
                     </div>
@@ -354,7 +354,7 @@ const Item: React.FC<{ file: FileWithMeta; index: number }> = ({ file, index }) 
                 type="button"
                 onClick={() => removeFile(file.id)}
                 disabled={isUploading}
-                className="p-2 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-400/10 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                className="p-2 rounded-lg text-muted-content hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 aria-label={`Remove ${file.file.name}`}
             >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -392,16 +392,16 @@ const Actions: React.FC = () => {
     if (files.length === 0) return null;
 
     return (
-        <div className="mt-4 pt-4 border-t border-gray-700/50 flex justify-end gap-3">
+        <div className="mt-4 pt-4 border-t border-border flex justify-end gap-3">
             <button
                 onClick={clearFiles}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 border border-gray-600 hover:border-gray-400 hover:bg-gray-700/30 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-surface-content border border-border hover:border-muted-content hover:bg-muted/30 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
             >
                 Clear All
             </button>
             <button
                 onClick={uploadFiles}
-                className="px-6 py-2 rounded-lg text-sm font-semibold bg-cyan-400 text-gray-900 hover:bg-cyan-300 transition-all hover:shadow-[0_4px_20px_rgba(0,212,170,0.3)] active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+                className="px-6 py-2 rounded-lg text-sm font-semibold bg-brand text-brand-content hover:opacity-90 transition-all hover:shadow-lg hover:shadow-brand/30 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
             >
                 Upload Files
             </button>

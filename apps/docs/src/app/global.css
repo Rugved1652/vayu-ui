@@ -9,80 +9,43 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-:root {
-  /* ═════════════════════════════════════════════════════════════════════════════════════════════
-     BASE LAYERS - Foundation colors for layout structure
-     ═════════════════════════════════════════════════════════════════════════════════════════════ */
-  --canvas: #fafafa;                    /* App-level background | Use: <body>, viewport, app shell */
-  --canvas-content: #18181b;            /* App-level text | Use: body text, primary typography (improved contrast) */
-  --surface: #fff;                      /* Container backgrounds | Use: Card, Section, Input, Table, Panel (crisp white) */
-  --surface-content: #18181b;           /* Container text | Use: card content, form labels, table text */
-  --sidebar: #f4f4f5;                   /* Sidebar background | Use: navigation sidebar, drawer, rail nav (neutral gray) */
-  --sidebar-content: #18181b;           /* Sidebar text | Use: nav links, sidebar labels, menu items */
-  --elevated: #fff;                     /* Highest z-index surfaces | Use: Modal, Popover, Dropdown, Tooltip */
-  --elevated-content: #18181b;          /* Elevated surface text | Use: dialog text, dropdown items, tooltip text */
-
-  /* ═════════════════════════════════════════════════════════════════════════════════════════════
-     SEMANTIC COLORS - Convey meaning and state
-     ═════════════════════════════════════════════════════════════════════════════════════════════ */
-  --brand: #6366f1;                     /* Primary brand color | Use: primary-accent, primary Button, link, active state, CTA, selected tab */
-  --brand-content: #fff;                /* Primary brand text | Use: primary-accent, button text, active nav text, selected state text */
-  --success: #10b981;                   /* Success/positive actions | Use: success Alert, completed badge, checkmark, positive feedback */
-  --success-content: #fff;              /* Success text | Use: success button text, completion message text */
-  --warning: #f59e0b;                   /* Warning background | Use: warning Alert, caution badge, unsaved changes, pending state */
-  --warning-content: #18181b;           /* Warning text | Use: warning alert text, caution label, validation warning text */
-  --destructive: #ef4444;               /* Destructive actions | Use: delete Button, error Alert, validation error, critical warning */
-  --destructive-content: #fff;          /* Destructive text | Use: delete button text, error message text */
-  --info: #3b82f6;                      /* Informational background | Use: info Alert, help banner, notification, onboarding hint */
-  --info-content: #fff;                 /* Informational text | Use: info alert text, help text, notification content */
-  --muted: #f4f4f5;                     /* De-emphasized UI | Use: disabled state, skeleton, secondary background */
-  --muted-content: #71717a;             /* De-emphasized text | Use: secondary labels, disabled text, placeholder text (WCAG AA) */
-
-  /* ═════════════════════════════════════════════════════════════════════════════════════════════
-     STRUCTURAL ELEMENTS - Borders, separators, focus
-     ═════════════════════════════════════════════════════════════════════════════════════════════ */
-  --border: #e4e4e7;                    /* Container borders | Use: Card border, divider, Table border, Panel outline */
-  --field: #d4d4d8;                     /* Form field borders | Use: Input border, Select border, Textarea border (darker for clarity) */
-  --focus: #6366f1;                     /* Focus indicators (WCAG 2.2 AA) | Use: focus ring, keyboard nav highlight, :focus-visible */
-  --shadow: #000;                       /* Shadow color | Use: shadow-sm, shadow-md, shadow-lg, shadow-inner, drop-shadow-subtle, drop-shadow-elevated, text-shadow-sm, text-shadow-md, text-shadow-lg */
+:root{
+  --canvas: #e7e5e4;
+  --canvas-content: #1c1917;
+  --surface: #f5f5f4;
+  --surface-content: #1c1917;
+  --sidebar: #ecebe9;
+  --sidebar-content: #292524;
+  --elevated: #fff;
+  --elevated-content: #1c1917;
+  --brand: #059669;
+  --brand-content: #fff;
+  --success: #16a34a; --success-content: #fff;
+  --warning: #d97706; --warning-content: #fff;
+  --destructive: #dc2626; --destructive-content: #fff;
+  --info: #2563eb; --info-content: #fff;
+  --muted: #d6d3d1; --muted-content: #57534e;
+  --border: #a8a29e; --field: #78716c; --focus: #059669; --shadow: #000;
 }
 
 :root.dark {
-  /* ═════════════════════════════════════════════════════════════════════════════════════════════
-     BASE LAYERS - Foundation colors for layout structure
-     ═════════════════════════════════════════════════════════════════════════════════════════════ */
-  --canvas: #09090b;                    /* App-level background | Use: <body>, viewport, app shell (near-black, not pure black) */
-  --canvas-content: #fafafa;            /* App-level text | Use: body text, primary typography (soft white for eye comfort) */
-  --surface: #18181b;                   /* Container backgrounds | Use: Card, Section, Input, Table, Panel (elevated from canvas) */
-  --surface-content: #fafafa;           /* Container text | Use: card content, form labels, table text */
-  --sidebar: #0a0a0a;                   /* Sidebar background | Use: navigation sidebar, drawer, rail nav (darker for depth) */
-  --sidebar-content: #fafafa;           /* Sidebar text | Use: nav links, sidebar labels, menu items */
-  --elevated: #27272a;                  /* Highest z-index surfaces | Use: Modal, Popover, Dropdown, Tooltip (lightest layer) */
-  --elevated-content: #fafafa;          /* Elevated surface text | Use: dialog text, dropdown items, tooltip text */
+--canvas: #0c0a09;
+  --canvas-content: #fafaf9;
+  --surface: #1c1917;
+  --surface-content: #f5f5f4;
+  --sidebar: #13100f;
+  --sidebar-content: #e7e5e4;
+  --elevated: #292524;
+  --elevated-content: #fff;
+  --brand: #34d399;
+  --brand-content: #0c0a09;
+  --success: #4ade80; --success-content: #0c0a09;
+  --warning: #fcd34d; --warning-content: #0c0a09;
+  --destructive: #fca5a5; --destructive-content: #0c0a09;
+  --info: #93c5fd; --info-content: #0c0a09;
+  --muted: #44403c; --muted-content: #a8a29e;
+  --border: #44403c; --field: #57534e; --focus: #34d399; --shadow: #000; 
 
-  /* ═════════════════════════════════════════════════════════════════════════════════════════════
-     SEMANTIC COLORS - Convey meaning and state (slightly desaturated for dark mode comfort)
-     ═════════════════════════════════════════════════════════════════════════════════════════════ */
-  --brand: #818cf8;                     /* Primary brand color | Use: primary Button, link, active state, CTA, selected tab (lighter indigo) */
-  --brand-content: #09090b;             /* Primary brand text | Use: button text, active nav text, selected state text (dark on bright) */
-  --success: #34d399;                   /* Success/positive actions | Use: success Alert, completed badge, checkmark, positive feedback */
-  --success-content: #09090b;           /* Success text | Use: success button text, completion message text */
-  --warning: #fbbf24;                   /* Warning background | Use: warning Alert, caution badge, unsaved changes, pending state (brighter amber) */
-  --warning-content: #09090b;           /* Warning text | Use: warning alert text, caution label, validation warning text */
-  --destructive: #f87171;               /* Destructive actions | Use: delete Button, error Alert, validation error, critical warning (softer red) */
-  --destructive-content: #09090b;       /* Destructive text | Use: delete button text, error message text */
-  --info: #60a5fa;                      /* Informational background | Use: info Alert, help banner, notification, onboarding hint (lighter blue) */
-  --info-content: #09090b;              /* Informational text | Use: info alert text, help text, notification content */
-  --muted: #27272a;                     /* De-emphasized UI | Use: disabled state, skeleton, secondary background */
-  --muted-content: #a1a1aa;             /* De-emphasized text | Use: secondary labels, disabled text, placeholder text (WCAG AA on dark) */
-
-  /* ═════════════════════════════════════════════════════════════════════════════════════════════
-     STRUCTURAL ELEMENTS - Borders, separators, focus
-     ═════════════════════════════════════════════════════════════════════════════════════════════ */
-  --border: #27272a;                    /* Container borders | Use: Card border, divider, Table border, Panel outline (subtle separation) */
-  --field: #3f3f46;                     /* Form field borders | Use: Input border, Select border, Textarea border (visible but not harsh) */
-  --focus: #818cf8;                     /* Focus indicators (WCAG 2.2 AA) | Use: focus ring, keyboard nav highlight, :focus-visible */
-  --shadow: #000;                    /* Shadow color | Use: shadow-sm, shadow-md, shadow-lg, shadow-inner, drop-shadow-subtle, drop-shadow-elevated, text-shadow-sm, text-shadow-md, text-shadow-lg */ 
 }
 
 @theme {
