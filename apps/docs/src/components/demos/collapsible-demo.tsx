@@ -1,59 +1,73 @@
 "use client";
+import { useState } from "react";
+import { Collapsible, Typography } from "vayu-ui";
 
-import { Collapsible } from "vayu-ui";
+const longText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.`;
 
 export default function CollapsibleDemo() {
-    return (
-        <div className="not-prose flex flex-col gap-8 w-full max-w-lg">
-            {/* Default */}
-            <Collapsible trigger="What is VED UI?">
-                VED UI is a premium React component library built with
-                accessibility, dark mode, and modern design principles at its
-                core.
-            </Collapsible>
+  const [controlledOpen, setControlledOpen] = useState(false);
 
-            {/* Bordered */}
-            <Collapsible
-                trigger="How do I install it?"
-                variant="bordered"
-                defaultOpen
-            >
-                Run <code>npm install vayu-ui</code> or copy individual
-                component files directly into your project.
-            </Collapsible>
+  return (
+    <div className="w-full max-w-md space-y-8 not-prose">
+      {/* Basic Usage */}
+      <div>
+        <Typography.H5 className="mb-3">
+          Basic Collapsible (3 lines)
+        </Typography.H5>
+        <Collapsible.Root>
+          <Collapsible.Content lines={3}>
+            {longText}
+          </Collapsible.Content>
+          <Collapsible.Trigger />
+        </Collapsible.Root>
+      </div>
 
-            {/* Filled with left icon */}
-            <Collapsible
-                trigger="Is dark mode supported?"
-                variant="filled"
-                iconPosition="left"
-            >
-                Yes! All components support dark mode out of the box using
-                Tailwind&apos;s dark mode classes.
-            </Collapsible>
+      {/* Different Line Counts */}
+      <div>
+        <Typography.H5 className="mb-3">
+          2 Line Clamp
+        </Typography.H5>
+        <Collapsible.Root>
+          <Collapsible.Content lines={2}>
+            {longText}
+          </Collapsible.Content>
+          <Collapsible.Trigger showText="Read more" hideText="Read less" />
+        </Collapsible.Root>
+      </div>
 
-            {/* Group — accordion behavior */}
-            <div>
-                <h3 className="text-sm font-medium font-primary text-neutral-500 dark:text-neutral-400 mb-2">
-                    Accordion Group (single open)
-                </h3>
-                <Collapsible.Group defaultOpenItems={[0]}>
-                    <Collapsible trigger="Section One" variant="bordered">
-                        Content for section one. Only one section can be open at
-                        a time in this group.
-                    </Collapsible>
-                    <Collapsible trigger="Section Two" variant="bordered">
-                        Content for section two.
-                    </Collapsible>
-                    <Collapsible
-                        trigger="Section Three (disabled)"
-                        variant="bordered"
-                        disabled
-                    >
-                        This section is disabled.
-                    </Collapsible>
-                </Collapsible.Group>
-            </div>
-        </div>
-    );
+      {/* Controlled State */}
+      <div>
+        <Typography.H5 className="mb-3">
+          Controlled State
+        </Typography.H5>
+        <Collapsible.Root open={controlledOpen} onOpenChange={setControlledOpen}>
+          <Collapsible.Content lines={2}>
+            This is a controlled collapsible. The open state is managed externally.
+            You can use the trigger below or the button outside to toggle.
+          </Collapsible.Content>
+          <Collapsible.Trigger />
+        </Collapsible.Root>
+        <button
+          onClick={() => setControlledOpen(!controlledOpen)}
+          className="mt-2 px-4 py-2 text-sm bg-muted text-muted-content rounded-control hover:bg-muted/80 transition-colors"
+        >
+          External Toggle ({controlledOpen ? "Open" : "Closed"})
+        </button>
+      </div>
+
+      {/* Default Open */}
+      <div>
+        <Typography.H5 className="mb-3">
+          Default Open
+        </Typography.H5>
+        <Collapsible.Root defaultOpen>
+          <Collapsible.Content lines={2}>
+            This collapsible starts in the open state by default.
+            Click &quot;Show less&quot; to collapse it.
+          </Collapsible.Content>
+          <Collapsible.Trigger />
+        </Collapsible.Root>
+      </div>
+    </div>
+  );
 }

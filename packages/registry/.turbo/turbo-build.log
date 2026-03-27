@@ -9,9 +9,9 @@ CLI Using tsup config: /Users/rugvedpatel/Desktop/Workspace/VedUI/packages/regis
 CLI Target: es2022
 CLI Cleaning output folder
 ESM Build start
-ESM dist/index.js     107.09 KB
-ESM dist/index.js.map 169.52 KB
-ESM ⚡️ Build success in 12ms
+ESM dist/index.js     107.54 KB
+ESM dist/index.js.map 170.24 KB
+ESM ⚡️ Build success in 14ms
 DTS Build start
-DTS ⚡️ Build success in 1349ms
+DTS ⚡️ Build success in 1561ms
 DTS dist/index.d.ts 2.59 KB

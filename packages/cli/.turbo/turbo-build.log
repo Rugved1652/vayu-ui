@@ -10,28 +10,28 @@ CLI Target: es2022
 CLI Cleaning output folder
 ESM Build start
 ESM dist/index.js                  178.00 B
-ESM dist/chunk-2DSS6QGO.js         3.98 KB
-ESM dist/chunk-Q2PTTYRI.js         195.00 B
-ESM dist/utils/installer.js        343.00 B
-ESM dist/chunk-67SZWWI6.js         1.31 KB
-ESM dist/registry/templates.js     183.00 B
-ESM dist/commands/add.js           3.77 KB
-ESM dist/commands/update.js        8.27 KB
-ESM dist/commands/list.js          2.61 KB
-ESM dist/commands/create.js        5.00 KB
 ESM dist/commands/init.js          10.90 KB
+ESM dist/registry/templates.js     183.00 B
+ESM dist/commands/list.js          2.61 KB
+ESM dist/utils/installer.js        343.00 B
+ESM dist/chunk-Q2PTTYRI.js         195.00 B
+ESM dist/chunk-67SZWWI6.js         1.31 KB
+ESM dist/chunk-2DSS6QGO.js         3.98 KB
+ESM dist/commands/update.js        8.27 KB
+ESM dist/commands/add.js           3.77 KB
+ESM dist/commands/create.js        5.00 KB
 ESM dist/index.js.map              71.00 B
+ESM dist/registry/templates.js.map 71.00 B
+ESM dist/commands/list.js.map      4.47 KB
+ESM dist/chunk-Q2PTTYRI.js.map     634.00 B
+ESM dist/commands/init.js.map      17.72 KB
 ESM dist/chunk-2DSS6QGO.js.map     9.14 KB
 ESM dist/utils/installer.js.map    71.00 B
-ESM dist/registry/templates.js.map 71.00 B
-ESM dist/chunk-Q2PTTYRI.js.map     634.00 B
 ESM dist/chunk-67SZWWI6.js.map     3.34 KB
 ESM dist/commands/update.js.map    17.48 KB
 ESM dist/commands/add.js.map       7.90 KB
-ESM dist/commands/list.js.map      4.47 KB
-ESM dist/commands/init.js.map      17.72 KB
 ESM dist/commands/create.js.map    9.64 KB
-ESM ⚡️ Build success in 94ms
+ESM ⚡️ Build success in 234ms
 DTS Build start
 src/index.ts(8,15): error TS2305: Module '"vayu-ui-registry"' has no exported member 'ItemType'.
 src/index.ts(8,25): error TS2724: '"vayu-ui-registry"' has no exported member named 'RegistryItem'. Did you mean 'Registry'?
@@ -42,6 +42,7 @@ Error: error occurred in dts build
     at MessagePort.<anonymous> (node:internal/worker:270:53)
     at [nodejs.internal.kHybridDispatch] (node:internal/event_target:827:20)
     at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)
+DTS Build error
 npm error Lifecycle script `build` failed with error:
 npm error code 1
 npm error path /Users/rugvedpatel/Desktop/Workspace/VedUI/packages/cli

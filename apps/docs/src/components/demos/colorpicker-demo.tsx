@@ -5,27 +5,74 @@ import { useState } from "react";
 
 export default function ColorPickerDemo() {
     const [color, setColor] = useState("#3b82f6");
+    const [rgbColor, setRgbColor] = useState("#22c55e");
+    const [hslColor, setHslColor] = useState("#8b5cf6");
     const [swatchColor, setSwatchColor] = useState("#ef4444");
 
     return (
         <div className="not-prose flex flex-col gap-8 w-full max-w-md">
-            {/* Default */}
-            <ColorPicker
-                label="Brand Color"
-                description="Choose a primary color for your brand."
-                value={color}
-                onChange={setColor}
-            />
+            {/* Basic ColorPicker with all features */}
+            <ColorPicker.Root value={color} onChange={setColor}>
+                <ColorPicker.Label>Brand Color</ColorPicker.Label>
+                <ColorPicker.Description>
+                    Choose a primary color for your brand.
+                </ColorPicker.Description>
+                <div className="flex items-center gap-2">
+                    <ColorPicker.Trigger />
+                    <ColorPicker.Input />
+                    <ColorPicker.CopyButton />
+                </div>
+                <ColorPicker.Content>
+                    <div className="flex flex-col gap-4">
+                        <ColorPicker.Palette />
+                        <ColorPicker.Eyedropper />
+                        <ColorPicker.Presets />
+                    </div>
+                </ColorPicker.Content>
+            </ColorPicker.Root>
 
             {/* RGB Format */}
-            <ColorPicker
-                label="Background"
+            <ColorPicker.Root
+                value={rgbColor}
+                onChange={setRgbColor}
                 format="rgb"
-                defaultValue="#22c55e"
-                showAlpha
-            />
+            >
+                <ColorPicker.Label>Background Color (RGB)</ColorPicker.Label>
+                <div className="flex items-center gap-2">
+                    <ColorPicker.Trigger size="sm" />
+                    <ColorPicker.Input />
+                    <ColorPicker.CopyButton />
+                </div>
+                <ColorPicker.Content>
+                    <div className="flex flex-col gap-4">
+                        <ColorPicker.Palette label="Choose background" />
+                        <ColorPicker.Presets columns={6} />
+                    </div>
+                </ColorPicker.Content>
+            </ColorPicker.Root>
 
-            {/* Swatches Only */}
+            {/* HSL Format */}
+            <ColorPicker.Root
+                value={hslColor}
+                onChange={setHslColor}
+                format="hsl"
+            >
+                <ColorPicker.Label>Accent Color (HSL)</ColorPicker.Label>
+                <div className="flex items-center gap-2">
+                    <ColorPicker.Trigger size="lg" />
+                    <ColorPicker.Input />
+                    <ColorPicker.CopyButton />
+                </div>
+                <ColorPicker.Content align="end">
+                    <div className="flex flex-col gap-4">
+                        <ColorPicker.Palette />
+                        <ColorPicker.Eyedropper label="Pick accent from screen" />
+                        <ColorPicker.Presets label="Theme Colors" />
+                    </div>
+                </ColorPicker.Content>
+            </ColorPicker.Root>
+
+            {/* Standalone Swatches */}
             <ColorPicker.Swatches
                 label="Quick Pick"
                 colors={[
@@ -41,22 +88,41 @@ export default function ColorPickerDemo() {
                 value={swatchColor}
                 onChange={setSwatchColor}
                 size="lg"
+                columns={4}
             />
 
-            {/* Disabled */}
-            <ColorPicker
-                label="Locked Color"
-                defaultValue="#6366f1"
-                disabled
-            />
+            {/* Disabled State */}
+            <ColorPicker.Root defaultValue="#6366f1" disabled>
+                <ColorPicker.Label>Locked Color</ColorPicker.Label>
+                <div className="flex items-center gap-2">
+                    <ColorPicker.Trigger />
+                    <ColorPicker.Input />
+                </div>
+            </ColorPicker.Root>
 
             {/* Error State */}
-            <ColorPicker
-                label="Theme Color"
-                defaultValue="#ff0000"
-                error
-                errorText="This color does not meet contrast requirements."
-            />
+            <ColorPicker.Root validationState="error">
+                <ColorPicker.Label>Theme Color</ColorPicker.Label>
+                <ColorPicker.Description>
+                    Select a color for your theme.
+                </ColorPicker.Description>
+                <div className="flex items-center gap-2">
+                    <ColorPicker.Trigger />
+                    <ColorPicker.Input />
+                </div>
+                <ColorPicker.Error>
+                    This color does not meet contrast requirements.
+                </ColorPicker.Error>
+            </ColorPicker.Root>
+
+            {/* Minimal ColorPicker (Trigger only) */}
+            <ColorPicker.Root defaultValue="#10b981">
+                <ColorPicker.Label>Minimal Picker</ColorPicker.Label>
+                <ColorPicker.Trigger />
+                <ColorPicker.Content>
+                    <ColorPicker.Palette />
+                </ColorPicker.Content>
+            </ColorPicker.Root>
         </div>
     );
 }
