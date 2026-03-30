@@ -1,7 +1,7 @@
 export * from "./accordion";
 export * from "./affix";
 export * from "./alert";
-export { default as Animation, type AnimationDirection, type BaseAnimationProps } from "./animation";
+export * from "./animation";
 export * from "./aspectratio";
 export * from "./audioplayer";
 export * from "./avatar";

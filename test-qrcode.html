@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Test</title>
+</head>
+<body>
+    <h1>QR Code Test</h1>
+    <div id="qrcode-container"></div>
+
+    <script>
+        // Simple test value
+        const testValue = "https://vayu-ui.com";
+
+        // Create the QRCode component with default value
+        const qrcodeDiv = document.createElement('div');
+        qrcodeDiv.innerHTML = `
+            <svg width="200" height="200" viewBox="0 0 29 29" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                <rect width="29" height="29" fill="#ffffff"/>
+            </svg>
+        `;
+        document.getElementById('qrcode-container').appendChild(qrcodeDiv);
+
+        console.log("Test QR with value:", testValue);
+        console.log("Expected: A scannable QR code with black modules on white background");
+    </script>
+</body>
+</html>

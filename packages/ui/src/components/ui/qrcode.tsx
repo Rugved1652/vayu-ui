@@ -110,7 +110,7 @@ function rsEncode(data: Uint8Array, ecCount: number): Uint8Array {
 
 // Alignment pattern positions for each version
 const ALIGNMENT_POSITIONS: number[][] = [
-    [], [], [6, 18], [6, 22], [6, 26], [6, 30], [6, 34],
+    [], [6, 18], [6, 22], [6, 26], [6, 30], [6, 34],
     [6, 22, 38], [6, 24, 42], [6, 26, 46], [6, 28, 50], [6, 30, 54], [6, 32, 58], [6, 34, 62],
     [6, 26, 46, 66], [6, 26, 48, 70], [6, 26, 50, 74], [6, 30, 54, 78], [6, 30, 56, 82], [6, 30, 58, 86],
     [6, 34, 62, 90], [6, 28, 50, 72, 94], [6, 26, 50, 74, 98], [6, 30, 54, 78, 102], [6, 28, 54, 80, 106],
@@ -172,10 +172,10 @@ function createMatrix(version: number): { modules: boolean[][]; isFunction: bool
 
     // Timing patterns
     for (let i = 8; i < size - 8; i++) {
-        isFunction[6]![i] = true;
-        modules[6]![i] = i % 2 === 0;
-        isFunction[i]![6] = true;
-        modules[i]![6] = i % 2 === 0;
+        isFunction[7]![i] = true;
+        modules[7]![i] = i % 2 === 0;
+        isFunction[i]![7] = true;
+        modules[i]![7] = i % 2 === 0;
     }
 
     // Dark module
@@ -600,6 +600,34 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
             return { cells: matrix, numCells: matrix.length };
         }, [value, level]);
 
+        const margin = includeMargin ? 4 : 0;
+        const viewBoxSize = numCells + margin * 2;
+        const cellSize = 1;
+
+        // Determine which cells to excavate (clear) for the center logo
+        // Must be called before any early returns to satisfy Rules of Hooks
+        const excavatedCells = useMemo(() => {
+            if (!imageSettings?.excavate || numCells === 0) return new Set<string>();
+            const imgW = (imageSettings.width / computedSize) * viewBoxSize;
+            const imgH = (imageSettings.height / computedSize) * viewBoxSize;
+            const startX = Math.floor((viewBoxSize - imgW) / 2) - margin;
+            const startY = Math.floor((viewBoxSize - imgH) / 2) - margin;
+            const endX = Math.ceil(startX + imgW);
+            const endY = Math.ceil(startY + imgH);
+
+            const set = new Set<string>();
+            for (let r = Math.max(0, startY); r < Math.min(numCells, endY); r++) {
+                for (
+                    let c = Math.max(0, startX);
+                    c < Math.min(numCells, endX);
+                    c++
+                ) {
+                    set.add(`${r},${c}`);
+                }
+            }
+            return set;
+        }, [imageSettings, computedSize, viewBoxSize, margin, numCells]);
+
         if (!value || numCells === 0) {
             return (
                 <div
@@ -620,33 +648,6 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
                 </div>
             );
         }
-
-        const margin = includeMargin ? 4 : 0;
-        const viewBoxSize = numCells + margin * 2;
-        const cellSize = 1;
-
-        // Determine which cells to excavate (clear) for the center logo
-        const excavatedCells = useMemo(() => {
-            if (!imageSettings?.excavate) return new Set<string>();
-            const imgW = (imageSettings.width / computedSize) * viewBoxSize;
-            const imgH = (imageSettings.height / computedSize) * viewBoxSize;
-            const startX = Math.floor((viewBoxSize - imgW) / 2) - margin;
-            const startY = Math.floor((viewBoxSize - imgH) / 2) - margin;
-            const endX = Math.ceil(startX + imgW);
-            const endY = Math.ceil(startY + imgH);
-
-            const set = new Set<string>();
-            for (let r = Math.max(0, startY); r < Math.min(numCells, endY); r++) {
-                for (
-                    let c = Math.max(0, startX);
-                    c < Math.min(numCells, endX);
-                    c++
-                ) {
-                    set.add(`${r},${c}`);
-                }
-            }
-            return set;
-        }, [imageSettings, computedSize, viewBoxSize, margin, numCells]);
 
         return (
             <div
