@@ -5,7 +5,7 @@
 
 import React, { forwardRef } from "react";
 import { cn } from "../utils";
-import { useTextInput } from "./textinput";
+import { useTextInput } from "./TextInput";
 import type { InputProps } from "./types";
 
 const Input = forwardRef<HTMLInputElement, InputProps>(

@@ -13,8 +13,8 @@ import { clsx } from "clsx";
 import { StepIndexContext } from "./hooks";
 import type { StepperRootProps } from "./types";
 import { Step } from "./step";
-import { StepIndicator } from "./step-indicator";
-import { StepContent, StepTitle, StepDescription } from "./step-content";
+import { StepIndicator } from "./StepperIndicator";
+import { StepContent, StepTitle, StepDescription } from "./StepperContent";
 
 // StepperContext (created here, consumed via hooks.ts)
 import { StepperContext } from "./hooks";

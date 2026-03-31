@@ -6,7 +6,7 @@ import React, { useMemo } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { clsx } from "clsx";
 import { forwardRef, HTMLAttributes } from "react";
-import { encodeQR } from "./encoder";
+import { encodeQR } from "./QREncoder";
 import type { ErrorCorrectionLevel, QRCodeImageSettings } from "./types";
 
 export const qrcodeVariants = cva("inline-block", {
@@ -30,7 +30,7 @@ const sizeMap = {
 
 export interface QRCodeProps
     extends Omit<HTMLAttributes<HTMLDivElement>, "children">,
-        VariantProps<typeof qrcodeVariants> {
+    VariantProps<typeof qrcodeVariants> {
     /** Data to encode in the QR code */
     value: string;
     /** Width & height in pixels (default 200) */

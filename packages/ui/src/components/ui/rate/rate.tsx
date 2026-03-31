@@ -5,7 +5,7 @@
 import React, { ReactElement, ReactNode, useState, useId } from "react";
 
 import { RateContext } from "./hooks";
-import { RateStars } from "./stars";
+import { RateStars } from "./RateStars";
 import type { RateContextType, RateRootProps, RateSize } from "./types";
 
 // ============================================================================

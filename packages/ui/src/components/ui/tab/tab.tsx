@@ -4,10 +4,10 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { cn } from "../utils";
-import { TabsContext } from "./context";
-import TabsList from "./tabs-list";
-import TabsTrigger from "./tabs-trigger";
-import TabsContent from "./tabs-content";
+import { TabsContext } from "./hooks";
+import TabsList from "./TabsList";
+import TabsTrigger from "./TabsTrigger";
+import TabsContent from "./TabsContent";
 import type {
     TabsProps,
     TabsOrientation,

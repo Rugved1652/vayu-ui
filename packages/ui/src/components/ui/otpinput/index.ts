@@ -1,10 +1,10 @@
 // index.ts
 // Public API
 
-import OTPInputRoot, { useOTPInput } from "./otpinput";
-import { OTPInputGroup } from "./group";
-import { OTPInputSlot } from "./slot";
-import { OTPInputSeparator } from "./separator";
+import OTPInputRoot, { useOTPInput } from "./OTPInput";
+import { OTPInputGroup } from "./OTPInputGroup";
+import { OTPInputSlot } from "./OTPInputSlot";
+import { OTPInputSeparator } from "./OTPSeparator";
 
 export type {
     OTPInputContextValue,

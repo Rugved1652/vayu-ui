@@ -1,22 +1,22 @@
 // index.ts
 // Public API
 
-import TextInput from "./textinput";
-import { useTextInput } from "./textinput";
-import { Label } from "./label";
-import { Field } from "./field";
-import { Input } from "./input";
-import { PasswordInput } from "./password-input";
-import { NumberInput } from "./number-input";
-import { SearchInput } from "./search-input";
-import { Description } from "./description";
-import { ErrorMessage } from "./error-message";
-import { WarningMessage } from "./warning-message";
-import { SuccessMessage } from "./success-message";
-import { Icon } from "./icon";
-import { LoadingSpinner } from "./loading-spinner";
-import { CharacterCount } from "./character-count";
-import { ClearButton } from "./clear-button";
+import TextInput from "./TextInput";
+import { useTextInput } from "./TextInput";
+import { Label } from "./TextInputLabel";
+import { Field } from "./TextInputField";
+import { Input } from "./Input";
+import { PasswordInput } from "./TextInputPasswordInput";
+import { NumberInput } from "./TextInputNumberInput";
+import { SearchInput } from "./TextInputSearchInput";
+import { Description } from "./TextInputDescription";
+import { ErrorMessage } from "./TextInputErrorMessage";
+import { WarningMessage } from "./TextInputWarningMessage";
+import { SuccessMessage } from "./TextInputSuccessMessage";
+import { Icon } from "./TextInputIcon";
+import { LoadingSpinner } from "./TextInputLoadingSpinner";
+import { CharacterCount } from "./TextInputCharacterCount";
+import { ClearButton } from "./TextInputClearButton";
 
 export type {
     InputSize,

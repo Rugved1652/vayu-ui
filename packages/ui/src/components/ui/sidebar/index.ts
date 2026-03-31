@@ -1,13 +1,13 @@
 // Public API
 
-export { SidebarProvider, Sidebar } from "./sidebar";
-export { SidebarHeader } from "./sidebar-header";
-export { SidebarContent } from "./sidebar-content";
-export { SidebarFooter } from "./sidebar-footer";
-export { SidebarMenu, SidebarMenuGroup } from "./sidebar-menu";
-export { SidebarMenuItem } from "./sidebar-menu-item";
-export { SidebarToggle } from "./sidebar-toggle";
-export { MobileMenuButton } from "./mobile-menu-button";
+export { SidebarProvider, Sidebar } from "./Sidebar";
+export { SidebarHeader } from "./SidebarHeader";
+export { SidebarContent } from "./SidebarContent";
+export { SidebarFooter } from "./SidebarFooter";
+export { SidebarMenu, SidebarMenuGroup } from "./SidebarMenu";
+export { SidebarMenuItem } from "./SidebarMenuItem";
+export { SidebarToggle } from "./SidebarToggle";
+export { MobileMenuButton } from "./SidebarMobileMenuButton";
 export { useSidebar } from "./hooks";
 export type {
     SidebarContextType,

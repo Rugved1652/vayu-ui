@@ -1,8 +1,8 @@
 // index.ts
 // Public API
 
-import { ToastTitle, ToastDescription, ToastClose } from "./compound";
-import { ToastProvider, useToast } from "./toast-provider";
+import { ToastTitle, ToastDescription, ToastClose } from "./ToastUtilities";
+import { ToastProvider, useToast } from "./ToastProvider";
 
 // Compound component
 export const Toast = {

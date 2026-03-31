@@ -1,7 +1,7 @@
 // index.ts
 // Public API
 
-export { default, default as Stepper, StepperRoot, Step, StepIndicator, StepContent, StepTitle, StepDescription } from "./stepper";
+export { default, default as Stepper, StepperRoot, Step, StepIndicator, StepContent, StepTitle, StepDescription } from "./Stepper";
 
 export type {
     StepperOrientation,

@@ -1,8 +1,8 @@
 // index.ts
 // Public API
 
-export { default, default as VideoPlayer } from "./videoplayer";
+export { default, default as VideoPlayer } from "./VideoPlayer";
 
-export { useVideoPlayer } from "./videoplayer";
+export { useVideoPlayer } from "./VideoPlayer";
 
 export type { QualityLevel, VideoPlayerContextValue } from "./types";

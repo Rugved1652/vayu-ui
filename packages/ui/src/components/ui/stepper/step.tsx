@@ -11,7 +11,7 @@ import {
 } from "react";
 import { clsx } from "clsx";
 import { useStepperContext, useStepIndexContext, getStatus } from "./hooks";
-import { StepIndicator } from "./step-indicator";
+import { StepIndicator } from "./StepperIndicator";
 import { StepStatusContext } from "./hooks";
 import type { StepProps } from "./types";
 

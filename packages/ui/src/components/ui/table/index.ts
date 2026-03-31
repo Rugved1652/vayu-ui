@@ -1,7 +1,7 @@
 // index.ts
 // Public API
 
-export { default } from "./table";
+export { default } from "./Table";
 
 export {
     TableBody,
@@ -11,7 +11,7 @@ export {
     TableHead,
     TableHeader,
     TableRow,
-} from "./table";
+} from "./Table";
 
 export type {
     TableBodyProps,

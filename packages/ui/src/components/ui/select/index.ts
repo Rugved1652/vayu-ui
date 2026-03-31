@@ -1,13 +1,13 @@
 // index.ts
 // Public API
 
-import { SelectRoot } from "./select";
-import { SelectTrigger } from "./trigger";
-import { SelectContent } from "./content";
-import { SelectItem } from "./item";
-import { SelectCreateButton } from "./create-button";
-import { SelectAsyncOptions, SelectList } from "./list";
-import { SelectLoading, SelectNotFound, SelectSearchHint, SelectError, SelectFooter } from "./select-states";
+import { SelectRoot } from "./Select";
+import { SelectTrigger } from "./SelectTrigger";
+import { SelectContent } from "./SelectContent";
+import { SelectItem } from "./Selectitem";
+import { SelectCreateButton } from "./SelectCreateButton";
+import { SelectAsyncOptions, SelectList } from "./SelectOptionList";
+import { SelectLoading, SelectNotFound, SelectSearchHint, SelectError, SelectFooter } from "./SelectStates";
 
 // ============================================================================
 // Compound Component Assembly

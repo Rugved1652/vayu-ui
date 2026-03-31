@@ -1,9 +1,9 @@
 // index.ts
 // Public API
 
-import SkeletonRoot from "./skeleton-root";
-import SkeletonItem from "./skeleton-item";
-import { SkeletonText, SkeletonCircle, SkeletonRectangle } from "./primitives";
+import SkeletonRoot from "./SkeletonRoot";
+import SkeletonItem from "./SkeletonItem";
+import { SkeletonText, SkeletonCircle, SkeletonRectangle } from "./SkeletonPrimitives";
 import {
     SkeletonCard,
     SkeletonAvatar,
@@ -11,7 +11,7 @@ import {
     SkeletonTable,
     SkeletonGrid,
     SkeletonGroup,
-} from "./composites";
+} from "./SkeletonComposites";
 
 export type {
     SkeletonAnimation,

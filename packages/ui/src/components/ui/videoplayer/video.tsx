@@ -6,7 +6,7 @@
 import { clsx } from "clsx";
 import { forwardRef } from "react";
 
-import { useVideoPlayer } from "./videoplayer";
+import { useVideoPlayer } from "./VideoPlayer";
 import type { VideoProps } from "./types";
 
 export const Video = forwardRef<HTMLVideoElement, VideoProps>(

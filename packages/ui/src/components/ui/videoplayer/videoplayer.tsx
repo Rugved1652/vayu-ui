@@ -7,7 +7,6 @@ import { clsx } from "clsx";
 import {
     createContext,
     forwardRef,
-    HTMLAttributes,
     useCallback,
     useContext,
     useEffect,
@@ -518,10 +517,10 @@ VideoPlayerRoot.displayName = "VideoPlayer.Root";
 // ============================================================================
 
 // Import subcomponents for compound API
-import { Video } from "./video";
-import { Controls } from "./controls";
-import { ProgressBar } from "./progress";
-import { VolumeControl } from "./volume";
+import { Video } from "./Video";
+import { Controls } from "./VideoPlayerControls";
+import { ProgressBar } from "./VideoPlayerProgress";
+import { VolumeControl } from "./VideoPlayerVolume";
 import {
     PlayPauseButton,
     SkipBackwardButton,
@@ -533,7 +532,7 @@ import {
     DownloadButton,
     LoadingOverlay,
     CenterPlayButton,
-} from "./buttons";
+} from "./VideoPlayerButtons";
 
 const DefaultVideoPlayer = Object.assign(VideoPlayerRoot, {
     Root: VideoPlayerRoot,

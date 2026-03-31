@@ -1,8 +1,8 @@
 // index.ts
 // Public API
 
-import RadioGroupRoot from "./radiogroup";
-import RadioItem from "./radio-item";
+import RadioGroupRoot from "./RadioGroup";
+import RadioItem from "./RadioItem";
 
 const RadioGroup = Object.assign(RadioGroupRoot, { Item: RadioItem });
 

@@ -1,9 +1,9 @@
 // index.ts
 // Public API
 
-import PopoverRoot from "./popover";
-import PopoverTrigger from "./trigger";
-import PopoverContent from "./content";
+import PopoverRoot from "./Popover";
+import PopoverTrigger from "./PopoverTrigger";
+import PopoverContent from "./PopoverContent";
 
 export type {
     PopoverProps,

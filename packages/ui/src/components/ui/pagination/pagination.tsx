@@ -1,10 +1,10 @@
 // pagination.tsx
 // Composition: compound export
 
-import { PaginationRoot } from "./pagination-root";
-import { PaginationInfo } from "./pagination-info";
-import { PaginationButtons } from "./pagination-buttons";
-import { CompactPagination } from "./compact-pagination";
+import { PaginationRoot } from "./PaginationRoot";
+import { PaginationInfo } from "./PaginationInfo";
+import { PaginationButtons } from "./PaginationButtons";
+import { CompactPagination } from "./CompactPagination";
 
 const Pagination = {
     Root: PaginationRoot,

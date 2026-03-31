@@ -1,6 +1,6 @@
 // Public API
 
-import SliderRoot from "./slider";
+import SliderRoot from "./Slider";
 
 export type { SliderProps } from "./types";
 

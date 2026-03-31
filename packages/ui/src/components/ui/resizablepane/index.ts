@@ -1,9 +1,9 @@
 // index.ts
 // Public API
 
-import ResizablePaneRoot, { useResizablePane } from "./resizablepane";
-import ResizablePanePanel from "./panel";
-import ResizablePaneHandle from "./handle";
+import ResizablePaneRoot, { useResizablePane } from "./ResizablePane";
+import ResizablePanePanel from "./ResizablePanel";
+import ResizablePaneHandle from "./ResizablePaneHandle";
 
 export type { Direction, HandleProps, PanelProps, ResizablePaneProps } from "./types";
 

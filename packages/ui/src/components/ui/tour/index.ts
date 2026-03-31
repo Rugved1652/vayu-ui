@@ -1,7 +1,7 @@
 // index.ts
 // Public API
 
-import Tour from "./tour";
+import Tour from "./Tour";
 import { useTour } from "./hooks";
 
 export type { TourStep, TourContextValue, TourProps } from "./types";

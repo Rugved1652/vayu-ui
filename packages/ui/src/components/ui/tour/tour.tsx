@@ -17,8 +17,8 @@ import { createPortal } from "react-dom";
 import type { TourContextValue, TourProps, TourStep } from "./types";
 import { usePopoverPosition } from "./use-position";
 import { useTourTarget } from "./use-target";
-import { TourOverlay } from "./overlay";
-import { TourPopover } from "./popover";
+import { TourOverlay } from "./TourOverlay";
+import { TourPopover } from "./TourPopover";
 
 // ============================================================================
 // Context

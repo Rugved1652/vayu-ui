@@ -4,7 +4,7 @@
 "use client";
 
 import { useContext } from "react";
-import { TourContext } from "./tour";
+import { TourContext } from "./Tour";
 import type { TourContextValue } from "./types";
 
 const useTour = (): TourContextValue => {

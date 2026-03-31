@@ -6,7 +6,7 @@
 import { clsx } from "clsx";
 import { forwardRef, HTMLAttributes, useEffect, useRef } from "react";
 import { useAudioPlayer } from "./Audio";
-import { useMergeRefs } from "../popover";
+import { useMergeRefs } from "../Popover";
 import { hashString, pseudoRandom } from "./utils";
 
 export const AudioPlayerWaveform = forwardRef<HTMLCanvasElement, HTMLAttributes<HTMLCanvasElement>>(({ className, ...props }, ref) => {

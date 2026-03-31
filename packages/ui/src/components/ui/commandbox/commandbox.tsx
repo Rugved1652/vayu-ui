@@ -318,7 +318,7 @@ const CommandBox = forwardRef<HTMLDivElement, CommandBoxProps>(
                                                                 sizeClasses[
                                                                     size
                                                                 ].icon,
-                                                                "flex-shrink-0",
+                                                                "shrink-0",
                                                                 isSelected
                                                                     ? "text-primary-600 dark:text-primary-400"
                                                                     : "text-neutral-500 dark:text-neutral-400"

@@ -1,13 +1,13 @@
 // rate/index.ts
 // Public API
 
-import RateRoot from "./rate";
-import { RateStars, RateStar } from "./stars";
-import { RateLabel } from "./label";
-import { RateDescription } from "./description";
-import { RateValue, RateTextLabel } from "./value";
-import { RateContainer } from "./container";
-import { RateErrorText } from "./error-text";
+import RateRoot from "./Rate";
+import { RateStars, RateStar } from "./RateStars";
+import { RateLabel } from "./RateLabel";
+import { RateDescription } from "./RateDescription";
+import { RateValue, RateTextLabel } from "./RateValue";
+import { RateContainer } from "./RateContainer";
+import { RateErrorText } from "./RateErrorText";
 
 const Rate = Object.assign(RateRoot, {
     Label: RateLabel,

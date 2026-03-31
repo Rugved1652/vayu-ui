@@ -7,7 +7,7 @@ import { clsx } from "clsx";
 import { Volume2, VolumeX } from "lucide-react";
 import { forwardRef, HTMLAttributes, ButtonHTMLAttributes, useCallback, useRef, useState } from "react";
 import { useAudioPlayer } from "./Audio";
-import { useMergeRefs } from "../popover";
+import { useMergeRefs } from "../Popover";
 
 export const AudioPlayerMute = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement>>(({ className, ...props }, ref) => {
     const { isMuted, toggleMute, volume } = useAudioPlayer();

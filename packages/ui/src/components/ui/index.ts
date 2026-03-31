@@ -37,26 +37,26 @@ export * from "./Marquee";
 export * from "./MenuBar";
 export * from "./Modal";
 export * from "./NavBar";
-export * from "./otpinput";
-export { default as Pagination } from "./pagination";
-export * from "./popover";
-export * from "./qrcode";
-export * from "./radiogroup";
-export * from "./rate";
-export { ResizablePane, useResizablePane, type Direction as ResizeDirection } from "./resizablepane";
-export * from "./select";
-export { Show, Switch, Case, Default } from "./show";
-export type { ShowProps, SwitchProps, CaseProps, DefaultProps } from "./show";
-export * from "./sidebar";
-export * from "./skeleton";
-export * from "./slider";
+export * from "./OTPInput";
+export { default as Pagination } from "./Pagination";
+export * from "./Popover";
+export * from "./QRcode";
+export * from "./RadioGroup";
+export * from "./Rate";
+export { ResizablePane, useResizablePane, type Direction as ResizeDirection } from "./ResizablePane";
+export * from "./Select";
+export { Show, Switch, Case, Default } from "./Show";
+export type { ShowProps, SwitchProps, CaseProps, DefaultProps } from "./Show";
+export * from "./Sidebar";
+export * from "./Skeleton";
+export * from "./Slider";
 export { Spinner, type SpinnerProps, type SpinnerSize } from "./Spinner";
-export * from "./stepper";
-export * from "./switch";
-export { default as Tabs } from "./tab";
-export { default as Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "./table";
-export type { TableProps, TableBodyProps, TableCaptionProps, TableCellProps, TableFooterProps, TableHeadProps, TableHeaderProps, TableRowProps } from "./table";
-export * from "./textarea";
+export * from "./Stepper";
+export * from "./Switch";
+export { default as Tabs } from "./Tab";
+export { default as Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "./Table";
+export type { TableProps, TableBodyProps, TableCaptionProps, TableCellProps, TableFooterProps, TableHeadProps, TableHeaderProps, TableRowProps } from "./Table";
+export * from "./TextArea";
 export {
     TextInput,
     useTextInput,
@@ -74,20 +74,20 @@ export {
     LoadingSpinner,
     CharacterCount,
     ClearButton,
-} from "./textinput/index";
+} from "./TextInput/index";
 export type {
     InputSize,
     InputType,
     NumberType,
     TextInputContextValue,
     ValidationState as TextInputValidationState,
-} from "./textinput/index";
-export * from "./timepicker";
-export * from "./toaster";
-export * from "./tooltip";
-export * from "./tour";
-export * from "./tree";
-export { default as Typography } from "./typography";
+} from "./TextInput/index";
+export * from "./TimePicker";
+export * from "./Toaster";
+export * from "./Tooltip";
+export * from "./Tour";
+export * from "./Tree";
+export { default as Typography } from "./Typography";
 export type {
     BaseTypographyProps,
     H1Props,
@@ -101,6 +101,6 @@ export type {
     LinkProps,
     CodeProps,
     CTAProps,
-} from "./typography";
-export * from "./videoplayer";
+} from "./Typography";
+export * from "./VideoPlayer";
 

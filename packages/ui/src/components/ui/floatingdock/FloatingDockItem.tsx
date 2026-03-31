@@ -4,7 +4,7 @@
 import type { HTMLAttributes, ElementType, ComponentType } from "react";
 import Link from "next/link";
 import { cn } from "../utils";
-import { Tooltip } from "../tooltip";
+import { Tooltip } from "../Tooltip";
 import type { DockItemProps, InjectedDockProps } from "./types";
 
 const DockItem = (allProps: DockItemProps & InjectedDockProps) => {

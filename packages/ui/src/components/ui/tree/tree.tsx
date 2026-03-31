@@ -6,11 +6,11 @@
 import { clsx } from "clsx";
 import React, { ReactNode, useCallback, useId, useMemo, useState } from "react";
 
-import { TreeContext } from "./context";
-import TreeNodeItem from "./tree-node";
-import TreeSearch from "./tree-search";
-import TreeActions from "./tree-actions";
-import TreeContainer from "./tree-container";
+import { TreeContext } from "./hooks";
+import TreeNodeItem from "./TreeNode";
+import TreeSearch from "./TreeSearch";
+import TreeActions from "./TreeActions";
+import TreeContainer from "./TreeContainer";
 import type {
     CheckboxState,
     TreeNode,

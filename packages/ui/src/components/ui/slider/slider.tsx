@@ -6,8 +6,8 @@ import { clsx } from "clsx";
 import { forwardRef, useRef } from "react";
 
 import { useSliderDrag } from "./hooks";
-import SliderTrack from "./track";
-import SliderThumb from "./thumb";
+import SliderTrack from "./SliderTrack";
+import SliderThumb from "./SliderThumb";
 import type { SliderProps } from "./types";
 
 const sliderRootStyles =
@@ -108,8 +108,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                         label={label}
                         isDragging={isDragging}
                         isActive={activeThumb === index}
-                        onValueChange={onValueChange || (() => {})}
-                        onValueCommit={onValueCommit || (() => {})}
+                        onValueChange={onValueChange || (() => { })}
+                        onValueCommit={onValueCommit || (() => { })}
                         values={values}
                     />
                 ))}

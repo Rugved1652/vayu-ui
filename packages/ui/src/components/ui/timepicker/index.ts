@@ -1,11 +1,11 @@
 // index.ts
 // Public API
 
-import Timepicker from "./timepicker";
-import { TimepickerTrigger } from "./trigger";
-import { TimepickerContent } from "./content";
-import { HourColumn, MinuteColumn, PeriodColumn, TimeGrid } from "./columns";
-import { TimepickerFooter, TimepickerError } from "./footer";
+import Timepicker from "./TimePicker";
+import { TimepickerTrigger } from "./TimePickerTrigger";
+import { TimepickerContent } from "./TimePickerContent";
+import { HourColumn, MinuteColumn, PeriodColumn, TimeGrid } from "./TimePickerColumns";
+import { TimepickerFooter, TimepickerError } from "./TimePickerFooter";
 
 export type {
     TimeValue,

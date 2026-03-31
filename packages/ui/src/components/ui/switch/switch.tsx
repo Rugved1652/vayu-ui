@@ -7,8 +7,8 @@ import { cn } from "../utils";
 import { forwardRef, useId } from "react";
 import type { SwitchProps } from "./types";
 import { useSwitchControl } from "./hooks";
-import { SwitchTrack } from "./track";
-import { SwitchLabel } from "./label";
+import { SwitchTrack } from "./SwitchTrack";
+import { SwitchLabel } from "./SwitchLabel";
 
 const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   (

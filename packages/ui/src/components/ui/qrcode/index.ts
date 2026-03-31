@@ -1,6 +1,6 @@
 // index.ts
 // Public API
 
-export { QRCode } from "./qrcode";
-export type { QRCodeProps } from "./qrcode";
+export { QRCode } from "./QRCode";
+export type { QRCodeProps } from "./QRCode";
 export type { QRCodeImageSettings, ErrorCorrectionLevel } from "./types";

@@ -1,7 +1,7 @@
 // index.ts
 // Public API
 
-export { default, default as Typography } from "./typography";
+export { default, default as Typography } from "./Typography";
 
 export type {
     BaseTypographyProps,

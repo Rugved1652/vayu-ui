@@ -1,12 +1,12 @@
 // index.ts
 // Public API
 
-import TextAreaRoot from "./textarea";
-import { TextAreaLabel } from "./label";
-import { TextAreaInput } from "./input";
-import { TextAreaSupportText } from "./support-text";
-import { TextAreaErrorText } from "./error-text";
-import { TextAreaCharCount } from "./char-count";
+import TextAreaRoot from "./TextArea";
+import { TextAreaLabel } from "./TextAreaLabel";
+import { TextAreaInput } from "./TextAreaInput";
+import { TextAreaSupportText } from "./TextAreaSupportText";
+import { TextAreaErrorText } from "./TextAreaErrorText";
+import { TextAreaCharCount } from "./TextAreaCharCount";
 
 export type {
     TextAreaResize,

@@ -1,8 +1,8 @@
 // index.ts
 // Public API
 
-import Tree from "./tree";
-import { useTree } from "./context";
+import Tree from "./Tree";
+import { useTree } from "./hooks";
 
 export { Tree as default };
 export { Tree, useTree };

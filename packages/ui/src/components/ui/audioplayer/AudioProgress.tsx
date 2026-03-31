@@ -6,7 +6,7 @@
 import { clsx } from "clsx";
 import { forwardRef, HTMLAttributes, useCallback, useRef, useState } from "react";
 import { useAudioPlayer } from "./Audio";
-import { useMergeRefs } from "../popover";
+import { useMergeRefs } from "../Popover";
 
 export const AudioPlayerSeek = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => {
     const { currentTime, duration, seek, buffered } = useAudioPlayer();

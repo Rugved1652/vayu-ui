@@ -5,13 +5,13 @@ import React from "react";
 import { cn } from "../utils";
 import { TableProps } from "./types";
 
-import TableCaption from "./table-caption";
-import TableHead from "./table-head";
-import TableBody from "./table-body";
-import TableFooter from "./table-footer";
-import TableRow from "./table-row";
-import TableHeader from "./table-header";
-import TableCell from "./table-cell";
+import TableCaption from "./TableCaption";
+import TableHead from "./TableHead";
+import TableBody from "./TableBody";
+import TableFooter from "./TableFooter";
+import TableRow from "./TableRow";
+import TableHeader from "./TableHeader";
+import TableCell from "./TableCell";
 
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
     ({ children, className, "aria-label": ariaLabel, "aria-describedby": ariaDescribedby, "aria-colcount": ariaColcount, "aria-rowcount": ariaRowcount, ...props }, ref) => {
