@@ -1,14 +1,14 @@
 // index.ts
 // Public API
 
-import { MenubarRoot } from "./menubar";
-import { Menu } from "./menu";
-import { SubMenu } from "./submenu";
-import { MenuItem } from "./item";
-import { MenuSeparator } from "./separator";
-import { MenuLabel } from "./label";
-import { MenuCheckboxItem } from "./checkbox-item";
-import { MenuRadioGroup, MenuRadioItem } from "./radio-group";
+import { MenubarRoot } from "./Menubar";
+import { Menu } from "./Menu";
+import { SubMenu } from "./MenubarSubMenu";
+import { MenuItem } from "./MenubarItem";
+import { MenuSeparator } from "./MenubarSeparator";
+import { MenuLabel } from "./MenubarLabel";
+import { MenuCheckboxItem } from "./MenubarCheckBoxItem";
+import { MenuRadioGroup, MenuRadioItem } from "./MenubarRadioGroup";
 
 export type {
     Orientation,

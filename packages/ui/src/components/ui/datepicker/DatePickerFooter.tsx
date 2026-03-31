@@ -5,8 +5,8 @@
 
 import React, { forwardRef } from "react";
 import { cn } from "../utils";
-import { useDatePicker } from "./datepicker";
-import { XIcon } from "./icons";
+import { useDatePicker } from "./DatePicker";
+import { XIcon } from "./DatePickerIcons";
 import type { DatePickerCalendarFooterProps } from "./types";
 
 export const DatePickerCalendarFooter = forwardRef<

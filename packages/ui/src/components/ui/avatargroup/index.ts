@@ -1,7 +1,7 @@
 // index.ts
 // Public API
 
-export { default, AvatarGroup } from './avatargroup';
+export { default, AvatarGroup } from './AvatarGroup';
 export type {
     AvatarGroupSize,
     AvatarGroupLayout,

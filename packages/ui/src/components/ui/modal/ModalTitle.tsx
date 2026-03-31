@@ -5,7 +5,7 @@
 
 import { forwardRef, HTMLAttributes } from "react";
 import { cn } from "../utils";
-import { useModal } from "./modal";
+import { useModal } from "./Modal";
 
 const ModalTitle = forwardRef<
   HTMLHeadingElement,

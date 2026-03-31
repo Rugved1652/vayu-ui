@@ -6,7 +6,7 @@
 import { cn } from "../utils";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { useNavbar } from "./navbar";
+import { useNavbar } from "./NavBar";
 import type { NavbarMobileMenuProps, NavbarMobileItemProps, InjectedLinkProps } from "./types";
 
 export function NavbarMobileMenu({ className, children, ...props }: NavbarMobileMenuProps) {

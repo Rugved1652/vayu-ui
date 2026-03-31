@@ -4,7 +4,7 @@
 "use client";
 import { forwardRef } from "react";
 import { cn } from "../utils";
-import { useCollapsible } from "./collapsible";
+import { useCollapsible } from "./Collapsible";
 import type { CollapsibleTriggerProps } from "./types";
 
 const CollapsibleTrigger = forwardRef<HTMLButtonElement, CollapsibleTriggerProps>(

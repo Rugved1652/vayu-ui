@@ -5,7 +5,7 @@
 
 import { AlertCircle, Loader2 } from "lucide-react";
 import { forwardRef, HTMLAttributes } from "react";
-import { useAudioPlayer } from "./audioplayer";
+import { useAudioPlayer } from "./Audio";
 import { clsx } from "clsx";
 
 export const AudioPlayerLoading = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => {

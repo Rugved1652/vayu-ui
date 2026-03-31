@@ -14,10 +14,10 @@ import React, {
     useState,
 } from "react";
 import { defaultFilter, sizeClasses, variantClasses } from "./config";
-import { CommandBoxFooter } from "./footer";
+import { CommandBoxFooter } from "./CommandBoxFooter";
 import { useFilteredItems } from "./hooks";
-import { CommandBoxSearchInput } from "./search-input";
-import { CommandBoxTrigger } from "./trigger";
+import { CommandBoxSearchInput } from "./CommandBoxSearchInput";
+import { CommandBoxTrigger } from "./CommandBoxTrigger";
 import type { CommandBoxProps, CommandItem } from "./types";
 
 const CommandBox = forwardRef<HTMLDivElement, CommandBoxProps>(
@@ -303,13 +303,13 @@ const CommandBox = forwardRef<HTMLDivElement, CommandBoxProps>(
                                                         "flex items-center gap-3 cursor-pointer transition-colors duration-150 font-secondary",
                                                         sizeClasses[size].item,
                                                         isSelected &&
-                                                            !item.disabled &&
-                                                            "bg-primary-50 text-primary-900 dark:bg-primary-900/20 dark:text-primary-100",
+                                                        !item.disabled &&
+                                                        "bg-primary-50 text-primary-900 dark:bg-primary-900/20 dark:text-primary-100",
                                                         !isSelected &&
-                                                            !item.disabled &&
-                                                            "hover:bg-neutral-50 dark:hover:bg-neutral-700/50 text-neutral-900 dark:text-white",
+                                                        !item.disabled &&
+                                                        "hover:bg-neutral-50 dark:hover:bg-neutral-700/50 text-neutral-900 dark:text-white",
                                                         item.disabled &&
-                                                            "opacity-50 cursor-not-allowed"
+                                                        "opacity-50 cursor-not-allowed"
                                                     )}
                                                 >
                                                     {item.icon && (

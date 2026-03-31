@@ -1,16 +1,16 @@
 // index.ts
 // Public API
 
-import Drawer from "./drawer";
-import { DrawerTrigger } from "./trigger";
-import { DrawerOverlay } from "./overlay";
-import { DrawerContent } from "./content";
-import { DrawerHeader } from "./header";
-import { DrawerFooter } from "./footer";
-import { DrawerTitle } from "./title";
-import { DrawerDescription } from "./description";
-import { DrawerClose } from "./close";
-import { DrawerPortal } from "./portal";
+import Drawer from "./Drawer";
+import { DrawerTrigger } from "./DrawerTrigger";
+import { DrawerOverlay } from "./DrawerOverlay";
+import { DrawerContent } from "./DrawerContent";
+import { DrawerHeader } from "./DrawerHeader";
+import { DrawerFooter } from "./DrawerFooter";
+import { DrawerTitle } from "./DrawerTitle";
+import { DrawerDescription } from "./DrawerDescription";
+import { DrawerClose } from "./DrawerClose";
+import { DrawerPortal } from "./DrawerPortal";
 
 export type {
     DrawerSide,

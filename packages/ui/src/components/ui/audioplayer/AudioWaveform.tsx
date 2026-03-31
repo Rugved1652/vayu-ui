@@ -5,7 +5,7 @@
 
 import { clsx } from "clsx";
 import { forwardRef, HTMLAttributes, useEffect, useRef } from "react";
-import { useAudioPlayer } from "./audioplayer";
+import { useAudioPlayer } from "./Audio";
 import { useMergeRefs } from "../popover";
 import { hashString, pseudoRandom } from "./utils";
 

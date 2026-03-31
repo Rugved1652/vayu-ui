@@ -5,7 +5,7 @@
 
 import React, { forwardRef } from "react";
 import { cn } from "../utils";
-import { useDrawer } from "./drawer";
+import { useDrawer } from "./Drawer";
 import type { DrawerTriggerProps } from "./types";
 
 const DrawerTrigger = forwardRef<HTMLButtonElement, DrawerTriggerProps>(

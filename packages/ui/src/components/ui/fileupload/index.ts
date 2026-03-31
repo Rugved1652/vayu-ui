@@ -1,12 +1,12 @@
 // index.ts
 // Public API
 
-import FileUploadComponent from "./fileupload";
-import DropZone from "./dropzone";
-import DropZoneContent from "./dropzone-content";
-import ErrorMessage from "./error-message";
-import List from "./list";
-import Actions from "./actions";
+import FileUploadComponent from "./FileUpload";
+import DropZone from "./DropZone";
+import DropZoneContent from "./DropZoneContent";
+import ErrorMessage from "./FileUploadErrorMessage";
+import List from "./FileUploadList";
+import Actions from "./FileUploadActions";
 
 export type { FileWithMeta } from "./types";
 

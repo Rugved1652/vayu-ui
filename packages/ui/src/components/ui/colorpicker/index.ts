@@ -1,18 +1,18 @@
 // index.ts
 // Public API
 
-import ColorPickerRoot from "./colorpicker";
-import { ColorPickerLabel } from "./label";
-import { ColorPickerDescription } from "./description";
-import { ColorPickerError } from "./error";
-import { ColorPickerTrigger } from "./trigger";
-import { ColorPickerInput } from "./input";
-import { ColorPickerCopyButton } from "./copy-button";
-import { ColorPickerContent } from "./content";
-import { ColorPickerPalette } from "./palette";
-import { ColorPickerEyedropper } from "./eyedropper";
-import { ColorPickerPresets } from "./presets";
-import { ColorPickerSwatches } from "./swatches";
+import ColorPickerRoot from "./ColorPicker";
+import { ColorPickerLabel } from "./ColorPickerLabel";
+import { ColorPickerDescription } from "./ColorPickerDescription";
+import { ColorPickerError } from "./ColorPickerError";
+import { ColorPickerTrigger } from "./ColorPickerTrigger";
+import { ColorPickerInput } from "./ColorPickerInput";
+import { ColorPickerCopyButton } from "./ColorPickerCopyButton";
+import { ColorPickerContent } from "./ColorPickerContent";
+import { ColorPickerPalette } from "./ColorPickerPalette";
+import { ColorPickerEyedropper } from "./ColorPickerEyeDropper";
+import { ColorPickerPresets } from "./ColorPickerPresets";
+import { ColorPickerSwatches } from "./ColorPickerSwatches";
 
 // Types
 export type {

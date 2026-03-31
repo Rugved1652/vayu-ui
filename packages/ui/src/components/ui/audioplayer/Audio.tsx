@@ -376,20 +376,20 @@ export const AudioPlayerSource = ({ src }: { src?: string }) => null;
 // ============================================================================
 
 // Import subcomponents for compound API
-import { AudioPlayerPlaylist, AudioPlayerTrack } from "./playlist";
-import { AudioPlayerTrackInfo } from "./track-info";
+import { AudioPlayerPlaylist, AudioPlayerTrack } from "./AudioPlaylist";
+import { AudioPlayerTrackInfo } from "./AudioTrackInfo";
 import {
     AudioPlayerControls,
     AudioPlayerPlayPause,
     AudioPlayerNext,
     AudioPlayerPrevious,
     AudioPlayerTime,
-} from "./controls";
-import { AudioPlayerSeek, AudioPlayerProgress } from "./progress";
-import { AudioPlayerVolume, AudioPlayerMute } from "./volume";
-import { AudioPlayerRate } from "./rate";
-import { AudioPlayerLoading, AudioPlayerError, AudioPlayerBuffer } from "./status";
-import { AudioPlayerWaveform } from "./waveform";
+} from "./AudioControls";
+import { AudioPlayerSeek, AudioPlayerProgress } from "./AudioProgress";
+import { AudioPlayerVolume, AudioPlayerMute } from "./AudioVolume";
+import { AudioPlayerRate } from "./AudioRate";
+import { AudioPlayerLoading, AudioPlayerError, AudioPlayerBuffer } from "./AudioStatus";
+import { AudioPlayerWaveform } from "./AudioWaveform";
 
 const DefaultAudioPlayer = Object.assign(AudioPlayer, {
     Root: AudioPlayer,

@@ -3,7 +3,7 @@
 
 "use client";
 import React, { forwardRef } from "react";
-import Button from "../button";
+import Button from "../Button";
 import { cn, useMergeRefs } from "../utils";
 import { usePopover } from "./hooks";
 import type { PopoverTriggerProps } from "./types";

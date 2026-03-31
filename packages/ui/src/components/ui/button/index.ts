@@ -1,10 +1,10 @@
 // index.ts
 // Public API
 
-import ButtonRoot from "./button";
-import Icon from "./icon";
-import Badge from "./badge";
-import Text from "./text";
+import ButtonRoot from "./Button";
+import Icon from "./ButtonIcon";
+import Badge from "./ButtonBadge";
+import Text from "./ButtonText";
 
 export { Status } from "./types";
 export type {

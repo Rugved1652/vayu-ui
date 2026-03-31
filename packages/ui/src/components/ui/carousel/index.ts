@@ -1,15 +1,15 @@
 // index.ts
 // Public API
 
-import CarouselRoot from "./carousel";
-import CarouselViewport from "./viewport";
-import CarouselSlide from "./slide";
-import CarouselPrevious from "./previous";
-import CarouselNext from "./next";
-import CarouselBullets from "./bullets";
-import CarouselPlayPause from "./play-pause";
-import CarouselSpeedControl from "./speed-control";
-import CarouselGallery from "./gallery";
+import CarouselRoot from "./Carousel";
+import CarouselViewport from "./CarouselViewport";
+import CarouselSlide from "./CarouselSlide";
+import CarouselPrevious from "./CarouselPrevious";
+import CarouselNext from "./CarouselNext";
+import CarouselBullets from "./CarouselBullets";
+import CarouselPlayPause from "./CarouselPlayPause";
+import CarouselSpeedControl from "./CarouselSpeedControl";
+import CarouselGallery from "./CarouselGallery";
 
 // Types
 export type {

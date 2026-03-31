@@ -5,9 +5,9 @@
 
 import React, { forwardRef } from "react";
 import { cn } from "../utils";
-import { useDatePicker, useMergeRefs } from "./datepicker";
+import { useDatePicker, useMergeRefs } from "./DatePicker";
 import { formatDate } from "./utils";
-import { CalendarIcon } from "./icons";
+import { CalendarIcon } from "./DatePickerIcons";
 import type { DatePickerTriggerProps } from "./types";
 
 export const DatePickerTrigger = forwardRef<

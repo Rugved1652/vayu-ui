@@ -1,7 +1,6 @@
 // FooterUtilities.tsx
 // UI: utility elements (Copyright, Divider)
 
-import React from "react";
 import { cn } from "../utils";
 import type { FooterCopyrightProps, FooterDividerProps } from "./types";
 

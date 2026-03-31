@@ -1,7 +1,7 @@
 // index.ts
 // Public API
 
-export { default, default as CommandBox } from "./commandbox";
+export { default, default as CommandBox } from "./CommandBox";
 
 export type {
     CommandBoxProps,

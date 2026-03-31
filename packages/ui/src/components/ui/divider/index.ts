@@ -1,8 +1,8 @@
 // index.ts
 // Public API
 
-export { default } from "./divider";
-export { Divider } from "./divider";
+export { default } from "./Divider";
+export { Divider } from "./Divider";
 export type {
     DividerColor,
     DividerLabelProps,

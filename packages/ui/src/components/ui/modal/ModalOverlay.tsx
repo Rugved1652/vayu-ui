@@ -5,7 +5,7 @@
 
 import { forwardRef, HTMLAttributes } from "react";
 import { cn } from "../utils";
-import { useModal } from "./modal";
+import { useModal } from "./Modal";
 import type { ModalOverlayProps } from "./types";
 
 const ModalOverlay = forwardRef<HTMLDivElement, ModalOverlayProps>(

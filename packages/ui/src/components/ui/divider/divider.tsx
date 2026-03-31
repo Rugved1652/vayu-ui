@@ -4,8 +4,8 @@
 import { cn } from "../utils";
 import { spacingMap, verticalSpacingMap } from "./types";
 import type { DividerRootProps } from "./types";
-import DividerLine from "./divider-line";
-import DividerLabel from "./divider-label";
+import DividerLine from "./DividerLine";
+import DividerLabel from "./DividerLabel";
 
 // ============================================================================
 // DividerRoot

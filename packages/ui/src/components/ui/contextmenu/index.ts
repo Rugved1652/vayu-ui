@@ -1,15 +1,15 @@
 // index.ts
 // Public API
 
-import { ContextMenuRoot } from './contextmenu';
-import { ContextMenuTrigger } from './trigger';
-import { ContextMenuContent } from './content';
-import { ContextMenuItem } from './item';
-import { ContextMenuCheckboxItem } from './checkbox-item';
-import { ContextMenuRadioGroup, ContextMenuRadioItem } from './radio-group';
-import { ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent } from './sub';
-import { ContextMenuSeparator } from './separator';
-import { ContextMenuLabel } from './label';
+import { ContextMenuRoot } from './ContextMenu';
+import { ContextMenuTrigger } from './ContextMenuTrigger';
+import { ContextMenuContent } from './ContextMenuContent';
+import { ContextMenuItem } from './ContextMenuItem';
+import { ContextMenuCheckboxItem } from './ContextMenuCheckBoxItem';
+import { ContextMenuRadioGroup, ContextMenuRadioItem } from './ContextMenuRadioGroup';
+import { ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent } from './ContextMenuSub';
+import { ContextMenuSeparator } from './ContextMenuSeparator';
+import { ContextMenuLabel } from './ContextMenuLabel';
 
 export type {
   ContextMenuProps,

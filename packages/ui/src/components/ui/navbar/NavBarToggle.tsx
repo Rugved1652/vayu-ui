@@ -4,7 +4,7 @@
 "use client";
 
 import { cn } from "../utils";
-import { useNavbar } from "./navbar";
+import { useNavbar } from "./NavBar";
 import type { NavbarToggleProps } from "./types";
 
 export function NavbarToggle({ className, ...props }: NavbarToggleProps) {

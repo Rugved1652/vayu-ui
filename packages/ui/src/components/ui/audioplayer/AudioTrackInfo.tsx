@@ -5,7 +5,7 @@
 
 import { clsx } from "clsx";
 import { forwardRef, HTMLAttributes } from "react";
-import { useAudioPlayer } from "./audioplayer";
+import { useAudioPlayer } from "./Audio";
 
 export const AudioPlayerTrackInfo = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => {
     const { currentTrack } = useAudioPlayer();

@@ -5,7 +5,7 @@
 
 import { clsx } from "clsx";
 import { forwardRef, HTMLAttributes, ButtonHTMLAttributes } from "react";
-import { useAudioPlayer } from "./audioplayer";
+import { useAudioPlayer } from "./Audio";
 
 export const AudioPlayerRate = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement>>(({ className, ...props }, ref) => {
     const { playbackRate, setPlaybackRate } = useAudioPlayer();

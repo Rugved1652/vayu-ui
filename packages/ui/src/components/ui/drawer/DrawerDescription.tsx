@@ -5,7 +5,7 @@
 
 import { forwardRef, HTMLAttributes } from "react";
 import { cn } from "../utils";
-import { useDrawer } from "./drawer";
+import { useDrawer } from "./Drawer";
 
 const DrawerDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(
     ({ className, ...props }, ref) => {

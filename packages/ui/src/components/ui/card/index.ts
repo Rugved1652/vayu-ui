@@ -1,11 +1,11 @@
 // index.ts
 // Public API
 
-import CardRoot from "./card";
-import { CardHeader } from "./header";
-import { CardMedia } from "./media";
-import { CardContent } from "./content";
-import { CardFooter } from "./footer";
+import CardRoot from "./Card";
+import { CardHeader } from "./CardHeader";
+import { CardMedia } from "./CardMedia";
+import { CardContent } from "./CardContent";
+import { CardFooter } from "./CardFooter";
 
 export type {
     CardProps,

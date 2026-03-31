@@ -1,11 +1,11 @@
 // index.ts
 // Public API
 
-import Dock from "./floatingdock";
-import DockContainer from "./container";
-import DockItem from "./item";
-import DockLogo from "./logo";
-import { Divider } from "../divider";
+import Dock from "./FloatingDock";
+import DockContainer from "./FloatingDockContainer";
+import DockItem from "./FloatingDockItem";
+import DockLogo from "./FloatingDockLogo";
+import { Divider } from "../Divider";
 
 export type {
     DockBaseProps,

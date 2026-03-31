@@ -5,7 +5,7 @@
 
 import { forwardRef, HTMLAttributes } from "react";
 import { cn } from "../utils";
-import { useDrawer } from "./drawer";
+import { useDrawer } from "./Drawer";
 import type { DrawerOverlayProps } from "./types";
 
 const DrawerOverlay = forwardRef<HTMLDivElement, DrawerOverlayProps>(

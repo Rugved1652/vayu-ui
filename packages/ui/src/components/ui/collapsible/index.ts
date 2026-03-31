@@ -1,9 +1,9 @@
 // index.ts
 // Public API
 
-import Collapsible from "./collapsible";
-import { CollapsibleContent } from "./content";
-import { CollapsibleTrigger } from "./trigger";
+import Collapsible from "./Collapsible";
+import { CollapsibleContent } from "./CollapsibleContent";
+import { CollapsibleTrigger } from "./CollapsibleTrigger";
 
 export type {
     CollapsibleRootProps,

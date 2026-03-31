@@ -12,10 +12,10 @@ import {
 
 import type { BigCalendarProps, CalendarView } from "./types";
 import { CalendarContext } from "./hooks";
-import { Toolbar } from "./toolbar";
-import { MonthView } from "./month-view";
-import { WeekView } from "./week-view";
-import { DayView } from "./day-view";
+import { Toolbar } from "./BigCalendarToolbar";
+import { MonthView } from "./BigCalendarMonthView";
+import { WeekView } from "./BigCalendarWeekView";
+import { DayView } from "./BigCalendarDayView";
 
 const BigCalendarRoot = forwardRef<HTMLDivElement, BigCalendarProps>(
     (

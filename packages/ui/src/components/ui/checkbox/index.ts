@@ -1,11 +1,11 @@
 // index.ts
 // Public API
 
-import CheckboxRoot from "./checkbox";
-import { CheckboxIndicator } from "./indicator";
-import { CheckboxLabel } from "./label";
-import { CheckboxDescription } from "./description";
-import { CheckboxError } from "./error";
+import CheckboxRoot from "./CheckBox";
+import { CheckboxIndicator } from "./CheckBoxIndicator";
+import { CheckboxLabel } from "./CheckBoxLabel";
+import { CheckboxDescription } from "./CheckBoxDescription";
+import { CheckboxError } from "./CheckBoxError";
 
 const Checkbox = Object.assign(CheckboxRoot, {
     Indicator: CheckboxIndicator,

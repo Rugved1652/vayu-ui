@@ -12,8 +12,8 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "../utils";
-import { useModal, sizeWidths, FOCUSABLE } from "./modal";
-import { ModalOverlay } from "./overlay";
+import { useModal, sizeWidths, FOCUSABLE } from "./Modal";
+import { ModalOverlay } from "./ModalOverlay";
 import type { ModalContentProps } from "./types";
 
 const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(

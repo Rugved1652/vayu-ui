@@ -1,11 +1,11 @@
 // index.ts
 // Public API
 
-import BigCalendarRoot from "./bigcalendar";
-import { Toolbar } from "./toolbar";
-import { MonthView } from "./month-view";
-import { WeekView } from "./week-view";
-import { DayView } from "./day-view";
+import BigCalendarRoot from "./BigCalendar";
+import { Toolbar } from "./BigCalendarToolbar";
+import { MonthView } from "./BigCalendarMonthView";
+import { WeekView } from "./BigCalendarWeekView";
+import { DayView } from "./BigCalendarDayView";
 
 export type { CalendarView, CalendarEvent, BigCalendarProps } from "./types";
 

@@ -3,8 +3,8 @@
 
 import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from 'react';
 import { ContextMenuContext, useBodyScrollLock } from './hooks';
-import { ContextMenuContent } from './content';
-import { ContextMenuTrigger } from './trigger';
+import { ContextMenuContent } from './ContextMenuContent';
+import { ContextMenuTrigger } from './ContextMenuTrigger';
 import type { ContextMenuProps } from './types';
 
 const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
@@ -92,16 +92,16 @@ const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
             if (React.isValidElement(child) && child.type === ContextMenuContent) {
               return isOpen
                 ? React.cloneElement(
-                    child as React.ReactElement<
-                      React.ComponentProps<typeof ContextMenuContent> & {
-                        position?: {
-                          x: number;
-                          y: number;
-                        };
-                      }
-                    >,
-                    { position },
-                  )
+                  child as React.ReactElement<
+                    React.ComponentProps<typeof ContextMenuContent> & {
+                      position?: {
+                        x: number;
+                        y: number;
+                      };
+                    }
+                  >,
+                  { position },
+                )
                 : null;
             }
             return child;

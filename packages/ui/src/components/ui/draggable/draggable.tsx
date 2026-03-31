@@ -13,7 +13,7 @@ import React, {
 import { DraggableContext, reorder } from "./types";
 import type { Ctx, DraggableItem, DraggableListProps, DragHandleProps } from "./types";
 import { useAnnounce, useDragOperations, useKeyboardSort } from "./hooks";
-import { DragHandle } from "./drag-handle";
+import { DragHandle } from "./DragHandle";
 
 // ============================================================================
 // DraggableList

@@ -5,7 +5,7 @@
 
 import React, { forwardRef, useCallback } from "react";
 import { cn } from "../utils";
-import { useModal } from "./modal";
+import { useModal } from "./Modal";
 import type { ModalTriggerProps } from "./types";
 
 const ModalTrigger = forwardRef<HTMLButtonElement, ModalTriggerProps>(

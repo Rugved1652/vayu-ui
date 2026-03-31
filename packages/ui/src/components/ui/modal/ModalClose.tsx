@@ -6,7 +6,7 @@
 import React, { forwardRef } from "react";
 import { cn } from "../utils";
 import { X } from "lucide-react";
-import { useModal } from "./modal";
+import { useModal } from "./Modal";
 import type { ModalCloseProps } from "./types";
 
 const ModalClose = forwardRef<HTMLButtonElement, ModalCloseProps>(

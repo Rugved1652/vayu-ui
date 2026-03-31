@@ -1,13 +1,13 @@
 // Public API
 
-import NavbarRoot from "./navbar";
-import { NavbarContainer } from "./container";
-import { NavbarBrand } from "./brand";
-import { NavbarItems, NavbarItem } from "./items";
-import { NavbarActions } from "./actions";
-import { NavbarToggle } from "./toggle";
-import { NavbarMobileMenu, NavbarMobileItem } from "./mobile-menu";
-import { NavbarSeparator } from "./separator";
+import NavbarRoot from "./NavBar";
+import { NavbarContainer } from "./NavbarContainer";
+import { NavbarBrand } from "./NavBarBrand";
+import { NavbarItems, NavbarItem } from "./NavbarMenuItems";
+import { NavbarActions } from "./NavBarActions";
+import { NavbarToggle } from "./NavBarToggle";
+import { NavbarMobileMenu, NavbarMobileItem } from "./NavBarMobileMenu";
+import { NavbarSeparator } from "./NavBarSeparator";
 
 export type {
     NavbarProps,

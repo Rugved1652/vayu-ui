@@ -6,7 +6,7 @@
 import { clsx } from "clsx";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { forwardRef, HTMLAttributes, ButtonHTMLAttributes } from "react";
-import { useAudioPlayer } from "./audioplayer";
+import { useAudioPlayer } from "./Audio";
 import { formatTime } from "./utils";
 
 const BTN_CLASS = "p-2 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-focus hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 disabled:opacity-50 disabled:pointer-events-none";

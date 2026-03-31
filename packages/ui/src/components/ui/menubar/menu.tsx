@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useElementPosition } from "vayu-ui";
 import { cn } from "../utils";
 import { useMenubarContext, useMenuContext, MenuContext, useTypeahead, useFocusItems } from "./hooks";
-import { Portal } from "./portal";
+import { Portal } from "./MenubarPortal";
 import type { MenuProps } from "./types";
 
 export const Menu = ({
@@ -64,8 +64,8 @@ export const Menu = ({
             direction === "next"
                 ? (currentIndex + 1) % triggers.length
                 : currentIndex === 0
-                  ? triggers.length - 1
-                  : currentIndex - 1;
+                    ? triggers.length - 1
+                    : currentIndex - 1;
 
         const targetTrigger = triggers[targetIndex];
         if (targetTrigger && targetTrigger.ref.current) {

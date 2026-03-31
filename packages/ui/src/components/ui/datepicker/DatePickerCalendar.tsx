@@ -14,7 +14,7 @@ import React, {
 } from "react";
 import moment from "moment";
 import { cn } from "../utils";
-import { useDatePicker, useMergeRefs } from "./datepicker";
+import { useDatePicker, useMergeRefs } from "./DatePicker";
 import type { DatePickerCalendarProps } from "./types";
 import {
   getMonthDays,
@@ -30,8 +30,8 @@ import {
   DAY_NAMES_FULL,
   MONTH_NAMES_SHORT,
 } from "./utils";
-import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "./icons";
-import { MonthDropdownList, YearDropdownList } from "./dropdowns";
+import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "./DatePickerIcons";
+import { MonthDropdownList, YearDropdownList } from "./DatePickerDropDowns";
 
 export const DatePickerCalendar = forwardRef<
   HTMLDivElement,
@@ -458,7 +458,7 @@ export const DatePickerCalendar = forwardRef<
             mode === "single"
               ? isSameDay(day, selectedDate)
               : isRangeStart(day, selectedRange) ||
-                isRangeEnd(day, selectedRange);
+              isRangeEnd(day, selectedRange);
           const isRangeStartDay = isRangeStart(day, selectedRange);
           const isRangeEndDay = isRangeEnd(day, selectedRange);
           const isInRange =

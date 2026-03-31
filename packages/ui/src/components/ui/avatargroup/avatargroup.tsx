@@ -6,8 +6,8 @@
 import React, { useMemo, forwardRef, HTMLAttributes } from "react";
 import { clsx } from "clsx";
 import type { AvatarGroupProps, UserData } from "./types";
-import { AvatarItem } from "./avatar-item";
-import { OverflowButton } from "./overflow-button";
+import { AvatarItem } from "./AvatarItem";
+import { OverflowButton } from "./AvtarGroupOverflowButton";
 import { useSpacing, useKeyboardNavigation } from "./hooks";
 
 const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(

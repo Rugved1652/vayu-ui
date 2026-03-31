@@ -5,7 +5,7 @@
 
 import React, { useRef, useEffect } from "react";
 import { useFileUpload } from "./hooks";
-import Item from "./item";
+import Item from "./FileUploadItem";
 
 const List: React.FC = () => {
     const { files, dropZoneRef } = useFileUpload();

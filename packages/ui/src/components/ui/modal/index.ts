@@ -1,16 +1,16 @@
 // index.ts
 // Public API
 
-import Modal from "./modal";
-import { ModalTrigger } from "./trigger";
-import { ModalOverlay } from "./overlay";
-import { ModalContent } from "./content";
-import { ModalHeader } from "./header";
-import { ModalBody } from "./body";
-import { ModalFooter } from "./footer";
-import { ModalTitle } from "./title";
-import { ModalDescription } from "./description";
-import { ModalClose } from "./close";
+import Modal from "./Modal";
+import { ModalTrigger } from "./ModalTrigger";
+import { ModalOverlay } from "./ModalOverlay";
+import { ModalContent } from "./ModalContent";
+import { ModalHeader } from "./ModalHeader";
+import { ModalBody } from "./ModalBody";
+import { ModalFooter } from "./ModalFooter";
+import { ModalTitle } from "./ModalTitle";
+import { ModalDescription } from "./ModalDescription";
+import { ModalClose } from "./ModalClose";
 
 export type {
   ModalSize,

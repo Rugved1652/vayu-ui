@@ -1,4 +1,4 @@
-export { default, default as AudioPlayer } from "./audioplayer";
+export { default, default as AudioPlayer } from "./Audio";
 
 export type {
     Track,

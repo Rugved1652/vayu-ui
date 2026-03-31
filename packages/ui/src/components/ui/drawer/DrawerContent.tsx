@@ -6,8 +6,8 @@
 import React, { forwardRef, useCallback, useEffect, useRef, HTMLAttributes } from "react";
 import { cn } from "../utils";
 import { X } from "lucide-react";
-import { useDrawer } from "./drawer";
-import { DrawerClose } from "./close";
+import { useDrawer } from "./Drawer";
+import { DrawerClose } from "./DrawerClose";
 import type { DrawerContentProps } from "./types";
 
 const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(

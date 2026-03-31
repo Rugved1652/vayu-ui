@@ -6,7 +6,7 @@
 import { cn } from "../utils";
 import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { HoverCardArrow } from "./arrow";
+import { HoverCardArrow } from "./HoverCardArrow";
 import { useHoverCardOpen, useHoverCardPosition } from "./hooks";
 import type { HoverCardProps } from "./types";
 

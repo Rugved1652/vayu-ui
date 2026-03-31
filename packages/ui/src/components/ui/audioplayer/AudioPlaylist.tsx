@@ -7,7 +7,7 @@ import { clsx } from "clsx";
 import { Music } from "lucide-react";
 import React, { forwardRef, HTMLAttributes, useEffect } from "react";
 import type { Track } from "./types";
-import { useAudioPlayer } from "./audioplayer";
+import { useAudioPlayer } from "./Audio";
 
 export const AudioPlayerPlaylist = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({ children, className, ...props }, ref) => {
     const { setPlaylist } = useAudioPlayer();
