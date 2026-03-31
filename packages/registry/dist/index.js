@@ -2193,13 +2193,13 @@ var skeletonRegistry = {
     "npx vayu-ui add skeleton"
   ],
   source: {
-    file: "packages/ui/src/components/ui/skeleton.tsx",
+    file: "packages/ui/src/components/ui/skeleton/",
     language: "TypeScript",
     framework: "React"
   },
   meta: {
     doc_url: "/docs/components/skeleton",
-    source_file: "packages/ui/src/components/ui/skeleton.tsx",
+    source_file: "packages/ui/src/components/ui/skeleton/",
     extracted: [
       "component",
       "slug",
@@ -3632,7 +3632,7 @@ var components = [
     since: "1.0.0",
     description: "Export types for use in other components",
     targetPath: "src/components/ui",
-    fileName: "typography.tsx",
+    fileName: "typography/index.ts",
     dependencies: [],
     registryDependencies: [],
     tags: ["component"]

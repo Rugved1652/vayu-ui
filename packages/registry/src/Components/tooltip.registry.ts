@@ -429,14 +429,14 @@ export function InlineExample() {
   ],
 
   source: {
-    file: "packages/ui/src/components/ui/tooltip.tsx",
+    file: "packages/ui/src/components/ui/tooltip/tooltip.tsx",
     language: "typescript",
     framework: "react"
   },
 
   meta: {
     doc_url: "/docs/components/tooltip",
-    source_file: "packages/ui/src/components/ui/tooltip.tsx",
+    source_file: "packages/ui/src/components/ui/tooltip/tooltip.tsx",
     extracted: [
       "component",
       "description",

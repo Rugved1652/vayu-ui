@@ -105,4 +105,5 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
 
 AspectRatio.displayName = "AspectRatio";
 
+export { AspectRatio };
 export default AspectRatio;

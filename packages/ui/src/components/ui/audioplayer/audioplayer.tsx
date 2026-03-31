@@ -1,287 +1,416 @@
-// audioplayer/audioplayer.tsx
+// audioplayer.tsx
 // Composition: UI + logic
 
 "use client";
 
-import React, {
-  createContext,
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
+import { clsx } from "clsx";
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+    useCallback,
+    useMemo,
+    useId,
+    forwardRef,
 } from "react";
 import type {
-  AudioPlayerActions,
-  AudioPlayerGetters,
-  AudioPlayerState,
-  PropGetter,
-  RootProps,
-  Track,
+    Track,
+    AudioPlayerState,
+    AudioPlayerActions,
+    AudioPlayerGetters,
+    RootProps,
 } from "./types";
-import { formatTime } from "./utils";
+import { GLOBAL_PLAY_EVENT } from "./utils";
 
 // ============================================================================
-// Contexts
+// Types & Context
 // ============================================================================
 
-export const AudioPlayerStateContext = createContext<AudioPlayerState | undefined>(undefined);
-export const AudioPlayerActionsContext = createContext<(AudioPlayerActions & AudioPlayerGetters) | undefined>(undefined);
+type AudioPlayerContextValue = AudioPlayerState & AudioPlayerActions & AudioPlayerGetters;
 
-// ============================================================================
-// Hooks
-// ============================================================================
+const AudioPlayerContext = createContext<AudioPlayerContextValue | undefined>(undefined);
 
-export const useAudioPlayerState = () => {
-  const ctx = useContext(AudioPlayerStateContext);
-  if (!ctx) throw new Error("useAudioPlayerState must be used within AudioPlayer.Root");
-  return ctx;
+export const useAudioPlayer = (): AudioPlayerContextValue => {
+    const ctx = useContext(AudioPlayerContext);
+    if (!ctx) throw new Error("AudioPlayer components must be inside <AudioPlayer>.");
+    return ctx;
 };
 
-export const useAudioPlayerActions = () => {
-  const ctx = useContext(AudioPlayerActionsContext);
-  if (!ctx) throw new Error("useAudioPlayerActions must be used within AudioPlayer.Root");
-  return ctx;
+export const useAudioPlayerState = (): AudioPlayerState => {
+    const { play, pause, togglePlay, seek, setVolume, toggleMute, setPlaybackRate, playTrack, next, previous, setPlaylist, getTrack, ...state } = useAudioPlayer();
+    return state as AudioPlayerState;
 };
 
-export const useAudioPlayer = () => {
-  const state = useAudioPlayerState();
-  const actions = useAudioPlayerActions();
-  return { ...state, ...actions };
+export const useAudioPlayerActions = (): AudioPlayerActions => {
+    const { play, pause, togglePlay, seek, setVolume, toggleMute, setPlaybackRate, playTrack, next, previous, setPlaylist } = useAudioPlayer();
+    return { play, pause, togglePlay, seek, setVolume, toggleMute, setPlaybackRate, playTrack, next, previous, setPlaylist };
 };
 
 // ============================================================================
-// Root Component
+// Root
 // ============================================================================
 
-const Root = forwardRef<HTMLDivElement, RootProps>(
-  ({ children, track, playlist: initialPlaylist = [], defaultVolume = 0.8 }, ref) => {
-    const audioRef = useRef<HTMLAudioElement>(null);
-    const rafRef = useRef<number | null>(null);
+export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(({
+    children,
+    className,
+    defaultVolume = 1,
+    allowMultiple = false,
+    autoPlayNext = true,
+    loopPlaylist = false,
+    onPlay,
+    onPause,
+    onEnded,
+    onTrackChange,
+    ...props
+}, ref) => {
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const hlsRef = useRef<any>(null);
+    const playerId = useId();
 
-    // State
+    const [playlist, setPlaylistState] = useState<Track[]>([]);
+    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [buffered, setBuffered] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<Error | null>(null);
+    const [hasEnded, setHasEnded] = useState(false);
+
     const [volume, setVolumeState] = useState(defaultVolume);
     const [isMuted, setIsMuted] = useState(false);
-    const [isSeeking, setIsSeekingState] = useState(false);
+    const [playbackRate, setPlaybackRateState] = useState(1);
+    const prevVolumeRef = useRef(defaultVolume);
 
-    const [playlist, setPlaylist] = useState<Track[]>(
-      track ? [track, ...initialPlaylist] : initialPlaylist
-    );
-    const [currentTrackIndex, setCurrentTrackIndex] = useState(track ? 0 : -1);
-    const currentTrack = currentTrackIndex >= 0 ? playlist[currentTrackIndex] : null;
+    const currentTrack = playlist[currentTrackIndex] || null;
 
-    // Cleanup
+    // ── Global Play Management ──
     useEffect(() => {
-      const audio = audioRef.current;
-      return () => {
-        if (audio) {
-          audio.pause();
-          audio.src = "";
-        }
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      };
+        if (allowMultiple) return;
+        const handler = (e: Event) => {
+            const detail = (e as CustomEvent).detail;
+            if (detail && detail.id !== playerId) {
+                audioRef.current?.pause();
+            }
+        };
+        window.addEventListener(GLOBAL_PLAY_EVENT, handler);
+        return () => window.removeEventListener(GLOBAL_PLAY_EVENT, handler);
+    }, [playerId, allowMultiple]);
+
+    // ── Playlist Setting ──
+    const setPlaylist = useCallback((tracks: Track[]) => {
+        setPlaylistState(tracks);
     }, []);
 
-    // Core Actions
-    const play = useCallback(() => audioRef.current?.play().catch(() => { }), []);
-    const pause = useCallback(() => audioRef.current?.pause(), []);
-    const togglePlay = useCallback(() => (isPlaying ? pause() : play()), [isPlaying, play, pause]);
+    // ── Actions ──
+    const play = useCallback(() => {
+        audioRef.current?.play().catch(e => setError(e));
+    }, []);
+
+    const pause = useCallback(() => {
+        audioRef.current?.pause();
+    }, []);
+
+    const togglePlay = useCallback(() => {
+        if (isPlaying) pause();
+        else play();
+    }, [isPlaying, play, pause]);
 
     const seek = useCallback((time: number) => {
-      if (audioRef.current) {
-        audioRef.current.currentTime = Math.max(0, Math.min(time, duration));
-      }
-    }, [duration]);
+        if (audioRef.current) {
+            audioRef.current.currentTime = Math.max(0, Math.min(time, audioRef.current.duration || 0));
+        }
+    }, []);
 
-    const seekForward = useCallback((s = 5) => seek(currentTime + s), [currentTime, seek]);
-    const seekBackward = useCallback((s = 5) => seek(currentTime - s), [currentTime, seek]);
-
-    const setVolume = useCallback((vol: number) => {
-      const v = Math.max(0, Math.min(1, vol));
-      setVolumeState(v);
-      if (audioRef.current) audioRef.current.volume = v;
-      if (v > 0 && isMuted) {
-        setIsMuted(false);
-        if (audioRef.current) audioRef.current.muted = false;
-      }
+    const setVolume = useCallback((v: number) => {
+        const val = Math.max(0, Math.min(1, v));
+        if (audioRef.current) {
+            audioRef.current.volume = val;
+            if (val > 0 && isMuted) audioRef.current.muted = false;
+        }
     }, [isMuted]);
-
-    const volumeUp = useCallback((step = 0.1) => setVolume(volume + step), [volume, setVolume]);
-    const volumeDown = useCallback((step = 0.1) => setVolume(volume - step), [volume, setVolume]);
 
     const toggleMute = useCallback(() => {
-      if (!audioRef.current) return;
-      const newMuted = !isMuted;
-      audioRef.current.muted = newMuted;
-      setIsMuted(newMuted);
-    }, [isMuted]);
+        if (!audioRef.current) return;
+        if (isMuted) {
+            audioRef.current.muted = false;
+            audioRef.current.volume = prevVolumeRef.current;
+        } else {
+            prevVolumeRef.current = volume;
+            audioRef.current.muted = true;
+        }
+    }, [isMuted, volume]);
+
+    const setPlaybackRate = useCallback((rate: number) => {
+        if (audioRef.current) audioRef.current.playbackRate = rate;
+    }, []);
 
     const playTrack = useCallback((index: number) => {
-      if (index < 0 || index >= playlist.length) return;
-      setCurrentTrackIndex(index);
-      setIsLoading(true);
-      setIsPlaying(false);
-      rafRef.current = requestAnimationFrame(() => {
-        if (audioRef.current) {
-          audioRef.current.load();
-          audioRef.current.play().catch(() => { });
+        if (index >= 0 && index < playlist.length) {
+            setCurrentTrackIndex(index);
+            onTrackChange?.(index, playlist[index]);
+            setTimeout(() => play(), 50);
         }
-      });
-    }, [playlist]);
+    }, [playlist, onTrackChange, play]);
 
-    const nextTrack = useCallback(() => playTrack((currentTrackIndex + 1) % playlist.length), [currentTrackIndex, playlist.length, playTrack]);
+    const next = useCallback(() => {
+        if (playlist.length === 0) return;
+        const isLast = currentTrackIndex === playlist.length - 1;
+        if (!isLast) playTrack(currentTrackIndex + 1);
+        else if (loopPlaylist) playTrack(0);
+    }, [currentTrackIndex, playlist.length, loopPlaylist, playTrack]);
 
-    const previousTrack = useCallback(() => {
-      if (currentTime > 3) seek(0);
-      else playTrack(currentTrackIndex <= 0 ? playlist.length - 1 : currentTrackIndex - 1);
-    }, [currentTime, currentTrackIndex, playlist.length, playTrack, seek]);
+    const previous = useCallback(() => {
+        if (playlist.length === 0) return;
+        if (currentTime > 3) {
+            seek(0);
+        } else {
+            const isFirst = currentTrackIndex === 0;
+            if (!isFirst) playTrack(currentTrackIndex - 1);
+            else if (loopPlaylist) playTrack(playlist.length - 1);
+            else seek(0);
+        }
+    }, [currentTrackIndex, playlist.length, loopPlaylist, currentTime, seek, playTrack]);
 
-    const setSeeking = useCallback((seeking: boolean) => setIsSeekingState(seeking), []);
+    const getTrack = useCallback((idx: number) => playlist[idx] || null, [playlist]);
 
-    // Event Listeners
+    // ── Audio Events ──
     useEffect(() => {
-      const audio = audioRef.current;
-      if (!audio) return;
+        const audio = audioRef.current;
+        if (!audio) return;
 
-      const onPlay = () => { setIsPlaying(true); setIsLoading(false); };
-      const onPause = () => setIsPlaying(false);
-      const onWaiting = () => setIsLoading(true);
-      const onCanPlay = () => setIsLoading(false);
-      const onDuration = () => setDuration(audio.duration);
-      const onTime = () => { if (!isSeeking) setCurrentTime(audio.currentTime); };
-      const onProgress = () => {
-        if (audio.buffered.length > 0) setBuffered(audio.buffered.end(audio.buffered.length - 1));
-      };
-      const onEnd = () => { setIsPlaying(false); nextTrack(); };
-      const onVol = () => { setVolumeState(audio.volume); setIsMuted(audio.muted); };
+        const handlePlay = () => {
+            setIsPlaying(true);
+            setHasEnded(false);
+            if (!allowMultiple) {
+                window.dispatchEvent(new CustomEvent(GLOBAL_PLAY_EVENT, { detail: { id: playerId } }));
+            }
+            onPlay?.();
+            setError(null);
+        };
+        const handlePause = () => { setIsPlaying(false); onPause?.(); };
+        const handleTime = () => setCurrentTime(audio.currentTime);
+        const handleDuration = () => setDuration(audio.duration || 0);
+        const handleProgress = () => {
+            if (audio.buffered.length > 0) {
+                setBuffered(audio.buffered.end(audio.buffered.length - 1));
+            }
+        };
+        const handleWaiting = () => setIsLoading(true);
+        const handleCanPlay = () => setIsLoading(false);
+        const handleEnded = () => {
+            setIsPlaying(false);
+            setHasEnded(true);
+            onEnded?.();
+            if (autoPlayNext) next();
+        };
+        const handleVolume = () => {
+            setVolumeState(audio.volume);
+            setIsMuted(audio.muted);
+            setPlaybackRateState(audio.playbackRate);
+        };
+        const handleError = (e: Event) => setError(new Error("Playback error occurred."));
 
-      const events: [string, EventListener][] = [
-        ["play", onPlay], ["pause", onPause], ["waiting", onWaiting],
-        ["canplay", onCanPlay], ["durationchange", onDuration],
-        ["timeupdate", onTime], ["progress", onProgress],
-        ["ended", onEnd], ["volumechange", onVol]
-      ];
+        audio.addEventListener("play", handlePlay);
+        audio.addEventListener("pause", handlePause);
+        audio.addEventListener("timeupdate", handleTime);
+        audio.addEventListener("durationchange", handleDuration);
+        audio.addEventListener("progress", handleProgress);
+        audio.addEventListener("waiting", handleWaiting);
+        audio.addEventListener("canplay", handleCanPlay);
+        audio.addEventListener("ended", handleEnded);
+        audio.addEventListener("volumechange", handleVolume);
+        audio.addEventListener("ratechange", handleVolume);
+        audio.addEventListener("error", handleError);
 
-      events.forEach(([e, h]) => audio.addEventListener(e, h));
-      audio.volume = defaultVolume;
+        return () => {
+            audio.removeEventListener("play", handlePlay);
+            audio.removeEventListener("pause", handlePause);
+            audio.removeEventListener("timeupdate", handleTime);
+            audio.removeEventListener("durationchange", handleDuration);
+            audio.removeEventListener("progress", handleProgress);
+            audio.removeEventListener("waiting", handleWaiting);
+            audio.removeEventListener("canplay", handleCanPlay);
+            audio.removeEventListener("ended", handleEnded);
+            audio.removeEventListener("volumechange", handleVolume);
+            audio.removeEventListener("ratechange", handleVolume);
+            audio.removeEventListener("error", handleError);
+        };
+    }, [playerId, allowMultiple, autoPlayNext, next, onPlay, onPause, onEnded]);
 
-      return () => events.forEach(([e, h]) => audio.removeEventListener(e, h));
-    }, [defaultVolume, isSeeking, nextTrack]);
-
-    // Prop Getters with WCAG Keybinds
-    const getRootProps = useCallback((props: Record<string, any> = {}) => ({
-      role: "region",
-      "aria-label": "Audio Player",
-      tabIndex: -1,
-      onKeyDown: (e: React.KeyboardEvent) => {
-        if (e.target === e.currentTarget) {
-          switch (e.key) {
-            case " ": case "k": togglePlay(); e.preventDefault(); break;
-            case "m": toggleMute(); break;
-            case "ArrowLeft": seekBackward(); break;
-            case "ArrowRight": seekForward(); break;
-            case "ArrowUp": volumeUp(); e.preventDefault(); break;
-            case "ArrowDown": volumeDown(); e.preventDefault(); break;
-          }
+    // ── HLS & Source Management ──
+    const initHls = useCallback(async (src: string, audio: HTMLAudioElement) => {
+        if (hlsRef.current) {
+            hlsRef.current.destroy();
+            hlsRef.current = null;
         }
-        props.onKeyDown?.(e);
-      },
-      ...props,
-    }), [togglePlay, toggleMute, seekBackward, seekForward, volumeUp, volumeDown]);
 
-    const getPlayButtonProps = useCallback((props = {}) => ({
-      "aria-label": isPlaying ? "Pause" : "Play",
-      onClick: togglePlay,
-      disabled: isLoading,
-      ...props,
-    }), [isPlaying, isLoading, togglePlay]);
-
-    const getPrevButtonProps = useCallback((props = {}) => ({
-      "aria-label": "Previous track",
-      onClick: previousTrack,
-      ...props,
-    }), [previousTrack]);
-
-    const getNextButtonProps = useCallback((props = {}) => ({
-      "aria-label": "Next track",
-      onClick: nextTrack,
-      ...props,
-    }), [nextTrack]);
-
-    const getProgressProps = useCallback((props: Record<string, any> = {}) => ({
-      role: "slider",
-      "aria-label": "Audio progress",
-      "aria-valuemin": 0,
-      "aria-valuemax": duration,
-      "aria-valuenow": Math.floor(currentTime),
-      "aria-valuetext": formatTime(currentTime),
-      tabIndex: 0,
-      onKeyDown: (e: React.KeyboardEvent) => {
-        switch (e.key) {
-          case "ArrowRight": seekForward(); e.preventDefault(); break;
-          case "ArrowLeft": seekBackward(); e.preventDefault(); break;
-          case "Home": seek(0); e.preventDefault(); break;
-          case "End": seek(duration); e.preventDefault(); break;
+        if (src.endsWith(".m3u8")) {
+            try {
+                const HlsModule = (await import("hls.js")).default;
+                if (HlsModule.isSupported()) {
+                    const hls = new HlsModule();
+                    hlsRef.current = hls;
+                    hls.loadSource(src);
+                    hls.attachMedia(audio);
+                    hls.on(HlsModule.Events.ERROR, (_evt, data) => {
+                        if (data.fatal) {
+                            switch (data.type) {
+                                case HlsModule.ErrorTypes.NETWORK_ERROR:
+                                    hls.startLoad();
+                                    break;
+                                case HlsModule.ErrorTypes.MEDIA_ERROR:
+                                    hls.recoverMediaError();
+                                    break;
+                                default:
+                                    hls.destroy();
+                                    setError(new Error("HLS Fatal playback error"));
+                            }
+                        }
+                    });
+                } else if (audio.canPlayType("application/vnd.apple.mpegurl")) {
+                    audio.src = src;
+                }
+            } catch (err) {
+                console.error("Failed to load hls.js", err);
+                setError(new Error("Failed to load HLS playback support."));
+            }
+        } else {
+            audio.src = src;
         }
-        props.onKeyDown?.(e);
-      },
-      ...props,
-    }), [duration, currentTime, seekForward, seekBackward, seek]);
+    }, []);
 
-    const getVolumeProps = useCallback((props = {}) => ({
-      type: "range",
-      min: 0,
-      max: 1,
-      step: 0.01,
-      value: isMuted ? 0 : volume,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setVolume(parseFloat(e.target.value)),
-      "aria-label": "Volume",
-      ...props,
-    }), [volume, isMuted, setVolume]);
+    useEffect(() => {
+        if (!currentTrack || !audioRef.current) return;
+        initHls(currentTrack.src, audioRef.current);
+    }, [currentTrack?.src, initHls]);
 
-    // Context Values
-    const stateValue = useMemo<AudioPlayerState>(() => ({
-      isPlaying, isLoading, currentTime, duration, buffered, volume, isMuted,
-      isSeeking, currentTrack, playlist, currentTrackIndex,
-    }), [isPlaying, isLoading, currentTime, duration, buffered, volume, isMuted,
-      isSeeking, currentTrack, playlist, currentTrackIndex]);
-
-    const actionsValue = useMemo<AudioPlayerActions & AudioPlayerGetters>(() => ({
-      formatTime, play, pause, togglePlay, seek, seekForward, seekBackward,
-      setVolume, volumeUp, volumeDown, toggleMute, setSeeking,
-      playTrack, nextTrack, previousTrack,
-      getRootProps, getPlayButtonProps, getPrevButtonProps,
-      getNextButtonProps, getProgressProps, getVolumeProps,
+    // ── Context Memo ──
+    const ctx = useMemo(() => ({
+        playlist, setPlaylist, currentTrackIndex, currentTrack,
+        isPlaying, currentTime, duration, buffered,
+        volume, isMuted, playbackRate,
+        isLoading, error, hasEnded, playerId,
+        play, pause, togglePlay, seek, setVolume, toggleMute, setPlaybackRate,
+        playTrack, next, previous, getTrack
     }), [
-      play, pause, togglePlay, seek, seekForward, seekBackward,
-      setVolume, volumeUp, volumeDown, toggleMute, setSeeking,
-      playTrack, nextTrack, previousTrack,
-      getRootProps, getPlayButtonProps, getPrevButtonProps,
-      getNextButtonProps, getProgressProps, getVolumeProps,
+        playlist, setPlaylist, currentTrackIndex, currentTrack,
+        isPlaying, currentTime, duration, buffered,
+        volume, isMuted, playbackRate,
+        isLoading, error, hasEnded, playerId,
+        play, pause, togglePlay, seek, setVolume, toggleMute, setPlaybackRate,
+        playTrack, next, previous, getTrack
     ]);
 
+    // ── Keyboard Support ──
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+            switch (e.key) {
+                case " ":
+                    e.preventDefault();
+                    togglePlay();
+                    break;
+                case "ArrowLeft":
+                    e.preventDefault();
+                    seek(currentTime - 5);
+                    break;
+                case "ArrowRight":
+                    e.preventDefault();
+                    seek(currentTime + 5);
+                    break;
+                case "ArrowUp":
+                    e.preventDefault();
+                    setVolume(volume + 0.1);
+                    break;
+                case "ArrowDown":
+                    e.preventDefault();
+                    setVolume(volume - 0.1);
+                    break;
+                case "n":
+                    e.preventDefault();
+                    next();
+                    break;
+                case "p":
+                    e.preventDefault();
+                    previous();
+                    break;
+            }
+        };
+        const el = ref && typeof ref !== 'function' ? ref.current : null;
+        if (el) el.addEventListener("keydown", handler);
+        return () => { if (el) el.removeEventListener("keydown", handler); };
+    }, [togglePlay, seek, currentTime, setVolume, volume, next, previous, ref]);
+
+
     return (
-      <AudioPlayerActionsContext.Provider value={actionsValue}>
-        <AudioPlayerStateContext.Provider value={stateValue}>
-          <div ref={ref} {...getRootProps()}>
-            <audio ref={audioRef} src={currentTrack?.src} preload="metadata" className="sr-only" />
-            {children}
-          </div>
-        </AudioPlayerStateContext.Provider>
-      </AudioPlayerActionsContext.Provider>
+        <AudioPlayerContext.Provider value={ctx}>
+            <div
+                ref={ref}
+                role="region"
+                aria-label="Audio Player"
+                tabIndex={0}
+                className={clsx(
+                    "flex flex-col bg-surface text-surface-content rounded-surface overflow-hidden focus:outline-none focus:ring-2 focus:ring-focus",
+                    className
+                )}
+                {...props}
+            >
+                <audio ref={audioRef} preload="metadata" crossOrigin="anonymous" className="hidden" />
+                {children}
+            </div>
+        </AudioPlayerContext.Provider>
     );
-  }
-);
+});
+AudioPlayer.displayName = "AudioPlayer";
 
-Root.displayName = "AudioPlayer.Root";
+// ============================================================================
+// Internal Source (Optional Fallback)
+// ============================================================================
+export const AudioPlayerSource = ({ src }: { src?: string }) => null;
 
-// Compound component export
-export const AudioPlayer = { Root };
-export default AudioPlayer;
+// ============================================================================
+// Default Export
+// ============================================================================
+
+// Import subcomponents for compound API
+import { AudioPlayerPlaylist, AudioPlayerTrack } from "./playlist";
+import { AudioPlayerTrackInfo } from "./track-info";
+import {
+    AudioPlayerControls,
+    AudioPlayerPlayPause,
+    AudioPlayerNext,
+    AudioPlayerPrevious,
+    AudioPlayerTime,
+} from "./controls";
+import { AudioPlayerSeek, AudioPlayerProgress } from "./progress";
+import { AudioPlayerVolume, AudioPlayerMute } from "./volume";
+import { AudioPlayerRate } from "./rate";
+import { AudioPlayerLoading, AudioPlayerError, AudioPlayerBuffer } from "./status";
+import { AudioPlayerWaveform } from "./waveform";
+
+const DefaultAudioPlayer = Object.assign(AudioPlayer, {
+    Root: AudioPlayer,
+    Source: AudioPlayerSource,
+    Playlist: AudioPlayerPlaylist,
+    Track: AudioPlayerTrack,
+    TrackInfo: AudioPlayerTrackInfo,
+    Controls: AudioPlayerControls,
+    PlayPause: AudioPlayerPlayPause,
+    Next: AudioPlayerNext,
+    Previous: AudioPlayerPrevious,
+    Progress: AudioPlayerProgress,
+    Seek: AudioPlayerSeek,
+    Time: AudioPlayerTime,
+    Volume: AudioPlayerVolume,
+    Mute: AudioPlayerMute,
+    Rate: AudioPlayerRate,
+    Waveform: AudioPlayerWaveform,
+    Buffer: AudioPlayerBuffer,
+    Loading: AudioPlayerLoading,
+    Error: AudioPlayerError,
+});
+
+export default DefaultAudioPlayer;

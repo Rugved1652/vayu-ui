@@ -1,2 +1,2 @@
-export { default } from './accordion';
-export * from './accordion';
+export { default } from './Accordion';
+export * from './Accordion';

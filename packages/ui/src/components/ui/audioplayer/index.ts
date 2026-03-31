@@ -1,12 +1,10 @@
-// audioplayer/index.ts
-// Public API
+export { default, default as AudioPlayer } from "./audioplayer";
 
-export { default, useAudioPlayerState, useAudioPlayerActions, useAudioPlayer } from "./audioplayer";
 export type {
-  Track,
-  AudioPlayerState,
-  AudioPlayerActions,
-  AudioPlayerGetters,
-  RootProps,
-  PropGetter,
+    Track,
+    AudioPlayerState,
+    AudioPlayerActions,
+    AudioPlayerGetters,
+    RootProps,
+    PropGetter,
 } from "./types";

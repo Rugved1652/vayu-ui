@@ -88,4 +88,5 @@ const Affix = forwardRef<HTMLDivElement, AffixProps>(
 
 Affix.displayName = "Affix";
 
+export { Affix };
 export default Affix;

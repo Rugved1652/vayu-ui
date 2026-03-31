@@ -7,9 +7,9 @@ import React, {
     useMemo,
 } from "react";
 import { AccordionProps, AccordionContext, AccordionContextType } from "./types";
-import { AccordionItem } from "./accordion-item";
-import { AccordionHeader } from "./accordion-header";
-import { AccordionBody } from "./accordion-body";
+import { AccordionItem } from "./AccordionItem";
+import { AccordionHeader } from "./AccordionHeader";
+import { AccordionBody } from "./AccordionBody";
 import { cn } from "../utils";
 
 const Accordion: React.FC<AccordionProps> & {
@@ -118,6 +118,6 @@ Accordion.Body = AccordionBody;
 export type { AccordionProps, AccordionItemProps, AccordionHeaderProps, AccordionBodyProps, AccordionContextType } from "./types";
 export { Accordion };
 export default Accordion;
-export { AccordionItem } from "./accordion-item";
-export { AccordionHeader } from "./accordion-header";
-export { AccordionBody } from "./accordion-body";
+export { AccordionItem } from "./AccordionItem";
+export { AccordionHeader } from "./AccordionHeader";
+export { AccordionBody } from "./AccordionBody";

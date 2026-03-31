@@ -448,14 +448,14 @@ export const typographyRegistry = {
   ],
 
   source: {
-    file: "src/components/ui/typography.tsx",
+    file: "src/components/ui/typography/index.ts",
     language: "typescript",
     framework: "react"
   },
 
   meta: {
     doc_url: "/docs/components/typography",
-    source_file: "packages/ui/src/components/ui/typography.tsx",
+    source_file: "packages/ui/src/components/ui/typography/index.ts",
     extracted: [
       "component",
       "description",

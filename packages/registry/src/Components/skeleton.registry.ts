@@ -736,14 +736,14 @@ export const skeletonRegistry: VayuComponentDoc = {
   ],
 
   source: {
-    file: "packages/ui/src/components/ui/skeleton.tsx",
+    file: "packages/ui/src/components/ui/skeleton/",
     language: "TypeScript",
     framework: "React"
   },
 
   meta: {
     doc_url: "/docs/components/skeleton",
-    source_file: "packages/ui/src/components/ui/skeleton.tsx",
+    source_file: "packages/ui/src/components/ui/skeleton/",
     extracted: [
       "component",
       "slug",

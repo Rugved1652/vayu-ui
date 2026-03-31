@@ -1,63 +1,61 @@
-// audioplayer/types.ts
-// Types
-
 import type { ReactNode } from "react";
 
 export interface Track {
-  id: string;
-  src: string;
-  title: string;
-  artist?: string;
-  album?: string;
-  artwork?: string;
+    id?: string;
+    src: string;
+    title?: string;
+    artist?: string;
+    poster?: string;
+    duration?: number;
 }
 
 export interface AudioPlayerState {
-  isPlaying: boolean;
-  isLoading: boolean;
-  currentTime: number;
-  duration: number;
-  buffered: number;
-  volume: number;
-  isMuted: boolean;
-  isSeeking: boolean;
-  currentTrack: Track | null;
-  playlist: Track[];
-  currentTrackIndex: number;
+    playlist: Track[];
+    currentTrackIndex: number;
+    currentTrack: Track | null;
+    isPlaying: boolean;
+    currentTime: number;
+    duration: number;
+    buffered: number;
+    volume: number;
+    isMuted: boolean;
+    playbackRate: number;
+    isLoading: boolean;
+    error: Error | null;
+    hasEnded: boolean;
+    playerId: string;
 }
 
 export interface AudioPlayerActions {
-  formatTime: (seconds: number) => string;
-  play: () => void;
-  pause: () => void;
-  togglePlay: () => void;
-  seek: (time: number) => void;
-  seekForward: (seconds?: number) => void;
-  seekBackward: (seconds?: number) => void;
-  setVolume: (vol: number) => void;
-  volumeUp: (step?: number) => void;
-  volumeDown: (step?: number) => void;
-  toggleMute: () => void;
-  playTrack: (index: number) => void;
-  nextTrack: () => void;
-  previousTrack: () => void;
-  setSeeking: (isSeeking: boolean) => void;
+    play: () => void;
+    pause: () => void;
+    togglePlay: () => void;
+    seek: (time: number) => void;
+    setVolume: (volume: number) => void;
+    toggleMute: () => void;
+    setPlaybackRate: (rate: number) => void;
+    playTrack: (index: number) => void;
+    next: () => void;
+    previous: () => void;
+    setPlaylist: (tracks: Track[]) => void;
 }
-
-export type PropGetter = (props?: Record<string, any>) => Record<string, any>;
 
 export interface AudioPlayerGetters {
-  getRootProps: PropGetter;
-  getPlayButtonProps: PropGetter;
-  getPrevButtonProps: PropGetter;
-  getNextButtonProps: PropGetter;
-  getProgressProps: PropGetter;
-  getVolumeProps: PropGetter;
+    getTrack: (index: number) => Track | null;
 }
 
-export interface RootProps {
-  children: ReactNode;
-  track?: Track;
-  playlist?: Track[];
-  defaultVolume?: number;
+export type PropGetter<P = Record<string, unknown>> = (
+    props?: P
+) => P & React.HTMLAttributes<any>;
+
+export interface RootProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onPlay" | "onPause" | "onEnded"> {
+    children: ReactNode;
+    defaultVolume?: number;
+    allowMultiple?: boolean;
+    autoPlayNext?: boolean;
+    loopPlaylist?: boolean;
+    onPlay?: () => void;
+    onPause?: () => void;
+    onEnded?: () => void;
+    onTrackChange?: (index: number, track: Track) => void;
 }

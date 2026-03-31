@@ -434,14 +434,14 @@ export default function ControlledDrawer() {
   ],
 
   source: {
-    file: "packages/ui/src/components/ui/drawer.tsx",
+    file: "packages/ui/src/components/ui/drawer/",
     language: "typescript",
     framework: "react"
   },
 
   meta: {
     doc_url: "/docs/components/drawer",
-    source_file: "packages/ui/src/components/ui/drawer.tsx",
+    source_file: "packages/ui/src/components/ui/drawer/",
     extracted: [
       "component",
       "description",

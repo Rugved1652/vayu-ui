@@ -3,19 +3,17 @@
 
 "use client";
 
-import "../animation.css";
-
 import { forwardRef, HTMLAttributes, ReactNode } from "react";
 import { cn } from "../utils";
-import { AnimationFade } from "./fade";
-import { AnimationSlide } from "./slide";
-import { AnimationBounce } from "./bounce";
-import { AnimationFlip } from "./flip";
-import { AnimationRotate } from "./rotate";
-import { AnimationZoom } from "./zoom";
-import { AnimationRoll } from "./roll";
-import { AnimationJackInTheBox } from "./jackinthebox";
-import { AnimationHinge } from "./hinge";
+import { AnimationFade } from "./FadeAnimation";
+import { AnimationSlide } from "./SlideAnimation";
+import { AnimationBounce } from "./BounceAnimation";
+import { AnimationFlip } from "./FlipAnimation";
+import { AnimationRotate } from "./RotateAnimation";
+import { AnimationZoom } from "./ZoomAnimation";
+import { AnimationRoll } from "./RollAnimation";
+import { AnimationJackInTheBox } from "./JackInTheBoxAnimation";
+import { AnimationHinge } from "./HingeAnimation";
 
 interface AnimationRootProps extends HTMLAttributes<HTMLDivElement> {
     children: ReactNode;

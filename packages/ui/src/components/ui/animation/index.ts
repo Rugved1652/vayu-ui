@@ -1,7 +1,7 @@
 // index.ts
 // Public API
 
-export { default } from './animation';
+export { default, Animation } from './Animation';
 export type {
     AnimationDuration,
     AnimationDelay,

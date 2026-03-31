@@ -1,130 +1,122 @@
 "use client";
 
-import { AudioPlayer, useAudioPlayer, Track } from "vayu-ui";
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Loader2 } from "lucide-react";
+import { AudioPlayer } from "vayu-ui"
 
-const tracks: Track[] = [
-  { id: "1", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", title: "Neon Dreams", artist: "Synthwave" },
-  { id: "2", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", title: "Electric Soul", artist: "Funky" },
-];
+export default function AudioPlayerDemo() {
+    return (
+        <div className="flex flex-col gap-10 w-full max-w-5xl mx-auto py-8">
+            <div className="p-6 bg-surface rounded-surface shadow-surface border border-border/20">
+                <h3 className="text-h3 font-primary mb-2 text-surface-content">Spotify-style Single Track</h3>
+                <p className="text-text-sm text-muted-content mb-6">Demonstrating HLS fallback and seeded fake waveform</p>
+                <AudioPlayer allowMultiple={false} className="max-w-md mx-auto shadow-elevated">
+                    {/* The Playlist holds tracks invisibly if we just want one */}
+                    <AudioPlayer.Playlist className="hidden">
+                        <AudioPlayer.Track
+                            src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                            title="Mux Demo HLS Stream"
+                            artist="Mux"
+                            poster="https://images.unsplash.com/photo-1614145121029-83a9f7b68bf4?auto=format&fit=crop&q=80&w=200&h=200"
+                        />
+                    </AudioPlayer.Playlist>
 
-const PlayerUI = () => {
-  const player = useAudioPlayer();
-  
-  // Screen Reader Announcer for track changes
-  const announcement = player.isPlaying 
-    ? `Playing ${player.currentTrack?.title}` 
-    : `Paused ${player.currentTrack?.title}`;
+                    <div className="flex flex-col">
+                        <AudioPlayer.TrackInfo className="pt-4 px-4" />
 
-  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
-    player.seek(percent * player.duration);
-  };
+                        <div className="px-5 mt-2">
+                            <AudioPlayer.Waveform />
+                        </div>
 
-  return (
-    <div className="w-full max-w-md bg-white shadow-xl rounded-xl p-6 border border-gray-200 relative">
-      
-      {/* Accessibility Live Region - Screen readers announce this when it changes */}
-      <div role="status" aria-live="polite" className="sr-only">
-        {announcement}
-      </div>
+                        <AudioPlayer.Controls className="flex-col gap-2 w-full">
+                            <div className="flex flex-row items-center justify-between w-full">
+                                <AudioPlayer.Time />
+                            </div>
+                            <div className="flex flex-row items-center justify-between w-full mt-2">
+                                <div className="flex items-center gap-1">
+                                    <AudioPlayer.Mute />
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <AudioPlayer.Previous />
+                                    <AudioPlayer.PlayPause className="w-12 h-12 [&>svg]:w-6 [&>svg]:h-6 shadow-md" />
+                                    <AudioPlayer.Next />
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <AudioPlayer.Rate />
+                                </div>
+                            </div>
+                        </AudioPlayer.Controls>
 
-      {/* Track Info */}
-      <div className="mb-6 text-center">
-        <h2 className="text-xl font-bold text-gray-900 truncate">
-          {player.currentTrack?.title || "Select a track"}
-        </h2>
-        <p className="text-sm text-gray-500 truncate">
-          {player.currentTrack?.artist || "Unknown Artist"}
-        </p>
-      </div>
+                        <AudioPlayer.Error />
+                    </div>
+                </AudioPlayer>
+            </div>
 
-      {/* Progress Bar */}
-      <div 
-        className="relative w-full h-2 bg-gray-200 rounded-full cursor-pointer group"
-        onClick={handleSeek}
-        {...player.getProgressProps({ 
-          className: "w-full h-2 bg-gray-200 rounded-full cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-full"
-        })}
-      >
-        {/* Buffer */}
-        <div 
-          className="absolute h-full bg-gray-300 rounded-full"
-          style={{ width: `${(player.buffered / player.duration) * 100}%` }}
-        />
-        {/* Progress */}
-        <div 
-          className="absolute h-full bg-blue-600 rounded-full"
-          style={{ width: `${(player.currentTime / player.duration) * 100}%` }}
-        />
-        {/* Thumb (Visual only) */}
-        <div className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-blue-600 rounded-full shadow opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity"
-             style={{ left: `${(player.currentTime / player.duration) * 100}%`, transform: 'translate(-50%, -50%)' }} 
-        />
-      </div>
+            <div className="p-6 bg-surface rounded-surface shadow-surface border border-border/20">
+                <h3 className="text-h3 font-primary mb-2 text-surface-content">Full Playlist Flow</h3>
+                <p className="text-text-sm text-muted-content mb-6">Queue management, auto-play next, and separated components</p>
 
-      {/* Time Display */}
-      <div className="flex justify-between text-xs text-gray-500 font-mono mt-2 mb-4">
-        <span>{player.formatTime(player.currentTime)}</span>
-        <span>{player.formatTime(player.duration)}</span>
-      </div>
+                <AudioPlayer allowMultiple={false} autoPlayNext className="grid grid-cols-1 md:grid-cols-2 gap-0 bg-canvas rounded-surface overflow-hidden border border-border/20 shadow-md">
 
-      {/* Controls */}
-      <div className="flex items-center justify-center gap-6">
-        
-        <button {...player.getPrevButtonProps({ 
-          className: "p-2 rounded-full hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-50" 
-        })}>
-          <SkipBack className="w-6 h-6 text-gray-700" />
-        </button>
+                    {/* Left: Player UI */}
+                    <div className="flex flex-col bg-elevated h-full border-r border-border/10">
+                        <AudioPlayer.TrackInfo className="p-6 border-b border-border/10 bg-surface/50 h-28" />
 
-        <button {...player.getPlayButtonProps({ 
-          className: "w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition-colors disabled:bg-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-        })}>
-          {player.isLoading ? (
-            <Loader2 className="w-6 h-6 animate-spin" />
-          ) : player.isPlaying ? (
-            <Pause className="w-6 h-6" />
-          ) : (
-            <Play className="w-6 h-6 ml-0.5" />
-          )}
-        </button>
+                        <div className="flex flex-col items-center justify-center flex-1 p-6 gap-6">
+                            {/* Animated ring when playing */}
+                            <div className="relative group">
+                                <div className="absolute inset-0 bg-brand/20 rounded-full blur-xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                                <AudioPlayer.PlayPause className="w-20 h-20 shadow-elevated relative z-10 [&>svg]:w-10 [&>svg]:h-10" />
+                            </div>
 
-        <button {...player.getNextButtonProps({ 
-          className: "p-2 rounded-full hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:opacity-50" 
-        })}>
-          <SkipForward className="w-6 h-6 text-gray-700" />
-        </button>
+                            <div className="w-full space-y-2 mt-4">
+                                <AudioPlayer.Seek />
+                                <div className="flex justify-between w-full">
+                                    <AudioPlayer.Time />
+                                </div>
+                            </div>
 
-      </div>
+                            <div className="flex items-center justify-center gap-6 mt-2">
+                                <AudioPlayer.Previous />
+                                <AudioPlayer.Rate />
+                                <AudioPlayer.Mute />
+                                <AudioPlayer.Next />
+                            </div>
+                        </div>
+                    </div>
 
-      {/* Volume */}
-      <div className="flex items-center justify-center gap-2 mt-6">
-        <button 
-          onClick={player.toggleMute}
-          className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-          aria-label={player.isMuted ? "Unmute" : "Mute"}
-        >
-          {player.isMuted ? <VolumeX className="w-5 h-5 text-gray-500"/> : <Volume2 className="w-5 h-5 text-gray-500"/>}
-        </button>
-        
-        <input 
-          {...player.getVolumeProps({ 
-            className: "w-24 h-1 bg-gray-200 rounded-full appearance-none cursor-pointer accent-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-          })} 
-        />
-      </div>
-    </div>
-  );
-};
-
-export default function DemoPage() {
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
-      <AudioPlayer.Root track={tracks[0]} playlist={tracks}>
-        <PlayerUI />
-      </AudioPlayer.Root>
-    </div>
-  );
+                    {/* Right: Playlist Sidebar */}
+                    <div className="flex flex-col h-80 md:h-full max-h-[400px] bg-sidebar">
+                        <div className="p-4 border-b border-border/10 bg-surface text-sm font-semibold text-surface-content sticky top-0 z-10 shadow-sm">
+                            Up Next
+                        </div>
+                        <AudioPlayer.Playlist className="p-2 gap-1 rounded-none border-none">
+                            <AudioPlayer.Track
+                                src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg"
+                                title="Digital Watch Alarm"
+                                artist="Google Sounds"
+                                poster="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&q=80&w=100&h=100"
+                            />
+                            <AudioPlayer.Track
+                                src="https://actions.google.com/sounds/v1/animals/cat_purr_close.ogg"
+                                title="Cat Purring Close"
+                                artist="Nature Sounds"
+                                poster="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&q=80&w=100&h=100"
+                            />
+                            <AudioPlayer.Track
+                                src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                                title="Mux Test HLS"
+                                artist="Streaming Team"
+                                poster="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=100&h=100"
+                            />
+                            <AudioPlayer.Track
+                                src="https://actions.google.com/sounds/v1/water/rain_on_roof.ogg"
+                                title="Rain on Roof"
+                                artist="Nature Sounds"
+                                poster="https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&q=80&w=100&h=100"
+                            />
+                        </AudioPlayer.Playlist>
+                    </div>
+                </AudioPlayer>
+            </div>
+        </div>
+    );
 }
