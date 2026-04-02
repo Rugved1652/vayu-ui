@@ -1,21 +1,21 @@
-// separator.tsx
-// UI: presentational
+"use client";
 
-import { clsx } from 'clsx';
-import React, { forwardRef } from 'react';
-import type { ContextMenuSeparatorProps } from './types';
+import React, { forwardRef } from "react";
+import { cn } from "../utils";
+import type { ContextMenuSeparatorProps } from "./types";
 
 const ContextMenuSeparator = forwardRef<HTMLDivElement, ContextMenuSeparatorProps>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
       role="separator"
-      className={clsx('my-1 mx-2 h-px bg-neutral-200 dark:bg-neutral-800', className)}
+      aria-orientation="horizontal"
+      className={cn("my-1 h-px bg-border dark:bg-border", className)}
       {...props}
     />
-  ),
+  )
 );
 
-ContextMenuSeparator.displayName = 'ContextMenu.Separator';
+ContextMenuSeparator.displayName = "ContextMenu.Separator";
 
 export { ContextMenuSeparator };

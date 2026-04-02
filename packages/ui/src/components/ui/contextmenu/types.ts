@@ -1,17 +1,25 @@
-// types.ts
-// Types
+import React from "react";
 
-import React from 'react';
-
-// Context types
+// ─── Context Types ───────────────────────────────────────────
 
 export interface ContextMenuContextValue {
   isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
   closeMenu: () => void;
-  openSubmenu: (id: string) => void;
-  closeSubmenu: (id: string) => void;
-  openSubmenus: Set<string>;
-  menuId: string;
+  cursorPositionRef: React.RefObject<{ x: number; y: number }>;
+  menuRef: React.RefObject<HTMLDivElement | null>;
+  handleTypeahead: (key: string) => void;
+}
+
+export interface SubContextValue {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  level: number;
+  subMenuRef: React.RefObject<HTMLDivElement | null>;
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
+  handleTypeahead: (key: string) => void;
+  openSub: () => void;
+  closeSub: () => void;
 }
 
 export interface RadioGroupCtxValue {
@@ -19,16 +27,7 @@ export interface RadioGroupCtxValue {
   onValueChange?: (value: string) => void;
 }
 
-export interface SubmenuContextValue {
-  id: string;
-  isOpen: boolean;
-  position: { x: number; y: number };
-  triggerRef: React.RefObject<HTMLDivElement | null>;
-  handleOpen: () => void;
-  handleClose: () => void;
-}
-
-// Prop interfaces
+// ─── Prop Interfaces ────────────────────────────────────────
 
 export interface ContextMenuProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -42,11 +41,11 @@ export interface ContextMenuTriggerProps extends React.HTMLAttributes<HTMLDivEle
 
 export interface ContextMenuContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  align?: 'start' | 'center' | 'end';
+  align?: "start" | "center" | "end";
   sideOffset?: number;
 }
 
-export interface ContextMenuItemProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContextMenuItemProps extends React.HTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   onSelect?: () => void;
   disabled?: boolean;
@@ -55,32 +54,36 @@ export interface ContextMenuItemProps extends React.HTMLAttributes<HTMLDivElemen
   shortcut?: string;
 }
 
-export interface ContextMenuCheckboxItemProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContextMenuCheckboxItemProps
+  extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onSelect"> {
   children: React.ReactNode;
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   disabled?: boolean;
   icon?: React.ReactNode;
+  shortcut?: string;
 }
 
-export interface ContextMenuRadioGroupProps {
+export interface ContextMenuRadioGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   value?: string;
   onValueChange?: (value: string) => void;
 }
 
-export interface ContextMenuRadioItemProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContextMenuRadioItemProps
+  extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onSelect"> {
   children: React.ReactNode;
   value: string;
   disabled?: boolean;
   icon?: React.ReactNode;
+  shortcut?: string;
 }
 
-export interface ContextMenuSubProps {
+export interface ContextMenuSubProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-export interface ContextMenuSubTriggerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContextMenuSubTriggerProps extends React.HTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   disabled?: boolean;
   icon?: React.ReactNode;
@@ -96,11 +99,9 @@ export interface ContextMenuLabelProps extends React.HTMLAttributes<HTMLDivEleme
   children: React.ReactNode;
 }
 
-// Constants
+// ─── Constants ──────────────────────────────────────────────
 
-export const MENU_ITEM_SELECTOR =
-  '[role="menuitem"]:not([aria-disabled="true"]), ' +
-  '[role="menuitemcheckbox"]:not([aria-disabled="true"]), ' +
-  '[role="menuitemradio"]:not([aria-disabled="true"])';
+export const FOCUSABLE_SELECTOR =
+  '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])]';
 
 export const VIEWPORT_PAD = 8;

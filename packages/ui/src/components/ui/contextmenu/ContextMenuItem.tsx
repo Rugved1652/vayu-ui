@@ -1,27 +1,17 @@
-// item.tsx
-// UI: presentational
+"use client";
 
-import { clsx } from 'clsx';
-import React, { forwardRef, useCallback, useState } from 'react';
-import { useContextMenuCtx, useItemKeyDown, baseItemStyles } from './hooks';
-import type { ContextMenuItemProps } from './types';
+import React, { forwardRef, useCallback, useRef } from "react";
+import { cn } from "../utils";
+import { useContextMenuCtx, useSubCtx, getFocusableItems, useItemKeyDown, baseItemStyles } from "./hooks";
+import type { ContextMenuItemProps } from "./types";
 
-const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
-  (
-    {
-      children,
-      onSelect,
-      disabled = false,
-      destructive = false,
-      icon,
-      shortcut,
-      className,
-      ...props
-    },
-    ref,
-  ) => {
+const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
+  ({ children, onSelect, disabled = false, destructive = false, icon, shortcut, className, ...props }, ref) => {
     const { closeMenu } = useContextMenuCtx();
-    const [isFocused, setIsFocused] = useState(false);
+    const subCtx = React.useContext(
+      React.createContext<ReturnType<typeof useSubCtx> | null>(null)
+    );
+    const itemRef = useRef<HTMLButtonElement>(null);
 
     const handleClick = useCallback(() => {
       if (disabled) return;
@@ -31,25 +21,66 @@ const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
 
     const handleKeyDown = useItemKeyDown(disabled, handleClick);
 
-    const handleFocus = useCallback(() => setIsFocused(true), []);
-    const handleBlur = useCallback(() => setIsFocused(false), []);
+    // ArrowUp/Down/Home/End navigation
+    const handleNavKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        if (disabled) return;
+
+        const menuEl = itemRef.current?.closest('[role="menu"]');
+        const items = getFocusableItems(menuEl);
+
+        switch (e.key) {
+          case "ArrowDown":
+            e.preventDefault();
+            e.stopPropagation();
+            if (items.length > 0) {
+              const idx = items.indexOf(itemRef.current!);
+              items[(idx + 1) % items.length]?.focus();
+            }
+            break;
+          case "ArrowUp":
+            e.preventDefault();
+            e.stopPropagation();
+            if (items.length > 0) {
+              const idx = items.indexOf(itemRef.current!);
+              items[idx <= 0 ? items.length - 1 : idx - 1]?.focus();
+            }
+            break;
+          case "Home":
+            e.preventDefault();
+            e.stopPropagation();
+            items[0]?.focus();
+            break;
+          case "End":
+            e.preventDefault();
+            e.stopPropagation();
+            if (items.length > 0) items[items.length - 1]?.focus();
+            break;
+          case "Escape":
+            e.preventDefault();
+            e.stopPropagation();
+            closeMenu();
+            break;
+          default:
+            handleKeyDown(e);
+            break;
+        }
+      },
+      [disabled, handleKeyDown, closeMenu]
+    );
 
     return (
-      <div
-        ref={ref}
+      <button
+        ref={itemRef}
         role="menuitem"
         tabIndex={-1}
         aria-disabled={disabled || undefined}
         onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        data-focused={isFocused ? '' : undefined}
-        className={clsx(
-          baseItemStyles(disabled, destructive ? 'destructive' : undefined),
-          'focus:bg-primary-500! focus:text-white!',
-          'justify-between',
-          className,
+        onKeyDown={handleNavKeyDown}
+        className={cn(
+          baseItemStyles(disabled, destructive ? "destructive" : undefined),
+          "justify-between w-full",
+          className
         )}
         {...props}
       >
@@ -62,15 +93,15 @@ const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
           <span className="truncate">{children}</span>
         </div>
         {shortcut && (
-          <span className="text-xs text-neutral-500 dark:text-neutral-400 font-mono shrink-0">
+          <span className="text-xs text-muted-content dark:text-muted-content shrink-0">
             {shortcut}
           </span>
         )}
-      </div>
+      </button>
     );
-  },
+  }
 );
 
-ContextMenuItem.displayName = 'ContextMenu.Item';
+ContextMenuItem.displayName = "ContextMenu.Item";
 
 export { ContextMenuItem };
