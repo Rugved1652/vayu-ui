@@ -40,6 +40,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       )
     }
     ```
+
   </Tab>
 </Tabs>
 
@@ -65,55 +66,55 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ## Sub-components
 
-| Component       | Description                               |
-| :-------------- | :---------------------------------------- |
-| `Tree`          | Root provider with context                |
-| `Tree.Search`   | Searchbox for filtering                   |
-| `Tree.Actions`  | Expand All / Collapse All toolbar         |
-| `Tree.Container`| Bordered container with empty state       |
-| `Tree.Nodes`    | Renders an array of root `TreeNode`s      |
-| `Tree.Node`     | Single node (used internally or manually) |
+| Component        | Description                               |
+| :--------------- | :---------------------------------------- |
+| `Tree`           | Root provider with context                |
+| `Tree.Search`    | Searchbox for filtering                   |
+| `Tree.Actions`   | Expand All / Collapse All toolbar         |
+| `Tree.Container` | Bordered container with empty state       |
+| `Tree.Nodes`     | Renders an array of root `TreeNode`s      |
+| `Tree.Node`      | Single node (used internally or manually) |
 
 ## Props
 
 ### Tree
 
-| Prop                | Type                                                       | Default     | Description                   |
-| :------------------ | :--------------------------------------------------------- | :---------- | :---------------------------- |
-| `data`              | `TreeNode[]`                                               | —           | Tree data                     |
-| `mode`              | `normal \| checkbox`                                       | `"normal"`  | Selection mode                |
-| `variant`           | `default \| filled \| bordered \| minimal`                 | `"default"` | Visual variant                |
-| `size`              | `sm \| md \| lg`                                           | `"md"`      | Size                          |
-| `showLines`         | `boolean`                                                  | `true`      | Show connecting lines         |
-| `showIcons`         | `boolean`                                                  | `true`      | Show file/folder icons        |
-| `defaultExpandAll`  | `boolean`                                                  | `false`     | Expand all on mount           |
-| `expandedKeys`      | `(string \| number)[]`                                     | —           | Controlled expanded keys      |
-| `onExpandedChange`  | `(keys: (string \| number)[]) => void`                     | —           | Expanded change callback      |
-| `selectedKey`       | `string \| number \| null`                                 | —           | Controlled selected key       |
-| `onSelect`          | `(key, node) => void`                                      | —           | Select callback               |
-| `checkedKeys`       | `(string \| number)[]`                                     | —           | Controlled checked keys       |
-| `onCheck`           | `(keys, nodes) => void`                                    | —           | Check callback                |
-| `checkStrictly`     | `boolean`                                                  | `false`     | Disable cascade checking      |
-| `disabled`          | `boolean`                                                  | `false`     | Disable entire tree           |
-| `renderActions`     | `(node: TreeNode) => ReactNode`                            | —           | Per-node action renderer      |
-| `aria-label`        | `string`                                                   | `"Tree"`    | Accessible label              |
+| Prop               | Type                                       | Default     | Description              |
+| :----------------- | :----------------------------------------- | :---------- | :----------------------- |
+| `data`             | `TreeNode[]`                               | —           | Tree data                |
+| `mode`             | `normal \| checkbox`                       | `"normal"`  | Selection mode           |
+| `variant`          | `default \| filled \| bordered \| minimal` | `"default"` | Visual variant           |
+| `size`             | `sm \| md \| lg`                           | `"md"`      | Size                     |
+| `showLines`        | `boolean`                                  | `true`      | Show connecting lines    |
+| `showIcons`        | `boolean`                                  | `true`      | Show file/folder icons   |
+| `defaultExpandAll` | `boolean`                                  | `false`     | Expand all on mount      |
+| `expandedKeys`     | `(string \| number)[]`                     | —           | Controlled expanded keys |
+| `onExpandedChange` | `(keys: (string \| number)[]) => void`     | —           | Expanded change callback |
+| `selectedKey`      | `string \| number \| null`                 | —           | Controlled selected key  |
+| `onSelect`         | `(key, node) => void`                      | —           | Select callback          |
+| `checkedKeys`      | `(string \| number)[]`                     | —           | Controlled checked keys  |
+| `onCheck`          | `(keys, nodes) => void`                    | —           | Check callback           |
+| `checkStrictly`    | `boolean`                                  | `false`     | Disable cascade checking |
+| `disabled`         | `boolean`                                  | `false`     | Disable entire tree      |
+| `renderActions`    | `(node: TreeNode) => ReactNode`            | —           | Per-node action renderer |
+| `aria-label`       | `string`                                   | `"Tree"`    | Accessible label         |
 
 ### TreeNode
 
-| Prop         | Type                          | Default | Description          |
-| :----------- | :---------------------------- | :------ | :------------------- |
-| `id`         | `string \| number`            | —       | Unique identifier    |
-| `label`      | `string`                      | —       | Display text         |
-| `icon`       | `ReactNode`                   | —       | Custom icon          |
-| `children`   | `TreeNode[]`                  | —       | Child nodes          |
-| `disabled`   | `boolean`                     | `false` | Disable node         |
-| `selectable` | `boolean`                     | `true`  | Allow selection      |
-| `metadata`   | `Record<string, unknown>`     | —       | Arbitrary metadata   |
+| Prop         | Type                      | Default | Description        |
+| :----------- | :------------------------ | :------ | :----------------- |
+| `id`         | `string \| number`        | —       | Unique identifier  |
+| `label`      | `string`                  | —       | Display text       |
+| `icon`       | `ReactNode`               | —       | Custom icon        |
+| `children`   | `TreeNode[]`              | —       | Child nodes        |
+| `disabled`   | `boolean`                 | `false` | Disable node       |
+| `selectable` | `boolean`                 | `true`  | Allow selection    |
+| `metadata`   | `Record<string, unknown>` | —       | Arbitrary metadata |
 
 ### useTree Hook
 
 ```tsx
-const ctx = useTree()
+const ctx = useTree();
 ```
 
 Access tree context from any component rendered inside `<Tree>`.

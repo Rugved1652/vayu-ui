@@ -1,6 +1,7 @@
 # TextInput
 
 ## Anatomy
+
 - textinput.tsx — Composition: context, useTextInput hook, TextInputRoot with compound placeholders
 - label.tsx — UI: Label (accessible label linked to input via htmlFor)
 - field.tsx — UI: Field (input container with size, state, focus styling)
@@ -20,6 +21,7 @@
 - index.ts — Public API: compound exports
 
 ## Use Cases
+
 - Text input with labels, descriptions, and validation feedback
 - Password fields with visibility toggle
 - Search fields with built-in icon

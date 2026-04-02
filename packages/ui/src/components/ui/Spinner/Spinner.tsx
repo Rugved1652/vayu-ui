@@ -1,17 +1,17 @@
 // Spinner.tsx
 // Composition: UI + wiring
 
-import { cn } from "../utils";
-import type { SpinnerProps, SpinnerSize } from "./types";
+import { cn } from '../utils';
+import type { SpinnerProps, SpinnerSize } from './types';
 
 // ============================================================================
 // Size Configuration
 // ============================================================================
 
 const sizeClasses: Record<SpinnerSize, string> = {
-    sm: "w-4 h-4",
-    md: "w-6 h-6",
-    lg: "w-8 h-8",
+  sm: 'w-4 h-4',
+  md: 'w-6 h-6',
+  lg: 'w-8 h-8',
 };
 
 // ============================================================================
@@ -30,28 +30,28 @@ const sizeClasses: Record<SpinnerSize, string> = {
  * ```
  */
 function Spinner({
-    className,
-    size = "md",
-    "aria-label": ariaLabel = "Loading",
-    ...props
+  className,
+  size = 'md',
+  'aria-label': ariaLabel = 'Loading',
+  ...props
 }: SpinnerProps) {
-    return (
-        <span
-            role="status"
-            aria-live="polite"
-            aria-busy="true"
-            aria-label={ariaLabel}
-            className={cn(
-                "rounded-full border-2 border-brand border-t-transparent",
-                "animate-spin motion-reduce:animate-none",
-                sizeClasses[size],
-                className
-            )}
-            {...props}
-        >
-            <span className="sr-only">{ariaLabel}</span>
-        </span>
-    );
+  return (
+    <span
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      aria-label={ariaLabel}
+      className={cn(
+        'rounded-full border-2 border-brand border-t-transparent',
+        'animate-spin motion-reduce:animate-none',
+        sizeClasses[size],
+        className,
+      )}
+      {...props}
+    >
+      <span className="sr-only">{ariaLabel}</span>
+    </span>
+  );
 }
 
 export { Spinner };

@@ -1,13 +1,9 @@
-"use client";
-import { useState } from "react";
-import { Affix } from "vayu-ui";
-import { Typography } from "vayu-ui";
+'use client';
+import { useState } from 'react';
+import { Affix } from 'vayu-ui';
+import { Typography } from 'vayu-ui';
 
-const ScrollPlaceHolder = ({
-  height = 400,
-}: {
-  height?: number;
-}) => (
+const ScrollPlaceHolder = ({ height = 400 }: { height?: number }) => (
   <div
     className="w-full flex items-center justify-center border border-dashed border-border rounded-surface my-4 bg-muted"
     style={{ height }}
@@ -37,9 +33,9 @@ export default function AffixDemo() {
         <section>
           <Typography.H2>1. Top Affix (with Offset)</Typography.H2>
           <Typography.P variant="secondary" className="mb-4">
-            This bar sticks to the top of the viewport with a{" "}
-            <Typography.Code>20px</Typography.Code> offset.
-            It uses <Typography.Code>zIndex: 50</Typography.Code>.
+            This bar sticks to the top of the viewport with a{' '}
+            <Typography.Code>20px</Typography.Code> offset. It uses{' '}
+            <Typography.Code>zIndex: 50</Typography.Code>.
           </Typography.P>
 
           <div className="p-4 border border-border rounded-surface bg-surface shadow-surface">
@@ -53,7 +49,7 @@ export default function AffixDemo() {
               <div className="bg-brand text-brand-content p-4 rounded-control shadow-elevated flex justify-between items-center">
                 <Typography.Label className="font-bold">Top Sticky Bar</Typography.Label>
                 <span className="text-xs bg-brand/80 px-2 py-1 rounded-control">
-                  Status: {isTopAffixed ? "Affixed" : "Static"}
+                  Status: {isTopAffixed ? 'Affixed' : 'Static'}
                 </span>
               </div>
             </Affix>
@@ -68,7 +64,8 @@ export default function AffixDemo() {
         <section>
           <Typography.H2>2. Bottom Affix</Typography.H2>
           <Typography.P variant="secondary" className="mb-4">
-            This bar sticks to the bottom of the viewport. Useful for cookie consents or action bars.
+            This bar sticks to the bottom of the viewport. Useful for cookie consents or action
+            bars.
           </Typography.P>
 
           <div className="p-4 border border-border rounded-surface bg-surface shadow-surface">
@@ -84,7 +81,7 @@ export default function AffixDemo() {
                 <div>
                   <Typography.Label className="font-bold">Bottom Action Bar</Typography.Label>
                   <Typography.P variant="secondary" className="text-xs">
-                    Sticks to the bottom edge. {isBottomAffixed ? "(Affixed)" : ""}
+                    Sticks to the bottom edge. {isBottomAffixed ? '(Affixed)' : ''}
                   </Typography.P>
                 </div>
                 <button className="bg-success text-success-content hover:bg-success/90 px-4 py-2 rounded-control text-sm font-medium transition">
@@ -101,8 +98,8 @@ export default function AffixDemo() {
         <section>
           <Typography.H2>3. Custom Target Container</Typography.H2>
           <Typography.P variant="secondary" className="mb-4">
-            The Affix can be scoped to a specific scrollable element,
-            not just the window. Scroll inside the box below.
+            The Affix can be scoped to a specific scrollable element, not just the window. Scroll
+            inside the box below.
           </Typography.P>
 
           <div
@@ -121,9 +118,7 @@ export default function AffixDemo() {
 
               <Affix target={scrollContainer} position="bottom" offset={10}>
                 <div className="bg-warning text-warning-content p-3 rounded-control shadow-elevated text-center font-medium border border-warning/50">
-                  <Typography.P>
-                    I am stuck to the bottom of the custom container!
-                  </Typography.P>
+                  <Typography.P>I am stuck to the bottom of the custom container!</Typography.P>
                 </div>
               </Affix>
 
@@ -139,15 +134,16 @@ export default function AffixDemo() {
         <section>
           <Typography.H2>4. Accessibility & Custom Styles</Typography.H2>
           <Typography.P variant="secondary" className="mb-4">
-            This example passes a custom <Typography.Code>className</Typography.Code> and <Typography.Code>style</Typography.Code>.
-            It also uses standard <Typography.Code>aria-label</Typography.Code> for screen readers.
+            This example passes a custom <Typography.Code>className</Typography.Code> and{' '}
+            <Typography.Code>style</Typography.Code>. It also uses standard{' '}
+            <Typography.Code>aria-label</Typography.Code> for screen readers.
           </Typography.P>
 
           <div className="p-4 border border-border rounded-surface bg-surface shadow-surface">
             <Affix
               offset={80}
               className="bg-linear-to-r from-brand to-info"
-              style={{ borderRadius: "9999px" }}
+              style={{ borderRadius: '9999px' }}
               role="region"
               aria-label="Special Offer Banner"
             >
@@ -158,8 +154,7 @@ export default function AffixDemo() {
             <ScrollPlaceHolder height={300} />
           </div>
         </section>
-
       </main>
-    </div >
+    </div>
   );
 }

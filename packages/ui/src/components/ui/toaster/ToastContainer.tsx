@@ -1,30 +1,27 @@
 // toast-container.tsx
 // UI: portal + position grouping
 
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import type { ToastContainerProps, ToastPosition } from "./types";
-import { ToastStack } from "./ToastStack";
-import { PORTAL_ID } from "./constants";
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import type { ToastContainerProps, ToastPosition } from './types';
+import { ToastStack } from './ToastStack';
+import { PORTAL_ID } from './constants';
 
 function getPortalRoot(): HTMLElement {
   let el = document.getElementById(PORTAL_ID);
   if (!el) {
-    el = document.createElement("div");
+    el = document.createElement('div');
     el.id = PORTAL_ID;
     el.style.cssText =
-      "position:fixed;inset:0;pointer-events:none;z-index:2147483647;isolation:isolate;";
+      'position:fixed;inset:0;pointer-events:none;z-index:2147483647;isolation:isolate;';
     document.body.appendChild(el);
   }
   return el;
 }
 
-const ToastContainer: React.FC<ToastContainerProps> = ({
-  toasts,
-  onRemove,
-}) => {
+const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onRemove }) => {
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -35,12 +32,12 @@ const ToastContainer: React.FC<ToastContainerProps> = ({
 
   const toastsByPosition = toasts.reduce(
     (acc, toast) => {
-      const position = toast.position || "bottom-right";
+      const position = toast.position || 'bottom-right';
       if (!acc[position]) acc[position] = [];
       acc[position].push(toast);
       return acc;
     },
-    {} as Record<ToastPosition, typeof toasts>
+    {} as Record<ToastPosition, typeof toasts>,
   );
 
   return createPortal(
@@ -54,7 +51,7 @@ const ToastContainer: React.FC<ToastContainerProps> = ({
         />
       ))}
     </>,
-    portalRoot
+    portalRoot,
   );
 };
 

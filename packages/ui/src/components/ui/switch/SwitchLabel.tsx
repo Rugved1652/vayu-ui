@@ -1,8 +1,8 @@
 // label.tsx
 // UI: presentational
 
-import type { ReactNode } from "react";
-import { cn } from "../utils";
+import type { ReactNode } from 'react';
+import { cn } from '../utils';
 
 interface SwitchLabelProps {
   id: string;
@@ -25,10 +25,10 @@ export function SwitchLabel({ id, label, description, disabled, error }: SwitchL
           id={labelId}
           htmlFor={id}
           className={cn(
-            "text-sm font-medium select-none",
-            "text-surface-content",
-            disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
-            error && !disabled && "text-destructive"
+            'text-sm font-medium select-none',
+            'text-surface-content',
+            disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+            error && !disabled && 'text-destructive',
           )}
         >
           {label}
@@ -38,11 +38,7 @@ export function SwitchLabel({ id, label, description, disabled, error }: SwitchL
       {description && (
         <p
           id={descriptionId}
-          className={cn(
-            "text-xs select-none",
-            "text-muted-content",
-            disabled && "opacity-50"
-          )}
+          className={cn('text-xs select-none', 'text-muted-content', disabled && 'opacity-50')}
         >
           {description}
         </p>

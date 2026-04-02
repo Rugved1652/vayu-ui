@@ -18,13 +18,13 @@ The `useScrollPosition` hook tracks the scroll position of the window or a speci
 Copy this code into `src/hooks/useScrollPosition.ts`:
 
 ```tsx
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface ScrollPosition {
   x: number;
   y: number;
-  directionY: "up" | "down" | null;
-  directionX: "left" | "right" | null;
+  directionY: 'up' | 'down' | null;
+  directionX: 'left' | 'right' | null;
   isAtTop: boolean;
   isAtBottom: boolean;
   progress: number; // 0–100
@@ -36,8 +36,13 @@ export const useScrollPosition = (options?: {
 }): ScrollPosition => {
   const { throttle: throttleMs = 50, element } = options ?? {};
   const [position, setPosition] = useState<ScrollPosition>({
-    x: 0, y: 0, directionY: null, directionX: null,
-    isAtTop: true, isAtBottom: false, progress: 0,
+    x: 0,
+    y: 0,
+    directionY: null,
+    directionX: null,
+    isAtTop: true,
+    isAtBottom: false,
+    progress: 0,
   });
 
   // ... throttled scroll handler with rAF
@@ -50,7 +55,7 @@ export const useScrollPosition = (options?: {
 ## Usage
 
 ```tsx
-import { useScrollPosition } from "@/hooks/useScrollPosition";
+import { useScrollPosition } from '@/hooks/useScrollPosition';
 
 const ScrollIndicator = () => {
   const { progress, directionY, isAtBottom } = useScrollPosition();
@@ -68,19 +73,19 @@ const ScrollIndicator = () => {
 
 ### Options
 
-| Property | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `throttle` | `number` | `50` | Throttle interval in milliseconds |
-| `element` | `RefObject<HTMLElement>` | `window` | Element to track scroll on |
+| Property   | Type                     | Default  | Description                       |
+| :--------- | :----------------------- | :------- | :-------------------------------- |
+| `throttle` | `number`                 | `50`     | Throttle interval in milliseconds |
+| `element`  | `RefObject<HTMLElement>` | `window` | Element to track scroll on        |
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `x` | `number` | Horizontal scroll position in pixels |
-| `y` | `number` | Vertical scroll position in pixels |
-| `directionY` | `"up" \| "down" \| null` | Vertical scroll direction |
-| `directionX` | `"left" \| "right" \| null` | Horizontal scroll direction |
-| `isAtTop` | `boolean` | Whether scrolled to the top |
-| `isAtBottom` | `boolean` | Whether scrolled to the bottom |
-| `progress` | `number` | Scroll progress from 0 to 100 |
+| Property     | Type                        | Description                          |
+| :----------- | :-------------------------- | :----------------------------------- |
+| `x`          | `number`                    | Horizontal scroll position in pixels |
+| `y`          | `number`                    | Vertical scroll position in pixels   |
+| `directionY` | `"up" \| "down" \| null`    | Vertical scroll direction            |
+| `directionX` | `"left" \| "right" \| null` | Horizontal scroll direction          |
+| `isAtTop`    | `boolean`                   | Whether scrolled to the top          |
+| `isAtBottom` | `boolean`                   | Whether scrolled to the bottom       |
+| `progress`   | `number`                    | Scroll progress from 0 to 100        |

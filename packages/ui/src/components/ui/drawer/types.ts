@@ -1,40 +1,40 @@
 // types.ts
 // Types
 
-import type { HTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react';
 
-export type DrawerSide = "left" | "right" | "top" | "bottom";
+export type DrawerSide = 'left' | 'right' | 'top' | 'bottom';
 
 export interface DrawerContextType {
-    open: boolean;
-    setOpen: (open: boolean) => void;
-    side: DrawerSide;
-    titleId: string;
-    descriptionId: string;
-    modal: boolean;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  side: DrawerSide;
+  titleId: string;
+  descriptionId: string;
+  modal: boolean;
 }
 
 export interface DrawerRootProps {
-    children: ReactNode;
-    open?: boolean;
-    onOpenChange?: (open: boolean) => void;
-    side?: DrawerSide;
-    modal?: boolean;
-    defaultOpen?: boolean;
+  children: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  side?: DrawerSide;
+  modal?: boolean;
+  defaultOpen?: boolean;
 }
 
 export interface DrawerTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    asChild?: boolean;
+  asChild?: boolean;
 }
 
 export interface DrawerOverlayProps extends HTMLAttributes<HTMLDivElement> {
-    dismissible?: boolean;
+  dismissible?: boolean;
 }
 
 export interface DrawerContentProps extends HTMLAttributes<HTMLDivElement> {
-    trapFocus?: boolean;
+  trapFocus?: boolean;
 }
 
 export interface DrawerCloseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    asChild?: boolean;
+  asChild?: boolean;
 }

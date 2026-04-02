@@ -18,7 +18,7 @@ The `useConfirmExit` hook attaches a `beforeunload` event listener that prompts 
 Copy this code into `src/hooks/useConfirmExit.ts`:
 
 ```tsx
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from 'react';
 
 export interface UseConfirmExitOptions {
   enabled: boolean;
@@ -27,7 +27,7 @@ export interface UseConfirmExitOptions {
 
 export const useConfirmExit = ({
   enabled,
-  message = "You have unsaved changes. Are you sure you want to leave?",
+  message = 'You have unsaved changes. Are you sure you want to leave?',
 }: UseConfirmExitOptions): void => {
   const messageRef = useRef(message);
   messageRef.current = message;
@@ -39,13 +39,13 @@ export const useConfirmExit = ({
       e.returnValue = messageRef.current;
       return messageRef.current;
     },
-    [enabled]
+    [enabled],
   );
 
   useEffect(() => {
     if (!enabled) return;
-    window.addEventListener("beforeunload", handler);
-    return () => window.removeEventListener("beforeunload", handler);
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
   }, [enabled, handler]);
 };
 ```
@@ -53,7 +53,7 @@ export const useConfirmExit = ({
 ## Usage
 
 ```tsx
-import { useConfirmExit } from "@/hooks/useConfirmExit";
+import { useConfirmExit } from '@/hooks/useConfirmExit';
 
 const EditForm = () => {
   const [dirty, setDirty] = useState(false);
@@ -73,7 +73,7 @@ const EditForm = () => {
 
 ### Options
 
-| Property | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `enabled` | `boolean` | — | Whether the exit guard is active |
-| `message` | `string` | `"You have unsaved changes…"` | Message for the dialog (most browsers ignore custom text) |
+| Property  | Type      | Default                       | Description                                               |
+| :-------- | :-------- | :---------------------------- | :-------------------------------------------------------- |
+| `enabled` | `boolean` | —                             | Whether the exit guard is active                          |
+| `message` | `string`  | `"You have unsaved changes…"` | Message for the dialog (most browsers ignore custom text) |

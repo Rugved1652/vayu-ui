@@ -13,39 +13,210 @@ var h = (name, slug, fileName, description) => ({
   tags: ["hook"]
 });
 var hooks = [
-  h("useBatteryStatus", "use-battery-status", "useBatteryStatus.ts", "Tracks the device battery level, charging state, and charging/discharging time."),
-  h("useConfirmExit", "use-confirm-exit", "useConfirmExit.ts", "Prompts the user with a confirmation dialog when they try to close or reload the tab."),
-  h("useCopyToClipboard", "use-copy-to-clipboard", "useCopyToClipboard.ts", "Copies a string to the clipboard and exposes a copied state flag."),
-  h("useCountdown", "use-countdown", "useCountdown.ts", "Countdown timer hook \u2014 returns remaining seconds and controls."),
-  h("useDebounce", "use-debounce", "useDebounce.ts", "Debounces a value by delaying updates until after the wait period."),
-  h("useDeviceOS", "use-device-os", "useDeviceOS.ts", "Detects the user's operating system from the user agent string."),
-  h("useElementPosition", "use-element-position", "useElementPosition.ts", "Tracks the bounding rect position of a DOM element relative to the viewport."),
-  h("useHover", "use-hover", "useHover.ts", "Returns a ref and a boolean indicating whether the element is hovered."),
-  h("useIdle", "use-idle", "useIdle.ts", "Detects user inactivity after a configurable idle timeout."),
-  h("useIndexedDB", "use-indexed-db", "useIndexedDB.ts", "CRUD operations on an IndexedDB object store with async state management."),
-  h("useIntervalWhen", "use-interval-when", "useIntervalWhen.ts", "Runs a callback on an interval only when a condition is true."),
-  h("useIsMount", "use-is-mount", "useIsMount.ts", "Returns true only on the initial render \u2014 useful for skipping effects on mount."),
-  h("useKeyPress", "use-key-press", "useKeyPress.ts", "Returns true while a specific keyboard key is held down."),
-  h("useList", "use-list", "useList.ts", "State hook for an array with push, remove, update, and clear helpers."),
-  h("useLocalStorage", "use-local-storage", "useLocalStorage.ts", "Synced state backed by localStorage with JSON serialisation."),
-  h("useLockBodyScroll", "use-lock-body-scroll", "useLockBodyScroll.ts", "Locks body scroll when active \u2014 typically used by modals and drawers."),
-  h("useMap", "use-map", "useMap.ts", "State hook for a Map with set, delete, clear, and has helpers."),
-  h("useMeasure", "use-measure", "useMeasure.ts", "Measures the width and height of a DOM element using ResizeObserver."),
-  h("useMediaQuery", "use-media-query", "useMediaQuery.ts", "Returns true when a CSS media query matches the current viewport."),
-  h("useMouseTrack", "use-mouse-track", "useMouseTrack.ts", "Tracks mouse position (x, y) relative to the window or a specific element."),
-  h("useNetworkStatus", "use-network-status", "useNetworkStatus.ts", "Tracks online/offline status and network connection information."),
-  h("useOnClickOutside", "use-on-click-outside", "useOnClickOutside.ts", "Fires a callback when a click is detected outside the referenced element."),
-  h("usePageLeave", "use-page-leave", "usePageLeave.ts", "Fires a callback when the user's cursor leaves the browser viewport."),
-  { ...h("usePermission", "use-permission", "usePermission.ts", "Queries the Permissions API for a given permission name and returns its state.") },
-  { ...h("usePreviousState", "use-previous-state", "usePreviousState.ts", "Returns the previous value of a state variable or prop.") },
-  h("useQueue", "use-queue", "useQueue.ts", "FIFO queue state with enqueue, dequeue, and peek helpers."),
-  h("useRenderCount", "use-render-count", "useRenderCount.ts", "Returns the number of times the component has rendered \u2014 useful for debugging."),
-  { ...h("useScrollPosition", "use-scroll-position", "useScrollPosition.ts", "Tracks the scroll position of the window or a specific element.") },
-  h("useSet", "use-set", "useSet.ts", "State hook for a Set with add, delete, has, and clear helpers."),
-  h("useThrottle", "use-throttle", "useThrottle.ts", "Throttles a value so updates fire at most once per delay period."),
-  h("useTimeout", "use-timeout", "useTimeout.ts", "Runs a callback after a delay with cancel and reset controls."),
-  h("useVisibilityChange", "use-visibility-change", "useVisibilityChange.ts", "Tracks document visibility \u2014 fires a callback when the tab becomes visible or hidden."),
-  h("useWindowSize", "use-window-size", "useWindowSize.ts", "Tracks window width and height, updating on resize with debouncing.")
+  h(
+    "useBatteryStatus",
+    "use-battery-status",
+    "useBatteryStatus.ts",
+    "Tracks the device battery level, charging state, and charging/discharging time."
+  ),
+  h(
+    "useConfirmExit",
+    "use-confirm-exit",
+    "useConfirmExit.ts",
+    "Prompts the user with a confirmation dialog when they try to close or reload the tab."
+  ),
+  h(
+    "useCopyToClipboard",
+    "use-copy-to-clipboard",
+    "useCopyToClipboard.ts",
+    "Copies a string to the clipboard and exposes a copied state flag."
+  ),
+  h(
+    "useCountdown",
+    "use-countdown",
+    "useCountdown.ts",
+    "Countdown timer hook \u2014 returns remaining seconds and controls."
+  ),
+  h(
+    "useDebounce",
+    "use-debounce",
+    "useDebounce.ts",
+    "Debounces a value by delaying updates until after the wait period."
+  ),
+  h(
+    "useDeviceOS",
+    "use-device-os",
+    "useDeviceOS.ts",
+    "Detects the user's operating system from the user agent string."
+  ),
+  h(
+    "useElementPosition",
+    "use-element-position",
+    "useElementPosition.ts",
+    "Tracks the bounding rect position of a DOM element relative to the viewport."
+  ),
+  h(
+    "useHover",
+    "use-hover",
+    "useHover.ts",
+    "Returns a ref and a boolean indicating whether the element is hovered."
+  ),
+  h(
+    "useIdle",
+    "use-idle",
+    "useIdle.ts",
+    "Detects user inactivity after a configurable idle timeout."
+  ),
+  h(
+    "useIndexedDB",
+    "use-indexed-db",
+    "useIndexedDB.ts",
+    "CRUD operations on an IndexedDB object store with async state management."
+  ),
+  h(
+    "useIntervalWhen",
+    "use-interval-when",
+    "useIntervalWhen.ts",
+    "Runs a callback on an interval only when a condition is true."
+  ),
+  h(
+    "useIsMount",
+    "use-is-mount",
+    "useIsMount.ts",
+    "Returns true only on the initial render \u2014 useful for skipping effects on mount."
+  ),
+  h(
+    "useKeyPress",
+    "use-key-press",
+    "useKeyPress.ts",
+    "Returns true while a specific keyboard key is held down."
+  ),
+  h(
+    "useList",
+    "use-list",
+    "useList.ts",
+    "State hook for an array with push, remove, update, and clear helpers."
+  ),
+  h(
+    "useLocalStorage",
+    "use-local-storage",
+    "useLocalStorage.ts",
+    "Synced state backed by localStorage with JSON serialisation."
+  ),
+  h(
+    "useLockBodyScroll",
+    "use-lock-body-scroll",
+    "useLockBodyScroll.ts",
+    "Locks body scroll when active \u2014 typically used by modals and drawers."
+  ),
+  h(
+    "useMap",
+    "use-map",
+    "useMap.ts",
+    "State hook for a Map with set, delete, clear, and has helpers."
+  ),
+  h(
+    "useMeasure",
+    "use-measure",
+    "useMeasure.ts",
+    "Measures the width and height of a DOM element using ResizeObserver."
+  ),
+  h(
+    "useMediaQuery",
+    "use-media-query",
+    "useMediaQuery.ts",
+    "Returns true when a CSS media query matches the current viewport."
+  ),
+  h(
+    "useMouseTrack",
+    "use-mouse-track",
+    "useMouseTrack.ts",
+    "Tracks mouse position (x, y) relative to the window or a specific element."
+  ),
+  h(
+    "useNetworkStatus",
+    "use-network-status",
+    "useNetworkStatus.ts",
+    "Tracks online/offline status and network connection information."
+  ),
+  h(
+    "useOnClickOutside",
+    "use-on-click-outside",
+    "useOnClickOutside.ts",
+    "Fires a callback when a click is detected outside the referenced element."
+  ),
+  h(
+    "usePageLeave",
+    "use-page-leave",
+    "usePageLeave.ts",
+    "Fires a callback when the user's cursor leaves the browser viewport."
+  ),
+  {
+    ...h(
+      "usePermission",
+      "use-permission",
+      "usePermission.ts",
+      "Queries the Permissions API for a given permission name and returns its state."
+    )
+  },
+  {
+    ...h(
+      "usePreviousState",
+      "use-previous-state",
+      "usePreviousState.ts",
+      "Returns the previous value of a state variable or prop."
+    )
+  },
+  h(
+    "useQueue",
+    "use-queue",
+    "useQueue.ts",
+    "FIFO queue state with enqueue, dequeue, and peek helpers."
+  ),
+  h(
+    "useRenderCount",
+    "use-render-count",
+    "useRenderCount.ts",
+    "Returns the number of times the component has rendered \u2014 useful for debugging."
+  ),
+  {
+    ...h(
+      "useScrollPosition",
+      "use-scroll-position",
+      "useScrollPosition.ts",
+      "Tracks the scroll position of the window or a specific element."
+    )
+  },
+  h(
+    "useSet",
+    "use-set",
+    "useSet.ts",
+    "State hook for a Set with add, delete, has, and clear helpers."
+  ),
+  h(
+    "useThrottle",
+    "use-throttle",
+    "useThrottle.ts",
+    "Throttles a value so updates fire at most once per delay period."
+  ),
+  h(
+    "useTimeout",
+    "use-timeout",
+    "useTimeout.ts",
+    "Runs a callback after a delay with cancel and reset controls."
+  ),
+  h(
+    "useVisibilityChange",
+    "use-visibility-change",
+    "useVisibilityChange.ts",
+    "Tracks document visibility \u2014 fires a callback when the tab becomes visible or hidden."
+  ),
+  h(
+    "useWindowSize",
+    "use-window-size",
+    "useWindowSize.ts",
+    "Tracks window width and height, updating on resize with debouncing."
+  )
 ];
 
 // src/Components/accordion.registry.ts
@@ -89,17 +260,8 @@ var accordionRegistry = {
   ],
   composition: {
     root: "Accordion",
-    slots: [
-      "Accordion.Item",
-      "Accordion.Header",
-      "Accordion.Body"
-    ],
-    structure: [
-      "Accordion",
-      "Accordion.Item",
-      "Accordion.Header",
-      "Accordion.Body"
-    ],
+    slots: ["Accordion.Item", "Accordion.Header", "Accordion.Body"],
+    structure: ["Accordion", "Accordion.Item", "Accordion.Header", "Accordion.Body"],
     rules: [
       "Accordion.Item must be a direct child of Accordion",
       "Accordion.Header must be inside Accordion.Item",
@@ -192,12 +354,7 @@ var accordionRegistry = {
     ]
   },
   variants: [],
-  states: [
-    "expanded",
-    "collapsed",
-    "hovered",
-    "focused"
-  ],
+  states: ["expanded", "collapsed", "hovered", "focused"],
   responsive: {
     allowed: false,
     patterns: []
@@ -224,13 +381,7 @@ var accordionRegistry = {
       typography: ["font-secondary", "font-medium", "text-base", "text-left", "leading-relaxed"]
     },
     recommended: {
-      colors: [
-        "ground-200",
-        "ground-800",
-        "ground-900",
-        "ground-100",
-        "primary-500"
-      ],
+      colors: ["ground-200", "ground-800", "ground-900", "ground-100", "primary-500"],
       radius: ["xl"],
       typography: ["font-secondary", "font-medium"]
     },
@@ -319,10 +470,7 @@ var accordionRegistry = {
   ],
   accessibility: {
     pattern: "WAI-ARIA Accordion Pattern",
-    standards: [
-      "WAI-ARIA accordion pattern compliance",
-      "WCAG 2.2 AA standards"
-    ],
+    standards: ["WAI-ARIA accordion pattern compliance", "WCAG 2.2 AA standards"],
     keyboard_support: [
       "ArrowDown - Move focus to the next accordion header",
       "ArrowUp - Move focus to the previous accordion header",
@@ -365,10 +513,7 @@ var accordionRegistry = {
     "Accordion.Body itemId must match parent Accordion.Item itemId",
     "Each itemId must be unique within an Accordion"
   ],
-  installation: [
-    "npx vayu-ui init    # Add Theme CSS if not added",
-    "npx vayu-ui add accordion"
-  ],
+  installation: ["npx vayu-ui init    # Add Theme CSS if not added", "npx vayu-ui add accordion"],
   source: {
     file: "packages/ui/src/components/ui/accordion.tsx",
     language: "typescript",
@@ -418,7 +563,17 @@ var affixRegistry = {
     "Implement sticky footers",
     "Maintain visibility of important UI elements during scroll"
   ],
-  ai_keywords: ["sticky", "affix", "pin", "scroll", "position", "header", "footer", "navigation", "toolbar"],
+  ai_keywords: [
+    "sticky",
+    "affix",
+    "pin",
+    "scroll",
+    "position",
+    "header",
+    "footer",
+    "navigation",
+    "toolbar"
+  ],
   when_to_use: [
     "Navigation bars that should remain visible while scrolling",
     "Action buttons that need to stay accessible",
@@ -525,7 +680,15 @@ var affixRegistry = {
       typography: []
     },
     recommended: {
-      colors: ["primary-600", "primary-500", "info-600", "info-500", "ground-100", "ground-800", "ground-200"],
+      colors: [
+        "primary-600",
+        "primary-500",
+        "info-600",
+        "info-500",
+        "ground-100",
+        "ground-800",
+        "ground-200"
+      ],
       spacing: ["px-4", "py-3"],
       radius: ["rounded"],
       typography: ["font-secondary", "text-sm", "text-xs"]
@@ -601,13 +764,8 @@ var affixRegistry = {
   ],
   accessibility: {
     pattern: "ARIA landmark pattern",
-    standards: [
-      "WCAG 2.1 Level AA",
-      "ARIA 1.2 specification"
-    ],
-    keyboard_support: [
-      "No direct keyboard interaction - component is presentational"
-    ],
+    standards: ["WCAG 2.1 Level AA", "ARIA 1.2 specification"],
+    keyboard_support: ["No direct keyboard interaction - component is presentational"],
     aria_attributes: [
       "role - Should be set to appropriate landmark (navigation, region, etc.)",
       "aria-label - Provides accessible name for screen readers",
@@ -639,10 +797,7 @@ var affixRegistry = {
     "offset should be a non-negative number",
     "zIndex should be a positive number to ensure visibility"
   ],
-  installation: [
-    "npx vayu-ui init    # Add Theme CSS if not added",
-    "npx vayu-ui add affix"
-  ],
+  installation: ["npx vayu-ui init    # Add Theme CSS if not added", "npx vayu-ui add affix"],
   source: {
     file: "src/components/ui/affix.tsx",
     language: "typescript",
@@ -651,14 +806,7 @@ var affixRegistry = {
   meta: {
     doc_url: "/docs/components/affix",
     source_file: "packages/ui/src/components/ui/affix.tsx",
-    extracted: [
-      "props",
-      "variants",
-      "examples",
-      "accessibility",
-      "installation",
-      "description"
-    ],
+    extracted: ["props", "variants", "examples", "accessibility", "installation", "description"],
     inferred: [
       "complexity",
       "category",
@@ -795,7 +943,17 @@ var buttongroupRegistry = {
   },
   design_tokens: {
     used: {
-      spacing: ["px-3", "px-4", "px-6", "py-2", "py-2.5", "py-3", "min-h-[36px]", "min-h-[40px]", "min-h-[44px]"],
+      spacing: [
+        "px-3",
+        "px-4",
+        "px-6",
+        "py-2",
+        "py-2.5",
+        "py-3",
+        "min-h-[36px]",
+        "min-h-[40px]",
+        "min-h-[44px]"
+      ],
       typography: ["text-sm", "text-base", "text-lg"]
     },
     recommended: {
@@ -937,10 +1095,7 @@ var buttongroupRegistry = {
     "size prop only affects direct button children via CSS selectors",
     "fullWidth requires the parent container to have defined width"
   ],
-  installation: [
-    "npx vayu-ui init    # Add Theme CSS if not added",
-    "npx vayu-ui add buttongroup"
-  ],
+  installation: ["npx vayu-ui init    # Add Theme CSS if not added", "npx vayu-ui add buttongroup"],
   source: {
     file: "packages/ui/src/components/ui/buttongroup.tsx",
     language: "typescript",
@@ -1018,19 +1173,8 @@ var cardRegistry = {
   ],
   composition: {
     root: "Card",
-    slots: [
-      "Card.Header",
-      "Card.Media",
-      "Card.Content",
-      "Card.Footer"
-    ],
-    structure: [
-      "Card",
-      "Card.Header",
-      "Card.Media",
-      "Card.Content",
-      "Card.Footer"
-    ],
+    slots: ["Card.Header", "Card.Media", "Card.Content", "Card.Footer"],
+    structure: ["Card", "Card.Header", "Card.Media", "Card.Content", "Card.Footer"],
     rules: [
       "Card sub-components can be used in any order",
       "Card.Media extends to card edges with negative margin styling",
@@ -1040,7 +1184,7 @@ var cardRegistry = {
     ]
   },
   props: {
-    "Card": [
+    Card: [
       {
         name: "interactive",
         type: "boolean",
@@ -1240,24 +1384,9 @@ var cardRegistry = {
         "text-primary-600",
         "dark:text-primary-400"
       ],
-      radius: [
-        "rounded-lg",
-        "rounded-t-[inherit]",
-        "rounded-b-[inherit]",
-        "rounded-full"
-      ],
-      border: [
-        "border",
-        "border-t"
-      ],
-      spacing: [
-        "p-5",
-        "p-4",
-        "gap-3",
-        "gap-2",
-        "pt-2",
-        "mt-0.5"
-      ],
+      radius: ["rounded-lg", "rounded-t-[inherit]", "rounded-b-[inherit]", "rounded-full"],
+      border: ["border", "border-t"],
+      spacing: ["p-5", "p-4", "gap-3", "gap-2", "pt-2", "mt-0.5"],
       typography: [
         "text-lg",
         "text-sm",
@@ -1269,18 +1398,10 @@ var cardRegistry = {
         "leading-relaxed",
         "truncate"
       ],
-      shadow: [
-        "shadow-outer",
-        "hover:shadow-lg"
-      ]
+      shadow: ["shadow-outer", "hover:shadow-lg"]
     },
     recommended: {
-      colors: [
-        "bg-white",
-        "dark:bg-ground-900",
-        "text-ground-900",
-        "dark:text-ground-50"
-      ],
+      colors: ["bg-white", "dark:bg-ground-900", "text-ground-900", "dark:text-ground-50"],
       radius: ["rounded-lg"],
       spacing: ["p-5", "gap-3"]
     },
@@ -1436,10 +1557,7 @@ var cardRegistry = {
     "Disabled cards ignore all interactive props",
     "Card.Header title should be meaningful for accessibility"
   ],
-  installation: [
-    "npx vayu-ui init    # Add Theme CSS if not added",
-    "npx vayu-ui add card"
-  ],
+  installation: ["npx vayu-ui init    # Add Theme CSS if not added", "npx vayu-ui add card"],
   source: {
     file: "packages/ui/src/components/ui/card.tsx",
     language: "typescript",
@@ -2017,14 +2135,7 @@ var skeletonRegistry = {
   },
   design_tokens: {
     used: {
-      colors: [
-        "ground-50",
-        "ground-100",
-        "ground-200",
-        "ground-800",
-        "ground-900",
-        "ground-950"
-      ],
+      colors: ["ground-50", "ground-100", "ground-200", "ground-800", "ground-900", "ground-950"],
       radius: ["rounded", "rounded-lg", "rounded-full"],
       border: ["border", "border-b", "border-transparent"],
       spacing: [
@@ -2046,14 +2157,7 @@ var skeletonRegistry = {
       radius: ["rounded", "rounded-lg", "rounded-full"]
     },
     allowed: {
-      colors: [
-        "ground-50",
-        "ground-100",
-        "ground-200",
-        "ground-800",
-        "ground-900",
-        "ground-950"
-      ],
+      colors: ["ground-50", "ground-100", "ground-200", "ground-800", "ground-900", "ground-950"],
       radius: ["rounded", "rounded-sm", "rounded-md", "rounded-lg", "rounded-full"],
       border: ["border", "border-b", "border-transparent"],
       spacing: ["p-*", "gap-*", "m-*", "space-y-*", "mb-*"],
@@ -2188,10 +2292,7 @@ var skeletonRegistry = {
     "Skeleton.Grid items and columns should be positive integers",
     "animation prop must be one of: pulse, wave, none"
   ],
-  installation: [
-    "npx vayu-ui init    # Add Theme CSS if not added",
-    "npx vayu-ui add skeleton"
-  ],
+  installation: ["npx vayu-ui init    # Add Theme CSS if not added", "npx vayu-ui add skeleton"],
   source: {
     file: "packages/ui/src/components/ui/skeleton/",
     language: "TypeScript",
@@ -3497,12 +3598,7 @@ var components = [
     },
     a11y: {
       requiredAttrs: {},
-      managedAttrs: [
-        "aria-labelledby",
-        "aria-describedby",
-        "aria-invalid",
-        "aria-required"
-      ],
+      managedAttrs: ["aria-labelledby", "aria-describedby", "aria-invalid", "aria-required"],
       keyboard: {
         Tab: "Moves focus into/out of the input",
         Enter: "Submits nearest form (default browser)"
@@ -3659,9 +3755,7 @@ var templates = [
 
 // src/registryData.ts
 var all = [...hooks, ...components, ...templates];
-var registry = Object.fromEntries(
-  all.map((item) => [item.name, item])
-);
+var registry = Object.fromEntries(all.map((item) => [item.name, item]));
 
 // src/index.ts
 function findItem(slug) {

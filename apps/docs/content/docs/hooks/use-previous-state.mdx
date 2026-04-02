@@ -34,7 +34,7 @@ export const usePreviousState = <T>(value: T): T | undefined => {
 ## Usage
 
 ```tsx
-import { usePreviousState } from "@/hooks/usePreviousState";
+import { usePreviousState } from '@/hooks/usePreviousState';
 
 const Counter = () => {
   const [count, setCount] = useState(0);
@@ -43,7 +43,7 @@ const Counter = () => {
   return (
     <div>
       <p>Current: {count}</p>
-      <p>Previous: {prevCount ?? "none"}</p>
+      <p>Previous: {prevCount ?? 'none'}</p>
       <button onClick={() => setCount((c) => c + 1)}>+1</button>
     </div>
   );
@@ -54,12 +54,12 @@ const Counter = () => {
 
 ### Parameters
 
-| Parameter | Type | Description |
-| :--- | :--- | :--- |
-| `value` | `T` | The current value to track |
+| Parameter | Type | Description                |
+| :-------- | :--- | :------------------------- |
+| `value`   | `T`  | The current value to track |
 
 ### Return Value
 
-| Type | Description |
-| :--- | :--- |
+| Type             | Description                                                        |
+| :--------------- | :----------------------------------------------------------------- |
 | `T \| undefined` | The value from the previous render, or `undefined` on first render |

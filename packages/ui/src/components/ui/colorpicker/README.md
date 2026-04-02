@@ -1,6 +1,7 @@
 # ColorPicker
 
 ## Anatomy
+
 - colorpicker.tsx — composition (context provider + state management)
 - label.tsx — UI: accessible label
 - description.tsx — UI: helper text
@@ -19,6 +20,7 @@
 - index.ts — public API
 
 ## Use Cases
+
 - Form color selection with hex/rgb/hsl format support
 - Theme builder or design tool color pickers
 - Standalone swatch grids for quick color selection

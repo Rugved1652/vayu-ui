@@ -8,6 +8,7 @@ import { UseIsMountDemo } from '@/components/demos/use-is-mount-demo';
 The `useIsMount` hook allows you to distinguish between the initial mount of a component and subsequent updates. It returns `true` during the first render cycle and `false` after the component has mounted.
 
 This is useful for:
+
 - Preventing effects from running on the initial render
 - Showing loading skeletons or animations only during mount
 - Initializing data that should only be set once
@@ -23,7 +24,7 @@ This is useful for:
 Copy this code into `src/hooks/useIsMount.ts`:
 
 ```tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export const useIsMount = () => {
   const [isMount, setIsMount] = useState(true);
@@ -39,17 +40,17 @@ export const useIsMount = () => {
 ## Usage
 
 ```tsx
-import { useEffect } from "react";
-import { useIsMount } from "@/hooks/useIsMount";
+import { useEffect } from 'react';
+import { useIsMount } from '@/hooks/useIsMount';
 
 const MyComponent = () => {
   const isMount = useIsMount();
 
   useEffect(() => {
     if (isMount) {
-      console.log("Component Just Mounted!");
+      console.log('Component Just Mounted!');
     } else {
-      console.log("Component Updated");
+      console.log('Component Updated');
     }
   });
 
@@ -65,6 +66,6 @@ const MyComponent = () => {
 
 ### Return Value
 
-| Type | Description |
-| :--- | :--- |
+| Type      | Description                                    |
+| :-------- | :--------------------------------------------- |
 | `boolean` | `true` on the first render, `false` otherwise. |

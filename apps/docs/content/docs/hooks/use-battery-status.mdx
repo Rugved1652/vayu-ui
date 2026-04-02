@@ -18,13 +18,13 @@ The `useBatteryStatus` hook wraps the [Battery Status API](https://developer.moz
 Copy this code into `src/hooks/useBatteryStatus.ts`:
 
 ```tsx
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export interface BatteryStatus {
   charging: boolean;
   chargingTime: number;
   dischargingTime: number;
-  level: number;       // 0 to 1
+  level: number; // 0 to 1
   isSupported: boolean;
 }
 
@@ -52,8 +52,8 @@ export const useBatteryStatus = (): BatteryStatus => {
         });
 
       update();
-      battery.addEventListener("chargingchange", update);
-      battery.addEventListener("levelchange", update);
+      battery.addEventListener('chargingchange', update);
+      battery.addEventListener('levelchange', update);
     });
   }, []);
 
@@ -64,7 +64,7 @@ export const useBatteryStatus = (): BatteryStatus => {
 ## Usage
 
 ```tsx
-import { useBatteryStatus } from "@/hooks/useBatteryStatus";
+import { useBatteryStatus } from '@/hooks/useBatteryStatus';
 
 const BatteryIndicator = () => {
   const { level, charging, isSupported } = useBatteryStatus();
@@ -73,7 +73,7 @@ const BatteryIndicator = () => {
 
   return (
     <span>
-      {charging ? "⚡" : "🔋"} {Math.round(level * 100)}%
+      {charging ? '⚡' : '🔋'} {Math.round(level * 100)}%
     </span>
   );
 };
@@ -83,10 +83,10 @@ const BatteryIndicator = () => {
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `charging` | `boolean` | Whether the device is currently charging |
-| `chargingTime` | `number` | Seconds until fully charged (`Infinity` if not charging) |
-| `dischargingTime` | `number` | Seconds until empty (`Infinity` if charging) |
-| `level` | `number` | Battery level from `0` to `1` |
-| `isSupported` | `boolean` | Whether the Battery API is available |
+| Property          | Type      | Description                                              |
+| :---------------- | :-------- | :------------------------------------------------------- |
+| `charging`        | `boolean` | Whether the device is currently charging                 |
+| `chargingTime`    | `number`  | Seconds until fully charged (`Infinity` if not charging) |
+| `dischargingTime` | `number`  | Seconds until empty (`Infinity` if charging)             |
+| `level`           | `number`  | Battery level from `0` to `1`                            |
+| `isSupported`     | `boolean` | Whether the Battery API is available                     |

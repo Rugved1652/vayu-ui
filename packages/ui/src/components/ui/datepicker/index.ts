@@ -1,10 +1,10 @@
 // index.ts
 // Public API
 
-import { DatePickerRoot } from "./DatePicker";
-import { DatePickerTrigger } from "./DatePickerTrigger";
-import { DatePickerCalendar } from "./DatePickerCalendar";
-import { DatePickerCalendarFooter } from "./DatePickerFooter";
+import { DatePickerRoot } from './DatePicker';
+import { DatePickerTrigger } from './DatePickerTrigger';
+import { DatePickerCalendar } from './DatePickerCalendar';
+import { DatePickerCalendarFooter } from './DatePickerFooter';
 
 // Compound API
 
@@ -20,10 +20,10 @@ export { DatePicker };
 export default DatePicker;
 
 // Subcomponents
-export { DatePickerRoot } from "./DatePicker";
-export { DatePickerTrigger } from "./DatePickerTrigger";
-export { DatePickerCalendar } from "./DatePickerCalendar";
-export { DatePickerCalendarFooter } from "./DatePickerFooter";
+export { DatePickerRoot } from './DatePicker';
+export { DatePickerTrigger } from './DatePickerTrigger';
+export { DatePickerCalendar } from './DatePickerCalendar';
+export { DatePickerCalendarFooter } from './DatePickerFooter';
 
 // Public types
 export type {
@@ -34,4 +34,4 @@ export type {
   DatePickerTriggerProps,
   DatePickerCalendarProps,
   DatePickerCalendarFooterProps,
-} from "./types";
+} from './types';

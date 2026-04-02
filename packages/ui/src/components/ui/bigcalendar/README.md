@@ -1,6 +1,7 @@
 # BigCalendar
 
 ## Anatomy
+
 - bigcalendar.tsx — composition (root with state, context provider, default children)
 - toolbar.tsx — UI: navigation controls and view switcher
 - month-view.tsx — UI: month grid view with day cells and events
@@ -12,6 +13,7 @@
 - index.ts — export: compound component with subcomponents
 
 ## Use Cases
+
 - Displaying events in month, week, or day views
 - Navigating between dates and switching calendar views
 - Custom event rendering with `renderEvent` prop

@@ -1,6 +1,6 @@
 ---
 title: Marquee
-description: An infinite scrolling component for showcasing logos, testimonials, or any other content.
+description: WCAG 2.2 AA compliant scrolling content component with pause controls.
 ---
 
 import MarqueeDemo from '@/components/demos/marquee-demo';
@@ -9,38 +9,41 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add marquee
 ```
 
+```bash
+npx vayu-ui add -t marquee #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-centerborder ">
       <MarqueeDemo />
-    </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Marquee, MarqueeItem } from "vayu-ui"
+    <Marquee pauseOnHover label="Featured technologies">
+      <MarqueeItem>React</MarqueeItem>
+      <MarqueeItem>TypeScript</MarqueeItem>
+      <MarqueeItem>Tailwind CSS v4</MarqueeItem>
+      <MarqueeItem>Next.js</MarqueeItem>
+    </Marquee>
 
-    export function MarqueeDemo() {
-      return (
-        <Marquee label="Technologies carousel">
-          {["React", "Next.js", "Tailwind", "TypeScript", "Vercel"].map((item) => (
-            <MarqueeItem key={item} className="mx-4">
-              <div className="px-4 py-2 bg-ground-100 dark:bg-ground-800 rounded-md border border-ground-200 dark:border-ground-700">
-                <p className="text-sm font-medium">{item}</p>
-              </div>
-            </MarqueeItem>
-          ))}
-        </Marquee>
-      )
-    }
+    <Marquee speed="fast" direction="right" label="Fast scrolling right">
+      <MarqueeItem>Fast 1</MarqueeItem>
+      <MarqueeItem>Fast 2</MarqueeItem>
+    </Marquee>
+
+    <Marquee loopMode="ping-pong" label="Ping-pong scrolling content">
+      <MarqueeItem>Item 1</MarqueeItem>
+      <MarqueeItem>Item 2</MarqueeItem>
+    </Marquee>
     ```
 
   </Tab>
@@ -49,256 +52,54 @@ npx vayu-ui add marquee
 ## Anatomy
 
 ```tsx
-<Marquee
-  speed="normal"
-  direction="left"
-  pauseOnHover
-  showControls
-  gradient
-  loopMode="infinite"
-  loopCount={1}
-  label="Accessible label"
->
-  <MarqueeItem>Content...</MarqueeItem>
-</Marquee>
+import { Marquee, MarqueeItem } from 'vayu-ui';
+
+export default () => (
+  <Marquee pauseOnHover label="Marquee Label">
+    <MarqueeItem>Item 1</MarqueeItem>
+    <MarqueeItem>Item 2</MarqueeItem>
+  </Marquee>
+);
 ```
 
 ## Accessibility
 
-- **WCAG 2.2.2 (Pause, Stop, Hide)**: Includes a pause/play control button by default (`showControls`)
-- **WCAG 2.3.3 (Animation from Interactions)**: Respects `prefers-reduced-motion` system preference - animations are disabled for users who prefer reduced motion
-- Proper ARIA attributes: `role="region"`, `aria-roledescription="marquee"`, `aria-live="off"`
-- Keyboard accessible pause button (Tab to focus, Enter/Space to toggle)
-- `aria-hidden="true"` on duplicate content to prevent screen reader redundancy
-- Server-side rendered - no client-side JavaScript required
+- Keyboard support: `Tab` to focus on the pause/play control button. `Enter` or `Space` toggles the play/pause state.
+- ARIA attributes: Uses `role="region"`, `aria-roledescription="marquee"`, and `aria-label` for semantic meaning. The pause button uses `aria-pressed` and `aria-label`.
+- Focus behavior: Focus indicator is clearly visible on the pause control button. Animation pauses on hover or when interacting with controls, fulfilling WCAG 2.2.2 (Level A). Respects `prefers-reduced-motion` settings (WCAG 2.3.3).
+
+## Screen reader behavior
+
+Screen readers will announce the component as a "marquee" region with the provided accessible label. Users can interact with the pause/play button securely, enabling them to control the scrolling animation independently to read the content without a time constraint.
+
+## Component Folder Structure
+
+```bash
+Marquee/
+├── index.ts
+├── types.ts
+├── Marquee.tsx
+├── MarqueeItem.tsx
+└── README.md
+```
 
 ## Props
 
 ### Marquee
 
-| Prop           | Type        | Default               | Description                                                 |
-| :------------- | :---------- | :-------------------- | :---------------------------------------------------------- | --------------------------- | ----------------------- | ----------------------------------- |
-| `speed`        | `"slow"     | "normal"              | "fast"`                                                     | `"normal"`                  | Speed of the animation. |
-| `direction`    | `"left"     | "right"`              | `"left"`                                                    | Direction of the animation. |
-| `pauseOnHover` | `boolean`   | `true`                | Whether to pause the animation when hovering.               |
-| `gradient`     | `boolean`   | `true`                | Whether to show fade gradient on edges.                     |
-| `showControls` | `boolean`   | `true`                | Whether to show the pause/play control button (WCAG 2.2.2). |
-| `loopMode`     | `"infinite" | "finite"              | "single"                                                    | "ping-pong"`                | `"infinite"`            | The loop behavior of the animation. |
-| `loopCount`    | `number`    | `1`                   | Number of loops when `loopMode` is `"finite"`.              |
-| `label`        | `string`    | `"Scrolling content"` | Accessible label for the marquee region.                    |
+| Prop           | Type                                                | Description                                                 |
+| :------------- | :-------------------------------------------------- | :---------------------------------------------------------- |
+| `speed`        | `"slow" \| "normal" \| "fast"`                      | The speed of the scroll animation. Default: `"normal"`.     |
+| `direction`    | `"left" \| "right"`                                 | The direction of the scroll. Default: `"left"`.             |
+| `pauseOnHover` | `boolean`                                           | Whether to pause animation on hover. Default: `true`.       |
+| `gradient`     | `boolean`                                           | Whether to apply edge gradient fade. Default: `true`.       |
+| `showControls` | `boolean`                                           | Whether to show pause/play control button. Default: `true`. |
+| `label`        | `string`                                            | Accessible label for the marquee region.                    |
+| `loopMode`     | `"infinite" \| "finite" \| "single" \| "ping-pong"` | The loop mode for the animation. Default: `"infinite"`.     |
+| `loopCount`    | `number`                                            | Number of loops when loopMode is `"finite"`. Default: `1`.  |
 
 ### MarqueeItem
 
-| Prop        | Type     | Default | Description             |
-| :---------- | :------- | :------ | :---------------------- |
-| `className` | `string` | -       | Additional CSS classes. |
-
-## Source Code
-
-```tsx title="src/components/ui/marquee.tsx"
-import { clsx } from 'clsx';
-import React, { forwardRef } from 'react';
-
-// ============================================================================
-// Types
-// ============================================================================
-
-type MarqueeSpeed = 'slow' | 'normal' | 'fast';
-type MarqueeDirection = 'left' | 'right';
-type MarqueeLoopMode = 'infinite' | 'finite' | 'single' | 'ping-pong';
-
-interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** The speed of the scroll animation. Default: "normal" */
-  speed?: MarqueeSpeed;
-  /** The direction of the scroll. Default: "left" */
-  direction?: MarqueeDirection;
-  /** Whether to pause animation on hover. Default: true */
-  pauseOnHover?: boolean;
-  /** Whether to apply edge gradient fade. Default: true */
-  gradient?: boolean;
-  /** Whether to show pause/play control button. Default: true (WCAG 2.2.2) */
-  showControls?: boolean;
-  /** Accessible label for the marquee region */
-  label?: string;
-  /** The loop mode for the animation. Default: "infinite" */
-  loopMode?: MarqueeLoopMode;
-  /** Number of loops when loopMode is "finite". Default: 1 */
-  loopCount?: number;
-  children: React.ReactNode;
-}
-
-// ============================================================================
-// Marquee Root (Server Component)
-// ============================================================================
-
-const Marquee = forwardRef<HTMLDivElement, MarqueeProps>(
-  (
-    {
-      speed = 'normal',
-      direction = 'left',
-      pauseOnHover = true,
-      gradient = true,
-      showControls = true,
-      label = 'Scrolling content',
-      loopMode = 'infinite',
-      loopCount = 1,
-      className,
-      children,
-      style,
-      ...props
-    },
-    ref,
-  ) => {
-    const durations: Record<MarqueeSpeed, string> = {
-      slow: '40s',
-      normal: '20s',
-      fast: '10s',
-    };
-
-    // Determine animation class based on loop mode
-    const getAnimationClass = () => {
-      switch (loopMode) {
-        case 'ping-pong':
-          return 'animate-marquee-ping-pong';
-        case 'finite':
-          return clsx('animate-marquee-scroll', '[animation-iteration-count:var(--loop-count)]');
-        case 'single':
-          return clsx(
-            'animate-marquee-scroll',
-            '[animation-iteration-count:1]',
-            '[animation-fill-mode:forwards]',
-          );
-        default:
-          return 'animate-marquee-scroll';
-      }
-    };
-
-    // For ping-pong mode, we don't need to duplicate content
-    const shouldDuplicateContent = loopMode !== 'ping-pong';
-
-    return (
-      <div
-        ref={ref}
-        className={clsx(
-          'relative flex w-full items-center gap-2',
-          // When checkbox is checked, pause animation
-          showControls &&
-            'has-[:checked] [&>.marquee-container>.marquee-content]:[animation-play-state:paused]',
-          className,
-        )}
-        role="region"
-        aria-roledescription="marquee"
-        aria-label={label}
-        aria-live="off"
-        {...props}
-      >
-        {/* Pause/Play Control (WCAG 2.2.2 - CSS-only) */}
-        {showControls && (
-          <>
-            <input
-              type="checkbox"
-              id="marquee-pause"
-              className="peer sr-only"
-              aria-label="Pause scrolling animation"
-            />
-            <label
-              htmlFor="marquee-pause"
-              className={clsx(
-                'shrink-0 w-8 h-8 flex items-center justify-center',
-                'rounded-md border border-ground-300 dark:border-ground-600',
-                'bg-white dark:bg-ground-800',
-                'text-ground-600 dark:text-ground-400',
-                'hover:bg-ground-100 dark:hover:bg-ground-700',
-                'focus-within:ring-2 focus-within:ring-primary-500',
-                'cursor-pointer select-none',
-                'transition-colors',
-              )}
-              title="Pause/Play animation"
-            >
-              {/* Play icon (shown when paused - checkbox checked) */}
-              <svg
-                className="w-4 h-4 hidden peer-checked:block"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              {/* Pause icon (shown when playing - checkbox unchecked) */}
-              <svg
-                className="w-4 h-4 block peer-checked:hidden"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-              </svg>
-            </label>
-          </>
-        )}
-
-        {/* Marquee Container */}
-        <div
-          className={clsx(
-            'marquee-container flex-1 overflow-hidden',
-            gradient &&
-              'mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]',
-          )}
-        >
-          <div
-            className={clsx(
-              'marquee-content flex flex-row w-max min-w-full items-center',
-              getAnimationClass(),
-              '[animation-duration:var(--duration)]',
-              // Only apply direction for non-ping-pong modes
-              loopMode !== 'ping-pong' && '[animation-direction:var(--direction)]',
-              // Pause on hover
-              pauseOnHover && 'hover:[animation-play-state:paused]',
-              // Respect reduced motion preference (WCAG 2.3.3)
-              'motion-reduce:animate-none',
-            )}
-            style={
-              {
-                '--duration': durations[speed],
-                '--direction': direction === 'left' ? 'normal' : 'reverse',
-                '--loop-count': loopCount,
-                ...style,
-              } as React.CSSProperties
-            }
-          >
-            {/* Original Content */}
-            <div className="flex shrink-0 items-center justify-around gap-4 px-4">{children}</div>
-            {/* Duplicate Content for Seamless Loop (not for ping-pong) */}
-            {shouldDuplicateContent && (
-              <div
-                className="flex shrink-0 items-center justify-around gap-4 px-4"
-                aria-hidden="true"
-              >
-                {children}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  },
-);
-Marquee.displayName = 'Marquee';
-
-// ============================================================================
-// MarqueeItem
-// ============================================================================
-
-const MarqueeItem = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={clsx('flex shrink-0 items-center justify-center', className)}
-      {...props}
-    />
-  ),
-);
-MarqueeItem.displayName = 'MarqueeItem';
-
-export { Marquee, MarqueeItem };
-```
+| Prop       | Type              | Description                                    |
+| :--------- | :---------------- | :--------------------------------------------- |
+| `children` | `React.ReactNode` | The content to render inside the marquee item. |

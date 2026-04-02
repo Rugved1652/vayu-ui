@@ -18,7 +18,7 @@ The `useQueue` hook provides a simple interface for managing a queue (First-In-F
 Copy this code into `src/hooks/useQueue.ts`:
 
 ```tsx
-import { useState } from "react";
+import { useState } from 'react';
 
 export const useQueue = <T,>() => {
   const [queue, setQueue] = useState<T[]>([]);
@@ -50,7 +50,7 @@ export const useQueue = <T,>() => {
 ## Usage
 
 ```tsx
-import { useQueue } from "@/hooks/useQueue";
+import { useQueue } from '@/hooks/useQueue';
 
 const TaskProcessor = () => {
   const { add, remove, first, size, queue } = useQueue<string>();
@@ -58,14 +58,16 @@ const TaskProcessor = () => {
   return (
     <div>
       <div className="flex gap-2">
-        <button onClick={() => add("Task A")}>Add Task A</button>
-        <button onClick={() => add("Task B")}>Add Task B</button>
-        <button onClick={remove} disabled={size === 0}>Process Next Task</button>
+        <button onClick={() => add('Task A')}>Add Task A</button>
+        <button onClick={() => add('Task B')}>Add Task B</button>
+        <button onClick={remove} disabled={size === 0}>
+          Process Next Task
+        </button>
       </div>
 
       <p>Current Task: {first}</p>
       <p>Tasks in Queue: {size}</p>
-      
+
       <ul>
         {queue.map((task, i) => (
           <li key={i}>{task}</li>
@@ -80,12 +82,12 @@ const TaskProcessor = () => {
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `queue` | `T[]` | The array of items currently in the queue. |
-| `add` | `(item: T) => void` | Adds an item to the end of the queue. |
-| `remove` | `() => void` | Removes the first item from the queue. |
-| `clear` | `() => void` | Removes all items from the queue. |
-| `first` | `T \| undefined` | The first item in the queue. |
-| `last` | `T \| undefined` | The last item in the queue. |
-| `size` | `number` | The number of items in the queue. |
+| Property | Type                | Description                                |
+| :------- | :------------------ | :----------------------------------------- |
+| `queue`  | `T[]`               | The array of items currently in the queue. |
+| `add`    | `(item: T) => void` | Adds an item to the end of the queue.      |
+| `remove` | `() => void`        | Removes the first item from the queue.     |
+| `clear`  | `() => void`        | Removes all items from the queue.          |
+| `first`  | `T \| undefined`    | The first item in the queue.               |
+| `last`   | `T \| undefined`    | The last item in the queue.                |
+| `size`   | `number`            | The number of items in the queue.          |

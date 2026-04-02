@@ -1,6 +1,7 @@
 # Table
 
 ## Anatomy
+
 - table.tsx — composition (UI + wiring, compound component attachment)
 - table-caption.tsx — UI: caption with visually-hidden support
 - table-head.tsx — UI: thead section
@@ -13,6 +14,7 @@
 - index.ts — public API
 
 ## Use Cases
+
 - Displaying tabular data with WCAG 2.2 AA compliance
 - Sortable column headers with aria-sort indicators
 - Selectable rows with keyboard focus support

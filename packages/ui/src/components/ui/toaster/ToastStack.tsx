@@ -1,30 +1,20 @@
 // toast-stack.tsx
 // UI: Sonner-style stack with expand/collapse
 
-"use client";
+'use client';
 
-import React, { useState, useCallback, useId } from "react";
-import { cn } from "../utils";
-import type { ToastStackProps } from "./types";
-import { ToastItem } from "./ToastItem";
-import {
-  VISIBLE_TOASTS,
-  GAP,
-  TOAST_HEIGHT_OFFSET,
-  SCALE_STEP,
-  positionClasses,
-} from "./constants";
+import React, { useState, useCallback, useId } from 'react';
+import { cn } from '../utils';
+import type { ToastStackProps } from './types';
+import { ToastItem } from './ToastItem';
+import { VISIBLE_TOASTS, GAP, TOAST_HEIGHT_OFFSET, SCALE_STEP, positionClasses } from './constants';
 
-const ToastStack: React.FC<ToastStackProps> = ({
-  position,
-  toasts,
-  onRemove,
-}) => {
+const ToastStack: React.FC<ToastStackProps> = ({ position, toasts, onRemove }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [heights, setHeights] = useState<Record<string, number>>({});
   const [isAllPaused, setIsAllPaused] = useState(false);
   const regionId = useId();
-  const isBottom = position.startsWith("bottom");
+  const isBottom = position.startsWith('bottom');
 
   const handleHeightUpdate = useCallback((id: string, height: number) => {
     setHeights((prev) => {
@@ -35,12 +25,12 @@ const ToastStack: React.FC<ToastStackProps> = ({
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         const firstDismissible = toasts.find((t) => t.dismissible !== false);
         if (firstDismissible) onRemove(firstDismissible.id);
       }
     },
-    [toasts, onRemove]
+    [toasts, onRemove],
   );
 
   const getStackOffset = (index: number): number => {
@@ -62,13 +52,10 @@ const ToastStack: React.FC<ToastStackProps> = ({
       aria-relevant="additions removals"
       id={regionId}
       tabIndex={-1}
-      className={cn(
-        "absolute flex flex-col p-4 pointer-events-none",
-        positionClasses[position]
-      )}
+      className={cn('absolute flex flex-col p-4 pointer-events-none', positionClasses[position])}
       style={{
-        width: "100%",
-        maxWidth: "420px",
+        width: '100%',
+        maxWidth: '420px',
       }}
       onKeyDown={handleKeyDown}
     >
@@ -95,16 +82,12 @@ const ToastStack: React.FC<ToastStackProps> = ({
         style={{
           height: isExpanded
             ? toasts.reduce(
-              (sum, t, i) =>
-                sum +
-                (heights[t.id] || 64) +
-                (i < toasts.length - 1 ? GAP : 0),
-              0
-            )
+                (sum, t, i) => sum + (heights[t.id] || 64) + (i < toasts.length - 1 ? GAP : 0),
+                0,
+              )
             : (heights[toasts[0]?.id] || 64) +
-            (Math.min(toasts.length, VISIBLE_TOASTS) - 1) *
-            TOAST_HEIGHT_OFFSET,
-          transition: "height 300ms cubic-bezier(0.22, 1, 0.36, 1)",
+              (Math.min(toasts.length, VISIBLE_TOASTS) - 1) * TOAST_HEIGHT_OFFSET,
+          transition: 'height 300ms cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
         {toasts.map((toast, index) => {
@@ -120,10 +103,10 @@ const ToastStack: React.FC<ToastStackProps> = ({
               style={{
                 zIndex: toasts.length - index,
                 transform: `translateY(${offset * direction}px) scale(${scale})`,
-                transformOrigin: isBottom ? "bottom center" : "top center",
+                transformOrigin: isBottom ? 'bottom center' : 'top center',
                 opacity: isHidden ? 0 : 1,
-                pointerEvents: isHidden ? "none" : "auto",
-                transition: "all 300ms cubic-bezier(0.22, 1, 0.36, 1)",
+                pointerEvents: isHidden ? 'none' : 'auto',
+                transition: 'all 300ms cubic-bezier(0.22, 1, 0.36, 1)',
                 ...(isBottom ? { bottom: 0 } : { top: 0 }),
               }}
               aria-hidden={isHidden}
@@ -142,17 +125,17 @@ const ToastStack: React.FC<ToastStackProps> = ({
       {!isExpanded && toasts.length > VISIBLE_TOASTS && (
         <div
           className={cn(
-            "pointer-events-auto mt-1 self-center rounded-full px-2.5 py-1",
-            "bg-surface-content text-surface",
-            "text-xs font-medium shadow-control cursor-pointer",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2"
+            'pointer-events-auto mt-1 self-center rounded-full px-2.5 py-1',
+            'bg-surface-content text-surface',
+            'text-xs font-medium shadow-control cursor-pointer',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2',
           )}
           role="button"
           tabIndex={0}
           aria-label={`Show all ${toasts.length} notifications`}
           onClick={() => setIsExpanded(true)}
           onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
+            if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               setIsExpanded(true);
             }

@@ -37,6 +37,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       );
     }
     ```
+
   </Tab>
 </Tabs>
 
@@ -53,16 +54,16 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ## Compound Components
 
-| Component | Description |
-|:----------|:------------|
-| `Timepicker.Root` | Context provider that manages state and configuration |
-| `Timepicker.Trigger` | Button that displays selected time and opens dropdown |
-| `Timepicker.Content` | Portal-rendered dropdown containing time columns |
-| `Timepicker.TimeGrid` | Pre-configured layout of Hour, Minute, and Period columns |
-| `Timepicker.HourColumn` | Individual hour selection column |
-| `Timepicker.MinuteColumn` | Individual minute selection column |
-| `Timepicker.PeriodColumn` | AM/PM toggle (only shown in 12h format) |
-| `Timepicker.Footer` | Action buttons (Clear, Apply) |
+| Component                 | Description                                               |
+| :------------------------ | :-------------------------------------------------------- |
+| `Timepicker.Root`         | Context provider that manages state and configuration     |
+| `Timepicker.Trigger`      | Button that displays selected time and opens dropdown     |
+| `Timepicker.Content`      | Portal-rendered dropdown containing time columns          |
+| `Timepicker.TimeGrid`     | Pre-configured layout of Hour, Minute, and Period columns |
+| `Timepicker.HourColumn`   | Individual hour selection column                          |
+| `Timepicker.MinuteColumn` | Individual minute selection column                        |
+| `Timepicker.PeriodColumn` | AM/PM toggle (only shown in 12h format)                   |
+| `Timepicker.Footer`       | Action buttons (Clear, Apply)                             |
 
 ## Examples
 
@@ -81,7 +82,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ### Time Range Selection
 
 ```tsx
-import { Timepicker, TimeRange } from "vayu-ui";
+import { Timepicker, TimeRange } from 'vayu-ui';
 
 function RangeExample() {
   const [range, setRange] = useState<TimeRange | null>(null);
@@ -113,7 +114,7 @@ function RangeExample() {
 ```tsx
 <Timepicker.Root
   disabledHours={[0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]}
-  disabledTimes={["12:00", "12:30", "13:00"]}
+  disabledTimes={['12:00', '12:30', '13:00']}
   placeholder="Business hours only"
 >
   <Timepicker.Trigger />
@@ -127,11 +128,7 @@ function RangeExample() {
 ### Min/Max Time Bounds
 
 ```tsx
-<Timepicker.Root
-  minTime="09:00"
-  maxTime="17:00"
-  placeholder="Work hours (9AM - 5PM)"
->
+<Timepicker.Root minTime="09:00" maxTime="17:00" placeholder="Work hours (9AM - 5PM)">
   <Timepicker.Trigger />
   <Timepicker.Content>
     <Timepicker.TimeGrid />
@@ -155,8 +152,8 @@ function RangeExample() {
 ### React Hook Form Integration
 
 ```tsx
-import { Controller, useForm } from "react-hook-form";
-import { Timepicker, TimeValue } from "vayu-ui";
+import { Controller, useForm } from 'react-hook-form';
+import { Timepicker, TimeValue } from 'vayu-ui';
 
 interface FormData {
   appointmentTime: TimeValue | null;
@@ -170,7 +167,7 @@ function FormExample() {
       <Controller
         name="appointmentTime"
         control={control}
-        rules={{ required: "Time is required" }}
+        rules={{ required: 'Time is required' }}
         render={({ field, fieldState }) => (
           <Timepicker.Root
             value={field.value}
@@ -196,30 +193,30 @@ function FormExample() {
 
 ### Timepicker.Root
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `value` | `TimeValue \| TimeRange \| null` | — | Controlled value |
-| `defaultValue` | `TimeValue \| TimeRange \| null` | — | Default uncontrolled value |
-| `onValueChange` | `(value) => void` | — | Callback when value changes |
-| `format` | `'12h' \| '24h'` | `'12h'` | Time display format |
-| `mode` | `'single' \| 'range'` | `'single'` | Single time or time range selection |
-| `label` | `string` | — | Accessible label text |
-| `error` | `string` | — | Error message to display |
-| `disabled` | `boolean` | `false` | Disable the timepicker |
-| `placeholder` | `string` | `'Select time'` | Placeholder text |
-| `minuteStep` | `number` | `5` | Minute increment step |
-| `clearable` | `boolean` | `true` | Show clear button |
-| `showApplyButton` | `boolean` | `false` | Show Apply button in footer |
-| `minTime` | `string` | — | Minimum selectable time (HH:MM) |
-| `maxTime` | `string` | — | Maximum selectable time (HH:MM) |
-| `disabledTimes` | `string[]` | — | Array of disabled times (HH:MM) |
-| `disabledHours` | `number[]` | — | Array of disabled hours (0-23) |
+| Prop              | Type                             | Default         | Description                         |
+| :---------------- | :------------------------------- | :-------------- | :---------------------------------- |
+| `value`           | `TimeValue \| TimeRange \| null` | —               | Controlled value                    |
+| `defaultValue`    | `TimeValue \| TimeRange \| null` | —               | Default uncontrolled value          |
+| `onValueChange`   | `(value) => void`                | —               | Callback when value changes         |
+| `format`          | `'12h' \| '24h'`                 | `'12h'`         | Time display format                 |
+| `mode`            | `'single' \| 'range'`            | `'single'`      | Single time or time range selection |
+| `label`           | `string`                         | —               | Accessible label text               |
+| `error`           | `string`                         | —               | Error message to display            |
+| `disabled`        | `boolean`                        | `false`         | Disable the timepicker              |
+| `placeholder`     | `string`                         | `'Select time'` | Placeholder text                    |
+| `minuteStep`      | `number`                         | `5`             | Minute increment step               |
+| `clearable`       | `boolean`                        | `true`          | Show clear button                   |
+| `showApplyButton` | `boolean`                        | `false`         | Show Apply button in footer         |
+| `minTime`         | `string`                         | —               | Minimum selectable time (HH:MM)     |
+| `maxTime`         | `string`                         | —               | Maximum selectable time (HH:MM)     |
+| `disabledTimes`   | `string[]`                       | —               | Array of disabled times (HH:MM)     |
+| `disabledHours`   | `number[]`                       | —               | Array of disabled hours (0-23)      |
 
 ### TimeValue Type
 
 ```tsx
 interface TimeValue {
-  hour: number;   // 0-23
+  hour: number; // 0-23
   minute: number; // 0-59
 }
 ```
@@ -257,13 +254,13 @@ The Timepicker component follows WCAG 2.2 AA guidelines:
 
 The Timepicker uses semantic design tokens from the theme:
 
-| Token | Usage |
-|:------|:------|
-| `bg-surface` | Trigger background |
-| `bg-elevated` | Dropdown content background |
-| `bg-brand` | Selected item background |
-| `border-field` | Default border color |
-| `border-focus` | Focus border color |
-| `rounded-control` | Trigger border radius |
-| `rounded-overlay` | Dropdown border radius |
-| `shadow-elevated` | Dropdown shadow |
+| Token             | Usage                       |
+| :---------------- | :-------------------------- |
+| `bg-surface`      | Trigger background          |
+| `bg-elevated`     | Dropdown content background |
+| `bg-brand`        | Selected item background    |
+| `border-field`    | Default border color        |
+| `border-focus`    | Focus border color          |
+| `rounded-control` | Trigger border radius       |
+| `rounded-overlay` | Dropdown border radius      |
+| `shadow-elevated` | Dropdown shadow             |

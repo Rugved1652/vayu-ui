@@ -1,6 +1,7 @@
 # Timepicker
 
 ## Anatomy
+
 - timepicker.tsx — Composition: context, useTimepicker hook, TimepickerRoot with compound placeholders
 - trigger.tsx — UI: TimepickerTrigger (inline editing, keyboard navigation)
 - content.tsx — UI: TimepickerContent (portal, positioning, scroll lock, focus trap)
@@ -11,6 +12,7 @@
 - index.ts — Public API: compound exports
 
 ## Use Cases
+
 - Single time selection with inline editing or dropdown columns
 - Time range selection (start/end) with tabbed phases
 - 12h/24h format support with AM/PM toggle

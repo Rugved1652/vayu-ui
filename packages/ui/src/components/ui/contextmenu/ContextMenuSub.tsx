@@ -3,7 +3,15 @@
 
 import { clsx } from 'clsx';
 import { ChevronRight } from 'lucide-react';
-import React, { forwardRef, useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { SubmenuContext, useContextMenuCtx, useMenuKeyboard, useMenuPosition } from './hooks';
 import type {
@@ -170,9 +178,11 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
     useEffect(() => {
       if (isOpen && isMounted && contentRef.current) {
         requestAnimationFrame(() => {
-          contentRef.current?.querySelector<HTMLElement>(
-            '[role="menuitem"]:not([aria-disabled="true"]), [role="menuitemcheckbox"]:not([aria-disabled="true"]), [role="menuitemradio"]:not([aria-disabled="true"])',
-          )?.focus();
+          contentRef.current
+            ?.querySelector<HTMLElement>(
+              '[role="menuitem"]:not([aria-disabled="true"]), [role="menuitemcheckbox"]:not([aria-disabled="true"]), [role="menuitemradio"]:not([aria-disabled="true"])',
+            )
+            ?.focus();
         });
       }
     }, [isOpen, isMounted]);

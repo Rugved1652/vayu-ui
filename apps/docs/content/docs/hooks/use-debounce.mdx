@@ -8,6 +8,7 @@ import { UseDebounceDemo } from '@/components/demos/use-debounce-demo';
 The `useDebounce` hook allows you to debounce any fast-changing value. The debounced value will only reflect the latest value when the `useDebounce` hook has not been called for the specified time period.
 
 This is particularly useful for optimizing performance for:
+
 - Search inputs that trigger API calls
 - Form validation
 - Window resize calculations
@@ -24,7 +25,7 @@ This is particularly useful for optimizing performance for:
 Copy this code into `src/hooks/useDebounce.ts`:
 
 ```tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export const useDebounce = <T,>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -46,17 +47,17 @@ export const useDebounce = <T,>(value: T, delay: number): T => {
 ## Usage
 
 ```tsx
-import { useState, useEffect } from "react";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useState, useEffect } from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
 
 const SearchComponent = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
       // Trigger API call here
-      console.log("Searching for:", debouncedSearchTerm);
+      console.log('Searching for:', debouncedSearchTerm);
     }
   }, [debouncedSearchTerm]);
 
@@ -75,13 +76,13 @@ const SearchComponent = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `value` | `T` | The value to be debounced. |
+| Name    | Type     | Description                                                  |
+| :------ | :------- | :----------------------------------------------------------- |
+| `value` | `T`      | The value to be debounced.                                   |
 | `delay` | `number` | The delay in milliseconds to wait before updating the value. |
 
 ### Return Value
 
-| Type | Description |
-| :--- | :--- |
-| `T` | The debounced value. |
+| Type | Description          |
+| :--- | :------------------- |
+| `T`  | The debounced value. |

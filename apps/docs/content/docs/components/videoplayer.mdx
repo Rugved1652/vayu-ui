@@ -40,6 +40,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       </VideoPlayer.Controls>
     </VideoPlayer.Root>
     ```
+
   </Tab>
 </Tabs>
 
@@ -58,63 +59,63 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ## Sub-components
 
-| Component | Description |
-|:----------|:------------|
-| `Root` | Context provider, keyboard listener, auto-hide |
-| `Video` | The `<video>` element (click to toggle play) |
-| `Controls` | Bottom control bar with gradient overlay |
-| `ProgressBar` | Seekable slider with buffer + hover tooltip |
-| `PlayPauseButton` | Play / pause toggle |
-| `SkipBackwardButton` | Skip backward (default 10s) |
-| `SkipForwardButton` | Skip forward (default 10s) |
-| `VolumeControl` | Mute toggle + volume slider |
-| `TimeDisplay` | Current time / duration |
-| `FullscreenButton` | Fullscreen toggle |
-| `SubtitlesButton` | Toggle subtitles/captions |
-| `SettingsButton` | Settings (extensible) |
-| `DownloadButton` | Download source video |
-| `LoadingOverlay` | Buffering spinner overlay |
-| `CenterPlayButton` | Large center play (hidden when playing) |
+| Component            | Description                                    |
+| :------------------- | :--------------------------------------------- |
+| `Root`               | Context provider, keyboard listener, auto-hide |
+| `Video`              | The `<video>` element (click to toggle play)   |
+| `Controls`           | Bottom control bar with gradient overlay       |
+| `ProgressBar`        | Seekable slider with buffer + hover tooltip    |
+| `PlayPauseButton`    | Play / pause toggle                            |
+| `SkipBackwardButton` | Skip backward (default 10s)                    |
+| `SkipForwardButton`  | Skip forward (default 10s)                     |
+| `VolumeControl`      | Mute toggle + volume slider                    |
+| `TimeDisplay`        | Current time / duration                        |
+| `FullscreenButton`   | Fullscreen toggle                              |
+| `SubtitlesButton`    | Toggle subtitles/captions                      |
+| `SettingsButton`     | Settings (extensible)                          |
+| `DownloadButton`     | Download source video                          |
+| `LoadingOverlay`     | Buffering spinner overlay                      |
+| `CenterPlayButton`   | Large center play (hidden when playing)        |
 
 ## Root Props
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `onPlay` | `() => void` | — | Play callback |
-| `onPause` | `() => void` | — | Pause callback |
-| `onEnded` | `() => void` | — | Ended callback |
-| `onTimeUpdate` | `(time: number) => void` | — | Time callback |
-| `onVolumeChange` | `(vol: number) => void` | — | Volume callback |
-| `onFullscreenChange` | `(fs: boolean) => void` | — | Fullscreen callback |
-| `defaultVolume` | `number` | `1` | Initial volume (0–1) |
-| `defaultPlaybackRate` | `number` | `1` | Initial speed |
-| `autoHideControls` | `boolean` | `true` | Auto-hide controls |
-| `autoHideDelay` | `number` | `3000` | Hide delay in ms |
+| Prop                  | Type                     | Default | Description          |
+| :-------------------- | :----------------------- | :------ | :------------------- |
+| `onPlay`              | `() => void`             | —       | Play callback        |
+| `onPause`             | `() => void`             | —       | Pause callback       |
+| `onEnded`             | `() => void`             | —       | Ended callback       |
+| `onTimeUpdate`        | `(time: number) => void` | —       | Time callback        |
+| `onVolumeChange`      | `(vol: number) => void`  | —       | Volume callback      |
+| `onFullscreenChange`  | `(fs: boolean) => void`  | —       | Fullscreen callback  |
+| `defaultVolume`       | `number`                 | `1`     | Initial volume (0–1) |
+| `defaultPlaybackRate` | `number`                 | `1`     | Initial speed        |
+| `autoHideControls`    | `boolean`                | `true`  | Auto-hide controls   |
+| `autoHideDelay`       | `number`                 | `3000`  | Hide delay in ms     |
 
 ## Keyboard Shortcuts
 
-| Key | Action |
-|:----|:-------|
-| `Space` / `K` | Play / pause |
-| `← →` / `J` / `L` | Seek ±5s |
-| `↑ ↓` | Volume ±10% |
-| `M` | Mute toggle |
-| `F` | Fullscreen toggle |
-| `C` | Toggle subtitles |
-| `Home` / `0` | Seek to start |
-| `End` | Seek to end |
+| Key               | Action            |
+| :---------------- | :---------------- |
+| `Space` / `K`     | Play / pause      |
+| `← →` / `J` / `L` | Seek ±5s          |
+| `↑ ↓`             | Volume ±10%       |
+| `M`               | Mute toggle       |
+| `F`               | Fullscreen toggle |
+| `C`               | Toggle subtitles  |
+| `Home` / `0`      | Seek to start     |
+| `End`             | Seek to end       |
 
 ## Utility Hooks
 
 Imported from `@/components/ui/hook`:
 
-| Hook | Description |
-|:-----|:------------|
-| `useWatchTime` | Track total and session watch time |
-| `useVideoAnalytics` | Record events and milestone tracking |
-| `useVideoChapters` | Chapter navigation with auto-detection |
-| `usePlaybackSpeed` | Stepped speed control |
-| `useVideoBuffer` | Buffer health monitoring |
-| `useVideoQuality` | Stream quality switching |
-| `useVideoStateSync` | Resume position via localStorage |
-| `useVideoHotkeys` | Custom keyboard shortcuts |
+| Hook                | Description                            |
+| :------------------ | :------------------------------------- |
+| `useWatchTime`      | Track total and session watch time     |
+| `useVideoAnalytics` | Record events and milestone tracking   |
+| `useVideoChapters`  | Chapter navigation with auto-detection |
+| `usePlaybackSpeed`  | Stepped speed control                  |
+| `useVideoBuffer`    | Buffer health monitoring               |
+| `useVideoQuality`   | Stream quality switching               |
+| `useVideoStateSync` | Resume position via localStorage       |
+| `useVideoHotkeys`   | Custom keyboard shortcuts              |

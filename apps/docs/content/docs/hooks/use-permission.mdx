@@ -18,27 +18,31 @@ The `usePermission` hook wraps the [Permissions API](https://developer.mozilla.o
 Copy this code into `src/hooks/usePermission.ts`:
 
 ```tsx
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
 export type PermissionName =
-  | "camera" | "microphone" | "geolocation" | "notifications"
-  | "clipboard-read" | "clipboard-write" | "push" | "midi";
+  | 'camera'
+  | 'microphone'
+  | 'geolocation'
+  | 'notifications'
+  | 'clipboard-read'
+  | 'clipboard-write'
+  | 'push'
+  | 'midi';
 
-export type PermissionState = "granted" | "denied" | "prompt" | "unsupported" | "loading";
+export type PermissionState = 'granted' | 'denied' | 'prompt' | 'unsupported' | 'loading';
 
 export const usePermission = (permissionName: PermissionName) => {
-  const [state, setState] = useState<PermissionState>("loading");
+  const [state, setState] = useState<PermissionState>('loading');
 
   useEffect(() => {
     navigator.permissions
       .query({ name: permissionName as any })
       .then((status) => {
         setState(status.state as PermissionState);
-        status.addEventListener("change", () =>
-          setState(status.state as PermissionState)
-        );
+        status.addEventListener('change', () => setState(status.state as PermissionState));
       })
-      .catch(() => setState("unsupported"));
+      .catch(() => setState('unsupported'));
   }, [permissionName]);
 
   const request = useCallback(async () => {
@@ -46,25 +50,28 @@ export const usePermission = (permissionName: PermissionName) => {
     // See full source for implementation
   }, [permissionName]);
 
-  return { state, isGranted: state === "granted", isDenied: state === "denied", isPrompt: state === "prompt", isSupported: state !== "unsupported", request };
+  return {
+    state,
+    isGranted: state === 'granted',
+    isDenied: state === 'denied',
+    isPrompt: state === 'prompt',
+    isSupported: state !== 'unsupported',
+    request,
+  };
 };
 ```
 
 ## Usage
 
 ```tsx
-import { usePermission } from "@/hooks/usePermission";
+import { usePermission } from '@/hooks/usePermission';
 
 const CameraAccess = () => {
-  const { state, isGranted, request } = usePermission("camera");
+  const { state, isGranted, request } = usePermission('camera');
 
   if (isGranted) return <p>✅ Camera access granted</p>;
 
-  return (
-    <button onClick={request}>
-      Grant Camera ({state})
-    </button>
-  );
+  return <button onClick={request}>Grant Camera ({state})</button>;
 };
 ```
 
@@ -72,17 +79,17 @@ const CameraAccess = () => {
 
 ### Parameters
 
-| Parameter | Type | Description |
-| :--- | :--- | :--- |
+| Parameter        | Type             | Description             |
+| :--------------- | :--------------- | :---------------------- |
 | `permissionName` | `PermissionName` | The permission to query |
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `state` | `PermissionState` | `"granted"` \| `"denied"` \| `"prompt"` \| `"unsupported"` \| `"loading"` |
-| `isGranted` | `boolean` | Whether the permission is granted |
-| `isDenied` | `boolean` | Whether the permission is denied |
-| `isPrompt` | `boolean` | Whether the user hasn't been asked yet |
-| `isSupported` | `boolean` | Whether the Permissions API supports this permission |
-| `request` | `() => Promise<void>` | Triggers the browser's permission prompt |
+| Property      | Type                  | Description                                                               |
+| :------------ | :-------------------- | :------------------------------------------------------------------------ |
+| `state`       | `PermissionState`     | `"granted"` \| `"denied"` \| `"prompt"` \| `"unsupported"` \| `"loading"` |
+| `isGranted`   | `boolean`             | Whether the permission is granted                                         |
+| `isDenied`    | `boolean`             | Whether the permission is denied                                          |
+| `isPrompt`    | `boolean`             | Whether the user hasn't been asked yet                                    |
+| `isSupported` | `boolean`             | Whether the Permissions API supports this permission                      |
+| `request`     | `() => Promise<void>` | Triggers the browser's permission prompt                                  |

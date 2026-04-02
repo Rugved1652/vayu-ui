@@ -18,11 +18,18 @@ The `useDeviceOS` hook detects the current device's OS, browser, form factor, an
 Copy this code into `src/hooks/useDeviceOS.ts`:
 
 ```tsx
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-export type OSName = "Windows" | "macOS" | "Linux" | "Android" | "iOS" | "ChromeOS" | "Unknown";
-export type BrowserName = "Chrome" | "Firefox" | "Safari" | "Edge" | "Opera" | "Samsung Internet" | "Unknown";
-export type DeviceType = "mobile" | "tablet" | "desktop";
+export type OSName = 'Windows' | 'macOS' | 'Linux' | 'Android' | 'iOS' | 'ChromeOS' | 'Unknown';
+export type BrowserName =
+  | 'Chrome'
+  | 'Firefox'
+  | 'Safari'
+  | 'Edge'
+  | 'Opera'
+  | 'Samsung Internet'
+  | 'Unknown';
+export type DeviceType = 'mobile' | 'tablet' | 'desktop';
 
 export interface DeviceOSInfo {
   os: OSName;
@@ -35,8 +42,12 @@ export interface DeviceOSInfo {
 
 export const useDeviceOS = (): DeviceOSInfo => {
   const [info, setInfo] = useState<DeviceOSInfo>({
-    os: "Unknown", browser: "Unknown", deviceType: "desktop",
-    isTouchDevice: false, userAgent: "", isReady: false,
+    os: 'Unknown',
+    browser: 'Unknown',
+    deviceType: 'desktop',
+    isTouchDevice: false,
+    userAgent: '',
+    isReady: false,
   });
 
   useEffect(() => {
@@ -45,7 +56,7 @@ export const useDeviceOS = (): DeviceOSInfo => {
       os: detectOS(ua),
       browser: detectBrowser(ua),
       deviceType: detectDeviceType(ua),
-      isTouchDevice: "ontouchstart" in window || navigator.maxTouchPoints > 0,
+      isTouchDevice: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
       userAgent: ua,
       isReady: true,
     });
@@ -58,7 +69,7 @@ export const useDeviceOS = (): DeviceOSInfo => {
 ## Usage
 
 ```tsx
-import { useDeviceOS } from "@/hooks/useDeviceOS";
+import { useDeviceOS } from '@/hooks/useDeviceOS';
 
 const PlatformMessage = () => {
   const { os, browser, deviceType, isReady } = useDeviceOS();
@@ -77,11 +88,11 @@ const PlatformMessage = () => {
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `os` | `OSName` | `"Windows"` \| `"macOS"` \| `"Linux"` \| `"Android"` \| `"iOS"` \| `"ChromeOS"` \| `"Unknown"` |
-| `browser` | `BrowserName` | `"Chrome"` \| `"Firefox"` \| `"Safari"` \| `"Edge"` \| `"Opera"` \| `"Samsung Internet"` \| `"Unknown"` |
-| `deviceType` | `DeviceType` | `"mobile"` \| `"tablet"` \| `"desktop"` |
-| `isTouchDevice` | `boolean` | Whether the device has touch capability |
-| `userAgent` | `string` | Raw user agent string |
-| `isReady` | `boolean` | `true` after client-side detection completes |
+| Property        | Type          | Description                                                                                             |
+| :-------------- | :------------ | :------------------------------------------------------------------------------------------------------ |
+| `os`            | `OSName`      | `"Windows"` \| `"macOS"` \| `"Linux"` \| `"Android"` \| `"iOS"` \| `"ChromeOS"` \| `"Unknown"`          |
+| `browser`       | `BrowserName` | `"Chrome"` \| `"Firefox"` \| `"Safari"` \| `"Edge"` \| `"Opera"` \| `"Samsung Internet"` \| `"Unknown"` |
+| `deviceType`    | `DeviceType`  | `"mobile"` \| `"tablet"` \| `"desktop"`                                                                 |
+| `isTouchDevice` | `boolean`     | Whether the device has touch capability                                                                 |
+| `userAgent`     | `string`      | Raw user agent string                                                                                   |
+| `isReady`       | `boolean`     | `true` after client-side detection completes                                                            |

@@ -1,11 +1,11 @@
 // slide.tsx
 // UI: Individual slide
 
-import React, { forwardRef } from "react";
-import { cn } from "../utils";
-import { useCarouselContext } from "./hooks";
+import React, { forwardRef } from 'react';
+import { cn } from '../utils';
+import { useCarouselContext } from './hooks';
 
-const CarouselSlide = forwardRef<HTMLDivElement, import("./types").CarouselSlideProps>(
+const CarouselSlide = forwardRef<HTMLDivElement, import('./types').CarouselSlideProps>(
   ({ index, className, children, ...props }, ref) => {
     const { currentIndex } = useCarouselContext();
     const isActive = index === currentIndex;
@@ -20,18 +20,18 @@ const CarouselSlide = forwardRef<HTMLDivElement, import("./types").CarouselSlide
         data-index={index}
         data-active={isActive}
         className={cn(
-          "transition-opacity duration-300",
-          isActive ? "opacity-100" : "opacity-0 absolute inset-0 pointer-events-none",
-          className
+          'transition-opacity duration-300',
+          isActive ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none',
+          className,
         )}
         {...props}
       >
         {children}
       </div>
     );
-  }
+  },
 );
 
-CarouselSlide.displayName = "Carousel.Slide";
+CarouselSlide.displayName = 'Carousel.Slide';
 
 export default CarouselSlide;

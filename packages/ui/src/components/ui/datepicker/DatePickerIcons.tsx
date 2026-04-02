@@ -1,9 +1,9 @@
 // icons.tsx
 // UI: icon components
 
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 export const ChevronLeftIcon = ({ className }: { className?: string }) => (
   <svg

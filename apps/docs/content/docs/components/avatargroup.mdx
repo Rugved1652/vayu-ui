@@ -9,11 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init
 ```
 
 ```bash
 npx vayu-ui add avatargroup
+```
+
+```bash
+npx vayu-ui add -t avatargroup
 ```
 
 ## Usage
@@ -26,183 +30,145 @@ npx vayu-ui add avatargroup
   </Tab>
   <Tab value="Code">
     ```tsx
-       const users = [
-        {
-            id: 1,
-            username: "John Doe",
-            src: "https://github.com/shadcn.png",
-            alt: "John Doe",
-            status: "online" as const,
-        },
-        {
-            id: 2,
-            username: "Jane Smith",
-            fallback: "JS",
-            status: "offline" as const,
-        },
-        {
-            id: 3,
-            username: "Bob Wilson",
-            src: "https://github.com/vercel.png",
-            alt: "Bob Wilson",
-            status: "online" as const,
-        },
-        {
-            id: 4,
-            username: "Alice Johnson",
-            fallback: "AJ",
-            status: "away" as const,
-        },
-        {
-            id: 5,
-            username: "Charlie Brown",
-            src: "https://github.com/octocat.png",
-            status: "busy" as const,
-        },
-        {
-            id: 6,
-            username: "David Lee",
-            fallback: "DL",
-            status: "offline" as const,
-        },
+    const users = [
+      { id: 1, username: "John Doe", src: "https://github.com/shadcn.png", status: "online" as const },
+      { id: 2, username: "Jane Smith", fallback: "JS", status: "offline" as const },
+      { id: 3, username: "Bob Wilson", src: "https://github.com/vercel.png", status: "online" as const },
+      { id: 4, username: "Alice Johnson", fallback: "AJ", status: "away" as const },
+      { id: 5, username: "Charlie Brown", src: "https://github.com/octocat.png", status: "busy" as const },
+      { id: 6, username: "David Lee", fallback: "DL", status: "offline" as const },
     ];
 
-        {/* Basic Stack (Default) */}
-        <AvatarGroup users={users} maxDisplay={4} />
-  
-         {/* Different Sizes */}
-          <AvatarGroup users={users} size="small" maxDisplay={3} />
-          <AvatarGroup users={users} size="medium" maxDisplay={3} />
-          <AvatarGroup users={users} size="large" maxDisplay={3} />
-          <AvatarGroup users={users} size="xlarge" maxDisplay={3} />
+    <AvatarGroup users={users} maxDisplay={4} />
 
-       {/* Interactive (Clickable) */}
-       <AvatarGroup 
-            users={users} 
-            maxDisplay={4} 
-            onAvatarClick={(user, index) => alert(`Clicked ${user.username}`)}
-            onOverflowClick={(hidden) => alert(`${hidden.length} more users`)}
-        />
+    <AvatarGroup users={users} layout="grid" maxDisplay={6} />
 
-      {/* Grid Layout */}
-       <AvatarGroup users={users} layout="grid" maxDisplay={6} />
+    <AvatarGroup users={users.slice(0, 3)} size="small" spacing="tight" />
+    <AvatarGroup users={users.slice(0, 3)} size="medium" />
+    <AvatarGroup users={users.slice(0, 3)} size="large" spacing="loose" />
+    <AvatarGroup users={users.slice(0, 3)} size="xlarge" />
 
-      {/* With Status & Initials Fallback */}
-        <AvatarGroup 
-            users={[
-                { username: "Online User", status: "online" },
-                { username: "Busy User", status: "busy" },
-                { username: "Away User", status: "away" },
-                { username: "Offline User", status: "offline" },
-            ]} 
-        />
+    <AvatarGroup
+      users={users}
+      maxDisplay={5}
+      onAvatarClick={(user, index) => console.log(user)}
+      onOverflowClick={(hiddenUsers) => console.log(hiddenUsers)}
+    />
     ```
+
   </Tab>
 </Tabs>
-
-## Features
-
-- Stacked (overlapping) or Grid layouts
-- Overflow handling (`+3 more`)
-- Hover effects for stacked items (expand on hover)
-- Integrated with `Avatar` component for consistent styling
-- Fully accessible `role="group"`
 
 ## Anatomy
 
 ```tsx
-<AvatarGroup
-  users={users}
-  size="medium"
-  maxDisplay={3}
-  layout="stack"
-  spacing="normal"
-  onAvatarClick={(user, index) => console.log(user)}
-  onOverflowClick={(hiddenUsers) => console.log(hiddenUsers)}
-/>
+<AvatarGroup>
+  {/* Root container — role="group" */}
+  <AvatarItem>
+    {/* Per-user avatar wrapper with Avatar inside */}
+    <Avatar>
+      <Avatar.Image />
+      <Avatar.Status />
+    </Avatar>
+  </AvatarItem>
+  <AvatarItem>...</AvatarItem>
+  <OverflowButton>{/* "+N" indicator shown when users exceed maxDisplay */}</OverflowButton>
+</AvatarGroup>
 ```
 
-| Element          | Description                                                           |
-| :--------------- | :-------------------------------------------------------------------- |
-| **Root**         | Container with `role="group"` for accessibility                       |
-| **Avatar Items** | Individual avatars rendered from the `users` array                    |
-| **Overflow**     | Indicator showing remaining count when users exceed `maxDisplay`      |
-
-## Props
-
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `users` | `UserData[]` | `[]` | Array of user objects |
-| `size` | `'small' \| 'medium' \| 'large' \| 'xlarge'` | `'medium'` | Size of avatars |
-| `maxDisplay` | `number` | `5` | Max visible before overflow |
-| `layout` | `'stack' \| 'grid'` | `'stack'` | Layout mode |
-| `spacing` | `'tight' \| 'normal' \| 'loose' \| number` | `'normal'` | Negative margin for stack |
-| `onAvatarClick` | `(user: UserData, index: number) => void` | — | Click handler for avatars |
-| `onOverflowClick` | `(hiddenUsers: UserData[]) => void` | — | Click handler for overflow button |
-
-### UserData Interface
-
-```tsx
-interface UserData {
-  id?: string | number | null;
-  src?: string;
-  username?: string;
-  alt?: string;
-  fallback?: string;
-  status?: "online" | "offline" | "away" | "busy";
-}
-```
-
-### Sizes
-
-| Size     | Dimensions | Use Case                         |
-| :------- | :--------- | :------------------------------- |
-| `small`  | 32×32px    | Dense lists, tables, inline text |
-| `medium` | 48×48px    | Default, comments, cards         |
-| `large`  | 64×64px    | Profiles, headers                |
-| `xlarge` | 96×96px    | Hero sections, user profiles     |
-
-### Spacing Values
-
-| Spacing | Stack Offset | Use Case                    |
-| :------ | :----------- | :-------------------------- |
-| `tight` | -12px        | Compact displays            |
-| `normal`| -8px         | Default overlapping         |
-| `loose` | -4px         | More spacing between items  |
+| Part               | Description                                              |
+| :----------------- | :------------------------------------------------------- |
+| **Root**           | Flex container with `role="group"` and keyboard handling |
+| **AvatarItem**     | Per-user wrapper — renders `Avatar` with positioning     |
+| **OverflowButton** | Button showing remaining count when overflow occurs      |
 
 ## Accessibility
 
-The AvatarGroup component follows WCAG 2.2 Level AA guidelines:
+### Keyboard Support
 
-### Keyboard Navigation
+| Key          | Behavior                                      |
+| :----------- | :-------------------------------------------- |
+| `ArrowRight` | Move focus to the next interactive avatar     |
+| `ArrowLeft`  | Move focus to the previous interactive avatar |
+| `Tab`        | Move focus into and out of the avatar group   |
+| `Enter`      | Activate the focused clickable avatar         |
+| `Space`      | Activate the focused clickable avatar         |
 
-- **Arrow Keys**: Navigate between avatars when interactive (`ArrowRight` / `ArrowLeft`)
-- **Tab**: Move focus into and out of the avatar group
-- **Enter/Space**: Activate clickable avatars and overflow button
+### ARIA Attributes
 
-### Screen Reader Support
+| Element            | Attribute                  | Value                               |
+| :----------------- | :------------------------- | :---------------------------------- |
+| Root               | `role`                     | `group`                             |
+| Root               | `aria-label`               | `Avatar group with {count} members` |
+| Avatar (static)    | `aria-label` (from Avatar) | `{username}'s avatar`               |
+| Avatar (clickable) | `role`                     | `button`                            |
+| Avatar (clickable) | `tabIndex`                 | `0`                                 |
+| OverflowButton     | `role`                     | `button`                            |
+| OverflowButton     | `aria-label`               | `Show {count} more users`           |
 
-| Element           | Role     | ARIA Attributes                                      |
-| :---------------- | :------- | :--------------------------------------------------- |
-| AvatarGroup Root  | `group`  | `aria-label="Avatar group with {count} members"`     |
-| Avatar (static)   | `img`    | `aria-label="{username}'s avatar"`                   |
-| Avatar (clickable)| `button` | `tabIndex={0}`, `role="button"`                      |
-| Overflow Button   | `button` | `aria-label="Show {count} more users"`               |
+### Focus Behavior
 
-### Motion Preferences
+- Focus is managed via roving tabindex on interactive avatars (`role="button"`)
+- `focus-visible` ring uses `ring-focus` design token with offset
+- All hover animations respect `prefers-reduced-motion` via `motion-safe:` prefix
+- Minimum touch target of 24x24px (WCAG 2.5.5)
 
-- All animations use `motion-safe:` prefix
-- Respects `prefers-reduced-motion` media query
-- Hover expansion effects are disabled for users with reduced motion preferences
+## Screen reader behavior
 
-### Touch Targets
+A screen reader announces the group as "Avatar group with N members, list" followed by each avatar individually. Each avatar is announced using the `username` property (e.g., "John Doe's avatar, image"). Avatars without an image source fall back to the initials text. When the overflow button is present, it is announced as "Show N more users, button".
 
-- Minimum touch target size of **24×24px** (WCAG 2.5.5)
-- Overflow button matches avatar size for consistent touch targets
+## Component Folder Structure
 
-### Best Practices
+```
+AvatarGroup/
+├── AvatarGroup.tsx              # Composition — data processing + layout
+├── AvatarItem.tsx               # Individual avatar wrapper with positioning
+├── AvtarGroupOverflowButton.tsx # "+N more" overflow indicator
+├── hooks.ts                     # Spacing calculation and keyboard navigation
+├── types.ts                     # Type definitions
+├── index.ts                     # Public API exports
+└── README.md
+```
 
-1. **Provide meaningful `username`**: Enables automatic alt text generation for each avatar
-2. **Handle `onOverflowClick`**: Make overflow indicator interactive to reveal hidden users
-3. **Use semantic grouping**: The `role="group"` provides context for screen readers
-4. **Limit `maxDisplay`**: Keep visible avatars to a reasonable number (5-7) for cognitive accessibility
+## Props
+
+### AvatarGroup
+
+| Prop              | Type                                         | Default    | Description                              |
+| :---------------- | :------------------------------------------- | :--------- | :--------------------------------------- |
+| `users`           | `UserData[]`                                 | `[]`       | Array of user objects to display         |
+| `size`            | `"small" \| "medium" \| "large" \| "xlarge"` | `"medium"` | Size of each avatar                      |
+| `maxDisplay`      | `number`                                     | `5`        | Maximum visible avatars before overflow  |
+| `layout`          | `"stack" \| "grid"`                          | `"stack"`  | Layout mode for the group                |
+| `spacing`         | `"tight" \| "normal" \| "loose" \| number`   | `"normal"` | Overlap offset for stack layout          |
+| `renderOverflow`  | `(count: number) => React.ReactNode`         | —          | Custom render for the overflow indicator |
+| `onAvatarClick`   | `(user: UserData, index: number) => void`    | —          | Click handler for individual avatars     |
+| `onOverflowClick` | `(hiddenUsers: UserData[]) => void`          | —          | Click handler for the overflow button    |
+
+### UserData
+
+| Prop       | Type                                        | Description                    |
+| :--------- | :------------------------------------------ | :----------------------------- |
+| `id`       | `string \| number \| null`                  | Unique identifier for the user |
+| `src`      | `string`                                    | Image URL for the avatar       |
+| `username` | `string`                                    | Display name, used as alt text |
+| `alt`      | `string`                                    | Alt text for the avatar image  |
+| `fallback` | `string`                                    | Initials shown when no image   |
+| `status`   | `"online" \| "offline" \| "away" \| "busy"` | Status indicator on the avatar |
+
+### Size Reference
+
+| Size     | Dimensions |
+| :------- | :--------- |
+| `small`  | 32x32px    |
+| `medium` | 48x48px    |
+| `large`  | 64x64px    |
+| `xlarge` | 96x96px    |
+
+### Spacing Reference
+
+| Spacing  | Stack Offset |
+| :------- | :----------- |
+| `tight`  | -12px        |
+| `normal` | -8px         |
+| `loose`  | -4px         |

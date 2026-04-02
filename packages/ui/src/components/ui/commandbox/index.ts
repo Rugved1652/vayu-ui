@@ -1,12 +1,12 @@
 // index.ts
 // Public API
 
-export { default, default as CommandBox } from "./CommandBox";
+export { default, default as CommandBox } from './CommandBox';
 
 export type {
-    CommandBoxProps,
-    CommandBoxSize,
-    CommandBoxVariant,
-    CommandGroup,
-    CommandItem,
-} from "./types";
+  CommandBoxProps,
+  CommandBoxSize,
+  CommandBoxVariant,
+  CommandGroup,
+  CommandItem,
+} from './types';

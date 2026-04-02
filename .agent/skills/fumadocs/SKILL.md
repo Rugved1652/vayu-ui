@@ -32,6 +32,7 @@ description: A brief description of the page content.
 ### Automatic Routing
 
 Fumadocs generates routes based on the file system structure.
+
 - `content/docs/index.mdx` -> `/docs`
 - `content/docs/guide/hello.mdx` -> `/docs/guide/hello`
 
@@ -42,11 +43,7 @@ To customize the order of pages in the sidebar or grouping, use `meta.json` file
 ```json
 {
   "title": "Section Title",
-  "pages": [
-    "index",
-    "guides",
-    "components"
-  ]
+  "pages": ["index", "guides", "components"]
 }
 ```
 
@@ -87,17 +84,21 @@ When adding documentation for a new component:
    ```
 4. **Demo/Usage**:
    - **Simple**: Import the component directly and render it.
+
      ```tsx
      import { Button } from '@/components/ui/button';
 
-     <Button>Click me</Button>
+     <Button>Click me</Button>;
      ```
+
    - **Complex**: Create a demo component in `src/components/demos/<component-name>-demo.tsx` and import it.
+
      ```tsx
      import { ButtonDemo } from '@/components/demos/button-demo';
 
-     <ButtonDemo />
+     <ButtonDemo />;
      ```
+
 5. **API Reference**: Document props, types, and variants.
 
 ## Adding New Hooks

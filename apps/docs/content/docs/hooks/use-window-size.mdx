@@ -18,7 +18,7 @@ The `useWindowSize` hook returns the current width and height of the browser win
 Copy this code into `src/hooks/useWindowSize.ts`:
 
 ```tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 interface WindowSize {
   width: number;
@@ -41,15 +41,15 @@ export const useWindowSize = (): WindowSize => {
     };
 
     // Check availability of window
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       // Call handler right away so state gets updated with initial window size
       handleResize();
 
       // Add event listener
-      window.addEventListener("resize", handleResize);
+      window.addEventListener('resize', handleResize);
 
       // Remove event listener on cleanup
-      return () => window.removeEventListener("resize", handleResize);
+      return () => window.removeEventListener('resize', handleResize);
     }
   }, []); // Empty array ensures that effect is only run on mount
 
@@ -60,7 +60,7 @@ export const useWindowSize = (): WindowSize => {
 ## Usage
 
 ```tsx
-import { useWindowSize } from "@/hooks/useWindowSize";
+import { useWindowSize } from '@/hooks/useWindowSize';
 
 const MyComponent = () => {
   const { width, height } = useWindowSize();
@@ -79,7 +79,7 @@ const MyComponent = () => {
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `width` | `number` | The current width of the window in pixels. |
+| Property | Type     | Description                                 |
+| :------- | :------- | :------------------------------------------ |
+| `width`  | `number` | The current width of the window in pixels.  |
 | `height` | `number` | The current height of the window in pixels. |

@@ -18,7 +18,7 @@ The `useMouseTrack` hook tracks the coordinates of the mouse cursor in real-time
 Copy this code into `src/hooks/useMouseTrack.ts`:
 
 ```tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export const useMouseTrack = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -28,10 +28,10 @@ export const useMouseTrack = () => {
       setMousePosition({ x: event.clientX, y: event.clientY });
     };
 
-    window.addEventListener("mousemove", updateMousePosition);
+    window.addEventListener('mousemove', updateMousePosition);
 
     return () => {
-      window.removeEventListener("mousemove", updateMousePosition);
+      window.removeEventListener('mousemove', updateMousePosition);
     };
   }, []);
 
@@ -42,7 +42,7 @@ export const useMouseTrack = () => {
 ## Usage
 
 ```tsx
-import { useMouseTrack } from "@/hooks/useMouseTrack";
+import { useMouseTrack } from '@/hooks/useMouseTrack';
 
 const MouseTracker = () => {
   const { x, y } = useMouseTrack();
@@ -60,7 +60,7 @@ const MouseTracker = () => {
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `x` | `number` | The horizontal coordinate of the mouse pointer. |
-| `y` | `number` | The vertical coordinate of the mouse pointer. |
+| Property | Type     | Description                                     |
+| :------- | :------- | :---------------------------------------------- |
+| `x`      | `number` | The horizontal coordinate of the mouse pointer. |
+| `y`      | `number` | The vertical coordinate of the mouse pointer.   |

@@ -9,44 +9,67 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init
 ```
 
 ```bash
 npx vayu-ui add button
 ```
 
+```bash
+npx vayu-ui add -t button
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
-      <ButtonDemo />
-    </div>
+    <ButtonDemo />
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Button, Status } from "vayu-ui";
-    import { Mail } from "lucide-react";
+    <Button variant="primary">Primary</Button>
+    <Button variant="secondary">Secondary</Button>
+    <Button variant="outline">Outline</Button>
+    <Button variant="ghost">Ghost</Button>
+    <Button variant="destructive">Destructive</Button>
 
-    export default function App() {
-      return (
-        <div className="flex gap-4">
-            <Button variant="primary">Click me</Button>
+    <Button size="small" variant="secondary">Small</Button>
+    <Button size="medium" variant="secondary">Medium</Button>
+    <Button size="large" variant="secondary">Large</Button>
 
-            <Button variant="secondary" size="large">
-                <Button.Icon size="large"><Mail /></Button.Icon>
-                <Button.Text>Login with Email</Button.Text>
-            </Button>
+    <Button variant="primary">
+      <Button.Icon><Mail /></Button.Icon>
+      <Button.Text>Email Login</Button.Text>
+    </Button>
 
-            <Button variant="destructive">
-                <Button.Icon><Trash2 /></Button.Icon>
-                <Button.Text>Delete</Button.Text>
-            </Button>
-        </div>
-      );
-    }
+    <Button variant="outline" size="large">
+      <Button.Text>Send</Button.Text>
+      <Button.Icon size="large"><Send /></Button.Icon>
+    </Button>
+
+    <Button
+      variant="primary"
+      loading={Status.PENDING}
+      loadingText="Sending..."
+    >
+      Click to Load
+    </Button>
+
+    <Button variant="secondary">
+      <Button.Icon><Bell /></Button.Icon>
+      <Button.Badge value={3} variant="danger" />
+    </Button>
+
+    <Button variant="outline">
+      <Button.Text>Messages</Button.Text>
+      <Button.Badge value={12} max={9} variant="primary" position="top-right" />
+    </Button>
+
+    <Button variant="primary" disabled>Disabled</Button>
+    <Button variant="primary" fullWidth>Full Width Button</Button>
     ```
+
   </Tab>
 </Tabs>
 
@@ -54,575 +77,95 @@ npx vayu-ui add button
 
 ```tsx
 <Button variant="primary" size="medium">
-  <Button.Icon><Mail /></Button.Icon>
+  <Button.Icon>
+    <Mail />
+  </Button.Icon>
   <Button.Text>Button Label</Button.Text>
   <Button.Badge value={3} variant="danger" />
 </Button>
 ```
 
-## Variants
+- **Button** — root element, renders a native `<button>`
+- **Button.Icon** — wraps an icon element with sized constraints
+- **Button.Text** — wraps button label text with truncation
+- **Button.Badge** — notification badge positioned relative to the button
 
-### Primary
+## Accessibility
 
-Used for main actions and primary CTAs.
+- **Keyboard Navigation**: Activated via `Enter` and `Space` keys
+- **Focus Visible**: Displays a `focus-visible` ring using design tokens when navigating with keyboard
+- **ARIA Attributes**: Sets `aria-disabled`, `aria-busy`, and `aria-label` as needed
+- **Loading State**: Announced via `aria-live="polite"` with descriptive loading text
+- **Semantic HTML**: Renders a native `<button>` with the correct `type` attribute
+- **Ref Forwarding**: Supports programmatic focus through `ref`
 
-```tsx
-<Button variant="primary">Primary Button</Button>
+## Screen reader behavior
+
+- In default state, the screen reader announces the button's text content or `aria-label`
+- When `disabled`, the button is announced as "dimmed" or "unavailable" depending on the screen reader
+- During loading (`Status.PENDING`), `aria-busy="true"` signals an in-progress operation, and the `aria-live="polite"` region announces the `loadingText` value
+- `Button.Badge` uses `role="status"` with `aria-live="polite"` to announce count changes (e.g., "3 notifications")
+- `Button.Icon` is hidden from screen readers by default (`aria-hidden="true"`); set the `label` prop to make it accessible as an image
+- When `loading` transitions to `Status.SUCCESS` or `Status.REJECTED`, the button returns to its default content and the screen reader re-announces the visible text
+
+## Component Folder Structure
+
 ```
-
-### Secondary
-
-Used for secondary actions and less prominent buttons.
-
-```tsx
-<Button variant="secondary">Secondary Button</Button>
-```
-
-### Outline
-
-Used for tertiary actions with a border-only style.
-
-```tsx
-<Button variant="outline">Outline Button</Button>
-```
-
-### Ghost
-
-Used for subtle actions with no background or border.
-
-```tsx
-<Button variant="ghost">Ghost Button</Button>
-```
-
-### Destructive
-
-Used for dangerous actions like delete or remove.
-
-```tsx
-<Button variant="destructive">Delete</Button>
-```
-
-## Sizes
-
-```tsx
-<Button size="small" variant="secondary">Small</Button>
-<Button size="medium" variant="secondary">Medium</Button>
-<Button size="large" variant="secondary">Large</Button>
-```
-
-## With Icons
-
-```tsx
-<Button variant="primary">
-  <Button.Icon><Mail /></Button.Icon>
-  <Button.Text>Email Login</Button.Text>
-</Button>
-
-<Button variant="outline" size="large">
-  <Button.Text>Send</Button.Text>
-  <Button.Icon size="large"><Send /></Button.Icon>
-</Button>
-```
-
-## Loading State
-
-```tsx
-import { Button, Status } from "vayu-ui";
-import { useState } from "react";
-
-function Example() {
-  const [loading, setLoading] = useState(Status.IDLE);
-
-  const handleClick = () => {
-    setLoading(Status.PENDING);
-    setTimeout(() => setLoading(Status.SUCCESS), 2000);
-    setTimeout(() => setLoading(Status.IDLE), 4000);
-  };
-
-  return (
-    <Button
-      variant="primary"
-      loading={loading}
-      onClick={handleClick}
-      loadingText="Sending..."
-    >
-      Click to Load
-    </Button>
-  );
-}
-```
-
-## With Badge
-
-```tsx
-<Button variant="secondary">
-  <Button.Icon><Bell /></Button.Icon>
-  <Button.Badge value={3} variant="danger" />
-</Button>
-
-<Button variant="outline">
-  <Button.Text>Messages</Button.Text>
-  <Button.Badge value={12} max={9} variant="primary" position="top-right" />
-</Button>
-
-<Button variant="ghost">
-  <Button.Text>Updates</Button.Text>
-  <Button.Badge value="New" variant="info" position="inline-right" />
-</Button>
-```
-
-## Disabled State
-
-```tsx
-<Button variant="primary" disabled>Disabled</Button>
-<Button variant="secondary" disabled>Disabled</Button>
-<Button variant="outline" disabled>Disabled</Button>
-```
-
-## Full Width
-
-```tsx
-<Button variant="primary" fullWidth>Full Width Button</Button>
+Button/
+├── Button.tsx        # Root button component with loading states
+├── ButtonIcon.tsx    # Icon wrapper subcomponent
+├── ButtonBadge.tsx   # Notification badge subcomponent
+├── ButtonText.tsx    # Text wrapper subcomponent
+├── types.ts          # Shared types, enums, and interfaces
+├── index.ts          # Public API and compound component export
+└── README.md         # Component-level documentation
 ```
 
 ## Props
 
 ### Button
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `variant` | `"primary" \| "secondary" \| "outline" \| "ghost" \| "destructive"` | `"primary"` | Visual style of the button |
-| `size` | `"small" \| "medium" \| "large"` | `"small"` | Size of the button |
-| `loading` | `Status` | `Status.IDLE` | Loading state of the button |
-| `fullWidth` | `boolean` | `false` | Whether the button takes full width |
-| `loadingText` | `string` | `"Loading"` | Text to show when loading |
-| `disabled` | `boolean` | `false` | Disables the button |
-| `type` | `"button" \| "submit" \| "reset"` | `"button"` | HTML button type |
-| `aria-label` | `string` | - | Accessible label for the button |
+| Prop          | Type                                                                | Default       | Description                                      |
+| :------------ | :------------------------------------------------------------------ | :------------ | :----------------------------------------------- |
+| `variant`     | `"primary" \| "secondary" \| "outline" \| "ghost" \| "destructive"` | `"primary"`   | Visual style of the button                       |
+| `size`        | `"small" \| "medium" \| "large"`                                    | `"small"`     | Size of the button                               |
+| `loading`     | `Status`                                                            | `Status.IDLE` | Loading state controlling spinner and text       |
+| `fullWidth`   | `boolean`                                                           | `false`       | Whether the button spans full container width    |
+| `loadingText` | `string`                                                            | `"Loading"`   | Text displayed during loading state              |
+| `disabled`    | `boolean`                                                           | `false`       | Disables the button                              |
+| `type`        | `"button" \| "submit" \| "reset"`                                   | `"button"`    | Native HTML button type                          |
+| `aria-label`  | `string`                                                            | —             | Accessible label when no visible text is present |
 
 ### Button.Icon
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `size` | `"small" \| "medium" \| "large"` | `"small"` | Size of the icon container |
-| `children` | `ReactNode` | - | The icon element to render |
-| `label` | `string` | - | Accessible label for the icon (if standalone) |
-| `className` | `string` | - | Custom classes for the icon container |
+| Prop       | Type                             | Default   | Description                                                |
+| :--------- | :------------------------------- | :-------- | :--------------------------------------------------------- |
+| `size`     | `"small" \| "medium" \| "large"` | `"small"` | Size of the icon container                                 |
+| `children` | `ReactNode`                      | —         | The icon element to render                                 |
+| `label`    | `string`                         | —         | Accessible label; makes the icon visible to screen readers |
 
 ### Button.Text
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The text content |
-| `className` | `string` | - | Custom classes for the text container |
+| Prop       | Type        | Default | Description                |
+| :--------- | :---------- | :------ | :------------------------- |
+| `children` | `ReactNode` | —       | Text content of the button |
 
 ### Button.Badge
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `size` | `"small" \| "medium" \| "large"` | `"small"` | Size of the badge |
-| `value` | `number \| string` | - | Content of the badge |
-| `max` | `number` | `99` | Max number to show before adding + |
-| `variant` | `"primary" \| "danger" \| "warning" \| "info" \| "success"` | `"danger"` | Visual style of the badge |
-| `position` | `"top-right" \| "top-left" \| "inline-right" \| "inline-left"` | `"top-right"` | Position of the badge |
-| `showZero` | `boolean` | `false` | Whether to show badge when value is 0 |
-| `className` | `string` | - | Custom classes |
+| Prop       | Type                                                           | Default       | Description                                   |
+| :--------- | :------------------------------------------------------------- | :------------ | :-------------------------------------------- |
+| `value`    | `number \| string`                                             | —             | Badge content — number or short label         |
+| `max`      | `number`                                                       | `99`          | Maximum number before truncating with `+`     |
+| `variant`  | `"primary" \| "danger" \| "warning" \| "info" \| "success"`    | `"danger"`    | Visual style of the badge                     |
+| `position` | `"top-right" \| "top-left" \| "inline-right" \| "inline-left"` | `"top-right"` | Position relative to the button               |
+| `size`     | `"small" \| "medium" \| "large"`                               | `"small"`     | Size of the badge                             |
+| `showZero` | `boolean`                                                      | `false`       | Whether to render the badge when value is `0` |
 
-### Status Enum
+### Status
 
-| Value | Description |
-| :--- | :--- |
-| `Status.IDLE` | Default state, no loading |
-| `Status.PENDING` | Loading in progress |
-| `Status.SUCCESS` | Operation completed successfully |
-| `Status.REJECTED` | Operation failed |
-
-## Accessibility
-
-- **Keyboard Navigation**: Button can be activated using Enter and Space keys
-- **Focus Visible**: Clear focus ring using design tokens when keyboard navigating
-- **ARIA Attributes**: Proper `aria-label`, `aria-disabled`, `aria-busy`, and `aria-live` attributes
-- **Screen Reader**: Loading states announced via `aria-live="polite"` with descriptive text
-- **Semantic HTML**: Uses native `<button>` element with appropriate `type` attribute
-- **Focus Management**: Supports programmatic focus through `ref` forwarding
-- **Color Contrast**: All variants meet WCAG 2.2 AA contrast requirements
-
-## Source Code
-
-```tsx title="src/components/ui/button.tsx"
-// button.tsx
-// "use client" is required here because we use forwardRef and handle events (onClick, etc.).
-// This allows the button to work in both Client and Server Components seamlessly.
-"use client";
-
-import { clsx } from "clsx";
-import React, {
-    ButtonHTMLAttributes,
-    forwardRef,
-    HTMLAttributes,
-} from "react";
-
-// ============================================================================
-// Types & Enums
-// ============================================================================
-
-enum Status {
-    IDLE = "idle",
-    PENDING = "pending",
-    SUCCESS = "success",
-    REJECTED = "rejected",
-}
-
-type ButtonVariant =
-    | "primary"
-    | "secondary"
-    | "outline"
-    | "ghost"
-    | "destructive";
-
-type ButtonSize = "small" | "medium" | "large";
-
-type BadgePosition = "top-right" | "top-left" | "inline-right" | "inline-left";
-
-type BadgeVariant = "primary" | "danger" | "warning" | "info" | "success";
-
-// ============================================================================
-// Spinner Component
-// ============================================================================
-
-const Spinner = forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
-    (props, ref) => (
-        <svg
-            ref={ref}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="animate-spin w-4 h-4"
-            {...props}
-        >
-            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-        </svg>
-    )
-);
-Spinner.displayName = "Spinner";
-
-// ============================================================================
-// Main Button Component
-// ============================================================================
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: ButtonVariant;
-    size?: ButtonSize;
-    loading?: Status;
-    fullWidth?: boolean;
-    loadingText?: string;
-    "aria-label"?: string;
-}
-
-const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
-    (
-        {
-            children,
-            variant = "primary",
-            size = "small",
-            loading = Status.IDLE,
-            fullWidth = false,
-            loadingText = "Loading",
-            disabled = false,
-            className,
-            type = "button",
-            "aria-label": ariaLabel,
-            ...props
-        },
-        ref
-    ) => {
-        const isLoading = loading === Status.PENDING;
-        const isDisabled = disabled || isLoading;
-
-        // Size variants
-        const sizeClasses = {
-            small: "px-3 py-2 text-sm gap-2 min-h-[36px]",
-            medium: "px-4 py-2.5 text-base gap-2.5 min-h-[40px]",
-            large: "px-6 py-3 text-lg gap-3 min-h-[44px]",
-        };
-
-        // Variant styles
-        const variantClasses = {
-            primary: clsx(
-                "bg-primary-600 text-white",
-                "border border-primary-700",
-                "hover:bg-primary-700 active:bg-primary-800",
-                "shadow-outer",
-                "dark:bg-primary-500 dark:text-white",
-                "dark:border-primary-600",
-                "dark:hover:bg-primary-600 dark:active:bg-primary-700"
-            ),
-            secondary: clsx(
-                "bg-ground-100 hover:bg-ground-200 active:bg-ground-300",
-                "text-ground-800 font-medium",
-                "border border-ground-300 hover:border-ground-400",
-                "shadow-outer",
-                "dark:bg-ground-800 dark:hover:bg-ground-700",
-                "dark:text-ground-100 dark:border-ground-600"
-            ),
-            outline: clsx(
-                "bg-transparent hover:bg-ground-100 active:bg-ground-200",
-                "text-ground-800 font-medium",
-                "border-2 border-ground-500 hover:border-ground-600",
-                "dark:hover:bg-ground-800 dark:active:bg-ground-700",
-                "dark:text-ground-100 dark:border-ground-400"
-            ),
-            ghost: clsx(
-                "bg-transparent hover:bg-ground-100 active:bg-ground-200",
-                "text-ground-700 hover:text-ground-900 font-medium",
-                "border border-transparent",
-                "dark:hover:bg-ground-800 dark:active:bg-ground-700",
-                "dark:text-ground-300 dark:hover:text-ground-100"
-            ),
-            destructive: clsx(
-                "bg-error-600 text-white",
-                "border border-error-700",
-                "hover:bg-error-700 active:bg-error-800",
-                "shadow-outer",
-                "dark:bg-error-500 dark:text-white",
-                "dark:border-error-600",
-                "dark:hover:bg-error-600 dark:active:bg-error-700"
-            ),
-        };
-
-        const buttonClasses = clsx(
-            "relative inline-flex items-center justify-center",
-            "rounded",
-            "font-secondary font-medium",
-            "transition-all duration-150 ease-in-out",
-            "outline-none focus-visible:outline-none",
-            "focus-visible:ring-2 focus-visible:ring-offset-2",
-            variant === "primary" && "focus-visible:ring-primary-600 dark:focus-visible:ring-primary-500",
-            variant === "secondary" && "focus-visible:ring-ground-500 dark:focus-visible:ring-ground-400",
-            variant === "outline" && "focus-visible:ring-ground-600 dark:focus-visible:ring-ground-400",
-            variant === "ghost" && "focus-visible:ring-ground-600 dark:focus-visible:ring-ground-400",
-            variant === "destructive" && "focus-visible:ring-error-600 dark:focus-visible:ring-error-500",
-            "focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
-            sizeClasses[size],
-            variantClasses[variant],
-            fullWidth ? "w-full" : "w-auto",
-            isDisabled && "cursor-not-allowed opacity-60 pointer-events-none",
-            !isDisabled && "active:scale-[0.98]",
-            className
-        );
-
-        return (
-            <button
-                ref={ref}
-                type={type}
-                disabled={isDisabled}
-                aria-disabled={isDisabled}
-                aria-busy={isLoading}
-                aria-live={isLoading ? "polite" : undefined}
-                aria-label={ariaLabel}
-                data-variant={variant}
-                data-size={size}
-                data-loading={loading}
-                className={buttonClasses}
-                {...props}
-            >
-                {isLoading ? (
-                    <>
-                        <Spinner aria-hidden="true" />
-                        <span className="sr-only">{loadingText}</span>
-                        <span aria-hidden="true">{loadingText}</span>
-                    </>
-                ) : (
-                    children
-                )}
-            </button>
-        );
-    }
-);
-
-ButtonRoot.displayName = "Button";
-
-// ============================================================================
-// Icon Component
-// ============================================================================
-
-interface IconProps extends HTMLAttributes<HTMLSpanElement> {
-    size?: ButtonSize;
-    children: React.ReactNode;
-    label?: string;
-}
-
-const Icon = forwardRef<HTMLSpanElement, IconProps>(
-    ({ children, size = "small", label, className, ...props }, ref) => {
-        const iconSizeClasses = {
-            small: "w-4 h-4",
-            medium: "w-5 h-5",
-            large: "w-6 h-6",
-        };
-
-        return (
-            <span
-                ref={ref}
-                aria-hidden={!label}
-                aria-label={label}
-                role={label ? "img" : undefined}
-                className={clsx(
-                    "inline-flex items-center justify-center shrink-0",
-                    iconSizeClasses[size],
-                    className
-                )}
-                {...props}
-            >
-                {children}
-            </span>
-        );
-    }
-);
-
-Icon.displayName = "Button.Icon";
-
-// ============================================================================
-// Badge Component
-// ============================================================================
-
-interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-    size?: ButtonSize;
-    value?: number | string;
-    max?: number;
-    position?: BadgePosition;
-    variant?: BadgeVariant;
-    showZero?: boolean;
-    className?: string;
-}
-
-const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-    (
-        {
-            size = "small",
-            value,
-            max = 99,
-            position = "top-right",
-            variant = "danger",
-            showZero = false,
-            className,
-            ...props
-        },
-        ref
-    ) => {
-        const getBadgeContent = () => {
-            if (typeof value === "number") {
-                if (value === 0 && !showZero) return null;
-                return value > max ? `${max}+` : value.toString();
-            }
-            return value;
-        };
-
-        const badgeContent = getBadgeContent();
-        const showBadge = badgeContent !== null && badgeContent !== undefined;
-
-        if (!showBadge) return null;
-
-        const badgeSizeClasses = {
-            small: "min-w-[20px] h-[20px] text-[11px] px-1.5",
-            medium: "min-w-[22px] h-[22px] text-xs px-2",
-            large: "min-w-[24px] h-[24px] text-xs px-2",
-        };
-
-        const badgeVariantClasses = {
-            primary: "bg-primary-600 text-white dark:bg-primary-500",
-            danger: "bg-error-600 text-white dark:bg-error-500",
-            warning: "bg-warning-700 text-white dark:bg-warning-600",
-            info: "bg-info-600 text-white dark:bg-info-500",
-            success: "bg-success-600 text-white dark:bg-success-500",
-        };
-
-        const badgePositionClasses = {
-            "top-right": "absolute -top-1.5 -right-1.5",
-            "top-left": "absolute -top-1.5 -left-1.5",
-            "inline-right": "relative ml-1",
-            "inline-left": "relative mr-1",
-        };
-
-        const getAriaLabel = () => {
-            if (typeof value === "number") {
-                const count = value > max ? `more than ${max}` : value;
-                return `${count} notification${value !== 1 ? "s" : ""}`;
-            }
-            return value ? String(value) : undefined;
-        };
-
-        return (
-            <span
-                ref={ref}
-                role="status"
-                aria-live="polite"
-                aria-label={getAriaLabel()}
-                className={clsx(
-                    "inline-flex items-center justify-center",
-                    "rounded-full font-semibold leading-none",
-                    "border-2 border-white dark:border-ground-950",
-                    "shadow-outer",
-                    "z-10",
-                    badgeSizeClasses[size],
-                    badgeVariantClasses[variant],
-                    badgePositionClasses[position],
-                    className
-                )}
-                {...props}
-            >
-                <span aria-hidden="true">{badgeContent}</span>
-            </span>
-        );
-    }
-);
-
-Badge.displayName = "Button.Badge";
-
-// ============================================================================
-// Text Component
-// ============================================================================
-
-interface TextProps extends HTMLAttributes<HTMLSpanElement> {
-    children: React.ReactNode;
-}
-
-const Text = forwardRef<HTMLSpanElement, TextProps>(
-    ({ children, className, ...props }, ref) => {
-        return (
-            <span ref={ref} className={clsx("truncate", className)} {...props}>
-                {children}
-            </span>
-        );
-    }
-);
-
-Text.displayName = "Button.Text";
-
-// ============================================================================
-// Compound Component Export
-// ============================================================================
-
-export const Button = Object.assign(ButtonRoot, {
-    Icon,
-    Badge,
-    Text,
-});
-
-export { Status };
-export type {
-    BadgePosition,
-    BadgeProps,
-    BadgeVariant,
-    ButtonProps,
-    ButtonSize,
-    ButtonVariant,
-    IconProps,
-    TextProps,
-};
-```
+| Value             | Description                                   |
+| :---------------- | :-------------------------------------------- |
+| `Status.IDLE`     | Default state, no loading indicator           |
+| `Status.PENDING`  | Shows spinner and loading text                |
+| `Status.SUCCESS`  | Operation completed (returns to normal state) |
+| `Status.REJECTED` | Operation failed (returns to normal state)    |

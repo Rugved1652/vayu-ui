@@ -1,7 +1,7 @@
 // datepicker.tsx
 // Composition: context, hooks, root component
 
-"use client";
+'use client';
 
 import React, {
   useState,
@@ -11,30 +11,26 @@ import React, {
   useContext,
   forwardRef,
   useCallback,
-} from "react";
-import moment from "moment";
-import { cn } from "../utils";
-import { isSameDay } from "./utils";
+} from 'react';
+import moment from 'moment';
+import { cn } from '../utils';
+import { isSameDay } from './utils';
 import type {
   DatePickerMode,
   DatePickerValue,
   DateRange,
   DatePickerContextValue,
   DatePickerRootProps,
-} from "./types";
+} from './types';
 
 // Context
 
-const DatePickerContext = createContext<DatePickerContextValue | undefined>(
-  undefined
-);
+const DatePickerContext = createContext<DatePickerContextValue | undefined>(undefined);
 
 export const useDatePicker = (): DatePickerContextValue => {
   const context = useContext(DatePickerContext);
   if (!context) {
-    throw new Error(
-      "DatePicker compound components must be used within DatePicker.Root"
-    );
+    throw new Error('DatePicker compound components must be used within DatePicker.Root');
   }
   return context;
 };
@@ -42,14 +38,12 @@ export const useDatePicker = (): DatePickerContextValue => {
 // Hook: merge refs
 
 export function useMergeRefs<T = unknown>(
-  ...refs: Array<
-    React.RefObject<T | null> | React.ForwardedRef<T> | undefined
-  >
+  ...refs: Array<React.RefObject<T | null> | React.ForwardedRef<T> | undefined>
 ): React.RefCallback<T | null> {
   return useCallback(
     (node) => {
       refs.forEach((ref) => {
-        if (typeof ref === "function") {
+        if (typeof ref === 'function') {
           ref(node);
         } else if (ref != null) {
           (ref as React.RefObject<T | null>).current = node;
@@ -57,7 +51,7 @@ export function useMergeRefs<T = unknown>(
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    refs
+    refs,
   );
 }
 
@@ -67,18 +61,18 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
   (
     {
       children,
-      mode = "single",
+      mode = 'single',
       value,
       defaultValue,
       onChange,
       disabled = false,
       disabledWeekdays = [],
       disabledDates = [],
-      placeholder = "Select date",
+      placeholder = 'Select date',
       className,
       ...props
     },
-    ref
+    ref,
   ) => {
     const isControlled = value !== undefined;
 
@@ -87,7 +81,7 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
       range: DateRange | null;
     } => {
       if (!defaultValue) return { date: null, range: null };
-      if (mode === "range" && "startDate" in defaultValue) {
+      if (mode === 'range' && 'startDate' in defaultValue) {
         return {
           date: null,
           range: defaultValue as DateRange,
@@ -103,9 +97,7 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
 
     // State
     const [internalDate, setInternalDate] = useState<Date | null>(initial.date);
-    const [internalRange, setInternalRange] = useState<DateRange | null>(
-      initial.range
-    );
+    const [internalRange, setInternalRange] = useState<DateRange | null>(initial.range);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [open, setOpen] = useState(false);
     const [rangeHoverDate, setRangeHoverDate] = useState<Date | null>(null);
@@ -118,13 +110,9 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
     const calendarRef = useRef<HTMLDivElement>(null);
 
     // Get current values
-    const selectedDate = isControlled
-      ? mode === "single"
-        ? (value as Date)
-        : null
-      : internalDate;
+    const selectedDate = isControlled ? (mode === 'single' ? (value as Date) : null) : internalDate;
     const selectedRange = isControlled
-      ? mode === "range"
+      ? mode === 'range'
         ? (value as DateRange)
         : null
       : internalRange;
@@ -141,7 +129,7 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
     };
 
     const handleClear = () => {
-      if (mode === "single") {
+      if (mode === 'single') {
         setSelectedDate(null);
       } else {
         setSelectedRange(null);
@@ -151,11 +139,11 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
 
     // Navigation handlers
     const goToMonth = (direction: 1 | -1) => {
-      setCurrentDate((prev) => moment(prev).add(direction, "month").toDate());
+      setCurrentDate((prev) => moment(prev).add(direction, 'month').toDate());
     };
 
     const goToYear = (direction: 1 | -1) => {
-      setCurrentDate((prev) => moment(prev).add(direction, "year").toDate());
+      setCurrentDate((prev) => moment(prev).add(direction, 'year').toDate());
     };
 
     const goToToday = () => {
@@ -191,7 +179,7 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
     useEffect(() => {
       if (open) {
         const originalOverflow = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
+        document.body.style.overflow = 'hidden';
         return () => {
           document.body.style.overflow = originalOverflow;
         };
@@ -214,7 +202,7 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
       };
 
       const handleEscape = (event: KeyboardEvent) => {
-        if (event.key === "Escape" && open) {
+        if (event.key === 'Escape' && open) {
           if (monthDropdownOpen || yearDropdownOpen) {
             setMonthDropdownOpen(false);
             setYearDropdownOpen(false);
@@ -226,13 +214,13 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
       };
 
       if (open) {
-        document.addEventListener("mousedown", handleClickOutside);
-        document.addEventListener("keydown", handleEscape);
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleEscape);
       }
 
       return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-        document.removeEventListener("keydown", handleEscape);
+        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('keydown', handleEscape);
       };
     }, [open, monthDropdownOpen, yearDropdownOpen]);
 
@@ -271,16 +259,12 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
 
     return (
       <DatePickerContext.Provider value={contextValue}>
-        <div
-          ref={ref}
-          className={cn("relative inline-block", className)}
-          {...props}
-        >
+        <div ref={ref} className={cn('relative inline-block', className)} {...props}>
           {children}
         </div>
       </DatePickerContext.Provider>
     );
-  }
+  },
 );
 
-DatePickerRoot.displayName = "DatePicker.Root";
+DatePickerRoot.displayName = 'DatePicker.Root';

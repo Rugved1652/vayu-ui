@@ -1,6 +1,7 @@
 # Drawer
 
 ## Anatomy
+
 - drawer.tsx — Root: context, useDrawer hook, DrawerRoot with compound placeholders
 - trigger.tsx — UI: DrawerTrigger (opens drawer, supports asChild)
 - overlay.tsx — UI: DrawerOverlay (backdrop for modal drawers)
@@ -15,6 +16,7 @@
 - index.ts — Public API: compound exports
 
 ## Use Cases
+
 - Navigation menus that slide in from any edge of the viewport
 - Forms or supplementary content panels (filters, settings, details)
 - Non-modal side panels for persistent contextual information

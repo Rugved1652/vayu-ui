@@ -24,6 +24,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
     // Multi
     <Select options={techs} multiple placeholder="Choose…" />
     ```
+
   </Tab>
 </Tabs>
 
@@ -39,23 +40,23 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ## Props
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `options` | `SelectOption[]` | `[]` | Available options |
-| `value` | `string \| number \| null` or `(string \| number)[]` | — | Controlled value |
-| `onChange` | `(val) => void` | — | Change handler |
-| `multiple` | `boolean` | `false` | Enable multi-select |
-| `placeholder` | `string` | `"Select..."` | Placeholder text |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Trigger size |
-| `variant` | `'default' \| 'outline' \| 'filled'` | `'default'` | Visual variant |
-| `searchable` | `boolean` | `false` | Show search input |
-| `clearable` | `boolean` | `false` | Show clear button |
-| `creatable` | `boolean` | `false` | Allow creating options |
-| `disabled` | `boolean` | `false` | Disable interaction |
-| `error` | `boolean` | `false` | Show error styling |
-| `errorText` | `string` | — | Error message |
-| `label` | `string` | — | Accessible label |
-| `maxSelected` | `number` | — | Max selections (multi only) |
+| Prop          | Type                                                 | Default       | Description                 |
+| :------------ | :--------------------------------------------------- | :------------ | :-------------------------- |
+| `options`     | `SelectOption[]`                                     | `[]`          | Available options           |
+| `value`       | `string \| number \| null` or `(string \| number)[]` | —             | Controlled value            |
+| `onChange`    | `(val) => void`                                      | —             | Change handler              |
+| `multiple`    | `boolean`                                            | `false`       | Enable multi-select         |
+| `placeholder` | `string`                                             | `"Select..."` | Placeholder text            |
+| `size`        | `'sm' \| 'md' \| 'lg'`                               | `'md'`        | Trigger size                |
+| `variant`     | `'default' \| 'outline' \| 'filled'`                 | `'default'`   | Visual variant              |
+| `searchable`  | `boolean`                                            | `false`       | Show search input           |
+| `clearable`   | `boolean`                                            | `false`       | Show clear button           |
+| `creatable`   | `boolean`                                            | `false`       | Allow creating options      |
+| `disabled`    | `boolean`                                            | `false`       | Disable interaction         |
+| `error`       | `boolean`                                            | `false`       | Show error styling          |
+| `errorText`   | `string`                                             | —             | Error message               |
+| `label`       | `string`                                             | —             | Accessible label            |
+| `maxSelected` | `number`                                             | —             | Max selections (multi only) |
 
 ### SelectOption
 

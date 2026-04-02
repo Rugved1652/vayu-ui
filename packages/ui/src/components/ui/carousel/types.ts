@@ -1,7 +1,7 @@
 // types.ts
 // Types
 
-import type { HTMLAttributes, ButtonHTMLAttributes } from "react";
+import type { HTMLAttributes, ButtonHTMLAttributes } from 'react';
 
 export type SpeedMultiplier = 0.5 | 1 | 1.5 | 2;
 

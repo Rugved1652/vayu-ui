@@ -1,32 +1,18 @@
 // content.tsx
 // UI: presentational (with focus management)
 
-"use client";
+'use client';
 
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useRef,
-  HTMLAttributes,
-} from "react";
-import { createPortal } from "react-dom";
-import { cn } from "../utils";
-import { useModal, sizeWidths, FOCUSABLE } from "./Modal";
-import { ModalOverlay } from "./ModalOverlay";
-import type { ModalContentProps } from "./types";
+import React, { forwardRef, useCallback, useEffect, useRef, HTMLAttributes } from 'react';
+import { createPortal } from 'react-dom';
+import { cn } from '../utils';
+import { useModal, sizeWidths, FOCUSABLE } from './Modal';
+import { ModalOverlay } from './ModalOverlay';
+import type { ModalContentProps } from './types';
 
 const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
   ({ children, className, onKeyDown, ...props }, ref) => {
-    const {
-      open,
-      setOpen,
-      titleId,
-      descriptionId,
-      size,
-      closeOnEscape,
-      triggerRef,
-    } = useModal();
+    const { open, setOpen, titleId, descriptionId, size, closeOnEscape, triggerRef } = useModal();
     const contentRef = useRef<HTMLDivElement>(null);
     const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
@@ -34,26 +20,22 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
     const setRefs = useCallback(
       (node: HTMLDivElement | null) => {
         contentRef.current = node;
-        if (typeof ref === "function") {
+        if (typeof ref === 'function') {
           ref(node);
         } else if (ref) {
-          (
-            ref as React.MutableRefObject<HTMLDivElement | null>
-          ).current = node;
+          (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }
       },
-      [ref]
+      [ref],
     );
 
     // Focus management: capture previous focus, move into modal, restore on close
     useEffect(() => {
       if (open) {
-        previouslyFocusedRef.current =
-          document.activeElement as HTMLElement | null;
+        previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
 
         const timer = setTimeout(() => {
-          const focusable =
-            contentRef.current?.querySelector<HTMLElement>(FOCUSABLE);
+          const focusable = contentRef.current?.querySelector<HTMLElement>(FOCUSABLE);
           if (focusable) {
             focusable.focus();
           } else {
@@ -63,8 +45,7 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
 
         return () => clearTimeout(timer);
       } else {
-        const returnTarget =
-          triggerRef.current ?? previouslyFocusedRef.current;
+        const returnTarget = triggerRef.current ?? previouslyFocusedRef.current;
         returnTarget?.focus();
       }
     }, [open, triggerRef]);
@@ -73,15 +54,14 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
       onKeyDown?.(e);
 
-      if (e.key === "Escape" && closeOnEscape) {
+      if (e.key === 'Escape' && closeOnEscape) {
         e.stopPropagation();
         setOpen(false);
         return;
       }
 
-      if (e.key === "Tab") {
-        const focusableElements =
-          contentRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE);
+      if (e.key === 'Tab') {
+        const focusableElements = contentRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE);
 
         if (!focusableElements || focusableElements.length === 0) {
           e.preventDefault();
@@ -89,8 +69,7 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
         }
 
         const firstElement = focusableElements[0];
-        const lastElement =
-          focusableElements[focusableElements.length - 1];
+        const lastElement = focusableElements[focusableElements.length - 1];
 
         if (e.shiftKey) {
           if (document.activeElement === firstElement) {
@@ -114,10 +93,7 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
         <ModalOverlay />
 
         {/* Center wrapper */}
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          aria-hidden="true"
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" aria-hidden="true">
           <div
             ref={setRefs}
             role="dialog"
@@ -127,12 +103,12 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
             tabIndex={-1}
             style={{ maxWidth: sizeWidths[size] }}
             className={cn(
-              "relative w-full flex flex-col",
-              "bg-elevated",
-              "border border-border",
-              "rounded-overlay shadow-elevated",
-              "focus:outline-none",
-              className
+              'relative w-full flex flex-col',
+              'bg-elevated',
+              'border border-border',
+              'rounded-overlay shadow-elevated',
+              'focus:outline-none',
+              className,
             )}
             onKeyDown={handleKeyDown}
             onClick={(e) => e.stopPropagation()}
@@ -142,10 +118,10 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
           </div>
         </div>
       </>,
-      document.body
+      document.body,
     );
-  }
+  },
 );
-ModalContent.displayName = "Modal.Content";
+ModalContent.displayName = 'Modal.Content';
 
 export { ModalContent };

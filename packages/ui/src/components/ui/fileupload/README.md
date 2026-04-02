@@ -1,6 +1,7 @@
 # FileUpload
 
 ## Anatomy
+
 - fileupload.tsx — composition (provider + state + logic)
 - dropzone.tsx — UI: drag-and-drop zone
 - dropzone-content.tsx — UI: default drop zone content
@@ -14,6 +15,7 @@
 - index.ts — public API
 
 ## Use Cases
+
 - Drag-and-drop file uploads with visual feedback
 - Multi-file selection with type and size validation
 - Simulated upload progress with per-file status tracking

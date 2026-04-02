@@ -1,11 +1,4 @@
 {
-    "title": "Documentation",
-    "pages": [
-        "index",
-        "design-system",
-        "components",
-        "hooks",
-        "mcp-support",
-        "maintainers"
-    ]
+  "title": "Documentation",
+  "pages": ["index", "design-system", "components", "hooks", "mcp-support", "maintainers"]
 }

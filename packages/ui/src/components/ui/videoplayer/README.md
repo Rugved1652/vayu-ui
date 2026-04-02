@@ -1,6 +1,7 @@
 # VideoPlayer
 
 ## Anatomy
+
 - `videoplayer.tsx` — Composition: Root component + context + core logic
 - `video.tsx` — UI: Video element wrapper
 - `controls.tsx` — UI: Controls container
@@ -12,6 +13,7 @@
 - `index.ts` — Public API: Exports
 
 ## Use Cases
+
 - Video playback with custom compound controls
 - Keyboard shortcuts (Space, Arrows, J/K/L, M, F, C, 0/Home, End)
 - Auto-hiding controls with configurable delay

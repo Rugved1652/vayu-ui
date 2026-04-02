@@ -1,6 +1,7 @@
 # Toaster
 
 ## Anatomy
+
 - toast-provider.tsx — Composition: context, provider, useToast hook
 - toast-container.tsx — UI: portal + position grouping
 - toast-stack.tsx — UI: Sonner-style stack with expand/collapse
@@ -12,6 +13,7 @@
 - index.ts — Public API
 
 ## Use Cases
+
 - Display transient success, error, warning, and info messages
 - Show loading states that auto-transition to success/error via `promise()`
 - Render custom toast content with compound sub-components

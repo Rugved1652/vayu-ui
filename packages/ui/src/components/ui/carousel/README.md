@@ -1,6 +1,7 @@
 # Carousel
 
 ## Anatomy
+
 - `carousel.tsx` — root component with context provider and state management
 - `viewport.tsx` — viewport with touch and keyboard navigation
 - `slide.tsx` — individual slide wrapper
@@ -15,6 +16,7 @@
 - `index.ts` — public API
 
 ## Use Cases
+
 - Image galleries and slideshows
 - Product showcases with multiple views
 - Auto-playing presentations with manual controls

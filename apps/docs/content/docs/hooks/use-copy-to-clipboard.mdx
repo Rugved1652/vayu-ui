@@ -18,7 +18,7 @@ The `useCopyToClipboard` hook abstracts the complexity of copying text to the cl
 Copy this code into `src/hooks/useCopyToClipboard.ts`:
 
 ```tsx
-import { useState } from "react";
+import { useState } from 'react';
 
 export const useCopyToClipboard = () => {
   const [copied, setCopied] = useState(false);
@@ -29,11 +29,11 @@ export const useCopyToClipboard = () => {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(text);
       } else {
-        const textArea = document.createElement("textarea");
+        const textArea = document.createElement('textarea');
         textArea.value = text;
         document.body.appendChild(textArea);
         textArea.select();
-        document.execCommand("copy");
+        document.execCommand('copy');
         document.body.removeChild(textArea);
       }
       setCopied(true);
@@ -50,16 +50,14 @@ export const useCopyToClipboard = () => {
 ## Usage
 
 ```tsx
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 
 const CopyComponent = () => {
   const { copy, copied, error } = useCopyToClipboard();
 
   return (
     <div>
-      <button onClick={() => copy("Hello, World!")}>
-        {copied ? "Copied!" : "Copy Text"}
-      </button>
+      <button onClick={() => copy('Hello, World!')}>{copied ? 'Copied!' : 'Copy Text'}</button>
       {error && <p>Error copying text: {error.message}</p>}
     </div>
   );
@@ -70,8 +68,8 @@ const CopyComponent = () => {
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `copy` | `(text: string) => Promise<void>` | Function to copy the given text to the clipboard. |
-| `copied` | `boolean` | Indicates if the text was successfully copied. Resets after 2 seconds. |
-| `error` | `Error \| null` | Holds any error encountered during the copy operation. |
+| Property | Type                              | Description                                                            |
+| :------- | :-------------------------------- | :--------------------------------------------------------------------- |
+| `copy`   | `(text: string) => Promise<void>` | Function to copy the given text to the clipboard.                      |
+| `copied` | `boolean`                         | Indicates if the text was successfully copied. Resets after 2 seconds. |
+| `error`  | `Error \| null`                   | Holds any error encountered during the copy operation.                 |

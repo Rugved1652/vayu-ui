@@ -20,7 +20,7 @@ It also listens for changes to the local storage key from other tabs/windows and
 Copy this code into `src/hooks/useLocalStorage.ts`:
 
 ```tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export const useLocalStorage = <T,>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -28,7 +28,7 @@ export const useLocalStorage = <T,>(key: string, initialValue: T) => {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      console.error("Error reading localStorage key:", key, error);
+      console.error('Error reading localStorage key:', key, error);
       return initialValue;
     }
   });
@@ -37,7 +37,7 @@ export const useLocalStorage = <T,>(key: string, initialValue: T) => {
     try {
       localStorage.setItem(key, JSON.stringify(storedValue));
     } catch (error) {
-      console.error("Error setting localStorage key:", key, error);
+      console.error('Error setting localStorage key:', key, error);
     }
   }, [key, storedValue]);
 
@@ -48,9 +48,9 @@ export const useLocalStorage = <T,>(key: string, initialValue: T) => {
       }
     };
 
-    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener('storage', handleStorageChange);
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener('storage', handleStorageChange);
     };
   }, [key]);
 
@@ -61,13 +61,13 @@ export const useLocalStorage = <T,>(key: string, initialValue: T) => {
 ## Usage
 
 ```tsx
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const ThemeToggle = () => {
-  const [theme, setTheme] = useLocalStorage("theme", "light");
+  const [theme, setTheme] = useLocalStorage('theme', 'light');
 
   return (
-    <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+    <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
       Current Theme: {theme}
     </button>
   );
@@ -78,13 +78,13 @@ const ThemeToggle = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `key` | `string` | The key used to store the value in localStorage. |
-| `initialValue` | `T` | The initial value if the key does not exist. |
+| Name           | Type     | Description                                      |
+| :------------- | :------- | :----------------------------------------------- |
+| `key`          | `string` | The key used to store the value in localStorage. |
+| `initialValue` | `T`      | The initial value if the key does not exist.     |
 
 ### Return Value
 
-| Type | Description |
-| :--- | :--- |
+| Type                                           | Description                                           |
+| :--------------------------------------------- | :---------------------------------------------------- |
 | `[T, React.Dispatch<React.SetStateAction<T>>]` | Returns a stateful value and a function to update it. |

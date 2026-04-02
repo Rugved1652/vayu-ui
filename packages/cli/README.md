@@ -41,10 +41,10 @@ npx vayu-ui-cli <command>
 
 ## Requirements
 
-| Requirement | Version  |
-|-------------|----------|
-| Node.js     | ≥ 18.0.0 |
-| npm / pnpm / yarn / bun | any |
+| Requirement             | Version  |
+| ----------------------- | -------- |
+| Node.js                 | ≥ 18.0.0 |
+| npm / pnpm / yarn / bun | any      |
 
 ---
 
@@ -76,17 +76,18 @@ npx vayu-ui-cli init
 ```
 
 **What it does:**
+
 - Writes a `globals.css` (or `index.css`) with all Vayu UI CSS design tokens (colors, radii, shadows, fonts, transitions, keyframes)
 - Creates `postcss.config.mjs` if missing
 - Installs `tailwindcss`, `@tailwindcss/postcss`, and `postcss` if not already present
 
 **Flags:**
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--path <file>` | `-p` | Custom CSS file path |
-| `--overwrite` | `-o` | Overwrite existing CSS file |
-| `--force` | `-f` | Skip project type detection |
+| Flag            | Short | Description                 |
+| --------------- | ----- | --------------------------- |
+| `--path <file>` | `-p`  | Custom CSS file path        |
+| `--overwrite`   | `-o`  | Overwrite existing CSS file |
+| `--force`       | `-f`  | Skip project type detection |
 
 ```bash
 # Custom CSS path
@@ -113,6 +114,7 @@ npx vayu-ui-cli add use-battery-status
 ```
 
 **What happens:**
+
 1. Looks up `use-battery-status` in the registry
 2. Resolves all transitive dependencies (e.g., if `modal` needs `button`, both are installed)
 3. Copies files into your project at the correct target path
@@ -120,10 +122,10 @@ npx vayu-ui-cli add use-battery-status
 
 **Flags:**
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--overwrite` | `-o` | Overwrite existing file if it already exists |
-| `--path <dir>` | `-p` | Custom directory to write the file into |
+| Flag           | Short | Description                                  |
+| -------------- | ----- | -------------------------------------------- |
+| `--overwrite`  | `-o`  | Overwrite existing file if it already exists |
+| `--path <dir>` | `-p`  | Custom directory to write the file into      |
 
 ```bash
 # Overwrite if already installed
@@ -136,7 +138,7 @@ npx vayu-ui-cli add use-battery-status --path src/lib/hooks
 **After installing**, import it like this:
 
 ```ts
-import { useBatteryStatus } from "@/hooks/use-battery-status";
+import {useBatteryStatus} from '@/hooks/use-battery-status'
 ```
 
 ---
@@ -165,10 +167,10 @@ npx vayu-ui-cli list
 
 **Flags:**
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--type <hook\|component>` | `-t` | Filter by type |
-| `--tag <tag>` | — | Filter by tag |
+| Flag                       | Short | Description    |
+| -------------------------- | ----- | -------------- |
+| `--type <hook\|component>` | `-t`  | Filter by type |
+| `--tag <tag>`              | —     | Filter by tag  |
 
 ```bash
 # Only hooks
@@ -196,11 +198,11 @@ npx vayu-ui-cli update use-battery-status
 
 **Flags:**
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--css` | — | Also update Vayu UI CSS design tokens (`globals.css`) |
-| `--dry-run` | — | Preview what would be updated without making changes |
-| `--force` | `-f` | Force update even if content hash matches |
+| Flag        | Short | Description                                           |
+| ----------- | ----- | ----------------------------------------------------- |
+| `--css`     | —     | Also update Vayu UI CSS design tokens (`globals.css`) |
+| `--dry-run` | —     | Preview what would be updated without making changes  |
+| `--force`   | `-f`  | Force update even if content hash matches             |
 
 ```bash
 # Preview changes first
@@ -225,19 +227,19 @@ npx vayu-ui-cli create <template>
 
 **Accepted formats:**
 
-| Format | Example |
-|--------|---------|
-| Registered template name | `vayu-ui create starter` |
-| GitHub `owner/repo` slug | `vayu-ui create Rugved1652/my-template` |
-| Full GitHub URL | `vayu-ui create https://github.com/Rugved1652/my-template` |
+| Format                   | Example                                                    |
+| ------------------------ | ---------------------------------------------------------- |
+| Registered template name | `vayu-ui create starter`                                   |
+| GitHub `owner/repo` slug | `vayu-ui create Rugved1652/my-template`                    |
+| Full GitHub URL          | `vayu-ui create https://github.com/Rugved1652/my-template` |
 
 **Flags:**
 
-| Flag | Short | Description |
-|------|-------|-------------|
-| `--dir <name>` | `-d` | Custom output directory name |
-| `--branch <branch>` | `-b` | Git branch to download (default: `main`) |
-| `--no-install` | — | Skip dependency installation |
+| Flag                | Short | Description                              |
+| ------------------- | ----- | ---------------------------------------- |
+| `--dir <name>`      | `-d`  | Custom output directory name             |
+| `--branch <branch>` | `-b`  | Git branch to download (default: `main`) |
+| `--no-install`      | —     | Skip dependency installation             |
 
 ```bash
 # Create from a registered template
@@ -324,6 +326,7 @@ npm unlink -g vayu-ui-cli
 > `npm unlink` **removes the global symlink** created by `npm link`.
 > After unlinking, `vayu-ui` will no longer resolve to your local code.
 > If you had the published package installed globally before, reinstall it:
+>
 > ```bash
 > npm install -g vayu-ui-cli
 > ```
@@ -392,10 +395,10 @@ rm src/hooks/use-battery-status.ts
 
 Components are sourced from the **`vayu-ui-docs`** repository. Here's where things live:
 
-| Type | Location in `vayu-ui-docs` repo |
-|------|-------------------------------|
-| Hooks | `src/hooks/<slug>.ts` |
-| Components | `src/components/ui/<slug>.tsx` |
+| Type             | Location in `vayu-ui-docs` repo                     |
+| ---------------- | --------------------------------------------------- |
+| Hooks            | `src/hooks/<slug>.ts`                               |
+| Components       | `src/components/ui/<slug>.tsx`                      |
 | Registry entries | `packages/registry/src/` (components.ts / hooks.ts) |
 
 ### To add a new hook or component:

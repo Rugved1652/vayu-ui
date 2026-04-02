@@ -1,20 +1,15 @@
 // toast-item.tsx
 // UI: individual toast with timer, swipe, drag, progress bar
 
-"use client";
+'use client';
 
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { cn } from "../utils";
-import type { ToastItemProps, ToastType } from "./types";
-import { Icons } from "./ToastIcons";
-import { typeStyles } from "./constants";
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { cn } from '../utils';
+import type { ToastItemProps, ToastType } from './types';
+import { Icons } from './ToastIcons';
+import { typeStyles } from './constants';
 
-const ToastItem: React.FC<ToastItemProps> = ({
-  toast,
-  onRemove,
-  onHeightUpdate,
-  isAllPaused,
-}) => {
+const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, isAllPaused }) => {
   const [isExiting, setIsExiting] = useState(false);
   const [isLocalPaused, setIsLocalPaused] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
@@ -46,12 +41,12 @@ const ToastItem: React.FC<ToastItemProps> = ({
       timerRef.current = null;
     }
 
-    if (toast.duration === 0 || toast.type === "loading") {
+    if (toast.duration === 0 || toast.type === 'loading') {
       prevTypeRef.current = toast.type;
       return;
     }
 
-    if (prevTypeRef.current === "loading") {
+    if (prevTypeRef.current === 'loading') {
       remainingTimeRef.current = toast.duration || 0;
     }
     prevTypeRef.current = toast.type;
@@ -70,9 +65,9 @@ const ToastItem: React.FC<ToastItemProps> = ({
 
   // Progress bar animation
   useEffect(() => {
-    if (!progressRef.current || toast.duration === 0 || toast.type === "loading") return;
+    if (!progressRef.current || toast.duration === 0 || toast.type === 'loading') return;
     const el = progressRef.current;
-    el.style.animationPlayState = isPaused ? "paused" : "running";
+    el.style.animationPlayState = isPaused ? 'paused' : 'running';
   }, [isPaused, toast.duration, toast.type]);
 
   // Swipe to dismiss
@@ -112,27 +107,28 @@ const ToastItem: React.FC<ToastItemProps> = ({
 
   const config = typeStyles[toast.type];
   const Icon = toast.icon ?? Icons[toast.type];
-  const hasDuration = toast.duration !== undefined && toast.duration > 0 && toast.type !== "loading";
+  const hasDuration =
+    toast.duration !== undefined && toast.duration > 0 && toast.type !== 'loading';
   const dragOpacity = Math.max(0, 1 - Math.abs(dragOffset) / 150);
 
   return (
     <div
       ref={itemRef}
       className={cn(
-        "pointer-events-auto relative w-full overflow-hidden rounded-surface shadow-elevated",
-        !toast.customContent && "border border-l-4",
-        !toast.customContent && "bg-surface",
-        !toast.customContent && "border-border",
+        'pointer-events-auto relative w-full overflow-hidden rounded-surface shadow-elevated',
+        !toast.customContent && 'border border-l-4',
+        !toast.customContent && 'bg-surface',
+        !toast.customContent && 'border-border',
         !toast.customContent && config.border,
-        "transition-all duration-300 ease-out",
-        isExiting && "animate-toast-exit",
-        !isExiting && "animate-toast-enter",
-        isDragging && "select-none cursor-grabbing"
+        'transition-all duration-300 ease-out',
+        isExiting && 'animate-toast-exit',
+        !isExiting && 'animate-toast-enter',
+        isDragging && 'select-none cursor-grabbing',
       )}
       style={{
         transform: `translateX(${dragOffset}px)`,
         opacity: isDragging ? dragOpacity : undefined,
-        transition: isDragging ? "none" : undefined,
+        transition: isDragging ? 'none' : undefined,
       }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -148,7 +144,7 @@ const ToastItem: React.FC<ToastItemProps> = ({
         toast.customContent
       ) : (
         <div className="flex items-start gap-3 p-4">
-          <div className={cn("shrink-0 mt-0.5", config.icon)} aria-hidden="true">
+          <div className={cn('shrink-0 mt-0.5', config.icon)} aria-hidden="true">
             {Icon}
           </div>
 
@@ -159,9 +155,7 @@ const ToastItem: React.FC<ToastItemProps> = ({
               </div>
             )}
             {toast.description && (
-              <div className="text-sm text-muted-content leading-relaxed">
-                {toast.description}
-              </div>
+              <div className="text-sm text-muted-content leading-relaxed">{toast.description}</div>
             )}
             {toast.action && (
               <button
@@ -170,9 +164,9 @@ const ToastItem: React.FC<ToastItemProps> = ({
                   handleClose();
                 }}
                 className={cn(
-                  "mt-2 text-sm font-medium text-surface-content underline-offset-2 hover:underline",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1",
-                  "min-h-6 min-w-6"
+                  'mt-2 text-sm font-medium text-surface-content underline-offset-2 hover:underline',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1',
+                  'min-h-6 min-w-6',
                 )}
               >
                 {toast.action.label}
@@ -184,13 +178,13 @@ const ToastItem: React.FC<ToastItemProps> = ({
             <button
               onClick={handleClose}
               className={cn(
-                "shrink-0 flex items-center justify-center rounded-control p-1.5",
-                "min-h-7 min-w-7",
-                "text-muted-content",
-                "hover:text-surface-content",
-                "hover:bg-muted",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1",
-                "transition-colors"
+                'shrink-0 flex items-center justify-center rounded-control p-1.5',
+                'min-h-7 min-w-7',
+                'text-muted-content',
+                'hover:text-surface-content',
+                'hover:bg-muted',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1',
+                'transition-colors',
               )}
               aria-label={`Dismiss ${config.label.toLowerCase()} notification`}
             >
@@ -211,11 +205,11 @@ const ToastItem: React.FC<ToastItemProps> = ({
         >
           <div
             ref={progressRef}
-            className={cn("h-full origin-left", config.progress)}
+            className={cn('h-full origin-left', config.progress)}
             style={{
               animation: `toast-progress ${toast.duration}ms linear forwards`,
-              animationPlayState: isPaused ? "paused" : "running",
-              willChange: "transform",
+              animationPlayState: isPaused ? 'paused' : 'running',
+              willChange: 'transform',
             }}
           />
         </div>

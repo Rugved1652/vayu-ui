@@ -16,6 +16,10 @@ npx vayu-ui init    # Add Theme CSS if not added
 npx vayu-ui add breadcrumb
 ```
 
+```bash
+npx vayu-ui add -t breadcrumb    # with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -41,7 +45,44 @@ npx vayu-ui add breadcrumb
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
+
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator>/</BreadcrumbSeparator>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/docs">Docs</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator>/</BreadcrumbSeparator>
+        <BreadcrumbItem>
+          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbEllipsis />
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
     ```
+
   </Tab>
 </Tabs>
 
@@ -51,206 +92,112 @@ npx vayu-ui add breadcrumb
 <Breadcrumb>
   <BreadcrumbList>
     <BreadcrumbItem>
-      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+      <BreadcrumbLink href="/" />
     </BreadcrumbItem>
     <BreadcrumbSeparator />
     <BreadcrumbItem>
-      <BreadcrumbPage>Current Page</BreadcrumbPage>
+      <BreadcrumbEllipsis />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage />
     </BreadcrumbItem>
   </BreadcrumbList>
 </Breadcrumb>
+```
+
+## Accessibility
+
+- `Breadcrumb` renders a `<nav>` with `aria-label="breadcrumb"` for landmark identification
+- `BreadcrumbList` uses a semantic `<ol>` element to convey item ordering
+- `BreadcrumbLink` provides a visible focus ring (`focus-visible:ring-2`) and meets WCAG 2.2 AA minimum target size (24x24px) via `py-2` padding
+- `BreadcrumbPage` sets `aria-current="page"` to indicate the current location
+- `BreadcrumbSeparator` is hidden from assistive technology via `role="presentation"` and `aria-hidden="true"`
+- `BreadcrumbEllipsis` is hidden from assistive technology via `role="presentation"` and `aria-hidden="true"`
+- All interactive elements (links) are keyboard-navigable using standard Tab key behavior
+
+## Screen reader behavior
+
+A screen reader announces the breadcrumb navigation landmark and reads each link in order:
+
+> "breadcrumb navigation, list, 3 items, Home link, Components link, Breadcrumb current page"
+
+The separator between items is not announced. The final item is identified as the current page via `aria-current="page"`, so the user knows their location within the hierarchy.
+
+## Component Folder Structure
+
+```
+Breadcrumb/
+├── Breadcrumb.tsx
+├── BreadcrumbEllipsis.tsx
+├── BreadCrumbItem.tsx
+├── BreadCrumbLink.tsx
+├── BreadCrumbList.tsx
+├── BreadCrumbPage.tsx
+├── BreadCrumbSeparator.tsx
+├── index.ts
+├── types.ts
+└── README.md
 ```
 
 ## Props
 
 ### Breadcrumb
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type     | Default | Description            |
+| :---------- | :------- | :------ | :--------------------- |
+| `className` | `string` | -       | Additional CSS classes |
+
+Extends `React.ComponentPropsWithoutRef<"nav">`.
 
 ### BreadcrumbList
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type     | Default | Description            |
+| :---------- | :------- | :------ | :--------------------- |
+| `className` | `string` | -       | Additional CSS classes |
+
+Extends `React.OlHTMLAttributes<HTMLOListElement>`.
 
 ### BreadcrumbItem
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type     | Default | Description            |
+| :---------- | :------- | :------ | :--------------------- |
+| `className` | `string` | -       | Additional CSS classes |
+
+Extends `React.LiHTMLAttributes<HTMLLIElement>`.
 
 ### BreadcrumbLink
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `href` | `string` | - | Link destination (required) |
-| `className` | `string` | - | Additional CSS classes |
-| `children` | `ReactNode` | - | Link content |
+| Prop        | Type        | Default | Description            |
+| :---------- | :---------- | :------ | :--------------------- |
+| `href`      | `string`    | -       | Link destination       |
+| `className` | `string`    | -       | Additional CSS classes |
+| `children`  | `ReactNode` | -       | Link content           |
+
+Extends `LinkProps` from `next/link`.
 
 ### BreadcrumbPage
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type        | Default | Description            |
+| :---------- | :---------- | :------ | :--------------------- |
+| `className` | `string`    | -       | Additional CSS classes |
+| `children`  | `ReactNode` | -       | Current page text      |
+
+Extends `React.HTMLAttributes<HTMLSpanElement>`.
 
 ### BreadcrumbSeparator
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | `<ChevronRight />` | Custom separator icon or text |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type        | Default            | Description                   |
+| :---------- | :---------- | :----------------- | :---------------------------- |
+| `children`  | `ReactNode` | `<ChevronRight />` | Custom separator icon or text |
+| `className` | `string`    | -                  | Additional CSS classes        |
+
+Extends `React.LiHTMLAttributes<HTMLLIElement>`.
 
 ### BreadcrumbEllipsis
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type     | Default | Description            |
+| :---------- | :------- | :------ | :--------------------- |
+| `className` | `string` | -       | Additional CSS classes |
 
-## Accessibility
-
-- Full keyboard navigation support for breadcrumb links
-- Proper ARIA roles and attributes (`aria-label="breadcrumb"`, `role="presentation"`, `aria-current="page"`)
-- Visible focus indicators using system `focus-visible` ring
-- Screen reader compatible labels ("More" for ellipsis)
-- Semantic HTML elements (`<nav>`, `<ol>`, `<li>`)
-- Hover and focus states use design system tokens for consistent visual feedback
-- WCAG 2.2 AA compliant minimum target size (24x24px) for links
-
-## Source Code
-
-```tsx title="src/components/ui/breadcrumb.tsx"
-import React from "react";
-import { ChevronRight, MoreHorizontal } from "lucide-react";
-import { clsx } from "clsx";
-import Link from "next/link";
-import type { LinkProps } from "next/link";
-
-// ============================================================================
-// Breadcrumb Root
-// ============================================================================
-
-type BreadcrumbProps = React.ComponentPropsWithoutRef<"nav">;
-
-const Breadcrumb = ({ ...props }: BreadcrumbProps) => {
-  return <nav aria-label="breadcrumb" {...props} />;
-};
-
-// ============================================================================
-// Breadcrumb List
-// ============================================================================
-
-type BreadcrumbListProps = React.OlHTMLAttributes<HTMLOListElement>;
-
-const BreadcrumbList = ({ className, ...props }: BreadcrumbListProps) => (
-  <ol
-    className={clsx(
-      "flex flex-wrap items-center gap-1.5 wrap-break-word text-sm text-ground-600 sm:gap-2.5 dark:text-ground-400",
-      className
-    )}
-    {...props}
-  />
-);
-
-// ============================================================================
-// Breadcrumb Item
-// ============================================================================
-
-type BreadcrumbItemProps = React.LiHTMLAttributes<HTMLLIElement>;
-
-const BreadcrumbItem = ({ className, ...props }: BreadcrumbItemProps) => (
-  <li
-    className={clsx("inline-flex items-center gap-1.5", className)}
-    {...props}
-  />
-);
-
-// ============================================================================
-// Breadcrumb Link
-// ============================================================================
-
-type BreadcrumbLinkProps = Omit<LinkProps, "className"> & {
-  className?: string;
-  children?: React.ReactNode;
-};
-
-const BreadcrumbLink = ({ className, ...props }: BreadcrumbLinkProps) => {
-  return (
-    <Link
-      className={clsx(
-        // WCAG 2.2 AA: Minimum target size is 24x24px.
-        // py-2 (8px top/bottom) + text height (~16px) ensures vertical size >= 24px.
-        // px-3 provides horizontal spacing.
-        // -mx-1 prevents the increased padding from shifting the visual layout alignment.
-        "rounded px-3 py-2 -mx-1 text-ground-600 transition-colors duration-(--transition-fast) ease-in-out hover:text-ground-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ground-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-ground-400 dark:focus-visible:ring-ground-600 dark:focus-visible:ring-offset-ground-950 dark:hover:text-ground-100",
-        className
-      )}
-      {...props}
-    />
-  );
-};
-
-// ============================================================================
-// Breadcrumb Page
-// ============================================================================
-
-type BreadcrumbPageProps = React.HTMLAttributes<HTMLSpanElement>;
-
-const BreadcrumbPage = ({ className, ...props }: BreadcrumbPageProps) => (
-  <span
-    aria-current="page"
-    className={clsx(
-      // Matching padding of BreadcrumbLink for consistent layout and target size.
-      "px-3 py-2 -mx-1 font-normal text-ground-950 dark:text-ground-100",
-      className
-    )}
-    {...props}
-  />
-);
-
-// ============================================================================
-// Breadcrumb Separator
-// ============================================================================
-
-type BreadcrumbSeparatorProps = React.LiHTMLAttributes<HTMLLIElement>;
-
-const BreadcrumbSeparator = ({ children, className, ...props }: BreadcrumbSeparatorProps) => (
-  <li
-    role="presentation"
-    aria-hidden="true"
-    className={clsx("[&>svg]:size-3.5", className)}
-    {...props}
-  >
-    {children ?? <ChevronRight />}
-  </li>
-);
-
-// ============================================================================
-// Breadcrumb Ellipsis
-// ============================================================================
-
-type BreadcrumbEllipsisProps = React.HTMLAttributes<HTMLSpanElement>;
-
-const BreadcrumbEllipsis = ({ className, ...props }: BreadcrumbEllipsisProps) => (
-  <span
-    role="presentation"
-    aria-hidden="true"
-    className={clsx("flex h-9 w-9 items-center justify-center", className)}
-    {...props}
-  >
-    <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More</span>
-  </span>
-);
-
-export {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-  BreadcrumbEllipsis,
-};
-```
+Extends `React.HTMLAttributes<HTMLSpanElement>`.

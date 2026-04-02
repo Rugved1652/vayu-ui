@@ -18,7 +18,7 @@ The `useHover` hook allows you to detect when a user's mouse is over a specific 
 Copy this code into `src/hooks/useHover.ts`:
 
 ```tsx
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from 'react';
 
 export const useHover = <T extends HTMLElement>() => {
   const [isHovered, setIsHovered] = useState(false);
@@ -31,12 +31,12 @@ export const useHover = <T extends HTMLElement>() => {
     const handleMouseEnter = () => setIsHovered(true);
     const handleMouseLeave = () => setIsHovered(false);
 
-    element.addEventListener("mouseenter", handleMouseEnter);
-    element.addEventListener("mouseleave", handleMouseLeave);
+    element.addEventListener('mouseenter', handleMouseEnter);
+    element.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
-      element.removeEventListener("mouseenter", handleMouseEnter);
-      element.removeEventListener("mouseleave", handleMouseLeave);
+      element.removeEventListener('mouseenter', handleMouseEnter);
+      element.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, []);
 
@@ -47,21 +47,21 @@ export const useHover = <T extends HTMLElement>() => {
 ## Usage
 
 ```tsx
-import { useHover } from "@/hooks/useHover";
+import { useHover } from '@/hooks/useHover';
 
 const HoverCard = () => {
   const { ref, isHovered } = useHover<HTMLDivElement>();
 
   return (
-    <div 
-      ref={ref} 
-      style={{ 
-        backgroundColor: isHovered ? "blue" : "gray",
-        color: "white",
-        padding: "20px" 
+    <div
+      ref={ref}
+      style={{
+        backgroundColor: isHovered ? 'blue' : 'gray',
+        color: 'white',
+        padding: '20px',
       }}
     >
-      {isHovered ? "Get off me!" : "Hover me!"}
+      {isHovered ? 'Get off me!' : 'Hover me!'}
     </div>
   );
 };
@@ -71,7 +71,7 @@ const HoverCard = () => {
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `ref` | `RefObject<T>` | A React ref to attach to the target element. |
-| `isHovered` | `boolean` | `true` if the element is being hovered, `false` otherwise. |
+| Property    | Type           | Description                                                |
+| :---------- | :------------- | :--------------------------------------------------------- |
+| `ref`       | `RefObject<T>` | A React ref to attach to the target element.               |
+| `isHovered` | `boolean`      | `true` if the element is being hovered, `false` otherwise. |

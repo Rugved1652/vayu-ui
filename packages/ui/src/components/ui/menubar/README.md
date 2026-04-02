@@ -1,6 +1,7 @@
 # Menubar
 
 ## Anatomy
+
 - menubar.tsx — root composition (context provider + state)
 - menu.tsx — top-level menu trigger + dropdown
 - submenu.tsx — nested submenu trigger + dropdown
@@ -15,6 +16,7 @@
 - index.ts — public API
 
 ## Use Cases
+
 - Application-level navigation menus (File, Edit, View, etc.)
 - Toolbar menus with keyboard navigation
 - Nested submenus for grouped actions

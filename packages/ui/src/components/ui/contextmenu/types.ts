@@ -55,8 +55,7 @@ export interface ContextMenuItemProps extends React.HTMLAttributes<HTMLDivElemen
   shortcut?: string;
 }
 
-export interface ContextMenuCheckboxItemProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContextMenuCheckboxItemProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
@@ -70,8 +69,7 @@ export interface ContextMenuRadioGroupProps {
   onValueChange?: (value: string) => void;
 }
 
-export interface ContextMenuRadioItemProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContextMenuRadioItemProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   value: string;
   disabled?: boolean;
@@ -82,23 +80,19 @@ export interface ContextMenuSubProps {
   children: React.ReactNode;
 }
 
-export interface ContextMenuSubTriggerProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContextMenuSubTriggerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   disabled?: boolean;
   icon?: React.ReactNode;
 }
 
-export interface ContextMenuSubContentProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContextMenuSubContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-export interface ContextMenuSeparatorProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+export interface ContextMenuSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export interface ContextMenuLabelProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContextMenuLabelProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 

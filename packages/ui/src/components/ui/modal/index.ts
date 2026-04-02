@@ -1,16 +1,16 @@
 // index.ts
 // Public API
 
-import Modal from "./Modal";
-import { ModalTrigger } from "./ModalTrigger";
-import { ModalOverlay } from "./ModalOverlay";
-import { ModalContent } from "./ModalContent";
-import { ModalHeader } from "./ModalHeader";
-import { ModalBody } from "./ModalBody";
-import { ModalFooter } from "./ModalFooter";
-import { ModalTitle } from "./ModalTitle";
-import { ModalDescription } from "./ModalDescription";
-import { ModalClose } from "./ModalClose";
+import Modal from './Modal';
+import { ModalTrigger } from './ModalTrigger';
+import { ModalOverlay } from './ModalOverlay';
+import { ModalContent } from './ModalContent';
+import { ModalHeader } from './ModalHeader';
+import { ModalBody } from './ModalBody';
+import { ModalFooter } from './ModalFooter';
+import { ModalTitle } from './ModalTitle';
+import { ModalDescription } from './ModalDescription';
+import { ModalClose } from './ModalClose';
 
 export type {
   ModalSize,
@@ -20,7 +20,7 @@ export type {
   ModalOverlayProps,
   ModalContentProps,
   ModalCloseProps,
-} from "./types";
+} from './types';
 
 // Compound component pattern
 Modal.Trigger = ModalTrigger;

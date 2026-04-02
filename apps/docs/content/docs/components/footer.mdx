@@ -1,6 +1,6 @@
 ---
 title: Footer
-description: A responsive footer component with multiple layout variants for building site-wide navigation and information sections.
+description: A responsive footer component with multiple layout variants for site-wide navigation and information sections.
 ---
 
 import FooterDemo from '@/components/demos/footer-demo';
@@ -9,516 +9,271 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add footer
 ```
 
+```bash
+npx vayu-ui add -t footer #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center">
+    <div className="not-prose flex w-full justify-center p-4">
       <FooterDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Footer } from "vayu-ui";
-    import { Twitter, Github } from "lucide-react";
+    <Footer>
+      <Footer.Container>
+        <Footer.Grid>
+          <Footer.Section>
+            <Footer.Logo href="#">Logo</Footer.Logo>
+            <p>Building modern UIs.</p>
+            <Footer.Social>
+              <Footer.SocialLink href="#" aria-label="Twitter">
+                <Twitter size={18} />
+              </Footer.SocialLink>
+              <Footer.SocialLink href="#" aria-label="GitHub">
+                <Github size={18} />
+              </Footer.SocialLink>
+            </Footer.Social>
+          </Footer.Section>
+          <Footer.Section title="Product">
+            <Footer.Link href="#">Features</Footer.Link>
+            <Footer.Link href="#">Pricing</Footer.Link>
+          </Footer.Section>
+          <Footer.Section title="Resources">
+            <Footer.Link href="#">Documentation</Footer.Link>
+            <Footer.Link href="#">API Reference</Footer.Link>
+          </Footer.Section>
+          <Footer.Section title="Company">
+            <Footer.Link href="#">About</Footer.Link>
+            <Footer.Link href="#">Contact</Footer.Link>
+          </Footer.Section>
+        </Footer.Grid>
+        <Divider />
+        <Footer.Bottom>
+          <Footer.Copyright>&copy; 2026 Company. All rights reserved.</Footer.Copyright>
+          <Footer.Link href="#">Privacy Policy</Footer.Link>
+          <Footer.Link href="#">Terms of Service</Footer.Link>
+        </Footer.Bottom>
+      </Footer.Container>
+    </Footer>
 
-    export default function App() {
-      return (
-        <Footer>
-            <Footer.Container>
-                <Footer.Grid>
-                    <Footer.Section>
-                        <Footer.Logo>Logo</Footer.Logo>
-                        <p>Description</p>
-                        <Footer.Social>
-                            <Footer.SocialLink href="#" aria-label="Twitter">
-                                <Twitter size={18} />
-                            </Footer.SocialLink>
-                        </Footer.Social>
-                    </Footer.Section>
-                    <Footer.Section title="Links">
-                        <Footer.Link href="#">Link 1</Footer.Link>
-                        <Footer.Link href="#">Link 2</Footer.Link>
-                    </Footer.Section>
-                </Footer.Grid>
-                <Footer.Divider />
-                <Footer.Bottom>
-                    <Footer.Copyright>© 2024</Footer.Copyright>
-                </Footer.Bottom>
-            </Footer.Container>
-        </Footer>
-      );
-    }
+    <Footer variant="centered">
+      <Footer.Container>
+        <Footer.Grid>
+          <Footer.Section>
+            <Footer.Logo href="#">Logo</Footer.Logo>
+            <nav className="flex flex-wrap justify-center gap-6 mt-4">
+              <Footer.Link href="#">Home</Footer.Link>
+              <Footer.Link href="#">About</Footer.Link>
+              <Footer.Link href="#">Services</Footer.Link>
+              <Footer.Link href="#">Contact</Footer.Link>
+            </nav>
+            <Footer.Social className="mt-4">
+              <Footer.SocialLink href="#" aria-label="Twitter">
+                <Twitter size={18} />
+              </Footer.SocialLink>
+              <Footer.SocialLink href="#" aria-label="GitHub">
+                <Github size={18} />
+              </Footer.SocialLink>
+            </Footer.Social>
+          </Footer.Section>
+        </Footer.Grid>
+        <Divider />
+        <Footer.Bottom>
+          <Footer.Copyright>&copy; 2026 Company. All rights reserved.</Footer.Copyright>
+        </Footer.Bottom>
+      </Footer.Container>
+    </Footer>
+
+    <Footer variant="minimal">
+      <Footer.Container>
+        <Footer.Bottom>
+          <Footer.Logo href="#">Logo</Footer.Logo>
+          <Footer.Copyright>&copy; 2026 Company. Inc.</Footer.Copyright>
+          <Footer.Social>
+            <Footer.SocialLink href="#" aria-label="GitHub">
+              <Github size={16} />
+            </Footer.SocialLink>
+            <Footer.SocialLink href="#" aria-label="Twitter">
+              <Twitter size={16} />
+            </Footer.SocialLink>
+          </Footer.Social>
+        </Footer.Bottom>
+      </Footer.Container>
+    </Footer>
     ```
+
   </Tab>
 </Tabs>
 
 ## Anatomy
 
 ```tsx
-<Footer>
+import { Footer } from 'vayu-ui';
+
+<Footer variant="default">
   <Footer.Container>
     <Footer.Grid>
       <Footer.Section title="Section">
-        <Footer.Logo>Logo</Footer.Logo>
+        <Footer.Logo href="/">Logo</Footer.Logo>
         <Footer.Social>
           <Footer.SocialLink href="#" aria-label="Social">
             {/* Icon */}
           </Footer.SocialLink>
         </Footer.Social>
         <Footer.Link href="#">Link</Footer.Link>
+        <Footer.Link href="#" external>
+          External
+        </Footer.Link>
       </Footer.Section>
     </Footer.Grid>
-    <Footer.Divider />
+    <Divider />
     <Footer.Bottom>
-      <Footer.Copyright>© 2024</Footer.Copyright>
+      <Footer.Copyright>&copy; 2026</Footer.Copyright>
     </Footer.Bottom>
   </Footer.Container>
-</Footer>
+</Footer>;
 ```
 
-## Variants
-
-### Default
-
-The default variant displays a 4-column grid layout on large screens, collapsing to 2 columns on medium screens and 1 column on mobile.
-
-### Centered
-
-The centered variant uses a single column with centered text and content alignment, ideal for minimal sites or landing pages.
-
-### Minimal
-
-The minimal variant uses a simple 2-column layout, perfect for app footers or simple site footers with just copyright and social links.
+- **Footer** — Root element. Renders a `<footer>` landmark with `role="contentinfo"`. Accepts a `variant` prop that controls layout across all children.
+- **Footer.Container** — Constrained width wrapper with responsive horizontal padding.
+- **Footer.Grid** — Responsive grid layout. Column count adapts based on the parent variant.
+- **Footer.Section** — Content group with an optional `title` heading. Contains a `<nav>` with `aria-label` for link collections.
+- **Footer.Logo** — Logo wrapper. Renders an `<a>` link when `href` is provided, or a plain `<div>` otherwise.
+- **Footer.Link** — Navigation link with hover underline. Supports `external` to open in a new tab with an auto-generated `aria-label`.
+- **Footer.Social** — Container for social icon links. Uses `role="list"` to avoid nested navigation landmarks.
+- **Footer.SocialLink** — Circular icon link with hover background. Always opens externally. Requires `aria-label` for accessibility.
+- **Footer.Copyright** — Styled text wrapper for copyright content.
+- **Footer.Divider** — Horizontal separator with `role="separator"`.
+- **Footer.Bottom** — Bottom bar layout. Alignment adapts to the parent variant (row for default/minimal, centered column for centered).
 
 ## Accessibility
 
-- **Semantic HTML**: Uses `<footer>` with `role="contentinfo"` for proper document structure
-- **Keyboard Navigation**: All interactive elements are keyboard accessible
-- **Focus Indicators**: Visible focus rings with proper color contrast
-- **Screen Reader Support**:
-  - Navigation sections have descriptive `aria-label` attributes
-  - External links announce they open in a new tab
-  - Social links require `aria-label` for accessibility
-  - Social container uses `role="list"` to avoid nested navigation landmarks
-- **Color Contrast**: All text colors meet WCAG 2.2 AA requirements (divider uses `ground-300` for WCAG 1.4.11 non-text contrast)
-- **Touch Targets**: Social links have minimum 44px touch targets (`min-w-11 min-h-11`)
-- **Server Component**: This is a true server component with no `"use client"` directive needed, making it fully SSR-compatible
+- **Keyboard Support**:
+  - All interactive elements are native `<a>` tags, fully keyboard navigable.
+  - `Tab` — Moves focus between links and social icons in document order.
+  - `Enter` / `Space` — Activates the focused link.
+- **ARIA Attributes**:
+  - `role="contentinfo"` on the root `<footer>` landmark.
+  - `aria-label="{title} links"` on `<nav>` elements inside `Footer.Section`.
+  - `aria-label` auto-generated as `"{text} (opens in new tab)"` for external `Footer.Link` with string children.
+  - `role="list"` and `aria-label="Social media links"` on `Footer.Social`.
+  - `role="separator"` and `aria-orientation="horizontal"` on `Footer.Divider`.
+  - External link icon marked `aria-hidden="true"`.
+- **Focus Behavior**:
+  - Visible focus ring (`ring-2 ring-focus ring-offset-2 ring-offset-canvas`) on all interactive elements.
+  - Social links have minimum 44px touch targets (`min-w-11 min-h-11`).
+
+## Screen reader behavior
+
+When a screen reader encounters the footer, it announces the "contentinfo" landmark. Each section with a title renders an `<h3>` heading followed by a navigation region labeled `"{title} links"` (e.g., "Product links"). Links within sections are listed as standard navigation items. External links are announced with "(opens in new tab)" appended to the link text. Social links are announced within a list context, so each social icon&apos;s `aria-label` is read as a list item. The divider is announced as a separator. The footer landmark provides a quick navigation target for assistive technology users to skip to the site footer.
+
+## Component Folder Structure
+
+```
+Footer/
+├── Footer.tsx            # Main composition file, wires all subcomponents via Object.assign
+├── FooterRoot.tsx        # Root <footer> element with variant and group styling
+├── FooterLayout.tsx      # Container, Grid, and Bottom layout primitives
+├── FooterContent.tsx     # Section, Link, and Logo content elements
+├── FooterSocial.tsx      # Social container and SocialLink icon buttons
+├── FooterUtilities.tsx   # Copyright text and Divider separator
+├── types.ts              # TypeScript type definitions
+├── index.ts              # Re-exports Footer component and types
+└── README.md             # Component usage reference
+```
 
 ## Props
 
 ### Footer (Root)
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content of the footer. |
-| `variant` | `"default" \| "minimal" \| "centered"` | `"default"` | The layout variant. Applied via data attributes. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type                                   | Default     | Description                                            |
+| :---------- | :------------------------------------- | :---------- | :----------------------------------------------------- |
+| `variant`   | `"default" \| "minimal" \| "centered"` | `"default"` | Layout variant controlling grid columns and alignment. |
+| `children`  | `ReactNode`                            | —           | Footer content.                                        |
+| `className` | `string`                               | —           | Additional CSS classes.                                |
 
 ### Footer.Container
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | Content to render. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Container content.      |
+| `className` | `string`    | —       | Additional CSS classes. |
 
 ### Footer.Grid
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | Content to render. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Grid sections.          |
+| `className` | `string`    | —       | Additional CSS classes. |
 
 ### Footer.Section
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `title` | `string` | - | Optional title for the section. |
-| `children` | `ReactNode` | - | The content of the section. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type        | Default | Description                                                       |
+| :---------- | :---------- | :------ | :---------------------------------------------------------------- |
+| `title`     | `string`    | —       | Optional section heading. Sets `aria-label` on the inner `<nav>`. |
+| `children`  | `ReactNode` | —       | Section content, typically `Footer.Link` elements.                |
+| `className` | `string`    | —       | Additional CSS classes.                                           |
 
 ### Footer.Link
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `href` | `string` | - | The URL to navigate to. |
-| `external` | `boolean` | `false` | Whether to open the link in a new tab. |
-| `children` | `ReactNode` | - | The link text or content. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type        | Default | Description                                                            |
+| :---------- | :---------- | :------ | :--------------------------------------------------------------------- |
+| `href`      | `string`    | —       | Link destination.                                                      |
+| `external`  | `boolean`   | `false` | Open in a new tab with `target="_blank"`. Auto-generates `aria-label`. |
+| `children`  | `ReactNode` | —       | Link text or content.                                                  |
+| `className` | `string`    | —       | Additional CSS classes.                                                |
 
 ### Footer.Logo
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `href` | `string` | `"/"` | URL for the logo link. |
-| `children` | `ReactNode` | - | Logo content. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type        | Default | Description                                                      |
+| :---------- | :---------- | :------ | :--------------------------------------------------------------- |
+| `href`      | `string`    | `"/"`   | Logo link destination. Omit to render a non-interactive wrapper. |
+| `children`  | `ReactNode` | —       | Logo content.                                                    |
+| `className` | `string`    | —       | Additional CSS classes.                                          |
 
 ### Footer.Social
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | Social link elements. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type        | Default | Description                   |
+| :---------- | :---------- | :------ | :---------------------------- |
+| `children`  | `ReactNode` | —       | `Footer.SocialLink` elements. |
+| `className` | `string`    | —       | Additional CSS classes.       |
 
 ### Footer.SocialLink
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `href` | `string` | - | The URL to navigate to. |
-| `aria-label` | `string` | - | Accessible label for screen readers (required). |
-| `children` | `ReactNode` | - | Icon or content. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop         | Type        | Default | Description                                                        |
+| :----------- | :---------- | :------ | :----------------------------------------------------------------- |
+| `href`       | `string`    | —       | Social profile URL. Opens externally.                              |
+| `aria-label` | `string`    | —       | Accessible label for screen readers. Required for icon-only links. |
+| `children`   | `ReactNode` | —       | Icon content.                                                      |
+| `className`  | `string`    | —       | Additional CSS classes.                                            |
 
 ### Footer.Copyright
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | Copyright text. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Copyright text.         |
+| `className` | `string`    | —       | Additional CSS classes. |
 
 ### Footer.Divider
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type     | Default | Description             |
+| :---------- | :------- | :------ | :---------------------- |
+| `className` | `string` | —       | Additional CSS classes. |
 
 ### Footer.Bottom
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | Bottom section content. |
-| `className` | `string` | - | Additional CSS classes. |
-
-## Source Code
-
-```tsx title="src/components/ui/footer.tsx"
-// footer.tsx
-// TRUE Server Component (No "use client" needed!)
-
-import React from "react";
-import { clsx } from "clsx";
-
-// ==================== Types ====================
-
-type FooterVariant = "default" | "minimal" | "centered";
-
-interface FooterRootProps extends React.HTMLAttributes<HTMLElement> {
-    children: React.ReactNode;
-    variant?: FooterVariant;
-}
-
-interface FooterSectionProps extends React.HTMLAttributes<HTMLElement> {
-    children: React.ReactNode;
-    title?: string;
-}
-
-interface FooterLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-    children: React.ReactNode;
-    external?: boolean;
-}
-
-interface FooterLogoProps extends React.HTMLAttributes<HTMLDivElement> {
-    children: React.ReactNode;
-    href?: string;
-}
-
-interface FooterSocialProps extends React.HTMLAttributes<HTMLDivElement> {
-    children: React.ReactNode;
-}
-
-interface FooterCopyrightProps extends React.HTMLAttributes<HTMLDivElement> {
-    children: React.ReactNode;
-}
-
-interface FooterDividerProps extends React.HTMLAttributes<HTMLHRElement> { }
-
-// ==================== Main Footer Component ====================
-
-function FooterRoot({ children, variant = "default", className = "", ...props }: FooterRootProps) {
-    return (
-        <footer
-            data-variant={variant}
-            className={clsx(
-                "group/footer",
-                "bg-ground-50 dark:bg-ground-950",
-                "text-ground-900 dark:text-ground-100",
-                "font-secondary",
-                "transition-colors duration-300",
-                className
-            )}
-            role="contentinfo"
-            {...props}
-        >
-            {children}
-        </footer>
-    );
-}
-FooterRoot.displayName = "Footer";
-
-// ==================== Footer Container ====================
-
-function FooterContainer({ children, className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
-    return (
-        <div
-            className={clsx(
-                "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12",
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-}
-FooterContainer.displayName = "Footer.Container";
-
-// ==================== Footer Grid ====================
-
-function FooterGrid({ children, className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
-    return (
-        <div
-            className={clsx(
-                "grid gap-8",
-                "group-data-[variant=default]/footer:grid-cols-1 group-data-[variant=default]/footer:md:grid-cols-2 group-data-[variant=default]/footer:lg:grid-cols-4",
-                "group-data-[variant=centered]/footer:grid-cols-1 group-data-[variant=centered]/footer:text-center group-data-[variant=centered]/footer:justify-items-center",
-                "group-data-[variant=minimal]/footer:grid-cols-1 group-data-[variant=minimal]/footer:md:grid-cols-2",
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-}
-FooterGrid.displayName = "Footer.Grid";
-
-// ==================== Footer Section ====================
-
-function FooterSection({ children, title, className = "", ...props }: FooterSectionProps) {
-    return (
-        <section
-            className={clsx("flex flex-col gap-4", className)}
-            {...props}
-        >
-            {title && (
-                <h3 className="font-primary font-semibold text-lg text-ground-900 dark:text-ground-50 uppercase tracking-wide transition-colors duration-300">
-                    {title}
-                </h3>
-            )}
-            <nav
-                className="flex flex-col gap-2"
-                aria-label={title ? `${title} links` : "Footer navigation"}
-            >
-                {children}
-            </nav>
-        </section>
-    );
-}
-FooterSection.displayName = "Footer.Section";
-
-// ==================== Footer Link ====================
-
-function FooterLink({ children, external = false, className = "", href, ...props }: FooterLinkProps) {
-    const isStringChild = typeof children === "string";
-
-    const computedAriaLabel =
-        external && !props['aria-label'] && isStringChild
-        ? `${children} (opens in new tab)`
-        : props['aria-label'];
-
-    return (
-        <a
-            href={href}
-            className={clsx(
-                "text-ground-600 dark:text-ground-400",
-                "hover:text-primary-600 dark:hover:text-primary-400",
-                "transition-colors duration-200",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
-                "focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
-                "rounded-sm",
-                "inline-flex items-center gap-1.5",
-                "underline-offset-4 hover:underline",
-                className
-            )}
-            {...(external && {
-                target: "_blank",
-                rel: "noopener noreferrer",
-            })}
-            aria-label={computedAriaLabel}
-            {...props}
-        >
-            {children}
-            {external && (
-                <svg
-                    className="w-3.5 h-3.5 shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                </svg>
-            )}
-        </a>
-    );
-}
-FooterLink.displayName = "Footer.Link";
-
-// ==================== Footer Logo ====================
-
-function FooterLogo({ children, href = "/", className = "", ...props }: FooterLogoProps) {
-    return (
-        <div
-            className={clsx("flex items-center gap-3", className)}
-            {...props}
-        >
-            {href ? (
-                <a
-                    href={href}
-                    className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950 rounded-sm"
-                >
-                    {children}
-                </a>
-            ) : (
-                children
-            )}
-        </div>
-    );
-}
-FooterLogo.displayName = "Footer.Logo";
-
-// ==================== Footer Social ====================
-
-function FooterSocial({ children, className = "", ...props }: FooterSocialProps) {
-    // FIX: Changed from <nav> to <div role="list"> to prevent nested navigation landmarks
-    // when used inside FooterSection.
-    return (
-        <div
-            className={clsx("flex gap-4 items-center", className)}
-            role="list"
-            aria-label="Social media links"
-            {...props}
-        >
-            {children}
-        </div>
-    );
-}
-FooterSocial.displayName = "Footer.Social";
-
-// ==================== Footer Social Link ====================
-
-function FooterSocialLink(
-    { children, href, className = "", "aria-label": ariaLabel, ...props }: FooterLinkProps
-) {
-    return (
-        <a
-            href={href}
-            className={clsx(
-                "text-ground-600 dark:text-ground-400",
-                "hover:text-primary-600 dark:hover:text-primary-400",
-                "hover:bg-ground-100 dark:hover:bg-ground-900",
-                "transition-all duration-200",
-                "p-2.5 rounded-full min-w-11 min-h-11",
-                "flex items-center justify-center",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
-                "focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
-                className
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={ariaLabel}
-            {...props}
-        >
-            {children}
-        </a>
-    );
-}
-FooterSocialLink.displayName = "Footer.SocialLink";
-
-// ==================== Footer Copyright ====================
-
-function FooterCopyright({ children, className = "", ...props }: FooterCopyrightProps) {
-    return (
-        <div
-            className={clsx(
-                "text-ground-600 dark:text-ground-400",
-                "text-sm transition-colors duration-300",
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-}
-FooterCopyright.displayName = "Footer.Copyright";
-
-// ==================== Footer Divider ====================
-
-function FooterDivider({ className = "", ...props }: FooterDividerProps) {
-    return (
-        <hr
-            className={clsx(
-                // FIX: ground-300 for WCAG 1.4.11 Non-text Contrast
-                "border-ground-300 dark:border-ground-700",
-                "my-8 transition-colors duration-300",
-                className
-            )}
-            role="separator"
-            aria-orientation="horizontal"
-            {...props}
-        />
-    );
-}
-FooterDivider.displayName = "Footer.Divider";
-
-// ==================== Footer Bottom ====================
-
-function FooterBottom({ children, className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
-    return (
-        <div
-            className={clsx(
-                "flex flex-col md:flex-row gap-4",
-                "group-data-[variant=centered]/footer:justify-center group-data-[variant=centered]/footer:items-center group-data-[variant=centered]/footer:text-center",
-                "group-data-[variant=default]/footer:justify-between group-data-[variant=default]/footer:items-center",
-                "group-data-[variant=minimal]/footer:justify-between group-data-[variant=minimal]/footer:items-center",
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-}
-FooterBottom.displayName = "Footer.Bottom";
-
-// ==================== Attach Compound Components ====================
-
-export const Footer = Object.assign(FooterRoot, {
-    Container: FooterContainer,
-    Grid: FooterGrid,
-    Section: FooterSection,
-    Link: FooterLink,
-    Logo: FooterLogo,
-    Social: FooterSocial,
-    SocialLink: FooterSocialLink,
-    Copyright: FooterCopyright,
-    Divider: FooterDivider,
-    Bottom: FooterBottom,
-});
-
-export default Footer;
-```
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Bottom bar content.     |
+| `className` | `string`    | —       | Additional CSS classes. |

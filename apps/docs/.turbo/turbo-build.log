@@ -9,9 +9,9 @@
  Detected additional lockfiles: 
    * /Users/rugvedpatel/Desktop/Workspace/VedUI/package-lock.json
 
-[MDX] generated files in 18.35112500000014ms
 ▲ Next.js 16.1.6 (Turbopack)
 
+[MDX] generated files in 13.934000000000026ms
   Creating an optimized production build ...
 npm error Lifecycle script `build` failed with error:
 npm error code 130

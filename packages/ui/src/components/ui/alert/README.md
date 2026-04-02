@@ -1,6 +1,7 @@
 # Alert
 
 ## Anatomy
+
 - alert.tsx — composition (AlertRoot + styling maps + compound exports)
 - AlertIcon.tsx — UI (icon wrapper)
 - AlertTitle.tsx — UI (title heading)
@@ -11,6 +12,7 @@
 - index.ts — public API
 
 ## Use Cases
+
 - Display success, error, warning, or info messages
 - Provide dismissible notifications with clear visual hierarchy
 - Communicate system status with accessible ARIA roles

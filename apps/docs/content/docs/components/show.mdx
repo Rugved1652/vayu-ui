@@ -41,6 +41,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       </Default>
     </Switch>
     ```
+
   </Tab>
 </Tabs>
 
@@ -54,16 +55,16 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ## Show Props
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `when` | `T \| undefined \| null \| false` | — | Condition to check |
-| `fallback` | `ReactNode` | `null` | Rendered when `when` is falsy |
-| `children` | `ReactNode \| (value: T) => ReactNode` | — | Content or render function |
+| Prop       | Type                                   | Default | Description                   |
+| :--------- | :------------------------------------- | :------ | :---------------------------- |
+| `when`     | `T \| undefined \| null \| false`      | —       | Condition to check            |
+| `fallback` | `ReactNode`                            | `null`  | Rendered when `when` is falsy |
+| `children` | `ReactNode \| (value: T) => ReactNode` | —       | Content or render function    |
 
 ## Switch Props
 
-| Component | Prop | Type | Description |
-|:----------|:-----|:-----|:------------|
-| `Switch` | `children` | `ReactNode` | Must contain `Case` and/or `Default` |
-| `Case` | `condition` | `boolean` | Renders if truthy (first match wins) |
-| `Default` | `children` | `ReactNode` | Rendered if no `Case` matches |
+| Component | Prop        | Type        | Description                          |
+| :-------- | :---------- | :---------- | :----------------------------------- |
+| `Switch`  | `children`  | `ReactNode` | Must contain `Case` and/or `Default` |
+| `Case`    | `condition` | `boolean`   | Renders if truthy (first match wins) |
+| `Default` | `children`  | `ReactNode` | Rendered if no `Case` matches        |

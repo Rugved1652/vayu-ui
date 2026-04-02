@@ -18,7 +18,7 @@ The `useCountdown` hook provides a simple way to implement a countdown timer in 
 Copy this code into `src/hooks/useCountdown.ts`:
 
 ```tsx
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
 interface UseCountdownOptions {
   seconds: number;
@@ -83,7 +83,7 @@ export const useCountdown = ({
 ## Usage
 
 ```tsx
-import { useCountdown } from "@/hooks/useCountdown";
+import { useCountdown } from '@/hooks/useCountdown';
 
 const CountdownComponent = () => {
   const { timeLeft, start, pause, reset, isRunning } = useCountdown({
@@ -110,19 +110,19 @@ const CountdownComponent = () => {
 
 ### Options
 
-| Property | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `seconds` | `number` | **Required** | The initial time in seconds. |
-| `interval` | `number` | `1000` | The interval in milliseconds (default: 1 second). |
-| `onTick` | `(timeLeft: number) => void` | `undefined` | Callback function called on every tick. |
-| `onComplete` | `() => void` | `undefined` | Callback function called when countdown reaches 0. |
+| Property     | Type                         | Default      | Description                                        |
+| :----------- | :--------------------------- | :----------- | :------------------------------------------------- |
+| `seconds`    | `number`                     | **Required** | The initial time in seconds.                       |
+| `interval`   | `number`                     | `1000`       | The interval in milliseconds (default: 1 second).  |
+| `onTick`     | `(timeLeft: number) => void` | `undefined`  | Callback function called on every tick.            |
+| `onComplete` | `() => void`                 | `undefined`  | Callback function called when countdown reaches 0. |
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `timeLeft` | `number` | The current time left in seconds. |
-| `start` | `() => void` | Function to start the countdown. |
-| `pause` | `() => void` | Function to pause the countdown. |
-| `reset` | `() => void` | Function to reset the countdown to original seconds. |
-| `isRunning` | `boolean` | Boolean indicating if the countdown is active. |
+| Property    | Type         | Description                                          |
+| :---------- | :----------- | :--------------------------------------------------- |
+| `timeLeft`  | `number`     | The current time left in seconds.                    |
+| `start`     | `() => void` | Function to start the countdown.                     |
+| `pause`     | `() => void` | Function to pause the countdown.                     |
+| `reset`     | `() => void` | Function to reset the countdown to original seconds. |
+| `isRunning` | `boolean`    | Boolean indicating if the countdown is active.       |

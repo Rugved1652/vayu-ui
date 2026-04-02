@@ -1,58 +1,69 @@
 // table.tsx
 // Composition: UI + wiring
 
-import React from "react";
-import { cn } from "../utils";
-import { TableProps } from "./types";
+import React from 'react';
+import { cn } from '../utils';
+import { TableProps } from './types';
 
-import TableCaption from "./TableCaption";
-import TableHead from "./TableHead";
-import TableBody from "./TableBody";
-import TableFooter from "./TableFooter";
-import TableRow from "./TableRow";
-import TableHeader from "./TableHeader";
-import TableCell from "./TableCell";
+import TableCaption from './TableCaption';
+import TableHead from './TableHead';
+import TableBody from './TableBody';
+import TableFooter from './TableFooter';
+import TableRow from './TableRow';
+import TableHeader from './TableHeader';
+import TableCell from './TableCell';
 
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
-    ({ children, className, "aria-label": ariaLabel, "aria-describedby": ariaDescribedby, "aria-colcount": ariaColcount, "aria-rowcount": ariaRowcount, ...props }, ref) => {
-        return (
-            <div
-                className={cn(
-                    "w-full overflow-x-auto rounded-surface border",
-                    "border-border bg-surface",
-                    "dark:border-border dark:bg-surface",
-                    "shadow-surface"
-                )}
-            >
-                <table
-                    ref={ref}
-                    className={cn("w-full border-collapse text-sm font-secondary", className)}
-                    aria-label={ariaLabel}
-                    aria-describedby={ariaDescribedby}
-                    aria-colcount={ariaColcount}
-                    aria-rowcount={ariaRowcount}
-                    {...props}
-                >
-                    {children}
-                </table>
-            </div>
-        );
-    }
+  (
+    {
+      children,
+      className,
+      'aria-label': ariaLabel,
+      'aria-describedby': ariaDescribedby,
+      'aria-colcount': ariaColcount,
+      'aria-rowcount': ariaRowcount,
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <div
+        className={cn(
+          'w-full overflow-x-auto rounded-surface border',
+          'border-border bg-surface',
+          'dark:border-border dark:bg-surface',
+          'shadow-surface',
+        )}
+      >
+        <table
+          ref={ref}
+          className={cn('w-full border-collapse text-sm font-secondary', className)}
+          aria-label={ariaLabel}
+          aria-describedby={ariaDescribedby}
+          aria-colcount={ariaColcount}
+          aria-rowcount={ariaRowcount}
+          {...props}
+        >
+          {children}
+        </table>
+      </div>
+    );
+  },
 );
 
-Table.displayName = "Table";
+Table.displayName = 'Table';
 
 // Compound component typing
 type TableComponent = React.ForwardRefExoticComponent<
-    TableProps & React.RefAttributes<HTMLTableElement>
+  TableProps & React.RefAttributes<HTMLTableElement>
 > & {
-    Caption: typeof TableCaption;
-    Head: typeof TableHead;
-    Body: typeof TableBody;
-    Footer: typeof TableFooter;
-    Row: typeof TableRow;
-    Header: typeof TableHeader;
-    Cell: typeof TableCell;
+  Caption: typeof TableCaption;
+  Head: typeof TableHead;
+  Body: typeof TableBody;
+  Footer: typeof TableFooter;
+  Row: typeof TableRow;
+  Header: typeof TableHeader;
+  Cell: typeof TableCell;
 };
 
 const TableWithCompounds = Table as TableComponent;
@@ -67,12 +78,4 @@ TableWithCompounds.Cell = TableCell;
 
 export default TableWithCompounds;
 
-export {
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-};
+export { TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };

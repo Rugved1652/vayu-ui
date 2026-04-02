@@ -9,42 +9,34 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add checkbox
 ```
 
+```bash
+npx vayu-ui add -t checkbox #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
+    <div className="not-prose flex w-full justify-center p-4">
       <CheckboxDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Checkbox } from "vayu-ui";
-    import { useState } from "react";
+    <Checkbox checked={checked} onChange={setChecked}>
+      <div className="flex items-start gap-3">
+        <Checkbox.Indicator />
+        <Checkbox.Label>Accept terms and conditions</Checkbox.Label>
+      </div>
+    </Checkbox>
 
-    export function CheckboxExample() {
-      const [checked, setChecked] = useState(false);
-
-      return (
-        <Checkbox checked={checked} onChange={setChecked}>
-          <div className="flex items-start gap-3">
-            <Checkbox.Indicator />
-            <div className="flex flex-col">
-              <Checkbox.Label>Accept terms and conditions</Checkbox.Label>
-            </div>
-          </div>
-        </Checkbox>
-      );
-    }
-
-    // With description
     <Checkbox>
       <div className="flex items-start gap-3">
         <Checkbox.Indicator />
@@ -57,7 +49,6 @@ npx vayu-ui add checkbox
       </div>
     </Checkbox>
 
-    // With error
     <Checkbox error>
       <div className="flex items-start gap-3">
         <Checkbox.Indicator />
@@ -68,27 +59,30 @@ npx vayu-ui add checkbox
       </div>
     </Checkbox>
 
-    // Indeterminate state (for "Select All" patterns)
     <Checkbox indeterminate>
       <div className="flex items-center gap-3">
         <Checkbox.Indicator />
         <Checkbox.Label>Select all</Checkbox.Label>
       </div>
     </Checkbox>
+
+    <Checkbox disabled>
+      <div className="flex items-center gap-3">
+        <Checkbox.Indicator />
+        <Checkbox.Label>Disabled option</Checkbox.Label>
+      </div>
+    </Checkbox>
     ```
+
   </Tab>
 </Tabs>
 
 ## Anatomy
 
 ```tsx
-<Checkbox
-  checked={checked}
-  onChange={setChecked}
-  indeterminate={false}
-  disabled={false}
-  error={false}
->
+import { Checkbox } from 'vayu-ui';
+
+<Checkbox checked={checked} onChange={setChecked}>
   <div className="flex items-start gap-3">
     <Checkbox.Indicator />
     <div className="flex flex-col gap-1">
@@ -97,428 +91,88 @@ npx vayu-ui add checkbox
       <Checkbox.Error>Error message</Checkbox.Error>
     </div>
   </div>
-</Checkbox>
+</Checkbox>;
 ```
+
+- **Checkbox** — Root container. Manages checked/indeterminate/disabled state and provides context to children.
+- **Checkbox.Indicator** — Renders a hidden native `<input type="checkbox">` and a custom visual checkbox with check or minus icon.
+- **Checkbox.Label** — Accessible label associated with the checkbox input via `htmlFor`.
+- **Checkbox.Description** — Helper text below the label, linked via `aria-describedby`.
+- **Checkbox.Error** — Error message with `role="alert"` and `aria-live="polite"` for screen reader announcements.
 
 ## Accessibility
 
-- Full keyboard navigation support (Space to toggle, Tab to focus)
-- Proper ARIA roles and attributes (`aria-checked`, `aria-invalid`, `aria-describedby`)
-- WAI-ARIA checkbox pattern compliance
-- Visible focus indicators using system focus-visible ring (WCAG 2.2 AA)
-- Screen reader compatible with proper label associations
-- Support for indeterminate state with proper ARIA announcement
-- `aria-live="polite"` on error messages for dynamic announcements
+- **Keyboard Support**:
+  - `Space` — Toggle the checkbox checked state.
+  - `Tab` — Move focus to the next checkbox.
+  - `Shift + Tab` — Move focus to the previous checkbox.
+- **ARIA Attributes**:
+  - `aria-checked` reflects checked, unchecked, or mixed (indeterminate) state on the native input.
+  - `aria-invalid="true"` set when `error` prop is passed.
+  - `aria-describedby` links the input to its description and error elements when present.
+  - Error message uses `role="alert"` and `aria-live="polite"` for dynamic announcements.
+- **Focus Behavior**:
+  - Visible focus ring (`focus-visible`) on the checkbox indicator using the `focus` design token.
+  - Focus ring meets WCAG 2.2 AA contrast requirements.
+
+## Screen reader behavior
+
+When a user navigates to a checkbox, the screen reader announces the label text, the current state (checked or unchecked), and the name of the control. When in the indeterminate state, the screen reader announces "mixed" as the value. If an error is present, the screen reader announces the error message due to `aria-live="polite"` and `role="alert"` on the error element, which is linked to the input via `aria-describedby`. If a description is provided, it is also announced after the label. The native checkbox input ensures standard checkbox semantics are conveyed without additional ARIA role declarations.
+
+## Component Folder Structure
+
+```
+CheckBox/
+├── CheckBox.tsx            # Root component with context provider and state management
+├── CheckBoxIndicator.tsx   # Hidden native input + custom visual checkbox
+├── CheckBoxLabel.tsx       # Accessible label linked to the checkbox input
+├── CheckBoxDescription.tsx # Helper description text below the label
+├── CheckBoxError.tsx       # Error message with aria-live for screen readers
+├── hooks.ts                # Context creation and useCheckboxContext hook
+├── types.ts                # TypeScript type definitions
+├── index.ts                # Re-exports Checkbox compound component and types
+└── README.md               # Component usage reference
+```
 
 ## Props
 
 ### Checkbox (Root)
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `checked` | `boolean` | - | Controlled checked state. |
-| `defaultChecked` | `boolean` | `false` | Default checked state for uncontrolled mode. |
-| `indeterminate` | `boolean` | `false` | Shows indeterminate state (minus icon). |
-| `disabled` | `boolean` | `false` | Disables the checkbox. |
-| `error` | `boolean` | `false` | Shows error styling on the indicator. |
-| `onChange` | `(checked: boolean) => void` | - | Callback when checked state changes. |
-| `name` | `string` | - | Form field name for form submission. |
-| `value` | `string` | - | Form field value. |
-| `required` | `boolean` | - | Marks the field as required. |
+| Prop             | Type                         | Default | Description                                  |
+| :--------------- | :--------------------------- | :------ | :------------------------------------------- |
+| `checked`        | `boolean`                    | —       | Controlled checked state.                    |
+| `defaultChecked` | `boolean`                    | `false` | Default checked state for uncontrolled mode. |
+| `indeterminate`  | `boolean`                    | `false` | Shows indeterminate state (minus icon).      |
+| `disabled`       | `boolean`                    | `false` | Disables the checkbox.                       |
+| `error`          | `boolean`                    | `false` | Shows error styling on the indicator.        |
+| `onChange`       | `(checked: boolean) => void` | —       | Callback when checked state changes.         |
+| `name`           | `string`                     | —       | Form field name for form submission.         |
+| `value`          | `string`                     | —       | Form field value.                            |
+| `required`       | `boolean`                    | —       | Marks the field as required.                 |
 
 ### Checkbox.Indicator
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional classes for the hidden input. |
+| Prop        | Type     | Default | Description                              |
+| :---------- | :------- | :------ | :--------------------------------------- |
+| `className` | `string` | —       | Additional classes for the hidden input. |
 
 ### Checkbox.Label
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional classes for the label. |
-| `children` | `ReactNode` | - | Label content. |
+| Prop        | Type        | Default | Description                       |
+| :---------- | :---------- | :------ | :-------------------------------- |
+| `children`  | `ReactNode` | —       | Label content.                    |
+| `className` | `string`    | —       | Additional classes for the label. |
 
 ### Checkbox.Description
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional classes for the description. |
-| `children` | `ReactNode` | - | Description content. |
+| Prop        | Type        | Default | Description                             |
+| :---------- | :---------- | :------ | :-------------------------------------- |
+| `children`  | `ReactNode` | —       | Description content.                    |
+| `className` | `string`    | —       | Additional classes for the description. |
 
 ### Checkbox.Error
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional classes for the error message. |
-| `children` | `ReactNode` | - | Error message content. |
-
-## Source Code
-
-```tsx title="src/components/ui/checkbox.tsx"
-"use client";
-import { clsx } from "clsx";
-import React, {
-    createContext,
-    forwardRef,
-    InputHTMLAttributes,
-    HTMLAttributes,
-    useContext,
-    useRef,
-    useId,
-    useLayoutEffect,
-    useState,
-    useEffect,
-} from "react";
-
-import { CheckIcon } from "../icons/check-icon";
-import { MinusIcon } from "../icons/minus-icon";
-
-// ============================================================================
-// Context
-// ============================================================================
-
-interface CheckboxContextValue {
-    checked: boolean;
-    indeterminate: boolean;
-    disabled: boolean;
-    error: boolean;
-    checkboxId: string;
-    errorId: string;
-    descriptionId: string;
-    name?: string;
-    value?: string;
-    required?: boolean;
-    onChange: (checked: boolean) => void;
-}
-
-const CheckboxContext = createContext<CheckboxContextValue | null>(null);
-
-const useCheckboxContext = () => {
-    const context = useContext(CheckboxContext);
-    if (!context) {
-        throw new Error("Checkbox compound components must be used within Checkbox.Root");
-    }
-    return context;
-};
-
-// ============================================================================
-// Types
-// ============================================================================
-
-interface CheckboxRootProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {
-    checked?: boolean;
-    defaultChecked?: boolean;
-    indeterminate?: boolean;
-    disabled?: boolean;
-    error?: boolean;
-    onChange?: (checked: boolean) => void;
-    name?: string;
-    value?: string;
-    required?: boolean;
-}
-
-interface CheckboxIndicatorProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {}
-
-interface CheckboxLabelProps extends HTMLAttributes<HTMLLabelElement> {}
-
-interface CheckboxDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {}
-
-interface CheckboxErrorProps extends HTMLAttributes<HTMLParagraphElement> {}
-
-// ============================================================================
-// Root Component
-// ============================================================================
-
-const CheckboxRoot = forwardRef<HTMLDivElement, CheckboxRootProps>(
-    (
-        {
-            checked: controlledChecked,
-            defaultChecked = false,
-            indeterminate = false,
-            disabled = false,
-            error = false,
-            onChange,
-            name,
-            value,
-            required,
-            className,
-            children,
-            id,
-            ...props
-        },
-        ref
-    ) => {
-        const generatedId = useId();
-        const checkboxId = id || `checkbox-${generatedId}`;
-        const errorId = `${checkboxId}-error`;
-        const descriptionId = `${checkboxId}-description`;
-
-        // Internal state for uncontrolled mode
-        const [internalChecked, setInternalChecked] = React.useState(defaultChecked);
-
-        const isControlled = controlledChecked !== undefined;
-        const checked = isControlled ? controlledChecked : internalChecked;
-
-        const handleChange = (newChecked: boolean) => {
-            if (!isControlled) {
-                setInternalChecked(newChecked);
-            }
-            onChange?.(newChecked);
-        };
-
-        const contextValue: CheckboxContextValue = {
-            checked,
-            indeterminate,
-            disabled,
-            error,
-            checkboxId,
-            errorId,
-            descriptionId,
-            name,
-            value,
-            required,
-            onChange: handleChange,
-        };
-
-        return (
-            <CheckboxContext.Provider value={contextValue}>
-                <div
-                    ref={ref}
-                    className={clsx("flex flex-col gap-1", className)}
-                    {...props}
-                >
-                    {children}
-                </div>
-            </CheckboxContext.Provider>
-        );
-    }
-);
-
-CheckboxRoot.displayName = "Checkbox.Root";
-
-// ============================================================================
-// Indicator Component (the actual input + visual)
-// ============================================================================
-
-const CheckboxIndicator = forwardRef<HTMLInputElement, CheckboxIndicatorProps>(
-    ({ className, ...props }, ref) => {
-        const { checked, indeterminate, disabled, error, checkboxId, errorId, descriptionId, onChange, name, value, required } = useCheckboxContext();
-        const localInputRef = useRef<HTMLInputElement>(null);
-
-        // Merge refs
-        const setRefs = (node: HTMLInputElement | null) => {
-            localInputRef.current = node;
-            if (typeof ref === "function") {
-                ref(node);
-            } else if (ref) {
-                ref.current = node;
-            }
-        };
-
-        // Handle indeterminate state
-        useLayoutEffect(() => {
-            if (localInputRef.current) {
-                localInputRef.current.indeterminate = indeterminate;
-            }
-        }, [indeterminate]);
-
-        // Build aria-describedby (client-side only to avoid SSR issues)
-        const [describedBy, setDescribedBy] = useState<string | undefined>(undefined);
-
-        useEffect(() => {
-            const hasError = error && document.getElementById(errorId);
-            const hasDescription = document.getElementById(descriptionId);
-            const ids = [
-                hasError ? errorId : null,
-                hasDescription ? descriptionId : null,
-            ]
-                .filter(Boolean)
-                .join(" ") || undefined;
-            setDescribedBy(ids);
-        }, [error, errorId, descriptionId]);
-
-        return (
-            <div className="relative inline-flex items-center">
-                {/* Hidden native input */}
-                <input
-                    ref={setRefs}
-                    type="checkbox"
-                    id={checkboxId}
-                    checked={checked}
-                    disabled={disabled}
-                    name={name}
-                    value={value}
-                    required={required}
-                    onChange={(e) => onChange(e.target.checked)}
-                    aria-invalid={error ? "true" : "false"}
-                    aria-describedby={describedBy}
-                    className={clsx(
-                        "peer absolute w-5 h-5 opacity-0",
-                        disabled ? "cursor-not-allowed" : "cursor-pointer",
-                        className
-                    )}
-                    {...props}
-                />
-
-                {/* Custom visual indicator */}
-                <div
-                    className={clsx(
-                        "pointer-events-none",
-                        "relative flex items-center justify-center",
-                        "h-5 w-5 rounded border-2 transition-all duration-200",
-
-                        // Base unchecked state
-                        "bg-white border-ground-400",
-                        "dark:bg-ground-800 dark:border-ground-500",
-
-                        // Focus state (WCAG 2.2 AA)
-                        "peer-focus-visible:outline-none",
-                        "peer-focus-visible:ring-[3px] peer-focus-visible:ring-primary-500/50",
-                        "peer-focus-visible:border-primary-500",
-
-                        // Checked state (not indeterminate)
-                        !indeterminate && "peer-checked:bg-primary-600 peer-checked:border-primary-600",
-                        !indeterminate && "dark:peer-checked:bg-primary-500 dark:peer-checked:border-primary-500",
-
-                        // Indeterminate state (overrides checked)
-                        indeterminate && "bg-primary-600 border-primary-600",
-                        indeterminate && "dark:bg-primary-500 dark:border-primary-500",
-
-                        // Error state
-                        error && !checked && !indeterminate && "border-error-500 dark:border-error-400",
-
-                        // Hover state
-                        !disabled && !indeterminate && "hover:border-primary-500 dark:hover:border-primary-400",
-                        !disabled && "peer-checked:hover:bg-primary-700 dark:peer-checked:hover:bg-primary-600",
-                        !disabled && indeterminate && "hover:bg-primary-700 dark:hover:bg-primary-600",
-
-                        // Disabled state
-                        disabled && "opacity-50 cursor-not-allowed"
-                    )}
-                    aria-hidden="true"
-                >
-                    {indeterminate ? (
-                        <MinusIcon
-                            size={14}
-                            className="text-white pointer-events-none"
-                        />
-                    ) : (
-                        <CheckIcon
-                            size={14}
-                            className={clsx(
-                                "text-white pointer-events-none transition-opacity duration-200",
-                                checked ? "opacity-100" : "opacity-0"
-                            )}
-                        />
-                    )}
-                </div>
-            </div>
-        );
-    }
-);
-
-CheckboxIndicator.displayName = "Checkbox.Indicator";
-
-// ============================================================================
-// Label Component
-// ============================================================================
-
-const CheckboxLabel = forwardRef<HTMLLabelElement, CheckboxLabelProps>(
-    ({ className, children, ...props }, ref) => {
-        const { checkboxId, disabled } = useCheckboxContext();
-
-        return (
-            <label
-                ref={ref}
-                htmlFor={checkboxId}
-                className={clsx(
-                    "text-sm font-medium text-ground-900 dark:text-ground-100",
-                    "select-none",
-                    disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
-                    className
-                )}
-                {...props}
-            >
-                {children}
-            </label>
-        );
-    }
-);
-
-CheckboxLabel.displayName = "Checkbox.Label";
-
-// ============================================================================
-// Description Component
-// ============================================================================
-
-const CheckboxDescription = forwardRef<HTMLParagraphElement, CheckboxDescriptionProps>(
-    ({ className, children, ...props }, ref) => {
-        const { descriptionId, disabled } = useCheckboxContext();
-
-        return (
-            <p
-                ref={ref}
-                id={descriptionId}
-                className={clsx(
-                    "text-sm text-ground-600 dark:text-ground-400",
-                    disabled && "opacity-50",
-                    className
-                )}
-                {...props}
-            >
-                {children}
-            </p>
-        );
-    }
-);
-
-CheckboxDescription.displayName = "Checkbox.Description";
-
-// ============================================================================
-// Error Component
-// ============================================================================
-
-const CheckboxError = forwardRef<HTMLParagraphElement, CheckboxErrorProps>(
-    ({ className, children, ...props }, ref) => {
-        const { errorId } = useCheckboxContext();
-
-        return (
-            <p
-                ref={ref}
-                id={errorId}
-                className={clsx(
-                    "text-sm text-error-600 dark:text-error-400 font-medium",
-                    className
-                )}
-                role="alert"
-                aria-live="polite"
-                {...props}
-            >
-                {children}
-            </p>
-        );
-    }
-);
-
-CheckboxError.displayName = "Checkbox.Error";
-
-// ============================================================================
-// Exports
-// ============================================================================
-
-export const Checkbox = Object.assign(CheckboxRoot, {
-    Indicator: CheckboxIndicator,
-    Label: CheckboxLabel,
-    Description: CheckboxDescription,
-    Error: CheckboxError,
-});
-
-export type {
-    CheckboxRootProps,
-    CheckboxIndicatorProps,
-    CheckboxLabelProps,
-    CheckboxDescriptionProps,
-    CheckboxErrorProps,
-};
-```
+| Prop        | Type        | Default | Description                               |
+| :---------- | :---------- | :------ | :---------------------------------------- |
+| `children`  | `ReactNode` | —       | Error message content.                    |
+| `className` | `string`    | —       | Additional classes for the error message. |

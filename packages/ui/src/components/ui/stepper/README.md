@@ -1,6 +1,7 @@
 # Stepper
 
 ## Anatomy
+
 - stepper.tsx — composition: root + wiring + compound assembly
 - step.tsx — UI: individual step with connectors and keyboard handling
 - step-indicator.tsx — UI: step indicator circle
@@ -10,6 +11,7 @@
 - index.ts — export
 
 ## Use Cases
+
 - Multi-step form wizards
 - Progress indicators for linear flows
 - Onboarding sequences

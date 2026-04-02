@@ -8,6 +8,7 @@ import { UseIdleDemo } from '@/components/demos/use-idle-demo';
 The `useIdle` hook allows you to detect when a user has been inactive for a specified period of time. It listens for events like mouse movement, scrolling, and key presses to reset the idle timer.
 
 This is useful for:
+
 - Automatically logging out inactive users
 - Showing a "Are you still there?" modal
 - Pausing background syncs or animations to save resources
@@ -23,7 +24,7 @@ This is useful for:
 Copy this code into `src/hooks/useIdle.ts`:
 
 ```tsx
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
 export const useIdle = (timeout: number) => {
   const [isIdle, setIsIdle] = useState(false);
@@ -36,7 +37,7 @@ export const useIdle = (timeout: number) => {
   };
 
   useEffect(() => {
-    const events = ["mousemove", "keydown", "wheel", "touchstart", "scroll"];
+    const events = ['mousemove', 'keydown', 'wheel', 'touchstart', 'scroll'];
 
     resetTimer(); // Initialize the timer on mount
 
@@ -56,21 +57,13 @@ export const useIdle = (timeout: number) => {
 ## Usage
 
 ```tsx
-import { useIdle } from "@/hooks/useIdle";
+import { useIdle } from '@/hooks/useIdle';
 
 const IdleMonitor = () => {
   // Set timeout to 5 minutes (300000ms)
   const isIdle = useIdle(300000);
 
-  return (
-    <div>
-      {isIdle ? (
-        <p>You have been idle for a while.</p>
-      ) : (
-        <p>User is active.</p>
-      )}
-    </div>
-  );
+  return <div>{isIdle ? <p>You have been idle for a while.</p> : <p>User is active.</p>}</div>;
 };
 ```
 
@@ -78,12 +71,12 @@ const IdleMonitor = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
+| Name      | Type     | Description                                                        |
+| :-------- | :------- | :----------------------------------------------------------------- |
 | `timeout` | `number` | The time in milliseconds to wait before considering the user idle. |
 
 ### Return Value
 
-| Type | Description |
-| :--- | :--- |
+| Type      | Description                                            |
+| :-------- | :----------------------------------------------------- |
 | `boolean` | Returns `true` if the user is idle, `false` otherwise. |

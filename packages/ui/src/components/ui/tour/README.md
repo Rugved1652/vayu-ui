@@ -1,6 +1,7 @@
 # Tour
 
 ## Anatomy
+
 - tour.tsx — composition (UI + wiring)
 - overlay.tsx — UI: SVG mask + spotlight border
 - popover.tsx — UI: dialog with arrow, header, body, progress, footer
@@ -11,6 +12,7 @@
 - index.ts — export
 
 ## Use Cases
+
 - Guided product tours with step-by-step spotlight on specific elements
 - Onboarding flows with keyboard navigation and progress tracking
 - Feature discovery with popover annotations and async step hooks

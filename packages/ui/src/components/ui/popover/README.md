@@ -1,6 +1,7 @@
 # Popover
 
 ## Anatomy
+
 - popover.tsx — composition (state, click outside, escape handling)
 - trigger.tsx — trigger button with asChild support
 - content.tsx — positioned content with collision avoidance
@@ -9,6 +10,7 @@
 - index.ts — public API
 
 ## Use Cases
+
 - Dropdown menus and action menus
 - Informational popovers and tooltips
 - Form controls (date pickers, selects) that need a floating panel

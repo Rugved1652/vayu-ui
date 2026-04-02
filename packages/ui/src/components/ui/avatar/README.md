@@ -1,6 +1,7 @@
 # Avatar
 
 ## Anatomy
+
 - `Avatar.tsx` — root component with keyboard support
 - `AvatarImage.tsx` — image with loading spinner and fallback
 - `AvatarInitials.tsx` — generated initials from username
@@ -10,6 +11,7 @@
 - `types.ts` — types and WCAG-compliant colors
 
 ## Use Cases
+
 - User profile pictures with initials fallback
 - Presence indicators (online/away/busy)
 - Accessible avatars with keyboard navigation

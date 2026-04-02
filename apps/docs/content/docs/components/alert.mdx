@@ -16,413 +16,165 @@ npx vayu-ui init    # Add Theme CSS if not added
 npx vayu-ui add alert
 ```
 
+```bash
+npx vayu-ui add -t alert    # With test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-ground-100 dark:bg-ground-900 rounded">
-      <AlertDemo />
-    </div>
+    <AlertDemo />
   </Tab>
   <Tab value="Code">
     ```tsx
-import { Alert } from "vayu-ui";
-import { Info, CheckCircle, TriangleAlert, XCircle } from "lucide-react";
+    <Alert variant="info">
+      <Alert.Icon variant="info">
+        <Info className="w-5 h-5" />
+      </Alert.Icon>
+      <Alert.Content>
+        <Alert.Title>Information</Alert.Title>
+        <Alert.Description>
+          This is an informational alert to highlight something important.
+        </Alert.Description>
+      </Alert.Content>
+    </Alert>
 
-// ...
+    <Alert variant="success">
+      <Alert.Icon variant="success">
+        <CheckCircle className="w-5 h-5" />
+      </Alert.Icon>
+      <Alert.Content>
+        <Alert.Title>Success</Alert.Title>
+        <Alert.Description>
+          Your changes have been successfully saved.
+        </Alert.Description>
+      </Alert.Content>
+      <Alert.Dismiss variant="success" alertTitle="Success" onClick={() => setShowSuccess(false)} />
+    </Alert>
 
-                <Alert variant="info">
-                    <Alert.Icon variant="info">
-                        <Info className="w-5 h-5" />
-                    </Alert.Icon>
-                    <Alert.Content>
-                        <Alert.Title>Information</Alert.Title>
-                        <Alert.Description>
-                            This is an informational alert to highlight something important.
-                        </Alert.Description>
-                    </Alert.Content>
-                </Alert>
+    <Alert variant="warning">
+      <Alert.Icon variant="warning">
+        <TriangleAlert className="w-5 h-5" />
+      </Alert.Icon>
+      <Alert.Content>
+        <Alert.Title>Warning</Alert.Title>
+        <Alert.Description>
+          Your account is about to expire. Please renew your subscription.
+        </Alert.Description>
+      </Alert.Content>
+    </Alert>
 
-                {/* Success Alert with Dismiss */}
-                {showSuccess && (
-                    <Alert variant="success">
-                        <Alert.Icon variant="success">
-                            <CheckCircle className="w-5 h-5" />
-                        </Alert.Icon>
-                        <Alert.Content>
-                            <Alert.Title>Success</Alert.Title>
-                            <Alert.Description>
-                                Your changes have been successfully saved.
-                            </Alert.Description>
-                        </Alert.Content>
-                        <Alert.Dismiss variant="success" alertTitle="Success" onClick={() => setShowSuccess(false)} />
-                    </Alert>
-                )}
-
-                {/* Warning Alert */}
-                <Alert variant="warning">
-                    <Alert.Icon variant="warning">
-                        <TriangleAlert className="w-5 h-5" />
-                    </Alert.Icon>
-                    <Alert.Content>
-                        <Alert.Title>Warning</Alert.Title>
-                        <Alert.Description>
-                            Your account is about to expire. Please renew your subscription.
-                        </Alert.Description>
-                    </Alert.Content>
-                </Alert>
-
-                {/* Error Alert with Dismiss */}
-                {showError && (
-                    <Alert variant="error">
-                        <Alert.Icon variant="error">
-                            <XCircle className="w-5 h-5" />
-                        </Alert.Icon>
-                        <Alert.Content>
-                            <Alert.Title>Error</Alert.Title>
-                            <Alert.Description>
-                                There was an error processing your request. Please try again.
-                            </Alert.Description>
-                        </Alert.Content>
-                        <Alert.Dismiss variant="error" alertTitle="Error" onClick={() => setShowError(false)} />
-                    </Alert>
-                )}
-
+    <Alert variant="error">
+      <Alert.Icon variant="error">
+        <XCircle className="w-5 h-5" />
+      </Alert.Icon>
+      <Alert.Content>
+        <Alert.Title>Error</Alert.Title>
+        <Alert.Description>
+          There was an error processing your request. Please try again.
+        </Alert.Description>
+      </Alert.Content>
+      <Alert.Dismiss variant="error" alertTitle="Error" onClick={() => setShowError(false)} />
+    </Alert>
     ```
+
   </Tab>
 </Tabs>
-
-## Variants
-
-The Alert component supports four semantic variants:
-
-- **info** - For informational messages (blue)
-- **success** - For positive feedback (green)
-- **warning** - For cautionary messages (yellow)
-- **error** - For error states and critical alerts (red)
 
 ## Anatomy
 
 ```tsx
-import { Alert } from "vayu-ui";
-import { Info } from "lucide-react"; // or your preferred icon library
-
 <Alert variant="info">
   <Alert.Icon variant="info">
     <Info className="w-5 h-5" />
   </Alert.Icon>
   <Alert.Content>
     <Alert.Title>Title</Alert.Title>
-    <Alert.Description>Description</Alert.Description>
+    <Alert.Description>Description text goes here.</Alert.Description>
   </Alert.Content>
   <Alert.Dismiss variant="info" alertTitle="Title" onClick={() => {}} />
 </Alert>
 ```
 
-## Props
-
-### Alert (Root)
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `variant` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | The visual style of the alert. |
-| `children` | `ReactNode` | - | The content of the alert. |
-| `className` | `string` | - | Additional CSS classes. |
-
-### Alert.Icon
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `variant` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | The variant for icon color. |
-| `children` | `ReactNode` | - | The icon component to display. |
-| `className` | `string` | - | Additional CSS classes. |
-
-### Alert.Title
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The title of the alert. |
-| `className` | `string` | - | Additional CSS classes. |
-
-### Alert.Description
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content/description of the alert. |
-| `className` | `string` | - | Additional CSS classes. |
-
-### Alert.Content
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content wrapper for title and description. |
-| `className` | `string` | - | Additional CSS classes. |
-
-### Alert.Dismiss
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `variant` | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | The variant for focus ring styling. |
-| `alertTitle` | `string` | - | Title for descriptive aria-label. |
-| `onClick` | `() => void` | - | Callback fired when the dismiss button is clicked. |
-| `className` | `string` | - | Additional CSS classes. |
+| Part                | Description                            |
+| :------------------ | :------------------------------------- |
+| `Alert`             | Root container with variant styling    |
+| `Alert.Icon`        | Icon wrapper with variant color        |
+| `Alert.Content`     | Flex wrapper for title and description |
+| `Alert.Title`       | Heading rendered as `<h5>`             |
+| `Alert.Description` | Body text below the title              |
+| `Alert.Dismiss`     | Dismiss button positioned top-right    |
 
 ## Accessibility
 
-The Alert component follows WCAG 2.2 AA guidelines:
+- **Keyboard support**: Alert.Dismiss is focusable via Tab and activatable with Enter or Space
+- **ARIA attributes**: Root uses `role="alert"` (warning/error) or `role="status"` (info/success) with corresponding `aria-live` values
+- **Focus behavior**: Alert.Dismiss displays a variant-colored focus ring on focus-visible
 
-- **ARIA Roles**: Uses `role="alert"` for warning/error variants and `role="status"` for info/success variants
-- **Live Regions**: Implements `aria-live` with appropriate politeness levels (`assertive` for warnings/errors, `polite` for info/success)
-- **Atomic Updates**: Uses `aria-atomic="true"` to ensure screen readers announce the full alert content
-- **Keyboard Navigation**: Dismiss button is fully keyboard accessible with Tab and Enter/Space
-- **Focus Visible**: Clear focus indicators with variant-specific ring colors
-- **Screen Reader Labels**: Descriptive `aria-label` on dismiss button including variant and title
-- **Decorative Icons**: Icons are marked with `aria-hidden="true"` as they are supplementary
+## Screen reader behavior
 
-## Source Code
+Info and success alerts use `role="status"` with `aria-live="polite"`, so screen readers announce changes without interrupting the user. Warning and error alerts use `role="alert"` with `aria-live="assertive"`, which causes an immediate announcement. The root has `aria-atomic="true"` so the full alert content is read on any change. Icons are marked `aria-hidden="true"` and are purely decorative. The dismiss button includes a descriptive `aria-label` such as "Dismiss error alert: Error".
 
-```tsx title="src/components/ui/alert.tsx"
-"use client";
+## Component Folder Structure
 
-import React, { HTMLAttributes, ButtonHTMLAttributes, forwardRef } from "react";
-import { cn } from "./utils";
-import { XIcon } from "../icons/x-icon";
-
-// ============================================================================
-// Types & Interfaces
-// ============================================================================
-
-type AlertVariant = "info" | "success" | "warning" | "error";
-
-interface AlertRootProps extends HTMLAttributes<HTMLDivElement> {
-    variant?: AlertVariant;
-    children: React.ReactNode;
-}
-
-interface AlertIconProps extends HTMLAttributes<HTMLDivElement> {
-    variant?: AlertVariant;
-    children: React.ReactNode;
-}
-
-interface AlertDismissProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: AlertVariant;
-    alertTitle?: string;
-}
-
-// ============================================================================
-// Styling Maps
-// ============================================================================
-
-const variantStyles: Record<AlertVariant, string> = {
-    info: "bg-info-100 border-info-200 text-info-900 dark:bg-info-950 dark:border-info-800 dark:text-info-100",
-    success: "bg-success-100 border-success-200 text-success-900 dark:bg-success-950 dark:border-success-800 dark:text-success-100",
-    warning: "bg-warning-100 border-warning-200 text-warning-900 dark:bg-warning-950 dark:border-warning-800 dark:text-warning-100",
-    error: "bg-error-100 border-error-200 text-error-900 dark:bg-error-950 dark:border-error-800 dark:text-error-100",
-};
-
-const variantIconStyles: Record<AlertVariant, string> = {
-    info: "text-info-600 dark:text-info-400",
-    success: "text-success-600 dark:text-success-400",
-    warning: "text-warning-600 dark:text-warning-400",
-    error: "text-error-600 dark:text-error-400",
-};
-
-const variantFocusStyles: Record<AlertVariant, string> = {
-    info: "focus-visible:ring-info-500 dark:focus-visible:ring-info-400",
-    success: "focus-visible:ring-success-500 dark:focus-visible:ring-success-400",
-    warning: "focus-visible:ring-warning-500 dark:focus-visible:ring-warning-400",
-    error: "focus-visible:ring-error-500 dark:focus-visible:ring-error-400",
-};
-
-const variantRole: Record<AlertVariant, "alert" | "status"> = {
-    info: "status",
-    success: "status",
-    warning: "alert",
-    error: "alert",
-};
-
-const variantLive: Record<AlertVariant, "polite" | "assertive"> = {
-    info: "polite",
-    success: "polite",
-    warning: "assertive",
-    error: "assertive",
-};
-
-// ============================================================================
-// Alert Root Component
-// ============================================================================
-
-const AlertRoot = forwardRef<HTMLDivElement, AlertRootProps>(({
-    variant = "info",
-    className,
-    children,
-    ...props
-}, ref) => {
-    return (
-        <div
-            ref={ref}
-            role={variantRole[variant]}
-            aria-live={variantLive[variant]}
-            aria-atomic="true"
-            className={cn(
-                "relative flex gap-3 p-4 border rounded w-full",
-                variantStyles[variant],
-                className
-            )}
-            data-variant={variant}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-});
-AlertRoot.displayName = "Alert";
-
-// ============================================================================
-// Alert Icon Component
-// ============================================================================
-
-const AlertIcon = forwardRef<HTMLDivElement, AlertIconProps>(({
-    variant = "info",
-    className,
-    children,
-    ...props
-}, ref) => {
-    return (
-        <div
-            ref={ref}
-            className={cn(
-                "shrink-0",
-                variantIconStyles[variant],
-                className
-            )}
-            aria-hidden="true"
-            {...props}
-        >
-            {children}
-        </div>
-    );
-});
-AlertIcon.displayName = "Alert.Icon";
-
-// ============================================================================
-// Alert Title Component
-// ============================================================================
-
-const AlertTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(({
-    className,
-    children,
-    ...props
-}, ref) => {
-    return (
-        <h5
-            ref={ref}
-            className={cn(
-                "font-primary font-semibold mb-1 leading-none tracking-tight",
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </h5>
-    );
-});
-AlertTitle.displayName = "Alert.Title";
-
-// ============================================================================
-// Alert Description Component
-// ============================================================================
-
-const AlertDescription = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({
-    className,
-    children,
-    ...props
-}, ref) => {
-    return (
-        <div
-            ref={ref}
-            className={cn(
-                "font-secondary text-para [&_p]:leading-relaxed",
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-});
-AlertDescription.displayName = "Alert.Description";
-
-// ============================================================================
-// Alert Dismiss Component
-// ============================================================================
-
-const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(({
-    variant = "info",
-    alertTitle,
-    className,
-    onClick,
-    ...props
-}, ref) => {
-    const ariaLabel = alertTitle
-        ? `Dismiss ${variant} alert: ${alertTitle}`
-        : `Dismiss ${variant} alert`;
-
-    return (
-        <button
-            ref={ref}
-            type="button"
-            onClick={onClick}
-            className={cn(
-                "absolute top-4 right-4 rounded p-1 transition-colors",
-                "hover:bg-black/10 dark:hover:bg-white/10",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                "ring-offset-info-100 dark:ring-offset-info-950",
-                variantIconStyles[variant],
-                variantFocusStyles[variant],
-                className
-            )}
-            aria-label={ariaLabel}
-            {...props}
-        >
-            <XIcon />
-        </button>
-    );
-});
-AlertDismiss.displayName = "Alert.Dismiss";
-
-// ============================================================================
-// Content Wrapper Component
-// ============================================================================
-
-const AlertContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(({
-    className,
-    children,
-    ...props
-}, ref) => {
-    return (
-        <div
-            ref={ref}
-            className={cn("flex-1 pr-10", className)}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-});
-AlertContent.displayName = "Alert.Content";
-
-// ============================================================================
-// Compound Component Export
-// ============================================================================
-
-export const Alert = Object.assign(AlertRoot, {
-    Icon: AlertIcon,
-    Title: AlertTitle,
-    Description: AlertDescription,
-    Dismiss: AlertDismiss,
-    Content: AlertContent,
-});
-
-export default Alert;
 ```
+Alert/
+├── Alert.tsx
+├── AlertIcon.tsx
+├── AlertTitle.tsx
+├── AlertDescription.tsx
+├── AlertContent.tsx
+├── AlertDismiss.tsx
+├── types.ts
+├── index.ts
+└── README.md
+```
+
+## Props
+
+### Alert
+
+| Prop        | Type                                          | Default  | Description               |
+| :---------- | :-------------------------------------------- | :------- | :------------------------ |
+| `variant`   | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | Visual style of the alert |
+| `children`  | `ReactNode`                                   | -        | Content inside the alert  |
+| `className` | `string`                                      | -        | Additional CSS classes    |
+
+### Alert.Icon
+
+| Prop        | Type                                          | Default  | Description            |
+| :---------- | :-------------------------------------------- | :------- | :--------------------- |
+| `variant`   | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | Variant for icon color |
+| `children`  | `ReactNode`                                   | -        | Icon element to render |
+| `className` | `string`                                      | -        | Additional CSS classes |
+
+### Alert.Title
+
+| Prop        | Type        | Default | Description            |
+| :---------- | :---------- | :------ | :--------------------- |
+| `children`  | `ReactNode` | -       | Title text             |
+| `className` | `string`    | -       | Additional CSS classes |
+
+### Alert.Description
+
+| Prop        | Type        | Default | Description            |
+| :---------- | :---------- | :------ | :--------------------- |
+| `children`  | `ReactNode` | -       | Description text       |
+| `className` | `string`    | -       | Additional CSS classes |
+
+### Alert.Content
+
+| Prop        | Type        | Default | Description                       |
+| :---------- | :---------- | :------ | :-------------------------------- |
+| `children`  | `ReactNode` | -       | Wrapper for title and description |
+| `className` | `string`    | -       | Additional CSS classes            |
+
+### Alert.Dismiss
+
+| Prop         | Type                                          | Default  | Description                      |
+| :----------- | :-------------------------------------------- | :------- | :------------------------------- |
+| `variant`    | `'info' \| 'success' \| 'warning' \| 'error'` | `'info'` | Variant for focus ring styling   |
+| `alertTitle` | `string`                                      | -        | Title for descriptive aria-label |
+| `onClick`    | `() => void`                                  | -        | Callback when dismiss is clicked |
+| `className`  | `string`                                      | -        | Additional CSS classes           |

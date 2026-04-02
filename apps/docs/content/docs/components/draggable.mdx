@@ -33,6 +33,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       )}
     </DraggableList>
     ```
+
   </Tab>
 </Tabs>
 
@@ -55,25 +56,25 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ## DraggableList Props
 
-| Prop         | Type                                                        | Default        | Description        |
-| :----------- | :---------------------------------------------------------- | :------------- | :----------------- |
-| `items`      | `T[]` (each needs `id: string`)                             | —              | Items array        |
-| `onReorder`  | `(items: T[]) => void`                                      | —              | Reorder callback   |
-| `direction`  | `vertical \| horizontal \| grid`                            | `"vertical"`   | Layout direction   |
-| `columns`    | `number`                                                    | `3`            | Grid columns (grid mode only) |
-| `children`   | `(item, { dragHandleProps, isDragging, isOver }) => ReactNode` | —           | Render function    |
-| `aria-label` | `string`                                                    | `"Sortable list"` | List label      |
+| Prop         | Type                                                           | Default           | Description                   |
+| :----------- | :------------------------------------------------------------- | :---------------- | :---------------------------- |
+| `items`      | `T[]` (each needs `id: string`)                                | —                 | Items array                   |
+| `onReorder`  | `(items: T[]) => void`                                         | —                 | Reorder callback              |
+| `direction`  | `vertical \| horizontal \| grid`                               | `"vertical"`      | Layout direction              |
+| `columns`    | `number`                                                       | `3`               | Grid columns (grid mode only) |
+| `children`   | `(item, { dragHandleProps, isDragging, isOver }) => ReactNode` | —                 | Render function               |
+| `aria-label` | `string`                                                       | `"Sortable list"` | List label                    |
 
 ## DragHandle Props
 
-| Prop          | Type            | Description                          |
-| :------------ | :-------------- | :----------------------------------- |
-| `handleProps` | `DragHandleProps` | Pass through from render function  |
+| Prop          | Type              | Description                       |
+| :------------ | :---------------- | :-------------------------------- |
+| `handleProps` | `DragHandleProps` | Pass through from render function |
 
 ## Keyboard Shortcuts
 
-| Key               | Action                    |
-| :----------------- | :----------------------- |
-| `Space` / `Enter`  | Grab or drop item        |
-| `↑ ↓` / `← →`     | Move grabbed item        |
-| `Escape`           | Cancel reorder           |
+| Key               | Action            |
+| :---------------- | :---------------- |
+| `Space` / `Enter` | Grab or drop item |
+| `↑ ↓` / `← →`     | Move grabbed item |
+| `Escape`          | Cancel reorder    |

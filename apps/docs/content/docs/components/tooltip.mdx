@@ -1,6 +1,6 @@
 ---
 title: Tooltip
-description: A portal-rendered tooltip with positions, colour variants, keyboard & focus support, and WCAG 2.2 AA accessibility compliance.
+description: A customizable, accessible popup that displays information related to an element.
 ---
 
 import TooltipDemo from '@/components/demos/tooltip-demo';
@@ -9,436 +9,77 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add tooltip
 ```
 
+```bash
+npx vayu-ui add -t tooltip #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
       <TooltipDemo />
-    </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Tooltip } from "vayu-ui";
+    <Tooltip content="Tooltip describing the button" position="top">
+      <button>Hover me</button>
+    </Tooltip>
 
-    export function Example() {
-      return (
-        <Tooltip content="Save changes" position="top">
-          <button>Save</button>
-        </Tooltip>
-      )
-    }
+    <Tooltip content="Disables arrow" showArrow={false}>
+      <button>Hover me</button>
+    </Tooltip>
+
+    <Tooltip content="Uses success variant with delay" variant="success" delay={500}>
+      <button>Hover me</button>
+    </Tooltip>
     ```
+
   </Tab>
 </Tabs>
 
 ## Anatomy
 
 ```tsx
-<Tooltip
-  content="Tooltip content"
-  position="top"
-  variant="default"
-  delay={200}
-  hideDelay={150}
-  showArrow={true}
-  ensureTouchTarget={true}
->
-  <button>Trigger element</button>
+<Tooltip content="Content String">
+  <button>Trigger Element</button>
 </Tooltip>
 ```
 
 ## Accessibility
 
-- Full keyboard navigation support via focus/blur events
-- `role="tooltip"` with proper ARIA attributes
-- Screen reader compatible with `aria-describedby` linking trigger to tooltip
-- Escape key dismisses the tooltip
-- Focus states trigger tooltip display for keyboard users
-- Respects `prefers-reduced-motion` for fade animation (WCAG 2.3.3)
-- Hoverable tooltips allow cursor to move onto tooltip content without it disappearing (WCAG 2.5.7)
-- Minimum touch target size of 24x24 CSS pixels by default (WCAG 2.5.8)
+- **Keyboard support**: Full keyboard navigation support (Escape dismisses the tooltip, opens on focus).
+- **ARIA attributes**: Automatically handles role="tooltip" and aria-describedby linking.
+- **Focus behavior**: Mounts dynamically, respects prefers-reduced-motion, and won't trap focus.
+
+## Screen reader behavior
+
+Screen readers will announce the trigger's accessible name first, followed by the tooltip content dynamically when it appears or when focused, linked via aria-describedby.
+
+## Component Folder Structure
+
+```bash
+Tooltip/
+├── Tooltip.tsx
+├── index.ts
+└── types.ts
+```
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `content` | `ReactNode` | — | Tooltip content (string or JSX) |
-| `position` | `top \| bottom \| left \| right` | `"top"` | Placement relative to the trigger |
-| `delay` | `number` | `200` | Show delay in milliseconds |
-| `hideDelay` | `number` | `150` | Hide delay in milliseconds (time before tooltip disappears after mouse leaves) |
-| `variant` | `default \| primary \| secondary \| success \| warning \| error \| info` | `"default"` | Colour variant |
-| `disabled` | `boolean` | `false` | Disable the tooltip entirely |
-| `showArrow` | `boolean` | `true` | Show the directional arrow |
-| `ensureTouchTarget` | `boolean` | `true` | Ensures minimum touch target size of 24x24 CSS pixels (WCAG 2.5.8). Set to `false` for inline text tooltips. |
-| `className` | `string` | — | Class applied to the trigger wrapper |
-
-## Source Code
-
-```tsx title="src/components/ui/tooltip.tsx"
-"use client";
-
-import { clsx } from "clsx";
-import React, {
-    forwardRef,
-    HTMLAttributes,
-    useCallback,
-    useEffect,
-    useId,
-    useLayoutEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
-import { createPortal } from "react-dom";
-
-// ============================================================================
-// Types
-// ============================================================================
-
-type TooltipPosition = "top" | "bottom" | "left" | "right";
-type TooltipVariant =
-    | "default"
-    | "primary"
-    | "secondary"
-    | "success"
-    | "warning"
-    | "error"
-    | "info";
-
-interface TooltipProps
-    extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
-    /** Tooltip content — string or JSX. */
-    content: React.ReactNode;
-    /** Placement relative to the trigger. */
-    position?: TooltipPosition;
-    /** Show delay in ms. */
-    delay?: number;
-    /** Hide delay in ms (time before tooltip disappears after mouse leaves). */
-    hideDelay?: number;
-    children: React.ReactNode;
-    /** Colour variant. */
-    variant?: TooltipVariant;
-    /** Disable the tooltip entirely. */
-    disabled?: boolean;
-    /** Show the directional arrow. */
-    showArrow?: boolean;
-    /** Minimum size for touch targets (WCAG 2.5.8). Default: true */
-    ensureTouchTarget?: boolean;
-}
-
-// ============================================================================
-// Config
-// ============================================================================
-
-const variantClasses: Record<TooltipVariant, string> = {
-    default: "bg-ground-800 dark:bg-ground-900 text-white",
-    primary: "bg-primary-600 text-white",
-    secondary: "bg-ground-700 dark:bg-ground-800 text-white",
-    success: "bg-success-600 text-white",
-    warning: "bg-warning-600 text-white",
-    error: "bg-error-600 text-white",
-    info: "bg-info-600 text-white",
-};
-
-const arrowBgClasses: Record<TooltipVariant, string> = {
-    default: "bg-ground-800 dark:bg-ground-900",
-    primary: "bg-primary-600",
-    secondary: "bg-ground-700 dark:bg-ground-800",
-    success: "bg-success-600",
-    warning: "bg-warning-600",
-    error: "bg-error-600",
-    info: "bg-info-600",
-};
-
-// Arrow size: 8px (w-2 h-2), rotated 45deg = diagonal ~11.3px
-// Offset by half the diagonal to properly connect to tooltip body
-const arrowPositionClasses: Record<TooltipPosition, string> = {
-    top: "-bottom-[5px] left-1/2 -translate-x-1/2",
-    bottom: "-top-[5px] left-1/2 -translate-x-1/2",
-    left: "-right-[5px] top-1/2 -translate-y-1/2",
-    right: "-left-[5px] top-1/2 -translate-y-1/2",
-};
-
-// ============================================================================
-// Tooltip
-// ============================================================================
-
-const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
-    (
-        {
-            content,
-            position = "top",
-            delay = 200,
-            hideDelay = 150,
-            children,
-            className,
-            variant = "default",
-            disabled = false,
-            showArrow = true,
-            ensureTouchTarget = true,
-            ...props
-        },
-        ref
-    ) => {
-        const [isVisible, setIsVisible] = useState(false);
-        const [mounted, setMounted] = useState(false);
-        const [coords, setCoords] = useState({ top: 0, left: 0 });
-
-        const triggerRef = useRef<HTMLDivElement>(null);
-        const tooltipRef = useRef<HTMLDivElement>(null);
-        const showTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-            undefined
-        );
-        const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-            undefined
-        );
-
-        const tooltipId = useId();
-
-        // Mount flag
-        useEffect(() => {
-            setMounted(true);
-        }, []);
-
-        // ------------------------------------------------------------------
-        // Positioning
-        // ------------------------------------------------------------------
-        const calculatePosition = useCallback(() => {
-            if (!triggerRef.current || !tooltipRef.current) return;
-
-            const tr = triggerRef.current.getBoundingClientRect();
-            const tt = tooltipRef.current.getBoundingClientRect();
-            // Gap accounts for arrow size (8px arrow, ~6px visible after offset)
-            const gap = showArrow ? 6 : 8;
-            const pad = 8;
-
-            let top = 0;
-            let left = 0;
-
-            switch (position) {
-                case "top":
-                    top = tr.top - tt.height - gap;
-                    left = tr.left + (tr.width - tt.width) / 2;
-                    break;
-                case "bottom":
-                    top = tr.bottom + gap;
-                    left = tr.left + (tr.width - tt.width) / 2;
-                    break;
-                case "left":
-                    top = tr.top + (tr.height - tt.height) / 2;
-                    left = tr.left - tt.width - gap;
-                    break;
-                case "right":
-                    top = tr.top + (tr.height - tt.height) / 2;
-                    left = tr.right + gap;
-                    break;
-            }
-
-            // Viewport clamping
-            if (left < pad) left = pad;
-            if (left + tt.width > window.innerWidth - pad)
-                left = window.innerWidth - tt.width - pad;
-            if (top < pad) top = pad;
-            if (top + tt.height > window.innerHeight - pad)
-                top = window.innerHeight - tt.height - pad;
-
-            setCoords({ top, left });
-        }, [position, showArrow]);
-
-        // Use double RAF to ensure tooltip is rendered before calculating position
-        useLayoutEffect(() => {
-            if (!isVisible) return;
-
-            const rafId = requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    calculatePosition();
-                });
-            });
-
-            window.addEventListener("scroll", calculatePosition, {
-                passive: true,
-                capture: true,
-            });
-            window.addEventListener("resize", calculatePosition, {
-                passive: true,
-            });
-
-            return () => {
-                cancelAnimationFrame(rafId);
-                window.removeEventListener("scroll", calculatePosition, true);
-                window.removeEventListener("resize", calculatePosition);
-            };
-        }, [isVisible, calculatePosition]);
-
-        // ------------------------------------------------------------------
-        // Show / hide with hover support (WCAG 2.5.7)
-        // ------------------------------------------------------------------
-        const clearAllTimeouts = useCallback(() => {
-            if (showTimeoutRef.current) {
-                clearTimeout(showTimeoutRef.current);
-                showTimeoutRef.current = undefined;
-            }
-            if (hideTimeoutRef.current) {
-                clearTimeout(hideTimeoutRef.current);
-                hideTimeoutRef.current = undefined;
-            }
-        }, []);
-
-        const show = useCallback(() => {
-            clearAllTimeouts();
-            if (disabled) return;
-            showTimeoutRef.current = setTimeout(() => setIsVisible(true), delay);
-        }, [disabled, delay, clearAllTimeouts]);
-
-        const hide = useCallback(() => {
-            clearAllTimeouts();
-            hideTimeoutRef.current = setTimeout(() => {
-                setIsVisible(false);
-            }, hideDelay);
-        }, [hideDelay, clearAllTimeouts]);
-
-        // Cancel hide when hovering over tooltip (WCAG 2.5.7)
-        const handleTooltipMouseEnter = useCallback(() => {
-            clearAllTimeouts();
-        }, [clearAllTimeouts]);
-
-        const handleTooltipMouseLeave = useCallback(() => {
-            hide();
-        }, [hide]);
-
-        // Escape to dismiss
-        useEffect(() => {
-            if (!isVisible) return;
-
-            const handleKeyDown = (e: KeyboardEvent) => {
-                if (e.key === "Escape") {
-                    clearAllTimeouts();
-                    setIsVisible(false);
-                }
-            };
-
-            document.addEventListener("keydown", handleKeyDown);
-            return () =>
-                document.removeEventListener("keydown", handleKeyDown);
-        }, [isVisible, clearAllTimeouts]);
-
-        // Clean up timers on unmount
-        useEffect(() => {
-            return () => {
-                clearAllTimeouts();
-            };
-        }, [clearAllTimeouts]);
-
-        // ------------------------------------------------------------------
-        // Ref merge
-        // ------------------------------------------------------------------
-        const setRefs = useCallback(
-            (node: HTMLDivElement | null) => {
-                (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current =
-                    node;
-                if (typeof ref === "function") {
-                    ref(node);
-                } else if (ref) {
-                    (ref as React.MutableRefObject<HTMLDivElement | null>).current =
-                        node;
-                }
-            },
-            [ref]
-        );
-
-        // ------------------------------------------------------------------
-        // Memoised tooltip body
-        // ------------------------------------------------------------------
-        const tooltipBody = useMemo(
-            () => (
-                <div
-                    className={clsx(
-                        "relative font-secondary text-sm px-3 py-2 rounded shadow-outer",
-                        variantClasses[variant]
-                    )}
-                >
-                    {content}
-                    {showArrow && (
-                        <div
-                            className={clsx(
-                                "absolute w-2 h-2 rotate-45",
-                                arrowBgClasses[variant],
-                                arrowPositionClasses[position]
-                            )}
-                            aria-hidden="true"
-                        />
-                    )}
-                </div>
-            ),
-            [content, variant, showArrow, position]
-        );
-
-        return (
-            <>
-                <div
-                    ref={setRefs}
-                    onMouseEnter={show}
-                    onMouseLeave={hide}
-                    onFocus={show}
-                    onBlur={hide}
-                    className={clsx(
-                        "inline-block",
-                        // WCAG 2.5.8: Ensure minimum touch target size of 24x24
-                        ensureTouchTarget && "min-h-6 min-w-6",
-                        className
-                    )}
-                    aria-describedby={
-                        isVisible ? tooltipId : undefined
-                    }
-                    {...props}
-                >
-                    {children}
-                </div>
-
-                {mounted &&
-                    isVisible &&
-                    createPortal(
-                        <div
-                            ref={tooltipRef}
-                            id={tooltipId}
-                            role="tooltip"
-                            onMouseEnter={handleTooltipMouseEnter}
-                            onMouseLeave={handleTooltipMouseLeave}
-                            className={clsx(
-                                "fixed z-50",
-                                // WCAG 2.5.7: Allow pointer events for hoverable tooltips
-                                "pointer-events-auto",
-                                // Respect prefers-reduced-motion (WCAG 2.3.3)
-                                "motion-reduce:animate-none animate-fade-in"
-                            )}
-                            style={{
-                                top: `${coords.top}px`,
-                                left: `${coords.left}px`,
-                            }}
-                        >
-                            {tooltipBody}
-                        </div>,
-                        document.body
-                    )}
-            </>
-        );
-    }
-);
-
-Tooltip.displayName = "Tooltip";
-
-// ============================================================================
-// Exports
-// ============================================================================
-
-export { Tooltip };
-export type { TooltipPosition, TooltipProps, TooltipVariant };
-```
+| Prop                | Type                                                                                         | Default     | Description                                  |
+| :------------------ | :------------------------------------------------------------------------------------------- | :---------- | :------------------------------------------- |
+| `content`           | `ReactNode`                                                                                  | -           | Tooltip content — string or JSX.             |
+| `position`          | `"top" \| "bottom" \| "left" \| "right"`                                                     | `"top"`     | Placement relative to the trigger.           |
+| `variant`           | `"default" \| "primary" \| "secondary" \| "success" \| "warning" \| "destructive" \| "info"` | `"default"` | Colour variant.                              |
+| `delay`             | `number`                                                                                     | `200`       | Show delay in ms.                            |
+| `hideDelay`         | `number`                                                                                     | `150`       | Hide delay in ms.                            |
+| `disabled`          | `boolean`                                                                                    | `false`     | Disable the tooltip entirely.                |
+| `showArrow`         | `boolean`                                                                                    | `true`      | Show the directional arrow.                  |
+| `ensureTouchTarget` | `boolean`                                                                                    | `true`      | Minimum size for touch targets (WCAG 2.5.8). |

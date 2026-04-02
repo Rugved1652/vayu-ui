@@ -6,534 +6,211 @@ description: A responsive table component with sorting, filtering, and paginatio
 import TableDemo from '@/components/demos/table-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add table
+```
+
+```bash
+npx vayu-ui add -t table #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-ground-100 dark:bg-ground-900 rounded-lg">
+    <div className="not-prose flex w-full justify-center p-4">
       <TableDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Table } from "vayu-ui";
-
-    const invoices = [
-      {
-        invoice: "INV001",
-        paymentStatus: "Paid",
-        totalAmount: "$250.00",
-        paymentMethod: "Credit Card",
-      },
-      {
-        invoice: "INV002",
-        paymentStatus: "Pending",
-        totalAmount: "$150.00",
-        paymentMethod: "PayPal",
-      },
-      {
-        invoice: "INV003",
-        paymentStatus: "Unpaid",
-        totalAmount: "$350.00",
-        paymentMethod: "Bank Transfer",
-      },
-    ];
-
-    export default function TableDemo() {
-      return (
-        <Table aria-label="Invoice List">
-          <Table.Caption>A list of your recent invoices.</Table.Caption>
-          <Table.Head>
-            <Table.Row>
-              <Table.Header className="w-[100px]">Invoice</Table.Header>
-              <Table.Header>Status</Table.Header>
-              <Table.Header>Method</Table.Header>
-              <Table.Header className="text-right">Amount</Table.Header>
-            </Table.Row>
-          </Table.Head>
-          <Table.Body>
-            {invoices.map((invoice) => (
-              <Table.Row key={invoice.invoice}>
-                <Table.Cell className="font-medium">{invoice.invoice}</Table.Cell>
-                <Table.Cell>{invoice.paymentStatus}</Table.Cell>
-                <Table.Cell>{invoice.paymentMethod}</Table.Cell>
-                <Table.Cell className="text-right">{invoice.totalAmount}</Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-          <Table.Footer>
-            <Table.Row>
-              <Table.Cell colSpan={3}>Total</Table.Cell>
-              <Table.Cell className="text-right">$750.00</Table.Cell>
-            </Table.Row>
-          </Table.Footer>
-        </Table>
-      );
-    }
+    <Table aria-label="Invoice List">
+      <Table.Caption>A list of your recent invoices.</Table.Caption>
+      <Table.Head>
+        <Table.Row>
+          <Table.Header className="w-[100px]">Invoice</Table.Header>
+          <Table.Header>Status</Table.Header>
+          <Table.Header>Method</Table.Header>
+          <Table.Header className="text-right">Amount</Table.Header>
+        </Table.Row>
+      </Table.Head>
+      <Table.Body>
+        {invoices.map((invoice) => (
+          <Table.Row key={invoice.invoice}>
+            <Table.Cell className="font-medium">{invoice.invoice}</Table.Cell>
+            <Table.Cell>{invoice.paymentStatus}</Table.Cell>
+            <Table.Cell>{invoice.paymentMethod}</Table.Cell>
+            <Table.Cell className="text-right">{invoice.totalAmount}</Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+      <Table.Footer>
+        <Table.Row>
+          <Table.Cell colSpan={3}>Total</Table.Cell>
+          <Table.Cell className="text-right">$750.00</Table.Cell>
+        </Table.Row>
+      </Table.Footer>
+    </Table>
     ```
   </Tab>
 </Tabs>
 
-## Features
+## Anatomy
 
-- **WCAG 2.2 AA Compliant**: Full keyboard navigation, ARIA roles, and semantic HTML
-- **Dark Mode Support**: Automatic dark mode adaptation
-- **Compound Pattern**: Clean, namespaced sub-components
-- **Responsive**: Horizontal scrolling on mobile
-- **Sortable Columns**: Built-in sort indicators and ARIA support
-- **Selectable Rows**: Click-to-select with visual feedback
-- **Customizable**: Full className support for styling overrides
+```tsx
+import { Table } from 'vayu-ui';
+
+<Table aria-label="Your table description">
+  <Table.Caption>Table summary for screen readers.</Table.Caption>
+  <Table.Head>
+    <Table.Row>
+      <Table.Header>Column A</Table.Header>
+      <Table.Header>Column B</Table.Header>
+    </Table.Row>
+  </Table.Head>
+  <Table.Body>
+    <Table.Row>
+      <Table.Cell>Data A1</Table.Cell>
+      <Table.Cell>Data B1</Table.Cell>
+    </Table.Row>
+  </Table.Body>
+  <Table.Footer>
+    <Table.Row>
+      <Table.Cell>Total</Table.Cell>
+      <Table.Cell>$100.00</Table.Cell>
+    </Table.Row>
+  </Table.Footer>
+</Table>;
+```
+
+- **Table** — Root container. Wraps a native `<table>` inside a scrollable container with border and shadow.
+- **Table.Caption** — Accessible caption element. Supports `visuallyHidden` to hide visually while remaining readable by screen readers.
+- **Table.Head** — `<thead>` section containing column header rows.
+- **Table.Body** — `<tbody>` section containing data rows. Supports `empty` prop to enable `aria-live` announcements.
+- **Table.Footer** — `<tfoot>` section for summary or totals rows.
+- **Table.Row** — `<tr>` row element. Supports `selectable` and `selected` for interactive row selection.
+- **Table.Header** — `<th>` header cell with sort icon support via `sortable` and `aria-sort` props.
+- **Table.Cell** — `<td>` data cell with support for `rowSpan`, `colSpan`, and accessibility indexing.
+
+## Accessibility
+
+- **Keyboard Support**:
+  - `Tab` — Moves focus to the next focusable element. Selectable rows (`selectable`) receive `tabIndex={0}`.
+  - `Enter` / `Space` — Activates a selectable row (selection handling is user-implemented).
+  - `Enter` / `Space` — Activates a sortable header column (sort handling is user-implemented).
+- **ARIA Attributes**:
+  - `aria-label` on `Table` provides an accessible name for the table.
+  - `aria-describedby` on `Table` references an external description element.
+  - `aria-colcount` and `aria-rowcount` on `Table` for large or virtualized tables.
+  - `aria-sort` on `Table.Header` reflects the current sort state (`ascending`, `descending`, `none`).
+  - `aria-selected` on `Table.Row` indicates selection state when `selectable` is set.
+  - `aria-rowindex` on `Table.Row` for row position in large tables.
+  - `aria-colindex` on `Table.Header` and `Table.Cell` for column position.
+  - `aria-live="polite"` on `Table.Body` when `empty` is true, announcing empty state changes.
+  - `headers` on `Table.Cell` links to associated header cell IDs.
+  - Sort indicator icons are marked `aria-hidden="true"` since state is conveyed via `aria-sort`.
+- **Focus Behavior**:
+  - Selectable rows show a visible focus ring on `focus-visible`.
+  - Sortable headers show a visible focus ring on `focus-visible`.
+  - Focus indicators use the design system focus token (`ring-focus`) with offset.
+
+## Screen reader behavior
+
+When a screen reader encounters the table, it announces the accessible name (from `aria-label` or `Table.Caption`) and describes the table structure. The screen reader reads column headers as the user navigates across rows, using the `scope="col"` attribute on `Table.Header` to associate headers with their columns. For sortable columns, the screen reader announces the current sort direction via `aria-sort`. Selectable rows announce their selection state through `aria-selected`. When the table body is empty and `empty` is set, the `aria-live="polite"` region announces content changes. For large tables using `aria-rowcount` and `aria-colcount`, the screen reader communicates the total table dimensions even when not all rows are rendered.
+
+## Component Folder Structure
+
+```
+Table/
+├── Table.tsx          # Root component with compound component composition
+├── TableCaption.tsx   # Caption with visually-hidden support
+├── TableHead.tsx      # <thead> section element
+├── TableBody.tsx      # <tbody> section with empty state aria-live
+├── TableFooter.tsx    # <tfoot> section element
+├── TableRow.tsx       # <tr> row with selectable and selected state
+├── TableHeader.tsx    # <th> header cell with sort icon logic
+├── TableCell.tsx      # <td> data cell
+├── types.ts           # TypeScript type definitions
+├── index.ts           # Re-exports all components and types
+└── README.md          # Component usage reference
+```
 
 ## Props
 
 ### Table
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content of the table. |
-| `className` | `string` | - | Additional CSS classes. |
-| `aria-label` | `string` | - | Accessible description for screen readers. |
-| `aria-describedby` | `string` | - | Reference to element that describes the table. |
-| `aria-colcount` | `number` | - | Total number of columns (for large tables). |
-| `aria-rowcount` | `number` | - | Total number of rows (for large tables). |
+| Prop               | Type        | Default | Description                                           |
+| :----------------- | :---------- | :------ | :---------------------------------------------------- |
+| `children`         | `ReactNode` | —       | Table sections (`Caption`, `Head`, `Body`, `Footer`). |
+| `className`        | `string`    | —       | Additional CSS classes.                               |
+| `aria-label`       | `string`    | —       | Accessible name for the table.                        |
+| `aria-describedby` | `string`    | —       | ID of an element describing the table.                |
+| `aria-colcount`    | `number`    | —       | Total column count for virtualized tables.            |
+| `aria-rowcount`    | `number`    | —       | Total row count for virtualized tables.               |
 
 ### Table.Caption
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content of the caption. |
-| `className` | `string` | - | Additional CSS classes. |
-| `visuallyHidden` | `boolean` | `false` | Visually hides the caption while keeping it accessible to screen readers. |
+| Prop             | Type        | Default | Description                                          |
+| :--------------- | :---------- | :------ | :--------------------------------------------------- |
+| `children`       | `ReactNode` | —       | Caption content.                                     |
+| `className`      | `string`    | —       | Additional CSS classes.                              |
+| `visuallyHidden` | `boolean`   | `false` | Hide visually but keep accessible to screen readers. |
 
 ### Table.Head
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content of the header section. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Header rows.            |
+| `className` | `string`    | —       | Additional CSS classes. |
 
 ### Table.Body
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content of the body section. |
-| `className` | `string` | - | Additional CSS classes. |
-| `empty` | `boolean` | `false` | Whether this body contains empty data. |
+| Prop        | Type        | Default | Description                                       |
+| :---------- | :---------- | :------ | :------------------------------------------------ |
+| `children`  | `ReactNode` | —       | Data rows.                                        |
+| `className` | `string`    | —       | Additional CSS classes.                           |
+| `empty`     | `boolean`   | `false` | Enable `aria-live` for empty state announcements. |
 
 ### Table.Footer
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content of the footer section. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Footer rows.            |
+| `className` | `string`    | —       | Additional CSS classes. |
 
 ### Table.Row
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The cells of the row. |
-| `className` | `string` | - | Additional CSS classes. |
-| `aria-rowindex` | `number` | - | Row index for accessibility. |
-| `selected` | `boolean` | `false` | Whether row is selected. |
-| `selectable` | `boolean` | `false` | Whether row can be selected. |
+| Prop            | Type        | Default | Description                               |
+| :-------------- | :---------- | :------ | :---------------------------------------- |
+| `children`      | `ReactNode` | —       | Row cells.                                |
+| `className`     | `string`    | —       | Additional CSS classes.                   |
+| `aria-rowindex` | `number`    | —       | Row position for large tables.            |
+| `selected`      | `boolean`   | `false` | Whether the row is currently selected.    |
+| `selectable`    | `boolean`   | `false` | Enable keyboard focus and selection cues. |
 
 ### Table.Header
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content of the header cell. |
-| `className` | `string` | - | Additional CSS classes. |
-| `scope` | `"row" \| "col" \| "rowgroup" \| "colgroup"` | `"col"` | Column scope. |
-| `aria-colindex` | `number` | - | Column index for accessibility. |
-| `aria-sort` | `"ascending" \| "descending" \| "none" \| "other"` | - | Sorting state. |
-| `sortable` | `boolean` | `false` | Whether column is sortable. |
+| Prop            | Type                                               | Default | Description                                 |
+| :-------------- | :------------------------------------------------- | :------ | :------------------------------------------ |
+| `children`      | `ReactNode`                                        | —       | Header cell content.                        |
+| `className`     | `string`                                           | —       | Additional CSS classes.                     |
+| `scope`         | `"row" \| "col" \| "rowgroup" \| "colgroup"`       | `"col"` | Scope of the header cell.                   |
+| `aria-colindex` | `number`                                           | —       | Column position for accessibility.          |
+| `aria-sort`     | `"ascending" \| "descending" \| "none" \| "other"` | —       | Current sort direction.                     |
+| `sortable`      | `boolean`                                          | `false` | Show sort indicator and enable interaction. |
 
 ### Table.Cell
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content of the cell. |
-| `className` | `string` | - | Additional CSS classes. |
-| `aria-colindex` | `number` | - | Column index for accessibility. |
-| `aria-rowindex` | `number` | - | Row index for accessibility. |
-| `headers` | `string` | - | ID of header cells that describe this cell. |
-| `rowSpan` | `number` | - | Number of rows this cell spans. |
-| `colSpan` | `number` | - | Number of columns this cell spans. |
-
-## Accessibility
-
-- Full keyboard navigation support
-- Proper ARIA roles and attributes
-- Visible focus indicators on interactive elements
-- Screen reader compatible labels and descriptions
-- Respects `prefers-reduced-motion` for animations
-- Semantic HTML table structure
-- Scope attributes for header cells
-- Row/column indices for large tables
-
-## Source Code
-
-```tsx title="src/components/ui/table.tsx"
-import React from "react";
-import { cn } from "../ui/utils";
-
-interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
-    children: React.ReactNode;
-    className?: string;
-    /**
-     * Accessible description for screen readers
-     */
-    "aria-label"?: string;
-    /**
-     * Reference to element that describes the table
-     */
-    "aria-describedby"?: string;
-    /**
-     * Total number of columns (for large tables)
-     */
-    "aria-colcount"?: number;
-    /**
-     * Total number of rows (for large tables)
-     */
-    "aria-rowcount"?: number;
-}
-
-interface TableCaptionProps extends React.HTMLAttributes<HTMLTableCaptionElement> {
-    children: React.ReactNode;
-    className?: string;
-    /**
-     * Visually hides the caption while keeping it accessible to screen readers
-     * @default false
-     */
-    visuallyHidden?: boolean;
-}
-
-interface TableHeadProps extends React.HTMLAttributes<HTMLTableSectionElement> {
-    children: React.ReactNode;
-    className?: string;
-}
-
-interface TableBodyProps extends React.HTMLAttributes<HTMLTableSectionElement> {
-    children: React.ReactNode;
-    className?: string;
-    /**
-     * Whether this body contains empty data
-     */
-    empty?: boolean;
-}
-
-interface TableFooterProps extends React.HTMLAttributes<HTMLTableSectionElement> {
-    children: React.ReactNode;
-    className?: string;
-}
-
-interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
-    children: React.ReactNode;
-    className?: string;
-    /**
-     * Row index for accessibility
-     */
-    "aria-rowindex"?: number;
-    /**
-     * Whether row is selected
-     */
-    selected?: boolean;
-    /**
-     * Whether row can be selected
-     */
-    selectable?: boolean;
-}
-
-interface TableHeaderProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
-    children: React.ReactNode;
-    className?: string;
-    /**
-     * Column scope (row, col, rowgroup, colgroup)
-     * @default "col"
-     */
-    scope?: "row" | "col" | "rowgroup" | "colgroup";
-    /**
-     * Column index for accessibility
-     */
-    "aria-colindex"?: number;
-    /**
-     * Sorting state (ascending, descending, none)
-     */
-    "aria-sort"?: "ascending" | "descending" | "none" | "other";
-    /**
-     * Whether column is sortable
-     */
-    sortable?: boolean;
-}
-
-// Removed manual rowspan/colspan from interface to avoid conflict with React.TdHTMLAttributes
-interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
-    children: React.ReactNode;
-    className?: string;
-    /**
-     * Column index for accessibility
-     */
-    "aria-colindex"?: number;
-    /**
-     * Row index for accessibility
-     */
-    "aria-rowindex"?: number;
-    /**
-     * Whether cell is a header cell
-     */
-    headers?: string;
-}
-
-/**
- * Table Component - Compound Pattern with WCAG 2.2 AA Compliance
- *
- * Fixes applied:
- * - Removed redundant region role on wrapper to prevent double announcement.
- * - Fixed "tabindex" class bug in TableRow (now uses proper attribute).
- * - Fixed sort icon visibility for unsorted sortable columns.
- * - Fixed prop naming (visuallyHidden vs hidden).
- */
-const Table = React.forwardRef<HTMLTableElement, TableProps>(
-    ({ children, className, "aria-label": ariaLabel, "aria-describedby": ariaDescribedby, "aria-colcount": ariaColcount, "aria-rowcount": ariaRowcount, ...props }, ref) => {
-        return (
-            <div
-                className={cn(
-                    "w-full overflow-x-auto rounded border",
-                    "border-ground-200 bg-ground-50",
-                    "dark:border-ground-700 dark:bg-ground-950",
-                    "shadow-outer"
-                )}
-            >
-                <table
-                    ref={ref}
-                    className={cn("w-full border-collapse text-sm font-secondary", className)}
-                    aria-label={ariaLabel}
-                    aria-describedby={ariaDescribedby}
-                    aria-colcount={ariaColcount}
-                    aria-rowcount={ariaRowcount}
-                    {...props}
-                >
-                    {children}
-                </table>
-            </div>
-        );
-    }
-);
-
-Table.displayName = "Table";
-
-const TableCaption = React.forwardRef<
-    HTMLTableCaptionElement,
-    TableCaptionProps
->(({ children, className, visuallyHidden = false, ...props }, ref) => {
-    return (
-        <caption
-            ref={ref}
-            className={cn(
-                "px-4 py-3 text-left font-primary text-base font-semibold",
-                "text-ground-900 dark:text-ground-50",
-                visuallyHidden && "sr-only",
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </caption>
-    );
-});
-
-TableCaption.displayName = "Table.Caption";
-
-/**
- * TableHead
- * Contains header rows with column labels
- * WCAG 2.2 AA: Proper header structure for screen readers
- */
-const TableHead = React.forwardRef<HTMLTableSectionElement, TableHeadProps>(
-    ({ children, className, ...props }, ref) => {
-        return (
-            <thead
-                ref={ref}
-                className={cn(
-                    "border-b-2",
-                    "border-ground-200 bg-ground-100",
-                    "dark:border-ground-700 dark:bg-ground-900",
-                    className
-                )}
-                {...props}
-            >
-                {children}
-            </thead>
-        );
-    }
-);
-
-TableHead.displayName = "Table.Head";
-
-const TableBody = React.forwardRef<HTMLTableSectionElement, TableBodyProps>(
-    ({ children, className, empty = false, ...props }, ref) => {
-        return (
-            <tbody
-                ref={ref}
-                className={cn(
-                    "bg-ground-50 dark:bg-ground-950",
-                    "divide-y divide-ground-200 dark:divide-ground-800",
-                    className
-                )}
-                aria-live={empty ? "polite" : undefined}
-                {...props}
-            >
-                {children}
-            </tbody>
-        );
-    }
-);
-
-TableBody.displayName = "Table.Body";
-
-const TableFooter = React.forwardRef<HTMLTableSectionElement, TableFooterProps>(
-    ({ children, className, ...props }, ref) => {
-        return (
-            <tfoot
-                ref={ref}
-                className={cn(
-                    "border-t-2 font-semibold",
-                    "border-ground-200 bg-ground-100",
-                    "dark:border-ground-700 dark:bg-ground-900",
-                    className
-                )}
-                {...props}
-            >
-                {children}
-            </tfoot>
-        );
-    }
-);
-
-TableFooter.displayName = "Table.Footer";
-
-const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
-    ({ children, className, "aria-rowindex": ariaRowindex, selected = false, selectable = false, ...props }, ref) => {
-        return (
-            <tr
-                ref={ref}
-                className={cn(
-                    "transition-colors transition-fast",
-                    "hover:bg-ground-100 dark:hover:bg-ground-900",
-                    selected && "bg-ground-200 dark:bg-ground-800",
-                    selectable && "cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-600 dark:focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
-                    className
-                )}
-                role="row"
-                aria-rowindex={ariaRowindex}
-                aria-selected={selectable ? selected : undefined}
-                tabIndex={selectable ? 0 : undefined}
-                {...props}
-            >
-                {children}
-            </tr>
-        );
-    }
-);
-
-TableRow.displayName = "Table.Row";
-
-const TableHeader = React.forwardRef<HTMLTableCellElement, TableHeaderProps>(
-    ({ children, className, scope = "col", "aria-colindex": ariaColindex, "aria-sort": ariaSort, sortable = false, ...props }, ref) => {
-        // Determine icon based on state
-        const renderSortIcon = () => {
-            if (!sortable) return null;
-
-            // Use aria-hidden on the visual icon since the state is exposed via aria-sort
-            if (ariaSort === "ascending") return <span className="ml-2" aria-hidden="true">↑</span>;
-            if (ariaSort === "descending") return <span className="ml-2" aria-hidden="true">↓</span>;
-            // Unsorted but sortable (shows affordance)
-            return <span className="ml-2 opacity-50" aria-hidden="true">↕</span>;
-        };
-
-        return (
-            <th
-                ref={ref}
-                className={cn(
-                    "px-4 py-3 text-left font-primary font-semibold text-sm whitespace-nowrap",
-                    "text-ground-700 dark:text-ground-300",
-                    sortable && "cursor-pointer hover:bg-ground-200 dark:hover:bg-ground-800 transition-colors transition-fast select-none",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-600 dark:focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
-                    className
-                )}
-                scope={scope}
-                aria-colindex={ariaColindex}
-                aria-sort={sortable ? (ariaSort || "none") : undefined}
-                tabIndex={sortable ? 0 : undefined}
-                {...props}
-            >
-                <div className="inline-flex items-center">
-                    {children}
-                    {renderSortIcon()}
-                </div>
-            </th>
-        );
-    }
-);
-
-TableHeader.displayName = "Table.Header";
-
-const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
-    ({ children, className, "aria-colindex": ariaColindex, "aria-rowindex": ariaRowindex, headers, ...props }, ref) => {
-        // Note: rowSpan and colSpan are passed via ...props automatically from React.TdHTMLAttributes
-        return (
-            <td
-                ref={ref}
-                className={cn(
-                    "px-4 py-3 text-sm",
-                    "text-ground-900 dark:text-ground-100",
-                    className
-                )}
-                aria-colindex={ariaColindex}
-                aria-rowindex={ariaRowindex}
-                headers={headers}
-                {...props}
-            >
-                {children}
-            </td>
-        );
-    }
-);
-
-TableCell.displayName = "Table.Cell";
-
-// --- Compound Component Typing & Exports ---
-
-type TableComponent = React.ForwardRefExoticComponent<
-    TableProps & React.RefAttributes<HTMLTableElement>
-> & {
-    Caption: typeof TableCaption;
-    Head: typeof TableHead;
-    Body: typeof TableBody;
-    Footer: typeof TableFooter;
-    Row: typeof TableRow;
-    Header: typeof TableHeader;
-    Cell: typeof TableCell;
-};
-
-const TableWithCompounds = Table as TableComponent;
-
-TableWithCompounds.Caption = TableCaption;
-TableWithCompounds.Head = TableHead;
-TableWithCompounds.Body = TableBody;
-TableWithCompounds.Footer = TableFooter;
-TableWithCompounds.Row = TableRow;
-TableWithCompounds.Header = TableHeader;
-TableWithCompounds.Cell = TableCell;
-
-export default TableWithCompounds;
-
-export {
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-};
+| Prop            | Type        | Default | Description                        |
+| :-------------- | :---------- | :------ | :--------------------------------- |
+| `children`      | `ReactNode` | —       | Cell content.                      |
+| `className`     | `string`    | —       | Additional CSS classes.            |
+| `aria-colindex` | `number`    | —       | Column position for accessibility. |
+| `aria-rowindex` | `number`    | —       | Row position for accessibility.    |
+| `headers`       | `string`    | —       | ID of associated header cells.     |

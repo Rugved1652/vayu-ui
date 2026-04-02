@@ -1,6 +1,7 @@
 # Navbar
 
 ## Anatomy
+
 - navbar.tsx — root: context + provider + state management
 - container.tsx — responsive max-width wrapper
 - brand.tsx — brand/logo area
@@ -13,6 +14,7 @@
 - index.ts — public API + compound assembly
 
 ## Use Cases
+
 - Primary site navigation with desktop and mobile responsive layouts
 - Sticky or fixed header with scroll-aware behavior
 - Navigation with brand identity, links, and action buttons

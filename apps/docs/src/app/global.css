@@ -180,10 +180,14 @@
   --animate-slide-in-up: slide-in-up 1s both;
   --animate-slide-in-down: slide-in-down 1s both;
   --animate-bounce-in: bounce-in 1s ease;
+  --animate-bounce-in-small: bounce-in-small 1s ease;
+  --animate-bounce-in-large: bounce-in-large 1s ease;
   --animate-flip-in-x: flip-in-x 1s ease-in;
   --animate-flip-in-y: flip-in-y 1s ease-in;
   --animate-rotate-in: rotate-in 1s ease-out;
   --animate-zoom-in: zoom-in 1s ease-out;
+  --animate-zoom-in-small: zoom-in-small 1s ease-out;
+  --animate-zoom-in-large: zoom-in-large 1s ease-out;
   --animate-roll-in: roll-in 1s ease-out;
   --animate-roll-in-right: roll-in-right 1s ease-out;
   --animate-roll-in-up: roll-in-up 1s ease-out;

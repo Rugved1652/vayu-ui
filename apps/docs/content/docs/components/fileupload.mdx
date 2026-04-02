@@ -1,83 +1,97 @@
 ---
 title: FileUpload
-description: A drag-and-drop file upload with previews, progress bars, validation, and ARIA-compliant keyboard interaction.
+description: A drag-and-drop file upload component with robust file validation and progress tracking.
 ---
 
 import FileUploadDemo from '@/components/demos/fileupload-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add fileupload
+```
+
+```bash
+npx vayu-ui add -t fileupload #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
-      <FileUploadDemo />
-    </div>
+    <FileUploadDemo />
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { FileUpload } from "@/components/ui/fileupload"
-
-    export function Example() {
-      return (
-        <FileUpload
-          label="Upload files"
-          accept="image/*"
-          maxSize={5 * 1024 * 1024}
-          maxFiles={5}
-          autoUpload
-          onUpload={async (files) => {
-            // upload logic
-          }}
-        />
-      )
-    }
+    <FileUpload
+      maxSize={10485760}
+      maxFiles={5}
+      accept="image/png, image/jpeg"
+      onUpload={(files) => console.log(files)}
+    >
+      <FileUpload.DropZone>
+        <FileUpload.DropZoneContent />
+      </FileUpload.DropZone>
+      <FileUpload.ErrorMessage />
+      <FileUpload.List />
+      <FileUpload.Actions />
+    </FileUpload>
     ```
   </Tab>
 </Tabs>
 
-## Installation
+## Anatomy
 
-```tsx title="src/components/ui/fileupload.tsx"
-// Copy the full component code
+```tsx
+<FileUpload maxSize={10485760} accept="image/*" maxFiles={5}>
+  <FileUpload.DropZone>
+    <FileUpload.DropZoneContent />
+  </FileUpload.DropZone>
+  <FileUpload.ErrorMessage />
+  <FileUpload.List />
+  <FileUpload.Actions />
+</FileUpload>
 ```
 
-## Features
+## Accessibility
 
-- Drag-and-drop with visual feedback
-- Click or keyboard (Enter / Space) to browse
-- File type, size, and count validation
-- Image preview thumbnails
-- Per-file progress bar with `role="progressbar"`
-- Auto-upload mode with simulated progress
-- Error display with `role="alert"`
-- `aria-label` / `aria-labelledby` / `aria-describedby` linking
-- `useId` for label → input association
-- Three variants — `default`, `bordered`, `minimal`
-- Three sizes — `sm`, `md`, `lg`
-- `forwardRef` for ref forwarding
+- **Keyboard support**: DropZone is focusable and supports `Enter`/`Space` to open file dialog.
+- **ARIA attributes**: Includes native `role="button"` for the zone and `role="list"` for selected files.
+- **Focus behavior**: Focus correctly reverts to the DropZone smoothly if all uploaded items are cleared to prevent focus loss.
+
+## Screen reader behavior
+
+Screen readers announce the DropZone using `aria-label="Upload files..."` and natively interpret the selected items as a dynamic, interactive list that updates upon file removal or addition.
+
+## Component Folder Structure
+
+```bash
+FileUpload/
+├── DropZone.tsx
+├── DropZoneContent.tsx
+├── FileUpload.tsx
+├── FileUploadActions.tsx
+├── FileUploadErrorMessage.tsx
+├── FileUploadItem.tsx
+├── FileUploadList.tsx
+├── hooks.ts
+├── index.ts
+├── types.ts
+└── utils.tsx
+```
 
 ## Props
 
-| Prop            | Type                                      | Default                           | Description                    |
-| :-------------- | :---------------------------------------- | :-------------------------------- | :----------------------------- |
-| `accept`        | `string`                                  | —                                 | Accepted MIME types / extensions |
-| `maxSize`       | `number`                                  | `5242880` (5 MB)                  | Max file size in bytes         |
-| `maxFiles`      | `number`                                  | `10`                              | Max number of files            |
-| `minFiles`      | `number`                                  | `0`                               | Min required files             |
-| `multiple`      | `boolean`                                 | `true`                            | Allow multiple files           |
-| `disabled`      | `boolean`                                 | `false`                           | Disable upload                 |
-| `autoUpload`    | `boolean`                                 | `false`                           | Upload immediately on drop     |
-| `onFilesChange` | `(files: File[]) => void`                 | —                                 | Files added callback           |
-| `onUpload`      | `(files: File[]) => Promise<void>`        | —                                 | Upload handler                 |
-| `onError`       | `(error: string) => void`                 | —                                 | Error callback                 |
-| `onRemove`      | `(fileId: string) => void`                | —                                 | File removed callback          |
-| `variant`       | `default \| bordered \| minimal`          | `"default"`                       | Visual variant                 |
-| `size`          | `sm \| md \| lg`                          | `"md"`                            | Size                           |
-| `label`         | `string`                                  | —                                 | Label text                     |
-| `description`   | `string`                                  | —                                 | Helper description             |
-| `uploadText`    | `string`                                  | `"Click to upload or drag…"`      | Drop zone text                 |
-| `dropText`      | `string`                                  | `"Drop files here"`               | Text shown while dragging      |
-| `showPreview`   | `boolean`                                 | `true`                            | Show image previews            |
-| `showProgress`  | `boolean`                                 | `true`                            | Show progress bars             |
-| `allowRemove`   | `boolean`                                 | `true`                            | Show remove buttons            |
+### FileUpload
+
+| Prop       | Type                              | Default | Description                                                 |
+| :--------- | :-------------------------------- | :------ | :---------------------------------------------------------- |
+| `maxSize`  | `number`                          | -       | Max allowed file size in bytes (e.g., 10485760 for 10MB).   |
+| `maxFiles` | `number`                          | -       | Max number of files allowed simultaneously.                 |
+| `accept`   | `string`                          | -       | Comma-separated list of supported MIME types or extensions. |
+| `onUpload` | `(files: FileWithMeta[]) => void` | -       | Callback function triggered when the upload action fires.   |

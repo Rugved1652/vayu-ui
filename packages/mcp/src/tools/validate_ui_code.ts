@@ -2,22 +2,19 @@
 // validate_ui_code - Validate UI code against component specifications
 // ============================================================================
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
-import type { Registry } from "vayu-ui-registry";
-import { ok, err, resolveComponent } from "../utils.js";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
+import type { Registry } from 'vayu-ui-registry';
+import { ok, err, resolveComponent } from '../utils.js';
 
 export function register(server: McpServer, registry: Registry) {
   server.tool(
-    "validate_ui_code",
-    "Validate UI code against component specifications and best practices.",
+    'validate_ui_code',
+    'Validate UI code against component specifications and best practices.',
     {
-      component: z.string().describe("Component name or slug"),
-      code: z.string().describe("Code snippet to validate"),
-      strictMode: z
-        .boolean()
-        .default(false)
-        .describe("Enable strict validation"),
+      component: z.string().describe('Component name or slug'),
+      code: z.string().describe('Code snippet to validate'),
+      strictMode: z.boolean().default(false).describe('Enable strict validation'),
     },
     async ({ component, code, strictMode }) => {
       const result = resolveComponent(registry, component);
@@ -39,14 +36,13 @@ export function register(server: McpServer, registry: Registry) {
       });
 
       // Basic validation checks
-      const issues: Array<{ type: "error" | "warning" | "info"; message: string }> =
-        [];
+      const issues: Array<{ type: 'error' | 'warning' | 'info'; message: string }> = [];
 
       // Check for required props
       requiredProps.forEach((prop) => {
         if (!code.includes(prop)) {
           issues.push({
-            type: "error",
+            type: 'error',
             message: `Missing required prop: ${prop}`,
           });
         }
@@ -59,13 +55,13 @@ export function register(server: McpServer, registry: Registry) {
         const propName = match[1];
         if (
           !allProps.includes(propName) &&
-          !propName.startsWith("on") &&
-          !propName.startsWith("aria-") &&
-          !propName.startsWith("data-") &&
-          !["className", "style", "id", "key", "ref", "children"].includes(propName)
+          !propName.startsWith('on') &&
+          !propName.startsWith('aria-') &&
+          !propName.startsWith('data-') &&
+          !['className', 'style', 'id', 'key', 'ref', 'children'].includes(propName)
         ) {
           issues.push({
-            type: strictMode ? "error" : "warning",
+            type: strictMode ? 'error' : 'warning',
             message: `Unknown prop: ${propName}`,
           });
         }
@@ -76,7 +72,7 @@ export function register(server: McpServer, registry: Registry) {
         c.composition.slots.forEach((slot) => {
           if (!code.includes(slot)) {
             issues.push({
-              type: "warning",
+              type: 'warning',
               message: `Missing compound slot: ${slot}`,
             });
           }
@@ -86,12 +82,12 @@ export function register(server: McpServer, registry: Registry) {
       // Check against validation rules
       validationRules.forEach((rule) => {
         issues.push({
-          type: "info",
+          type: 'info',
           message: `Rule reminder: ${rule}`,
         });
       });
 
-      const hasErrors = issues.some((i) => i.type === "error");
+      const hasErrors = issues.some((i) => i.type === 'error');
 
       return ok({
         component: c.component,
@@ -99,9 +95,9 @@ export function register(server: McpServer, registry: Registry) {
         strictMode,
         issues,
         summary: {
-          errors: issues.filter((i) => i.type === "error").length,
-          warnings: issues.filter((i) => i.type === "warning").length,
-          info: issues.filter((i) => i.type === "info").length,
+          errors: issues.filter((i) => i.type === 'error').length,
+          warnings: issues.filter((i) => i.type === 'warning').length,
+          info: issues.filter((i) => i.type === 'info').length,
         },
         componentSpec: {
           validProps: allProps,
@@ -109,6 +105,6 @@ export function register(server: McpServer, registry: Registry) {
           validationRules,
         },
       });
-    }
+    },
   );
 }

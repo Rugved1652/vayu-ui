@@ -5,12 +5,12 @@
 // (`vayu-ui-registry`) so there is a single source of truth.
 // ============================================================================
 
-import type { VayuComponentDoc, Registry } from "vayu-ui-registry";
+import type { VayuComponentDoc, Registry } from 'vayu-ui-registry';
 import {
   registry as cliRegistry,
   findItem as cliFindItem,
   findWithDependencies as cliFindWithDependencies,
-} from "vayu-ui-registry";
+} from 'vayu-ui-registry';
 
 export type { VayuComponentDoc, Registry };
 

@@ -1,13 +1,9 @@
 // types.ts
 // Types
 
-import type {
-  HTMLAttributes,
-  ButtonHTMLAttributes,
-  ReactNode,
-} from "react";
+import type { HTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react';
 
-export type ModalSize = "sm" | "md" | "lg" | "xl" | "full";
+export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
 export interface ModalContextType {
   open: boolean;
@@ -30,8 +26,7 @@ export interface ModalProps {
   closeOnEscape?: boolean;
 }
 
-export interface ModalTriggerProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ModalTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
 
@@ -39,7 +34,6 @@ export interface ModalOverlayProps extends HTMLAttributes<HTMLDivElement> {}
 
 export interface ModalContentProps extends HTMLAttributes<HTMLDivElement> {}
 
-export interface ModalCloseProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ModalCloseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }

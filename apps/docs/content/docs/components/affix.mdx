@@ -1,6 +1,6 @@
 ---
 title: Affix
-description: Pins content to the viewport when scrolling past it. Supports top/bottom positioning, custom scroll containers, and an affixed callback.
+description: Pins content to the viewport or a scroll container when scrolling past it.
 ---
 
 import AffixDemo from '@/components/demos/affix-demo';
@@ -9,361 +9,110 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add affix
 ```
 
+```bash
+npx vayu-ui add -t affix #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border border-ground-200 dark:border-ground-700 rounded">
+    <div className="not-prose flex w-full justify-center p-4">
       <AffixDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-            <Affix
-                offset={64}
-                onAffixed={setTopAffixed}
-                role="navigation"
-                aria-label="Sticky navigation bar"
-            >
-                <div
-                    className={`
-                        flex items-center justify-between px-4 py-3 rounded
-                        font-secondary text-sm transition-colors duration-medium
-                        ${topAffixed
-                            ? "bg-primary-600 text-white dark:bg-primary-500"
-                            : "bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200"
-                        }
-                    `}
-                >
-                    <span className="font-semibold">
-                        {topAffixed ? "Affixed to top" : "Scroll down to affix me"}
-                    </span>
-                    <span className="text-xs opacity-75">
-                        offset: 64px · position: top
-                    </span>
-                </div>
-            </Affix>
+    <Affix offset={20} zIndex={50} role="navigation" aria-label="Sticky Top Navigation">
+      <div className="bg-brand text-brand-content p-4 rounded-control shadow-elevated flex justify-between items-center">
+        <span className="font-bold">Top Sticky Bar</span>
+        <span className="text-xs bg-brand/80 px-2 py-1 rounded-control">Status: Affixed</span>
+      </div>
+    </Affix>
 
-            <Affix
-                offset={16}
-                position="bottom"
-                onAffixed={setBottomAffixed}
-                role="region"
-                aria-label="Sticky footer bar"
-            >
-                <div
-                    className={`
-                        flex items-center justify-between px-4 py-3 rounded
-                        font-secondary text-sm transition-colors duration-medium
-                        ${bottomAffixed
-                            ? "bg-info-600 text-white dark:bg-info-500"
-                            : "bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200"
-                        }
-                    `}
-                >
-                    <span className="font-semibold">
-                        {bottomAffixed ? "Affixed to bottom" : "Scroll up to affix me"}
-                    </span>
-                    <span className="text-xs opacity-75">
-                        offset: 16px · position: bottom
-                    </span>
-                </div>
-            </Affix>
-    );
+    <Affix position="bottom" offset={0} zIndex={40}>
+      <div className="bg-elevated text-elevated-content p-4 rounded-control shadow-elevated flex justify-between items-center">
+        <span className="font-bold">Bottom Action Bar</span>
+        <button className="bg-success text-success-content px-4 py-2 rounded-control text-sm font-medium">Save Changes</button>
+      </div>
+    </Affix>
+
+    <div ref={scrollRef} className="h-100 overflow-auto border-2 border-border rounded-surface relative">
+      <div className="p-4">
+        <Affix target={scrollRef} position="bottom" offset={10}>
+          <div className="bg-warning text-warning-content p-3 rounded-control shadow-elevated text-center font-medium">
+            Scoped to this container
+          </div>
+        </Affix>
+      </div>
+    </div>
     ```
+
   </Tab>
 </Tabs>
 
 ## Anatomy
 
 ```tsx
-<Affix offset={64} position="top" role="navigation" aria-label="Sticky navigation">
+import { Affix } from 'vayu-ui';
+
+<Affix offset={20} position="top" role="navigation" aria-label="Sticky navigation">
   {/* Content to be affixed */}
-</Affix>
+</Affix>;
+```
+
+- **Affix** — Root container. Pins its child content to the viewport or a custom scroll container when the scroll threshold is reached.
+- **Placeholder** (internal) — Maintains layout height when the affixed element switches to `position: fixed`. Marked `aria-hidden="true"`.
+- **Affixed element** (internal) — The visible wrapper that receives `data-affixed` and dynamic position styles.
+
+## Accessibility
+
+- **Keyboard Support**:
+  - The affixed content is not focus-trapped. Users can tab through it normally as part of the document flow.
+  - All interactive children remain fully keyboard accessible when affixed.
+- **ARIA Attributes**:
+  - Pass `role` and `aria-label` to provide semantic context to screen readers.
+  - `data-affixed` attribute is set on the element when content is affixed, useful for CSS hooks and testing.
+  - The placeholder element uses `aria-hidden="true"` to prevent duplicate announcements.
+- **Focus Behavior**:
+  - Focus is not affected by the affix state change.
+  - Interactive children (buttons, links) remain focusable in both static and affixed states.
+
+## Screen reader behavior
+
+When the affix element transitions between static and fixed positioning, no live region announcement is triggered. Screen readers perceive the content as a standard `<div>` with whatever `role` and `aria-label` the developer provides. The placeholder element is hidden from the accessibility tree via `aria-hidden="true"`, so users will not encounter duplicate content. If `onAffixed` is used to toggle visual indicators, those changes are not announced unless wrapped in a live region (`aria-live`).
+
+## Component Folder Structure
+
+```
+Affix/
+├── Affix.tsx        # Root component with ref management and composition
+├── hooks.ts         # useAffixMeasure and useAffixScroll hooks for scroll logic
+├── types.ts         # AffixPosition and AffixProps type definitions
+├── index.ts         # Re-exports component and types
+└── README.md        # Component usage reference
 ```
 
 ## Props
 
-| Prop       | Type                         | Default     | Description                                   |
-| :--------- | :--------------------------- | :---------- | :-------------------------------------------- |
-| `offset`   | `number`                     | `0`         | Distance (px) from viewport edge              |
-| `position` | `"top" \| "bottom"`          | `"top"`     | Which edge to affix to                        |
-| `target`   | `HTMLElement \| null`        | `window`    | Custom scroll container                       |
-| `zIndex`   | `number`                     | `100`       | Z-index when affixed                          |
-| `onAffixed`| `(affixed: boolean) => void` | —           | Called when affixed state changes             |
-| `className`| `string`                     | —           | Additional class names                        |
-| `style`    | `CSSProperties`              | —           | Inline styles (merged with affix styles)      |
+### Affix
 
-Accepts all standard HTML div attributes (e.g., `role`, `aria-label`, `id`).
+| Prop        | Type                         | Default | Description                                             |
+| :---------- | :--------------------------- | :------ | :------------------------------------------------------ |
+| `offset`    | `number`                     | `0`     | Distance in pixels from the viewport or container edge. |
+| `position`  | `"top" \| "bottom"`          | `"top"` | Which edge to pin to.                                   |
+| `target`    | `HTMLElement \| null`        | `null`  | Custom scroll container. Defaults to `window`.          |
+| `zIndex`    | `number`                     | `100`   | Stack order when affixed.                               |
+| `onAffixed` | `(affixed: boolean) => void` | —       | Callback fired when affixed state changes.              |
+| `children`  | `ReactNode`                  | —       | Content to be affixed.                                  |
+| `className` | `string`                     | —       | Additional CSS classes.                                 |
+| `style`     | `CSSProperties`              | —       | Inline styles merged with affix positioning styles.     |
 
-## Accessibility
-
-- **ARIA support** — Pass `role` and `aria-label` props directly for screen reader context
-- **Data attribute** — `data-affixed` attribute is set when content is affixed (useful for CSS hooks)
-- **Semantic HTML** — Uses `<div>` as a neutral container; wrap children semantically
-- **Placeholder** — Uses `aria-hidden="true"` on the placeholder element to hide it from screen readers
-
-## Source Code
-
-```tsx title="src/components/ui/affix.tsx"
-"use client";
-
-import { cn } from "./utils";
-import React, {
-    forwardRef,
-    HTMLAttributes,
-    useCallback,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from "react";
-
-// ============================================================================
-// Types
-// ============================================================================
-
-type AffixPosition = "top" | "bottom";
-
-interface AffixProps extends HTMLAttributes<HTMLDivElement> {
-    offset?: number;
-    position?: AffixPosition;
-    target?: HTMLElement | null;
-    zIndex?: number;
-    onAffixed?: (affixed: boolean) => void;
-    children: React.ReactNode;
-}
-
-// ============================================================================
-// Helpers
-// ============================================================================
-
-const mergeRefs = <T extends HTMLElement>(
-    ...refs: React.Ref<T>[]
-): React.RefCallback<T> => {
-    return (node) => {
-        refs.forEach((ref) => {
-            if (typeof ref === "function") {
-                ref(node);
-            } else if (ref) {
-                (ref as React.MutableRefObject<T | null>).current = node;
-            }
-        });
-    };
-};
-
-// ============================================================================
-// Affix
-// ============================================================================
-
-const Affix = forwardRef<HTMLDivElement, AffixProps>(
-    (
-        {
-            offset = 0,
-            position = "top",
-            target = null,
-            zIndex = 100,
-            onAffixed,
-            className,
-            style,
-            children,
-            ...props
-        },
-        ref
-    ) => {
-        const [isAffixed, setIsAffixed] = useState(false);
-        const [placeholderHeight, setPlaceholderHeight] = useState(0);
-        const [affixStyle, setAffixStyle] = useState<React.CSSProperties>({});
-
-        const innerRef = useRef<HTMLDivElement>(null);
-        const placeholderRef = useRef<HTMLDivElement>(null);
-        
-        // Performance: Track previous state to avoid unnecessary callback triggers
-        const prevAffixedRef = useRef(false);
-        
-        // Performance: Refs for animation frame to prevent scroll jank
-        const frameId = useRef<number | null>(null);
-        const isTicking = useRef(false);
-
-        const updateAffixed = useCallback(
-            (next: boolean) => {
-                if (prevAffixedRef.current !== next) {
-                    onAffixed?.(next);
-                    prevAffixedRef.current = next;
-                }
-                setIsAffixed(next);
-            },
-            [onAffixed]
-        );
-
-        const measure = useCallback(() => {
-            const el = innerRef.current;
-            const placeholder = placeholderRef.current;
-            if (!el || !placeholder) return;
-
-            const elHeight = el.offsetHeight;
-            const rect = placeholder.getBoundingClientRect();
-            const isContainerMode = target instanceof HTMLElement;
-
-            // --- Mode 1: Custom Container (Absolute) ---
-            if (isContainerMode) {
-                const containerRect = target.getBoundingClientRect();
-                const scrollTop = target.scrollTop;
-
-                if (position === "top") {
-                    const shouldAffix = rect.top - containerRect.top <= offset;
-
-                    if (shouldAffix) {
-                        setPlaceholderHeight(elHeight);
-                        setAffixStyle({
-                            position: "absolute",
-                            top: scrollTop + offset,
-                            left: rect.left - containerRect.left,
-                            width: rect.width,
-                            zIndex,
-                        });
-                        updateAffixed(true);
-                    } else {
-                        setPlaceholderHeight(0);
-                        setAffixStyle({});
-                        updateAffixed(false);
-                    }
-                } else {
-                    const shouldAffix = rect.bottom - containerRect.bottom >= -offset;
-
-                    if (shouldAffix) {
-                        setPlaceholderHeight(elHeight);
-                        const containerVisibleBottom = target.clientHeight;
-                        
-                        setAffixStyle({
-                            position: "absolute",
-                            top: scrollTop + (containerVisibleBottom - elHeight) - offset,
-                            left: rect.left - containerRect.left,
-                            width: rect.width,
-                            zIndex,
-                        });
-                        updateAffixed(true);
-                    } else {
-                        setPlaceholderHeight(0);
-                        setAffixStyle({});
-                        updateAffixed(false);
-                    }
-                }
-            } 
-            // --- Mode 2: Window (Fixed) ---
-            else {
-                const containerTop = 0;
-                const containerBottom = window.innerHeight;
-
-                if (position === "top") {
-                    const shouldAffix = rect.top - containerTop <= offset;
-
-                    if (shouldAffix) {
-                        setPlaceholderHeight(elHeight);
-                        setAffixStyle({
-                            position: "fixed",
-                            top: containerTop + offset,
-                            left: rect.left,
-                            width: rect.width,
-                            zIndex,
-                        });
-                        updateAffixed(true);
-                    } else {
-                        setPlaceholderHeight(0);
-                        setAffixStyle({});
-                        updateAffixed(false);
-                    }
-                } else {
-                    const shouldAffix = rect.bottom - containerBottom >= -offset;
-
-                    if (shouldAffix) {
-                        setPlaceholderHeight(elHeight);
-                        setAffixStyle({
-                            position: "fixed",
-                            bottom: offset,
-                            left: rect.left,
-                            width: rect.width,
-                            zIndex,
-                        });
-                        updateAffixed(true);
-                    } else {
-                        setPlaceholderHeight(0);
-                        setAffixStyle({});
-                        updateAffixed(false);
-                    }
-                }
-            }
-        }, [offset, position, target, zIndex, updateAffixed]);
-
-        // Performance: Throttle measure calls to Animation Frames
-        const handleScroll = useCallback(() => {
-            if (!isTicking.current) {
-                frameId.current = requestAnimationFrame(() => {
-                    measure();
-                    isTicking.current = false;
-                });
-                isTicking.current = true;
-            }
-        }, [measure]);
-
-        // Initial Measurement
-        useLayoutEffect(() => {
-            measure();
-        }, [measure]);
-
-        // Event Listeners
-        useEffect(() => {
-            const scrollTarget = target || window;
-
-            // Passive: true improves scroll performance by telling browser we won't preventDefault
-            scrollTarget.addEventListener("scroll", handleScroll, { passive: true });
-            window.addEventListener("resize", measure, { passive: true });
-
-            return () => {
-                // Cleanup: Cancel any pending animation frame
-                if (frameId.current) {
-                    cancelAnimationFrame(frameId.current);
-                }
-                scrollTarget.removeEventListener("scroll", handleScroll);
-                window.removeEventListener("resize", measure);
-            };
-        }, [measure, handleScroll, target]);
-
-        return (
-            <>
-                <div
-                    ref={placeholderRef}
-                    aria-hidden="true"
-                    style={{ height: isAffixed ? placeholderHeight : undefined }}
-                />
-
-                <div
-                    ref={mergeRefs(ref, innerRef)}
-                    className={cn(
-                        "transition-shadow duration-medium",
-                        isAffixed && "shadow-outer",
-                        className
-                    )}
-                    style={{ ...affixStyle, ...style }}
-                    data-affixed={isAffixed || undefined}
-                    {...props}
-                >
-                    {children}
-                </div>
-            </>
-        );
-    }
-);
-
-Affix.displayName = "Affix";
-
-export { Affix };
-export type { AffixPosition, AffixProps };
-```
+Inherits all standard HTML `<div>` attributes (e.g., `role`, `aria-label`, `id`).

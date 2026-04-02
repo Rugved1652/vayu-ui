@@ -1,6 +1,6 @@
 ---
 title: Modal
-description: An accessible dialog overlay component with focus trap, keyboard navigation, and compound component API.
+description: Accessible dialog component with focus trap and keyboard navigation.
 ---
 
 import ModalDemo from '@/components/demos/modal-demo';
@@ -9,76 +9,41 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add modal
 ```
 
+```bash
+npx vayu-ui add -t modal #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
-      <ModalDemo />
-    </div>
+    <ModalDemo />
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Modal } from "vayu-ui";
-
-    {/* Uncontrolled — state managed internally */}
     <Modal>
       <Modal.Trigger>Open Modal</Modal.Trigger>
-
       <Modal.Content>
         <Modal.Header>
-          <div className="flex-1">
-            <Modal.Title>Welcome</Modal.Title>
-            <Modal.Description>
-              This modal manages its own state.
-            </Modal.Description>
+          <div>
+            <Modal.Title>Modal Title</Modal.Title>
+            <Modal.Description>This is a description.</Modal.Description>
           </div>
           <Modal.Close />
         </Modal.Header>
-
         <Modal.Body>
-          <p>Your content here.</p>
+          <p>This is the modal body content.</p>
         </Modal.Body>
-
         <Modal.Footer>
-          <Modal.Close className="px-4 py-2 rounded-md bg-ground-200 dark:bg-ground-700 text-ground-900 dark:text-ground-100">
-            Close
-          </Modal.Close>
-        </Modal.Footer>
-      </Modal.Content>
-    </Modal>
-
-    {/* Controlled — state managed externally */}
-    const [open, setOpen] = useState(false);
-
-    <button onClick={() => setOpen(true)}>Open</button>
-
-    <Modal open={open} onOpenChange={setOpen}>
-      <Modal.Content>
-        <Modal.Header>
-          <div className="flex-1">
-            <Modal.Title>Controlled Modal</Modal.Title>
-            <Modal.Description>External state control.</Modal.Description>
-          </div>
-          <Modal.Close />
-        </Modal.Header>
-
-        <Modal.Body>
-          <p>Controlled by parent state.</p>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Modal.Close className="px-4 py-2 rounded-md bg-ground-200 dark:bg-ground-700">
-            Cancel
-          </Modal.Close>
-          <button onClick={() => setOpen(false)}>Confirm</button>
+          <Modal.Close>Cancel</Modal.Close>
+          <button>Confirm</button>
         </Modal.Footer>
       </Modal.Content>
     </Modal>
@@ -89,688 +54,105 @@ npx vayu-ui add modal
 ## Anatomy
 
 ```tsx
-<Modal>
-  <Modal.Trigger>{/* Trigger button */}</Modal.Trigger>
+import { Modal } from 'vayu-ui';
 
-  <Modal.Content>
-    <Modal.Header>
-      <Modal.Title>{/* Heading */}</Modal.Title>
-      <Modal.Description>{/* Subtext */}</Modal.Description>
-      <Modal.Close />
-    </Modal.Header>
-
-    <Modal.Body>
-      {/* Main content */}
-    </Modal.Body>
-
-    <Modal.Footer>
-      {/* Action buttons */}
-      <Modal.Close>{/* Cancel */}</Modal.Close>
-    </Modal.Footer>
-  </Modal.Content>
-</Modal>
+export default () => (
+  <Modal>
+    <Modal.Trigger>Trigger</Modal.Trigger>
+    <Modal.Overlay />
+    <Modal.Content>
+      <Modal.Header>
+        <Modal.Title>Title</Modal.Title>
+        <Modal.Description>Description</Modal.Description>
+        <Modal.Close>Close Icon</Modal.Close>
+      </Modal.Header>
+      <Modal.Body>Body content</Modal.Body>
+      <Modal.Footer>
+        <Modal.Close>Close Button</Modal.Close>
+      </Modal.Footer>
+    </Modal.Content>
+  </Modal>
+);
 ```
 
 ## Accessibility
 
-- `role="dialog"` with `aria-modal="true"` — screen readers announce modal context
-- `aria-labelledby` linked to `Modal.Title` via auto-generated `useId()`
-- `aria-describedby` linked to `Modal.Description` via auto-generated `useId()`
-- Focus trap — Tab / Shift+Tab cycles within the modal
-- Focus return — on close, focus is restored to the trigger element
-- Escape key dismisses the modal (configurable via `closeOnEscape`)
-- Body scroll lock when modal is open (compensates for scrollbar width shift)
-- Overlay click dismisses the modal (configurable via `closeOnOverlayClick`)
-- Close button includes `aria-label="Close"` for icon-only usage
-- `sr-only` text provided inside the default close button for screen readers
-- Content rendered via `createPortal` to `document.body` to avoid z-index clipping
-- Visible focus indicators using `focus-visible:ring-2` across all interactive elements
+- Keyboard support: `Tab` moves focus within the modal. `Esc` closes the modal (can be disabled).
+- ARIA attributes: Uses `role="dialog"` or `role="alertdialog"`. Connects `aria-labelledby` to the `Modal.Title` and `aria-describedby` to the `Modal.Description`.
+- Focus behavior: Traps focus within the active modal. Returns focus to the trigger element when closed. Auto-focuses the first focusable element or content when opened.
+
+## Screen reader behavior
+
+Screen readers will announce the modal as a dialog, reading the title and description as soon as it opens. Since focus is trapped, users cannot accidentally interact with background elements while the modal is active.
+
+## Component Folder Structure
+
+```bash
+Modal/
+├── Modal.tsx
+├── ModalTrigger.tsx
+├── ModalOverlay.tsx
+├── ModalContent.tsx
+├── ModalHeader.tsx
+├── ModalBody.tsx
+├── ModalFooter.tsx
+├── ModalTitle.tsx
+├── ModalDescription.tsx
+├── ModalClose.tsx
+├── index.ts
+├── types.ts
+└── README.md
+```
 
 ## Props
 
 ### Modal
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `open` | `boolean` | `undefined` | Controlled open state. When provided, the component becomes controlled. |
-| `onOpenChange` | `(open: boolean) => void` | - | Callback fired when the open state changes. |
-| `defaultOpen` | `boolean` | `false` | Initial open state for uncontrolled usage. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl" \| "full"` | `"md"` | Maximum width of the modal panel. |
-| `closeOnOverlayClick` | `boolean` | `true` | Whether clicking the overlay closes the modal. |
-| `closeOnEscape` | `boolean` | `true` | Whether pressing Escape closes the modal. |
+| Prop                  | Type                                     | Description                                                     |
+| :-------------------- | :--------------------------------------- | :-------------------------------------------------------------- |
+| `open`                | `boolean`                                | The controlled open state of the modal.                         |
+| `onOpenChange`        | `(open: boolean) => void`                | Event handler called when the open state changes.               |
+| `defaultOpen`         | `boolean`                                | The default open state when initially rendered.                 |
+| `size`                | `"sm" \| "md" \| "lg" \| "xl" \| "full"` | The size of the modal width. Default: `"md"`.                   |
+| `closeOnOverlayClick` | `boolean`                                | Whether clicking the overlay closes the modal. Default: `true`. |
+| `closeOnEscape`       | `boolean`                                | Whether pressing Escape closes the modal. Default: `true`.      |
 
 ### Modal.Trigger
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `asChild` | `boolean` | `false` | Render as the child element instead of a default button. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop      | Type      | Description                                                        |
+| :-------- | :-------- | :----------------------------------------------------------------- |
+| `asChild` | `boolean` | Change the default rendered element for the one passed as a child. |
 
-Extends all native `<button>` HTML attributes.
+### Modal.Overlay
+
+No meaningful props. Inherits `HTMLDivElement` attributes.
 
 ### Modal.Content
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes for the dialog panel. |
-
-Extends all native `<div>` HTML attributes.
+No meaningful props. Inherits `HTMLDivElement` attributes.
 
 ### Modal.Header
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes. |
+No meaningful props. Inherits `HTMLDivElement` attributes.
 
 ### Modal.Body
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes. |
+No meaningful props. Inherits `HTMLDivElement` attributes.
 
 ### Modal.Footer
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes. |
+No meaningful props. Inherits `HTMLDivElement` attributes.
 
 ### Modal.Title
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes. |
-
-Renders as `<h2>`. Automatically linked to `aria-labelledby` on the dialog.
+No meaningful props. Inherits `HTMLHeadingElement` attributes.
 
 ### Modal.Description
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `className` | `string` | - | Additional CSS classes. |
-
-Renders as `<p>`. Automatically linked to `aria-describedby` on the dialog.
+No meaningful props. Inherits `HTMLParagraphElement` attributes.
 
 ### Modal.Close
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `asChild` | `boolean` | `false` | Render as the child element instead of a default button. |
-| `className` | `string` | - | Additional CSS classes. |
-
-When no children are provided, renders a default X icon button with `aria-label="Close"`.
-
-## Source Code
-
-```tsx title="src/components/ui/modal.tsx"
-"use client";
-
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  forwardRef,
-  HTMLAttributes,
-} from "react";
-import { createPortal } from "react-dom";
-import { clsx } from "clsx";
-import { X } from "lucide-react";
-
-// ============================================================================
-// Types
-// ============================================================================
-
-type ModalSize = "sm" | "md" | "lg" | "xl" | "full";
-
-interface ModalContextType {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  titleId: string;
-  descriptionId: string;
-  size: ModalSize;
-  closeOnOverlayClick: boolean;
-  closeOnEscape: boolean;
-  triggerRef: React.RefObject<HTMLElement | null>;
-}
-
-// ============================================================================
-// Context
-// ============================================================================
-
-const ModalContext = createContext<ModalContextType | undefined>(undefined);
-
-const useModal = () => {
-  const context = useContext(ModalContext);
-  if (!context) {
-    throw new Error("Modal compound components must be used within Modal");
-  }
-  return context;
-};
-
-// ============================================================================
-// Size map
-// ============================================================================
-
-const sizeWidths: Record<ModalSize, string> = {
-  sm: "28rem",
-  md: "32rem",
-  lg: "40rem",
-  xl: "48rem",
-  full: "calc(100vw - 4rem)",
-};
-
-// ============================================================================
-// Focusable selector
-// ============================================================================
-
-const FOCUSABLE =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-// ============================================================================
-// Main Modal Root
-// ============================================================================
-
-interface ModalProps {
-  children: React.ReactNode;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  defaultOpen?: boolean;
-  size?: ModalSize;
-  closeOnOverlayClick?: boolean;
-  closeOnEscape?: boolean;
-}
-
-const ModalRoot: React.FC<ModalProps> = ({
-  children,
-  open: controlledOpen,
-  onOpenChange,
-  defaultOpen = false,
-  size = "md",
-  closeOnOverlayClick = true,
-  closeOnEscape = true,
-}) => {
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const isControlled = controlledOpen !== undefined;
-  const open = isControlled ? controlledOpen : internalOpen;
-
-  const titleId = useId();
-  const descriptionId = useId();
-  const triggerRef = useRef<HTMLElement>(null);
-
-  const setOpen = useCallback(
-    (value: boolean) => {
-      if (!isControlled) {
-        setInternalOpen(value);
-      }
-      onOpenChange?.(value);
-    },
-    [isControlled, onOpenChange]
-  );
-
-  // Lock body scroll when open
-  useEffect(() => {
-    if (open) {
-      const originalOverflow = document.body.style.overflow;
-      const originalPaddingRight = document.body.style.paddingRight;
-      const scrollbarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
-
-      document.body.style.overflow = "hidden";
-      if (scrollbarWidth > 0) {
-        document.body.style.paddingRight = `${scrollbarWidth}px`;
-      }
-
-      return () => {
-        document.body.style.overflow = originalOverflow;
-        document.body.style.paddingRight = originalPaddingRight;
-      };
-    }
-  }, [open]);
-
-  return (
-    <ModalContext.Provider
-      value={{
-        open,
-        setOpen,
-        titleId,
-        descriptionId,
-        size,
-        closeOnOverlayClick,
-        closeOnEscape,
-        triggerRef,
-      }}
-    >
-      {children}
-    </ModalContext.Provider>
-  );
-};
-ModalRoot.displayName = "Modal";
-
-// ============================================================================
-// Modal Trigger
-// ============================================================================
-
-interface ModalTriggerProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  asChild?: boolean;
-}
-
-const ModalTrigger = forwardRef<HTMLButtonElement, ModalTriggerProps>(
-  ({ children, asChild = false, className, onClick, ...props }, ref) => {
-    const { setOpen, open, triggerRef } = useModal();
-
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(e);
-      if (!e.defaultPrevented) {
-        setOpen(true);
-      }
-    };
-
-    // Merge trigger ref
-    const setRefs = useCallback(
-      (node: HTMLButtonElement | null) => {
-        (
-          triggerRef as React.MutableRefObject<HTMLElement | null>
-        ).current = node;
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          (
-            ref as React.MutableRefObject<HTMLButtonElement | null>
-          ).current = node;
-        }
-      },
-      [ref, triggerRef]
-    );
-
-    if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children as React.ReactElement<any>, {
-        ref: setRefs,
-        onClick: handleClick,
-        "aria-expanded": open,
-        "aria-haspopup": "dialog",
-        ...props,
-      });
-    }
-
-    return (
-      <button
-        ref={setRefs}
-        type="button"
-        onClick={handleClick}
-        className={clsx(
-          "inline-flex items-center justify-center rounded px-4 py-2 text-sm font-medium transition-colors",
-          "bg-ground-100 text-ground-900 hover:bg-ground-200",
-          "dark:bg-ground-800 dark:text-ground-100 dark:hover:bg-ground-700",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
-          "dark:focus-visible:ring-offset-ground-950",
-          className
-        )}
-        aria-expanded={open}
-        aria-haspopup="dialog"
-        {...props}
-      >
-        {children}
-      </button>
-    );
-  }
-);
-ModalTrigger.displayName = "Modal.Trigger";
-
-// ============================================================================
-// Modal Overlay
-// ============================================================================
-
-interface ModalOverlayProps extends HTMLAttributes<HTMLDivElement> { }
-
-const ModalOverlay = forwardRef<HTMLDivElement, ModalOverlayProps>(
-  ({ className, onClick, ...props }, ref) => {
-    const { open, setOpen, closeOnOverlayClick } = useModal();
-
-    if (!open) return null;
-
-    return (
-      <div
-        ref={ref}
-        className={clsx(
-          "fixed inset-0 z-50 bg-ground-950/50 backdrop-blur-sm",
-          "transition-opacity duration-300 ease-in-out",
-          className
-        )}
-        onClick={(e) => {
-          onClick?.(e);
-          if (closeOnOverlayClick) setOpen(false);
-        }}
-        aria-hidden="true"
-        {...props}
-      />
-    );
-  }
-);
-ModalOverlay.displayName = "Modal.Overlay";
-
-// ============================================================================
-// Modal Content
-// ============================================================================
-
-interface ModalContentProps extends HTMLAttributes<HTMLDivElement> { }
-
-const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
-  ({ children, className, onKeyDown, ...props }, ref) => {
-    const { open, setOpen, titleId, descriptionId, size, closeOnEscape, triggerRef } =
-      useModal();
-    const contentRef = useRef<HTMLDivElement>(null);
-    const previouslyFocusedRef = useRef<HTMLElement | null>(null);
-
-    // Merge refs
-    const setRefs = useCallback(
-      (node: HTMLDivElement | null) => {
-        contentRef.current = node;
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref) {
-          (
-            ref as React.MutableRefObject<HTMLDivElement | null>
-          ).current = node;
-        }
-      },
-      [ref]
-    );
-
-    // Focus management: capture previous focus, move into modal, restore on close
-    useEffect(() => {
-      if (open) {
-        // Store the element that had focus before modal opened
-        previouslyFocusedRef.current =
-          document.activeElement as HTMLElement | null;
-
-        // Focus first focusable element inside the modal
-        const timer = setTimeout(() => {
-          const focusable =
-            contentRef.current?.querySelector<HTMLElement>(FOCUSABLE);
-          if (focusable) {
-            focusable.focus();
-          } else {
-            // Fallback: focus the content container itself
-            contentRef.current?.focus();
-          }
-        }, 50);
-
-        return () => clearTimeout(timer);
-      } else {
-        // Return focus to triggerRef or previously focused element
-        const returnTarget =
-          triggerRef.current ?? previouslyFocusedRef.current;
-        returnTarget?.focus();
-      }
-    }, [open, triggerRef]);
-
-    // Keyboard navigation: Escape + focus trap
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-      onKeyDown?.(e);
-
-      if (e.key === "Escape" && closeOnEscape) {
-        e.stopPropagation();
-        setOpen(false);
-        return;
-      }
-
-      if (e.key === "Tab") {
-        const focusableElements =
-          contentRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE);
-
-        if (!focusableElements || focusableElements.length === 0) {
-          e.preventDefault();
-          return;
-        }
-
-        const firstElement = focusableElements[0];
-        const lastElement =
-          focusableElements[focusableElements.length - 1];
-
-        if (e.shiftKey) {
-          if (document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement.focus();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement.focus();
-          }
-        }
-      }
-    };
-
-    if (!open) return null;
-
-    return createPortal(
-      <>
-        {/* Overlay */}
-        <ModalOverlay />
-
-        {/* Center wrapper */}
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          aria-hidden="true"
-        >
-          <div
-            ref={setRefs}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={titleId}
-            aria-describedby={descriptionId}
-            tabIndex={-1}
-            style={{ maxWidth: sizeWidths[size] }}
-            className={clsx(
-              "relative w-full flex flex-col",
-              "bg-ground-50 dark:bg-ground-950",
-              "border border-ground-200 dark:border-ground-700",
-              "rounded-lg shadow-outer",
-              "focus:outline-none",
-              className
-            )}
-            onKeyDown={handleKeyDown}
-            onClick={(e) => e.stopPropagation()}
-            {...props}
-          >
-            {children}
-          </div>
-        </div>
-      </>,
-      document.body
-    );
-  }
-);
-ModalContent.displayName = "Modal.Content";
-
-// ============================================================================
-// Modal Header
-// ============================================================================
-
-const ModalHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={clsx(
-        "flex items-start gap-4 p-6 pb-0",
-        className
-      )}
-      {...props}
-    />
-  )
-);
-ModalHeader.displayName = "Modal.Header";
-
-// ============================================================================
-// Modal Body
-// ============================================================================
-
-const ModalBody = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={clsx(
-        "flex-1 overflow-y-auto p-6",
-        "text-sm font-secondary text-ground-700 dark:text-ground-300",
-        className
-      )}
-      {...props}
-    />
-  )
-);
-ModalBody.displayName = "Modal.Body";
-
-// ============================================================================
-// Modal Footer
-// ============================================================================
-
-const ModalFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={clsx(
-        "flex items-center justify-end gap-2 p-6 pt-0",
-        className
-      )}
-      {...props}
-    />
-  )
-);
-ModalFooter.displayName = "Modal.Footer";
-
-// ============================================================================
-// Modal Title
-// ============================================================================
-
-const ModalTitle = forwardRef<
-  HTMLHeadingElement,
-  HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => {
-  const { titleId } = useModal();
-  return (
-    <h2
-      id={titleId}
-      ref={ref}
-      className={clsx(
-        "text-lg font-semibold font-primary text-ground-900 dark:text-ground-100",
-        className
-      )}
-      {...props}
-    />
-  );
-});
-ModalTitle.displayName = "Modal.Title";
-
-// ============================================================================
-// Modal Description
-// ============================================================================
-
-const ModalDescription = forwardRef<
-  HTMLParagraphElement,
-  HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
-  const { descriptionId } = useModal();
-  return (
-    <p
-      id={descriptionId}
-      ref={ref}
-      className={clsx(
-        "text-sm font-secondary text-ground-500 dark:text-ground-400 mt-1",
-        className
-      )}
-      {...props}
-    />
-  );
-});
-ModalDescription.displayName = "Modal.Description";
-
-// ============================================================================
-// Modal Close
-// ============================================================================
-
-interface ModalCloseProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  asChild?: boolean;
-}
-
-const ModalClose = forwardRef<HTMLButtonElement, ModalCloseProps>(
-  ({ className, onClick, asChild = false, children, ...props }, ref) => {
-    const { setOpen } = useModal();
-
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(e);
-      if (!e.defaultPrevented) {
-        setOpen(false);
-      }
-    };
-
-    if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children as React.ReactElement<any>, {
-        ref,
-        onClick: handleClick,
-        ...props,
-      });
-    }
-
-    // If no children, render the default X icon button
-    if (!children) {
-      return (
-        <button
-          ref={ref}
-          type="button"
-          className={clsx(
-            "inline-flex items-center justify-center rounded-md p-1.5",
-            "text-ground-400 hover:text-ground-700 dark:text-ground-500 dark:hover:text-ground-200",
-            "transition-colors",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
-            "dark:focus-visible:ring-offset-ground-950",
-            className
-          )}
-          onClick={handleClick}
-          aria-label="Close"
-          {...props}
-        >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </button>
-      );
-    }
-
-    // Children provided – render as custom close button
-    return (
-      <button
-        ref={ref}
-        type="button"
-        className={className}
-        onClick={handleClick}
-        {...props}
-      >
-        {children}
-      </button>
-    );
-  }
-);
-ModalClose.displayName = "Modal.Close";
-
-// ============================================================================
-// Export Compound Component
-// ============================================================================
-
-export const Modal = Object.assign(ModalRoot, {
-  Trigger: ModalTrigger,
-  Overlay: ModalOverlay,
-  Content: ModalContent,
-  Header: ModalHeader,
-  Body: ModalBody,
-  Footer: ModalFooter,
-  Title: ModalTitle,
-  Description: ModalDescription,
-  Close: ModalClose,
-});
-
-export default Modal;
-```
+| Prop      | Type      | Description                                                        |
+| :-------- | :-------- | :----------------------------------------------------------------- |
+| `asChild` | `boolean` | Change the default rendered element for the one passed as a child. |

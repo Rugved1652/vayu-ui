@@ -1,6 +1,7 @@
 # AudioPlayer
 
 ## Anatomy
+
 - `audioplayer.tsx` — Composition: Root component + context + core logic
 - `playlist.tsx` — UI: Playlist + Track subcomponents
 - `track-info.tsx` — UI: Track info display
@@ -16,6 +17,7 @@
 - `index.ts` — Public API: Exports
 
 ## Use Cases
+
 - Single track playback with HLS support
 - Playlist management with auto-play next
 - Keyboard shortcuts (Space, Arrows, N/P keys)

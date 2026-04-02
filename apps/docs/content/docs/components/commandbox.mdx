@@ -32,6 +32,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       )
     }
     ```
+
   </Tab>
 </Tabs>
 
@@ -55,31 +56,31 @@ Copy the component file into your project:
 
 ### CommandBox
 
-| Prop             | Type                                | Default                         | Description                              |
-| :--------------- | :---------------------------------- | :------------------------------ | :--------------------------------------- |
-| `items`          | `CommandItem[]`                     | `[]`                            | Flat list of command items.              |
-| `groups`         | `CommandGroup[]`                    | `[]`                            | Grouped command items.                   |
-| `placeholder`    | `string`                            | `"Type a command or search..."` | Search input placeholder.                |
-| `emptyText`      | `string`                            | `"No results found."`           | Text shown when no results match.        |
-| `variant`        | `default \| bordered \| elevated \| minimal` | `default`              | Visual variant.                          |
-| `size`           | `small \| medium \| large`          | `medium`                        | Size of the command box.                 |
-| `open`           | `boolean`                           | `false`                         | Control open state.                      |
-| `onOpenChange`   | `(open: boolean) => void`           | —                               | Callback when open state changes.        |
-| `onSelect`       | `(item: CommandItem) => void`       | —                               | Callback when an item is selected.       |
-| `filter`         | `(value, search) => number`         | built-in                        | Custom filter function.                  |
-| `disabled`       | `boolean`                           | `false`                         | Disable the command box.                 |
-| `showShortcuts`  | `boolean`                           | `true`                          | Show keyboard shortcuts on items.        |
-| `maxHeight`      | `string`                            | `"400px"`                       | Max height of the dropdown.              |
+| Prop            | Type                                         | Default                         | Description                        |
+| :-------------- | :------------------------------------------- | :------------------------------ | :--------------------------------- |
+| `items`         | `CommandItem[]`                              | `[]`                            | Flat list of command items.        |
+| `groups`        | `CommandGroup[]`                             | `[]`                            | Grouped command items.             |
+| `placeholder`   | `string`                                     | `"Type a command or search..."` | Search input placeholder.          |
+| `emptyText`     | `string`                                     | `"No results found."`           | Text shown when no results match.  |
+| `variant`       | `default \| bordered \| elevated \| minimal` | `default`                       | Visual variant.                    |
+| `size`          | `small \| medium \| large`                   | `medium`                        | Size of the command box.           |
+| `open`          | `boolean`                                    | `false`                         | Control open state.                |
+| `onOpenChange`  | `(open: boolean) => void`                    | —                               | Callback when open state changes.  |
+| `onSelect`      | `(item: CommandItem) => void`                | —                               | Callback when an item is selected. |
+| `filter`        | `(value, search) => number`                  | built-in                        | Custom filter function.            |
+| `disabled`      | `boolean`                                    | `false`                         | Disable the command box.           |
+| `showShortcuts` | `boolean`                                    | `true`                          | Show keyboard shortcuts on items.  |
+| `maxHeight`     | `string`                                     | `"400px"`                       | Max height of the dropdown.        |
 
 ### CommandItem
 
-| Property      | Type         | Description                          |
-| :------------ | :----------- | :----------------------------------- |
-| `id`          | `string`     | Unique identifier.                   |
-| `title`       | `string`     | Display title.                       |
-| `description` | `string`     | Optional description text.           |
-| `icon`        | `ReactNode`  | Optional icon element.               |
-| `shortcut`    | `string[]`   | Keyboard shortcut keys to display.   |
-| `group`       | `string`     | Group name for auto-grouping.        |
-| `disabled`    | `boolean`    | Disable this item.                   |
-| `onSelect`    | `() => void` | Item-level select callback.          |
+| Property      | Type         | Description                        |
+| :------------ | :----------- | :--------------------------------- |
+| `id`          | `string`     | Unique identifier.                 |
+| `title`       | `string`     | Display title.                     |
+| `description` | `string`     | Optional description text.         |
+| `icon`        | `ReactNode`  | Optional icon element.             |
+| `shortcut`    | `string[]`   | Keyboard shortcut keys to display. |
+| `group`       | `string`     | Group name for auto-grouping.      |
+| `disabled`    | `boolean`    | Disable this item.                 |
+| `onSelect`    | `() => void` | Item-level select callback.        |

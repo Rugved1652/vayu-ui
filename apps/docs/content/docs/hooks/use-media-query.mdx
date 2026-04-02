@@ -18,14 +18,14 @@ The `useMediaQuery` hook allows you to subscribe to media query changes in React
 Copy this code into `src/hooks/useMediaQuery.ts`:
 
 ```tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export const useMediaQuery = (query: string): boolean => {
   const [matches, setMatches] = useState(false);
 
   useEffect(() => {
     // Ensure we are in the browser
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     const mediaQueryList = window.matchMedia(query);
     setMatches(mediaQueryList.matches);
@@ -34,10 +34,10 @@ export const useMediaQuery = (query: string): boolean => {
       setMatches(event.matches);
     };
 
-    mediaQueryList.addEventListener("change", handler);
+    mediaQueryList.addEventListener('change', handler);
 
     return () => {
-      mediaQueryList.removeEventListener("change", handler);
+      mediaQueryList.removeEventListener('change', handler);
     };
   }, [query]);
 
@@ -48,10 +48,10 @@ export const useMediaQuery = (query: string): boolean => {
 ## Usage
 
 ```tsx
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const ResponsiveComponent = () => {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   return (
     <div>
@@ -69,12 +69,12 @@ const ResponsiveComponent = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
+| Name    | Type     | Description                                                           |
+| :------ | :------- | :-------------------------------------------------------------------- |
 | `query` | `string` | The media query string to match against (e.g., `(min-width: 768px)`). |
 
 ### Return Value
 
-| Type | Description |
-| :--- | :--- |
+| Type      | Description                                                   |
+| :-------- | :------------------------------------------------------------ |
 | `boolean` | Returns `true` if the media query matches, `false` otherwise. |

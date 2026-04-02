@@ -14,11 +14,11 @@ Good typography is invisible — readers focus on your content, not the font. Va
 
 Vayu UI uses three font families, each with a specific purpose:
 
-| Tier | Font | CSS Variable | Tailwind Class | Usage |
-| :--- | :--- | :--- | :--- | :--- |
-| **Primary** | Oswald | `--font-primary` | `font-primary` | Headings, labels, navigation |
-| **Secondary** | Mulish | `--font-secondary` | `font-secondary` | Body text, descriptions, captions |
-| **Tertiary** | Geist Mono | `--font-tertiary` | `font-tertiary` | Code, technical values, keyboard shortcuts |
+| Tier          | Font       | CSS Variable       | Tailwind Class   | Usage                                      |
+| :------------ | :--------- | :----------------- | :--------------- | :----------------------------------------- |
+| **Primary**   | Oswald     | `--font-primary`   | `font-primary`   | Headings, labels, navigation               |
+| **Secondary** | Mulish     | `--font-secondary` | `font-secondary` | Body text, descriptions, captions          |
+| **Tertiary**  | Geist Mono | `--font-tertiary`  | `font-tertiary`  | Code, technical values, keyboard shortcuts |
 
 ### Primary Font: Oswald
 
@@ -45,6 +45,7 @@ Oswald is a condensed, bold sans-serif perfect for headlines and UI labels. It c
     // Badge or label
     <span className="font-primary text-h6 uppercase">New</span>
     ```
+
   </Tab>
 </Tabs>
 
@@ -77,6 +78,7 @@ Mulish is a clean, rounded sans-serif designed for extended reading. Use it for 
       Last updated 5 minutes ago
     </span>
     ```
+
   </Tab>
 </Tabs>
 
@@ -100,9 +102,10 @@ Geist Mono is a modern monospace font for code snippets, keyboard shortcuts, and
     // Code block
     <pre className="font-tertiary text-para bg-muted p-4 rounded-surface">
       {`function greet(name) {
-  return \`Hello, \${name}!\`;
+
+return \`Hello, \${name}!\`;
 }`}
-    </pre>
+</pre>
 
     // Keyboard shortcut
     <kbd className="font-tertiary text-h6 bg-muted px-2 py-0.5 rounded-control">
@@ -112,6 +115,7 @@ Geist Mono is a modern monospace font for code snippets, keyboard shortcuts, and
     // Technical value
     <span className="font-tertiary text-para">2024-01-15T14:30:00Z</span>
     ```
+
   </Tab>
 </Tabs>
 
@@ -123,15 +127,15 @@ Vayu UI provides semantic text sizes. Instead of using arbitrary sizes like `tex
 
 ### The Size Scale
 
-| Class | Size | Computed | Usage |
-| :--- | :--- | :--- | :--- |
-| `text-h1` | 1.875rem | 30px | Hero headings, page titles |
-| `text-h2` | 1.5rem | 24px | Section headings |
-| `text-h3` | 1.25rem | 20px | Card headings, subsections |
-| `text-h4` | 1.125rem | 18px | Form labels, important inline text |
-| `text-h5` | 1rem | 16px | Navigation links, button text |
-| `text-h6` | 0.875rem | 14px | Secondary labels, captions |
-| `text-para` | 0.875rem | 14px | Body copy, paragraphs |
+| Class       | Size     | Computed | Usage                              |
+| :---------- | :------- | :------- | :--------------------------------- |
+| `text-h1`   | 1.875rem | 30px     | Hero headings, page titles         |
+| `text-h2`   | 1.5rem   | 24px     | Section headings                   |
+| `text-h3`   | 1.25rem  | 20px     | Card headings, subsections         |
+| `text-h4`   | 1.125rem | 18px     | Form labels, important inline text |
+| `text-h5`   | 1rem     | 16px     | Navigation links, button text      |
+| `text-h6`   | 0.875rem | 14px     | Secondary labels, captions         |
+| `text-para` | 0.875rem | 14px     | Body copy, paragraphs              |
 
 ### Size Hierarchy Preview
 
@@ -207,6 +211,7 @@ Vayu UI provides semantic text sizes. Instead of using arbitrary sizes like `tex
         </div>
       </section>
     </div>
+
   </Tab>
 </Tabs>
 
@@ -216,12 +221,12 @@ Vayu UI provides semantic text sizes. Instead of using arbitrary sizes like `tex
 
 ### Using Semantic Sizes
 
-| Do ✅ | Don't ❌ |
-| :--- | :--- |
-| `text-h1` for page titles | `text-3xl` for page titles |
-| `text-h2` for section headings | `text-2xl` for section headings |
-| `text-para` for body text | `text-base` or `text-sm` for body |
-| Let the system define hierarchy | Manually adjust font sizes |
+| Do ✅                           | Don't ❌                          |
+| :------------------------------ | :-------------------------------- |
+| `text-h1` for page titles       | `text-3xl` for page titles        |
+| `text-h2` for section headings  | `text-2xl` for section headings   |
+| `text-para` for body text       | `text-base` or `text-sm` for body |
+| Let the system define hierarchy | Manually adjust font sizes        |
 
 ### Why Semantic Sizes Matter
 
@@ -238,6 +243,7 @@ Vayu UI provides semantic text sizes. Instead of using arbitrary sizes like `tex
 ```
 
 When you use semantic sizes:
+
 - **Consistency** is automatic across your app
 - **Updates** are easy (change one variable, update everywhere)
 - **Accessibility** is built in (proper hierarchy for screen readers)
@@ -249,18 +255,18 @@ When you use semantic sizes:
 
 ### The Golden Combinations
 
-| Element | Font | Size | Full Class |
-| :--- | :--- | :--- | :--- |
-| Page Title | Primary | h1 | `font-primary text-h1` |
-| Section Heading | Primary | h2 | `font-primary text-h2` |
-| Card Title | Primary | h3 | `font-primary text-h3` |
-| Form Label | Primary | h4 | `font-primary text-h4` |
-| Button Text | Primary | h5 | `font-primary text-h5` |
-| Navigation | Primary | h5 | `font-primary text-h5` |
-| Caption | Primary | h6 | `font-primary text-h6` |
-| Body Text | Secondary | para | `font-secondary text-para` |
-| Description | Secondary | para | `font-secondary text-para text-muted-content` |
-| Code | Tertiary | para | `font-tertiary text-para` |
+| Element         | Font      | Size | Full Class                                    |
+| :-------------- | :-------- | :--- | :-------------------------------------------- |
+| Page Title      | Primary   | h1   | `font-primary text-h1`                        |
+| Section Heading | Primary   | h2   | `font-primary text-h2`                        |
+| Card Title      | Primary   | h3   | `font-primary text-h3`                        |
+| Form Label      | Primary   | h4   | `font-primary text-h4`                        |
+| Button Text     | Primary   | h5   | `font-primary text-h5`                        |
+| Navigation      | Primary   | h5   | `font-primary text-h5`                        |
+| Caption         | Primary   | h6   | `font-primary text-h6`                        |
+| Body Text       | Secondary | para | `font-secondary text-para`                    |
+| Description     | Secondary | para | `font-secondary text-para text-muted-content` |
+| Code            | Tertiary  | para | `font-tertiary text-para`                     |
 
 ### Complete Example
 
@@ -269,30 +275,20 @@ export function BlogPost({ title, date, excerpt, content }) {
   return (
     <article className="bg-surface text-surface-content rounded-surface p-6">
       {/* Page title */}
-      <h1 className="font-primary text-h1 mb-2">
-        {title}
-      </h1>
+      <h1 className="font-primary text-h1 mb-2">{title}</h1>
 
       {/* Meta info */}
       <div className="flex items-center gap-4 mb-6">
-        <time className="font-secondary text-h6 text-muted-content">
-          {date}
-        </time>
-        <span className="font-tertiary text-h6 text-muted-content">
-          5 min read
-        </span>
+        <time className="font-secondary text-h6 text-muted-content">{date}</time>
+        <span className="font-tertiary text-h6 text-muted-content">5 min read</span>
       </div>
 
       {/* Excerpt (lead paragraph) */}
-      <p className="font-secondary text-para text-surface-content mb-6">
-        {excerpt}
-      </p>
+      <p className="font-secondary text-para text-surface-content mb-6">{excerpt}</p>
 
       {/* Main content */}
       <div className="prose">
-        <p className="font-secondary text-para mb-4">
-          {content}
-        </p>
+        <p className="font-secondary text-para mb-4">{content}</p>
       </div>
 
       {/* Code example */}
@@ -312,22 +308,20 @@ Combine typography with Vayu UI's color system for proper contrast.
 
 ### Standard Text Colors
 
-| Class | Usage | When to Use |
-| :--- | :--- | :--- |
-| `text-surface-content` | Primary text | Headlines, important content |
-| `text-muted-content` | Secondary text | Descriptions, captions, placeholders |
-| `text-brand` | Brand accent | Links, active states |
-| `text-destructive` | Error text | Validation errors, warnings |
-| `text-success` | Success text | Confirmations, completed states |
+| Class                  | Usage          | When to Use                          |
+| :--------------------- | :------------- | :----------------------------------- |
+| `text-surface-content` | Primary text   | Headlines, important content         |
+| `text-muted-content`   | Secondary text | Descriptions, captions, placeholders |
+| `text-brand`           | Brand accent   | Links, active states                 |
+| `text-destructive`     | Error text     | Validation errors, warnings          |
+| `text-success`         | Success text   | Confirmations, completed states      |
 
 ### Example with Colors
 
 ```tsx
 <div className="bg-surface rounded-surface p-6">
   {/* Primary text */}
-  <h2 className="font-primary text-h2 text-surface-content mb-2">
-    Account Settings
-  </h2>
+  <h2 className="font-primary text-h2 text-surface-content mb-2">Account Settings</h2>
 
   {/* Secondary text */}
   <p className="font-secondary text-para text-muted-content mb-4">
@@ -335,9 +329,7 @@ Combine typography with Vayu UI's color system for proper contrast.
   </p>
 
   {/* Form label */}
-  <label className="font-primary text-h4 text-surface-content block mb-2">
-    Email Address
-  </label>
+  <label className="font-primary text-h4 text-surface-content block mb-2">Email Address</label>
 
   {/* Input with placeholder */}
   <input
@@ -442,16 +434,16 @@ export default function RootLayout({ children }) {
 
 ```css
 /* Font families */
---font-primary: "Oswald", sans-serif;
---font-secondary: "Mulish", sans-serif;
---font-tertiary: "Geist Mono", monospace;
+--font-primary: 'Oswald', sans-serif;
+--font-secondary: 'Mulish', sans-serif;
+--font-tertiary: 'Geist Mono', monospace;
 
 /* Font sizes */
---text-h1: 1.875rem;  /* 30px */
---text-h2: 1.5rem;    /* 24px */
---text-h3: 1.25rem;   /* 20px */
---text-h4: 1.125rem;  /* 18px */
---text-h5: 1rem;      /* 16px */
---text-h6: 0.875rem;  /* 14px */
+--text-h1: 1.875rem; /* 30px */
+--text-h2: 1.5rem; /* 24px */
+--text-h3: 1.25rem; /* 20px */
+--text-h4: 1.125rem; /* 18px */
+--text-h5: 1rem; /* 16px */
+--text-h6: 0.875rem; /* 14px */
 --text-para: 0.875rem; /* 14px */
 ```

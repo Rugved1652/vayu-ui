@@ -1,16 +1,16 @@
 // types.ts
 // Types
 
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
-export type ToastType = "success" | "error" | "warning" | "info" | "loading";
+export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'loading';
 export type ToastPosition =
-  | "top-left"
-  | "top-center"
-  | "top-right"
-  | "bottom-left"
-  | "bottom-center"
-  | "bottom-right";
+  | 'top-left'
+  | 'top-center'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-center'
+  | 'bottom-right';
 
 export interface Toast {
   id: string;
@@ -51,15 +51,12 @@ export interface ToastContextType {
   addToast: (options: ToastOptions) => string;
   removeToast: (id: string) => void;
   updateToast: (id: string, options: Partial<ToastOptions>) => void;
-  success: (message: ReactNode, options?: Omit<ToastOptions, "type">) => string;
-  error: (message: ReactNode, options?: Omit<ToastOptions, "type">) => string;
-  warning: (message: ReactNode, options?: Omit<ToastOptions, "type">) => string;
-  info: (message: ReactNode, options?: Omit<ToastOptions, "type">) => string;
-  loading: (message: ReactNode, options?: Omit<ToastOptions, "type">) => string;
-  custom: (
-    content: ReactNode,
-    options?: Omit<ToastOptions, "type" | "customContent">
-  ) => string;
+  success: (message: ReactNode, options?: Omit<ToastOptions, 'type'>) => string;
+  error: (message: ReactNode, options?: Omit<ToastOptions, 'type'>) => string;
+  warning: (message: ReactNode, options?: Omit<ToastOptions, 'type'>) => string;
+  info: (message: ReactNode, options?: Omit<ToastOptions, 'type'>) => string;
+  loading: (message: ReactNode, options?: Omit<ToastOptions, 'type'>) => string;
+  custom: (content: ReactNode, options?: Omit<ToastOptions, 'type' | 'customContent'>) => string;
   promise: <T>(
     promise: Promise<T>,
     messages: {
@@ -67,7 +64,7 @@ export interface ToastContextType {
       success: ReactNode | ((data: T) => ReactNode);
       error: ReactNode | ((error: unknown) => ReactNode);
     },
-    options?: Omit<ToastOptions, "type">
+    options?: Omit<ToastOptions, 'type'>,
   ) => Promise<T>;
 }
 

@@ -8,7 +8,7 @@ export type VayuComponentDoc = {
   component: string;
   slug: string;
   category: string;
-  complexity?: "simple" | "compound" | "layout";
+  complexity?: 'simple' | 'compound' | 'layout';
 
   // Descriptions
   description: string;
@@ -149,7 +149,7 @@ export type Registry = Record<string, VayuComponentDoc>;
 // Registry Data & Helpers
 // ============================================================================
 
-import { registry as registryData } from "./registryData";
+import { registry as registryData } from './registryData';
 
 export function findItem(slug: string): VayuComponentDoc | undefined {
   return Object.values(registryData).find((item) => item.slug === slug);
@@ -160,7 +160,7 @@ export function findWithDependencies(slug: string): VayuComponentDoc[] {
   if (!item) return [];
 
   const deps = (item.dependencies?.components ?? []).flatMap((depSlug) =>
-    findWithDependencies(depSlug)
+    findWithDependencies(depSlug),
   );
 
   return [...deps, item];

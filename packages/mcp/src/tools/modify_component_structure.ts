@@ -2,25 +2,22 @@
 // modify_component_structure - Guidance for compound structure changes
 // ============================================================================
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
-import type { Registry } from "vayu-ui-registry";
-import { ok, err, resolveComponent } from "../utils.js";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
+import type { Registry } from 'vayu-ui-registry';
+import { ok, err, resolveComponent } from '../utils.js';
 
 export function register(server: McpServer, registry: Registry) {
   server.tool(
-    "modify_component_structure",
+    'modify_component_structure',
     "Get guidance for modifying the component's compound structure or adding new parts.",
     {
-      component: z.string().describe("Component name or slug"),
+      component: z.string().describe('Component name or slug'),
       modificationType: z
-        .enum(["add_slot", "modify_slot", "reorder_slots", "nest_slots"])
-        .describe("Type of structural modification"),
-      slotName: z.string().describe("Name of the slot to add/modify"),
-      parentSlot: z
-        .string()
-        .optional()
-        .describe("Parent slot for nested modifications"),
+        .enum(['add_slot', 'modify_slot', 'reorder_slots', 'nest_slots'])
+        .describe('Type of structural modification'),
+      slotName: z.string().describe('Name of the slot to add/modify'),
+      parentSlot: z.string().optional().describe('Parent slot for nested modifications'),
     },
     async ({ component, modificationType, slotName, parentSlot }) => {
       const result = resolveComponent(registry, component);
@@ -31,8 +28,7 @@ export function register(server: McpServer, registry: Registry) {
       if (!c.composition) {
         return ok({
           _note: `${c.component} does not use a compound component pattern`,
-          _suggestion:
-            "Consider using modify_component_props for simple component modifications",
+          _suggestion: 'Consider using modify_component_props for simple component modifications',
         });
       }
 
@@ -48,7 +44,7 @@ export function register(server: McpServer, registry: Registry) {
       };
 
       switch (modificationType) {
-        case "add_slot":
+        case 'add_slot':
           return ok({
             ...baseResponse,
             instructions: [
@@ -59,10 +55,10 @@ export function register(server: McpServer, registry: Registry) {
               `4. Update composition.slots in the registry`,
               ...(parentSlot ? [`5. Nest under parent: ${parentSlot}`] : []),
             ],
-            codeHint: `// In ${c.source?.file ?? "component.tsx"}\nconst ${slotName} = React.forwardRef<${slotName}Element, ${slotName}Props>(\n  (props, ref) => {\n    // Implementation\n  }\n);\n\n${c.component}.${slotName} = ${slotName};`,
+            codeHint: `// In ${c.source?.file ?? 'component.tsx'}\nconst ${slotName} = React.forwardRef<${slotName}Element, ${slotName}Props>(\n  (props, ref) => {\n    // Implementation\n  }\n);\n\n${c.component}.${slotName} = ${slotName};`,
           });
 
-        case "modify_slot":
+        case 'modify_slot':
           return ok({
             ...baseResponse,
             slotExists,
@@ -75,18 +71,18 @@ export function register(server: McpServer, registry: Registry) {
             ],
           });
 
-        case "reorder_slots":
+        case 'reorder_slots':
           return ok({
             ...baseResponse,
             instructions: [
               `To reorder slots in ${c.component}:`,
-              `1. Current order: ${existingSlots.join(" > ")}`,
+              `1. Current order: ${existingSlots.join(' > ')}`,
               `2. Reorder exports in the compound assignment`,
               `3. Update structure documentation`,
             ],
           });
 
-        case "nest_slots":
+        case 'nest_slots':
           return ok({
             ...baseResponse,
             instructions: [
@@ -97,6 +93,6 @@ export function register(server: McpServer, registry: Registry) {
             ],
           });
       }
-    }
+    },
   );
 }

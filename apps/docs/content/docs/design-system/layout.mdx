@@ -33,12 +33,12 @@ Vayu UI uses four primary layers, ordered from bottom to top:
 
 ### Visual Order
 
-| Layer | Z-Index Concept | Visual Weight |
-| :--- | :--- | :--- |
-| **Canvas** | 0 (base) | Lowest — the background everything sits on |
-| **Sidebar** | 1 | Low — sits alongside main content |
-| **Surface** | 1 | Low — sits on top of canvas |
-| **Elevated** | 2+ | Highest — floats above everything |
+| Layer        | Z-Index Concept | Visual Weight                              |
+| :----------- | :-------------- | :----------------------------------------- |
+| **Canvas**   | 0 (base)        | Lowest — the background everything sits on |
+| **Sidebar**  | 1               | Low — sits alongside main content          |
+| **Surface**  | 1               | Low — sits on top of canvas                |
+| **Elevated** | 2+              | Highest — floats above everything          |
 
 ---
 
@@ -81,6 +81,7 @@ The canvas is your app's backdrop. It should always be the bottom-most layer.
       );
     }
     ```
+
   </Tab>
 </Tabs>
 
@@ -132,6 +133,7 @@ Surfaces sit on top of the canvas to group related content. Most of your UI comp
       );
     }
     ```
+
   </Tab>
 </Tabs>
 
@@ -190,6 +192,7 @@ Sidebars are distinct from both canvas and surface. They create a dedicated spac
       );
     }
     ```
+
   </Tab>
 </Tabs>
 
@@ -218,6 +221,7 @@ Elevated elements float above everything else. They command attention and requir
         </div>
       </div>
     </div>
+
   </Tab>
   <Tab value="Code">
     ```tsx
@@ -258,6 +262,7 @@ Elevated elements float above everything else. They command attention and requir
       );
     }
     ```
+
   </Tab>
 </Tabs>
 
@@ -274,7 +279,6 @@ export function Screen() {
   return (
     // 1. Canvas — always at the root
     <div className="bg-canvas text-canvas-content min-h-screen">
-
       {/* 2. Sidebar — optional, for navigation */}
       <aside className="bg-sidebar text-sidebar-content">
         <nav>{/* ... */}</nav>
@@ -282,18 +286,13 @@ export function Screen() {
 
       {/* 3. Surface — content containers */}
       <main className="p-6">
-        <div className="bg-surface text-surface-content rounded-surface p-6">
-          {/* Content */}
-        </div>
+        <div className="bg-surface text-surface-content rounded-surface p-6">{/* Content */}</div>
       </main>
 
       {/* 4. Elevated — only when needed */}
       <Modal>
-        <div className="bg-elevated text-elevated-content">
-          {/* Modal content */}
-        </div>
+        <div className="bg-elevated text-elevated-content">{/* Modal content */}</div>
       </Modal>
-
     </div>
   );
 }
@@ -330,9 +329,7 @@ export function DashboardLayout() {
         </div>
 
         {/* Content area */}
-        <div className="bg-surface text-surface-content rounded-surface p-6">
-          Main content
-        </div>
+        <div className="bg-surface text-surface-content rounded-surface p-6">Main content</div>
       </main>
     </div>
   );
@@ -399,32 +396,56 @@ Vayu UI uses a class-based dark mode strategy. Add `.dark` to a parent element, 
   <Tab value="Light Mode">
     <div className="space-y-4">
       <div className="p-4 rounded-lg" style={{ backgroundColor: '#fafafa' }}>
-        <p className="font-medium mb-2" style={{ color: '#18181b' }}>Canvas (#fafafa)</p>
-        <p className="text-sm" style={{ color: '#71717a' }}>Soft off-white background</p>
+        <p className="font-medium mb-2" style={{ color: '#18181b' }}>
+          Canvas (#fafafa)
+        </p>
+        <p className="text-sm" style={{ color: '#71717a' }}>
+          Soft off-white background
+        </p>
       </div>
       <div className="p-4 rounded-lg" style={{ backgroundColor: '#fff' }}>
-        <p className="font-medium mb-2" style={{ color: '#18181b' }}>Surface (#fff)</p>
-        <p className="text-sm" style={{ color: '#71717a' }}>Pure white, elevated from canvas</p>
+        <p className="font-medium mb-2" style={{ color: '#18181b' }}>
+          Surface (#fff)
+        </p>
+        <p className="text-sm" style={{ color: '#71717a' }}>
+          Pure white, elevated from canvas
+        </p>
       </div>
       <div className="p-4 rounded-lg" style={{ backgroundColor: '#f4f4f5' }}>
-        <p className="font-medium mb-2" style={{ color: '#18181b' }}>Sidebar (#f4f4f5)</p>
-        <p className="text-sm" style={{ color: '#71717a' }}>Neutral gray for navigation</p>
+        <p className="font-medium mb-2" style={{ color: '#18181b' }}>
+          Sidebar (#f4f4f5)
+        </p>
+        <p className="text-sm" style={{ color: '#71717a' }}>
+          Neutral gray for navigation
+        </p>
       </div>
     </div>
   </Tab>
   <Tab value="Dark Mode">
     <div className="space-y-4">
       <div className="p-4 rounded-lg" style={{ backgroundColor: '#09090b' }}>
-        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>Canvas (#09090b)</p>
-        <p className="text-sm" style={{ color: '#a1a1aa' }}>Near-black, not pure black</p>
+        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>
+          Canvas (#09090b)
+        </p>
+        <p className="text-sm" style={{ color: '#a1a1aa' }}>
+          Near-black, not pure black
+        </p>
       </div>
       <div className="p-4 rounded-lg" style={{ backgroundColor: '#18181b' }}>
-        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>Surface (#18181b)</p>
-        <p className="text-sm" style={{ color: '#a1a1aa' }}>Elevated from canvas</p>
+        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>
+          Surface (#18181b)
+        </p>
+        <p className="text-sm" style={{ color: '#a1a1aa' }}>
+          Elevated from canvas
+        </p>
       </div>
       <div className="p-4 rounded-lg" style={{ backgroundColor: '#0a0a0a' }}>
-        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>Sidebar (#0a0a0a)</p>
-        <p className="text-sm" style={{ color: '#a1a1aa' }}>Darker for depth</p>
+        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>
+          Sidebar (#0a0a0a)
+        </p>
+        <p className="text-sm" style={{ color: '#a1a1aa' }}>
+          Darker for depth
+        </p>
       </div>
     </div>
   </Tab>
@@ -433,7 +454,7 @@ Vayu UI uses a class-based dark mode strategy. Add `.dark` to a parent element, 
 ### Implementing Dark Mode
 
 ```tsx
-"use client";
+'use client';
 import { useState, useEffect } from 'react';
 
 export function ThemeProvider({ children }) {
@@ -453,11 +474,7 @@ export function ThemeProvider({ children }) {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
 }
 ```
 
@@ -491,22 +508,22 @@ The Tailwind custom variant makes `dark:` classes work:
 
 ### Do's
 
-| Do ✅ | Why |
-| :--- | :--- |
-| Start every page with `bg-canvas` | Establishes a consistent foundation |
+| Do ✅                                   | Why                                   |
+| :-------------------------------------- | :------------------------------------ |
+| Start every page with `bg-canvas`       | Establishes a consistent foundation   |
 | Use `bg-surface` for content containers | Creates visual separation from canvas |
-| Reserve `bg-elevated` for overlays | Ensures modals and popups stand out |
-| Use the pairing pattern | Guarantees contrast in both modes |
-| Let the system handle dark mode | Avoid manual color switching |
+| Reserve `bg-elevated` for overlays      | Ensures modals and popups stand out   |
+| Use the pairing pattern                 | Guarantees contrast in both modes     |
+| Let the system handle dark mode         | Avoid manual color switching          |
 
 ### Don'ts
 
-| Don't ❌ | Why |
-| :--- | :--- |
-| Skip layers (canvas → elevated) | Creates jarring visual jumps |
-| Use surface for modals | Won't stand out enough from content |
-| Manually specify colors for dark mode | Defeats the purpose of the system |
-| Nest surfaces too deeply | Creates visual noise |
+| Don't ❌                              | Why                                 |
+| :------------------------------------ | :---------------------------------- |
+| Skip layers (canvas → elevated)       | Creates jarring visual jumps        |
+| Use surface for modals                | Won't stand out enough from content |
+| Manually specify colors for dark mode | Defeats the purpose of the system   |
+| Nest surfaces too deeply              | Creates visual noise                |
 
 ---
 
@@ -538,24 +555,18 @@ export function App() {
       {/* Main content */}
       <main className="ml-64 p-6">
         {/* Cards */}
-        <div className="bg-surface text-surface-content rounded-surface p-6 mb-6">
-          Content card
-        </div>
+        <div className="bg-surface text-surface-content rounded-surface p-6 mb-6">Content card</div>
 
         {/* Form */}
         <form className="bg-surface text-surface-content rounded-surface p-6">
           <input className="bg-surface border border-field rounded-control" />
-          <button className="bg-brand text-brand-content rounded-control">
-            Submit
-          </button>
+          <button className="bg-brand text-brand-content rounded-control">Submit</button>
         </form>
       </main>
 
       {/* Modal (when open) */}
       <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-        <div className="bg-elevated text-elevated-content rounded-overlay p-6">
-          Modal content
-        </div>
+        <div className="bg-elevated text-elevated-content rounded-overlay p-6">Modal content</div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 ---
 title: Skeleton
-description: Use to show a placeholder while content is loading.
+description: A placeholder for loading content to provide structural preview before data arrives.
 ---
 
 import SkeletonDemo from '@/components/demos/skeleton-demo';
@@ -9,47 +9,53 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add skeleton
 ```
 
-## Usage
+```bash
+npx vayu-ui add -t skeleton #with test case needs
+```
 
+## Usage
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
       <SkeletonDemo />
-    </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Skeleton } from "vayu-ui";
+    import { Skeleton } from "@/components/ui/Skeleton";
 
-    export default function SkeletonExample() {
-      return (
-        <div className="space-y-4">
-          {/* Text Skeleton */}
-          <Skeleton.Text lines={3} />
+    // Basic Text Skeleton
+    <Skeleton.Root>
+      <Skeleton.Text lines={3} />
+    </Skeleton.Root>
 
-          {/* Avatar Skeleton */}
-          <Skeleton.Avatar />
+    // Profile Skeleton
+    <Skeleton.Root animation="wave">
+      <Skeleton.Group spacing="md">
+        <Skeleton.Avatar showText textLines={2} />
+      </Skeleton.Group>
+    </Skeleton.Root>
 
-          {/* Card Skeleton */}
-          <Skeleton.Card />
+    // Card Skeleton
+    <Skeleton.Root>
+      <Skeleton.Card showImage lines={4} />
+    </Skeleton.Root>
 
-          {/* Custom Item */}
-          <Skeleton.Item variant="rectangular" height={200} />
-
-          {/* With Root Wrapper */}
-          <Skeleton.Root animation="wave" aria-label="Loading content">
-            <Skeleton.Text lines={2} animation="wave" />
-          </Skeleton.Root>
+    // Custom Layout Skeleton
+    <Skeleton.Root>
+      <div className="flex gap-4">
+        <Skeleton.Circle size="lg" />
+        <div className="flex-1 space-y-2">
+          <Skeleton.Rectangle height="1.5rem" width="50%" rounded />
+          <Skeleton.Text lines={2} />
         </div>
-      );
-    }
+      </div>
+    </Skeleton.Root>
     ```
   </Tab>
 </Tabs>
@@ -57,744 +63,132 @@ npx vayu-ui add skeleton
 ## Anatomy
 
 ```tsx
-<Skeleton.Root aria-label="Loading content">
-  <Skeleton.Item variant="text" />
-  <Skeleton.Text lines={3} />
-  <Skeleton.Circle size="md" />
-  <Skeleton.Rectangle height={200} />
-  <Skeleton.Avatar />
+<Skeleton.Root>
+  <Skeleton.Item />
+  <Skeleton.Text />
+  <Skeleton.Circle />
+  <Skeleton.Rectangle />
   <Skeleton.Card />
-  <Skeleton.List items={5} />
-  <Skeleton.Table rows={5} columns={4} />
-  <Skeleton.Grid items={6} columns={3} />
-  <Skeleton.Group spacing="md">
-    {/* Multiple skeleton items */}
-  </Skeleton.Group>
+  <Skeleton.Avatar />
+  <Skeleton.List />
+  <Skeleton.Table />
+  <Skeleton.Grid />
+  <Skeleton.Group />
 </Skeleton.Root>
 ```
 
 ## Accessibility
+- **Keyboard support**: Skeletons are typically decorative and do not require keyboard focus unless they represent interactive elements loading.
+- **ARIA attributes**: Uses `aria-hidden="true"` for decorative skeletons to hide them from screen readers. Uses `aria-label` or `aria-labelledby` on the root container if the loading state itself is meaningful context.
+- **Focus behavior**: Non-focusable by default. Focus should remain on the surrounding structural elements or be handled by the layout container representing the loading state. 
 
-- Proper ARIA roles and attributes (`role="status"`, `aria-live`, `aria-busy`)
-- Screen reader announcements for loading states
-- Respects `prefers-reduced-motion` for users who prefer reduced motion
-- `aria-hidden="true"` on decorative skeleton items
-- Server-side rendering compatible with no hydration mismatches
-- WCAG 2.2 AA compliant color contrast
+## Screen reader behavior
+By default, decorative skeletons (e.g., individual lines of text, shapes) are hidden from screen readers using `aria-hidden="true"` to prevent noise. A generic loading announcement can be achieved via `aria-live` or dedicated visibly-hidden loading text on the `Skeleton.Root` to inform users that content is being fetched.
+
+## Component Folder Structure
+
+```text
+Skeleton/
+├── index.ts
+├── types.ts
+├── config.ts
+├── SkeletonRoot.tsx
+├── SkeletonItem.tsx
+├── SkeletonPrimitives.tsx
+└── SkeletonComposites.tsx
+```
 
 ## Props
 
 ### Skeleton.Root
-
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `animation` | `"pulse" \| "wave" \| "none"` | `"pulse"` | The animation style for visual feedback. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | Default size for child elements (informational). |
-| `aria-label` | `string` | `"Loading"` | Accessible label for loading state. |
-| `aria-live` | `"polite" \| "assertive" \| "off"` | `"polite"` | Whether to announce loading state to screen readers. |
-| `className` | `string` | - | Additional CSS classes. |
+| `animation` | `SkeletonAnimation` | `'pulse'` | The animation style for all child skeletons ('pulse', 'wave', 'none'). |
+| `size` | `SkeletonSize` | `'md'` | The base size for the skeletons ('sm', 'md', 'lg', 'xl'). |
+| `aria-label` | `string` | - | Accessible label for the skeleton container. |
+| `aria-live` | `'polite' \| 'assertive' \| 'off'` | `'polite'` | Configuration for screen reader live announcements. |
 
 ### Skeleton.Item
-
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `variant` | `"text" \| "circular" \| "rectangular" \| "rounded"` | `"text"` | The shape of the skeleton item. |
-| `width` | `string \| number` | - | Custom width. |
-| `height` | `string \| number` | - | Custom height. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | Size preset for the item. |
-| `count` | `number` | `1` | Number of items to render. |
-| `animation` | `"pulse" \| "wave" \| "none"` | `"pulse"` | The animation style. |
-| `className` | `string` | - | Additional CSS classes. |
+| `variant` | `SkeletonVariant` | `'rectangular'` | Shape logic of the skeleton item. |
+| `animation` | `SkeletonAnimation` | - | Overrides animation style for the item. |
+| `width` | `string \| number` | - | Explicit width of the item. |
+| `height` | `string \| number` | - | Explicit height of the item. |
+| `size` | `SkeletonSize` | - | Size scale token. |
+| `count` | `number` | `1` | Number of duplicate skeleton items to render. |
 
 ### Skeleton.Text
-
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `lines` | `number` | `1` | Number of text lines. |
-| `width` | `string \| number` | - | Width of lines (except last one). |
-| `lastLineWidth` | `string \| number` | - | Width of the last line. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | Size preset for text lines. |
-| `animation` | `"pulse" \| "wave" \| "none"` | `"pulse"` | The animation style. |
-| `className` | `string` | - | Additional CSS classes. |
+| `lines` | `number` | `3` | Number of text lines to simulate. |
+| `width` | `string \| number` | `'100%'` | Width of the standard text lines. |
+| `lastLineWidth` | `string \| number` | `'60%'` | Width of the final line. |
+| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
+| `size` | `SkeletonSize` | - | Controls the text height/spacing scale. |
 
 ### Skeleton.Circle
-
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | Size of the circle. |
-| `animation` | `"pulse" \| "wave" \| "none"` | `"pulse"` | The animation style. |
-| `className` | `string` | - | Additional CSS classes. |
+| `size` | `SkeletonSize` | `'md'` | Defined size mapping for the circle. |
+| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
 
 ### Skeleton.Rectangle
-
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `width` | `string \| number` | - | Custom width. |
-| `height` | `string \| number` | - | Custom height. |
-| `rounded` | `boolean` | `false` | Whether to use rounded corners. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | Size preset. |
-| `animation` | `"pulse" \| "wave" \| "none"` | `"pulse"` | The animation style. |
-| `className` | `string` | - | Additional CSS classes. |
-
-### Skeleton.Avatar
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `showText` | `boolean` | `true` | Whether to show text lines next to the circle. |
-| `textLines` | `number` | `2` | Number of text lines. |
-| `titleWidth` | `string \| number` | `"40%"` | Width of the title line. |
-| `subtitleWidth` | `string \| number` | `"60%"` | Width of the subtitle line. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | Size of the avatar circle. |
-| `animation` | `"pulse" \| "wave" \| "none"` | `"pulse"` | The animation style. |
-| `className` | `string` | - | Additional CSS classes. |
+| `width` | `string \| number` | `'100%'` | Width of the rectangle. |
+| `height` | `string \| number` | `'100%'` | Height of the rectangle. |
+| `rounded` | `boolean` | `true` | Applies border-radius to the rectangle. |
+| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
+| `size` | `SkeletonSize` | - | Base size token. |
 
 ### Skeleton.Card
-
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `showImage` | `boolean` | `true` | Whether to show the image placeholder. |
-| `imageHeight` | `number` | `200` | Height of the image placeholder. |
-| `lines` | `number` | `3` | Number of text lines below the image. |
-| `titleWidth` | `string \| number` | `"60%"` | Width of the title line. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | Size preset for child elements. |
-| `animation` | `"pulse" \| "wave" \| "none"` | `"pulse"` | The animation style. |
-| `className` | `string` | - | Additional CSS classes. |
+| `showImage` | `boolean` | `true` | Includes an image placeholder skeleton. |
+| `imageHeight` | `number` | - | Specific height for the image placeholder placeholder. |
+| `lines` | `number` | `2` | Number of text lines below the title. |
+| `titleWidth` | `string \| number` | `'60%'` | Width for the title skeleton block. |
+| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
+| `size` | `SkeletonSize` | - | Base size configuration. |
+
+### Skeleton.Avatar
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `showText` | `boolean` | `true` | Show adjacent text skeletons. |
+| `textLines` | `number` | `2` | Number of text lines if showing text. |
+| `titleWidth` | `string \| number` | `'100px'` | Width of the primary text line. |
+| `subtitleWidth` | `string \| number` | `'150px'` | Width of the secondary text line. |
+| `size` | `SkeletonSize` | `'md'` | Set the circle and text scaling sizes. |
+| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
 
 ### Skeleton.List
-
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `items` | `number` | `5` | Number of list items. |
-| `showAvatar` | `boolean` | `true` | Whether to include an avatar placeholder in each item. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | Size preset for child elements. |
-| `animation` | `"pulse" \| "wave" \| "none"` | `"pulse"` | The animation style. |
-| `className` | `string` | - | Additional CSS classes. |
+| `items` | `number` | `3` | Number of list items to mock. |
+| `showAvatar` | `boolean` | `true` | Includes a circle skeleton inside each list item. |
+| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
+| `size` | `SkeletonSize` | - | Used for internal skeleton dimensions. |
 
 ### Skeleton.Table
-
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `rows` | `number` | `5` | Number of rows. |
-| `columns` | `number` | `4` | Number of columns. |
-| `showHeader` | `boolean` | `true` | Whether to show a header row. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | Size preset for child elements. |
-| `animation` | `"pulse" \| "wave" \| "none"` | `"pulse"` | The animation style. |
-| `className` | `string` | - | Additional CSS classes. |
+| `rows` | `number` | `5` | Number of data rows. |
+| `columns` | `number` | `4` | Number of table columns. |
+| `showHeader` | `boolean` | `true` | Renders a header skeleton row. |
+| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
+| `size` | `SkeletonSize` | - | Dictates row height sizing. |
 
 ### Skeleton.Grid
-
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `items` | `number` | `6` | Number of grid items. |
-| `columns` | `number` | `3` | Number of columns. |
-| `itemHeight` | `number` | `200` | Height of each card's image. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | Size preset for child elements. |
-| `animation` | `"pulse" \| "wave" \| "none"` | `"pulse"` | The animation style. |
-| `className` | `string` | - | Additional CSS classes. |
+| `items` | `number` | `6` | Total skeleton blocks. |
+| `columns` | `number` | `3` | Columns per row. |
+| `itemHeight` | `number` | - | Internal rectangle height for each grid item. |
+| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
+| `size` | `SkeletonSize` | - | Drives the spacing format. |
 
 ### Skeleton.Group
-
 | Prop | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `spacing` | `"sm" \| "md" \| "lg"` | `"md"` | Vertical spacing between children. |
-| `className` | `string` | - | Additional CSS classes. |
-
-## Source Code
-
-```tsx title="src/components/ui/skeleton.tsx"
-import React from "react";
-
-/**
- * Skeleton Component - Compound Pattern with Accessibility
- *
- * A fully accessible skeleton loading component with:
- * - Compound component pattern for flexible composition
- * - ARIA live regions for screen reader announcements
- * - Multiple animation types (pulse, wave, none)
- * - Four shape variants (text, circular, rectangular, rounded)
- * - Four size presets
- * - Pre-built patterns (Card, Avatar, List, Table, Grid)
- * - Screen reader friendly loading states
- * - WCAG 2.2 AA compliant with motion preferences
- * - Server-side rendering compatible
- */
-
-// ============================================================================
-// Types
-// ============================================================================
-
-type SkeletonVariant = "text" | "circular" | "rectangular" | "rounded";
-type SkeletonAnimation = "pulse" | "wave" | "none";
-type SkeletonSize = "sm" | "md" | "lg" | "xl";
-
-// ============================================================================
-// Size & Animation Configuration
-// ============================================================================
-
-const sizeClasses = {
-    sm: {
-        text: "h-3",
-        circular: "w-8 h-8",
-        rectangular: "h-20",
-        rounded: "h-20",
-    },
-    md: {
-        text: "h-4",
-        circular: "w-12 h-12",
-        rectangular: "h-32",
-        rounded: "h-32",
-    },
-    lg: {
-        text: "h-5",
-        circular: "w-16 h-16",
-        rectangular: "h-48",
-        rounded: "h-48",
-    },
-    xl: {
-        text: "h-6",
-        circular: "w-24 h-24",
-        rectangular: "h-64",
-        rounded: "h-64",
-    },
-};
-
-// WCAG 2.2 AA: Respects prefers-reduced-motion
-const animationClasses = {
-    pulse: "animate-pulse motion-reduce:animate-none",
-    wave: "skeleton-wave motion-reduce:animate-none",
-    none: "",
-};
-
-// ============================================================================
-// Helper Functions
-// ============================================================================
-
-function getVariantClasses(variant: SkeletonVariant, size: SkeletonSize): string {
-    const variantMap = {
-        text: `${sizeClasses[size].text} w-full rounded`,
-        circular: `${sizeClasses[size].circular} rounded-full`,
-        rectangular: `${sizeClasses[size].rectangular} w-full rounded`,
-        rounded: `${sizeClasses[size].rounded} w-full rounded-lg`,
-    };
-    return variantMap[variant];
-}
-
-function getSkeletonStyles(width?: string | number, height?: string | number): React.CSSProperties {
-    return {
-        width: width ? (typeof width === "number" ? `${width}px` : width) : undefined,
-        height: height ? (typeof height === "number" ? `${height}px` : height) : undefined,
-    };
-}
-
-// ============================================================================
-// Main Skeleton Component (Root)
-// ============================================================================
-
-interface SkeletonRootProps extends React.HTMLAttributes<HTMLDivElement> {
-    animation?: SkeletonAnimation;
-    size?: SkeletonSize;
-    "aria-label"?: string;
-    "aria-live"?: "polite" | "assertive" | "off";
-}
-
-function SkeletonRoot({
-    children,
-    animation = "pulse",
-    size = "md",
-    className = "",
-    "aria-label": ariaLabel = "Loading",
-    "aria-live": ariaLive = "polite",
-    ...props
-}: SkeletonRootProps) {
-    return (
-        <div
-            className={className}
-            role="status"
-            aria-live={ariaLive}
-            aria-busy="true"
-            aria-label={ariaLabel}
-            data-animation={animation}
-            data-size={size}
-            {...props}
-        >
-            <span className="sr-only">{ariaLabel}</span>
-            {children}
-        </div>
-    );
-}
-
-// ============================================================================
-// Skeleton Item (Single Element)
-// ============================================================================
-
-interface SkeletonItemProps extends React.HTMLAttributes<HTMLDivElement> {
-    variant?: SkeletonVariant;
-    animation?: SkeletonAnimation;
-    width?: string | number;
-    height?: string | number;
-    size?: SkeletonSize;
-    count?: number;
-}
-
-function SkeletonItem({
-    variant = "text",
-    animation = "pulse",
-    width,
-    height,
-    size = "md",
-    className = "",
-    count = 1,
-    ...props
-}: SkeletonItemProps) {
-    const baseClasses = "bg-ground-200 dark:bg-ground-800 border border-transparent";
-    const variantClass = getVariantClasses(variant, size);
-    const styles = getSkeletonStyles(width, height);
-
-    const skeletonElement = (
-        <div
-            className={`${baseClasses} ${variantClass} ${animationClasses[animation]} ${className}`}
-            style={styles}
-            aria-hidden="true"
-            tabIndex={-1}
-            {...props}
-        />
-    );
-
-    if (count > 1) {
-        return (
-            <div className="space-y-2" role="presentation">
-                {Array.from({ length: count }).map((_, index) => (
-                    <React.Fragment key={index}>{skeletonElement}</React.Fragment>
-                ))}
-            </div>
-        );
-    }
-
-    return skeletonElement;
-}
-
-// ============================================================================
-// Skeleton Text
-// ============================================================================
-
-interface SkeletonTextProps extends React.HTMLAttributes<HTMLDivElement> {
-    lines?: number;
-    width?: string | number;
-    lastLineWidth?: string | number;
-    animation?: SkeletonAnimation;
-    size?: SkeletonSize;
-}
-
-function SkeletonText({
-    lines = 1,
-    width,
-    lastLineWidth,
-    animation = "pulse",
-    size = "md",
-    className = "",
-    ...props
-}: SkeletonTextProps) {
-    if (lines === 1) {
-        return (
-            <SkeletonItem
-                variant="text"
-                width={width}
-                animation={animation}
-                size={size}
-                className={className}
-                {...props}
-            />
-        );
-    }
-
-    return (
-        <div className={`space-y-2 ${className}`} role="presentation">
-            {Array.from({ length: lines }).map((_, index) => (
-                <SkeletonItem
-                    key={index}
-                    variant="text"
-                    width={index === lines - 1 && lastLineWidth ? lastLineWidth : width}
-                    animation={animation}
-                    size={size}
-                    {...props}
-                />
-            ))}
-        </div>
-    );
-}
-
-// ============================================================================
-// Skeleton Circle
-// ============================================================================
-
-interface SkeletonCircleProps extends React.HTMLAttributes<HTMLDivElement> {
-    size?: SkeletonSize;
-    animation?: SkeletonAnimation;
-}
-
-function SkeletonCircle({
-    className = "",
-    size = "md",
-    animation = "pulse",
-    ...props
-}: SkeletonCircleProps) {
-    return (
-        <SkeletonItem
-            variant="circular"
-            className={className}
-            size={size}
-            animation={animation}
-            {...props}
-        />
-    );
-}
-
-// ============================================================================
-// Skeleton Rectangle
-// ============================================================================
-
-interface SkeletonRectangleProps extends React.HTMLAttributes<HTMLDivElement> {
-    width?: string | number;
-    height?: string | number;
-    rounded?: boolean;
-    animation?: SkeletonAnimation;
-    size?: SkeletonSize;
-}
-
-function SkeletonRectangle({
-    width,
-    height,
-    rounded = false,
-    animation = "pulse",
-    size = "md",
-    className = "",
-    ...props
-}: SkeletonRectangleProps) {
-    return (
-        <SkeletonItem
-            variant={rounded ? "rounded" : "rectangular"}
-            width={width}
-            height={height}
-            className={className}
-            animation={animation}
-            size={size}
-            {...props}
-        />
-    );
-}
-
-// ============================================================================
-// Skeleton Card
-// ============================================================================
-
-interface SkeletonCardProps extends React.HTMLAttributes<HTMLDivElement> {
-    showImage?: boolean;
-    imageHeight?: number;
-    lines?: number;
-    titleWidth?: string | number;
-    animation?: SkeletonAnimation;
-    size?: SkeletonSize;
-}
-
-function SkeletonCard({
-    className = "",
-    showImage = true,
-    imageHeight = 200,
-    lines = 3,
-    titleWidth = "60%",
-    animation = "pulse",
-    size = "md",
-    ...props
-}: SkeletonCardProps) {
-    return (
-        <div
-            className={`bg-ground-50 dark:bg-ground-950 rounded p-4 border border-ground-200 dark:border-ground-900 shadow-outer ${className}`}
-            aria-hidden="true"
-            {...props}
-        >
-            {showImage && (
-                <SkeletonRectangle
-                    height={imageHeight}
-                    className="mb-4"
-                    animation={animation}
-                    size={size}
-                />
-            )}
-            <SkeletonItem
-                variant="text"
-                size="lg"
-                width={titleWidth}
-                className="mb-3"
-                animation={animation}
-            />
-            <SkeletonText lines={lines} animation={animation} size={size} />
-        </div>
-    );
-}
-
-// ============================================================================
-// Skeleton Avatar
-// ============================================================================
-
-interface SkeletonAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
-    showText?: boolean;
-    textLines?: number;
-    titleWidth?: string | number;
-    subtitleWidth?: string | number;
-    size?: SkeletonSize;
-    animation?: SkeletonAnimation;
-}
-
-function SkeletonAvatar({
-    className = "",
-    showText = true,
-    textLines = 2,
-    titleWidth = "40%",
-    subtitleWidth = "60%",
-    size = "md",
-    animation = "pulse",
-    ...props
-}: SkeletonAvatarProps) {
-    return (
-        <div className={`flex items-center gap-3 ${className}`} aria-hidden="true" {...props}>
-            <SkeletonCircle size={size} animation={animation} />
-            {showText && (
-                <div className="flex-1">
-                    <SkeletonItem
-                        variant="text"
-                        width={titleWidth}
-                        className="mb-2"
-                        animation={animation}
-                        size={size}
-                    />
-                    {textLines > 1 && (
-                        <SkeletonItem
-                            variant="text"
-                            size="sm"
-                            width={subtitleWidth}
-                            animation={animation}
-                        />
-                    )}
-                </div>
-            )}
-        </div>
-    );
-}
-
-// ============================================================================
-// Skeleton List
-// ============================================================================
-
-interface SkeletonListProps extends React.HTMLAttributes<HTMLDivElement> {
-    items?: number;
-    showAvatar?: boolean;
-    animation?: SkeletonAnimation;
-    size?: SkeletonSize;
-}
-
-function SkeletonList({
-    className = "",
-    items = 5,
-    showAvatar = true,
-    animation = "pulse",
-    size = "md",
-    ...props
-}: SkeletonListProps) {
-    return (
-        <div className={`space-y-4 ${className}`} aria-hidden="true" {...props}>
-            {Array.from({ length: items }).map((_, index) => (
-                <div
-                    key={index}
-                    className="flex items-center gap-3 p-3 bg-ground-50 dark:bg-ground-950 rounded border border-ground-200 dark:border-ground-900"
-                >
-                    {showAvatar && <SkeletonCircle size={size} animation={animation} />}
-                    <div className="flex-1">
-                        <SkeletonItem
-                            variant="text"
-                            width="70%"
-                            className="mb-2"
-                            animation={animation}
-                            size={size}
-                        />
-                        <SkeletonItem
-                            variant="text"
-                            size="sm"
-                            width="40%"
-                            animation={animation}
-                        />
-                    </div>
-                </div>
-            ))}
-        </div>
-    );
-}
-
-// ============================================================================
-// Skeleton Table
-// ============================================================================
-
-interface SkeletonTableProps extends React.HTMLAttributes<HTMLDivElement> {
-    rows?: number;
-    columns?: number;
-    showHeader?: boolean;
-    animation?: SkeletonAnimation;
-    size?: SkeletonSize;
-}
-
-function SkeletonTable({
-    className = "",
-    rows = 5,
-    columns = 4,
-    showHeader = true,
-    animation = "pulse",
-    size = "md",
-    ...props
-}: SkeletonTableProps) {
-    return (
-        <div
-            className={`bg-ground-50 dark:bg-ground-950 rounded border border-ground-200 dark:border-ground-900 overflow-hidden ${className}`}
-            aria-hidden="true"
-            {...props}
-        >
-            {showHeader && (
-                <div
-                    className="grid gap-4 p-4 border-b border-ground-200 dark:border-ground-900 bg-ground-100 dark:bg-ground-900/50"
-                    style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-                >
-                    {Array.from({ length: columns }).map((_, index) => (
-                        <SkeletonItem
-                            key={index}
-                            variant="text"
-                            width="60%"
-                            animation={animation}
-                            size={size}
-                        />
-                    ))}
-                </div>
-            )}
-            {Array.from({ length: rows }).map((_, rowIndex) => (
-                <div
-                    key={rowIndex}
-                    className="grid gap-4 p-4 border-b border-ground-200 dark:border-ground-900 last:border-b-0"
-                    style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-                >
-                    {Array.from({ length: columns }).map((_, colIndex) => (
-                        <SkeletonItem
-                            key={colIndex}
-                            variant="text"
-                            size="sm"
-                            width="80%"
-                            animation={animation}
-                        />
-                    ))}
-                </div>
-            ))}
-        </div>
-    );
-}
-
-// ============================================================================
-// Skeleton Grid
-// ============================================================================
-
-interface SkeletonGridProps extends React.HTMLAttributes<HTMLDivElement> {
-    items?: number;
-    columns?: number;
-    itemHeight?: number;
-    animation?: SkeletonAnimation;
-    size?: SkeletonSize;
-}
-
-function SkeletonGrid({
-    className = "",
-    items = 6,
-    columns = 3,
-    itemHeight = 200,
-    animation = "pulse",
-    size = "md",
-    ...props
-}: SkeletonGridProps) {
-    return (
-        <div
-            className={`grid gap-4 ${className}`}
-            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-            aria-hidden="true"
-            {...props}
-        >
-            {Array.from({ length: items }).map((_, index) => (
-                <SkeletonCard
-                    key={index}
-                    imageHeight={itemHeight}
-                    lines={2}
-                    animation={animation}
-                    size={size}
-                />
-            ))}
-        </div>
-    );
-}
-
-// ============================================================================
-// Skeleton Group (Container)
-// ============================================================================
-
-interface SkeletonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
-    spacing?: "sm" | "md" | "lg";
-}
-
-function SkeletonGroup({
-    children,
-    className = "",
-    spacing = "md",
-    ...props
-}: SkeletonGroupProps) {
-    const spacingClasses = {
-        sm: "space-y-2",
-        md: "space-y-4",
-        lg: "space-y-6",
-    };
-
-    return (
-        <div className={`${spacingClasses[spacing]} ${className}`} {...props}>
-            {children}
-        </div>
-    );
-}
-
-// ============================================================================
-// Export Compound Component
-// ============================================================================
-
-const Skeleton = Object.assign(SkeletonRoot, {
-    Root: SkeletonRoot,
-    Item: SkeletonItem,
-    Text: SkeletonText,
-    Circle: SkeletonCircle,
-    Rectangle: SkeletonRectangle,
-    Card: SkeletonCard,
-    Avatar: SkeletonAvatar,
-    List: SkeletonList,
-    Table: SkeletonTable,
-    Grid: SkeletonGrid,
-    Group: SkeletonGroup,
-});
-
-export { Skeleton };
-
-export type {
-    SkeletonAnimation,
-    SkeletonAvatarProps,
-    SkeletonCardProps,
-    SkeletonCircleProps,
-    SkeletonGridProps,
-    SkeletonGroupProps,
-    SkeletonItemProps,
-    SkeletonListProps,
-    SkeletonRectangleProps,
-    SkeletonRootProps,
-    SkeletonSize,
-    SkeletonTableProps,
-    SkeletonTextProps,
-    SkeletonVariant,
-};
-```
+| `spacing` | `'sm' \| 'md' \| 'lg'` | `'md'` | Provides consistent gaps between skeleton blocks. |

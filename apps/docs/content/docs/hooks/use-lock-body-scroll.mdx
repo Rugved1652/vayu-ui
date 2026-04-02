@@ -18,7 +18,7 @@ The `useLockBodyScroll` hook temporarily disables scrolling on the document body
 Copy this code into `src/hooks/useLockBodyScroll.ts`:
 
 ```tsx
-import { useLayoutEffect } from "react";
+import { useLayoutEffect } from 'react';
 
 export const useLockBodyScroll = () => {
   useLayoutEffect(() => {
@@ -26,7 +26,7 @@ export const useLockBodyScroll = () => {
     const originalOverflow = document.body.style.overflow;
 
     // Lock scrolling
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
 
     return () => {
       // Restore the original overflow style when the component unmounts
@@ -39,8 +39,8 @@ export const useLockBodyScroll = () => {
 ## Usage
 
 ```tsx
-import { useState } from "react";
-import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
+import { useState } from 'react';
+import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
 
 const Modal = ({ onClose }) => {
   // Lock body scroll when this component mounts
@@ -64,7 +64,7 @@ const App = () => {
     <div>
       <button onClick={() => setIsOpen(true)}>Open Modal</button>
       {isOpen && <Modal onClose={() => setIsOpen(false)} />}
-      <div style={{ height: "200vh" }}>
+      <div style={{ height: '200vh' }}>
         <p>Scroll down...</p>
       </div>
     </div>

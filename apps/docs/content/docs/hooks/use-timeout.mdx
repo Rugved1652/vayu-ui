@@ -18,7 +18,7 @@ The `useTimeout` hook allows you to schedule a function to run after a specified
 Copy this code into `src/hooks/useTimeout.ts`:
 
 ```tsx
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 export const useTimeout = (callback: () => void, ms: number) => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -46,8 +46,8 @@ export const useTimeout = (callback: () => void, ms: number) => {
 ## Usage
 
 ```tsx
-import { useTimeout } from "@/hooks/useTimeout";
-import { useState } from "react";
+import { useTimeout } from '@/hooks/useTimeout';
+import { useState } from 'react';
 
 const Notification = () => {
   const [visible, setVisible] = useState(true);
@@ -62,10 +62,12 @@ const Notification = () => {
   return (
     <div className="bg-blue-100 p-4 rounded flex justify-between">
       <span>This message will disappear in 3 seconds.</span>
-      <button onClick={() => {
+      <button
+        onClick={() => {
           clearTimeout();
           setVisible(false);
-      }}>
+        }}
+      >
         Dismiss Now
       </button>
     </div>
@@ -77,13 +79,13 @@ const Notification = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
+| Name       | Type         | Description                                       |
+| :--------- | :----------- | :------------------------------------------------ |
 | `callback` | `() => void` | The function to execute when the timeout expires. |
-| `ms` | `number` | The delay in milliseconds. |
+| `ms`       | `number`     | The delay in milliseconds.                        |
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
+| Property       | Type         | Description                                |
+| :------------- | :----------- | :----------------------------------------- |
 | `clearTimeout` | `() => void` | A function to manually cancel the timeout. |

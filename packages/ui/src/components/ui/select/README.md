@@ -1,6 +1,7 @@
 # Select
 
 ## Anatomy
+
 - select.tsx — composition (Context + Root with state management)
 - trigger.tsx — UI: search input, multi-value chips, keyboard nav
 - content.tsx — UI: portal dropdown with positioning
@@ -12,6 +13,7 @@
 - index.ts — export
 
 ## Use Cases
+
 - Single and multi-select dropdowns with search filtering
 - Async search with debounced API calls
 - Creatable options with validation

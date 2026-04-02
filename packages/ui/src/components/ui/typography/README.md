@@ -1,6 +1,7 @@
 # Typography
 
 ## Anatomy
+
 - `typography.tsx` — Composition: Typography compound object assembly
 - `headings.tsx` — UI: H1-H6 heading components
 - `text-elements.tsx` — UI: P, Label, CTA text components
@@ -11,6 +12,7 @@
 - `index.ts` — Public API: Exports
 
 ## Use Cases
+
 - Semantic text elements (H1-H6) for page headings and visual hierarchy
 - Paragraphs, labels, and call-to-action text with variant styles
 - Inline code snippets with language metadata

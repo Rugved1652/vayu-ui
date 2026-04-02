@@ -1,12 +1,12 @@
 // viewport.tsx
 // UI: Viewport with touch and keyboard handling
-"use client"
-import React, { forwardRef, useCallback, useRef } from "react";
-import { cn } from "../utils";
-import { useCarouselContext } from "./hooks";
+'use client';
+import React, { forwardRef, useCallback, useRef } from 'react';
+import { cn } from '../utils';
+import { useCarouselContext } from './hooks';
 
 // Layout
-const CarouselViewport = forwardRef<HTMLDivElement, import("./types").CarouselViewportProps>(
+const CarouselViewport = forwardRef<HTMLDivElement, import('./types').CarouselViewportProps>(
   ({ className, children, ...props }, ref) => {
     const { currentIndex, totalItems, goNext, goPrevious, goTo } = useCarouselContext();
 
@@ -39,19 +39,19 @@ const CarouselViewport = forwardRef<HTMLDivElement, import("./types").CarouselVi
     // Keyboard navigation
     const handleKeyDown = (e: React.KeyboardEvent) => {
       switch (e.key) {
-        case "ArrowLeft":
+        case 'ArrowLeft':
           e.preventDefault();
           goPrevious();
           break;
-        case "ArrowRight":
+        case 'ArrowRight':
           e.preventDefault();
           goNext();
           break;
-        case "Home":
+        case 'Home':
           e.preventDefault();
           goTo(0);
           break;
-        case "End":
+        case 'End':
           e.preventDefault();
           goTo(totalItems - 1);
           break;
@@ -62,13 +62,13 @@ const CarouselViewport = forwardRef<HTMLDivElement, import("./types").CarouselVi
     const setRefs = useCallback(
       (node: HTMLDivElement | null) => {
         viewportRef.current = node;
-        if (typeof ref === "function") {
+        if (typeof ref === 'function') {
           ref(node);
         } else if (ref) {
           ref.current = node;
         }
       },
-      [ref]
+      [ref],
     );
 
     return (
@@ -76,10 +76,7 @@ const CarouselViewport = forwardRef<HTMLDivElement, import("./types").CarouselVi
         ref={setRefs}
         role="group"
         aria-label={`Slide ${currentIndex + 1} of ${totalItems}`}
-        className={cn(
-          "overflow-hidden relative rounded-surface",
-          className
-        )}
+        className={cn('overflow-hidden relative rounded-surface', className)}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onKeyDown={handleKeyDown}
@@ -87,19 +84,15 @@ const CarouselViewport = forwardRef<HTMLDivElement, import("./types").CarouselVi
         {...props}
       >
         {/* Live region for screen readers */}
-        <div
-          aria-live="polite"
-          aria-atomic="true"
-          className="sr-only"
-        >
+        <div aria-live="polite" aria-atomic="true" className="sr-only">
           Slide {currentIndex + 1} of {totalItems}
         </div>
         {children}
       </div>
     );
-  }
+  },
 );
 
-CarouselViewport.displayName = "Carousel.Viewport";
+CarouselViewport.displayName = 'Carousel.Viewport';
 
 export default CarouselViewport;

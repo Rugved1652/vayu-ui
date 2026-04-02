@@ -2,19 +2,17 @@
 // get_component_spec - Get props, variants, and slots for a component
 // ============================================================================
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
-import type { Registry } from "vayu-ui-registry";
-import { ok, err, resolveComponent } from "../utils.js";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
+import type { Registry } from 'vayu-ui-registry';
+import { ok, err, resolveComponent } from '../utils.js';
 
 export function register(server: McpServer, registry: Registry) {
   server.tool(
-    "get_component_spec",
-    "Get the complete specification for a component including props, variants, and slots.",
+    'get_component_spec',
+    'Get the complete specification for a component including props, variants, and slots.',
     {
-      component: z
-        .string()
-        .describe("Component name or slug (e.g., 'Button', 'accordion')"),
+      component: z.string().describe("Component name or slug (e.g., 'Button', 'accordion')"),
     },
     async ({ component }) => {
       const result = resolveComponent(registry, component);
@@ -45,11 +43,11 @@ export function register(server: McpServer, registry: Registry) {
         component: c.component,
         slug: c.slug,
         category: c.category,
-        props: Object.keys(propsSpec).length > 0 ? propsSpec : { _note: "No props documented" },
-        variants: variantsSpec ?? { _note: "No variants documented" },
-        slots: slotsSpec ?? { _note: "This component does not use slots" },
+        props: Object.keys(propsSpec).length > 0 ? propsSpec : { _note: 'No props documented' },
+        variants: variantsSpec ?? { _note: 'No variants documented' },
+        slots: slotsSpec ?? { _note: 'This component does not use slots' },
         defaultProps,
       });
-    }
+    },
   );
 }

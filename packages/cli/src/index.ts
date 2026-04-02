@@ -5,5 +5,5 @@
 // you add one entry here + one template file. That's it.
 // ============================================================================
 
-export type { ItemType, RegistryItem } from "vayu-ui-registry";
-export { registry, findItem, findWithDependencies } from "vayu-ui-registry";
+export type {ItemType, RegistryItem} from 'vayu-ui-registry'
+export {registry, findItem, findWithDependencies} from 'vayu-ui-registry'

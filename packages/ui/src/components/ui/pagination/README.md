@@ -1,6 +1,7 @@
 # Pagination
 
 ## Anatomy
+
 - pagination.tsx — composition (compound export)
 - pagination-root.tsx — UI: nav wrapper
 - pagination-info.tsx — UI: "Showing X to Y of Z" display
@@ -11,6 +12,7 @@
 - index.ts — export
 
 ## Use Cases
+
 - Server-rendered paginated lists with Next.js Link navigation
 - Data tables with page number controls and item count info
 - Compact prev/next navigation for mobile or constrained layouts

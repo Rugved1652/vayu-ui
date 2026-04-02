@@ -1,13 +1,13 @@
 // hooks.ts
 // Logic
 
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
 export function useSwitchControl(
   controlledChecked: boolean | undefined,
   defaultChecked: boolean,
   disabled: boolean | undefined,
-  onCheckedChange?: (checked: boolean) => void
+  onCheckedChange?: (checked: boolean) => void,
 ) {
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;

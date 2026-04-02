@@ -1,6 +1,7 @@
 # Button
 
 ## Anatomy
+
 - button.tsx — main component with loading states, variants, sizes
 - icon.tsx — icon wrapper UI
 - badge.tsx — notification badge UI
@@ -9,6 +10,7 @@
 - index.ts — public API
 
 ## Use Cases
+
 - Primary actions, secondary actions, and destructive actions
 - Loading states with async operations
 - Icon buttons with optional text labels

@@ -2,7 +2,7 @@ type VayuComponentDoc = {
     component: string;
     slug: string;
     category: string;
-    complexity?: "simple" | "compound" | "layout";
+    complexity?: 'simple' | 'compound' | 'layout';
     description: string;
     ai_summary: string;
     intent: string[];

@@ -1,6 +1,7 @@
 # CommandBox
 
 ## Anatomy
+
 - commandbox.tsx — composition (state, effects, results list)
 - trigger.tsx — UI: closed-state trigger button
 - search-input.tsx — UI: search input in open state
@@ -11,6 +12,7 @@
 - index.ts — public API
 
 ## Use Cases
+
 - Command palette for quick navigation and actions
 - Searchable dropdown with keyboard navigation
 - Filterable action menus with grouped items and shortcuts

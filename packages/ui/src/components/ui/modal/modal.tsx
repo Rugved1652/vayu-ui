@@ -1,7 +1,7 @@
 // modal.tsx
 // Composition: context + root
 
-"use client";
+'use client';
 
 import React, {
   createContext,
@@ -11,16 +11,17 @@ import React, {
   useId,
   useRef,
   useState,
-} from "react";
-import type {
-  ModalContextType,
-  ModalProps,
-  ModalSize,
-  ModalTriggerProps,
-  ModalOverlayProps,
-  ModalContentProps,
-  ModalCloseProps,
-} from "./types";
+} from 'react';
+import type { ModalContextType, ModalProps, ModalSize } from './types';
+import { ModalTrigger } from './ModalTrigger';
+import { ModalOverlay } from './ModalOverlay';
+import { ModalContent } from './ModalContent';
+import { ModalHeader } from './ModalHeader';
+import { ModalBody } from './ModalBody';
+import { ModalFooter } from './ModalFooter';
+import { ModalClose } from './ModalClose';
+import { ModalDescription } from './ModalDescription';
+import { ModalTitle } from './ModalTitle';
 
 // Context
 
@@ -29,7 +30,7 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
 export const useModal = () => {
   const context = useContext(ModalContext);
   if (!context) {
-    throw new Error("Modal compound components must be used within Modal");
+    throw new Error('Modal compound components must be used within Modal');
   }
   return context;
 };
@@ -37,11 +38,11 @@ export const useModal = () => {
 // Size map
 
 export const sizeWidths: Record<ModalSize, string> = {
-  sm: "28rem",
-  md: "32rem",
-  lg: "40rem",
-  xl: "48rem",
-  full: "calc(100vw - 4rem)",
+  sm: '28rem',
+  md: '32rem',
+  lg: '40rem',
+  xl: '48rem',
+  full: 'calc(100vw - 4rem)',
 };
 
 // Focusable selector
@@ -56,7 +57,7 @@ const ModalRoot: React.FC<ModalProps> = ({
   open: controlledOpen,
   onOpenChange,
   defaultOpen = false,
-  size = "md",
+  size = 'md',
   closeOnOverlayClick = true,
   closeOnEscape = true,
 }) => {
@@ -75,7 +76,7 @@ const ModalRoot: React.FC<ModalProps> = ({
       }
       onOpenChange?.(value);
     },
-    [isControlled, onOpenChange]
+    [isControlled, onOpenChange],
   );
 
   // Lock body scroll when open
@@ -83,10 +84,9 @@ const ModalRoot: React.FC<ModalProps> = ({
     if (open) {
       const originalOverflow = document.body.style.overflow;
       const originalPaddingRight = document.body.style.paddingRight;
-      const scrollbarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
       if (scrollbarWidth > 0) {
         document.body.style.paddingRight = `${scrollbarWidth}px`;
       }
@@ -115,39 +115,19 @@ const ModalRoot: React.FC<ModalProps> = ({
     </ModalContext.Provider>
   );
 };
-ModalRoot.displayName = "Modal";
+ModalRoot.displayName = 'Modal';
 
 // Compound component with placeholder subcomponents (real ones assigned in index.ts)
 const Modal = Object.assign(ModalRoot, {
-  Trigger: {} as React.ForwardRefExoticComponent<
-    ModalTriggerProps & React.RefAttributes<HTMLButtonElement>
-  >,
-  Overlay: {} as React.ForwardRefExoticComponent<
-    ModalOverlayProps & React.RefAttributes<HTMLDivElement>
-  >,
-  Content: {} as React.ForwardRefExoticComponent<
-    ModalContentProps & React.RefAttributes<HTMLDivElement>
-  >,
-  Header: {} as React.ForwardRefExoticComponent<
-    React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>
-  >,
-  Body: {} as React.ForwardRefExoticComponent<
-    React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>
-  >,
-  Footer: {} as React.ForwardRefExoticComponent<
-    React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>
-  >,
-  Title: {} as React.ForwardRefExoticComponent<
-    React.HTMLAttributes<HTMLHeadingElement> &
-      React.RefAttributes<HTMLHeadingElement>
-  >,
-  Description: {} as React.ForwardRefExoticComponent<
-    React.HTMLAttributes<HTMLParagraphElement> &
-      React.RefAttributes<HTMLParagraphElement>
-  >,
-  Close: {} as React.ForwardRefExoticComponent<
-    ModalCloseProps & React.RefAttributes<HTMLButtonElement>
-  >,
+  Trigger: ModalTrigger,
+  Overlay: ModalOverlay,
+  Content: ModalContent,
+  Header: ModalHeader,
+  Body: ModalBody,
+  Footer: ModalFooter,
+  Title: ModalTitle,
+  Description: ModalDescription,
+  Close: ModalClose,
 });
 
 export default Modal;

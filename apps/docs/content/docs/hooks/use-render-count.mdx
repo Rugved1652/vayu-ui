@@ -18,7 +18,7 @@ The `useRenderCount` hook is a utility for debugging and performance optimizatio
 Copy this code into `src/hooks/useRenderCount.ts`:
 
 ```tsx
-import { useRef } from "react";
+import { useRef } from 'react';
 
 export const useRenderCount = () => {
   const renderCount = useRef(0);
@@ -30,8 +30,8 @@ export const useRenderCount = () => {
 ## Usage
 
 ```tsx
-import { useRenderCount } from "@/hooks/useRenderCount";
-import { useState } from "react";
+import { useRenderCount } from '@/hooks/useRenderCount';
+import { useState } from 'react';
 
 const MyComponent = () => {
   const renderCount = useRenderCount();
@@ -40,9 +40,7 @@ const MyComponent = () => {
   return (
     <div>
       <p>This component has rendered {renderCount} times.</p>
-      <button onClick={() => setState(!state)}>
-        Toggle State to Re-render
-      </button>
+      <button onClick={() => setState(!state)}>Toggle State to Re-render</button>
     </div>
   );
 };
@@ -52,6 +50,6 @@ const MyComponent = () => {
 
 ### Return Value
 
-| Type | Description |
-| :--- | :--- |
+| Type     | Description                                                                          |
+| :------- | :----------------------------------------------------------------------------------- |
 | `number` | The total number of times the component has rendered (including the initial render). |

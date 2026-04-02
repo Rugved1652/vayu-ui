@@ -1,10 +1,24 @@
 ---
 title: ColorPicker
-description: A color selection component with presets, format conversion, and alpha support.
+description: A color selection component with presets, format conversion, and screen picker support.
 ---
 
 import ColorPickerDemo from '@/components/demos/colorpicker-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add colorpicker
+```
+
+```bash
+npx vayu-ui add -t colorpicker #with test case needs
+```
 
 ## Usage
 
@@ -16,67 +30,257 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { ColorPicker } from "@/components/ui/colorpicker"
+    <ColorPicker value={color} onChange={setColor}>
+      <ColorPicker.Label>Brand Color</ColorPicker.Label>
+      <ColorPicker.Description>
+        Choose a primary color for your brand.
+      </ColorPicker.Description>
+      <div className="flex items-center gap-2">
+        <ColorPicker.Trigger />
+        <ColorPicker.Input />
+        <ColorPicker.CopyButton />
+      </div>
+      <ColorPicker.Content>
+        <div className="flex flex-col gap-4">
+          <ColorPicker.Palette />
+          <ColorPicker.Eyedropper />
+          <ColorPicker.Presets />
+        </div>
+      </ColorPicker.Content>
+    </ColorPicker>
 
-    export function Example() {
-      const [color, setColor] = useState("#3b82f6")
+    <ColorPicker value={color} onChange={setColor} format="rgb">
+      <ColorPicker.Label>Background Color</ColorPicker.Label>
+      <div className="flex items-center gap-2">
+        <ColorPicker.Trigger size="sm" />
+        <ColorPicker.Input />
+        <ColorPicker.CopyButton />
+      </div>
+      <ColorPicker.Content>
+        <div className="flex flex-col gap-4">
+          <ColorPicker.Palette />
+          <ColorPicker.Presets columns={6} />
+        </div>
+      </ColorPicker.Content>
+    </ColorPicker>
 
-      return (
-        <ColorPicker
-          label="Brand Color"
-          value={color}
-          onChange={setColor}
-        />
-      )
-    }
+    <ColorPicker validationState="error">
+      <ColorPicker.Label>Theme Color</ColorPicker.Label>
+      <ColorPicker.Description>
+        Select a color for your theme.
+      </ColorPicker.Description>
+      <div className="flex items-center gap-2">
+        <ColorPicker.Trigger />
+        <ColorPicker.Input />
+      </div>
+      <ColorPicker.Error>
+        This color does not meet contrast requirements.
+      </ColorPicker.Error>
+    </ColorPicker>
+
+    <ColorPicker.Swatches
+      label="Quick Pick"
+      colors={["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899", "#171717"]}
+      value={swatchColor}
+      onChange={setSwatchColor}
+      size="lg"
+      columns={4}
+    />
+
+    <ColorPicker defaultValue="#6366f1" disabled>
+      <ColorPicker.Label>Locked Color</ColorPicker.Label>
+      <div className="flex items-center gap-2">
+        <ColorPicker.Trigger />
+        <ColorPicker.Input />
+      </div>
+    </ColorPicker>
     ```
+
   </Tab>
 </Tabs>
 
-## Installation
+## Anatomy
 
-Copy the component file into your project:
+```
+ColorPicker
+├── ColorPicker.Label              -- Accessible label linked to the input
+├── ColorPicker.Description        -- Helper text below the label
+├── ColorPicker.Error              -- Error message (renders only in error state)
+├── ColorPicker.Trigger            -- Color swatch button that toggles the dropdown
+├── ColorPicker.Input              -- Text input for hex/rgb/hsl values
+├── ColorPicker.CopyButton         -- Copies current color to clipboard
+└── ColorPicker.Content            -- Dropdown panel with positioning
+    ├── ColorPicker.Palette        -- Native browser color picker
+    ├── ColorPicker.Eyedropper     -- Screen color picker (Chrome/Edge only)
+    └── ColorPicker.Presets        -- Grid of preset color swatches
 
-```tsx title="src/components/ui/colorpicker.tsx"
-// Copy the full component code
+ColorPicker.Swatches               -- Standalone swatch grid (no context required)
 ```
 
-## Components
+## Accessibility
 
-### ColorPicker
+### Keyboard support
 
-The main picker with swatch trigger, text input, native `<input type="color">` dropdown, preset grid, and optional alpha slider.
+| Key      | Context        | Behavior                       |
+| :------- | :------------- | :----------------------------- |
+| `Enter`  | Trigger        | Opens the dropdown             |
+| `Space`  | Trigger        | Opens the dropdown             |
+| `Escape` | Content (open) | Closes dropdown, returns focus |
+| `Tab`    | Any            | Moves focus to next element    |
 
-### ColorPicker.Swatches
+### ARIA attributes
 
-A standalone swatch grid for simple color selection without the full picker UI.
+| Component          | Attribute          | Value                             |
+| :----------------- | :----------------- | :-------------------------------- |
+| Trigger            | `aria-expanded`    | `true` / `false`                  |
+| Trigger            | `aria-controls`    | Dropdown ID                       |
+| Trigger            | `aria-labelledby`  | Label ID                          |
+| Trigger            | `aria-haspopup`    | `"dialog"`                        |
+| Input              | `aria-labelledby`  | Label ID                          |
+| Input              | `aria-describedby` | Description + error IDs           |
+| Input              | `aria-invalid`     | `true` when in error state        |
+| Content            | `role`             | `"dialog"`                        |
+| Content            | `aria-modal`       | `false`                           |
+| Error              | `role`             | `"alert"`                         |
+| Error              | `aria-live`        | `"polite"`                        |
+| Presets / Swatches | `role`             | `"listbox"` / `"option"`          |
+| Presets / Swatches | `aria-selected`    | `true` on active swatch           |
+| CopyButton         | `aria-label`       | Dynamic: "Copy color" / "Copied!" |
+| Eyedropper         | `aria-busy`        | `true` while picking              |
+
+### Focus behavior
+
+- Trigger receives focus via `Tab`
+- Content auto-focuses on open via `requestAnimationFrame`
+- `Escape` closes dropdown and returns focus to the trigger
+- Click outside closes dropdown and maintains focus
+- All interactive elements have visible `focus-visible` ring
+
+## Screen reader behavior
+
+- The trigger announces: "Select color. Current color: `{hex value}`"
+- The label is associated with the input via `htmlFor` and `aria-labelledby`
+- Description text is linked to the input via `aria-describedby`
+- In error state, the error message is announced via `aria-live="polite"` and `role="alert"`
+- Preset swatches are announced as a listbox with options: "Select color `{hex}`"
+- The selected swatch is indicated by `aria-selected="true"`
+- The copy button announces "Copied!" after a successful clipboard copy
+- The eyedropper announces its label and sets `aria-busy` during active picking
+
+## Component Folder Structure
+
+```
+ColorPicker/
+├── ColorPicker.tsx
+├── ColorPickerContent.tsx
+├── ColorPickerCopyButton.tsx
+├── ColorPickerDescription.tsx
+├── ColorPickerError.tsx
+├── ColorPickerEyeDropper.tsx
+├── ColorPickerInput.tsx
+├── ColorPickerLabel.tsx
+├── ColorPickerPalette.tsx
+├── ColorPickerPresets.tsx
+├── ColorPickerSwatches.tsx
+├── ColorPickerTrigger.tsx
+├── hooks.ts
+├── index.ts
+├── types.ts
+├── utils.ts
+└── README.md
+```
 
 ## Props
 
 ### ColorPicker
 
-| Prop           | Type                | Default      | Description                              |
-| :------------- | :------------------ | :----------- | :--------------------------------------- |
-| `value`        | `string`            | —            | Controlled color value (hex).            |
-| `defaultValue` | `string`            | `#3b82f6`    | Uncontrolled default color.              |
-| `onChange`      | `(color) => void`   | —            | Callback when color changes.             |
-| `format`       | `hex \| rgb \| hsl` | `hex`        | Display format in the text input.        |
-| `showInput`    | `boolean`           | `true`       | Show the text input field.               |
-| `showPresets`  | `boolean`           | `true`       | Show preset color swatches.              |
-| `showAlpha`    | `boolean`           | `false`      | Show the opacity slider.                 |
-| `presetColors` | `string[]`          | 16 defaults  | Array of hex colors for presets.         |
-| `disabled`     | `boolean`           | `false`      | Disable the picker.                      |
-| `label`        | `string`            | —            | Label text.                              |
-| `description`  | `string`            | —            | Helper text below the label.             |
-| `error`        | `boolean`           | `false`      | Show error styling.                      |
-| `errorText`    | `string`            | —            | Error message text.                      |
+| Prop              | Type                                             | Default     | Description                      |
+| :---------------- | :----------------------------------------------- | :---------- | :------------------------------- |
+| `value`           | `string`                                         | —           | Controlled color value (hex)     |
+| `defaultValue`    | `string`                                         | `"#3b82f6"` | Uncontrolled default color       |
+| `onChange`        | `(color: string) => void`                        | —           | Callback when color changes      |
+| `format`          | `"hex" \| "rgb" \| "hsl"`                        | `"hex"`     | Display format in the text input |
+| `presets`         | `string[]`                                       | 22 defaults | Custom preset color array        |
+| `disabled`        | `boolean`                                        | `false`     | Disable all interactions         |
+| `validationState` | `"default" \| "error" \| "warning" \| "success"` | `"default"` | Input validation state           |
+| `defaultOpen`     | `boolean`                                        | `false`     | Initial dropdown open state      |
+| `open`            | `boolean`                                        | —           | Controlled dropdown state        |
+| `onOpenChange`    | `(open: boolean) => void`                        | —           | Callback when dropdown toggles   |
+
+### ColorPicker.Label
+
+| Prop       | Type        | Default | Description             |
+| :--------- | :---------- | :------ | :---------------------- |
+| `children` | `ReactNode` | —       | Label text              |
+| `optional` | `boolean`   | `false` | Shows "(optional)" text |
+
+### ColorPicker.Description
+
+| Prop       | Type        | Default | Description |
+| :--------- | :---------- | :------ | :---------- |
+| `children` | `ReactNode` | —       | Helper text |
+
+### ColorPicker.Error
+
+| Prop       | Type        | Default | Description                                 |
+| :--------- | :---------- | :------ | :------------------------------------------ |
+| `children` | `ReactNode` | —       | Error message (only renders in error state) |
+
+### ColorPicker.Trigger
+
+| Prop   | Type                   | Default | Description               |
+| :----- | :--------------------- | :------ | :------------------------ |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"`  | Swatch size (32/48/64 px) |
+
+### ColorPicker.Input
+
+| Prop          | Type     | Default     | Description       |
+| :------------ | :------- | :---------- | :---------------- |
+| `placeholder` | `string` | `"#000000"` | Input placeholder |
+
+### ColorPicker.CopyButton
+
+| Prop         | Type     | Default     | Description              |
+| :----------- | :------- | :---------- | :----------------------- |
+| `copiedText` | `string` | `"Copied!"` | Text shown after copying |
+
+### ColorPicker.Content
+
+| Prop         | Type                           | Default    | Description                     |
+| :----------- | :----------------------------- | :--------- | :------------------------------ |
+| `side`       | `"top" \| "bottom"`            | `"bottom"` | Preferred vertical position     |
+| `align`      | `"start" \| "center" \| "end"` | `"start"`  | Horizontal alignment to trigger |
+| `sideOffset` | `number`                       | `8`        | Distance from trigger (px)      |
+
+### ColorPicker.Palette
+
+| Prop    | Type     | Default          | Description           |
+| :------ | :------- | :--------------- | :-------------------- |
+| `label` | `string` | `"Pick a color"` | Accessible label text |
+
+### ColorPicker.Eyedropper
+
+| Prop              | Type     | Default                                      | Description      |
+| :---------------- | :------- | :------------------------------------------- | :--------------- |
+| `label`           | `string` | `"Pick from screen"`                         | Button text      |
+| `unsupportedText` | `string` | `"Eyedropper not supported in this browser"` | Fallback message |
+
+### ColorPicker.Presets
+
+| Prop      | Type       | Default           | Description            |
+| :-------- | :--------- | :---------------- | :--------------------- |
+| `label`   | `string`   | `"Preset Colors"` | Section label          |
+| `colors`  | `string[]` | Context presets   | Override preset colors |
+| `columns` | `number`   | `8`               | Grid column count      |
 
 ### ColorPicker.Swatches
 
-| Prop       | Type              | Default | Description                       |
-| :--------- | :---------------- | :------ | :-------------------------------- |
-| `colors`   | `string[]`        | —       | Array of hex colors to display.   |
-| `value`    | `string`          | —       | Currently selected color.         |
-| `onChange`  | `(color) => void` | —       | Callback when a swatch is clicked.|
-| `size`     | `sm \| md \| lg`  | `md`    | Swatch size.                      |
-| `label`    | `string`          | —       | Label text above swatches.        |
+| Prop       | Type                   | Default | Description               |
+| :--------- | :--------------------- | :------ | :------------------------ |
+| `colors`   | `string[]`             | —       | Array of hex colors       |
+| `value`    | `string`               | —       | Currently selected color  |
+| `onChange` | `(color) => void`      | —       | Callback on swatch click  |
+| `size`     | `"sm" \| "md" \| "lg"` | `"md"`  | Swatch size (24/32/40 px) |
+| `columns`  | `number`               | `8`     | Grid column count         |
+| `label`    | `string`               | —       | Section label             |
+| `disabled` | `boolean`              | `false` | Disable all swatches      |

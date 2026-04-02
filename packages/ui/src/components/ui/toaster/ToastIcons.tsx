@@ -1,7 +1,7 @@
 // icons.tsx
 // Icons
 
-import React from "react";
+import React from 'react';
 
 const Icons = {
   success: (

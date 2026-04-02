@@ -1,33 +1,32 @@
-"use client";
-import { useCallback, useEffect, useRef } from "react";
+'use client';
+import { useCallback, useEffect, useRef } from 'react';
 
 export interface UseConfirmExitOptions {
-    enabled: boolean;
-    message?: string;
+  enabled: boolean;
+  message?: string;
 }
 
 export const useConfirmExit = ({
-    enabled,
-    message = "You have unsaved changes. Are you sure you want to leave?",
+  enabled,
+  message = 'You have unsaved changes. Are you sure you want to leave?',
 }: UseConfirmExitOptions): void => {
-    const messageRef = useRef(message);
-    messageRef.current = message;
+  const messageRef = useRef(message);
+  messageRef.current = message;
 
-    const handler = useCallback(
-        (e: BeforeUnloadEvent) => {
-            if (!enabled) return;
-            e.preventDefault();
-            e.returnValue = messageRef.current;
-            return messageRef.current;
-        },
-        [enabled]
-    );
+  const handler = useCallback(
+    (e: BeforeUnloadEvent) => {
+      if (!enabled) return;
+      e.preventDefault();
+      e.returnValue = messageRef.current;
+      return messageRef.current;
+    },
+    [enabled],
+  );
 
-    useEffect(() => {
-        if (!enabled) return;
+  useEffect(() => {
+    if (!enabled) return;
 
-        window.addEventListener("beforeunload", handler);
-        return () => window.removeEventListener("beforeunload", handler);
-    }, [enabled, handler]);
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [enabled, handler]);
 };
-

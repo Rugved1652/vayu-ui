@@ -1,27 +1,27 @@
 {
-    "name": "vayu-ui-monorepo",
-    "version": "0.0.0",
-    "private": true,
-    "workspaces": [
-        "apps/*",
-        "packages/*"
-    ],
-    "scripts": {
-        "refactor": "tsx scripts/refactor-component.ts",
-        "build": "turbo run build",
-        "dev": "turbo run dev",
-        "lint": "turbo run lint",
-        "test": "turbo run test",
-        "format": "prettier '**/*.{ts,tsx,js,jsx,json,md,mdx,css,scss,html,yml,yaml}' --ignore-path .prettierignore --write",
-        "format:check": "prettier '**/*.{ts,tsx,js,jsx,json,md,mdx,css,scss,html,yml,yaml}' --ignore-path .prettierignore --check"
-    },
-    "devDependencies": {
-        "prettier": "^3.8.1",
-        "stylelint": "^17.5.0",
-        "stylelint-config-standard": "^40.0.0",
-        "tsx": "^4.21.0",
-        "turbo": "^2.0.0",
-        "typescript": "^5.0.0"
-    },
-    "packageManager": "npm@10.0.0"
+  "name": "vayu-ui-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "refactor": "tsx scripts/refactor-component.ts",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "prettier '**/*.{ts,tsx,js,jsx,json,md,mdx,css,scss,html,yml,yaml}' --ignore-path .prettierignore --write",
+    "format:check": "prettier '**/*.{ts,tsx,js,jsx,json,md,mdx,css,scss,html,yml,yaml}' --ignore-path .prettierignore --check"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.1",
+    "stylelint": "^17.5.0",
+    "stylelint-config-standard": "^40.0.0",
+    "tsx": "^4.21.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.0.0"
+  },
+  "packageManager": "npm@10.0.0"
 }

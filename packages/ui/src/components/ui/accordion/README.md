@@ -1,6 +1,7 @@
 # Accordion
 
 ## Anatomy
+
 - accordion.tsx — Root Accordion component with context provider and state management
 - accordion-item.tsx — AccordionItem subcomponent for individual accordion sections
 - accordion-header.tsx — AccordionHeader subcomponent with keyboard navigation
@@ -9,6 +10,7 @@
 - index.ts — Re-exports all components and types
 
 ## Use Cases
+
 - Organizing content into collapsible sections to reduce visual clutter
 - FAQs, documentation, or help sections where users want to scan topics
 - Settings panels with grouped options that can be expanded on demand

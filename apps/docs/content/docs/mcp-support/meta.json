@@ -1,7 +1,4 @@
 {
-    "title": "MCP Support",
-    "pages": [
-        "index",
-        "design-system"
-    ]
+  "title": "MCP Support",
+  "pages": ["index", "design-system"]
 }

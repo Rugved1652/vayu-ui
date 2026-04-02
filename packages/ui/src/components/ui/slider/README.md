@@ -1,6 +1,7 @@
 # Slider
 
 ## Anatomy
+
 - slider.tsx — composition (UI + wiring)
 - track.tsx — track bar with range fill
 - thumb.tsx — individual thumb with keyboard handling
@@ -9,6 +10,7 @@
 - index.ts — export
 
 ## Use Cases
+
 - Single value selection (volume, brightness)
 - Range selection with two thumbs (price range, date range)
 - Form input with controlled or uncontrolled state

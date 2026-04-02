@@ -32,9 +32,11 @@ const ContextMenuContent = forwardRef<
   useEffect(() => {
     if (isMounted && contentRef.current) {
       requestAnimationFrame(() => {
-        contentRef.current?.querySelector<HTMLElement>(
-          '[role="menuitem"]:not([aria-disabled="true"]), [role="menuitemcheckbox"]:not([aria-disabled="true"]), [role="menuitemradio"]:not([aria-disabled="true"])',
-        )?.focus();
+        contentRef.current
+          ?.querySelector<HTMLElement>(
+            '[role="menuitem"]:not([aria-disabled="true"]), [role="menuitemcheckbox"]:not([aria-disabled="true"]), [role="menuitemradio"]:not([aria-disabled="true"])',
+          )
+          ?.focus();
       });
     }
   }, [isMounted]);

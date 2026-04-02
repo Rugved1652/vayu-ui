@@ -1,18 +1,18 @@
 {
-    "name": "vayu-ui-registry",
-    "version": "1.0.0",
-    "description": "Shared component registry for Vayu UI CLI and MCP Server",
-    "author": "Rugved Patel",
-    "license": "MIT",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "type": "module",
-    "scripts": {
-        "build": "tsup",
-        "dev": "tsup --watch"
-    },
-    "devDependencies": {
-        "tsup": "^8.5.1",
-        "typescript": "^5.0.0"
-    }
+  "name": "vayu-ui-registry",
+  "version": "1.0.0",
+  "description": "Shared component registry for Vayu UI CLI and MCP Server",
+  "author": "Rugved Patel",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^5.0.0"
+  }
 }

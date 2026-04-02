@@ -33,6 +33,7 @@ Every background color has a paired text color that guarantees proper contrast. 
 ```
 
 This pattern ensures:
+
 - **WCAG AA compliance** in both light and dark modes
 - **Consistent contrast** across your entire app
 - **Automatic dark mode support** without extra work
@@ -67,12 +68,12 @@ Each layer is slightly different from the one below it, creating visual separati
 
 These four layers form the foundation of every screen in your app.
 
-| Variable | Usage Context | Paired Text | Tailwind Classes |
-| :--- | :--- | :--- | :--- |
-| **Canvas** | App background, viewport, body | `canvas-content` | `bg-canvas text-canvas-content` |
-| **Surface** | Cards, sections, inputs, tables, panels | `surface-content` | `bg-surface text-surface-content` |
-| **Sidebar** | Navigation sidebar, drawer, rail nav | `sidebar-content` | `bg-sidebar text-sidebar-content` |
-| **Elevated** | Modals, popovers, dropdowns, tooltips | `elevated-content` | `bg-elevated text-elevated-content` |
+| Variable     | Usage Context                           | Paired Text        | Tailwind Classes                    |
+| :----------- | :-------------------------------------- | :----------------- | :---------------------------------- |
+| **Canvas**   | App background, viewport, body          | `canvas-content`   | `bg-canvas text-canvas-content`     |
+| **Surface**  | Cards, sections, inputs, tables, panels | `surface-content`  | `bg-surface text-surface-content`   |
+| **Sidebar**  | Navigation sidebar, drawer, rail nav    | `sidebar-content`  | `bg-sidebar text-sidebar-content`   |
+| **Elevated** | Modals, popovers, dropdowns, tooltips   | `elevated-content` | `bg-elevated text-elevated-content` |
 
 ### Canvas
 
@@ -103,6 +104,7 @@ The canvas is your app's foundation. It's the bottom-most layer.
       {children}
     </main>
     ```
+
   </Tab>
 </Tabs>
 
@@ -137,6 +139,7 @@ Surfaces are containers that sit on top of the canvas. Cards, panels, and form e
       placeholder="Enter text..."
     />
     ```
+
   </Tab>
 </Tabs>
 
@@ -170,6 +173,7 @@ Sidebars are for navigation. They're visually distinct from the main content are
       {drawerContent}
     </aside>
     ```
+
   </Tab>
 </Tabs>
 
@@ -209,6 +213,7 @@ Elevated surfaces appear above everything else. Think modals, tooltips, and drop
       Tooltip text
     </div>
     ```
+
   </Tab>
 </Tabs>
 
@@ -218,14 +223,14 @@ Elevated surfaces appear above everything else. Think modals, tooltips, and drop
 
 Semantic colors convey meaning. Use these when you need to communicate state or intent.
 
-| Variable | Meaning | Paired Text | Use Cases |
-| :--- | :--- | :--- | :--- |
-| **Brand** | Primary identity | `brand-content` | CTAs, active states, links |
-| **Success** | Positive, completed | `success-content` | Confirmations, checkmarks |
-| **Warning** | Caution, pending | `warning-content` | Alerts, unsaved changes |
-| **Destructive** | Error, dangerous | `destructive-content` | Delete buttons, errors |
-| **Info** | Informational | `info-content` | Help text, notifications |
-| **Muted** | De-emphasized | `muted-content` | Disabled states, placeholders |
+| Variable        | Meaning             | Paired Text           | Use Cases                     |
+| :-------------- | :------------------ | :-------------------- | :---------------------------- |
+| **Brand**       | Primary identity    | `brand-content`       | CTAs, active states, links    |
+| **Success**     | Positive, completed | `success-content`     | Confirmations, checkmarks     |
+| **Warning**     | Caution, pending    | `warning-content`     | Alerts, unsaved changes       |
+| **Destructive** | Error, dangerous    | `destructive-content` | Delete buttons, errors        |
+| **Info**        | Informational       | `info-content`        | Help text, notifications      |
+| **Muted**       | De-emphasized       | `muted-content`       | Disabled states, placeholders |
 
 ### Brand (Primary)
 
@@ -280,6 +285,7 @@ Your brand color is for primary actions and key interactive elements.
       Active Tab
     </button>
     ```
+
   </Tab>
 </Tabs>
 
@@ -308,6 +314,7 @@ For positive outcomes, confirmations, and completed states.
     // Checkmark icon
     <CheckCircle className="text-success" />
     ```
+
   </Tab>
 </Tabs>
 
@@ -333,6 +340,7 @@ For cautionary messages and pending states.
       Pending
     </span>
     ```
+
   </Tab>
 </Tabs>
 
@@ -361,6 +369,7 @@ For errors, dangerous actions, and critical warnings.
       Failed to save changes.
     </div>
     ```
+
   </Tab>
 </Tabs>
 
@@ -386,6 +395,7 @@ For informational messages and help content.
       Password must be at least 8 characters.
     </p>
     ```
+
   </Tab>
 </Tabs>
 
@@ -417,6 +427,7 @@ For de-emphasized content, disabled states, and placeholders.
       Last updated 2 hours ago
     </span>
     ```
+
   </Tab>
 </Tabs>
 
@@ -426,11 +437,11 @@ For de-emphasized content, disabled states, and placeholders.
 
 These colors define borders and focus states.
 
-| Variable | Usage | Tailwind Class |
-| :--- | :--- | :--- |
-| **Border** | Container borders, dividers | `border-border` |
-| **Field** | Form field borders (inputs, selects) | `border-field` |
-| **Focus** | Focus rings, keyboard navigation | `ring-focus`, `focus:ring-focus` |
+| Variable   | Usage                                | Tailwind Class                   |
+| :--------- | :----------------------------------- | :------------------------------- |
+| **Border** | Container borders, dividers          | `border-border`                  |
+| **Field**  | Form field borders (inputs, selects) | `border-field`                   |
+| **Focus**  | Focus rings, keyboard navigation     | `ring-focus`, `focus:ring-focus` |
 
 ```tsx
 // Card with border
@@ -458,16 +469,14 @@ Dark mode is automatically handled when you use the pairing pattern. Simply add 
 ```tsx
 // In your root layout
 <html className="dark">
-  <body className="bg-canvas text-canvas-content">
-    {/* All children use dark mode colors */}
-  </body>
+  <body className="bg-canvas text-canvas-content">{/* All children use dark mode colors */}</body>
 </html>
 ```
 
 ### Toggle Pattern
 
 ```tsx
-"use client";
+'use client';
 import { useState, useEffect } from 'react';
 
 export function ThemeToggle() {
@@ -477,11 +486,7 @@ export function ThemeToggle() {
     document.documentElement.classList.toggle('dark', isDark);
   }, [isDark]);
 
-  return (
-    <button onClick={() => setIsDark(!isDark)}>
-      {isDark ? '☀️ Light' : '🌙 Dark'}
-    </button>
-  );
+  return <button onClick={() => setIsDark(!isDark)}>{isDark ? '☀️ Light' : '🌙 Dark'}</button>;
 }
 ```
 
@@ -501,24 +506,24 @@ This means `dark:` classes apply when the element (or any parent) has the `.dark
 
 ### Complete Color Pairing Table
 
-| Background | Text Color | Example |
-| :--- | :--- | :--- |
-| `bg-canvas` | `text-canvas-content` | App shell |
-| `bg-surface` | `text-surface-content` | Cards, forms |
-| `bg-sidebar` | `text-sidebar-content` | Navigation |
-| `bg-elevated` | `text-elevated-content` | Modals, tooltips |
-| `bg-brand` | `text-brand-content` | Primary actions |
-| `bg-success` | `text-success-content` | Success states |
-| `bg-warning` | `text-warning-content` | Warning states |
-| `bg-destructive` | `text-destructive-content` | Error states |
-| `bg-info` | `text-info-content` | Info states |
-| `bg-muted` | `text-muted-content` | Disabled states |
+| Background       | Text Color                 | Example          |
+| :--------------- | :------------------------- | :--------------- |
+| `bg-canvas`      | `text-canvas-content`      | App shell        |
+| `bg-surface`     | `text-surface-content`     | Cards, forms     |
+| `bg-sidebar`     | `text-sidebar-content`     | Navigation       |
+| `bg-elevated`    | `text-elevated-content`    | Modals, tooltips |
+| `bg-brand`       | `text-brand-content`       | Primary actions  |
+| `bg-success`     | `text-success-content`     | Success states   |
+| `bg-warning`     | `text-warning-content`     | Warning states   |
+| `bg-destructive` | `text-destructive-content` | Error states     |
+| `bg-info`        | `text-info-content`        | Info states      |
+| `bg-muted`       | `text-muted-content`       | Disabled states  |
 
 ### Do's and Don'ts
 
-| Do ✅ | Don't ❌ |
-| :--- | :--- |
-| Use semantic names: `bg-brand` | Use literal names: `bg-indigo-500` |
+| Do ✅                                          | Don't ❌                                    |
+| :--------------------------------------------- | :------------------------------------------ |
+| Use semantic names: `bg-brand`                 | Use literal names: `bg-indigo-500`          |
 | Pair colors: `bg-surface text-surface-content` | Mix arbitrarily: `bg-surface text-blue-500` |
-| Use `muted` for secondary content | Use `gray` or random gray shades |
-| Let the system handle dark mode | Manually specify dark mode colors |
+| Use `muted` for secondary content              | Use `gray` or random gray shades            |
+| Let the system handle dark mode                | Manually specify dark mode colors           |

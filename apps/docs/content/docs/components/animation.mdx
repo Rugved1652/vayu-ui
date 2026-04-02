@@ -1,6 +1,6 @@
 ---
 title: Animation
-description: A collection of pure CSS animations for React components with full accessibility support.
+description: A collection of pure CSS entrance animations with WCAG 2.2 accessibility support.
 ---
 
 import AnimationDemo from '@/components/demos/animation-demo';
@@ -9,7 +9,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init
 ```
 
 ```bash
@@ -20,161 +20,142 @@ npx vayu-ui add animation
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border border-ground-200 rounded">
-      <AnimationDemo />
-    </div>
+    <AnimationDemo />
   </Tab>
   <Tab value="Code">
     ```tsx
-        <Animation.Fade>
-            <div className="w-14 h-14 bg-indigo-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-sm">
-              Fade
-            </div>
-          </Animation.Fade>
-       
-          <Animation.Fade delay="long">
-            <div className="w-14 h-14 bg-indigo-400 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-sm">
-              Delay
-            </div>
-          </Animation.Fade>
-      
-          <Animation.Slide direction="left">
-            <div className="w-14 h-14 bg-blue-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Left
-            </div>
-          </Animation.Slide>
-        
-          <Animation.Slide direction="right">
-            <div className="w-14 h-14 bg-blue-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Right
-            </div>
-          </Animation.Slide>
-       
-          <Animation.Slide direction="up">
-            <div className="w-14 h-14 bg-blue-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Up
-            </div>
-          </Animation.Slide>
-       
-          <Animation.Slide direction="down">
-            <div className="w-14 h-14 bg-blue-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Down
-            </div>
-          </Animation.Slide>
-       
-         <Animation.Zoom scale="small">
-            <div className="w-14 h-14 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Sm
-            </div>
-          </Animation.Zoom>
-        
-         <Animation.Zoom scale="medium">
-            <div className="w-14 h-14 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Md
-            </div>
-          </Animation.Zoom>
-       
-          <Animation.Zoom scale="large">
-            <div className="w-14 h-14 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Lg
-            </div>
-          </Animation.Zoom>
-        
-          <Animation.Bounce scale="small">
-            <div className="w-14 h-14 bg-yellow-500 rounded-md shadow-lg flex items-center justify-center text-black font-bold text-xs">
-              Bnc
-            </div>
-          </Animation.Bounce>
-      
-          <Animation.Bounce scale="large">
-            <div className="w-14 h-14 bg-yellow-500 rounded-md shadow-lg flex items-center justify-center text-black font-bold text-xs">
-              Bnc
-            </div>
-          </Animation.Bounce>
-      
+    <Animation.Fade>
+      <div className="w-14 h-14 bg-indigo-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-sm">
+        Fade
+      </div>
+    </Animation.Fade>
 
-          <Animation.Flip direction="up">
-            <div className="w-14 h-14 bg-purple-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Flip
-            </div>
-          </Animation.Flip>
-      
-          <Animation.Flip direction="left">
-            <div className="w-14 h-14 bg-purple-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Flip
-            </div>
-          </Animation.Flip>
-        
-          <Animation.Rotate degrees={180}>
-            <div className="w-14 h-14 bg-red-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              180°
-            </div>
-          </Animation.Rotate>
-       
-          <Animation.Rotate degrees={-200}>
-            <div className="w-14 h-14 bg-red-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              -200°
-            </div>
-          </Animation.Rotate>
-       
-          <Animation.Roll direction="left">
-            <div className="w-14 h-14 bg-pink-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Roll
-            </div>
-          </Animation.Roll>
+    <Animation.Fade delay="long">
+      <div className="w-14 h-14 bg-indigo-400 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-sm">
+        Delay
+      </div>
+    </Animation.Fade>
 
-          <Animation.Roll direction="right">
-            <div className="w-14 h-14 bg-pink-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Roll
-            </div>
-          </Animation.Roll>
-       
-          <Animation.JackInTheBox>
-            <div className="w-14 h-14 bg-teal-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-[8px] text-center leading-tight">
-              Jack In
-            </div>
-          </Animation.JackInTheBox>
-      
-         <Animation.Hinge duration="slower">
-            <div className="w-14 h-14 bg-orange-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Hinge
-            </div>
-          </Animation.Hinge>
+    <Animation.Slide direction="left">
+      <div className="w-14 h-14 bg-blue-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Left
+      </div>
+    </Animation.Slide>
 
-        
-          <Animation.Bounce iteration="infinite">
-            <div className="w-14 h-14 bg-cyan-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
-              Loop
-            </div>
-          </Animation.Bounce>
+    <Animation.Slide direction="right">
+      <div className="w-14 h-14 bg-blue-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Right
+      </div>
+    </Animation.Slide>
+
+    <Animation.Slide direction="up">
+      <div className="w-14 h-14 bg-blue-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Up
+      </div>
+    </Animation.Slide>
+
+    <Animation.Slide direction="down">
+      <div className="w-14 h-14 bg-blue-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Down
+      </div>
+    </Animation.Slide>
+
+    <Animation.Zoom scale="small">
+      <div className="w-14 h-14 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Sm
+      </div>
+    </Animation.Zoom>
+
+    <Animation.Zoom scale="medium">
+      <div className="w-14 h-14 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Md
+      </div>
+    </Animation.Zoom>
+
+    <Animation.Zoom scale="large">
+      <div className="w-14 h-14 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Lg
+      </div>
+    </Animation.Zoom>
+
+    <Animation.Bounce scale="small">
+      <div className="w-14 h-14 bg-yellow-500 rounded-md shadow-lg flex items-center justify-center text-black font-bold text-xs">
+        Bnc
+      </div>
+    </Animation.Bounce>
+
+    <Animation.Bounce scale="large">
+      <div className="w-14 h-14 bg-yellow-500 rounded-md shadow-lg flex items-center justify-center text-black font-bold text-xs">
+        Bnc
+      </div>
+    </Animation.Bounce>
+
+    <Animation.Flip direction="up">
+      <div className="w-14 h-14 bg-purple-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Flip
+      </div>
+    </Animation.Flip>
+
+    <Animation.Flip direction="left">
+      <div className="w-14 h-14 bg-purple-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Flip
+      </div>
+    </Animation.Flip>
+
+    <Animation.Rotate degrees={180}>
+      <div className="w-14 h-14 bg-red-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        180
+      </div>
+    </Animation.Rotate>
+
+    <Animation.Rotate degrees={-200}>
+      <div className="w-14 h-14 bg-red-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        -200
+      </div>
+    </Animation.Rotate>
+
+    <Animation.Roll direction="left">
+      <div className="w-14 h-14 bg-pink-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Roll
+      </div>
+    </Animation.Roll>
+
+    <Animation.Roll direction="right">
+      <div className="w-14 h-14 bg-pink-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Roll
+      </div>
+    </Animation.Roll>
+
+    <Animation.JackInTheBox>
+      <div className="w-14 h-14 bg-teal-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-[8px] text-center leading-tight">
+        Jack In
+      </div>
+    </Animation.JackInTheBox>
+
+    <Animation.Hinge duration="slower">
+      <div className="w-14 h-14 bg-orange-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Hinge
+      </div>
+    </Animation.Hinge>
+
+    <Animation.Bounce iteration="infinite">
+      <div className="w-14 h-14 bg-cyan-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
+        Loop
+      </div>
+    </Animation.Bounce>
     ```
+
   </Tab>
 </Tabs>
-
-## Available Animations
-
-The `Animation` component uses the compound component pattern and exports the following sub-components:
-
-| Component | Description |
-| :-------- | :---------- |
-| `Animation.Fade` | Fades content in from transparent to opaque |
-| `Animation.Slide` | Slides content in from a specified direction |
-| `Animation.Bounce` | Bounces content in with elastic scaling |
-| `Animation.Flip` | Flips content in along X or Y axis |
-| `Animation.Rotate` | Rotates content in from a specified angle |
-| `Animation.Zoom` | Zooms content in from a scaled state |
-| `Animation.Roll` | Rolls content in with rotation from a direction |
-| `Animation.JackInTheBox` | Playful pop animation |
-| `Animation.Hinge` | Exit animation that swings and drops |
 
 ## Anatomy
 
 ```tsx
-<Animation.Fade duration="normal" delay="none" iteration={1}>
+<Animation.Fade duration="normal" delay="none" iteration={1} fillMode="none">
   {/* Content to animate */}
 </Animation.Fade>
 
-<Animation.Slide direction="left" duration="normal">
+<Animation.Slide direction="left" duration="normal" delay="none">
   {/* Content to animate */}
 </Animation.Slide>
 
@@ -182,709 +163,131 @@ The `Animation` component uses the compound component pattern and exports the fo
   {/* Content to animate */}
 </Animation.Bounce>
 
+<Animation.Flip direction="up" duration="normal">
+  {/* Content to animate */}
+</Animation.Flip>
+
 <Animation.Rotate degrees={-200} duration="normal">
   {/* Content to animate */}
 </Animation.Rotate>
+
+<Animation.Zoom scale="medium" duration="normal">
+  {/* Content to animate */}
+</Animation.Zoom>
+
+<Animation.Roll direction="left" duration="normal">
+  {/* Content to animate */}
+</Animation.Roll>
+
+<Animation.JackInTheBox duration="normal">
+  {/* Content to animate */}
+</Animation.JackInTheBox>
+
+<Animation.Hinge duration="normal" fillMode="forwards">
+  {/* Content to animate */}
+</Animation.Hinge>
+```
+
+## Accessibility
+
+- **Reduced Motion**: All animation components detect the `prefers-reduced-motion: reduce` media query via the `usePrefersReducedMotion` hook. When enabled, animations are replaced with `opacity-100` so content appears instantly without motion.
+- **Keyboard Support**: Animation wrappers are standard `<div>` elements. They do not trap focus or intercept keyboard events.
+- **Focus Behavior**: Animations do not affect focus management. The animated wrapper is transparent to focus order.
+- **ARIA Attributes**: No ARIA attributes are added by the animation wrapper. Consumers should add appropriate roles and labels to the content inside.
+
+## Screen reader behavior
+
+Screen readers are not affected by CSS animations. Content inside animation wrappers is announced normally as soon as it enters the DOM, regardless of the visual animation state. When `prefers-reduced-motion` is active, the element renders with `opacity-100`, ensuring no delay in content accessibility for assistive technologies.
+
+## Component Folder Structure
+
+```
+Animation/
+├── Animation.tsx              # Root compound component and sub-component composition
+├── FadeAnimation.tsx          # Fade-in animation
+├── SlideAnimation.tsx         # Slide-in animation (directional)
+├── BounceAnimation.tsx        # Bounce-in animation (scale variants)
+├── FlipAnimation.tsx          # Flip-in animation (X/Y axis)
+├── RotateAnimation.tsx        # Rotate-in animation (custom degrees)
+├── ZoomAnimation.tsx          # Zoom-in animation (scale variants)
+├── RollAnimation.tsx          # Roll-in animation (directional)
+├── JackInTheBoxAnimation.tsx  # Pop-up animation
+├── HingeAnimation.tsx         # Swing-and-drop exit animation
+├── hooks.ts                   # usePrefersReducedMotion hook
+├── utils.ts                   # buildAnimationClasses utility
+├── types.ts                   # TypeScript types and mapping objects
+├── index.ts                   # Public API exports
+└── README.md                  # Internal documentation
 ```
 
 ## Props
 
 ### Base Props
 
-All animation components accept the following props:
+All animation sub-components accept these props:
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :------ | :---------- |
-| `children` | `ReactNode` | - | Content to animate |
-| `duration` | `"slower"` \| `"slow"` \| `"normal"` \| `"fast"` \| `"faster"` | `"normal"` | Animation duration |
-| `delay` | `"none"` \| `"short"` \| `"medium"` \| `"long"` | `"none"` | Delay before animation starts |
-| `iteration` | `1` \| `2` \| `3` \| `"infinite"` | `1` | Number of times to repeat |
-| `fillMode` | `"none"` \| `"forwards"` \| `"backwards"` \| `"both"` | `"none"` | Animation fill mode |
-| `className` | `string` | - | Additional CSS classes |
-| `onAnimationEnd` | `AnimationEventHandler<HTMLDivElement>` | - | Callback when animation completes |
-| `onAnimationStart` | `AnimationEventHandler<HTMLDivElement>` | - | Callback when animation starts |
+| Prop               | Type                                                           | Default    | Description                               |
+| :----------------- | :------------------------------------------------------------- | :--------- | :---------------------------------------- |
+| `children`         | `ReactNode`                                                    | —          | Content to animate                        |
+| `duration`         | `"slower"` \| `"slow"` \| `"normal"` \| `"fast"` \| `"faster"` | `"normal"` | Animation speed                           |
+| `delay`            | `"none"` \| `"short"` \| `"medium"` \| `"long"`                | `"none"`   | Delay before the animation starts         |
+| `iteration`        | `1` \| `2` \| `3` \| `"infinite"`                              | `1`        | Number of times the animation repeats     |
+| `fillMode`         | `"none"` \| `"forwards"` \| `"backwards"` \| `"both"`          | `"none"`   | How styles persist before/after animation |
+| `className`        | `string`                                                       | —          | Additional CSS classes                    |
+| `onAnimationEnd`   | `AnimationEventHandler<HTMLDivElement>`                        | —          | Fires when the animation completes        |
+| `onAnimationStart` | `AnimationEventHandler<HTMLDivElement>`                        | —          | Fires when the animation starts           |
 
-### Directional Props
+### Animation.Slide
 
-`Animation.Slide`, `Animation.Flip`, and `Animation.Roll` accept:
+| Prop        | Type                                        | Default  | Description                          |
+| :---------- | :------------------------------------------ | :------- | :----------------------------------- |
+| `direction` | `"up"` \| `"down"` \| `"left"` \| `"right"` | `"left"` | Direction the content slides in from |
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :------ | :---------- |
-| `direction` | `"up"` \| `"down"` \| `"left"` \| `"right"` | `"left"` | Direction of animation |
+### Animation.Flip
 
-### Scale Props
+| Prop        | Type                                        | Default | Description                                                             |
+| :---------- | :------------------------------------------ | :------ | :---------------------------------------------------------------------- |
+| `direction` | `"up"` \| `"down"` \| `"left"` \| `"right"` | `"up"`  | Flip axis and direction (`up`/`down` = X-axis, `left`/`right` = Y-axis) |
 
-`Animation.Bounce` and `Animation.Zoom` accept:
+### Animation.Roll
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :------ | :---------- |
-| `scale` | `"small"` \| `"medium"` \| `"large"` | `"medium"` | Scale intensity of animation |
+| Prop        | Type                                        | Default  | Description                         |
+| :---------- | :------------------------------------------ | :------- | :---------------------------------- |
+| `direction` | `"up"` \| `"down"` \| `"left"` \| `"right"` | `"left"` | Direction the content rolls in from |
 
-### Rotate Props
+### Animation.Bounce
 
-`Animation.Rotate` accepts:
+| Prop    | Type                                 | Default    | Description              |
+| :------ | :----------------------------------- | :--------- | :----------------------- |
+| `scale` | `"small"` \| `"medium"` \| `"large"` | `"medium"` | Starting scale intensity |
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :------ | :---------- |
-| `degrees` | `number` | `-200` | Starting rotation angle in degrees |
+### Animation.Zoom
 
-## Duration Values
+| Prop    | Type                                 | Default    | Description              |
+| :------ | :----------------------------------- | :--------- | :----------------------- |
+| `scale` | `"small"` \| `"medium"` \| `"large"` | `"medium"` | Starting scale intensity |
 
-| Value | Duration |
-| :---- | :------- |
-| `slower` | 2000ms |
-| `slow` | 1500ms |
-| `normal` | 1000ms |
-| `fast` | 700ms |
-| `faster` | 500ms |
+### Animation.Rotate
 
-## Delay Values
+| Prop      | Type     | Default | Description                        |
+| :-------- | :------- | :------ | :--------------------------------- |
+| `degrees` | `number` | `-200`  | Starting rotation angle in degrees |
 
-| Value | Delay |
-| :---- | :---- |
-| `none` | 0ms |
-| `short` | 150ms |
+### Duration Values
+
+| Value    | Duration |
+| :------- | :------- |
+| `slower` | 2000ms   |
+| `slow`   | 1500ms   |
+| `normal` | 1000ms   |
+| `fast`   | 700ms    |
+| `faster` | 500ms    |
+
+### Delay Values
+
+| Value    | Delay |
+| :------- | :---- |
+| `none`   | 0ms   |
+| `short`  | 150ms |
 | `medium` | 300ms |
-| `long` | 500ms |
-
-## Accessibility
-
-- **Reduced Motion**: All animations respect the `prefers-reduced-motion` media query. Users who have enabled reduced motion in their system preferences will see static content without animations.
-- **Semantic HTML**: Uses standard `<div>` elements for animation wrappers.
-- **No Seizure Risk**: Animations are designed to avoid rapid flashing or strobing effects.
-
-## Source Code
-
-```tsx title="packages/ui/src/components/ui/animation.tsx"
-"use client";
-
-import { cn } from "./utils";
-import {
-    CSSProperties,
-    forwardRef,
-    HTMLAttributes,
-    ReactNode,
-    useEffect,
-    useState,
-} from "react";
-import "./animation.css";
-
-// ============================================================================
-// Types
-// ============================================================================
-
-export type AnimationDuration = "slower" | "slow" | "normal" | "fast" | "faster";
-export type AnimationDelay = "none" | "short" | "medium" | "long";
-export type AnimationIteration = 1 | 2 | 3 | "infinite";
-export type AnimationDirection = "up" | "down" | "left" | "right";
-export type AnimationFillMode = "none" | "forwards" | "backwards" | "both";
-export type AnimationScale = "small" | "medium" | "large";
-
-export interface BaseAnimationProps extends HTMLAttributes<HTMLDivElement> {
-    children: ReactNode;
-    duration?: AnimationDuration;
-    delay?: AnimationDelay;
-    iteration?: AnimationIteration;
-    fillMode?: AnimationFillMode;
-    /** Fixed: Uses correct React Animation Event types */
-    onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement>;
-    onAnimationStart?: React.AnimationEventHandler<HTMLDivElement>;
-}
-
-export interface DirectionalAnimationProps extends BaseAnimationProps {
-    direction?: AnimationDirection;
-}
-
-export interface ScaleAnimationProps extends BaseAnimationProps {
-    scale?: AnimationScale;
-}
-
-export interface RotateAnimationProps extends BaseAnimationProps {
-    degrees?: number;
-}
-
-// ============================================================================
-// Accessibility Hook (WCAG 2.2)
-// ============================================================================
-
-/**
- * Detects if the user has requested reduced motion in their OS settings.
- * Essential for preventing vestibular disorders triggers.
- */
-const usePrefersReducedMotion = (): boolean => {
-    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-    useEffect(() => {
-        // Check if window is defined (SSR safety)
-        if (typeof window === "undefined") return;
-
-        const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-        
-        // Set initial value
-        setPrefersReducedMotion(mediaQuery.matches);
-
-        // Listen for changes
-        const handler = (event: MediaQueryListEvent) => {
-            setPrefersReducedMotion(event.matches);
-        };
-
-        mediaQuery.addEventListener("change", handler);
-        return () => mediaQuery.removeEventListener("change", handler);
-    }, []);
-
-    return prefersReducedMotion;
-};
-
-// ============================================================================
-// Mappings
-// ============================================================================
-
-const durationMap: Record<AnimationDuration, string> = {
-    slower: "duration-[2000ms]",
-    slow: "duration-[1500ms]",
-    normal: "duration-1000",
-    fast: "duration-700",
-    faster: "duration-500",
-};
-
-const delayMap: Record<AnimationDelay, string> = {
-    none: "delay-0",
-    short: "delay-150",
-    medium: "delay-300",
-    long: "delay-500",
-};
-
-// Fixed: Using arbitrary properties to ensure these work without tailwind.config.js extensions
-const iterationMap: Record<AnimationIteration, string> = {
-    1: "[animation-iteration:1]",
-    2: "[animation-iteration:2]",
-    3: "[animation-iteration:3]",
-    infinite: "animate-infinite",
-};
-
-const fillModeMap: Record<AnimationFillMode, string> = {
-    none: "[animation-fill-mode:none]",
-    forwards: "[animation-fill-mode:forwards]",
-    backwards: "[animation-fill-mode:backwards]",
-    both: "[animation-fill-mode:both]",
-};
-
-const directionAnimationMap: Record<AnimationDirection, string> = {
-    left: "animate-slide-in-left",
-    right: "animate-slide-in-right",
-    up: "animate-slide-in-up",
-    down: "animate-slide-in-down",
-};
-
-const flipAnimationMap: Record<AnimationDirection, string> = {
-    up: "animate-flip-in-x",
-    down: "animate-flip-in-x [animation-direction:reverse]",
-    left: "animate-flip-in-y",
-    right: "animate-flip-in-y [animation-direction:reverse]",
-};
-
-const rollAnimationMap: Record<AnimationDirection, string> = {
-    left: "animate-roll-in",
-    right: "animate-roll-in-right",
-    up: "animate-roll-in-up",
-    down: "animate-roll-in-down",
-};
-
-const bounceScaleMap: Record<AnimationScale, string> = {
-    small: "animate-bounce-in-small",
-    medium: "animate-bounce-in",
-    large: "animate-bounce-in-large",
-};
-
-const zoomScaleMap: Record<AnimationScale, string> = {
-    small: "animate-zoom-in-small",
-    medium: "animate-zoom-in",
-    large: "animate-zoom-in-large",
-};
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-
-const buildAnimationClasses = (
-    baseAnimation: string,
-    duration: AnimationDuration,
-    delay: AnimationDelay,
-    iteration: AnimationIteration,
-    fillMode: AnimationFillMode,
-    className?: string,
-    reduceMotion?: boolean
-): string => {
-    // WCAG Fix: If user prefers reduced motion, we skip the animation classes.
-    // We ensure the element is visible (opacity-100) instead of animating in.
-    if (reduceMotion) {
-        return cn("opacity-100", className);
-    }
-
-    return cn(
-        baseAnimation,
-        durationMap[duration],
-        delayMap[delay],
-        iterationMap[iteration],
-        fillModeMap[fillMode],
-        className
-    );
-};
-
-// ============================================================================
-// Animation Root Component
-// ============================================================================
-
-interface AnimationRootProps extends HTMLAttributes<HTMLDivElement> {
-    children: ReactNode;
-}
-
-const AnimationRoot = forwardRef<HTMLDivElement, AnimationRootProps>(
-    ({ children, className, ...props }, ref) => {
-        return (
-            // Fix: Removed 'contents' to allow proper styling and ref behavior
-            <div ref={ref} className={cn("", className)} {...props}>
-                {children}
-            </div>
-        );
-    }
-);
-
-AnimationRoot.displayName = "Animation";
-
-// ============================================================================
-// Fade Animation
-// ============================================================================
-
-const AnimationFade = forwardRef<HTMLDivElement, BaseAnimationProps>(
-    (
-        {
-            children,
-            className,
-            duration = "normal",
-            delay = "none",
-            iteration = 1,
-            fillMode = "none",
-            onAnimationEnd,
-            onAnimationStart,
-            ...props
-        },
-        ref
-    ) => {
-        const reduceMotion = usePrefersReducedMotion();
-
-        return (
-            <div
-                ref={ref}
-                className={buildAnimationClasses(
-                    "animate-fade-in",
-                    duration,
-                    delay,
-                    iteration,
-                    fillMode,
-                    className,
-                    reduceMotion
-                )}
-                onAnimationEnd={onAnimationEnd}
-                onAnimationStart={onAnimationStart}
-                {...props}
-            >
-                {children}
-            </div>
-        );
-    }
-);
-
-AnimationFade.displayName = "Animation.Fade";
-
-// ============================================================================
-// Slide Animation
-// ============================================================================
-
-const AnimationSlide = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
-    (
-        {
-            children,
-            className,
-            direction = "left",
-            duration = "normal",
-            delay = "none",
-            iteration = 1,
-            fillMode = "none",
-            onAnimationEnd,
-            onAnimationStart,
-            ...props
-        },
-        ref
-    ) => {
-        const reduceMotion = usePrefersReducedMotion();
-
-        return (
-            <div
-                ref={ref}
-                className={buildAnimationClasses(
-                    directionAnimationMap[direction],
-                    duration,
-                    delay,
-                    iteration,
-                    fillMode,
-                    className,
-                    reduceMotion
-                )}
-                onAnimationEnd={onAnimationEnd}
-                onAnimationStart={onAnimationStart}
-                {...props}
-            >
-                {children}
-            </div>
-        );
-    }
-);
-
-AnimationSlide.displayName = "Animation.Slide";
-
-// ============================================================================
-// Bounce Animation
-// ============================================================================
-
-const AnimationBounce = forwardRef<HTMLDivElement, ScaleAnimationProps>(
-    (
-        {
-            children,
-            className,
-            scale = "medium",
-            duration = "normal",
-            delay = "none",
-            iteration = 1,
-            fillMode = "none",
-            onAnimationEnd,
-            onAnimationStart,
-            ...props
-        },
-        ref
-    ) => {
-        const reduceMotion = usePrefersReducedMotion();
-
-        return (
-            <div
-                ref={ref}
-                className={buildAnimationClasses(
-                    bounceScaleMap[scale],
-                    duration,
-                    delay,
-                    iteration,
-                    fillMode,
-                    className,
-                    reduceMotion
-                )}
-                onAnimationEnd={onAnimationEnd}
-                onAnimationStart={onAnimationStart}
-                {...props}
-            >
-                {children}
-            </div>
-        );
-    }
-);
-
-AnimationBounce.displayName = "Animation.Bounce";
-
-// ============================================================================
-// Flip Animation
-// ============================================================================
-
-const AnimationFlip = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
-    (
-        {
-            children,
-            className,
-            direction = "up",
-            duration = "normal",
-            delay = "none",
-            iteration = 1,
-            fillMode = "none",
-            onAnimationEnd,
-            onAnimationStart,
-            ...props
-        },
-        ref
-    ) => {
-        const reduceMotion = usePrefersReducedMotion();
-
-        return (
-            <div
-                ref={ref}
-                className={buildAnimationClasses(
-                    flipAnimationMap[direction],
-                    duration,
-                    delay,
-                    iteration,
-                    fillMode,
-                    className,
-                    reduceMotion
-                )}
-                onAnimationEnd={onAnimationEnd}
-                onAnimationStart={onAnimationStart}
-                {...props}
-            >
-                {children}
-            </div>
-        );
-    }
-);
-
-AnimationFlip.displayName = "Animation.Flip";
-
-// ============================================================================
-// Rotate Animation
-// ============================================================================
-
-const AnimationRotate = forwardRef<HTMLDivElement, RotateAnimationProps>(
-    (
-        {
-            children,
-            className,
-            degrees = -200,
-            duration = "normal",
-            delay = "none",
-            iteration = 1,
-            fillMode = "none",
-            onAnimationEnd,
-            onAnimationStart,
-            ...props
-        },
-        ref
-    ) => {
-        const reduceMotion = usePrefersReducedMotion();
-
-        const style: CSSProperties = {
-            "--rotation-start": `${degrees}deg`,
-            ...props.style,
-        } as CSSProperties;
-
-        return (
-            <div
-                ref={ref}
-                style={style}
-                className={buildAnimationClasses(
-                    "animate-rotate-in",
-                    duration,
-                    delay,
-                    iteration,
-                    fillMode,
-                    className,
-                    reduceMotion
-                )}
-                onAnimationEnd={onAnimationEnd}
-                onAnimationStart={onAnimationStart}
-                {...props}
-            >
-                {children}
-            </div>
-        );
-    }
-);
-
-AnimationRotate.displayName = "Animation.Rotate";
-
-// ============================================================================
-// Zoom Animation
-// ============================================================================
-
-const AnimationZoom = forwardRef<HTMLDivElement, ScaleAnimationProps>(
-    (
-        {
-            children,
-            className,
-            scale = "medium",
-            duration = "normal",
-            delay = "none",
-            iteration = 1,
-            fillMode = "none",
-            onAnimationEnd,
-            onAnimationStart,
-            ...props
-        },
-        ref
-    ) => {
-        const reduceMotion = usePrefersReducedMotion();
-
-        return (
-            <div
-                ref={ref}
-                className={buildAnimationClasses(
-                    zoomScaleMap[scale],
-                    duration,
-                    delay,
-                    iteration,
-                    fillMode,
-                    className,
-                    reduceMotion
-                )}
-                onAnimationEnd={onAnimationEnd}
-                onAnimationStart={onAnimationStart}
-                {...props}
-            >
-                {children}
-            </div>
-        );
-    }
-);
-
-AnimationZoom.displayName = "Animation.Zoom";
-
-// ============================================================================
-// Roll Animation
-// ============================================================================
-
-const AnimationRoll = forwardRef<HTMLDivElement, DirectionalAnimationProps>(
-    (
-        {
-            children,
-            className,
-            direction = "left",
-            duration = "normal",
-            delay = "none",
-            iteration = 1,
-            fillMode = "none",
-            onAnimationEnd,
-            onAnimationStart,
-            ...props
-        },
-        ref
-    ) => {
-        const reduceMotion = usePrefersReducedMotion();
-
-        return (
-            <div
-                ref={ref}
-                className={buildAnimationClasses(
-                    rollAnimationMap[direction],
-                    duration,
-                    delay,
-                    iteration,
-                    fillMode,
-                    className,
-                    reduceMotion
-                )}
-                onAnimationEnd={onAnimationEnd}
-                onAnimationStart={onAnimationStart}
-                {...props}
-            >
-                {children}
-            </div>
-        );
-    }
-);
-
-AnimationRoll.displayName = "Animation.Roll";
-
-// ============================================================================
-// JackInTheBox Animation
-// ============================================================================
-
-const AnimationJackInTheBox = forwardRef<HTMLDivElement, BaseAnimationProps>(
-    (
-        {
-            children,
-            className,
-            duration = "normal",
-            delay = "none",
-            iteration = 1,
-            fillMode = "none",
-            onAnimationEnd,
-            onAnimationStart,
-            ...props
-        },
-        ref
-    ) => {
-        const reduceMotion = usePrefersReducedMotion();
-
-        return (
-            <div
-                ref={ref}
-                className={buildAnimationClasses(
-                    "animate-jack-in-the-box",
-                    duration,
-                    delay,
-                    iteration,
-                    fillMode,
-                    className,
-                    reduceMotion
-                )}
-                onAnimationEnd={onAnimationEnd}
-                onAnimationStart={onAnimationStart}
-                {...props}
-            >
-                {children}
-            </div>
-        );
-    }
-);
-
-AnimationJackInTheBox.displayName = "Animation.JackInTheBox";
-
-// ============================================================================
-// Hinge Animation
-// ============================================================================
-
-const AnimationHinge = forwardRef<HTMLDivElement, BaseAnimationProps>(
-    (
-        {
-            children,
-            className,
-            duration = "normal",
-            delay = "none",
-            iteration = 1,
-            fillMode = "forwards",
-            onAnimationEnd,
-            onAnimationStart,
-            ...props
-        },
-        ref
-    ) => {
-        const reduceMotion = usePrefersReducedMotion();
-
-        return (
-            <div
-                ref={ref}
-                className={buildAnimationClasses(
-                    "animate-hinge",
-                    duration,
-                    delay,
-                    iteration,
-                    fillMode,
-                    className,
-                    reduceMotion
-                )}
-                onAnimationEnd={onAnimationEnd}
-                onAnimationStart={onAnimationStart}
-                {...props}
-            >
-                {children}
-            </div>
-        );
-    }
-);
-
-AnimationHinge.displayName = "Animation.Hinge";
-
-// ============================================================================
-// Compound Component Export
-// ============================================================================
-
-const Animation = Object.assign(AnimationRoot, {
-    Fade: AnimationFade,
-    Slide: AnimationSlide,
-    Bounce: AnimationBounce,
-    Flip: AnimationFlip,
-    Rotate: AnimationRotate,
-    Zoom: AnimationZoom,
-    Roll: AnimationRoll,
-    JackInTheBox: AnimationJackInTheBox,
-    Hinge: AnimationHinge,
-});
-
-export { Animation };
-export default Animation;
-```
+| `long`   | 500ms |

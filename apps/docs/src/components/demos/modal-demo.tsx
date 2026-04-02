@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Modal, Button, Typography, Divider } from "vayu-ui";
+import React, { useState } from 'react';
+import { Modal, Button, Typography, Divider } from 'vayu-ui';
 
 export default function ModalDemo() {
   const [isControlledOpen, setIsControlledOpen] = useState(false);
@@ -14,8 +14,8 @@ export default function ModalDemo() {
         <header className="space-y-2">
           <Typography.H1>Modal Component</Typography.H1>
           <Typography.P variant="secondary">
-            Accessible dialog component with focus trap, keyboard navigation,
-            and compound component API.
+            Accessible dialog component with focus trap, keyboard navigation, and compound component
+            API.
           </Typography.P>
         </header>
 
@@ -26,13 +26,13 @@ export default function ModalDemo() {
           <div>
             <Typography.H2>1. Uncontrolled Modal</Typography.H2>
             <Typography.P variant="secondary" className="mt-1">
-              State is managed internally. Use{" "}
-              <Typography.Code>Modal.Trigger</Typography.Code> to open.
+              State is managed internally. Use <Typography.Code>Modal.Trigger</Typography.Code> to
+              open.
             </Typography.P>
           </div>
 
           <Modal>
-            <Modal.Trigger>
+            <Modal.Trigger asChild>
               <Button variant="primary">Open Modal</Button>
             </Modal.Trigger>
 
@@ -49,9 +49,8 @@ export default function ModalDemo() {
 
               <Modal.Body>
                 <Typography.P>
-                  This is a simple modal dialog. You can close it by clicking
-                  the X button, clicking outside the modal, or pressing the
-                  Escape key.
+                  This is a simple modal dialog. You can close it by clicking the X button, clicking
+                  outside the modal, or pressing the Escape key.
                 </Typography.P>
               </Modal.Body>
 
@@ -75,10 +74,7 @@ export default function ModalDemo() {
             </Typography.P>
           </div>
 
-          <Button
-            variant="primary"
-            onClick={() => setIsControlledOpen(true)}
-          >
+          <Button variant="primary" onClick={() => setIsControlledOpen(true)}>
             Open Controlled Modal
           </Button>
 
@@ -87,23 +83,19 @@ export default function ModalDemo() {
               <Modal.Header>
                 <div className="flex-1">
                   <Modal.Title>Controlled State</Modal.Title>
-                  <Modal.Description>
-                    This modal is controlled by external state.
-                  </Modal.Description>
+                  <Modal.Description>This modal is controlled by external state.</Modal.Description>
                 </div>
                 <Modal.Close />
               </Modal.Header>
 
               <Modal.Body>
                 <Typography.P className="mb-4">
-                  The open state is managed by the parent component. This is
-                  useful when you need to open the modal programmatically or
-                  track the state.
+                  The open state is managed by the parent component. This is useful when you need to
+                  open the modal programmatically or track the state.
                 </Typography.P>
                 <div className="p-4 rounded-surface bg-info/10 border border-info">
                   <Typography.P variant="info">
-                    <strong>Current state:</strong>{" "}
-                    {isControlledOpen ? "Open" : "Closed"}
+                    <strong>Current state:</strong> {isControlledOpen ? 'Open' : 'Closed'}
                   </Typography.P>
                 </div>
               </Modal.Body>
@@ -140,9 +132,7 @@ export default function ModalDemo() {
               <Modal.Header>
                 <div className="flex-1">
                   <Modal.Title>Edit Profile</Modal.Title>
-                  <Modal.Description>
-                    Update your personal information below.
-                  </Modal.Description>
+                  <Modal.Description>Update your personal information below.</Modal.Description>
                 </div>
                 <Modal.Close />
               </Modal.Header>
@@ -150,10 +140,7 @@ export default function ModalDemo() {
               <Modal.Body>
                 <form className="space-y-4">
                   <div>
-                    <Typography.Label
-                      htmlFor="name-input"
-                      className="block mb-1.5"
-                    >
+                    <Typography.Label htmlFor="name-input" className="block mb-1.5">
                       Full Name
                     </Typography.Label>
                     <input
@@ -165,10 +152,7 @@ export default function ModalDemo() {
                   </div>
 
                   <div>
-                    <Typography.Label
-                      htmlFor="email-input"
-                      className="block mb-1.5"
-                    >
+                    <Typography.Label htmlFor="email-input" className="block mb-1.5">
                       Email Address
                     </Typography.Label>
                     <input
@@ -180,10 +164,7 @@ export default function ModalDemo() {
                   </div>
 
                   <div>
-                    <Typography.Label
-                      htmlFor="bio-input"
-                      className="block mb-1.5"
-                    >
+                    <Typography.Label htmlFor="bio-input" className="block mb-1.5">
                       Bio
                     </Typography.Label>
                     <textarea
@@ -217,10 +198,7 @@ export default function ModalDemo() {
             </Typography.P>
           </div>
 
-          <Button
-            variant="destructive"
-            onClick={() => setIsDeleteOpen(true)}
-          >
+          <Button variant="destructive" onClick={() => setIsDeleteOpen(true)}>
             Delete Account
           </Button>
 
@@ -234,9 +212,7 @@ export default function ModalDemo() {
               <Modal.Header>
                 <div className="flex-1">
                   <Modal.Title>Delete Account?</Modal.Title>
-                  <Modal.Description>
-                    This action cannot be undone.
-                  </Modal.Description>
+                  <Modal.Description>This action cannot be undone.</Modal.Description>
                 </div>
                 <Modal.Close />
               </Modal.Header>
@@ -244,9 +220,8 @@ export default function ModalDemo() {
               <Modal.Body>
                 <div className="space-y-3">
                   <Typography.P>
-                    Are you sure you want to delete your account? All of your
-                    data will be permanently removed. This action cannot be
-                    undone.
+                    Are you sure you want to delete your account? All of your data will be
+                    permanently removed. This action cannot be undone.
                   </Typography.P>
                   <div className="p-3 rounded-surface bg-destructive/10 border border-destructive">
                     <Typography.P variant="error">
@@ -263,7 +238,7 @@ export default function ModalDemo() {
                 <Button
                   variant="destructive"
                   onClick={() => {
-                    alert("Account deleted!");
+                    alert('Account deleted!');
                     setIsDeleteOpen(false);
                   }}
                 >
@@ -286,7 +261,7 @@ export default function ModalDemo() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            {(["sm", "md", "lg", "xl", "full"] as const).map((size) => (
+            {(['sm', 'md', 'lg', 'xl', 'full'] as const).map((size) => (
               <Modal key={size} size={size}>
                 <Modal.Trigger>
                   <Button variant="outline">{size.toUpperCase()}</Button>
@@ -305,10 +280,8 @@ export default function ModalDemo() {
 
                   <Modal.Body>
                     <Typography.P>
-                      This modal demonstrates the{" "}
-                      <strong>{size}</strong> size option.
-                      {size === "full" &&
-                        " It takes up almost the entire viewport width."}
+                      This modal demonstrates the <strong>{size}</strong> size option.
+                      {size === 'full' && ' It takes up almost the entire viewport width.'}
                     </Typography.P>
                   </Modal.Body>
 
@@ -353,8 +326,8 @@ export default function ModalDemo() {
 
                 <Modal.Body>
                   <Typography.P>
-                    You must explicitly close this modal using the X button or
-                    the close button below. Clicking the overlay won't work.
+                    You must explicitly close this modal using the X button or the close button
+                    below. Clicking the overlay won't work.
                   </Typography.P>
                 </Modal.Body>
 
@@ -375,17 +348,14 @@ export default function ModalDemo() {
                 <Modal.Header>
                   <div className="flex-1">
                     <Modal.Title>No Escape Key</Modal.Title>
-                    <Modal.Description>
-                      Pressing Escape won't close this modal.
-                    </Modal.Description>
+                    <Modal.Description>Pressing Escape won't close this modal.</Modal.Description>
                   </div>
                   <Modal.Close />
                 </Modal.Header>
 
                 <Modal.Body>
                   <Typography.P>
-                    The Escape key is disabled for this modal. Use the close
-                    buttons instead.
+                    The Escape key is disabled for this modal. Use the close buttons instead.
                   </Typography.P>
                 </Modal.Body>
 

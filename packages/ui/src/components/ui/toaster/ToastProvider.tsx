@@ -1,31 +1,25 @@
 // toast-provider.tsx
 // Composition: context + provider + hook
 
-"use client";
+'use client';
 
-import React, {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
-import type { Toast, ToastOptions, ToastContextType, ToastProviderProps } from "./types";
-import { ToastContainer } from "./ToastContainer";
+import React, { createContext, ReactNode, useCallback, useContext, useState } from 'react';
+import type { Toast, ToastOptions, ToastContextType, ToastProviderProps } from './types';
+import { ToastContainer } from './ToastContainer';
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export const useToast = () => {
   const context = useContext(ToastContext);
   if (!context) {
-    throw new Error("useToast must be used within ToastProvider");
+    throw new Error('useToast must be used within ToastProvider');
   }
   return context;
 };
 
 const ToastProvider: React.FC<ToastProviderProps> = ({
   children,
-  defaultPosition = "bottom-right",
+  defaultPosition = 'bottom-right',
   maxToasts = 5,
   defaultDuration = 5000,
 }) => {
@@ -36,7 +30,7 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
       const id = Math.random().toString(36).substring(2, 9);
       const toast: Toast = {
         id,
-        type: options.type || "info",
+        type: options.type || 'info',
         title: options.title,
         description: options.description,
         duration: options.duration ?? defaultDuration,
@@ -56,7 +50,7 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
 
       return id;
     },
-    [maxToasts, defaultDuration, defaultPosition]
+    [maxToasts, defaultDuration, defaultPosition],
   );
 
   const removeToast = useCallback((id: string) => {
@@ -68,51 +62,51 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
       prev.map((toast) =>
         toast.id === id
           ? { ...toast, ...options, type: options.type || toast.type, createdAt: Date.now() }
-          : toast
-      )
+          : toast,
+      ),
     );
   }, []);
 
   const success = useCallback(
-    (message: ReactNode, options?: Omit<ToastOptions, "type">) =>
-      addToast({ ...options, type: "success", description: message }),
-    [addToast]
+    (message: ReactNode, options?: Omit<ToastOptions, 'type'>) =>
+      addToast({ ...options, type: 'success', description: message }),
+    [addToast],
   );
 
   const error = useCallback(
-    (message: ReactNode, options?: Omit<ToastOptions, "type">) =>
-      addToast({ ...options, type: "error", description: message }),
-    [addToast]
+    (message: ReactNode, options?: Omit<ToastOptions, 'type'>) =>
+      addToast({ ...options, type: 'error', description: message }),
+    [addToast],
   );
 
   const warning = useCallback(
-    (message: ReactNode, options?: Omit<ToastOptions, "type">) =>
-      addToast({ ...options, type: "warning", description: message }),
-    [addToast]
+    (message: ReactNode, options?: Omit<ToastOptions, 'type'>) =>
+      addToast({ ...options, type: 'warning', description: message }),
+    [addToast],
   );
 
   const info = useCallback(
-    (message: ReactNode, options?: Omit<ToastOptions, "type">) =>
-      addToast({ ...options, type: "info", description: message }),
-    [addToast]
+    (message: ReactNode, options?: Omit<ToastOptions, 'type'>) =>
+      addToast({ ...options, type: 'info', description: message }),
+    [addToast],
   );
 
   const loading = useCallback(
-    (message: ReactNode, options?: Omit<ToastOptions, "type">) =>
+    (message: ReactNode, options?: Omit<ToastOptions, 'type'>) =>
       addToast({
         ...options,
-        type: "loading",
+        type: 'loading',
         description: message,
         duration: 0,
         dismissible: false,
       }),
-    [addToast]
+    [addToast],
   );
 
   const custom = useCallback(
-    (content: ReactNode, options?: Omit<ToastOptions, "type" | "customContent">) =>
-      addToast({ ...options, type: "info", customContent: content }),
-    [addToast]
+    (content: ReactNode, options?: Omit<ToastOptions, 'type' | 'customContent'>) =>
+      addToast({ ...options, type: 'info', customContent: content }),
+    [addToast],
   );
 
   const promise = useCallback(
@@ -123,18 +117,16 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
         success: ReactNode | ((data: T) => ReactNode);
         error: ReactNode | ((error: unknown) => ReactNode);
       },
-      options?: Omit<ToastOptions, "type">
+      options?: Omit<ToastOptions, 'type'>,
     ): Promise<T> => {
       const toastId = loading(messages.loading, options);
 
       try {
         const data = await promise;
         const successMessage =
-          typeof messages.success === "function"
-            ? messages.success(data)
-            : messages.success;
+          typeof messages.success === 'function' ? messages.success(data) : messages.success;
         updateToast(toastId, {
-          type: "success",
+          type: 'success',
           description: successMessage,
           duration: defaultDuration,
           dismissible: true,
@@ -142,11 +134,9 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
         return data;
       } catch (err) {
         const errorMessage =
-          typeof messages.error === "function"
-            ? messages.error(err)
-            : messages.error;
+          typeof messages.error === 'function' ? messages.error(err) : messages.error;
         updateToast(toastId, {
-          type: "error",
+          type: 'error',
           description: errorMessage,
           duration: defaultDuration,
           dismissible: true,
@@ -154,7 +144,7 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
         throw err;
       }
     },
-    [loading, updateToast, defaultDuration]
+    [loading, updateToast, defaultDuration],
   );
 
   return (

@@ -9,13 +9,8 @@
     "moduleResolution": "Bundler",
     "skipLibCheck": true
   },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/hooks"
-  ],
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "src/hooks"],
   "ts-node": {
     "esm": true
   }

@@ -1,67 +1,66 @@
-"use client";
-import { useEffect, useLayoutEffect, useState, RefObject, useCallback } from "react";
+'use client';
+import { useEffect, useLayoutEffect, useState, RefObject, useCallback } from 'react';
 
 interface Position {
-    top: number;
-    left: number;
-    width: number;
-    height: number;
+  top: number;
+  left: number;
+  width: number;
+  height: number;
 }
 
 export const useElementPosition = (
-    triggerRef: RefObject<HTMLElement | null>,
-    isOpen: boolean
+  triggerRef: RefObject<HTMLElement | null>,
+  isOpen: boolean,
 ): Position => {
-    const [position, setPosition] = useState<Position>({
-        top: 0,
-        left: 0,
-        width: 0,
-        height: 0,
+  const [position, setPosition] = useState<Position>({
+    top: 0,
+    left: 0,
+    width: 0,
+    height: 0,
+  });
+
+  const updatePosition = useCallback(() => {
+    if (!triggerRef.current) return;
+
+    const rect = triggerRef.current.getBoundingClientRect();
+    // For position: fixed elements, getBoundingClientRect returns viewport-relative
+    // coordinates, so we don't add scroll offsets
+    setPosition({
+      top: rect.bottom,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
     });
+  }, [triggerRef]);
 
-    const updatePosition = useCallback(() => {
-        if (!triggerRef.current) return;
+  // Use useLayoutEffect for initial positioning to prevent flash
+  useLayoutEffect(() => {
+    if (isOpen) {
+      updatePosition();
+    }
+  }, [isOpen, updatePosition]);
 
-        const rect = triggerRef.current.getBoundingClientRect();
-        // For position: fixed elements, getBoundingClientRect returns viewport-relative
-        // coordinates, so we don't add scroll offsets
-        setPosition({
-            top: rect.bottom,
-            left: rect.left,
-            width: rect.width,
-            height: rect.height,
-        });
-    }, [triggerRef]);
+  useEffect(() => {
+    if (!isOpen || !triggerRef.current) return;
 
-    // Use useLayoutEffect for initial positioning to prevent flash
-    useLayoutEffect(() => {
-        if (isOpen) {
-            updatePosition();
-        }
-    }, [isOpen, updatePosition]);
+    const handleUpdate = () => {
+      requestAnimationFrame(updatePosition);
+    };
 
-    useEffect(() => {
-        if (!isOpen || !triggerRef.current) return;
+    // Scroll listener with capture phase to catch scroll events in nested scrollable containers
+    window.addEventListener('scroll', handleUpdate, true);
+    window.addEventListener('resize', handleUpdate);
 
-        const handleUpdate = () => {
-            requestAnimationFrame(updatePosition);
-        };
+    // ResizeObserver to handle trigger element resize
+    const resizeObserver = new ResizeObserver(handleUpdate);
+    resizeObserver.observe(triggerRef.current);
 
-        // Scroll listener with capture phase to catch scroll events in nested scrollable containers
-        window.addEventListener("scroll", handleUpdate, true);
-        window.addEventListener("resize", handleUpdate);
+    return () => {
+      window.removeEventListener('scroll', handleUpdate, true);
+      window.removeEventListener('resize', handleUpdate);
+      resizeObserver.disconnect();
+    };
+  }, [isOpen, triggerRef, updatePosition]);
 
-        // ResizeObserver to handle trigger element resize
-        const resizeObserver = new ResizeObserver(handleUpdate);
-        resizeObserver.observe(triggerRef.current);
-
-        return () => {
-            window.removeEventListener("scroll", handleUpdate, true);
-            window.removeEventListener("resize", handleUpdate);
-            resizeObserver.disconnect();
-        };
-    }, [isOpen, triggerRef, updatePosition]);
-
-    return position;
+  return position;
 };
-

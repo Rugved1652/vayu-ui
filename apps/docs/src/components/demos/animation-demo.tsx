@@ -1,22 +1,14 @@
-"use client";
+'use client';
 
-import { Animation, Button } from "vayu-ui";
-import { RefreshCcw, Accessibility } from "lucide-react";
-import { useState } from "react";
+import { Animation, Button } from 'vayu-ui';
+import { RefreshCcw, Accessibility } from 'lucide-react';
+import { useState } from 'react';
 
 // Helper component to render a consistent card for each animation
-const AnimationCard = ({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) => (
+const AnimationCard = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div className="flex flex-col items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 min-h-35 justify-center">
     <div className="h-16 w-16 flex items-center justify-center">{children}</div>
-    <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-      {label}
-    </span>
+    <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">{label}</span>
   </div>
 );
 
@@ -36,12 +28,13 @@ export default function AnimationDemo() {
             Replay All
           </Button>
         </div>
-        
+
         {/* Accessibility Notice */}
         <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 max-w-md">
           <Accessibility className="w-4 h-4 shrink-0" />
           <span>
-            <strong>WCAG Compliant:</strong> Animations are automatically disabled if &quot;Reduce Motion&quot; is enabled in your OS settings.
+            <strong>WCAG Compliant:</strong> Animations are automatically disabled if &quot;Reduce
+            Motion&quot; is enabled in your OS settings.
           </span>
         </div>
       </div>

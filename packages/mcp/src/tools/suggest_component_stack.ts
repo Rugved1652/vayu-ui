@@ -2,21 +2,18 @@
 // suggest_component_stack - Get related components and dependencies
 // ============================================================================
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
-import type { Registry } from "vayu-ui-registry";
-import { ok, err, resolveComponent, resolveBySlug } from "../utils.js";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
+import type { Registry } from 'vayu-ui-registry';
+import { ok, err, resolveComponent, resolveBySlug } from '../utils.js';
 
 export function register(server: McpServer, registry: Registry) {
   server.tool(
-    "suggest_component_stack",
-    "Get suggested related components and dependencies for building a complete UI pattern.",
+    'suggest_component_stack',
+    'Get suggested related components and dependencies for building a complete UI pattern.',
     {
-      component: z.string().describe("Component name or slug"),
-      includeDependencies: z
-        .boolean()
-        .default(true)
-        .describe("Include NPM dependencies"),
+      component: z.string().describe('Component name or slug'),
+      includeDependencies: z.boolean().default(true).describe('Include NPM dependencies'),
     },
     async ({ component, includeDependencies }) => {
       const result = resolveComponent(registry, component);
@@ -59,6 +56,6 @@ export function register(server: McpServer, registry: Registry) {
           : undefined,
         installCommand: `npx vedui add ${c.slug}`,
       });
-    }
+    },
   );
 }

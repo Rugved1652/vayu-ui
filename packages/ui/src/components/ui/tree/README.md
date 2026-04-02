@@ -1,6 +1,7 @@
 # Tree
 
 ## Anatomy
+
 - tree.tsx — composition (TreeRoot state + context provider, TreeNodes, compound assembly)
 - tree-node.tsx — UI (recursive node renderer with checkbox, keyboard nav, icons)
 - tree-search.tsx — UI (search input)
@@ -11,6 +12,7 @@
 - index.ts — export
 
 ## Use Cases
+
 - File/folder browser navigation
 - Hierarchical data display with selection (single or checkbox)
 - Filterable tree structures with expand/collapse controls

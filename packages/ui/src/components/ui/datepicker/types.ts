@@ -1,14 +1,9 @@
 // types.ts
 // Types
 
-import type {
-  ButtonHTMLAttributes,
-  HTMLAttributes,
-  ReactNode,
-  RefObject,
-} from "react";
+import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, RefObject } from 'react';
 
-export type DatePickerMode = "single" | "range";
+export type DatePickerMode = 'single' | 'range';
 
 export interface DateRange {
   startDate: Date | null;
@@ -53,8 +48,10 @@ interface DatePickerContextValue {
 
 // Props
 
-export interface DatePickerRootProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue"> {
+export interface DatePickerRootProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'onChange' | 'defaultValue'
+> {
   children: ReactNode;
   mode?: DatePickerMode;
   value?: DatePickerValue;
@@ -66,15 +63,12 @@ export interface DatePickerRootProps
   placeholder?: string;
 }
 
-export interface DatePickerTriggerProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface DatePickerTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   placeholder?: string;
 }
 
-export interface DatePickerCalendarProps
-  extends HTMLAttributes<HTMLDivElement> {}
+export interface DatePickerCalendarProps extends HTMLAttributes<HTMLDivElement> {}
 
-export interface DatePickerCalendarFooterProps
-  extends HTMLAttributes<HTMLDivElement> {}
+export interface DatePickerCalendarFooterProps extends HTMLAttributes<HTMLDivElement> {}
 
 export type { DatePickerContextValue };

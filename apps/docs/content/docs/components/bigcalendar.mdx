@@ -35,6 +35,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       onDateClick={(d) => console.log(d)}
     />
     ```
+
   </Tab>
 </Tabs>
 
@@ -49,40 +50,40 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ## BigCalendar Props
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `events` | `CalendarEvent[]` | `[]` | Events to display |
-| `defaultDate` | `Date` | `new Date()` | Initial date |
-| `date` | `Date` | — | Controlled current date |
-| `defaultView` | `CalendarView` | `'month'` | Initial view |
-| `view` | `CalendarView` | — | Controlled view |
-| `onDateChange` | `(date: Date) => void` | — | Navigation callback |
-| `onViewChange` | `(view: CalendarView) => void` | — | View switch callback |
-| `onEventClick` | `(event: CalendarEvent) => void` | — | Event click handler |
-| `onDateClick` | `(date: Date) => void` | — | Date cell click handler |
-| `weekStartsOn` | `0 \| 1` | `0` | 0 = Sunday, 1 = Monday |
-| `renderEvent` | `(event: CalendarEvent) => ReactNode` | — | Custom event renderer |
+| Prop           | Type                                  | Default      | Description             |
+| :------------- | :------------------------------------ | :----------- | :---------------------- |
+| `events`       | `CalendarEvent[]`                     | `[]`         | Events to display       |
+| `defaultDate`  | `Date`                                | `new Date()` | Initial date            |
+| `date`         | `Date`                                | —            | Controlled current date |
+| `defaultView`  | `CalendarView`                        | `'month'`    | Initial view            |
+| `view`         | `CalendarView`                        | —            | Controlled view         |
+| `onDateChange` | `(date: Date) => void`                | —            | Navigation callback     |
+| `onViewChange` | `(view: CalendarView) => void`        | —            | View switch callback    |
+| `onEventClick` | `(event: CalendarEvent) => void`      | —            | Event click handler     |
+| `onDateClick`  | `(date: Date) => void`                | —            | Date cell click handler |
+| `weekStartsOn` | `0 \| 1`                              | `0`          | 0 = Sunday, 1 = Monday  |
+| `renderEvent`  | `(event: CalendarEvent) => ReactNode` | —            | Custom event renderer   |
 
 ## CalendarEvent
 
-| Field | Type | Required | Description |
-|:------|:-----|:---------|:------------|
-| `id` | `string \| number` | ✅ | Unique identifier |
-| `title` | `string` | ✅ | Event title |
-| `start` | `Date` | ✅ | Start date/time |
-| `end` | `Date` | ✅ | End date/time |
-| `color` | `string` | — | `blue`, `green`, `red`, `amber`, `purple`, `pink`, `primary` |
-| `allDay` | `boolean` | — | All-day event |
-| `description` | `string` | — | Optional description |
+| Field         | Type               | Required | Description                                                  |
+| :------------ | :----------------- | :------- | :----------------------------------------------------------- |
+| `id`          | `string \| number` | ✅       | Unique identifier                                            |
+| `title`       | `string`           | ✅       | Event title                                                  |
+| `start`       | `Date`             | ✅       | Start date/time                                              |
+| `end`         | `Date`             | ✅       | End date/time                                                |
+| `color`       | `string`           | —        | `blue`, `green`, `red`, `amber`, `purple`, `pink`, `primary` |
+| `allDay`      | `boolean`          | —        | All-day event                                                |
+| `description` | `string`           | —        | Optional description                                         |
 
 ## Event Colors
 
-| Color | Preview |
-|:------|:--------|
-| `blue` | 🔵 Blue accent |
-| `green` | 🟢 Green accent |
-| `red` | 🔴 Red accent |
-| `amber` | 🟡 Amber accent |
-| `purple` | 🟣 Purple accent |
-| `pink` | 🩷 Pink accent |
+| Color     | Preview          |
+| :-------- | :--------------- |
+| `blue`    | 🔵 Blue accent   |
+| `green`   | 🟢 Green accent  |
+| `red`     | 🔴 Red accent    |
+| `amber`   | 🟡 Amber accent  |
+| `purple`  | 🟣 Purple accent |
+| `pink`    | 🩷 Pink accent   |
 | `primary` | 🎨 Theme primary |

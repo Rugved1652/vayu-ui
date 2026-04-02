@@ -1,9 +1,9 @@
-import { Command, Flags } from "@oclif/core";
-import chalk from "chalk";
-import ora from "ora";
-import path from "path";
-import fs from "fs-extra";
-import { fetchFromGitHub, installDependencies, detectPackageManager } from "../utils/installer";
+import {Command, Flags} from '@oclif/core'
+import chalk from 'chalk'
+import ora from 'ora'
+import path from 'path'
+import fs from 'fs-extra'
+import {fetchFromGitHub, installDependencies, detectPackageManager} from '../utils/installer'
 
 // ============================================================================
 // Vayu UI Design Tokens CSS (clean version without Fumadocs imports)
@@ -165,7 +165,7 @@ body {
   @apply bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100;
   overscroll-behavior: none;
 }
-`;
+`
 
 const POSTCSS_CONFIG = `/** @type {import('postcss-load-config').Config} */
 const config = {
@@ -175,42 +175,42 @@ const config = {
 };
 
 export default config;
-`;
+`
 
 // ============================================================================
 // Project Type Detection
 // ============================================================================
 
-type ProjectType = "nextjs" | "vite" | "cra" | "unknown";
+type ProjectType = 'nextjs' | 'vite' | 'cra' | 'unknown'
 
 function detectProjectType(cwd: string): ProjectType {
-    const pkgPath = path.join(cwd, "package.json");
-    if (!fs.existsSync(pkgPath)) return "unknown";
+  const pkgPath = path.join(cwd, 'package.json')
+  if (!fs.existsSync(pkgPath)) return 'unknown'
 
-    try {
-        const pkg = fs.readJsonSync(pkgPath);
-        const allDeps = { ...pkg.dependencies, ...pkg.devDependencies };
+  try {
+    const pkg = fs.readJsonSync(pkgPath)
+    const allDeps = {...pkg.dependencies, ...pkg.devDependencies}
 
-        if (allDeps.next) return "nextjs";
-        if (allDeps.vite) return "vite";
-        if (allDeps["react-scripts"]) return "cra";
-    } catch {
-        // ignore parse errors
-    }
+    if (allDeps.next) return 'nextjs'
+    if (allDeps.vite) return 'vite'
+    if (allDeps['react-scripts']) return 'cra'
+  } catch {
+    // ignore parse errors
+  }
 
-    return "unknown";
+  return 'unknown'
 }
 
 function getDefaultCssPath(projectType: ProjectType): string {
-    switch (projectType) {
-        case "nextjs":
-            return "src/app/globals.css";
-        case "vite":
-        case "cra":
-            return "src/index.css";
-        default:
-            return "src/globals.css";
-    }
+  switch (projectType) {
+    case 'nextjs':
+      return 'src/app/globals.css'
+    case 'vite':
+    case 'cra':
+      return 'src/index.css'
+    default:
+      return 'src/globals.css'
+  }
 }
 
 // ============================================================================
@@ -218,9 +218,9 @@ function getDefaultCssPath(projectType: ProjectType): string {
 // ============================================================================
 
 export default class Init extends Command {
-    static summary = "Initialize Vayu UI in your project";
+  static summary = 'Initialize Vayu UI in your project'
 
-    static description = `
+  static description = `
 Sets up Vayu UI design tokens and Tailwind CSS in your existing project.
 Writes the Vayu UI CSS file with all design tokens (colors, radii, shadows, fonts, transitions).
 Installs Tailwind CSS v4 and PostCSS if not already present.
@@ -229,138 +229,138 @@ Examples:
   $ vayu-ui init
   $ vayu-ui init --path src/styles/vayu-ui.css
   $ vayu-ui init --overwrite
-`;
+`
 
-    static flags = {
-        path: Flags.string({
-            char: "p",
-            description: "Custom CSS file path (default: auto-detected based on project type)",
-        }),
-        overwrite: Flags.boolean({
-            char: "o",
-            description: "Overwrite existing CSS file",
-            default: false,
-        }),
-        force: Flags.boolean({
-            char: "f",
-            description: "Skip project detection, just write files",
-            default: false,
-        }),
-    };
+  static flags = {
+    path: Flags.string({
+      char: 'p',
+      description: 'Custom CSS file path (default: auto-detected based on project type)',
+    }),
+    overwrite: Flags.boolean({
+      char: 'o',
+      description: 'Overwrite existing CSS file',
+      default: false,
+    }),
+    force: Flags.boolean({
+      char: 'f',
+      description: 'Skip project detection, just write files',
+      default: false,
+    }),
+  }
 
-    async run(): Promise<void> {
-        const { flags } = await this.parse(Init);
-        const cwd = process.cwd();
+  async run(): Promise<void> {
+    const {flags} = await this.parse(Init)
+    const cwd = process.cwd()
 
-        // ── 1. Detect project type ──────────────────────────────────────────
-        const projectType = detectProjectType(cwd);
+    // ── 1. Detect project type ──────────────────────────────────────────
+    const projectType = detectProjectType(cwd)
 
-        if (projectType === "unknown" && !flags.force) {
-            this.log("");
-            this.log(chalk.yellow("⚠  Could not detect project type (no Next.js, Vite, or CRA found)."));
-            this.log(chalk.dim("   Use --force to proceed anyway, or --path to specify the CSS location."));
-            this.log("");
-            return;
-        }
-
-        if (projectType !== "unknown") {
-            this.log("");
-            this.log(chalk.dim(`  Detected project: ${chalk.white(projectType)}`));
-        }
-
-        // ── 2. Determine CSS file path ──────────────────────────────────────
-        const cssPath = flags.path || getDefaultCssPath(projectType);
-        const fullCssPath = path.join(cwd, cssPath);
-
-        // ── 3. Check if file already exists ─────────────────────────────────
-        if (fs.existsSync(fullCssPath) && !flags.overwrite) {
-            this.log("");
-            this.log(chalk.yellow(`⚠  ${cssPath} already exists.`));
-            this.log(chalk.dim("   Use --overwrite to replace it."));
-            this.log("");
-            return;
-        }
-
-        // ── 4. Write the CSS file ───────────────────────────────────────────
-        const cssSpinner = ora({
-            text: `Writing Vayu UI design tokens to ${chalk.cyan(cssPath)}`,
-            color: "cyan",
-        }).start();
-
-        try {
-            await fs.ensureDir(path.dirname(fullCssPath));
-            await fs.writeFile(fullCssPath, VAYU_UI_CSS, "utf-8");
-            cssSpinner.succeed(chalk.green(`Vayu UI CSS written`) + chalk.dim(` → ${cssPath}`));
-        } catch (error) {
-            cssSpinner.fail(chalk.red("Failed to write CSS file"));
-            this.log(chalk.dim(`  Error: ${(error as Error).message}`));
-            this.exit(1);
-        }
-
-        // ── 5. Write postcss.config.mjs if missing ─────────────────────────
-        const postcssPath = path.join(cwd, "postcss.config.mjs");
-
-        if (!fs.existsSync(postcssPath)) {
-            const postcssSpinner = ora({
-                text: "Creating postcss.config.mjs",
-                color: "cyan",
-            }).start();
-
-            try {
-                await fs.writeFile(postcssPath, POSTCSS_CONFIG, "utf-8");
-                postcssSpinner.succeed(chalk.green("postcss.config.mjs created"));
-            } catch (error) {
-                postcssSpinner.fail(chalk.red("Failed to create postcss.config.mjs"));
-                this.log(chalk.dim(`  Error: ${(error as Error).message}`));
-            }
-        } else {
-            this.log(chalk.dim("  postcss.config.mjs already exists — skipped"));
-        }
-
-        // ── 6. Install Tailwind CSS v4 dependencies ─────────────────────────
-        const tailwindDeps = ["tailwindcss", "@tailwindcss/postcss", "postcss"];
-        const pm = detectPackageManager();
-
-        // Check which deps are already installed
-        const pkgPath = path.join(cwd, "package.json");
-        let missingDeps = tailwindDeps;
-
-        if (fs.existsSync(pkgPath)) {
-            try {
-                const pkg = fs.readJsonSync(pkgPath);
-                const allDeps = { ...pkg.dependencies, ...pkg.devDependencies };
-                missingDeps = tailwindDeps.filter((d) => !allDeps[d]);
-            } catch {
-                // proceed with installing all
-            }
-        }
-
-        if (missingDeps.length > 0) {
-            this.log("");
-            const depSpinner = ora({
-                text: `Installing via ${chalk.bold(pm)}: ${missingDeps.join(", ")}`,
-                color: "cyan",
-            }).start();
-
-            try {
-                installDependencies(missingDeps);
-                depSpinner.succeed(chalk.green("Tailwind CSS packages installed"));
-            } catch {
-                depSpinner.fail(chalk.red("Failed to install packages"));
-                this.log(chalk.dim(`  Run manually: ${pm} install ${missingDeps.join(" ")}`));
-            }
-        } else {
-            this.log(chalk.dim("  Tailwind CSS already installed — skipped"));
-        }
-
-        // ── 7. Done ─────────────────────────────────────────────────────────
-        this.log("");
-        this.log(chalk.bold.green("✓ Vayu UI initialized!"));
-        this.log("");
-        this.log(chalk.dim("  What's next:"));
-        this.log(chalk.white(`    1. Import the CSS in your app entry point`));
-        this.log(chalk.white(`    2. Run ${chalk.cyan("vayu-ui add <component>")} to add components`));
-        this.log(chalk.white(`    3. Run ${chalk.cyan("vayu-ui list")} to see all available items`));
-        this.log("");
+    if (projectType === 'unknown' && !flags.force) {
+      this.log('')
+      this.log(chalk.yellow('⚠  Could not detect project type (no Next.js, Vite, or CRA found).'))
+      this.log(chalk.dim('   Use --force to proceed anyway, or --path to specify the CSS location.'))
+      this.log('')
+      return
     }
+
+    if (projectType !== 'unknown') {
+      this.log('')
+      this.log(chalk.dim(`  Detected project: ${chalk.white(projectType)}`))
+    }
+
+    // ── 2. Determine CSS file path ──────────────────────────────────────
+    const cssPath = flags.path || getDefaultCssPath(projectType)
+    const fullCssPath = path.join(cwd, cssPath)
+
+    // ── 3. Check if file already exists ─────────────────────────────────
+    if (fs.existsSync(fullCssPath) && !flags.overwrite) {
+      this.log('')
+      this.log(chalk.yellow(`⚠  ${cssPath} already exists.`))
+      this.log(chalk.dim('   Use --overwrite to replace it.'))
+      this.log('')
+      return
+    }
+
+    // ── 4. Write the CSS file ───────────────────────────────────────────
+    const cssSpinner = ora({
+      text: `Writing Vayu UI design tokens to ${chalk.cyan(cssPath)}`,
+      color: 'cyan',
+    }).start()
+
+    try {
+      await fs.ensureDir(path.dirname(fullCssPath))
+      await fs.writeFile(fullCssPath, VAYU_UI_CSS, 'utf-8')
+      cssSpinner.succeed(chalk.green(`Vayu UI CSS written`) + chalk.dim(` → ${cssPath}`))
+    } catch (error) {
+      cssSpinner.fail(chalk.red('Failed to write CSS file'))
+      this.log(chalk.dim(`  Error: ${(error as Error).message}`))
+      this.exit(1)
+    }
+
+    // ── 5. Write postcss.config.mjs if missing ─────────────────────────
+    const postcssPath = path.join(cwd, 'postcss.config.mjs')
+
+    if (!fs.existsSync(postcssPath)) {
+      const postcssSpinner = ora({
+        text: 'Creating postcss.config.mjs',
+        color: 'cyan',
+      }).start()
+
+      try {
+        await fs.writeFile(postcssPath, POSTCSS_CONFIG, 'utf-8')
+        postcssSpinner.succeed(chalk.green('postcss.config.mjs created'))
+      } catch (error) {
+        postcssSpinner.fail(chalk.red('Failed to create postcss.config.mjs'))
+        this.log(chalk.dim(`  Error: ${(error as Error).message}`))
+      }
+    } else {
+      this.log(chalk.dim('  postcss.config.mjs already exists — skipped'))
+    }
+
+    // ── 6. Install Tailwind CSS v4 dependencies ─────────────────────────
+    const tailwindDeps = ['tailwindcss', '@tailwindcss/postcss', 'postcss']
+    const pm = detectPackageManager()
+
+    // Check which deps are already installed
+    const pkgPath = path.join(cwd, 'package.json')
+    let missingDeps = tailwindDeps
+
+    if (fs.existsSync(pkgPath)) {
+      try {
+        const pkg = fs.readJsonSync(pkgPath)
+        const allDeps = {...pkg.dependencies, ...pkg.devDependencies}
+        missingDeps = tailwindDeps.filter((d) => !allDeps[d])
+      } catch {
+        // proceed with installing all
+      }
+    }
+
+    if (missingDeps.length > 0) {
+      this.log('')
+      const depSpinner = ora({
+        text: `Installing via ${chalk.bold(pm)}: ${missingDeps.join(', ')}`,
+        color: 'cyan',
+      }).start()
+
+      try {
+        installDependencies(missingDeps)
+        depSpinner.succeed(chalk.green('Tailwind CSS packages installed'))
+      } catch {
+        depSpinner.fail(chalk.red('Failed to install packages'))
+        this.log(chalk.dim(`  Run manually: ${pm} install ${missingDeps.join(' ')}`))
+      }
+    } else {
+      this.log(chalk.dim('  Tailwind CSS already installed — skipped'))
+    }
+
+    // ── 7. Done ─────────────────────────────────────────────────────────
+    this.log('')
+    this.log(chalk.bold.green('✓ Vayu UI initialized!'))
+    this.log('')
+    this.log(chalk.dim("  What's next:"))
+    this.log(chalk.white(`    1. Import the CSS in your app entry point`))
+    this.log(chalk.white(`    2. Run ${chalk.cyan('vayu-ui add <component>')} to add components`))
+    this.log(chalk.white(`    3. Run ${chalk.cyan('vayu-ui list')} to see all available items`))
+    this.log('')
+  }
 }

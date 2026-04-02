@@ -18,7 +18,7 @@ The `useMap` hook provides a convenient way to manage a `Map` state in React. It
 Copy this code into `src/hooks/useMap.ts`:
 
 ```tsx
-import { useState } from "react";
+import { useState } from 'react';
 
 export const useMap = <K, V>(initialEntries?: [K, V][]) => {
   const [map, setMap] = useState(new Map<K, V>(initialEntries));
@@ -48,23 +48,21 @@ export const useMap = <K, V>(initialEntries?: [K, V][]) => {
 ## Usage
 
 ```tsx
-import { useMap } from "@/hooks/useMap";
+import { useMap } from '@/hooks/useMap';
 
 const MyComponent = () => {
   const { map, set, remove, clear } = useMap([
-    ["key1", "value1"],
-    ["key2", "value2"],
+    ['key1', 'value1'],
+    ['key2', 'value2'],
   ]);
 
   return (
     <div>
-      <button onClick={() => set("newKey", "newValue")}>Add</button>
-      <button onClick={() => remove("key1")}>Remove key1</button>
+      <button onClick={() => set('newKey', 'newValue')}>Add</button>
+      <button onClick={() => remove('key1')}>Remove key1</button>
       <button onClick={clear}>Clear All</button>
-      
-      <pre>
-        {JSON.stringify(Array.from(map.entries()), null, 2)}
-      </pre>
+
+      <pre>{JSON.stringify(Array.from(map.entries()), null, 2)}</pre>
     </div>
   );
 };
@@ -74,16 +72,16 @@ const MyComponent = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
+| Name             | Type       | Description                            |
+| :--------------- | :--------- | :------------------------------------- |
 | `initialEntries` | `[K, V][]` | Optional. Initial entries for the map. |
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `map` | `Map<K, V>` | The current Map object. |
-| `set` | `(key: K, value: V) => void` | Sets a value for a key in the Map. |
-| `remove` | `(key: K) => void` | Removes a key from the Map. |
-| `clear` | `() => void` | Removes all entries from the Map. |
-| `has` | `(key: K) => boolean` | Checks if a key exists in the Map. |
+| Property | Type                         | Description                        |
+| :------- | :--------------------------- | :--------------------------------- |
+| `map`    | `Map<K, V>`                  | The current Map object.            |
+| `set`    | `(key: K, value: V) => void` | Sets a value for a key in the Map. |
+| `remove` | `(key: K) => void`           | Removes a key from the Map.        |
+| `clear`  | `() => void`                 | Removes all entries from the Map.  |
+| `has`    | `(key: K) => boolean`        | Checks if a key exists in the Map. |

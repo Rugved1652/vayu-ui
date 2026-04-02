@@ -18,7 +18,7 @@ The `useList` hook provides a convenient way to manage an array state with built
 Copy this code into `src/hooks/useList.ts`:
 
 ```tsx
-import { useState } from "react";
+import { useState } from 'react';
 
 export const useList = <T,>(initialList: T[] = []) => {
   const [list, setList] = useState<T[]>(initialList);
@@ -32,9 +32,7 @@ export const useList = <T,>(initialList: T[] = []) => {
   };
 
   const update = (index: number, newItem: T) => {
-    setList((prevList) =>
-      prevList.map((item, i) => (i === index ? newItem : item))
-    );
+    setList((prevList) => prevList.map((item, i) => (i === index ? newItem : item)));
   };
 
   const clear = () => {
@@ -48,14 +46,14 @@ export const useList = <T,>(initialList: T[] = []) => {
 ## Usage
 
 ```tsx
-import { useList } from "@/hooks/useList";
+import { useList } from '@/hooks/useList';
 
 const TodoList = () => {
-  const { list, add, remove, clear } = useList(["Buy milk", "Walk dog"]);
+  const { list, add, remove, clear } = useList(['Buy milk', 'Walk dog']);
 
   return (
     <div>
-      <button onClick={() => add("New Task")}>Add Task</button>
+      <button onClick={() => add('New Task')}>Add Task</button>
       <button onClick={clear}>Clear All</button>
       <ul>
         {list.map((item, index) => (
@@ -73,16 +71,16 @@ const TodoList = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
+| Name          | Type  | Description                         |
+| :------------ | :---- | :---------------------------------- |
 | `initialList` | `T[]` | An optional initial array of items. |
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `list` | `T[]` | The current array of items. |
-| `add` | `(item: T) => void` | Adds an item to the end of the list. |
-| `remove` | `(index: number) => void` | Removes an item at the specified index. |
+| Property | Type                                  | Description                             |
+| :------- | :------------------------------------ | :-------------------------------------- |
+| `list`   | `T[]`                                 | The current array of items.             |
+| `add`    | `(item: T) => void`                   | Adds an item to the end of the list.    |
+| `remove` | `(index: number) => void`             | Removes an item at the specified index. |
 | `update` | `(index: number, newItem: T) => void` | Updates an item at the specified index. |
-| `clear` | `() => void` | Removes all items from the list. |
+| `clear`  | `() => void`                          | Removes all items from the list.        |

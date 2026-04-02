@@ -18,7 +18,7 @@ The `useThrottle` hook ensures that a value is updated at most once every specif
 Copy this code into `src/hooks/useThrottle.ts`:
 
 ```tsx
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
 export const useThrottle = <T,>(value: T, interval: number): T => {
   const [throttledValue, setThrottledValue] = useState(value);
@@ -33,7 +33,7 @@ export const useThrottle = <T,>(value: T, interval: number): T => {
           lastExecuted.current = now;
         }
       },
-      interval - (Date.now() - lastExecuted.current)
+      interval - (Date.now() - lastExecuted.current),
     );
 
     return () => {
@@ -48,17 +48,17 @@ export const useThrottle = <T,>(value: T, interval: number): T => {
 ## Usage
 
 ```tsx
-import { useThrottle } from "@/hooks/useThrottle";
-import { useState, useEffect } from "react";
+import { useThrottle } from '@/hooks/useThrottle';
+import { useState, useEffect } from 'react';
 
 const WindowResizeLogger = () => {
-  const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
   const throttledWidth = useThrottle(width, 500);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
@@ -74,13 +74,13 @@ const WindowResizeLogger = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `value` | `T` | The value to be throttled. |
+| Name       | Type     | Description                                                                  |
+| :--------- | :------- | :--------------------------------------------------------------------------- |
+| `value`    | `T`      | The value to be throttled.                                                   |
 | `interval` | `number` | The time interval (in milliseconds) to wait before updating the value again. |
 
 ### Return Value
 
-| Type | Description |
-| :--- | :--- |
-| `T` | The most recent value that passed the throttle check. |
+| Type | Description                                           |
+| :--- | :---------------------------------------------------- |
+| `T`  | The most recent value that passed the throttle check. |

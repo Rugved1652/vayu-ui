@@ -18,7 +18,7 @@ The `useIndexedDB` hook abstracts IndexedDB into a simple, typed, promise-based 
 Copy this code into `src/hooks/useIndexedDB.ts`:
 
 ```tsx
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface UseIndexedDBOptions {
   dbName: string;
@@ -28,11 +28,11 @@ interface UseIndexedDBOptions {
   indexes?: { name: string; keyPath: string; unique?: boolean }[];
 }
 
-export const useIndexedDB = <T = unknown>({
+export const useIndexedDB = <T = unknown,>({
   dbName,
   storeName,
   version = 1,
-  keyPath = "id",
+  keyPath = 'id',
   indexes,
 }: UseIndexedDBOptions) => {
   const dbRef = useRef<IDBDatabase | null>(null);
@@ -47,7 +47,7 @@ export const useIndexedDB = <T = unknown>({
       if (!db.objectStoreNames.contains(storeName)) {
         const store = db.createObjectStore(storeName, { keyPath });
         indexes?.forEach((idx) =>
-          store.createIndex(idx.name, idx.keyPath, { unique: idx.unique ?? false })
+          store.createIndex(idx.name, idx.keyPath, { unique: idx.unique ?? false }),
         );
       }
     };
@@ -69,7 +69,7 @@ export const useIndexedDB = <T = unknown>({
 ## Usage
 
 ```tsx
-import { useIndexedDB } from "@/hooks/useIndexedDB";
+import { useIndexedDB } from '@/hooks/useIndexedDB';
 
 interface User {
   id: string;
@@ -79,27 +79,28 @@ interface User {
 }
 
 const UserManager = () => {
-  const { put, get, getAll, remove, clear, count, getByIndex, isReady, error } =
-    useIndexedDB<User>({
-      dbName: "my-app",
-      storeName: "users",
-      keyPath: "id",
+  const { put, get, getAll, remove, clear, count, getByIndex, isReady, error } = useIndexedDB<User>(
+    {
+      dbName: 'my-app',
+      storeName: 'users',
+      keyPath: 'id',
       indexes: [
-        { name: "by-role", keyPath: "role" },
-        { name: "by-email", keyPath: "email", unique: true },
+        { name: 'by-role', keyPath: 'role' },
+        { name: 'by-email', keyPath: 'email', unique: true },
       ],
-    });
+    },
+  );
 
   const addUser = async () => {
-    await put({ id: "1", name: "Alice", email: "alice@example.com", role: "admin" });
+    await put({ id: '1', name: 'Alice', email: 'alice@example.com', role: 'admin' });
   };
 
   const findAdmins = async () => {
-    const admins = await getByIndex("by-role", "admin");
+    const admins = await getByIndex('by-role', 'admin');
     console.log(admins);
   };
 
-  return <div>{isReady ? "DB Ready" : "Connecting…"}</div>;
+  return <div>{isReady ? 'DB Ready' : 'Connecting…'}</div>;
 };
 ```
 
@@ -107,25 +108,25 @@ const UserManager = () => {
 
 ### Options
 
-| Property | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `dbName` | `string` | — | Name of the IndexedDB database |
-| `storeName` | `string` | — | Name of the object store |
-| `version` | `number` | `1` | Schema version (increment when changing structure) |
-| `keyPath` | `string` | `"id"` | Primary key path for records |
-| `indexes` | `{ name, keyPath, unique? }[]` | — | Indexes to create on the store |
+| Property    | Type                           | Default | Description                                        |
+| :---------- | :----------------------------- | :------ | :------------------------------------------------- |
+| `dbName`    | `string`                       | —       | Name of the IndexedDB database                     |
+| `storeName` | `string`                       | —       | Name of the object store                           |
+| `version`   | `number`                       | `1`     | Schema version (increment when changing structure) |
+| `keyPath`   | `string`                       | `"id"`  | Primary key path for records                       |
+| `indexes`   | `{ name, keyPath, unique? }[]` | —       | Indexes to create on the store                     |
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `put` | `(value: T) => Promise<IDBValidKey>` | Add or update a record (upsert) |
-| `add` | `(value: T) => Promise<IDBValidKey>` | Add a record (throws if key exists) |
-| `get` | `(key: IDBValidKey) => Promise<T \| undefined>` | Get a single record by key |
-| `getAll` | `() => Promise<T[]>` | Get all records in the store |
-| `remove` | `(key: IDBValidKey) => Promise<void>` | Delete a record by key |
-| `clear` | `() => Promise<void>` | Delete all records |
-| `count` | `() => Promise<number>` | Count total records |
-| `getByIndex` | `(indexName: string, value: IDBValidKey) => Promise<T[]>` | Query records by index |
-| `isReady` | `boolean` | `true` once the database connection is open |
-| `error` | `Error \| null` | Any error that occurred |
+| Property     | Type                                                      | Description                                 |
+| :----------- | :-------------------------------------------------------- | :------------------------------------------ |
+| `put`        | `(value: T) => Promise<IDBValidKey>`                      | Add or update a record (upsert)             |
+| `add`        | `(value: T) => Promise<IDBValidKey>`                      | Add a record (throws if key exists)         |
+| `get`        | `(key: IDBValidKey) => Promise<T \| undefined>`           | Get a single record by key                  |
+| `getAll`     | `() => Promise<T[]>`                                      | Get all records in the store                |
+| `remove`     | `(key: IDBValidKey) => Promise<void>`                     | Delete a record by key                      |
+| `clear`      | `() => Promise<void>`                                     | Delete all records                          |
+| `count`      | `() => Promise<number>`                                   | Count total records                         |
+| `getByIndex` | `(indexName: string, value: IDBValidKey) => Promise<T[]>` | Query records by index                      |
+| `isReady`    | `boolean`                                                 | `true` once the database connection is open |
+| `error`      | `Error \| null`                                           | Any error that occurred                     |

@@ -1,6 +1,6 @@
 ---
 title: Pagination
-description: A fully accessible pagination component with compound pattern for building flexible navigation interfaces.
+description: A set of components for navigating through paginated content.
 ---
 
 import PaginationDemo from '@/components/demos/pagination-demo';
@@ -9,545 +9,119 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add pagination
 ```
 
+```bash
+npx vayu-ui add -t pagination #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="flex items-center justify-center p-8 bg-ground-100 dark:bg-ground-900 rounded-lg">
       <PaginationDemo />
-    </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Pagination } from "vayu-ui";
+    <Pagination.Root>
+      <Pagination.Info 
+        totalItems={100} 
+        pageSize={10} 
+        currentPage={1} 
+      />
+      <Pagination.Buttons 
+        currentPage={1} 
+        totalPages={10} 
+        hrefBuilder={(page) => `?page=${page}`} 
+      />
+    </Pagination.Root>
 
-    export default function PaginationExample() {
-      const currentPage = 1;
-      const pageSize = 10;
-      const totalItems = 450;
-      const totalPages = Math.ceil(totalItems / pageSize);
-
-      // Helper function to build page URLs
-      const buildPageUrl = (page: number) => `?page=${page}`;
-
-      return (
-        <Pagination.Root aria-label="Pagination">
-          <Pagination.Info
-            totalItems={totalItems}
-            pageSize={pageSize}
-            currentPage={currentPage}
-          />
-          <div className="flex justify-center">
-            <Pagination.Buttons
-              currentPage={currentPage}
-              totalPages={totalPages}
-              hrefBuilder={buildPageUrl}
-            />
-          </div>
-        </Pagination.Root>
-      );
-    }
+    <Pagination.Compact
+      currentPage={1}
+      totalPages={10}
+      hrefBuilder={(page) => `?page=${page}`}
+    />
     ```
+
   </Tab>
 </Tabs>
 
 ## Anatomy
 
 ```tsx
-<Pagination.Root aria-label="Pagination">
-  <Pagination.Info
-    totalItems={450}
-    pageSize={10}
-    currentPage={1}
-  />
-  <Pagination.Buttons
-    currentPage={1}
-    totalPages={45}
-    hrefBuilder={(page) => `?page=${page}`}
-  />
+import Pagination from "@/components/ui/Pagination";
+
+<Pagination.Root>
+  <Pagination.Info />
+  <Pagination.Buttons />
 </Pagination.Root>
 
-{/* Compact variant for mobile */}
-<Pagination.Compact
-  currentPage={1}
-  totalPages={45}
-  hrefBuilder={(page) => `?page=${page}`}
-/>
+<Pagination.Compact />
 ```
 
-## Compound Components
+## Accessibility
 
-### Pagination.Root
+- Must include:
+  - Keyboard support (Tab, Space, Enter navigation for links and buttons)
+  - ARIA attributes (`aria-label`, `aria-current="page"`)
+  - Focus behavior (Focus styles visible, correct semantic HTML elements structure)
 
-The main container that wraps all pagination components.
+## Screen reader behavior
 
-### Pagination.Buttons
+- A `<nav>` element with `aria-label="pagination"` lets assistive technologies know the region's purpose.
+- The active page is indicated using `aria-current="page"` on the current page link.
+- Pagination Info announces visually "Showing X to Y of Z" properly to indicate list size context.
 
-Renders the page number buttons with first, previous, next, and last navigation. Uses Next.js `Link` for server-side navigation.
+## Component Folder Structure
 
-### Pagination.Info
-
-Displays the current range of items being shown (e.g., "Showing 1 to 10 of 450 results").
-
-### Pagination.Compact
-
-A simplified mobile-friendly pagination with only Previous and Next buttons.
-
-## Page Range Options
-
-The `pageRange` prop controls how many page numbers are displayed:
-
-- **compact** (default) — Shows limited page numbers with ellipsis for large page counts
-- **extended** — Shows more page numbers with increased `siblingCount`
-- **full** — Shows all page numbers (best for small page counts)
-
-```tsx
-{/* Extended range - shows more siblings */}
-<Pagination.Buttons
-  currentPage={currentPage}
-  totalPages={totalPages}
-  hrefBuilder={buildPageUrl}
-  pageRange="extended"
-  siblingCount={2}
-/>
-
-{/* Full range - shows all pages */}
-<Pagination.Buttons
-  currentPage={currentPage}
-  totalPages={8}
-  hrefBuilder={buildPageUrl}
-  pageRange="full"
-/>
+```text
+src/components/ui/Pagination
+├── CompactPagination.tsx
+├── Pagination.tsx
+├── PaginationButtons.tsx
+├── PaginationInfo.tsx
+├── PaginationRoot.tsx
+├── index.ts
+├── types.ts
+└── utils.ts
 ```
 
 ## Props
 
 ### Pagination.Root
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | — | Content to render |
-| `aria-label` | `string` | `"Pagination"` | Accessible label for the navigation |
-| `className` | `string` | — | Additional CSS classes |
-
-### Pagination.Buttons
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `currentPage` | `number` | — | The current active page (required) |
-| `totalPages` | `number` | — | The total number of pages (required) |
-| `hrefBuilder` | `(page: number) => string` | — | Function to generate URLs for each page (required) |
-| `pageRange` | `"compact" \| "extended" \| "full"` | `"compact"` | How many page numbers to show |
-| `siblingCount` | `number` | `1` | Number of siblings to show around the current page |
-| `className` | `string` | — | Additional CSS classes |
+| Prop       | Type        | Description                  |
+| :--------- | :---------- | :--------------------------- |
+| children   | `ReactNode` | Content for the pagination   |
+| aria-label | `string`    | Accessible label for the nav |
 
 ### Pagination.Info
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `totalItems` | `number` | — | The total number of items (required) |
-| `pageSize` | `number` | — | The number of items per page (required) |
-| `currentPage` | `number` | — | The current active page (required) |
-| `className` | `string` | — | Additional CSS classes |
+| Prop        | Type     | Description             |
+| :---------- | :------- | :---------------------- |
+| totalItems  | `number` | Total number of items   |
+| pageSize    | `number` | Items per page          |
+| currentPage | `number` | The current active page |
+
+### Pagination.Buttons
+
+| Prop         | Type                                | Description                       |
+| :----------- | :---------------------------------- | :-------------------------------- |
+| currentPage  | `number`                            | The current active page           |
+| totalPages   | `number`                            | Total number of pages             |
+| hrefBuilder  | `(page: number) => string`          | Function returning href           |
+| pageRange    | `"compact" \| "extended" \| "full"` | Strategy for rendering page links |
+| siblingCount | `number`                            | Pages to show around current page |
 
 ### Pagination.Compact
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `currentPage` | `number` | — | The current active page (required) |
-| `totalPages` | `number` | — | The total number of pages (required) |
-| `hrefBuilder` | `(page: number) => string` | — | Function to generate URLs for each page (required) |
-| `aria-label` | `string` | `"Pagination"` | Accessible label for the navigation |
-| `className` | `string` | — | Additional CSS classes |
-
-## Accessibility
-
-- Full keyboard navigation support with Tab and Enter/Space
-- Visible focus indicators with proper ring styling
-- Proper ARIA roles (`navigation`, `group`) and attributes (`aria-label`, `aria-current`, `aria-live`)
-- Semantic HTML with `<nav>` element
-- Screen reader compatible labels for all buttons
-- Live regions announce page changes to screen readers
-- WCAG 2.2 AA compliant contrast ratios
-
-## Source Code
-
-```tsx title="packages/ui/src/components/ui/pagination.tsx"
-import React from "react";
-import Link from "next/link";
-import {
-    ChevronLeft,
-    ChevronRight,
-    ChevronsLeft,
-    ChevronsRight,
-    MoreHorizontal,
-} from "lucide-react";
-import { cn } from "./utils";
-
-// ============================================================================
-// Types
-// ============================================================================
-
-type PageRange = "compact" | "extended" | "full";
-
-interface BaseProps {
-    className?: string;
-}
-
-// ============================================================================
-// Logic Helper (Pure Function - Server Compatible)
-// ============================================================================
-
-const getPaginationRange = (
-    currentPage: number,
-    totalPages: number,
-    siblingCount: number = 1,
-    pageRange: PageRange = "compact"
-): (number | string)[] => {
-    if (pageRange === "full") {
-        return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-
-    const totalNumbers = siblingCount * 2 + 5;
-    const totalBlocks = totalNumbers + 2;
-
-    if (totalPages <= totalBlocks) {
-        return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-
-    const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
-    const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPages);
-
-    const shouldShowLeftDots = leftSiblingIndex > 2;
-    const shouldShowRightDots = rightSiblingIndex < totalPages - 1;
-
-    if (!shouldShowLeftDots && shouldShowRightDots) {
-        const leftItemCount = 3 + 2 * siblingCount;
-        const leftRange = Array.from({ length: leftItemCount }, (_, i) => i + 1);
-        return [...leftRange, "ellipsis-right", totalPages];
-    }
-
-    if (shouldShowLeftDots && !shouldShowRightDots) {
-        const rightItemCount = 3 + 2 * siblingCount;
-        const rightRange = Array.from(
-            { length: rightItemCount },
-            (_, i) => totalPages - rightItemCount + i + 1
-        );
-        return [1, "ellipsis-left", ...rightRange];
-    }
-
-    const middleRange = Array.from(
-        { length: rightSiblingIndex - leftSiblingIndex + 1 },
-        (_, i) => leftSiblingIndex + i
-    );
-    return [1, "ellipsis-left", ...middleRange, "ellipsis-right", totalPages];
-};
-
-// ============================================================================
-// Root Component
-// ============================================================================
-
-interface PaginationRootProps extends BaseProps, React.HTMLAttributes<HTMLElement> {
-    children: React.ReactNode;
-    "aria-label"?: string;
-}
-
-const PaginationRoot = React.forwardRef<HTMLElement, PaginationRootProps>(
-    ({ children, className, "aria-label": ariaLabel = "Pagination", ...props }, ref) => {
-        return (
-            <nav
-                ref={ref}
-                aria-label={ariaLabel}
-                className={cn("flex flex-col gap-4", className)}
-                {...props}
-            >
-                {children}
-            </nav>
-        );
-    }
-);
-PaginationRoot.displayName = "PaginationRoot";
-
-// ============================================================================
-// Info Component
-// ============================================================================
-
-interface PaginationInfoProps extends React.HTMLAttributes<HTMLParagraphElement> {
-    totalItems: number;
-    pageSize: number;
-    currentPage: number;
-}
-
-const PaginationInfo: React.FC<PaginationInfoProps> = ({
-    totalItems,
-    pageSize,
-    currentPage,
-    className,
-    ...props
-}) => {
-    const startItem = Math.min((currentPage - 1) * pageSize + 1, totalItems);
-    const endItem = Math.min(currentPage * pageSize, totalItems);
-
-    return (
-        <p
-            className={cn(
-                "text-sm font-secondary text-ground-600 dark:text-ground-400",
-                className
-            )}
-            role="status"
-            aria-live="polite"
-            {...props}
-        >
-            Showing{" "}
-            <span className="font-semibold text-ground-900 dark:text-white">{startItem}</span>
-            {" "}to{" "}
-            <span className="font-semibold text-ground-900 dark:text-white">{endItem}</span>
-            {" "}of{" "}
-            <span className="font-semibold text-ground-900 dark:text-white">{totalItems}</span>
-            {" "}results
-        </p>
-    );
-};
-
-// ============================================================================
-// Buttons Component (Server Component with Next/Link)
-// ============================================================================
-
-interface PaginationButtonsProps extends BaseProps, Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
-    currentPage: number;
-    totalPages: number;
-    hrefBuilder: (page: number) => string;
-    pageRange?: PageRange;
-    siblingCount?: number;
-}
-
-const PaginationButtons: React.FC<PaginationButtonsProps> = ({
-    currentPage,
-    totalPages,
-    hrefBuilder,
-    pageRange = "compact",
-    siblingCount = 1,
-    className,
-    ...props
-}) => {
-    const pages = getPaginationRange(currentPage, totalPages, siblingCount, pageRange);
-
-    const baseClasses = cn(
-        "min-w-[36px] h-[36px] px-2.5 text-sm rounded",
-        "font-secondary font-medium transition-all duration-150",
-        "inline-flex items-center justify-center",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1",
-        "focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
-        "border border-ground-300 dark:border-ground-700"
-    );
-
-    const inactiveClasses = cn(
-        "bg-white dark:bg-ground-900",
-        "text-ground-700 dark:text-ground-300",
-        "hover:bg-ground-50 dark:hover:bg-ground-800",
-        "hover:border-ground-400 dark:hover:border-ground-600"
-    );
-
-    const activeClasses = cn(
-        "bg-primary-600 dark:bg-primary-500",
-        "text-white",
-        "border-primary-600 dark:border-primary-500"
-    );
-
-    const disabledClasses = "opacity-40 cursor-not-allowed pointer-events-none";
-
-    const renderPageButton = (
-        content: React.ReactNode,
-        page: number | null,
-        ariaLabel: string,
-        isDisabled: boolean = false,
-        isActive: boolean = false
-    ) => {
-        const classes = cn(
-            baseClasses,
-            isDisabled
-                ? cn(inactiveClasses, disabledClasses)
-                : isActive
-                    ? activeClasses
-                    : inactiveClasses
-        );
-
-        if (isDisabled) {
-            return (
-                <span className={classes} aria-disabled="true" aria-label={ariaLabel}>
-                    {content}
-                </span>
-            );
-        }
-
-        if (isActive) {
-            return (
-                <span className={classes} aria-current="page" aria-label={ariaLabel}>
-                    {content}
-                </span>
-            );
-        }
-
-        return (
-            <Link href={hrefBuilder(page!)} className={classes} aria-label={ariaLabel}>
-                {content}
-            </Link>
-        );
-    };
-
-    return (
-        <div className={cn("flex items-center gap-1 flex-wrap", className)} role="group" {...props}>
-            {/* First Page */}
-            {renderPageButton(
-                <ChevronsLeft className="w-4 h-4" aria-hidden="true" />,
-                1,
-                "First page",
-                currentPage === 1
-            )}
-
-            {/* Previous Page */}
-            {renderPageButton(
-                <ChevronLeft className="w-4 h-4" aria-hidden="true" />,
-                currentPage - 1,
-                "Previous page",
-                currentPage === 1
-            )}
-
-            {/* Page Numbers */}
-            {pages.map((page, index) => {
-                if (typeof page === "string") {
-                    return (
-                        <span
-                            key={`ellipsis-${index}`}
-                            className={cn(
-                                "min-w-[36px] h-[36px] px-2.5 text-sm rounded",
-                                "inline-flex items-center justify-center text-ground-400 dark:text-ground-500 border border-transparent"
-                            )}
-                            aria-hidden="true"
-                        >
-                            <MoreHorizontal className="w-4 h-4" />
-                        </span>
-                    );
-                }
-
-                const isActive = page === currentPage;
-                return renderPageButton(page, page, `Go to page ${page}`, false, isActive);
-            })}
-
-            {/* Next Page */}
-            {renderPageButton(
-                <ChevronRight className="w-4 h-4" aria-hidden="true" />,
-                currentPage + 1,
-                "Next page",
-                currentPage === totalPages
-            )}
-
-            {/* Last Page */}
-            {renderPageButton(
-                <ChevronsRight className="w-4 h-4" aria-hidden="true" />,
-                totalPages,
-                "Last page",
-                currentPage === totalPages
-            )}
-        </div>
-    );
-};
-
-// ============================================================================
-// Compact Pagination (Server Component)
-// ============================================================================
-
-interface CompactPaginationProps extends BaseProps, React.HTMLAttributes<HTMLElement> {
-    currentPage: number;
-    totalPages: number;
-    hrefBuilder: (page: number) => string;
-    "aria-label"?: string;
-}
-
-const CompactPagination: React.FC<CompactPaginationProps> = ({
-    currentPage,
-    totalPages,
-    hrefBuilder,
-    className,
-    "aria-label": ariaLabel = "Pagination",
-    ...props
-}) => {
-    const buttonClasses = cn(
-        "h-[36px] px-3 text-sm rounded",
-        "font-secondary font-medium transition-all duration-150",
-        "inline-flex items-center justify-center gap-1.5",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1",
-        "focus-visible:ring-offset-ground-50 dark:focus-visible:ring-offset-ground-950",
-        "border border-ground-300 dark:border-ground-700",
-        "bg-white dark:bg-ground-900 text-ground-700 dark:text-ground-300",
-        "hover:bg-ground-50 dark:hover:bg-ground-800 hover:border-ground-400 dark:hover:border-ground-600"
-    );
-
-    const disabledButtonClasses = cn(buttonClasses, "opacity-40 cursor-not-allowed pointer-events-none");
-
-    return (
-        <nav
-            aria-label={ariaLabel}
-            className={cn("flex items-center justify-between gap-4", className)}
-            {...props}
-        >
-            {/* Previous */}
-            {currentPage === 1 ? (
-                <span className={disabledButtonClasses} aria-disabled="true">
-                    <ChevronLeft className="w-4 h-4" />
-                    <span>Previous</span>
-                </span>
-            ) : (
-                <Link href={hrefBuilder(currentPage - 1)} className={buttonClasses}>
-                    <ChevronLeft className="w-4 h-4" />
-                    <span>Previous</span>
-                </Link>
-            )}
-
-            {/* Status */}
-            <span
-                className="text-sm font-secondary text-ground-600 dark:text-ground-400 tabular-nums"
-                role="status"
-                aria-live="polite"
-            >
-                Page{" "}
-                <span className="font-bold text-primary-600 dark:text-primary-400">
-                    {currentPage}
-                </span>
-                {" "}of {totalPages}
-            </span>
-
-            {/* Next */}
-            {currentPage === totalPages ? (
-                <span className={disabledButtonClasses} aria-disabled="true">
-                    <span>Next</span>
-                    <ChevronRight className="w-4 h-4" />
-                </span>
-            ) : (
-                <Link href={hrefBuilder(currentPage + 1)} className={buttonClasses}>
-                    <span>Next</span>
-                    <ChevronRight className="w-4 h-4" />
-                </Link>
-            )}
-        </nav>
-    );
-};
-
-// ============================================================================
-// Export
-// ============================================================================
-
-export const Pagination = {
-    Root: PaginationRoot,
-    Info: PaginationInfo,
-    Buttons: PaginationButtons,
-    Compact: CompactPagination,
-};
-```
+| Prop        | Type                       | Description                          |
+| :---------- | :------------------------- | :----------------------------------- |
+| currentPage | `number`                   | The current active page              |
+| totalPages  | `number`                   | Total number of pages                |
+| hrefBuilder | `(page: number) => string` | Function returning href given a page |

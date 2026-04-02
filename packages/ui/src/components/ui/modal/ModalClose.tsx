@@ -1,13 +1,13 @@
 // close.tsx
 // UI: presentational
 
-"use client";
+'use client';
 
-import React, { forwardRef } from "react";
-import { cn } from "../utils";
-import { X } from "lucide-react";
-import { useModal } from "./Modal";
-import type { ModalCloseProps } from "./types";
+import React, { forwardRef } from 'react';
+import { cn } from '../utils';
+import { X } from 'lucide-react';
+import { useModal } from './Modal';
+import type { ModalCloseProps } from './types';
 
 const ModalClose = forwardRef<HTMLButtonElement, ModalCloseProps>(
   ({ className, onClick, asChild = false, children, ...props }, ref) => {
@@ -35,12 +35,12 @@ const ModalClose = forwardRef<HTMLButtonElement, ModalCloseProps>(
           ref={ref}
           type="button"
           className={cn(
-            "inline-flex items-center justify-center rounded-control p-1.5",
-            "text-muted-content hover:text-elevated-content",
-            "transition-colors",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
-            "focus-visible:ring-offset-elevated",
-            className
+            'inline-flex items-center justify-center rounded-control p-1.5',
+            'text-muted-content hover:text-elevated-content',
+            'transition-colors',
+            'focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2',
+            'focus-visible:ring-offset-elevated',
+            className,
           )}
           onClick={handleClick}
           aria-label="Close"
@@ -54,18 +54,12 @@ const ModalClose = forwardRef<HTMLButtonElement, ModalCloseProps>(
 
     // Custom close button with children
     return (
-      <button
-        ref={ref}
-        type="button"
-        className={className}
-        onClick={handleClick}
-        {...props}
-      >
+      <button ref={ref} type="button" className={className} onClick={handleClick} {...props}>
         {children}
       </button>
     );
-  }
+  },
 );
-ModalClose.displayName = "Modal.Close";
+ModalClose.displayName = 'Modal.Close';
 
 export { ModalClose };

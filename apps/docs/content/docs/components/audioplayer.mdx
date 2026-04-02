@@ -37,6 +37,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       );
     }
     ```
+
   </Tab>
 </Tabs>
 
@@ -54,112 +55,112 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ## Sub-components
 
-| Component | Description |
-|:----------|:------------|
-| `Root` | Context provider + keyboard listener |
-| `Audio` | Hidden `<audio>` element |
-| `Player` | Visual container (default / minimal / card) |
-| `Artwork` | Album art with spin animation |
-| `TrackInfo` | Title, artist, album text |
-| `ProgressBar` | Seekable slider with buffer + timestamps |
-| `PlayPauseButton` | Play / pause toggle |
-| `SkipBackwardButton` | Previous track |
-| `SkipForwardButton` | Next track |
-| `VolumeControl` | Mute + volume slider |
-| `RepeatButton` | Repeat off - all - one |
-| `ShuffleButton` | Shuffle toggle |
-| `FavoriteButton` | Heart toggle |
-| `DownloadButton` | Download current track |
-| `ShareButton` | Share action |
-| `MoreButton` | More options |
-| `PlaylistButton` | Toggle playlist visibility |
-| `Playlist` | Track list with remove |
-| `LoadingIndicator` | Spinner overlay |
+| Component            | Description                                 |
+| :------------------- | :------------------------------------------ |
+| `Root`               | Context provider + keyboard listener        |
+| `Audio`              | Hidden `<audio>` element                    |
+| `Player`             | Visual container (default / minimal / card) |
+| `Artwork`            | Album art with spin animation               |
+| `TrackInfo`          | Title, artist, album text                   |
+| `ProgressBar`        | Seekable slider with buffer + timestamps    |
+| `PlayPauseButton`    | Play / pause toggle                         |
+| `SkipBackwardButton` | Previous track                              |
+| `SkipForwardButton`  | Next track                                  |
+| `VolumeControl`      | Mute + volume slider                        |
+| `RepeatButton`       | Repeat off - all - one                      |
+| `ShuffleButton`      | Shuffle toggle                              |
+| `FavoriteButton`     | Heart toggle                                |
+| `DownloadButton`     | Download current track                      |
+| `ShareButton`        | Share action                                |
+| `MoreButton`         | More options                                |
+| `PlaylistButton`     | Toggle playlist visibility                  |
+| `Playlist`           | Track list with remove                      |
+| `LoadingIndicator`   | Spinner overlay                             |
 
 ## Props
 
 ### AudioPlayer.Root
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `children` | `ReactNode` | - | Child components (required) |
-| `track` | `Track` | - | Initial track |
-| `playlist` | `Track[]` | `[]` | Additional tracks |
-| `autoPlay` | `boolean` | `false` | Auto-play on mount |
-| `defaultVolume` | `number` | `1` | Initial volume (0-1) |
-| `defaultPlaybackRate` | `number` | `1` | Initial speed |
-| `defaultRepeatMode` | `off \| all \| one` | `"off"` | Initial repeat |
-| `enableMediaSession` | `boolean` | `true` | Media Session API |
-| `onPlay` | `() => void` | - | Play callback |
-| `onPause` | `() => void` | - | Pause callback |
-| `onEnded` | `() => void` | - | Ended callback |
-| `onTimeUpdate` | `(time: number) => void` | - | Time callback |
-| `onVolumeChange` | `(vol: number) => void` | - | Volume callback |
-| `onTrackChange` | `(track: Track) => void` | - | Track change callback |
-| `className` | `string` | - | Additional CSS classes |
+| Prop                  | Type                     | Default | Description                 |
+| :-------------------- | :----------------------- | :------ | :-------------------------- |
+| `children`            | `ReactNode`              | -       | Child components (required) |
+| `track`               | `Track`                  | -       | Initial track               |
+| `playlist`            | `Track[]`                | `[]`    | Additional tracks           |
+| `autoPlay`            | `boolean`                | `false` | Auto-play on mount          |
+| `defaultVolume`       | `number`                 | `1`     | Initial volume (0-1)        |
+| `defaultPlaybackRate` | `number`                 | `1`     | Initial speed               |
+| `defaultRepeatMode`   | `off \| all \| one`      | `"off"` | Initial repeat              |
+| `enableMediaSession`  | `boolean`                | `true`  | Media Session API           |
+| `onPlay`              | `() => void`             | -       | Play callback               |
+| `onPause`             | `() => void`             | -       | Pause callback              |
+| `onEnded`             | `() => void`             | -       | Ended callback              |
+| `onTimeUpdate`        | `(time: number) => void` | -       | Time callback               |
+| `onVolumeChange`      | `(vol: number) => void`  | -       | Volume callback             |
+| `onTrackChange`       | `(track: Track) => void` | -       | Track change callback       |
+| `className`           | `string`                 | -       | Additional CSS classes      |
 
 ### AudioPlayer.Player
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `variant` | `default \| minimal \| card` | `"default"` | Visual style variant |
-| `children` | `ReactNode` | - | Content to render |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type                         | Default     | Description            |
+| :---------- | :--------------------------- | :---------- | :--------------------- |
+| `variant`   | `default \| minimal \| card` | `"default"` | Visual style variant   |
+| `children`  | `ReactNode`                  | -           | Content to render      |
+| `className` | `string`                     | -           | Additional CSS classes |
 
 ### AudioPlayer.Artwork
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `size` | `sm \| md \| lg \| xl` | `"lg"` | Artwork size |
-| `animated` | `boolean` | `true` | Enable spin animation when playing |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type                   | Default | Description                        |
+| :---------- | :--------------------- | :------ | :--------------------------------- |
+| `size`      | `sm \| md \| lg \| xl` | `"lg"`  | Artwork size                       |
+| `animated`  | `boolean`              | `true`  | Enable spin animation when playing |
+| `className` | `string`               | -       | Additional CSS classes             |
 
 ### AudioPlayer.TrackInfo
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `showArtist` | `boolean` | `true` | Show artist name |
-| `showAlbum` | `boolean` | `false` | Show album name |
-| `className` | `string` | - | Additional CSS classes |
+| Prop         | Type      | Default | Description            |
+| :----------- | :-------- | :------ | :--------------------- |
+| `showArtist` | `boolean` | `true`  | Show artist name       |
+| `showAlbum`  | `boolean` | `false` | Show album name        |
+| `className`  | `string`  | -       | Additional CSS classes |
 
 ### AudioPlayer.ProgressBar
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `showBuffer` | `boolean` | `true` | Show buffer indicator |
-| `showTimestamps` | `boolean` | `true` | Show time stamps |
-| `className` | `string` | - | Additional CSS classes |
+| Prop             | Type      | Default | Description            |
+| :--------------- | :-------- | :------ | :--------------------- |
+| `showBuffer`     | `boolean` | `true`  | Show buffer indicator  |
+| `showTimestamps` | `boolean` | `true`  | Show time stamps       |
+| `className`      | `string`  | -       | Additional CSS classes |
 
 ### AudioPlayer.PlayPauseButton
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `size` | `sm \| md \| lg` | `"md"` | Button size |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type             | Default | Description            |
+| :---------- | :--------------- | :------ | :--------------------- |
+| `size`      | `sm \| md \| lg` | `"md"`  | Button size            |
+| `className` | `string`         | -       | Additional CSS classes |
 
 ### AudioPlayer.Playlist
 
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
+| Prop        | Type     | Default   | Description                  |
+| :---------- | :------- | :-------- | :--------------------------- |
 | `maxHeight` | `string` | `"300px"` | Maximum height before scroll |
-| `className` | `string` | - | Additional CSS classes |
+| `className` | `string` | -         | Additional CSS classes       |
 
 ## Keyboard Shortcuts
 
-| Key | Action |
-|:----|:-------|
-| `Space` / `K` | Play / pause |
-| `ArrowLeft` | Seek backward 5s |
-| `ArrowRight` | Seek forward 5s |
-| `ArrowUp` | Volume +10% |
-| `ArrowDown` | Volume -10% |
-| `M` | Mute toggle |
-| `N` | Next track |
-| `P` | Previous track |
-| `R` | Cycle repeat mode |
-| `S` | Toggle shuffle |
-| `0` / `Home` | Seek to start |
-| `End` | Seek to end |
+| Key           | Action            |
+| :------------ | :---------------- |
+| `Space` / `K` | Play / pause      |
+| `ArrowLeft`   | Seek backward 5s  |
+| `ArrowRight`  | Seek forward 5s   |
+| `ArrowUp`     | Volume +10%       |
+| `ArrowDown`   | Volume -10%       |
+| `M`           | Mute toggle       |
+| `N`           | Next track        |
+| `P`           | Previous track    |
+| `R`           | Cycle repeat mode |
+| `S`           | Toggle shuffle    |
+| `0` / `Home`  | Seek to start     |
+| `End`         | Seek to end       |
 
 ## Accessibility
 

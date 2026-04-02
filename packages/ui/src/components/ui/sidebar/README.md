@@ -1,6 +1,7 @@
 # Sidebar
 
 ## Anatomy
+
 - sidebar.tsx — composition (provider + sidebar shell)
 - sidebar-header.tsx — UI: header section
 - sidebar-content.tsx — UI: scrollable content area
@@ -14,6 +15,7 @@
 - index.ts — public API
 
 ## Use Cases
+
 - Responsive sidebar navigation with collapsible state
 - Nested menu items with expandable submenus
 - Mobile-first overlay navigation with focus trap

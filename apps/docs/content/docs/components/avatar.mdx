@@ -16,6 +16,10 @@ npx vayu-ui init    # Add Theme CSS if not added
 npx vayu-ui add avatar
 ```
 
+```bash
+npx vayu-ui add -t avatar # with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -27,31 +31,41 @@ npx vayu-ui add avatar
   <Tab value="Code">
     ```tsx
 
-    // 1. Basic Image Avatar
-    <Avatar size="medium" username="John Doe">
-      <Avatar.Image src="https://example.com/avatar.jpg" alt="John Doe" />
-      <Avatar.Fallback src="/default-user.png" />
+    <Avatar size="small" username="Small User">
+      <Avatar.Initials username="Small User" />
     </Avatar>
 
-    // 2. Initials Fallback (Auto-generated color)
     <Avatar size="medium" username="Rugved Patel">
       <Avatar.Initials username="Rugved Patel" />
     </Avatar>
 
-    // 3. Status Indicator
-    <Avatar size="medium" username="Online User" status="online">
-      <Avatar.Initials username="Online User" />
+    <Avatar size="large" username="John Doe">
+      <Avatar.Image
+        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=800&auto=format&fit=crop&q=60"
+        alt=""
+      />
+    </Avatar>
+
+    <Avatar size="large" username="Fallback User">
+      <Avatar.Image src="https://broken-image-link.com/image.jpg" alt="" />
+      <Avatar.Fallback />
+    </Avatar>
+
+    <Avatar size="large" username="Online" status="online">
+      <Avatar.Initials username="Online" />
       <Avatar.Status status="online" />
     </Avatar>
 
-    // 5. Interactive Avatar (clickable)
     <Avatar
       size="large"
       username="Profile"
-      onClick={() => console.log('Avatar clicked')}
-      tabIndex={0}
+      onClick={() => console.log("clicked")}
     >
       <Avatar.Initials username="Profile" />
+    </Avatar>
+
+    <Avatar size={40} username="Custom Size">
+      <Avatar.Initials username="Custom Size" />
     </Avatar>
     ```
 
@@ -62,102 +76,30 @@ npx vayu-ui add avatar
 
 ```tsx
 <Avatar size="medium" username="John Doe">
-  <Avatar.Image src="https://example.com/avatar.jpg" alt="John Doe" />
-  <Avatar.Fallback src="/default-user.png" />
-  <Avatar.Initials>
-     <span>JD</span>
-  </Avatar.Initials>
+  <Avatar.Image src="https://example.com/avatar.jpg" alt="" />
+  <Avatar.Fallback />
+  <Avatar.Initials username="John Doe" />
   <Avatar.Status status="online" />
 </Avatar>
 ```
 
-| Element             | Description                                                        |
-| :------------------ | :----------------------------------------------------------------- |
-| **Avatar (Root)**   | Container that provides size, shape, and accessibility context     |
-| **Avatar.Image**    | Displays the user's profile image with loading state               |
-| **Avatar.Initials** | Auto-generated initials with deterministic color based on username |
-| **Avatar.Fallback** | Default image shown when primary image fails                       |
-| **Avatar.Status**   | Status indicator badge (online, offline, away, busy)               |
-
-## Props
-
-### Avatar (Root)
-
-| Prop        | Type                                                   | Default    | Description                                    |
-| :---------- | :----------------------------------------------------- | :--------- | :--------------------------------------------- |
-| `size`      | `'small' \| 'medium' \| 'large' \| 'xlarge' \| number` | `'medium'` | The size of the avatar container.              |
-| `username`  | `string`                                               | -          | Used for `aria-label` generation and initials. |
-| `alt`       | `string`                                               | -          | Custom alt text for the avatar.                |
-| `status`    | `'online' \| 'offline' \| 'away' \| 'busy'`            | -          | Used for `aria-label` status announcement.     |
-| `onClick`   | `() => void`                                           | -          | Handler for interactive avatars.               |
-| `tabIndex`  | `number`                                               | -          | Custom tab index for keyboard navigation.      |
-| `className` | `string`                                               | -          | Additional CSS classes.                        |
-| `children`  | `ReactNode`                                            | -          | Child components (Image, Initials, Status).    |
-
-### Avatar.Image
-
-| Prop          | Type                          | Default | Description                                              |
-| :------------ | :---------------------------- | :------ | :------------------------------------------------------- |
-| `src`         | `string`                      | -       | The source URL of the image.                             |
-| `fallbackSrc` | `string`                      | -       | A secondary image URL to use if the primary `src` fails. |
-| `alt`         | `string`                      | -       | Alt text for the image.                                  |
-| `onError`     | `(e: SyntheticEvent) => void` | -       | Callback when image fails to load.                       |
-| `onLoad`      | `(e: SyntheticEvent) => void` | -       | Callback when image loads successfully.                  |
-| `className`   | `string`                      | -       | Additional CSS classes.                                  |
-
-### Avatar.Initials
-
-| Prop        | Type     | Default | Description                                              |
-| :---------- | :------- | :------ | :------------------------------------------------------- |
-| `username`  | `string` | -       | The name to generate initials and background color from. |
-| `className` | `string` | -       | Additional CSS classes.                                  |
-
-### Avatar.Fallback
-
-| Prop        | Type     | Default            | Description                                     |
-| :---------- | :------- | :----------------- | :---------------------------------------------- |
-| `src`       | `string` | Placeholder URL    | Default image to show when primary image fails. |
-| `alt`       | `string` | `'Default avatar'` | Alt text for the fallback image.                |
-| `className` | `string` | -                  | Additional CSS classes.                         |
-
-### Avatar.Status
-
-| Prop        | Type                                        | Default | Description                                          |
-| :---------- | :------------------------------------------ | :------ | :--------------------------------------------------- |
-| `status`    | `'online' \| 'offline' \| 'away' \| 'busy'` | -       | The status to display visually.                      |
-| `label`     | `string`                                    | -       | Accessible label for the status (overrides default). |
-| `className` | `string`                                    | -       | Additional CSS classes.                              |
-
-### Sizes
-
-| Size     | Dimensions | Font Size   | Use Case                         |
-| :------- | :--------- | :---------- | :------------------------------- |
-| `small`  | 32×32px    | 12px        | Dense lists, tables, inline text |
-| `medium` | 48×48px    | 14px        | Default, comments, cards         |
-| `large`  | 64×64px    | 18px        | Profiles, headers                |
-| `xlarge` | 96×96px    | 24px        | Hero sections, user profiles     |
-| `number` | Custom     | 40% of size | Custom dimensions                |
-
-### Status Colors
-
-| Status    | Color        | Description                    |
-| :-------- | :----------- | :----------------------------- |
-| `online`  | Green        | User is available              |
-| `offline` | Gray         | User is not available          |
-| `away`    | Yellow/Amber | User is idle or away           |
-| `busy`    | Red          | User is busy or do not disturb |
+| Element             | Description                                                     |
+| :------------------ | :-------------------------------------------------------------- |
+| **Avatar**          | Root container providing size, shape, and accessibility context |
+| **Avatar.Image**    | Displays a profile image with loading state and error fallback  |
+| **Avatar.Fallback** | Default image shown when primary image fails to load            |
+| **Avatar.Initials** | Auto-generated initials with deterministic background color     |
+| **Avatar.Status**   | Status indicator dot (online, offline, away, busy)              |
 
 ## Accessibility
 
-The Avatar component follows WCAG 2.2 Level AA guidelines:
+### Keyboard Support
 
-### Keyboard Navigation
+- Interactive avatars (with `onClick`) receive `tabIndex={0}` and can be focused via Tab
+- **Enter** and **Space** activate the `onClick` handler
+- Static avatars are not focusable
 
-- **Interactive Avatars**: When `onClick` is provided, avatars receive `tabIndex={0}` and can be focused via keyboard
-- **Focus Indicators**: Visible 2px focus ring with offset in both light and dark modes
-- **Activation**: Enter and Space keys trigger `onClick` for interactive avatars
-
-### Screen Reader Support
+### ARIA Attributes
 
 | Element              | Role     | ARIA Attributes                                         |
 | :------------------- | :------- | :------------------------------------------------------ |
@@ -166,386 +108,81 @@ The Avatar component follows WCAG 2.2 Level AA guidelines:
 | Avatar.Status        | `status` | `aria-label="{status}"`, `aria-live="polite"`           |
 | Loading spinner      | `status` | `aria-busy="true"`, `aria-label="Loading avatar image"` |
 
-### Color Contrast
+### Focus Behavior
 
-- All auto-generated initials colors meet **4.5:1 contrast ratio** with white text
-- Status indicators use high-contrast color palette
-- Dark mode maintains adequate contrast levels
+- Visible 2px focus ring with offset using `focus-visible:ring-2 focus-visible:ring-focus`
+- Focus ring is styled consistently in both light and dark modes
+- Focus only appears on keyboard navigation, not on click (`focus-visible`)
 
-### Motion Preferences
+## Screen reader behavior
 
-- All animations use `motion-safe:` prefix
-- Respects `prefers-reduced-motion` media query
-- Users with reduced motion preferences see static content
+- Static avatars are announced as an image: "John Doe's avatar"
+- Interactive avatars are announced as a button: "John Doe's avatar, button"
+- When `status` is set on the root, it appends to the label: "John Doe's avatar (online)"
+- Status indicators are announced via `aria-live="polite"` when the status changes
+- Loading state is announced as "Loading avatar image" via `aria-busy="true"`
+- Initials and fallback images are hidden from screen readers (`aria-hidden="true"`) since the parent provides the label
 
-### Touch Targets
+## Component Folder Structure
 
-- Minimum touch target size of **24×24px** (WCAG 2.5.5)
-- Interactive avatars: Full avatar size is clickable
-- Status indicators: 20×20px minimum
-
-### Best Practices
-
-1. **Always provide `username`**: Enables automatic alt text generation and initials
-2. **Use `aria-label` for meaningful content**: When avatar represents specific user context
-3. **Interactive avatars**: Ensure `onClick` handler is provided for keyboard accessibility
-
-## Source Code
-
-```tsx title="src/components/ui/avatar.tsx"
-"use client";
-
-import React, { useMemo, useState, forwardRef, HTMLAttributes } from "react";
-import { cn } from "./utils";
-
-// ============================================================================
-// Types
-// ============================================================================
-
-type AvatarSize = "small" | "medium" | "large" | "xlarge";
-type AvatarStatus = "online" | "offline" | "away" | "busy";
-
-interface AvatarRootProps extends HTMLAttributes<HTMLSpanElement> {
-    size?: AvatarSize | number;
-    username?: string;
-    alt?: string;
-    status?: AvatarStatus;
-    className?: string;
-    children: React.ReactNode;
-    onClick?: () => void;
-    tabIndex?: number;
-}
-
-interface AvatarImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-    fallbackSrc?: string;
-}
-
-interface AvatarInitialsProps extends HTMLAttributes<HTMLSpanElement> {
-    username: string;
-}
-
-interface AvatarStatusProps extends HTMLAttributes<HTMLSpanElement> {
-    status: AvatarStatus;
-    label?: string;
-}
-
-// ============================================================================
-// WCAG 2.2 AA Compliant Color Palette
-// ============================================================================
-// All colors below meet or exceed 4.5:1 contrast ratio against white text.
-// Lighter yellows and oranges were darkened to ensure compliance.
-
-const WCAG_COMPLIANT_COLORS = [
-    "#B91C1C", // red-700 (Contrast: 5.12)
-    "#C2410C", // orange-700 (Contrast: 5.81)
-    "#A16207", // yellow-700 (Contrast: 5.68)
-    "#4F46E5", // indigo-600 (Contrast: 4.81)
-    "#2563EB", // blue-600 (Contrast: 4.56)
-    "#0E7490", // cyan-700 (Contrast: 5.08)
-    "#047857", // emerald-700 (Contrast: 5.25)
-    "#6D28D9", // violet-700 (Contrast: 5.35)
-    "#7C3AED", // violet-500 (Contrast: 4.52) - Lower bound acceptable
-    "#DB2777", // pink-600 (Contrast: 4.52) - Lower bound acceptable
-    "#0F766E", // teal-700 (Contrast: 5.06)
-    "#1E40AF", // blue-800 (Contrast: 7.06)
-];
-
-// ============================================================================
-// Helper Functions
-// ============================================================================
-
-const generateInitials = (username: string): string => {
-    if (!username) return "";
-    const names = username.trim().split(/\s+/);
-    if (names.length === 1) return names[0].charAt(0).toUpperCase();
-    return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
-};
-
-const getInitialsColor = (username: string): string => {
-    if (!username) return WCAG_COMPLIANT_COLORS[0];
-    let hash = 0;
-    for (let i = 0; i < username.length; i++) {
-        hash = username.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return WCAG_COMPLIANT_COLORS[Math.abs(hash) % WCAG_COMPLIANT_COLORS.length];
-};
-
-// ============================================================================
-// Avatar Root Component
-// ============================================================================
-
-const AvatarRoot = forwardRef<HTMLSpanElement, AvatarRootProps>(
-    (
-        {
-            size = "medium",
-            username = "",
-            alt,
-            status,
-            className,
-            onClick,
-            tabIndex,
-            children,
-            ...props
-        },
-        ref
-    ) => {
-        const sizeClasses = {
-            small: "w-8 h-8 text-xs",
-            medium: "w-12 h-12 text-sm",
-            large: "w-16 h-16 text-lg",
-            xlarge: "w-24 h-24 text-2xl",
-        };
-
-        const sizeClass = typeof size === "string" ? sizeClasses[size] : "";
-
-        // 1. Determine Alt Text
-        const getAltText = () => {
-            if (alt) return alt;
-            if (username) return `${username}'s avatar`;
-            return "User avatar";
-        };
-
-        // 2. Append status context if provided
-        const fullAltText = status ? `${getAltText()} (${status})` : getAltText();
-
-        // 3. Determine Interactive State
-        const isInteractive = onClick !== undefined;
-        const role = isInteractive ? "button" : "img";
-
-        const avatarClasses = cn(
-            "relative inline-flex items-center justify-center",
-            "rounded-full",
-            "bg-ground-100 dark:bg-ground-800",
-            "border-2 border-ground-300 dark:border-ground-600",
-            "shadow-outer",
-            // Motion Safe Transitions
-            "motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out",
-            // Focus Visible (WCAG 2.4.7)
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2",
-            "dark:focus-visible:ring-primary-500 dark:focus-visible:ring-offset-ground-950",
-            // Interactive States
-            isInteractive && "cursor-pointer hover:shadow-lg active:scale-95",
-            sizeClass,
-            className
-        );
-
-        return (
-            <span
-                ref={ref}
-                className={avatarClasses}
-                style={
-                    typeof size === "number"
-                        ? { width: size, height: size, fontSize: size * 0.4 }
-                        : undefined
-                }
-                role={role}
-                aria-label={fullAltText}
-                // If interactive, we handle keyboard events via onClick (Enter/Space mapping is automatic for role="button" in most browsers/react)
-                tabIndex={isInteractive ? (tabIndex !== undefined ? tabIndex : 0) : undefined}
-                onClick={onClick}
-                onKeyDown={(e) => {
-                    // WCAG 2.1.1: Ensure keyboard activation (redundant for role=button usually, but safe)
-                    if (isInteractive && (e.key === "Enter" || e.key === " ")) {
-                        e.preventDefault();
-                        onClick?.();
-                    }
-                }}
-                {...props}
-            >
-                {children}
-            </span>
-        );
-    }
-);
-
-AvatarRoot.displayName = "Avatar";
-
-// ============================================================================
-// Avatar Image Component
-// ============================================================================
-
-const AvatarImage = forwardRef<HTMLImageElement, AvatarImageProps>(
-    ({ src, fallbackSrc, alt = "", className, onError, onLoad, ...props }, ref) => {
-        const [imageError, setImageError] = useState(false);
-        const [imageLoading, setImageLoading] = useState(true);
-        const [tryingFallback, setTryingFallback] = useState(false);
-
-        const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-            if (fallbackSrc && !tryingFallback) {
-                setTryingFallback(true);
-                setImageLoading(true);
-                setImageError(false);
-            } else {
-                setImageError(true);
-                setImageLoading(false);
-            }
-            onError?.(e);
-        };
-
-        const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-            setImageError(false);
-            setImageLoading(false);
-            onLoad?.(e);
-        };
-
-        const currentSrc = tryingFallback && fallbackSrc ? fallbackSrc : src;
-
-        // FIX: Return null if error or no src to allow Initials/Fallback to show
-        if (imageError || !currentSrc) return null;
-
-        return (
-            <>
-                <img
-                    ref={ref}
-                    src={currentSrc}
-                    alt={alt}
-                    className={cn(
-                        "absolute inset-0 w-full h-full object-cover rounded-full",
-                        "motion-safe:transition-opacity motion-safe:duration-300",
-                        imageLoading ? "opacity-0" : "opacity-100",
-                        className
-                    )}
-                    onError={handleImageError}
-                    onLoad={handleImageLoad}
-                    {...props}
-                />
-                {imageLoading && (
-                    <span
-                        className="absolute inset-0 flex items-center justify-center bg-ground-100 dark:bg-ground-800 rounded-full"
-                        role="status"
-                        aria-live="polite"
-                        aria-busy="true"
-                    >
-                        {/* Visual Loading Spinner - Hidden from SR by aria-busy on parent */}
-                        <span
-                            className="w-4 h-4 border-2 border-primary-600 border-t-transparent rounded-full motion-safe:animate-spin"
-                            aria-hidden="true"
-                        ></span>
-                    </span>
-                )}
-            </>
-        );
-    }
-);
-
-AvatarImage.displayName = "Avatar.Image";
-
-// ============================================================================
-// Avatar Initials Component
-// ============================================================================
-
-const AvatarInitials = forwardRef<HTMLSpanElement, AvatarInitialsProps>(
-    ({ username, className, ...props }, ref) => {
-        const initials = useMemo(() => generateInitials(username), [username]);
-        const backgroundColor = useMemo(() => getInitialsColor(username), [username]);
-
-        if (!initials) return null;
-
-        return (
-            <span
-                ref={ref}
-                className={cn(
-                    "absolute inset-0 flex items-center justify-center",
-                    "text-white font-primary font-semibold select-none rounded-full",
-                    className
-                )}
-                style={{ backgroundColor }}
-                aria-hidden="true" // Decorative: Parent Avatar handles the label
-                {...props}
-            >
-                {initials}
-            </span>
-        );
-    }
-);
-
-AvatarInitials.displayName = "Avatar.Initials";
-
-// ============================================================================
-// Avatar Fallback Component
-// ============================================================================
-
-interface AvatarFallbackProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-    src?: string;
-}
-
-const AvatarFallback = forwardRef<HTMLImageElement, AvatarFallbackProps>(
-    (
-        {
-            src = "https://via.placeholder.com/150/999999/666666?text=User",
-            alt = "Default avatar",
-            className,
-            ...props
-        },
-        ref
-    ) => {
-        return (
-            <img
-                ref={ref}
-                src={src}
-                alt=""
-                className={cn(
-                    "absolute inset-0 w-full h-full object-cover rounded-full",
-                    "opacity-80 dark:opacity-60",
-                    className
-                )}
-                aria-hidden="true" // Decorative: Parent Avatar handles the label
-                {...props}
-            />
-        );
-    }
-);
-
-AvatarFallback.displayName = "Avatar.Fallback";
-
-// ============================================================================
-// Avatar Status Indicator Component
-// ============================================================================
-
-const AvatarStatus = forwardRef<HTMLSpanElement, AvatarStatusProps>(
-    ({ status, label, className, ...props }, ref) => {
-        const statusConfig = {
-            online: { color: "bg-success-600 dark:bg-success-500", label: "Online" },
-            offline: { color: "bg-ground-500 dark:bg-ground-400", label: "Offline" },
-            away: { color: "bg-warning-600 dark:bg-warning-500", label: "Away" },
-            busy: { color: "bg-error-600 dark:bg-error-500", label: "Busy" },
-        };
-
-        const config = statusConfig[status];
-
-        return (
-            <span
-                ref={ref}
-                className={cn(
-                    "absolute -bottom-0.5 -right-0.5",
-                    "w-5 h-5 rounded-full",
-                    "border-2 border-white dark:border-ground-950",
-                    "z-10 shadow-outer",
-                    config.color,
-                    className
-                )}
-                role="status"
-                aria-label={label || config.label}
-                title={label || config.label}
-                {...props}
-            />
-        );
-    }
-);
-
-AvatarStatus.displayName = "Avatar.Status";
-
-// ============================================================================
-// Compound Component Export
-// ============================================================================
-
-export const Avatar = Object.assign(AvatarRoot, {
-    Image: AvatarImage,
-    Initials: AvatarInitials,
-    Fallback: AvatarFallback,
-    Status: AvatarStatus,
-});
-
-export default Avatar;
-export type { AvatarSize, AvatarStatus };
 ```
+Avatar/
+├── Avatar.tsx           # Root component + compound pattern wiring
+├── AvatarImage.tsx      # Image with loading spinner and fallback support
+├── AvatarInitials.tsx   # Generated initials with background color
+├── AvatarFallback.tsx   # Default avatar image
+├── AvatarStatus.tsx     # Status indicator dot
+├── hooks.ts             # Initial generation and color hashing
+├── types.ts             # Types and WCAG-compliant color palette
+├── index.ts             # Public API barrel export
+└── README.md
+```
+
+## Props
+
+### Avatar (Root)
+
+| Prop        | Type                                                   | Default    | Description                                       |
+| :---------- | :----------------------------------------------------- | :--------- | :------------------------------------------------ |
+| `size`      | `"small" \| "medium" \| "large" \| "xlarge" \| number` | `"medium"` | Size of the avatar container                      |
+| `username`  | `string`                                               | `""`       | Used for `aria-label` and initials generation     |
+| `alt`       | `string`                                               | -          | Custom alt text for the avatar                    |
+| `status`    | `"online" \| "offline" \| "away" \| "busy"`            | -          | Appends status context to the aria-label          |
+| `onClick`   | `() => void`                                           | -          | Makes the avatar interactive (button role)        |
+| `tabIndex`  | `number`                                               | `0`        | Tab index when interactive                        |
+| `className` | `string`                                               | -          | Additional CSS classes                            |
+| `children`  | `ReactNode`                                            | -          | Subcomponents (Image, Initials, Fallback, Status) |
+
+### Avatar.Image
+
+| Prop          | Type                          | Default | Description                               |
+| :------------ | :---------------------------- | :------ | :---------------------------------------- |
+| `src`         | `string`                      | -       | Image source URL                          |
+| `fallbackSrc` | `string`                      | -       | Secondary URL used if primary `src` fails |
+| `alt`         | `string`                      | `""`    | Alt text for the image                    |
+| `onError`     | `(e: SyntheticEvent) => void` | -       | Callback when image fails to load         |
+| `onLoad`      | `(e: SyntheticEvent) => void` | -       | Callback when image loads successfully    |
+| `className`   | `string`                      | -       | Additional CSS classes                    |
+
+### Avatar.Initials
+
+| Prop        | Type     | Default | Description                                    |
+| :---------- | :------- | :------ | :--------------------------------------------- |
+| `username`  | `string` | -       | Name to generate initials and background color |
+| `className` | `string` | -       | Additional CSS classes                         |
+
+### Avatar.Fallback
+
+| Prop        | Type     | Default            | Description                            |
+| :---------- | :------- | :----------------- | :------------------------------------- |
+| `src`       | `string` | Placeholder URL    | Default image when primary image fails |
+| `alt`       | `string` | `"Default avatar"` | Alt text for the fallback image        |
+| `className` | `string` | -                  | Additional CSS classes                 |
+
+### Avatar.Status
+
+| Prop        | Type                                        | Default | Description                          |
+| :---------- | :------------------------------------------ | :------ | :----------------------------------- |
+| `status`    | `"online" \| "offline" \| "away" \| "busy"` | -       | Status to display visually           |
+| `label`     | `string`                                    | -       | Accessible label (overrides default) |
+| `className` | `string`                                    | -       | Additional CSS classes               |

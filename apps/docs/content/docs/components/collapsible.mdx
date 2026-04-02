@@ -1,79 +1,134 @@
 ---
 title: Collapsible
-description: A toggleable content section with smooth height animation, multiple variants, and group support.
+description: A toggleable content section with line-clamp truncation and smooth show/hide behavior.
 ---
 
 import CollapsibleDemo from '@/components/demos/collapsible-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add collapsible
+```
+
+```bash
+npx vayu-ui add -t collapsible #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+    <div className="not-prose flex w-full justify-center p-4">
       <CollapsibleDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Collapsible } from "@/components/ui/collapsible"
+    <Collapsible>
+      <Collapsible.Content lines={3}>
+        Long text content that gets clamped to 3 lines when collapsed.
+      </Collapsible.Content>
+      <Collapsible.Trigger />
+    </Collapsible>
 
-    export function Example() {
-      return (
-        <Collapsible trigger="Click to expand" variant="bordered">
-          Hidden content revealed on toggle.
-        </Collapsible>
-      )
-    }
+    <Collapsible>
+      <Collapsible.Content lines={2}>
+        Shorter clamp with custom trigger labels.
+      </Collapsible.Content>
+      <Collapsible.Trigger showText="Read more" hideText="Read less" />
+    </Collapsible>
+
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <Collapsible.Content lines={2}>
+        Controlled collapsible with external state management.
+      </Collapsible.Content>
+      <Collapsible.Trigger />
+    </Collapsible>
+
+    <Collapsible defaultOpen>
+      <Collapsible.Content lines={2}>
+        Starts in the open state by default.
+      </Collapsible.Content>
+      <Collapsible.Trigger />
+    </Collapsible>
     ```
+
   </Tab>
 </Tabs>
 
-## Installation
+## Anatomy
 
-```tsx title="src/components/ui/collapsible.tsx"
-// Copy the full component code
+```tsx
+import { Collapsible } from 'vayu-ui';
+
+<Collapsible>
+  <Collapsible.Content lines={3}>Your content here.</Collapsible.Content>
+  <Collapsible.Trigger />
+</Collapsible>;
 ```
 
-## Variants
+- **Collapsible** — Root container. Manages open/close state and provides context to children.
+- **Collapsible.Content** — Content panel with CSS line-clamp truncation when collapsed. Uses `role="region"` for accessibility.
+- **Collapsible.Trigger** — Button that toggles the content open or closed. Displays customizable label text.
 
-### Default
-Transparent background with subtle hover state.
+## Accessibility
 
-### Bordered
-Card-like styling with border and background.
+- **Keyboard Support**:
+  - `Enter` / `Space` — Toggle the collapsible open or closed when the trigger is focused.
+- **ARIA Attributes**:
+  - `aria-expanded` on `Collapsible.Trigger` reflects the open/closed state.
+  - `aria-controls` on `Collapsible.Trigger` links to the associated content panel.
+  - `aria-labelledby` on `Collapsible.Content` references the controlling trigger.
+  - `role="region"` on `Collapsible.Content` identifies it as a live content region.
+- **Focus Behavior**:
+  - Focus remains on the trigger button after toggling. Content does not steal focus.
 
-### Filled
-Shaded background for visual grouping.
+## Screen reader behavior
 
-## Collapsible.Group
+When a user navigates to the trigger button, the screen reader announces the button label (e.g., "Show more" or "Show less") along with its expanded or collapsed state via `aria-expanded`. When expanded, the content panel is announced as a region (`role="region"`) labeled by the trigger. When collapsed, the content is visually truncated with CSS line-clamp but remains in the accessibility tree — the region is still reachable by screen readers navigating by landmarks.
 
-Wrapping multiple `Collapsible` items in `Collapsible.Group` enables accordion behavior — only one item open at a time by default. Set `allowMultiple` to let multiple items stay open.
+## Component Folder Structure
+
+```
+Collapsible/
+├── Collapsible.tsx        # Root component with context provider and state management
+├── CollapsibleContent.tsx # Content panel with line-clamp truncation
+├── CollapsibleTrigger.tsx # Button trigger with aria attributes
+├── types.ts               # TypeScript type definitions
+├── index.ts               # Re-exports all components and types
+└── README.md              # Component usage reference
+```
 
 ## Props
 
-### Collapsible
+### Collapsible (Root)
 
-| Prop               | Type                             | Default     | Description                              |
-| :----------------- | :------------------------------- | :---------- | :--------------------------------------- |
-| `trigger`          | `ReactNode`                      | —           | Content rendered in the trigger button.  |
-| `children`         | `ReactNode`                      | —           | Collapsible content.                     |
-| `defaultOpen`      | `boolean`                        | `false`     | Initially open (uncontrolled).           |
-| `open`             | `boolean`                        | —           | Controlled open state.                   |
-| `onOpenChange`     | `(open: boolean) => void`        | —           | Callback when open state changes.        |
-| `variant`          | `default \| bordered \| filled`  | `default`   | Visual variant.                          |
-| `size`             | `sm \| md \| lg`                 | `md`        | Size of trigger and content.             |
-| `disabled`         | `boolean`                        | `false`     | Disable toggling.                        |
-| `icon`             | `ReactNode`                      | auto        | Custom icon (replaces default chevron).  |
-| `iconPosition`     | `left \| right`                  | `right`     | Icon placement.                          |
-| `triggerClassName`  | `string`                        | —           | Extra classes for the trigger.           |
-| `contentClassName`  | `string`                        | —           | Extra classes for the content.           |
-| `animationDuration` | `number`                        | `300`       | Height animation duration (ms).          |
+| Prop           | Type                      | Default | Description                                      |
+| :------------- | :------------------------ | :------ | :----------------------------------------------- |
+| `children`     | `ReactNode`               | —       | `Collapsible.Content` and `Collapsible.Trigger`. |
+| `defaultOpen`  | `boolean`                 | `false` | Start expanded (uncontrolled).                   |
+| `open`         | `boolean`                 | —       | Controlled open state.                           |
+| `onOpenChange` | `(open: boolean) => void` | —       | Callback when open state changes.                |
+| `className`    | `string`                  | —       | Additional CSS classes.                          |
 
-### Collapsible.Group
+### Collapsible.Content
 
-| Prop              | Type        | Default | Description                                  |
-| :---------------- | :---------- | :------ | :------------------------------------------- |
-| `children`        | `ReactNode` | —       | `Collapsible` items.                         |
-| `allowMultiple`   | `boolean`   | `false` | Allow multiple items open simultaneously.    |
-| `defaultOpenItems`| `number[]`  | `[]`    | Indices of initially open items.             |
+| Prop        | Type        | Default | Description                             |
+| :---------- | :---------- | :------ | :-------------------------------------- |
+| `children`  | `ReactNode` | —       | Content to display.                     |
+| `lines`     | `number`    | `3`     | Number of visible lines when collapsed. |
+| `className` | `string`    | —       | Additional CSS classes.                 |
+
+### Collapsible.Trigger
+
+| Prop        | Type     | Default       | Description                      |
+| :---------- | :------- | :------------ | :------------------------------- |
+| `showText`  | `string` | `"Show more"` | Label when content is collapsed. |
+| `hideText`  | `string` | `"Show less"` | Label when content is expanded.  |
+| `className` | `string` | —             | Additional CSS classes.          |

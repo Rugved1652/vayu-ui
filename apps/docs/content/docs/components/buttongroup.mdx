@@ -1,6 +1,6 @@
 ---
 title: ButtonGroup
-description: Groups multiple buttons together with connected borders and rounded edges for cohesive action layouts.
+description: Groups multiple buttons together with connected borders and consistent sizing for cohesive action layouts.
 ---
 
 import ButtonGroupDemo from '@/components/demos/buttongroup-demo';
@@ -9,11 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add buttongroup
+```
+
+```bash
+npx vayu-ui add -t buttongroup #with test case needs
 ```
 
 ## Usage
@@ -26,109 +30,107 @@ npx vayu-ui add buttongroup
   </Tab>
   <Tab value="Code">
     ```tsx
- 
-<ButtonGroup aria-label="Group label">
-  <Button variant="outline">
-    <Button.Text>Button 1</Button.Text>
-  </Button>
-  <Button variant="outline">
-    <Button.Text>Button 2</Button.Text>
-  </Button>
-  <Button variant="outline">
-    <Button.Text>Button 3</Button.Text>
-  </Button>
-</ButtonGroup>
+    <ButtonGroup aria-label="Text alignment">
+      <Button variant="outline">
+        <Button.Text>Left</Button.Text>
+      </Button>
+      <Button variant="outline">
+        <Button.Text>Center</Button.Text>
+      </Button>
+      <Button variant="outline">
+        <Button.Text>Right</Button.Text>
+      </Button>
+    </ButtonGroup>
 
-<ButtonGroup orientation="vertical" aria-label="Actions">
-  <Button variant="outline">
-    <Button.Text>Edit</Button.Text>
-  </Button>
-  <Button variant="outline">
-    <Button.Text>Copy</Button.Text>
-  </Button>
-  <Button variant="outline">
-    <Button.Text>Delete</Button.Text>
-  </Button>
-</ButtonGroup>
+    <ButtonGroup aria-label="Save options">
+      <Button variant="primary">
+        <Button.Text>Save</Button.Text>
+      </Button>
+      <Button variant="primary">
+        <Button.Text>Save &amp; Close</Button.Text>
+      </Button>
+    </ButtonGroup>
 
-<ButtonGroup fullWidth aria-label="Form actions">
-  <Button variant="secondary">
-    <Button.Text>Cancel</Button.Text>
-  </Button>
-  <Button variant="primary">
-    <Button.Text>Submit</Button.Text>
-  </Button>
-</ButtonGroup>
+    <ButtonGroup orientation="vertical" aria-label="Vertical actions">
+      <Button variant="outline">
+        <Button.Text>Top</Button.Text>
+      </Button>
+      <Button variant="outline">
+        <Button.Text>Middle</Button.Text>
+      </Button>
+      <Button variant="outline">
+        <Button.Text>Bottom</Button.Text>
+      </Button>
+    </ButtonGroup>
 
-<ButtonGroup aria-label="Navigation">
-  <Button variant="outline">
-    <Button.Text>Back</Button.Text>
-  </Button>
-  <Button variant="secondary">
-    <Button.Text>Save Draft</Button.Text>
-  </Button>
-  <Button variant="primary">
-    <Button.Text>Continue</Button.Text>
-  </Button>
-</ButtonGroup>
+    <ButtonGroup fullWidth aria-label="Confirmation actions">
+      <Button variant="secondary">
+        <Button.Text>Cancel</Button.Text>
+      </Button>
+      <Button variant="primary">
+        <Button.Text>Confirm</Button.Text>
+      </Button>
+    </ButtonGroup>
 
-<ButtonGroup aria-label="Formatting options">
-  <Button variant="outline">
-    <Button.Icon>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
-        <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
-      </svg>
-    </Button.Icon>
-  </Button>
-  <Button variant="outline">
-    <Button.Icon>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="19" x2="10" y1="4" y2="4"/>
-        <line x1="14" x2="15" y1="20" y2="4"/>
-        <line x1="5" x2="19" y1="20" y2="20"/>
-      </svg>
-    </Button.Icon>
-  </Button>
-  <Button variant="outline">
-    <Button.Icon>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M10 4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-8"/>
-        <path d="M14 12H6"/>
-        <path d="M10 8l-4 4 4 4"/>
-      </svg>
-    </Button.Icon>
-  </Button>
-</ButtonGroup>
+    <ButtonGroup aria-label="Mixed action buttons">
+      <Button variant="outline">
+        <Button.Text>Back</Button.Text>
+      </Button>
+      <Button variant="secondary">
+        <Button.Text>Save Draft</Button.Text>
+      </Button>
+      <Button variant="primary">
+        <Button.Text>Submit</Button.Text>
+      </Button>
+    </ButtonGroup>
+
+    <ButtonGroup radius="surface" aria-label="Formatted radius">
+      <Button variant="outline">
+        <Button.Text>A</Button.Text>
+      </Button>
+      <Button variant="outline">
+        <Button.Text>B</Button.Text>
+      </Button>
+    </ButtonGroup>
+
+    <ButtonGroup aria-label="Formatting options">
+      <Button variant="outline">
+        <Button.Icon>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+            <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+          </svg>
+        </Button.Icon>
+      </Button>
+      <Button variant="outline">
+        <Button.Icon>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="19" x2="10" y1="4" y2="4"/>
+            <line x1="14" x2="15" y1="20" y2="4"/>
+            <line x1="5" x2="19" y1="20" y2="20"/>
+          </svg>
+        </Button.Icon>
+      </Button>
+      <Button variant="outline">
+        <Button.Icon>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-8"/>
+            <path d="M14 12H6"/>
+            <path d="M10 8l-4 4 4 4"/>
+          </svg>
+        </Button.Icon>
+      </Button>
+    </ButtonGroup>
     ```
+
   </Tab>
 </Tabs>
-
-## Features
-
-- Joins borders between adjacent buttons (no double-borders)
-- Rounds only the outer edges of first/last child
-- Horizontal (default) and vertical orientations
-- Works with every `Button` variant and size
-- `fullWidth` mode to stretch across container
-- CSS-based size enforcement (Server Component safe)
-- Full keyboard navigation support
-
-## Props
-
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Stack direction of buttons |
-| `size` | `"small" \| "medium" \| "large"` | `"medium"` | Size applied to all child buttons via CSS |
-| `fullWidth` | `boolean` | `false` | Stretch to fill container width |
-| `aria-label` | `string` | — | Accessible label for the button group (required) |
-| `aria-labelledby` | `string` | — | ID of element that labels this group |
-| `className` | `string` | — | Additional CSS classes |
-| `children` | `ReactNode` | — | Button elements to group |
 
 ## Anatomy
 
 ```tsx
+import { ButtonGroup, Button } from 'vayu-ui';
+
 <ButtonGroup aria-label="Group label">
   <Button variant="outline">
     <Button.Text>Button 1</Button.Text>
@@ -139,113 +141,50 @@ npx vayu-ui add buttongroup
   <Button variant="outline">
     <Button.Text>Button 3</Button.Text>
   </Button>
-</ButtonGroup>
+</ButtonGroup>;
 ```
+
+- **ButtonGroup** — Root container with `role="group"`. Manages orientation, sizing, radius, and focus stacking for child buttons via CSS.
+- **Button** — Individual action buttons rendered as children of the group. Supports all variants and subcomponents (`Button.Text`, `Button.Icon`).
 
 ## Accessibility
 
-- Uses `role="group"` to indicate a related set of buttons
-- Requires `aria-label` or `aria-labelledby` for screen reader context
-- WCAG 2.2 AA compliant focus management via z-index
-- Focused and hovered items are raised with `z-10` for visual clarity
-- Keyboard navigation follows natural tab order
+- **Keyboard Support**:
+  - `Tab` — Move focus to the next focusable button.
+  - `Shift + Tab` — Move focus to the previous focusable button.
+  - `Enter` / `Space` — Activate the focused button.
+- **ARIA Attributes**:
+  - `role="group"` on `ButtonGroup` indicates a related set of buttons.
+  - `aria-label` or `aria-labelledby` provides the accessible group name. At least one is required.
+- **Focus Behavior**:
+  - Focused and hovered buttons receive `z-10` so the focus ring is fully visible over adjacent siblings (WCAG 2.4.11).
+  - Focus follows natural DOM tab order through child buttons.
 
-### Keyboard Navigation
+## Screen reader behavior
 
-| Key | Action |
-| :--- | :--- |
-| `Tab` | Move focus to the next focusable button |
-| `Shift + Tab` | Move focus to the previous focusable button |
-| `Enter` / `Space` | Activate the focused button |
+When a screen reader encounters a `ButtonGroup`, it announces the group label (via `aria-label` or `aria-labelledby`) followed by the individual button labels in sequence. Each button is announced as a standard push button with its text content. Users navigate between buttons using `Tab` and `Shift + Tab`, and the screen reader announces each button as it receives focus. No additional state information is conveyed since button groups do not manage selection state.
 
+## Component Folder Structure
 
-## Source Code
-
-```tsx title="packages/ui/src/components/ui/buttongroup.tsx"
-// button-group.tsx
-// TRUE Server Component (No "use client", No cloneElement)
-
-import { clsx } from "clsx";
-import { HTMLAttributes } from "react";
-
-// ============================================================================
-// Types
-// ============================================================================
-
-export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
-    /** Stack buttons vertically instead of horizontally. */
-    orientation?: "horizontal" | "vertical";
-    /** Force a specific size on all child buttons via CSS. */
-    size?: "small" | "medium" | "large";
-    /** Make the group span the full width of its container. */
-    fullWidth?: boolean;
-    /** Accessible label for the button group. */
-    "aria-label"?: string;
-    /** ID of an element that labels this button group. */
-    "aria-labelledby"?: string;
-}
-
-// ============================================================================
-// Component
-// ============================================================================
-
-/**
- * Groups multiple `<Button>` elements together.
- *
- * - Uses CSS to enforce sizing and border connections (Server Component safe).
- * - No Context or cloneElement required.
- * - WCAG 2.2 AA Compliant (Focus management via z-index).
- */
-export function ButtonGroup({
-    orientation = "horizontal",
-    size = "medium",
-    fullWidth = false,
-    className,
-    children,
-    "aria-label": ariaLabel,
-    "aria-labelledby": ariaLabelledby,
-    ...props
-}: ButtonGroupProps) {
-    // We define size classes here to apply them via CSS selectors.
-    // This mimics the Button's internal logic without passing props.
-    const sizeClasses = {
-        small: "[&>button]:px-3 [&>button]:py-2 [&>button]:text-sm [&>button]:min-h-[36px]",
-        medium: "[&>button]:px-4 [&>button]:py-2.5 [&>button]:text-base [&>button]:min-h-[40px]",
-        large: "[&>button]:px-6 [&>button]:py-3 [&>button]:text-lg [&>button]:min-h-[44px]",
-    };
-
-    return (
-        <div
-            role="group"
-            aria-label={ariaLabel}
-            aria-labelledby={ariaLabelledby}
-            className={clsx(
-                // Base layout
-                "inline-flex",
-                orientation === "vertical" ? "flex-col" : "flex-row",
-
-                // Full Width Logic
-                fullWidth ? "w-full [&>button]:flex-1" : "w-auto",
-
-                // ── Size Enforcement (CSS Override) ──
-                // We force these styles onto direct button children
-                sizeClasses[size],
-
-                // ── Orientation Logic ──
-                // Border radius and overlap handled in global CSS
-
-                // ── WCAG Focus Management ──
-                // Ensure the focused button sits on top of its siblings.
-                // This ensures the focus ring is fully visible (WCAG 2.4.11).
-                "[&>button:hover]:z-10",
-                "[&>button:focus-visible]:z-10",
-
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-}
 ```
+ButtonGroup/
+├── ButtonGroup.tsx    # Component with CSS-based sizing, radius, and focus management
+├── types.ts           # TypeScript type definitions (ButtonGroupProps, ButtonGroupRadius)
+├── index.ts           # Re-exports ButtonGroup and types
+└── README.md          # Component usage reference
+```
+
+## Props
+
+### ButtonGroup
+
+| Prop              | Type                                            | Default        | Description                                         |
+| :---------------- | :---------------------------------------------- | :------------- | :-------------------------------------------------- |
+| `orientation`     | `"horizontal" \| "vertical"`                    | `"horizontal"` | Stack direction of buttons.                         |
+| `size`            | `"small" \| "medium" \| "large"`                | `"medium"`     | Size applied to all child buttons via CSS.          |
+| `radius`          | `"control" \| "surface" \| "overlay" \| "full"` | `"control"`    | Border radius variant using semantic design tokens. |
+| `fullWidth`       | `boolean`                                       | `false`        | Stretch to fill container width.                    |
+| `aria-label`      | `string`                                        | —              | Accessible label for the button group.              |
+| `aria-labelledby` | `string`                                        | —              | ID of element that labels this group.               |
+| `className`       | `string`                                        | —              | Additional CSS classes.                             |
+| `children`        | `ReactNode`                                     | —              | Button elements to group.                           |

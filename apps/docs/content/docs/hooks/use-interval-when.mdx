@@ -18,13 +18,13 @@ The `useIntervalWhen` hook is a wrapper around `setInterval` that allows you to 
 Copy this code into `src/hooks/useIntervalWhen.ts`:
 
 ```tsx
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 export const useIntervalWhen = (
   callback: () => void,
   ms: number,
   when: boolean,
-  startImmediately: boolean = false
+  startImmediately: boolean = false,
 ) => {
   const savedCallback = useRef(callback);
 
@@ -51,8 +51,8 @@ export const useIntervalWhen = (
 ## Usage
 
 ```tsx
-import { useState } from "react";
-import { useIntervalWhen } from "@/hooks/useIntervalWhen";
+import { useState } from 'react';
+import { useIntervalWhen } from '@/hooks/useIntervalWhen';
 
 const TimerComponent = () => {
   const [count, setCount] = useState(0);
@@ -64,15 +64,13 @@ const TimerComponent = () => {
     },
     1000, // 1 second
     enabled, // only run when true
-    true // start immediately
+    true, // start immediately
   );
 
   return (
     <div>
       <p>Count: {count}</p>
-      <button onClick={() => setEnabled(!enabled)}>
-        {enabled ? "Stop" : "Start"}
-      </button>
+      <button onClick={() => setEnabled(!enabled)}>{enabled ? 'Stop' : 'Start'}</button>
     </div>
   );
 };
@@ -82,9 +80,9 @@ const TimerComponent = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `callback` | `() => void` | The function to be executed at each interval. |
-| `ms` | `number` | The duration in milliseconds between executions. |
-| `when` | `boolean` | A flag to enable or disable the interval. |
-| `startImmediately` | `boolean` | (Optional) Whether to execute the callback immediately when enabled. Default is `false`. |
+| Name               | Type         | Description                                                                              |
+| :----------------- | :----------- | :--------------------------------------------------------------------------------------- |
+| `callback`         | `() => void` | The function to be executed at each interval.                                            |
+| `ms`               | `number`     | The duration in milliseconds between executions.                                         |
+| `when`             | `boolean`    | A flag to enable or disable the interval.                                                |
+| `startImmediately` | `boolean`    | (Optional) Whether to execute the callback immediately when enabled. Default is `false`. |

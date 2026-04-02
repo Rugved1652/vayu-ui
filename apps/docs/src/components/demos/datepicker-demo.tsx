@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { DatePicker, DateRange } from "vayu-ui";
-import { Card, CardContent, CardHeader } from "vayu-ui";
-import { Badge } from "vayu-ui";
-import { Divider } from "vayu-ui";
+import { useState } from 'react';
+import { DatePicker, DateRange } from 'vayu-ui';
+import { Card, CardContent, CardHeader } from 'vayu-ui';
+import { Badge } from 'vayu-ui';
+import { Divider } from 'vayu-ui';
 
 export default function DatePickerDemo() {
   // ========================================
@@ -37,18 +37,18 @@ export default function DatePickerDemo() {
 
   // Format date for display
   const formatDate = (date: Date | null): string => {
-    if (!date) return "none";
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
+    if (!date) return 'none';
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   };
 
   // Format range for display
   const formatRange = (range: DateRange | null): string => {
-    if (!range) return "none";
-    if (!range.startDate) return "none";
+    if (!range) return 'none';
+    if (!range.startDate) return 'none';
     if (!range.endDate) return `${formatDate(range.startDate)} - Select end`;
     return `${formatDate(range.startDate)} - ${formatDate(range.endDate)}`;
   };
@@ -61,8 +61,7 @@ export default function DatePickerDemo() {
             DatePicker Component
           </h1>
           <p className="text-slate-600 dark:text-slate-400">
-            WCAG 2.2 AA Compliant • Keyboard Navigation • Range Selection •
-            Disabled Dates
+            WCAG 2.2 AA Compliant • Keyboard Navigation • Range Selection • Disabled Dates
           </p>
         </div>
 
@@ -86,7 +85,7 @@ export default function DatePickerDemo() {
                 </DatePicker.Calendar>
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
-                Selected:{" "}
+                Selected:{' '}
                 <code className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
                   {formatDate(selectedDate)}
                 </code>
@@ -114,7 +113,7 @@ export default function DatePickerDemo() {
                 </DatePicker.Calendar>
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
-                Range:{" "}
+                Range:{' '}
                 <code className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
                   {formatRange(dateRange)}
                 </code>
@@ -144,14 +143,13 @@ export default function DatePickerDemo() {
                 </DatePicker.Calendar>
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
-                Selected:{" "}
+                Selected:{' '}
                 <code className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
                   {formatDate(weekdayDate)}
                 </code>
               </p>
               <p className="mt-2 text-xs text-muted-content">
-                Note: Weekends are shown with strikethrough and cannot be
-                selected
+                Note: Weekends are shown with strikethrough and cannot be selected
               </p>
             </CardContent>
           </Card>
@@ -176,7 +174,7 @@ export default function DatePickerDemo() {
                 </DatePicker.Calendar>
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
-                Selected:{" "}
+                Selected:{' '}
                 <code className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
                   {formatDate(holidayDate)}
                 </code>
@@ -200,69 +198,44 @@ export default function DatePickerDemo() {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="space-y-2">
-                    <h4 className="font-semibold text-surface-content">
-                      Navigation
-                    </h4>
+                    <h4 className="font-semibold text-surface-content">Navigation</h4>
                     <ul className="space-y-1 text-muted-content">
                       <li>
-                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                          ←
-                        </kbd>{" "}
-                        Previous day
+                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">←</kbd> Previous day
                       </li>
                       <li>
-                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                          →
-                        </kbd>{" "}
-                        Next day
+                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">→</kbd> Next day
                       </li>
                       <li>
-                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                          ↑
-                        </kbd>{" "}
-                        Previous week
+                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">↑</kbd> Previous
+                        week
                       </li>
                       <li>
-                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                          ↓
-                        </kbd>{" "}
-                        Next week
+                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">↓</kbd> Next week
                       </li>
                     </ul>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="font-semibold text-surface-content">
-                      Actions
-                    </h4>
+                    <h4 className="font-semibold text-surface-content">Actions</h4>
                     <ul className="space-y-1 text-muted-content">
                       <li>
-                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                          Enter
-                        </kbd>{" "}
-                        Select date
+                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">Enter</kbd> Select
+                        date
                       </li>
                       <li>
-                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                          Escape
-                        </kbd>{" "}
-                        Close calendar
+                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">Escape</kbd> Close
+                        calendar
                       </li>
                       <li>
-                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                          Home
-                        </kbd>{" "}
-                        First day of month
+                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">Home</kbd> First day
+                        of month
                       </li>
                       <li>
-                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                          End
-                        </kbd>{" "}
-                        Last day of month
+                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">End</kbd> Last day
+                        of month
                       </li>
                       <li>
-                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                          PgUp/PgDn
-                        </kbd>{" "}
+                        <kbd className="bg-muted px-1.5 py-0.5 rounded text-xs">PgUp/PgDn</kbd>{' '}
                         Prev/Next month
                       </li>
                     </ul>
@@ -291,8 +264,7 @@ export default function DatePickerDemo() {
                 </DatePicker.Calendar>
               </DatePicker.Root>
               <p className="mt-2 text-xs text-muted-content">
-                Range selection with weekends disabled - useful for booking
-                business days
+                Range selection with weekends disabled - useful for booking business days
               </p>
             </CardContent>
           </Card>

@@ -18,7 +18,7 @@ The `useSet` hook provides a simple interface for managing a JavaScript `Set`. I
 Copy this code into `src/hooks/useSet.ts`:
 
 ```tsx
-import { useState } from "react";
+import { useState } from 'react';
 
 export const useSet = <T,>(initialValues?: T[]) => {
   const [set, setSet] = useState(new Set<T>(initialValues));
@@ -48,27 +48,27 @@ export const useSet = <T,>(initialValues?: T[]) => {
 ## Usage
 
 ```tsx
-import { useSet } from "@/hooks/useSet";
+import { useSet } from '@/hooks/useSet';
 
 const TagManager = () => {
-  const { set, add, remove, has } = useSet<string>(["react", "hook"]);
+  const { set, add, remove, has } = useSet<string>(['react', 'hook']);
 
   const toggleTag = (tag: string) => {
     if (has(tag)) {
-        remove(tag);
+      remove(tag);
     } else {
-        add(tag);
+      add(tag);
     }
   };
 
   return (
     <div>
       <div className="flex gap-2">
-        <button onClick={() => toggleTag("react")}>Toggle React</button>
-        <button onClick={() => toggleTag("vue")}>Toggle Vue</button>
+        <button onClick={() => toggleTag('react')}>Toggle React</button>
+        <button onClick={() => toggleTag('vue')}>Toggle Vue</button>
       </div>
 
-      <p>Selected Tags: {Array.from(set).join(", ")}</p>
+      <p>Selected Tags: {Array.from(set).join(', ')}</p>
     </div>
   );
 };
@@ -78,10 +78,10 @@ const TagManager = () => {
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `set` | `Set<T>` | The current Set object. |
-| `add` | `(value: T) => void` | Adds a value to the Set. Logic ensures uniqueness. |
-| `remove` | `(value: T) => void` | Removes a value from the Set. |
-| `clear` | `() => void` | Removes all values from the Set. |
-| `has` | `(value: T) => boolean` | Checks if a value exists in the Set. |
+| Property | Type                    | Description                                        |
+| :------- | :---------------------- | :------------------------------------------------- |
+| `set`    | `Set<T>`                | The current Set object.                            |
+| `add`    | `(value: T) => void`    | Adds a value to the Set. Logic ensures uniqueness. |
+| `remove` | `(value: T) => void`    | Removes a value from the Set.                      |
+| `clear`  | `() => void`            | Removes all values from the Set.                   |
+| `has`    | `(value: T) => boolean` | Checks if a value exists in the Set.               |

@@ -92,16 +92,16 @@ const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
             if (React.isValidElement(child) && child.type === ContextMenuContent) {
               return isOpen
                 ? React.cloneElement(
-                  child as React.ReactElement<
-                    React.ComponentProps<typeof ContextMenuContent> & {
-                      position?: {
-                        x: number;
-                        y: number;
-                      };
-                    }
-                  >,
-                  { position },
-                )
+                    child as React.ReactElement<
+                      React.ComponentProps<typeof ContextMenuContent> & {
+                        position?: {
+                          x: number;
+                          y: number;
+                        };
+                      }
+                    >,
+                    { position },
+                  )
                 : null;
             }
             return child;

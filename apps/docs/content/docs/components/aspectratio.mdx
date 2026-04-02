@@ -9,11 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add aspectratio
+```
+
+```bash
+npx vayu-ui add -t aspectratio #with test case needs
 ```
 
 ## Usage
@@ -26,69 +30,74 @@ npx vayu-ui add aspectratio
   </Tab>
   <Tab value="Code">
     ```tsx
-      {/* Square Ratio */}
-<AspectRatio ratio="square" decorative className="rounded bg-gray-100 dark:bg-gray-800">
-    <div className="flex items-center justify-center h-full text-sm text-gray-600 dark:text-gray-400">
-        Square (1:1)
-    </div>
-</AspectRatio>
+    <AspectRatio ratio="square" decorative className="rounded bg-ground-100 dark:bg-ground-800">
+      <div className="flex items-center justify-center h-full text-sm text-muted-content">Square (1:1)</div>
+    </AspectRatio>
 
-{/* Video Ratio */}
+    <AspectRatio ratio="video" decorative className="rounded bg-ground-100 dark:bg-ground-800">
+      <div className="flex items-center justify-center h-full text-sm text-muted-content">Video (16:9)</div>
+    </AspectRatio>
 
-<AspectRatio ratio="video" decorative className="rounded bg-gray-100 dark:bg-gray-800">
-  <div className="flex items-center justify-center h-full text-sm text-gray-600 dark:text-gray-400">
-    Video (16:9)
-  </div>
-</AspectRatio>
+    <AspectRatio ratio={2.5} decorative className="rounded bg-ground-100 dark:bg-ground-800">
+      <div className="flex items-center justify-center h-full text-sm text-muted-content">Custom (2.5)</div>
+    </AspectRatio>
 
-{/* Custom Numeric Ratio */}
-
-<AspectRatio ratio={2.5} decorative className="rounded bg-gray-100 dark:bg-gray-800">
-  <div className="flex items-center justify-center h-full text-sm text-gray-600 dark:text-gray-400">
-    Custom (2.5)
-  </div>
-</AspectRatio>
-
-{/* Image with Cover */}
-
-<AspectRatio 
-    ratio="video" 
-    aria-label="Landscape image"
-    className="rounded overflow-hidden"
->
-    <img
+    <AspectRatio ratio="video" aria-label="Mountain landscape" bordered rounded>
+      <img
         src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"
         alt="Mountain landscape"
-        className="w-full h-full object-cover"
-    />
-</AspectRatio>
+      />
+    </AspectRatio>
     ```
+
   </Tab>
 </Tabs>
 
 ## Anatomy
 
 ```tsx
+import { AspectRatio } from 'vayu-ui';
+
 <AspectRatio ratio="video" aria-label="Description">
-  {/* Container with aspect ratio constraint */}
-  ┌────────────────────────────────────────┐
-  │  <img /> or <video /> or any content   │  ← Child fills container
-  │                                        │
-  │         (16:9 aspect ratio)            │  ← Ratio defined by prop
-  │                                        │
-  └────────────────────────────────────────┘
-</AspectRatio>
+  {/* Outer div with aspect-ratio constraint */}
+  <div className="relative w-full aspect-video">
+    {/* Inner wrapper fills the container */}
+    <div className="absolute inset-0">{/* Your content renders here */}</div>
+  </div>
+</AspectRatio>;
 ```
 
-### Structure
+- **Root** — Outer `<div>` with the aspect ratio applied via Tailwind class (presets) or `padding-bottom` fallback (custom ratios). Manages overflow, accessibility roles, and design system tokens.
+- **Inner** — Absolutely positioned wrapper that fills the root container. Applies `object-fit` styles to direct `<img>` and `<video>` children.
 
-| Element      | Description                                                        |
-| :----------- | :----------------------------------------------------------------- |
-| **Root**     | Outer `<div>` with aspect-ratio applied (via Tailwind or padding)  |
-| **Inner**    | Absolutely positioned wrapper that fills the container             |
-| **Children** | Your content (images, videos, or any elements) rendered inside     |
+## Accessibility
+
+- **Keyboard Support**:
+  - AspectRatio is a non-interactive layout primitive. No keyboard interactions are required.
+- **ARIA Attributes**:
+  - When `decorative` is `true`: `role="presentation"` and `aria-hidden="true"` are applied, hiding the container from assistive technology.
+  - When `aria-label` is provided: `role="region"` is applied, making the container a named landmark for screen readers.
+  - When neither is set: no semantic role is added — the element is treated as a generic container.
+- **Focus Behavior**:
+  - No focus management. The component delegates focus behavior to its children (e.g., links, buttons, interactive media).
+
+## Screen reader behavior
+
+When `decorative` is set, the screen reader skips the container entirely — it will not be announced or included in the accessibility tree. When `aria-label` is provided, the screen reader identifies the container as a named region and announces the label when the user navigates into it (e.g., via landmarks or reading order). The content inside (images, videos, text) is announced normally based on its own semantics. When neither prop is set, the container is transparent to the screen reader and only its children are announced.
+
+## Component Folder Structure
+
+```
+AspectRatio/
+├── AspectRatio.tsx    # Root component with UI + accessibility logic
+├── types.ts           # TypeScript types, preset maps, and constant definitions
+├── index.ts           # Re-exports component and types
+└── README.md          # Component usage reference
+```
 
 ## Props
+
+### AspectRatio
 
 | Prop         | Type                                                       | Default    | Description                                                        |
 | :----------- | :--------------------------------------------------------- | :--------- | :----------------------------------------------------------------- |
@@ -96,229 +105,9 @@ npx vayu-ui add aspectratio
 | `overflow`   | `"hidden" \| "visible" \| "auto" \| "scroll"`              | `"hidden"` | Overflow behaviour for the container.                              |
 | `objectFit`  | `"cover" \| "contain" \| "fill" \| "scale-down" \| "none"` | `"cover"`  | Object-fit applied to direct `<img>` / `<video>` children.         |
 | `decorative` | `boolean`                                                  | `false`    | Marks the container as decorative, hiding it from screen readers.  |
-| `aria-label` | `string`                                                   | -          | Accessible label for screen readers when content is meaningful.    |
-| `className`  | `string`                                                   | -          | Additional CSS classes.                                            |
-| `children`   | `ReactNode`                                                | -          | Content to render inside the aspect ratio container.               |
-
-## Presets
-
-| Preset      | Ratio     | Example Use                           |
-| :---------- | :-------- | :------------------------------------ |
-| `square`    | 1 : 1     | Profile pictures, thumbnails          |
-| `video`     | 16 : 9    | YouTube embeds, video players         |
-| `photo`     | 4 : 3     | Photography, classic images           |
-| `landscape` | 3 : 2     | DSLR photos                           |
-| `ultrawide` | 21 : 9    | Ultrawide banners, cinematic displays |
-| `portrait`  | 9 : 16    | Phone wallpapers, stories             |
-| `golden`    | 1.618 : 1 | Golden ratio compositions             |
-| `a4`        | √2 : 1    | A4 paper, documents                   |
-| `cinema`    | 2.39 : 1  | Cinemascope, widescreen films         |
-| `iphone`    | 19.5 : 9  | iPhone screen mockups                 |
-| `ipad`      | 4 : 3     | iPad screen mockups                   |
-
-## Accessibility
-
-- **Semantic HTML**: Uses `<div>` with `role="region"` only when `aria-label` is provided (for meaningful content)
-- **Screen Reader Support**: Use `decorative` prop to hide purely visual containers from assistive technology
-- **ARIA Labels**: Use `aria-label` to provide context when the container holds meaningful content (e.g., images with context)
-- **Object Fit**: Automatically applies proper object-fit to child images and videos for visual consistency
-- **Reduced Motion**: No animations; respects user motion preferences inherently
-
-### When to use `decorative`
-
-Set `decorative={true}` when the aspect ratio container is purely for visual layout and doesn't convey meaningful information:
-
-```tsx
-{
-  /* Decorative background or placeholder */
-}
-<AspectRatio ratio="square" decorative className="rounded bg-ground-100">
-  <div className="flex items-center justify-center">Icon or decoration</div>
-</AspectRatio>;
-```
-
-### When to use `aria-label`
-
-Provide an `aria-label` when the content has meaning that should be announced:
-
-```tsx
-{
-  /* Meaningful image with context */
-}
-<AspectRatio ratio="video" aria-label="Product showcase video">
-  <img src="/product.jpg" alt="Product name" />
-</AspectRatio>;
-```
-
-## Source Code
-
-```tsx title="packages/ui/src/components/ui/aspectratio.tsx"
-import { cn } from "./utils";
-import React, { forwardRef, HTMLAttributes } from "react";
-
-// ============================================================================
-// Types
-// ============================================================================
-
-type AspectRatioPreset =
-    | "square"
-    | "video"
-    | "photo"
-    | "landscape"
-    | "ultrawide"
-    | "portrait"
-    | "golden"
-    | "a4"
-    | "cinema"
-    | "iphone"
-    | "ipad";
-
-type Overflow = "hidden" | "visible" | "auto" | "scroll";
-type ObjectFit = "cover" | "contain" | "fill" | "scale-down" | "none";
-
-interface AspectRatioProps
-    extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
-    /** Preset name or numeric ratio (width / height). */
-    ratio?: number | AspectRatioPreset;
-    /** Overflow behaviour. */
-    overflow?: Overflow;
-    /** Object-fit applied to direct `<img>` / `<video>` children. */
-    objectFit?: ObjectFit;
-    /** Accessible label for screen readers when content is meaningful. */
-    "aria-label"?: string;
-    /** Marks the container as decorative (hidden from screen readers). */
-    decorative?: boolean;
-    children: React.ReactNode;
-}
-
-// ============================================================================
-// Hoisted config
-// ============================================================================
-
-const PRESET_MAP: Record<AspectRatioPreset, { value: number; tw: string }> = {
-    square: { value: 1, tw: "aspect-square" },
-    video: { value: 16 / 9, tw: "aspect-video" },
-    photo: { value: 4 / 3, tw: "aspect-[4/3]" },
-    landscape: { value: 3 / 2, tw: "aspect-[3/2]" },
-    ultrawide: { value: 21 / 9, tw: "aspect-[21/9]" },
-    portrait: { value: 9 / 16, tw: "aspect-[9/16]" },
-    golden: { value: 1.618, tw: "aspect-[1.618/1]" },
-    a4: { value: Math.sqrt(2), tw: "aspect-[1.414/1]" },
-    cinema: { value: 2.39, tw: "aspect-[2.39/1]" },
-    iphone: { value: 19.5 / 9, tw: "aspect-[19.5/9]" },
-    ipad: { value: 4 / 3, tw: "aspect-[4/3]" },
-} as const;
-
-const OVERFLOW_CLASS: Record<Overflow, string> = {
-    hidden: "overflow-hidden",
-    visible: "overflow-visible",
-    auto: "overflow-auto",
-    scroll: "overflow-scroll",
-} as const;
-
-const OBJECT_FIT_CLASS: Record<ObjectFit, string> = {
-    cover: "[&>img]:object-cover [&>video]:object-cover",
-    contain: "[&>img]:object-contain [&>video]:object-contain",
-    fill: "[&>img]:object-fill [&>video]:object-fill",
-    "scale-down": "[&>img]:object-scale-down [&>video]:object-scale-down",
-    none: "[&>img]:object-none [&>video]:object-none",
-} as const;
-
-// ============================================================================
-// AspectRatio
-// ============================================================================
-
-const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
-    (
-        {
-            ratio = "square",
-            overflow = "hidden",
-            objectFit = "cover",
-            decorative = false,
-            className,
-            style,
-            children,
-            ...props
-        },
-        ref
-    ) => {
-        const isPreset = typeof ratio === "string";
-        const preset = isPreset ? PRESET_MAP[ratio] : null;
-        const numericRatio = preset ? preset.value : (ratio as number);
-
-        // Accessibility Logic
-        // 1. If decorative, hide from tree and ensure no label exists.
-        // 2. If not decorative with aria-label, apply role="region".
-        // 3. Otherwise, no semantic role (generic container).
-        const passedAriaLabel = props["aria-label"];
-
-        const getAriaProps = () => {
-            if (decorative) {
-                return {
-                    role: "presentation",
-                    "aria-hidden": true,
-                    "aria-label": undefined
-                };
-            }
-
-            if (passedAriaLabel) {
-                return {
-                    role: "region",
-                    "aria-hidden": undefined
-                };
-            }
-
-            return {
-                role: undefined,
-                "aria-hidden": undefined
-            };
-        };
-
-        const ariaProps = getAriaProps();
-
-        // Calculate Padding Bottom safely
-        const paddingBottom = numericRatio > 0 ? `${100 / numericRatio}%` : undefined;
-
-        return (
-            <div
-                ref={ref}
-                className={cn(
-                    "relative w-full",
-                    preset?.tw,
-                    OVERFLOW_CLASS[overflow],
-                    className
-                )}
-                style={
-                    preset
-                        ? style
-                        : {
-                            paddingBottom,
-                            ...style,
-                        }
-                }
-                {...ariaProps}
-                {...props}
-            >
-                <div
-                    className={cn(
-                        "absolute inset-0 w-full h-full",
-                        OBJECT_FIT_CLASS[objectFit],
-                        "[&>img]:w-full [&>img]:h-full [&>video]:w-full [&>video]:h-full"
-                    )}
-                >
-                    {children}
-                </div>
-            </div>
-        );
-    }
-);
-
-AspectRatio.displayName = "AspectRatio";
-
-// ============================================================================
-// Exports
-// ============================================================================
-
-export { AspectRatio };
-export type { AspectRatioPreset, AspectRatioProps };
-```
+| `rounded`    | `boolean`                                                  | `false`    | Adds rounded corners using design system tokens.                   |
+| `shadow`     | `boolean`                                                  | `false`    | Adds subtle shadow using design system tokens.                     |
+| `bordered`   | `boolean`                                                  | `false`    | Adds border using design system tokens.                            |
+| `aria-label` | `string`                                                   | —          | Accessible label for screen readers when content is meaningful.    |
+| `className`  | `string`                                                   | —          | Additional CSS classes.                                            |
+| `children`   | `ReactNode`                                                | —          | Content to render inside the aspect ratio container.               |

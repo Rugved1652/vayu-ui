@@ -18,7 +18,7 @@ The `useNetworkStatus` hook monitors the browser's network connection state. It 
 Copy this code into `src/hooks/useNetworkStatus.ts`:
 
 ```tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export interface NetworkStatus {
   isOnline: boolean;
@@ -27,19 +27,19 @@ export interface NetworkStatus {
 
 export const useNetworkStatus = (): NetworkStatus => {
   const [status, setStatus] = useState<NetworkStatus>({
-    isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
+    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
   });
 
   useEffect(() => {
     const handleOnline = () => setStatus({ isOnline: true });
     const handleOffline = () => setStatus({ isOnline: false, offlineAt: new Date() });
 
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
@@ -50,7 +50,7 @@ export const useNetworkStatus = (): NetworkStatus => {
 ## Usage
 
 ```tsx
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
 const AppStatus = () => {
   const { isOnline, offlineAt } = useNetworkStatus();
@@ -71,7 +71,7 @@ const AppStatus = () => {
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `isOnline` | `boolean` | `true` if the browser is online, `false` otherwise. |
+| Property    | Type                | Description                                                        |
+| :---------- | :------------------ | :----------------------------------------------------------------- |
+| `isOnline`  | `boolean`           | `true` if the browser is online, `false` otherwise.                |
 | `offlineAt` | `Date \| undefined` | The date object representing when the offline event was triggered. |

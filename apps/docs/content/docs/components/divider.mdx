@@ -9,11 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add divider
+```
+
+```bash
+npx vayu-ui add -t divider #with test case needs
 ```
 
 ## Usage
@@ -26,41 +30,43 @@ npx vayu-ui add divider
   </Tab>
   <Tab value="Code">
     ```tsx
-    "use client"
-    import { Divider } from "vayu-ui";
+    <Divider />
 
-    export default function DividerDemo() {
-        return (
-            <div className="w-full max-w-md not-prose">
-                {/* Simple Divider */}
-                <Divider />
+    <div className="flex items-center h-5 gap-2">
+      <span>Blog</span>
+      <Divider orientation="vertical" />
+      <span>Docs</span>
+      <Divider orientation="vertical" />
+      <span>Source</span>
+    </div>
 
-                {/* Vertical Divider */}
-                <div className="flex items-center h-5 space-x-2 text-sm font-secondary">
-                    <div>Blog</div>
-                    <Divider orientation="vertical" />
-                    <div>Docs</div>
-                    <Divider orientation="vertical" />
-                    <div>Source</div>
-                </div>
+    <Divider>
+      <Divider.Line />
+      <Divider.Label>OR</Divider.Label>
+      <Divider.Line />
+    </Divider>
 
-                {/* With Label (Compound Pattern) */}
-                <Divider>
-                    <Divider.Line />
-                    <Divider.Label>OR</Divider.Label>
-                    <Divider.Line />
-                </Divider>
+    <Divider>
+      <Divider.Line variant="dashed" color="brand" />
+      <Divider.Label color="brand">Brand</Divider.Label>
+      <Divider.Line variant="dashed" color="brand" />
+    </Divider>
 
-                {/* Custom Styling (Dashed, Colors) */}
-                <Divider>
-                    <Divider.Line variant="dashed" color="primary" />
-                    <Divider.Label color="primary">Dashed Primary</Divider.Label>
-                    <Divider.Line variant="dashed" color="primary" />
-                </Divider>
-            </div>
-        );
-    }
+    <Divider>
+      <Divider.Line size="thick" />
+      <Divider.Label>Thick</Divider.Label>
+      <Divider.Line size="thick" />
+    </Divider>
+
+    <Divider>
+      <Divider.Line variant="dotted" color="destructive" />
+      <Divider.Label color="destructive">Error</Divider.Label>
+      <Divider.Line variant="dotted" color="destructive" />
+    </Divider>
+
+    <Divider spacing="lg" />
     ```
+
   </Tab>
 </Tabs>
 
@@ -74,286 +80,59 @@ npx vayu-ui add divider
 </Divider>
 ```
 
+- **Divider** — Root container. Renders a default line when no children are provided.
+- **Divider.Line** — A single line segment with variant, color, and size controls.
+- **Divider.Label** — Text rendered between divider lines.
+
 ## Accessibility
 
-- **Semantic vs Decorative**: By default, dividers render with `role="separator"` and `aria-orientation` for screen readers. Set `decorative={true}` to mark the divider as purely decorative. When the divider has children (labels), no role is applied as the content is readable.
-- **Color Contrast**: All colors use WCAG-compliant tokens ensuring at least 3:1 contrast ratio for borders (using `ground-400` for better visibility) and 4.5:1 for text labels.
-- **Server Component**: This is a true server component with no `"use client"` directive needed, making it fully SSR-compatible.
+- **Keyboard support**: The divider is a non-interactive element and does not require keyboard handling.
+- **ARIA attributes**: By default, renders with `role="separator"` and `aria-orientation` matching the `orientation` prop. When `decorative={true}`, the divider is hidden from assistive technology via `aria-hidden="true"`. When children (labels) are present, no role is applied since the content is readable.
+- **Focus behavior**: The divider is not focusable and does not participate in tab order.
+
+## Screen reader behavior
+
+- **Default (no children)**: Announced as a separator. Screen readers may say "horizontal separator" or "vertical separator" depending on orientation.
+- **With label (children)**: No separator role is applied. The label text is read naturally as part of the page content flow.
+- **Decorative**: Completely hidden from assistive technology. Screen readers skip it entirely.
+
+## Component Folder Structure
+
+```
+Divider/
+├── Divider.tsx        # Root layout + compound assembly
+├── DividerLine.tsx    # Line subcomponent with variant/color/size
+├── DividerLabel.tsx   # Label subcomponent
+├── types.ts           # Types, interfaces, design token maps
+├── index.ts           # Public API exports
+└── README.md          # Component documentation
+```
 
 ## Props
 
-### Divider (Root)
+### Divider
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Orientation of the divider. |
-| `spacing` | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl'` | `'md'` | Spacing margin around the divider. |
-| `decorative` | `boolean` | `false` | If true, the divider is purely decorative (aria-hidden). If false, renders as semantic separator with ARIA role. |
-| `children` | `ReactNode` | - | If provided, used as content (flex container). If not, renders a default line. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop          | Type                                              | Default        | Description                                                               |
+| :------------ | :------------------------------------------------ | :------------- | :------------------------------------------------------------------------ |
+| `orientation` | `'horizontal' \| 'vertical'`                      | `'horizontal'` | Layout direction of the divider.                                          |
+| `spacing`     | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl'` | `'md'`         | Spacing margin around the divider.                                        |
+| `decorative`  | `boolean`                                         | `false`        | When true, hides the divider from assistive technology.                   |
+| `children`    | `ReactNode`                                       | —              | Content to render inside the divider. If omitted, renders a default line. |
 
 ### Divider.Line
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `variant` | `'solid' \| 'dashed' \| 'dotted'` | `'solid'` | Visual style of the line. |
-| `color` | `'ground' \| 'primary' \| 'success' \| 'warning' \| 'error' \| 'info'` | `'ground'` | Theme color of the line using design tokens. |
-| `size` | `'thin' \| 'normal' \| 'thick' \| 'bold'` | `'normal'` | Thickness preset (maps to pixel values: 1, 2, 3, 4). |
-| `thickness` | `number` | - | Custom pixel thickness (overrides `size`). |
-| `opacity` | `number` | `1` | Opacity of the line (0-1). |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop          | Type                                                                        | Default        | Description                               |
+| :------------ | :-------------------------------------------------------------------------- | :------------- | :---------------------------------------- |
+| `variant`     | `'solid' \| 'dashed' \| 'dotted'`                                           | `'solid'`      | Visual style of the line.                 |
+| `color`       | `'default' \| 'brand' \| 'success' \| 'warning' \| 'destructive' \| 'info'` | `'default'`    | Theme color of the line.                  |
+| `size`        | `'thin' \| 'normal' \| 'thick' \| 'bold'`                                   | `'normal'`     | Thickness preset (1, 2, 3, 4px).          |
+| `thickness`   | `number`                                                                    | —              | Custom pixel thickness, overrides `size`. |
+| `opacity`     | `number`                                                                    | `1`            | Opacity of the line (0–1).                |
+| `orientation` | `'horizontal' \| 'vertical'`                                                | `'horizontal'` | Orientation of this line segment.         |
 
 ### Divider.Label
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `color` | `'ground' \| 'primary' \| 'success' \| 'warning' \| 'error' \| 'info'` | `'ground'` | Text color of the label using design tokens. |
-| `children` | `ReactNode` | - | Label text or content. |
-| `className` | `string` | - | Additional CSS classes. |
-
-## Design Tokens
-
-The Divider component uses the following design token color scales:
-
-| Token | Use Case |
-| :--- | :--- |
-| `ground-*` | Neutral dividers, default styling |
-| `primary-*` | Primary brand dividers (lime) |
-| `success-*` | Success state dividers (green) |
-| `warning-*` | Warning state dividers (yellow) |
-| `error-*` | Error state dividers (red) |
-| `info-*` | Informational dividers (blue) |
-
-## Source Code
-
-```tsx title="src/components/ui/divider.tsx"
-// divider.tsx
-// TRUE Server Component (No "use client" needed!)
-
-import React, { HTMLAttributes } from "react";
-import { clsx } from "clsx";
-
-// ============================================================================
-// Types & Enums
-// ============================================================================
-
-type DividerOrientation = "horizontal" | "vertical";
-type DividerVariant = "solid" | "dashed" | "dotted";
-type DividerSpacing = "none" | "sm" | "md" | "lg" | "xl" | "2xl";
-type DividerColor =
-    | "ground"
-    | "primary"
-    | "success"
-    | "warning"
-    | "error"
-    | "info";
-type DividerSize = "thin" | "normal" | "thick" | "bold";
-
-interface DividerRootProps extends HTMLAttributes<HTMLDivElement> {
-    orientation?: DividerOrientation;
-    spacing?: DividerSpacing;
-    decorative?: boolean;
-}
-
-interface DividerLineProps extends HTMLAttributes<HTMLDivElement> {
-    variant?: DividerVariant;
-    color?: DividerColor;
-    size?: DividerSize;
-    thickness?: number;
-    opacity?: number;
-    orientation?: DividerOrientation;
-}
-
-interface DividerLabelProps extends HTMLAttributes<HTMLSpanElement> {
-    color?: DividerColor;
-}
-
-// ============================================================================
-// Helper Maps - Design Tokens & WCAG Compliant
-// ============================================================================
-
-const spacingMap: Record<DividerSpacing, string> = {
-    none: "my-0",
-    sm: "my-2",
-    md: "my-4",
-    lg: "my-6",
-    xl: "my-8",
-    "2xl": "my-12",
-};
-
-const verticalSpacingMap: Record<DividerSpacing, string> = {
-    none: "mx-0",
-    sm: "mx-2",
-    md: "mx-4",
-    lg: "mx-6",
-    xl: "mx-8",
-    "2xl": "mx-12",
-};
-
-const variantMap: Record<DividerVariant, string> = {
-    solid: "border-solid",
-    dashed: "border-dashed",
-    dotted: "border-dotted",
-};
-
-// FIX: Using ground-400 for 3:1 contrast ratio (WCAG 1.4.11)
-const colorMap: Record<DividerColor, string> = {
-    ground: "border-ground-400 dark:border-ground-600",
-    primary: "border-primary-300 dark:border-primary-600",
-    success: "border-success-400 dark:border-success-600",
-    warning: "border-warning-500 dark:border-warning-600",
-    error: "border-error-400 dark:border-error-600",
-    info: "border-info-400 dark:border-info-600",
-};
-
-// WCAG-compliant text colors (4.5:1 contrast minimum)
-const labelColorMap: Record<DividerColor, string> = {
-    ground: "text-ground-600 dark:text-ground-300",
-    primary: "text-primary-700 dark:text-primary-300",
-    success: "text-success-700 dark:text-success-300",
-    warning: "text-warning-800 dark:text-warning-200",
-    error: "text-error-700 dark:text-error-300",
-    info: "text-info-700 dark:text-info-300",
-};
-
-const sizeMap: Record<DividerSize, number> = {
-    thin: 1,
-    normal: 2,
-    thick: 3,
-    bold: 4,
-};
-
-// ============================================================================
-// Components
-// ============================================================================
-
-const DividerLine = ({
-    variant = "solid",
-    color = "ground",
-    size = "normal",
-    thickness,
-    opacity = 1,
-    orientation = "horizontal",
-    className,
-    style,
-    ...props
-}: DividerLineProps) => {
-    const actualThickness = thickness || sizeMap[size];
-    const isHorizontal = orientation === "horizontal";
-
-    const borderStyle: React.CSSProperties = {
-        opacity,
-        ...style,
-    };
-
-    return (
-        <div
-            className={clsx(
-                "grow shrink-0 border-0",
-                variantMap[variant],
-                colorMap[color],
-                className
-            )}
-            style={{
-                ...borderStyle,
-                [isHorizontal ? "borderTopWidth" : "borderLeftWidth"]: `${actualThickness}px`,
-            }}
-            aria-hidden="true"
-            {...props}
-        />
-    );
-};
-
-const DividerLabel = ({
-    color = "ground",
-    className,
-    children,
-    ...props
-}: DividerLabelProps) => {
-    return (
-        <span
-            className={clsx(
-                "px-3 py-1 text-sm font-medium whitespace-nowrap font-secondary",
-                labelColorMap[color],
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </span>
-    );
-};
-
-const DividerRoot = ({
-    orientation = "horizontal",
-    spacing = "md",
-    decorative = false,
-    className,
-    children,
-    ...props
-}: DividerRootProps) => {
-    const isHorizontal = orientation === "horizontal";
-
-    const layoutClasses = isHorizontal
-        ? clsx("flex items-center w-full", spacingMap[spacing])
-        : clsx(
-            "inline-flex flex-col items-center h-full min-h-[1em]",
-            verticalSpacingMap[spacing]
-        );
-
-    // FIX: Accessibility Semantics
-    // 1. Decorative -> hidden.
-    // 2. Has Children (Label) -> No role (content is readable).
-    // 3. Default -> Separator role.
-    const hasChildren = !!children;
-
-    const ariaProps = decorative
-        ? { "aria-hidden": "true" as const }
-        : hasChildren
-        ? {}
-        : {
-            role: "separator",
-            "aria-orientation": orientation
-        };
-
-    if (!children) {
-        return (
-            <div
-                className={clsx(layoutClasses, className)}
-                {...ariaProps}
-                {...props}
-            >
-                <DividerLine orientation={orientation} />
-            </div>
-        );
-    }
-
-    return (
-        <div
-            className={clsx(layoutClasses, className)}
-            {...ariaProps}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-};
-
-// ============================================================================
-// Compound Component Export
-// ============================================================================
-
-export const Divider = Object.assign(DividerRoot, {
-    Line: DividerLine,
-    Label: DividerLabel,
-});
-
-export default Divider;
-export type {
-    DividerColor,
-    DividerOrientation,
-    DividerSize,
-    DividerSpacing,
-    DividerVariant,
-};
-```
+| Prop       | Type                                                                        | Default     | Description              |
+| :--------- | :-------------------------------------------------------------------------- | :---------- | :----------------------- |
+| `color`    | `'default' \| 'brand' \| 'success' \| 'warning' \| 'destructive' \| 'info'` | `'default'` | Text color of the label. |
+| `children` | `ReactNode`                                                                 | —           | Label content.           |

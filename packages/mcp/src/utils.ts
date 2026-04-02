@@ -2,25 +2,25 @@
 // VedUI MCP Server Utilities
 // ============================================================================
 
-import type { Registry, VayuComponentDoc } from "vayu-ui-registry";
+import type { Registry, VayuComponentDoc } from 'vayu-ui-registry';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Response Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type McpResult = {
-  content: Array<{ type: "text"; text: string }>;
+  content: Array<{ type: 'text'; text: string }>;
   isError?: boolean;
 };
 
 /** Success response factory */
 export const ok = (data: unknown): McpResult => ({
-  content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+  content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
 });
 
 /** Error response factory */
 export const err = (msg: string): McpResult => ({
-  content: [{ type: "text", text: `ERROR: ${msg}` }],
+  content: [{ type: 'text', text: `ERROR: ${msg}` }],
   isError: true,
 });
 
@@ -29,28 +29,20 @@ export const err = (msg: string): McpResult => ({
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Case-insensitive lookup by component name */
-export function resolveByName(
-  registry: Registry,
-  name: string
-): VayuComponentDoc | null {
-  const normalizedName = Object.keys(registry).find(
-    (k) => k.toLowerCase() === name.toLowerCase()
-  );
+export function resolveByName(registry: Registry, name: string): VayuComponentDoc | null {
+  const normalizedName = Object.keys(registry).find((k) => k.toLowerCase() === name.toLowerCase());
   return normalizedName ? registry[normalizedName] : null;
 }
 
 /** Lookup by slug */
-export function resolveBySlug(
-  registry: Registry,
-  slug: string
-): VayuComponentDoc | null {
+export function resolveBySlug(registry: Registry, slug: string): VayuComponentDoc | null {
   return Object.values(registry).find((c) => c.slug === slug) ?? null;
 }
 
 /** Unified lookup (tries name first, then slug) */
 export function resolveComponent(
   registry: Registry,
-  identifier: string
+  identifier: string,
 ): { success: true; component: VayuComponentDoc } | { success: false; error: string } {
   const byName = resolveByName(registry, identifier);
   if (byName) return { success: true, component: byName };

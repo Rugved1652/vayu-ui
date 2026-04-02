@@ -1,10 +1,12 @@
 // types.ts
 // Types
 
-import type { InputHTMLAttributes, ReactNode } from "react";
+import type { InputHTMLAttributes, ReactNode } from 'react';
 
-export interface SwitchProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "checked" | "onChange"> {
+export interface SwitchProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'size' | 'checked' | 'onChange'
+> {
   /** Label text displayed next to the switch */
   label?: ReactNode;
   /** Description text below the label */

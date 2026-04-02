@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Switch, Typography, Divider, Button } from "vayu-ui";
-import { useState } from "react";
+import { Switch, Typography, Divider, Button } from 'vayu-ui';
+import { useState } from 'react';
 
 export default function SwitchDemo() {
   const [notifications, setNotifications] = useState(true);
@@ -25,10 +25,7 @@ export default function SwitchDemo() {
       <div className="space-y-3">
         <Typography.H6 variant="secondary">With Labels & Descriptions</Typography.H6>
         <div className="space-y-4">
-          <Switch
-            label="Auto-save"
-            description="Automatically save changes as you work"
-          />
+          <Switch label="Auto-save" description="Automatically save changes as you work" />
           <Switch
             label="Email notifications"
             description="Receive updates about your account activity"
@@ -43,21 +40,9 @@ export default function SwitchDemo() {
       <div className="space-y-3">
         <Typography.H6 variant="secondary">States</Typography.H6>
         <div className="space-y-4">
-          <Switch
-            disabled
-            label="Disabled"
-            description="This option is not available"
-          />
-          <Switch
-            disabled
-            defaultChecked
-            label="Disabled & Checked"
-          />
-          <Switch
-            error
-            label="Error state"
-            description="Failed to save preference"
-          />
+          <Switch disabled label="Disabled" description="This option is not available" />
+          <Switch disabled defaultChecked label="Disabled & Checked" />
+          <Switch error label="Error state" description="Failed to save preference" />
         </div>
       </div>
 
@@ -70,13 +55,13 @@ export default function SwitchDemo() {
           <Switch
             checked={notifications}
             onCheckedChange={setNotifications}
-            label={`Notifications: ${notifications ? "On" : "Off"}`}
+            label={`Notifications: ${notifications ? 'On' : 'Off'}`}
             description="Toggle push notifications"
           />
           <Switch
             checked={analytics}
             onCheckedChange={setAnalytics}
-            label={`Analytics: ${analytics ? "On" : "Off"}`}
+            label={`Analytics: ${analytics ? 'On' : 'Off'}`}
             description="Share anonymous usage data"
           />
         </div>
@@ -91,18 +76,24 @@ export default function SwitchDemo() {
           <Switch
             checked={darkMode}
             onCheckedChange={setDarkMode}
-            label={`Dark Mode: ${darkMode ? "On" : "Off"}`}
+            label={`Dark Mode: ${darkMode ? 'On' : 'Off'}`}
             description="Toggle dark mode theme"
           />
           <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="small"
-              onClick={() => setDarkMode(!darkMode)}
-            >
+            <Button variant="outline" size="small" onClick={() => setDarkMode(!darkMode)}>
               <Button.Icon>
                 {darkMode ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <circle cx="12" cy="12" r="4" />
                     <path d="M12 2v2" />
                     <path d="M12 20v2" />
@@ -114,7 +105,17 @@ export default function SwitchDemo() {
                     <path d="m19.07 4.93-1.41 1.41" />
                   </svg>
                 ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
                   </svg>
                 )}

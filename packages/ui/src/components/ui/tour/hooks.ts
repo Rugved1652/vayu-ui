@@ -1,16 +1,16 @@
 // hooks.ts
 // Logic
 
-"use client";
+'use client';
 
-import { useContext } from "react";
-import { TourContext } from "./Tour";
-import type { TourContextValue } from "./types";
+import { useContext } from 'react';
+import { TourContext } from './Tour';
+import type { TourContextValue } from './types';
 
 const useTour = (): TourContextValue => {
-    const ctx = useContext(TourContext);
-    if (!ctx) throw new Error("useTour must be used within <Tour>");
-    return ctx;
+  const ctx = useContext(TourContext);
+  if (!ctx) throw new Error('useTour must be used within <Tour>');
+  return ctx;
 };
 
 export { useTour };

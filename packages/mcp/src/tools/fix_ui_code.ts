@@ -2,22 +2,22 @@
 // fix_ui_code - Get fix suggestions for UI code issues
 // ============================================================================
 
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
-import type { Registry } from "vayu-ui-registry";
-import { ok, err, resolveComponent } from "../utils.js";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { z } from 'zod';
+import type { Registry } from 'vayu-ui-registry';
+import { ok, err, resolveComponent } from '../utils.js';
 
 export function register(server: McpServer, registry: Registry) {
   server.tool(
-    "fix_ui_code",
-    "Get fix suggestions for UI code issues based on component specifications.",
+    'fix_ui_code',
+    'Get fix suggestions for UI code issues based on component specifications.',
     {
-      component: z.string().describe("Component name or slug"),
-      code: z.string().describe("Code snippet with issues to fix"),
+      component: z.string().describe('Component name or slug'),
+      code: z.string().describe('Code snippet with issues to fix'),
       issues: z
         .array(z.string())
         .optional()
-        .describe("Specific issues to fix (omit for auto-detection)"),
+        .describe('Specific issues to fix (omit for auto-detection)'),
     },
     async ({ component, code, issues }) => {
       const result = resolveComponent(registry, component);
@@ -55,8 +55,8 @@ export function register(server: McpServer, registry: Registry) {
       }> = [];
 
       detectedIssues.forEach((issue) => {
-        if (issue.includes("Missing required prop")) {
-          const propName = issue.split(": ")[1];
+        if (issue.includes('Missing required prop')) {
+          const propName = issue.split(': ')[1];
           const propDef = propsMap[propName];
           fixes.push({
             issue,
@@ -85,8 +85,8 @@ export function register(server: McpServer, registry: Registry) {
         if (fix.codeChange && !fixedCode.includes(fix.codeChange)) {
           // Simple insertion - add props to the component tag
           fixedCode = fixedCode.replace(
-            new RegExp(`<${c.component}([^>]*)>`, "g"),
-            `<${c.component}$1 ${fix.codeChange}>`
+            new RegExp(`<${c.component}([^>]*)>`, 'g'),
+            `<${c.component}$1 ${fix.codeChange}>`,
           );
         }
       });
@@ -104,6 +104,6 @@ export function register(server: McpServer, registry: Registry) {
           examples: c.examples,
         },
       });
-    }
+    },
   );
 }

@@ -1,14 +1,14 @@
 // switch.tsx
 // Composition: UI + wiring
 
-"use client";
+'use client';
 
-import { cn } from "../utils";
-import { forwardRef, useId } from "react";
-import type { SwitchProps } from "./types";
-import { useSwitchControl } from "./hooks";
-import { SwitchTrack } from "./SwitchTrack";
-import { SwitchLabel } from "./SwitchLabel";
+import { cn } from '../utils';
+import { forwardRef, useId } from 'react';
+import type { SwitchProps } from './types';
+import { useSwitchControl } from './hooks';
+import { SwitchTrack } from './SwitchTrack';
+import { SwitchLabel } from './SwitchLabel';
 
 const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   (
@@ -24,7 +24,7 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       onCheckedChange,
       ...props
     },
-    ref
+    ref,
   ) => {
     const generatedId = useId();
     const id = idProp ?? generatedId;
@@ -33,17 +33,17 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       checked,
       defaultChecked,
       disabled,
-      onCheckedChange
+      onCheckedChange,
     );
 
     return (
-      <div className={cn("flex items-start gap-3", className)}>
+      <div className={cn('flex items-start gap-3', className)}>
         {/* Switch Control */}
         <label
           htmlFor={id}
           className={cn(
-            "inline-flex items-center",
-            disabled ? "cursor-not-allowed" : "cursor-pointer"
+            'inline-flex items-center',
+            disabled ? 'cursor-not-allowed' : 'cursor-pointer',
           )}
         >
           {/* Hidden Input - Accessibility API */}
@@ -76,9 +76,9 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         />
       </div>
     );
-  }
+  },
 );
 
-Switch.displayName = "Switch";
+Switch.displayName = 'Switch';
 
 export default Switch;

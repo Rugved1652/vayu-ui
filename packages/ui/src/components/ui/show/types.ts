@@ -1,25 +1,25 @@
 // types.ts
 // Types
 
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 interface ShowProps<T> {
-    when: T | undefined | null | false;
-    fallback?: ReactNode;
-    children: ReactNode | ((value: T) => ReactNode);
+  when: T | undefined | null | false;
+  fallback?: ReactNode;
+  children: ReactNode | ((value: T) => ReactNode);
 }
 
 interface CaseProps {
-    condition: boolean;
-    children: ReactNode;
+  condition: boolean;
+  children: ReactNode;
 }
 
 interface DefaultProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 interface SwitchProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export type { ShowProps, CaseProps, DefaultProps, SwitchProps };

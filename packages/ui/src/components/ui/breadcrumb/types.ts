@@ -1,15 +1,15 @@
 // types.ts
 // Types
 
-import type { LinkProps } from "next/link";
+import type { LinkProps } from 'next/link';
 
-export type BreadcrumbProps = React.ComponentPropsWithoutRef<"nav">;
+export type BreadcrumbProps = React.ComponentPropsWithoutRef<'nav'>;
 
 export type BreadcrumbListProps = React.OlHTMLAttributes<HTMLOListElement>;
 
 export type BreadcrumbItemProps = React.LiHTMLAttributes<HTMLLIElement>;
 
-export type BreadcrumbLinkProps = Omit<LinkProps, "className"> & {
+export type BreadcrumbLinkProps = Omit<LinkProps, 'className'> & {
   className?: string;
   children?: React.ReactNode;
 };

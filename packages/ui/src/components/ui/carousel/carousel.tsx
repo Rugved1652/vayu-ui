@@ -1,21 +1,12 @@
 // carousel.tsx
 // Composition: UI + logic (root component + context provider)
 
-"use client";
+'use client';
 
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  forwardRef,
-} from "react";
-import { cn } from "../utils";
-import { CarouselContext, usePrefersReducedMotion } from "./hooks";
-import type {
-  CarouselProps,
-  CarouselContextValue,
-  SpeedMultiplier,
-} from "./types";
+import React, { useCallback, useEffect, useState, forwardRef } from 'react';
+import { cn } from '../utils';
+import { CarouselContext, usePrefersReducedMotion } from './hooks';
+import type { CarouselProps, CarouselContextValue, SpeedMultiplier } from './types';
 
 // Root Component
 const CarouselBase = forwardRef<HTMLDivElement, CarouselProps>(
@@ -31,7 +22,7 @@ const CarouselBase = forwardRef<HTMLDivElement, CarouselProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [currentIndex, setCurrentIndex] = useState(defaultIndex);
     const [isPlaying, setIsPlaying] = useState(autoPlay);
@@ -51,7 +42,7 @@ const CarouselBase = forwardRef<HTMLDivElement, CarouselProps>(
           setCurrentIndex(Math.max(0, Math.min(index, totalItems - 1)));
         }
       },
-      [totalItems, loop]
+      [totalItems, loop],
     );
 
     const goNext = useCallback(() => {
@@ -115,7 +106,7 @@ const CarouselBase = forwardRef<HTMLDivElement, CarouselProps>(
           role="region"
           aria-label="Image carousel"
           aria-roledescription="carousel"
-          className={cn("relative", className)}
+          className={cn('relative', className)}
           onMouseEnter={() => setIsPausedByHover(true)}
           onMouseLeave={() => setIsPausedByHover(false)}
           {...props}
@@ -124,10 +115,10 @@ const CarouselBase = forwardRef<HTMLDivElement, CarouselProps>(
         </div>
       </CarouselContext.Provider>
     );
-  }
+  },
 );
 
-CarouselBase.displayName = "Carousel";
+CarouselBase.displayName = 'Carousel';
 
 // Export default for composition
 export default CarouselBase;

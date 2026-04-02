@@ -18,7 +18,7 @@ The `useMeasure` hook allows you to track the dimensions (width and height) of a
 Copy this code into `src/hooks/useMeasure.ts`:
 
 ```tsx
-import { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useLayoutEffect } from 'react';
 
 export const useMeasure = () => {
   const ref = useRef<HTMLElement | null>(null);
@@ -50,16 +50,16 @@ export const useMeasure = () => {
 ## Usage
 
 ```tsx
-import { useMeasure } from "@/hooks/useMeasure";
+import { useMeasure } from '@/hooks/useMeasure';
 
 const ResizableComponent = () => {
   const { ref, width, height } = useMeasure();
 
   return (
     <div>
-      <div 
-        ref={ref} 
-        style={{ resize: "both", overflow: "auto", border: "1px solid black", padding: "20px" }}
+      <div
+        ref={ref}
+        style={{ resize: 'both', overflow: 'auto', border: '1px solid black', padding: '20px' }}
       >
         Resize me!
       </div>
@@ -74,8 +74,8 @@ const ResizableComponent = () => {
 
 ### Return Value
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `ref` | `React.MutableRefObject<HTMLElement \| null>` | A ref to attach to the element you want to measure. |
-| `width` | `number` | The current width of the element. |
-| `height` | `number` | The current height of the element. |
+| Property | Type                                          | Description                                         |
+| :------- | :-------------------------------------------- | :-------------------------------------------------- |
+| `ref`    | `React.MutableRefObject<HTMLElement \| null>` | A ref to attach to the element you want to measure. |
+| `width`  | `number`                                      | The current width of the element.                   |
+| `height` | `number`                                      | The current height of the element.                  |

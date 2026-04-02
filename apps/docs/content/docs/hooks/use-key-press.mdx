@@ -18,12 +18,9 @@ The `useKeyPress` hook allows you to trigger a function when a specific key is p
 Copy this code into `src/hooks/useKeyPress.ts`:
 
 ```tsx
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-export const useKeyPress = (
-  targetKey: KeyboardEvent["key"],
-  callback: () => void
-) => {
+export const useKeyPress = (targetKey: KeyboardEvent['key'], callback: () => void) => {
   useEffect(() => {
     const keyHandler = (event: KeyboardEvent) => {
       if (event.key === targetKey) {
@@ -31,10 +28,10 @@ export const useKeyPress = (
       }
     };
 
-    window.addEventListener("keydown", keyHandler);
+    window.addEventListener('keydown', keyHandler);
 
     return () => {
-      window.removeEventListener("keydown", keyHandler);
+      window.removeEventListener('keydown', keyHandler);
     };
   }, [targetKey, callback]);
 };
@@ -43,14 +40,14 @@ export const useKeyPress = (
 ## Usage
 
 ```tsx
-import { useState } from "react";
-import { useKeyPress } from "@/hooks/useKeyPress";
+import { useState } from 'react';
+import { useKeyPress } from '@/hooks/useKeyPress';
 
 const KeyPressComponent = () => {
   const [count, setCount] = useState(0);
 
   // Increment count when 'Enter' is pressed
-  useKeyPress("Enter", () => {
+  useKeyPress('Enter', () => {
     setCount((c) => c + 1);
   });
 
@@ -66,7 +63,7 @@ const KeyPressComponent = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
-| `targetKey` | `string` | The key value to listen for (e.g., "Enter", "Escape", "a"). |
-| `callback` | `() => void` | The function to be executed when the key is pressed. |
+| Name        | Type         | Description                                                 |
+| :---------- | :----------- | :---------------------------------------------------------- |
+| `targetKey` | `string`     | The key value to listen for (e.g., "Enter", "Escape", "a"). |
+| `callback`  | `() => void` | The function to be executed when the key is pressed.        |

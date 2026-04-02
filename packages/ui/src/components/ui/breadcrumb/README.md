@@ -1,6 +1,7 @@
 # Breadcrumb
 
 ## Anatomy
+
 - breadcrumb.tsx — Root navigation container
 - list.tsx — Ordered list wrapper
 - item.tsx — List item container
@@ -12,6 +13,7 @@
 - index.ts — Public API exports
 
 ## Use Cases
+
 - Navigation trail showing page hierarchy
 - Breadcrumbs for deep navigation structures
 - SEO-friendly semantic navigation

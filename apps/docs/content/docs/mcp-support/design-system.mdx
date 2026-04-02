@@ -41,23 +41,23 @@ Add the Vayu UI MCP server to your Claude Desktop or MCP-compatible client:
 
 ### Available MCP Tools
 
-| Tool | Description |
-| :--- | :--- |
-| `list_components` | List all available components and hooks |
-| `find_component` | Search for components by use-case description |
-| `get_component_props` | Get all props with types and descriptions |
-| `get_component_variants` | Get available visual variants |
-| `get_component_states` | Get interactive and visual states |
-| `get_component_events` | Get event handlers with TypeScript signatures |
-| `get_component_example` | Get ready-to-paste TSX examples |
-| `get_component_a11y` | Get ARIA roles and accessibility info |
-| `get_component_doNot` | Get anti-pattern rules and common mistakes |
-| `get_component_dependencies` | Get NPM and registry dependencies |
-| `get_component_peer_components` | Get frequently used components |
-| `get_component_composition` | Get compound component patterns |
-| `scaffold_component_usage` | Generate copy-paste ready snippets |
-| `get_design_tokens` | Get CSS design tokens |
-| `get_component_full` | Get complete component definition |
+| Tool                            | Description                                   |
+| :------------------------------ | :-------------------------------------------- |
+| `list_components`               | List all available components and hooks       |
+| `find_component`                | Search for components by use-case description |
+| `get_component_props`           | Get all props with types and descriptions     |
+| `get_component_variants`        | Get available visual variants                 |
+| `get_component_states`          | Get interactive and visual states             |
+| `get_component_events`          | Get event handlers with TypeScript signatures |
+| `get_component_example`         | Get ready-to-paste TSX examples               |
+| `get_component_a11y`            | Get ARIA roles and accessibility info         |
+| `get_component_doNot`           | Get anti-pattern rules and common mistakes    |
+| `get_component_dependencies`    | Get NPM and registry dependencies             |
+| `get_component_peer_components` | Get frequently used components                |
+| `get_component_composition`     | Get compound component patterns               |
+| `scaffold_component_usage`      | Generate copy-paste ready snippets            |
+| `get_design_tokens`             | Get CSS design tokens                         |
+| `get_component_full`            | Get complete component definition             |
 
 ## Color System
 
@@ -120,6 +120,7 @@ Brand identity color for CTAs, active states, key highlights.
 **Available Shades:** 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
 
 **Usage Rules:**
+
 - 100-300 → backgrounds & decorative surfaces
 - 400-600 → interactive elements & primary actions
 - 700-950 → text on light bg / inverted surfaces in dark mode
@@ -131,18 +132,19 @@ Neutral foundation for backgrounds, surfaces, borders, text.
 **Available Shades:** 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
 
 **Usage Rules:**
+
 - 50-300 → surfaces, cards, borders (light mode)
 - 400-600 → text, icons, labels
 - 700-950 → headings in light / become surfaces in dark
 
 ### Semantic Colors
 
-| Color | Shades | Use Case | MCP Token Access |
-| :--- | :--- | :--- | :--- |
-| Warning | 100-950 | Caution, alerts, pending states | `get_design_tokens` |
-| Success | 100-950 | Confirmations, completed states | `get_design_tokens` |
-| Error | 100-950 | Validation failures, critical alerts | `get_design_tokens` |
-| Info | 100-950 | Informational content, help text | `get_design_tokens` |
+| Color   | Shades  | Use Case                             | MCP Token Access    |
+| :------ | :------ | :----------------------------------- | :------------------ |
+| Warning | 100-950 | Caution, alerts, pending states      | `get_design_tokens` |
+| Success | 100-950 | Confirmations, completed states      | `get_design_tokens` |
+| Error   | 100-950 | Validation failures, critical alerts | `get_design_tokens` |
+| Info    | 100-950 | Informational content, help text     | `get_design_tokens` |
 
 ## Typography
 
@@ -159,23 +161,23 @@ Access typography information through component metadata:
 }
 ```
 
-| Family | Font | Usage | Token |
-| :--- | :--- | :--- | :--- |
-| Primary | Oswald | Headings, labels, nav, badges | `--font-primary` |
-| Secondary | Mulish | Body copy, descriptions, captions | `--font-secondary` |
-| Tertiary | Geist Mono | Code blocks, kbd, technical values | `--font-tertiary` |
+| Family    | Font       | Usage                              | Token              |
+| :-------- | :--------- | :--------------------------------- | :----------------- |
+| Primary   | Oswald     | Headings, labels, nav, badges      | `--font-primary`   |
+| Secondary | Mulish     | Body copy, descriptions, captions  | `--font-secondary` |
+| Tertiary  | Geist Mono | Code blocks, kbd, technical values | `--font-tertiary`  |
 
 ### Type Scale
 
-| Scale | Size | Usage | Token |
-| :--- | :--- | :--- | :--- |
-| H1 | 36px | Page-level hero titles | `--text-h1` |
-| H2 | 30px | Section headings | `--text-h2` |
-| H3 | 24px | Card / panel headings | `--text-h3` |
-| H4 | 20px | Subsection, dialog titles | `--text-h4` |
-| H5 | 18px | Sidebar labels, group headers | `--text-h5` |
-| H6 | 16px | Small labels, table headers | `--text-h6` |
-| Para | 14px | All body text, captions, hints | `--text-para` |
+| Scale | Size | Usage                          | Token         |
+| :---- | :--- | :----------------------------- | :------------ |
+| H1    | 36px | Page-level hero titles         | `--text-h1`   |
+| H2    | 30px | Section headings               | `--text-h2`   |
+| H3    | 24px | Card / panel headings          | `--text-h3`   |
+| H4    | 20px | Subsection, dialog titles      | `--text-h4`   |
+| H5    | 18px | Sidebar labels, group headers  | `--text-h5`   |
+| H6    | 16px | Small labels, table headers    | `--text-h6`   |
+| Para  | 14px | All body text, captions, hints | `--text-para` |
 
 ## Spacing & Shape
 
@@ -200,10 +202,10 @@ Consistent `12px` border radius across all components.
 
 Available shadow tokens for depth and hierarchy:
 
-| Token | Use Case | Overridable |
-| :--- | :--- | :--- |
-| `--shadow-outer` | Cards, modals, dropdowns, popovers | Yes |
-| `--inset-shadow-inner` | Pressed buttons, inputs (focused/active) | Yes |
+| Token                  | Use Case                                 | Overridable |
+| :--------------------- | :--------------------------------------- | :---------- |
+| `--shadow-outer`       | Cards, modals, dropdowns, popovers       | Yes         |
+| `--inset-shadow-inner` | Pressed buttons, inputs (focused/active) | Yes         |
 
 ```css
 --shadow-outer: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
@@ -214,11 +216,11 @@ Available shadow tokens for depth and hierarchy:
 
 Smooth transition timing functions for consistent animations:
 
-| Transition | Duration | Easing | Use Case | Token |
-| :--- | :--- | :--- | :--- | :--- |
-| Fast | 150ms | ease-in-out | Hover states, tooltips, icon swaps | `--transition-fast` |
-| Medium | 300ms | ease-in-out | Modals, dropdowns, sidebar expand/collapse | `--transition-medium` |
-| Slow | 500ms | ease-in-out | Page transitions, onboarding overlays, banners | `--transition-slow` |
+| Transition | Duration | Easing      | Use Case                                       | Token                 |
+| :--------- | :------- | :---------- | :--------------------------------------------- | :-------------------- |
+| Fast       | 150ms    | ease-in-out | Hover states, tooltips, icon swaps             | `--transition-fast`   |
+| Medium     | 300ms    | ease-in-out | Modals, dropdowns, sidebar expand/collapse     | `--transition-medium` |
+| Slow       | 500ms    | ease-in-out | Page transitions, onboarding overlays, banners | `--transition-slow`   |
 
 ```json
 {
@@ -244,6 +246,7 @@ Discover all available components and hooks:
 ```
 
 **Filters:**
+
 - `category`: "action" | "input" | "layout" | "overlay" | "display" | "navigation" | "feedback" | "utility"
 - `type`: "component" | "hook"
 
@@ -261,6 +264,7 @@ Search for components based on what you need:
 ```
 
 **Searches across:**
+
 - Component names
 - Descriptions
 - Categories
@@ -284,6 +288,7 @@ Retrieve all props with TypeScript types and descriptions:
 ```
 
 **Response Structure:**
+
 ```json
 {
   "variant": {
@@ -320,6 +325,7 @@ Retrieve copy-paste ready TSX code:
 **Available Examples:** Varies by component
 
 **Response:**
+
 ```json
 {
   "code": "<Button variant=\"solid\" loading>Loading...</Button>",
@@ -356,6 +362,7 @@ Retrieve accessibility data for components:
 ```
 
 **Response Structure:**
+
 ```json
 {
   "role": "button",
@@ -386,6 +393,7 @@ Get common mistakes and anti-patterns:
 ```
 
 **Categories:**
+
 - `api` - API usage mistakes
 - `a11y` - Accessibility violations
 - `styling` - Styling anti-patterns
@@ -409,6 +417,7 @@ Retrieve all visual and interactive states:
 ```
 
 **Available States:**
+
 - `default` - Normal state
 - `hover` - Mouse hover
 - `focus` - Keyboard focus
@@ -421,6 +430,7 @@ Retrieve all visual and interactive states:
 - `indeterminate` - Indeterminate state
 
 **Response Structure:**
+
 ```json
 {
   "hover": {
@@ -447,6 +457,7 @@ Retrieve NPM and registry dependencies:
 ```
 
 **Response:**
+
 ```json
 {
   "npmDependencies": ["react", "clsx", "tailwind-merge"],
@@ -485,6 +496,7 @@ Retrieve composition data for compound components:
 ```
 
 **Response:**
+
 ```json
 {
   "parts": {
@@ -515,6 +527,7 @@ Retrieve visual variant options:
 ```
 
 **Response:**
+
 ```json
 ["solid", "outline", "ghost", "link"]
 ```
@@ -535,6 +548,7 @@ Retrieve all event handlers with TypeScript signatures:
 ```
 
 **Response Structure:**
+
 ```json
 {
   "onClick": {
@@ -563,6 +577,7 @@ Generate copy-paste ready code with imports and state:
 ```
 
 **Response:**
+
 ```json
 {
   "scaffold": "import { Dialog } from \"@/components/ui/dialog\";\n\nconst [open, setOpen] = React.useState(false);\n\n<Dialog open={open} onOpenChange={setOpen}>",
@@ -586,6 +601,7 @@ Access dark mode behavior through component metadata:
 ```
 
 **Dark Mode Response:**
+
 ```json
 {
   "darkMode": {
@@ -599,14 +615,14 @@ Access dark mode behavior through component metadata:
 
 ### Dark Mode Inversion Pattern
 
-| Light Mode | Dark Mode |
-| :--- | :--- |
-| Background → `ground-50/100` | `ground-950/900` |
-| Surface → `ground-100/200` | `ground-900/800` |
-| Border → `ground-200/300` | `ground-700/800` |
-| Text body → `ground-600/700` | `ground-300/400` |
+| Light Mode                     | Dark Mode        |
+| :----------------------------- | :--------------- |
+| Background → `ground-50/100`   | `ground-950/900` |
+| Surface → `ground-100/200`     | `ground-900/800` |
+| Border → `ground-200/300`      | `ground-700/800` |
+| Text body → `ground-600/700`   | `ground-300/400` |
 | Text strong → `ground-800/900` | `ground-100/200` |
-| Text muted → `ground-400/500` | `ground-500/600` |
+| Text muted → `ground-400/500`  | `ground-500/600` |
 
 ## Design Tokens Reference
 
@@ -614,14 +630,14 @@ Access dark mode behavior through component metadata:
 
 Design tokens are categorized by their scope and usage:
 
-| Category | Description | MCP Access |
-| :--- | :--- | :--- |
-| Colors | Semantic color tokens | `get_design_tokens` |
-| Spacing | Margin, padding, gap values | `get_design_tokens` |
-| Typography | Font sizes, line heights, weights | `get_design_tokens` |
-| Borders | Border radius, border width | `get_design_tokens` |
-| Shadows | Elevation and depth | `get_design_tokens` |
-| Transitions | Duration and easing functions | `get_design_tokens` |
+| Category    | Description                       | MCP Access          |
+| :---------- | :-------------------------------- | :------------------ |
+| Colors      | Semantic color tokens             | `get_design_tokens` |
+| Spacing     | Margin, padding, gap values       | `get_design_tokens` |
+| Typography  | Font sizes, line heights, weights | `get_design_tokens` |
+| Borders     | Border radius, border width       | `get_design_tokens` |
+| Shadows     | Elevation and depth               | `get_design_tokens` |
+| Transitions | Duration and easing functions     | `get_design_tokens` |
 
 ### Overridable Tokens
 
@@ -643,16 +659,16 @@ Filter to get only overridable tokens:
 
 All components are organized into categories:
 
-| Category | Description | Examples |
-| :--- | :--- | :--- |
-| Action | Interactive buttons and triggers | Button, Link, IconButton |
-| Input | Form controls and data entry | TextInput, Select, Checkbox |
-| Layout | Structural components | Card, Container, Grid |
-| Overlay | Modal and overlay components | Dialog, Popover, Dropdown |
-| Display | Content presentation | Avatar, Badge, Separator |
-| Navigation | Navigation components | Navbar, Sidebar, Tabs |
-| Feedback | Status and feedback components | Alert, Toast, Spinner |
-| Utility | Helper components | Separator, AspectRatio |
+| Category   | Description                      | Examples                    |
+| :--------- | :------------------------------- | :-------------------------- |
+| Action     | Interactive buttons and triggers | Button, Link, IconButton    |
+| Input      | Form controls and data entry     | TextInput, Select, Checkbox |
+| Layout     | Structural components            | Card, Container, Grid       |
+| Overlay    | Modal and overlay components     | Dialog, Popover, Dropdown   |
+| Display    | Content presentation             | Avatar, Badge, Separator    |
+| Navigation | Navigation components            | Navbar, Sidebar, Tabs       |
+| Feedback   | Status and feedback components   | Alert, Toast, Spinner       |
+| Utility    | Helper components                | Separator, AspectRatio      |
 
 ## AI Assistant Usage
 
@@ -739,16 +755,16 @@ All components in the Vayu UI registry meet WCAG 2.1 AA standards:
 
 All MCP tools follow a consistent parameter structure:
 
-| Parameter | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `name` | string | Yes | Component/hook name (case-insensitive) |
-| `slug` | string | No | CLI identifier (case-sensitive) |
-| `variant` | string | No | Example variant key |
-| `category` | enum | No | Filter by category |
-| `type` | enum | No | Filter by type (component/hook) |
-| `overridableOnly` | boolean | No | Return only overridable tokens |
-| `includeDeprecated` | boolean | No | Include deprecated props |
-| `withState` | boolean | No | Wrap examples in useState |
+| Parameter           | Type    | Required | Description                            |
+| :------------------ | :------ | :------- | :------------------------------------- |
+| `name`              | string  | Yes      | Component/hook name (case-insensitive) |
+| `slug`              | string  | No       | CLI identifier (case-sensitive)        |
+| `variant`           | string  | No       | Example variant key                    |
+| `category`          | enum    | No       | Filter by category                     |
+| `type`              | enum    | No       | Filter by type (component/hook)        |
+| `overridableOnly`   | boolean | No       | Return only overridable tokens         |
+| `includeDeprecated` | boolean | No       | Include deprecated props               |
+| `withState`         | boolean | No       | Wrap examples in useState              |
 
 ### Error Handling
 

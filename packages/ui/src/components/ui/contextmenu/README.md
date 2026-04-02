@@ -1,6 +1,7 @@
 # ContextMenu
 
 ## Anatomy
+
 - contextmenu.tsx — composition (root + state + context providers)
 - trigger.tsx — UI: right-click trigger area
 - content.tsx — UI: portal menu with viewport clamping
@@ -15,6 +16,7 @@
 - index.ts — export
 
 ## Use Cases
+
 - Right-click context menus with keyboard navigation
 - Nested submenus with hover/keyboard interaction
 - Checkbox and radio item groups for stateful selections

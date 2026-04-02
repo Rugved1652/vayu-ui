@@ -1,6 +1,6 @@
 ---
 title: Navbar
-description: A responsive, accessible navigation bar with compound components for building flexible navigation layouts.
+description: A responsive navigation header component with support for branding, navigation items, and a mobile menu.
 ---
 
 import NavbarDemo from '@/components/demos/navbar-demo';
@@ -9,649 +9,120 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init    # Add Theme CSS if not added
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add navbar
 ```
 
-## Usage
+```bash
+npx vayu-ui add -t navbar #with test case needs
+```
 
+## Usage
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4">
       <NavbarDemo />
-    </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-       <Navbar>
-                        <Navbar.Container>
-                            <Navbar.Brand>
-                                <span className="text-lg font-bold font-primary text-ground-900 dark:text-white">
-                                    Acme
-                                </span>
-                            </Navbar.Brand>
-
-                            <Navbar.Items>
-                                <Navbar.Item active>Home</Navbar.Item>
-                                <Navbar.Item>Products</Navbar.Item>
-                                <Navbar.Item>About</Navbar.Item>
-                                <Navbar.Item>Contact</Navbar.Item>
-                            </Navbar.Items>
-
-                            <Navbar.Actions>
-                                <Button variant="ghost" size="small">
-                                    <Button.Text>Sign in</Button.Text>
-                                </Button>
-                                <Button variant="primary" size="small">
-                                    <Button.Text>Get started</Button.Text>
-                                </Button>
-                            </Navbar.Actions>
-
-                            <Navbar.Toggle />
-                        </Navbar.Container>
-
-                        <Navbar.MobileMenu>
-                            <Navbar.MobileItem active>Home</Navbar.MobileItem>
-                            <Navbar.MobileItem>Products</Navbar.MobileItem>
-                            <Navbar.MobileItem>About</Navbar.MobileItem>
-                            <Navbar.MobileItem>Contact</Navbar.MobileItem>
-                            <Navbar.Separator />
-                            <div className="flex flex-col gap-2 px-4">
-                                <Button variant="ghost" size="small" fullWidth>
-                                    <Button.Text>Sign in</Button.Text>
-                                </Button>
-                                <Button variant="primary" size="small" fullWidth>
-                                    <Button.Text>Get started</Button.Text>
-                                </Button>
-                            </div>
-                        </Navbar.MobileMenu>
-                    </Navbar>
+    <Navbar>
+      <Navbar.Container>
+        <Navbar.Brand>VAYU-UI</Navbar.Brand>
+        <Navbar.Items>
+          <Navbar.Item href="/" active>Home</Navbar.Item>
+          <Navbar.Item href="/docs">Docs</Navbar.Item>
+          <Navbar.Item href="/components">Components</Navbar.Item>
+        </Navbar.Items>
+        <Navbar.Actions>
+          <button>Sign In</button>
+          <Navbar.Toggle />
+        </Navbar.Actions>
+      </Navbar.Container>
+      <Navbar.MobileMenu>
+        <Navbar.MobileItem href="/" active>Home</Navbar.MobileItem>
+        <Navbar.MobileItem href="/docs">Docs</Navbar.MobileItem>
+        <Navbar.MobileItem href="/components">Components</Navbar.MobileItem>
+      </Navbar.MobileMenu>
+    </Navbar>
     ```
   </Tab>
 </Tabs>
 
 ## Anatomy
-
 ```tsx
 <Navbar>
-  <Navbar.Container maxWidth="xl">
-    <Navbar.Brand>{/* Logo */}</Navbar.Brand>
+  <Navbar.Container>
+    <Navbar.Brand />
     <Navbar.Items>
-      <Navbar.Item href="#" active>Link</Navbar.Item>
+      <Navbar.Item />
     </Navbar.Items>
-    <Navbar.Actions>{/* Buttons */}</Navbar.Actions>
-    <Navbar.Toggle />
+    <Navbar.Actions>
+      <Navbar.Separator />
+      <Navbar.Toggle />
+    </Navbar.Actions>
   </Navbar.Container>
   <Navbar.MobileMenu>
-    <Navbar.MobileItem href="#">Link</Navbar.MobileItem>
-    <Navbar.Separator />
+    <Navbar.MobileItem />
   </Navbar.MobileMenu>
 </Navbar>
 ```
 
-## Compound Components
-
-| Component | Description |
-|:----------|:------------|
-| `Navbar` | Root `<nav>` element with context provider |
-| `Navbar.Container` | Max-width + padding wrapper for content |
-| `Navbar.Brand` | Logo / brand slot (left side) |
-| `Navbar.Items` | Desktop link group |
-| `Navbar.Item` | Individual navigation link (renders as `<a>`) |
-| `Navbar.Actions` | Right-side slot for buttons, avatars, etc. |
-| `Navbar.Toggle` | Mobile hamburger button (hidden on desktop) |
-| `Navbar.MobileMenu` | Slide-in panel with backdrop for mobile |
-| `Navbar.MobileItem` | Mobile navigation link (renders as `<a>`) |
-| `Navbar.Separator` | Divider inside mobile menu |
-
 ## Accessibility
+- **Keyboard support**: Escape key closes the mobile menu; focus trapping is implemented in the mobile panel.
+- **ARIA attributes**: Uses semantic `nav` element with `aria-label`, `aria-expanded` on the toggle, and `role="dialog"` for the mobile menu.
+- **Focus behavior**: Focus is moved to the close button when the mobile menu opens and restored to the toggle when closed.
 
-- **Semantic HTML**: Uses `<nav>` with `aria-label="Main navigation"`
-- **ARIA attributes**:
-  - `aria-expanded` and `aria-controls` on the mobile toggle
-  - `aria-current="page"` on active navigation items
-  - `role="dialog"` and `aria-modal="true"` on mobile menu panel
-- **Keyboard navigation**:
-  - Full Tab/Shift+Tab navigation
-  - Escape key closes mobile menu and returns focus to toggle
-  - Focus trap inside mobile menu with visible element filtering
-- **Focus management**:
-  - Focus returns to toggle button when menu closes (WCAG 2.4.3)
-  - Initial focus moves to close button when menu opens
-  - Visible focus rings using `focus-visible:ring-2`
-- **Screen reader support**:
-  - Descriptive aria-labels for toggle states
-  - Proper dialog semantics for mobile menu
-- **Body scroll lock**:
-  - Prevents background scrolling when mobile menu is open
-  - Compensates for scrollbar width to prevent layout shift
-  - Applies `inert` attribute to main content for complete focus containment
+## Screen reader behavior
+The component is announced as "Main navigation". The mobile toggle announces its expanded state, and the mobile menu is identified as a modal dialog.
+
+## Component Folder Structure
+```text
+NavBar/
+├── NavBar.tsx
+├── NavBarActions.tsx
+├── NavBarBrand.tsx
+├── NavBarMobileMenu.tsx
+├── NavBarSeparator.tsx
+├── NavBarToggle.tsx
+├── NavbarContainer.tsx
+├── NavbarMenuItems.tsx
+├── index.ts
+└── types.ts
+```
 
 ## Props
 
 ### Navbar
-
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `sticky` | `boolean` | `false` | Stick to top of viewport |
-| `mainContentSelector` | `string` | `"main"` | CSS selector for main content element (gets inert attribute when mobile menu is open) |
-| `className` | `string` | - | Additional CSS classes |
-| `children` | `ReactNode` | - | Child components |
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `mainContentSelector` | `string` | CSS selector for the main content to apply `inert` when mobile menu is open. |
+| `className` | `string` | Custom CSS classes for the root element. |
 
 ### Navbar.Container
-
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `maxWidth` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl" \| "full"` | `"xl"` | Maximum container width |
-| `className` | `string` | - | Additional CSS classes |
-| `children` | `ReactNode` | - | Child components |
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `maxWidth` | `'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | The maximum width of the navbar container. |
+| `className` | `string` | Custom CSS classes for the container. |
 
 ### Navbar.Item
-
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `active` | `boolean` | `false` | Highlights the item as the current page |
-| `href` | `string` | `"#"` | The URL to navigate to |
-| `className` | `string` | - | Additional CSS classes |
-| `children` | `ReactNode` | - | Link content |
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `href` | `string` | The URL the link points to. |
+| `active` | `boolean` | Whether the item is in an active state. |
+| `className` | `string` | Custom CSS classes for the item. |
 
 ### Navbar.MobileItem
-
-| Prop | Type | Default | Description |
-|:-----|:-----|:--------|:------------|
-| `active` | `boolean` | `false` | Highlights the item as the current page |
-| `href` | `string` | `"#"` | The URL to navigate to |
-| `className` | `string` | - | Additional CSS classes |
-| `children` | `ReactNode` | - | Link content |
-
-## Source Code
-
-```tsx title="src/components/ui/navbar.tsx"
-"use client";
-
-import { clsx } from "clsx";
-import {
-    createContext,
-    HTMLAttributes,
-    useContext,
-    useEffect,
-    useId,
-    useRef,
-    useState,
-    AnchorHTMLAttributes,
-    useCallback,
-} from "react";
-
-// ============================================================================
-// Types
-// ============================================================================
-
-interface NavbarContextValue {
-    mobileOpen: boolean;
-    setMobileOpen: (open: boolean) => void;
-    /** Closes the menu and returns focus to the toggle button */
-    closeMenu: () => void;
-    menuId: string;
-    triggerId: string;
-}
-
-// ============================================================================
-// Context
-// ============================================================================
-
-const NavbarContext = createContext<NavbarContextValue | null>(null);
-
-function useNavbar() {
-    const ctx = useContext(NavbarContext);
-    if (!ctx) throw new Error("Navbar compound components must be used inside <Navbar>");
-    return ctx;
-}
-
-// ============================================================================
-// Helper: Calculate Scrollbar Width
-// ============================================================================
-
-function getScrollbarWidth() {
-    if (typeof window === "undefined") return 0;
-    return window.innerWidth - document.documentElement.clientWidth;
-}
-
-// ============================================================================
-// Navbar Root
-// ============================================================================
-
-export interface NavbarProps extends HTMLAttributes<HTMLElement> {
-    sticky?: boolean;
-    mainContentSelector?: string;
-}
-
-function NavbarRoot({
-    sticky = false,
-    className,
-    children,
-    mainContentSelector = "main",
-    ...props
-}: NavbarProps) {
-    const [mobileOpen, setMobileOpen] = useState(false);
-    const id = useId();
-    const menuId = `navbar-menu-${id}`;
-    const triggerId = `navbar-trigger-${id}`;
-
-    // FIX: Unified close function to handle state + focus return (WCAG 2.4.3)
-    const closeMenu = useCallback(() => {
-        setMobileOpen(false);
-        // Return focus to the trigger button
-        document.getElementById(triggerId)?.focus();
-    }, [triggerId]);
-
-    // Close mobile menu on Escape
-    useEffect(() => {
-        if (!mobileOpen) return;
-
-        const handleEscape = (e: globalThis.KeyboardEvent) => {
-            if (e.key === "Escape") {
-                closeMenu(); // Use unified close function
-            }
-        };
-
-        document.addEventListener("keydown", handleEscape);
-        return () => document.removeEventListener("keydown", handleEscape);
-    }, [mobileOpen, closeMenu]);
-
-    // Lock body scroll & Inert background
-    useEffect(() => {
-        const mainContent = document.querySelector(mainContentSelector);
-
-        if (mobileOpen) {
-            const scrollbarWidth = getScrollbarWidth();
-            document.body.style.paddingRight = `${scrollbarWidth}px`;
-            document.body.style.overflow = "hidden";
-
-            if (mainContent) {
-                (mainContent as HTMLElement).inert = true;
-            }
-        } else {
-            document.body.style.overflow = "";
-            document.body.style.paddingRight = "";
-
-            if (mainContent) {
-                (mainContent as HTMLElement).inert = false;
-            }
-        }
-
-        return () => {
-            document.body.style.overflow = "";
-            document.body.style.paddingRight = "";
-            if (mainContent) {
-                (mainContent as HTMLElement).inert = false;
-            }
-        };
-    }, [mobileOpen, mainContentSelector]);
-
-    return (
-        <NavbarContext.Provider value={{ mobileOpen, setMobileOpen, closeMenu, menuId, triggerId }}>
-            <nav
-                aria-label="Main navigation"
-                className={clsx(
-                    "relative z-40 w-full",
-                    "bg-white dark:bg-ground-950 border-b border-ground-200 dark:border-ground-800",
-                    sticky && "sticky top-0",
-                    className
-                )}
-                {...props}
-            >
-                {children}
-            </nav>
-        </NavbarContext.Provider>
-    );
-}
-
-NavbarRoot.displayName = "Navbar";
-
-/* ---------------- CONTAINER ---------------- */
-
-export interface NavbarContainerProps extends HTMLAttributes<HTMLDivElement> {
-    maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "full";
-}
-
-function NavbarContainer({ maxWidth = "xl", className, children, ...props }: NavbarContainerProps) {
-    const maxWidthClasses: Record<string, string> = {
-        sm: "max-w-screen-sm",
-        md: "max-w-screen-md",
-        lg: "max-w-screen-lg",
-        xl: "max-w-screen-xl",
-        "2xl": "max-w-screen-2xl",
-        full: "max-w-full",
-    };
-
-    return (
-        <div
-            className={clsx(
-                "mx-auto flex items-center justify-between px-4 py-3",
-                maxWidthClasses[maxWidth],
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-}
-
-NavbarContainer.displayName = "Navbar.Container";
-
-/* ---------------- BRAND ---------------- */
-
-export interface NavbarBrandProps extends HTMLAttributes<HTMLDivElement> {}
-
-function NavbarBrand({ className, children, ...props }: NavbarBrandProps) {
-    return (
-        <div
-            className={clsx("flex items-center gap-2 shrink-0", className)}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-}
-
-NavbarBrand.displayName = "Navbar.Brand";
-
-/* ---------------- ITEMS (Desktop) ---------------- */
-
-export interface NavbarItemsProps extends HTMLAttributes<HTMLUListElement> {}
-
-function NavbarItems({ className, children, ...props }: NavbarItemsProps) {
-    return (
-        <ul
-            className={clsx(
-                "hidden md:flex items-center gap-1 list-none m-0 p-0",
-                className
-            )}
-            {...props}
-        >
-            {children}
-        </ul>
-    );
-}
-
-NavbarItems.displayName = "Navbar.Items";
-
-/* ---------------- ITEM (Desktop Link) ---------------- */
-
-export interface NavbarItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-    /** Highlights the item as the current page */
-    active?: boolean;
-}
-
-function NavbarItem({ active = false, className, children, href = "#", ...props }: NavbarItemProps) {
-    return (
-        <li className="list-none">
-            <a
-                href={href}
-                className={clsx(
-                    "px-3 py-2 rounded text-sm font-medium font-secondary transition-colors",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-ground-950",
-                    active
-                        ? "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
-                        : "text-ground-700 dark:text-ground-300 hover:text-ground-900 dark:hover:text-white hover:bg-ground-100 dark:hover:bg-ground-800",
-                    className
-                )}
-                aria-current={active ? "page" : undefined}
-                {...props}
-            >
-                {children}
-            </a>
-        </li>
-    );
-}
-
-NavbarItem.displayName = "Navbar.Item";
-
-/* ---------------- ACTIONS ---------------- */
-
-export interface NavbarActionsProps extends HTMLAttributes<HTMLDivElement> {}
-
-function NavbarActions({ className, children, ...props }: NavbarActionsProps) {
-    return (
-        <div
-            className={clsx("hidden md:flex items-center gap-2 shrink-0", className)}
-            {...props}
-        >
-            {children}
-        </div>
-    );
-}
-
-NavbarActions.displayName = "Navbar.Actions";
-
-/* ---------------- TOGGLE ---------------- */
-
-export interface NavbarToggleProps extends HTMLAttributes<HTMLButtonElement> {}
-
-function NavbarToggle({ className, ...props }: NavbarToggleProps) {
-    const { mobileOpen, setMobileOpen, menuId, triggerId } = useNavbar();
-
-    return (
-        <button
-            id={triggerId}
-            type="button"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-expanded={mobileOpen}
-            aria-controls={menuId}
-            aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
-            className={clsx(
-                "md:hidden relative flex items-center justify-center w-10 h-10 rounded transition-colors",
-                "text-ground-700 dark:text-ground-300 hover:bg-ground-100 dark:hover:bg-ground-800",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-ground-950",
-                className
-            )}
-            {...props}
-        >
-            <span className="flex flex-col items-center justify-center w-5 h-5">
-                <span
-                    className={clsx(
-                        "block h-0.5 w-5 bg-current transition-all rounded-full",
-                        mobileOpen ? "rotate-45 translate-y-[3px]" : "-translate-y-1"
-                    )}
-                />
-                <span
-                    className={clsx(
-                        "block h-0.5 w-5 bg-current transition-all rounded-full my-0.5",
-                        mobileOpen ? "opacity-0" : "opacity-100"
-                    )}
-                />
-                <span
-                    className={clsx(
-                        "block h-0.5 w-5 bg-current transition-all rounded-full",
-                        mobileOpen ? "-rotate-45 -translate-y-[3px]" : "translate-y-1"
-                    )}
-                />
-            </span>
-        </button>
-    );
-}
-
-NavbarToggle.displayName = "Navbar.Toggle";
-
-/* ---------------- MOBILE MENU ---------------- */
-
-export interface NavbarMobileMenuProps extends HTMLAttributes<HTMLDivElement> {}
-
-function NavbarMobileMenu({ className, children, ...props }: NavbarMobileMenuProps) {
-    const { mobileOpen, closeMenu, menuId } = useNavbar();
-    const menuRef = useRef<HTMLDivElement>(null);
-    const closeBtnRef = useRef<HTMLButtonElement>(null);
-
-    // Robust Focus Trap & Initial Focus
-    useEffect(() => {
-        if (!mobileOpen) return;
-
-        // Initial focus to close button
-        const timer = setTimeout(() => {
-            closeBtnRef.current?.focus();
-        }, 50);
-
-        const menu = menuRef.current;
-        if (!menu) return;
-
-        const handleTab = (e: globalThis.KeyboardEvent) => {
-            if (e.key !== "Tab") return;
-
-            const focusableEls = menu.querySelectorAll<HTMLElement>(
-                'a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])'
-            );
-
-            // Filter to only visible elements
-            const visibleFocusable = Array.from(focusableEls).filter(el =>
-                el.offsetParent !== null || el.getAttribute('tabindex') === '0'
-            );
-
-            if (visibleFocusable.length === 0) return;
-
-            const firstFocusable = visibleFocusable[0];
-            const lastFocusable = visibleFocusable[visibleFocusable.length - 1];
-
-            if (e.shiftKey) {
-                if (document.activeElement === firstFocusable || document.activeElement === menu) {
-                    e.preventDefault();
-                    lastFocusable?.focus();
-                }
-            } else {
-                if (document.activeElement === lastFocusable) {
-                    e.preventDefault();
-                    firstFocusable?.focus();
-                }
-            }
-        };
-
-        menu.addEventListener("keydown", handleTab);
-        return () => {
-            clearTimeout(timer);
-            menu.removeEventListener("keydown", handleTab);
-        };
-    }, [mobileOpen]);
-
-    return (
-        <>
-            {/* Backdrop */}
-            <div
-                className={clsx(
-                    "fixed inset-0 z-40 bg-ground-950/50 transition-opacity duration-300 md:hidden",
-                    mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-                )}
-                aria-hidden="true"
-                onClick={closeMenu}
-            />
-
-            {/* Panel */}
-            <div
-                ref={menuRef}
-                id={menuId}
-                role="dialog"
-                aria-modal="true"
-                aria-label="Navigation menu"
-                className={clsx(
-                    "fixed top-0 right-0 z-50 h-full w-72 max-w-[80vw] md:hidden",
-                    "bg-white dark:bg-ground-950 border-l border-ground-200 dark:border-ground-800",
-                    "shadow-outer",
-                    "transform transition-transform ease-in-out duration-300",
-                    mobileOpen ? "translate-x-0" : "translate-x-full",
-                    className
-                )}
-                {...props}
-            >
-                {/* Close button */}
-                <div className="flex items-center justify-end p-4 border-b border-ground-200 dark:border-ground-800">
-                    <button
-                        ref={closeBtnRef}
-                        type="button"
-                        onClick={closeMenu}
-                        aria-label="Close navigation menu"
-                        className={clsx(
-                            "flex items-center justify-center w-9 h-9 rounded transition-colors",
-                            "text-ground-500 hover:text-ground-900 dark:hover:text-white hover:bg-ground-100 dark:hover:bg-ground-800",
-                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
-                        )}
-                    >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18" />
-                            <line x1="6" y1="6" x2="18" y2="18" />
-                        </svg>
-                    </button>
-                </div>
-
-                {/* Menu content */}
-                <div className="flex flex-col gap-1 p-4 overflow-y-auto max-h-[calc(100vh-65px)]">
-                    {children}
-                </div>
-            </div>
-        </>
-    );
-}
-
-NavbarMobileMenu.displayName = "Navbar.MobileMenu";
-
-/* ---------------- MOBILE ITEM ---------------- */
-
-export interface NavbarMobileItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-    active?: boolean;
-}
-
-function NavbarMobileItem({ active = false, className, children, href = "#", ...props }: NavbarMobileItemProps) {
-    const { closeMenu } = useNavbar();
-
-    return (
-        <a
-            href={href}
-            onClick={closeMenu}
-            className={clsx(
-                "px-4 py-3 rounded text-sm font-medium font-secondary transition-colors",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
-                active
-                    ? "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20"
-                    : "text-ground-700 dark:text-ground-300 hover:text-ground-900 dark:hover:text-white hover:bg-ground-100 dark:hover:bg-ground-800",
-                className
-            )}
-            aria-current={active ? "page" : undefined}
-            {...props}
-        >
-            {children}
-        </a>
-    );
-}
-
-NavbarMobileItem.displayName = "Navbar.MobileItem";
-
-/* ---------------- SEPARATOR ---------------- */
-
-function NavbarSeparator({ className, ...props }: HTMLAttributes<HTMLHRElement>) {
-    return (
-        <hr
-            className={clsx("my-2 border-ground-200 dark:border-ground-800", className)}
-            {...props}
-        />
-    );
-}
-
-NavbarSeparator.displayName = "Navbar.Separator";
-
-/* ---------------- EXPORTS ---------------- */
-
-export const Navbar = Object.assign(NavbarRoot, {
-    Container: NavbarContainer,
-    Brand: NavbarBrand,
-    Items: NavbarItems,
-    Item: NavbarItem,
-    Actions: NavbarActions,
-    Toggle: NavbarToggle,
-    MobileMenu: NavbarMobileMenu,
-    MobileItem: NavbarMobileItem,
-    Separator: NavbarSeparator,
-});
-
-export default Navbar;
-```
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `href` | `string` | The URL the link points to. |
+| `active` | `boolean` | Whether the item is in an active state. |
+| `onClick` | `() => void` | Callback triggered when the item is clicked. |
+| `linkComponent` | `ElementType` | Custom link component (e.g., Next.js Link). |
+| `className` | `string` | Custom CSS classes for the mobile item. |
+
+### Navbar.Toggle
+| Prop | Type | Description |
+| :--- | :--- | :--- |
+| `className` | `string` | Custom CSS classes for the toggle button. |

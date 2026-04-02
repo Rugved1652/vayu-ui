@@ -1,6 +1,7 @@
 # Modal
 
 ## Anatomy
+
 - modal.tsx — Composition: context, useModal hook, sizeWidths, FOCUSABLE, ModalRoot with compound placeholders
 - trigger.tsx — UI: ModalTrigger (opens modal, supports asChild, merges triggerRef)
 - overlay.tsx — UI: ModalOverlay (backdrop with close-on-click)
@@ -15,6 +16,7 @@
 - index.ts — Public API: compound exports
 
 ## Use Cases
+
 - Confirmation dialogs and alerts
 - Form dialogs (create, edit, delete)
 - Informational popups with rich content

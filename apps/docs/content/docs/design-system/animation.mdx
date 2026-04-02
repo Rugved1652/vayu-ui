@@ -12,11 +12,11 @@ Animation adds personality and feedback to your UI. Vayu UI provides a comprehen
 
 ## Animation Categories
 
-| Category | Purpose | When to Use |
-| :--- | :--- | :--- |
-| **Entrance** | Elements appearing on screen | Page loads, modal opens, items added |
-| **Attention** | Drawing focus to elements | Notifications, highlights, errors |
-| **Cycles** | Continuous motion | Loading states, decorative elements |
+| Category      | Purpose                      | When to Use                          |
+| :------------ | :--------------------------- | :----------------------------------- |
+| **Entrance**  | Elements appearing on screen | Page loads, modal opens, items added |
+| **Attention** | Drawing focus to elements    | Notifications, highlights, errors    |
+| **Cycles**    | Continuous motion            | Loading states, decorative elements  |
 
 ---
 
@@ -54,6 +54,7 @@ The most subtle entrance. Great for content that should appear gently.
       Third item
     </div>
     ```
+
   </Tab>
 </Tabs>
 
@@ -61,12 +62,12 @@ The most subtle entrance. Great for content that should appear gently.
 
 Slide animations bring content in from a specific direction. Perfect for drawers, panels, and notifications.
 
-| Animation | Direction | Use Case |
-| :--- | :--- | :--- |
-| `animate-slide-in-left` | From left | Sidebar opening |
-| `animate-slide-in-right` | From right | Panel, offcanvas |
-| `animate-slide-in-up` | From bottom | Bottom sheet, snackbar |
-| `animate-slide-in-down` | From top | Dropdown, notification |
+| Animation                | Direction   | Use Case               |
+| :----------------------- | :---------- | :--------------------- |
+| `animate-slide-in-left`  | From left   | Sidebar opening        |
+| `animate-slide-in-right` | From right  | Panel, offcanvas       |
+| `animate-slide-in-up`    | From bottom | Bottom sheet, snackbar |
+| `animate-slide-in-down`  | From top    | Dropdown, notification |
 
 <Tabs items={['All Directions', 'Usage']}>
   <Tab value="All Directions">
@@ -107,6 +108,7 @@ Slide animations bring content in from a specific direction. Perfect for drawers
       Panel content
     </div>
     ```
+
   </Tab>
 </Tabs>
 
@@ -137,6 +139,7 @@ A playful entrance with a slight overshoot. Great for success states and modals.
     // Icon appearing
     <CheckCircle className="animate-bounce-in text-success w-8 h-8" />
     ```
+
   </Tab>
 </Tabs>
 
@@ -144,10 +147,10 @@ A playful entrance with a slight overshoot. Great for success states and modals.
 
 3D flip effects for card reveals and badge pops.
 
-| Animation | Axis | Use Case |
-| :--- | :--- | :--- |
+| Animation           | Axis       | Use Case  |
+| :------------------ | :--------- | :-------- |
 | `animate-flip-in-x` | Horizontal | Card flip |
-| `animate-flip-in-y` | Vertical | Badge pop |
+| `animate-flip-in-y` | Vertical   | Badge pop |
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
@@ -172,6 +175,7 @@ A playful entrance with a slight overshoot. Great for success states and modals.
       New!
     </span>
     ```
+
   </Tab>
 </Tabs>
 
@@ -198,6 +202,7 @@ Scale up from small to full size. Perfect for modals and dialogs.
     // Image preview
     <img src="/preview.jpg" className="animate-zoom-in rounded-surface" />
     ```
+
   </Tab>
 </Tabs>
 
@@ -223,6 +228,7 @@ Spin into view. Great for icons and decorative elements.
       Decorative content
     </div>
     ```
+
   </Tab>
 </Tabs>
 
@@ -230,12 +236,12 @@ Spin into view. Great for icons and decorative elements.
 
 Playful rolling entrance effects.
 
-| Animation | Direction |
-| :--- | :--- |
-| `animate-roll-in` | From left, rolling clockwise |
+| Animation               | Direction                             |
+| :---------------------- | :------------------------------------ |
+| `animate-roll-in`       | From left, rolling clockwise          |
 | `animate-roll-in-right` | From right, rolling counter-clockwise |
-| `animate-roll-in-up` | From bottom, rolling |
-| `animate-roll-in-down` | From top, rolling |
+| `animate-roll-in-up`    | From bottom, rolling                  |
+| `animate-roll-in-down`  | From top, rolling                     |
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
@@ -246,21 +252,18 @@ Playful rolling entrance effects.
     </div>
   </Tab>
   <Tab value="Code">
-    ```tsx
-    // Playful element entrance
-    <div className="animate-roll-in">
-      Fun content
-    </div>
+    ```tsx // Playful element entrance
+    <div className="animate-roll-in">Fun content</div>
     ```
   </Tab>
 </Tabs>
 
 ### Special Entrances
 
-| Animation | Description | Use Case |
-| :--- | :--- | :--- |
+| Animation                 | Description                  | Use Case              |
+| :------------------------ | :--------------------------- | :-------------------- |
 | `animate-jack-in-the-box` | Scales and rotates into view | Playful pop, tooltips |
-| `animate-hinge` | Falls off the screen | Exit animation |
+| `animate-hinge`           | Falls off the screen         | Exit animation        |
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
@@ -282,6 +285,7 @@ Playful rolling entrance effects.
       This will fall away
     </div>
     ```
+
   </Tab>
 </Tabs>
 
@@ -315,6 +319,7 @@ Gentle up-and-down motion. Great for decorative elements.
       Floating content
     </div>
     ```
+
   </Tab>
 </Tabs>
 
@@ -326,13 +331,18 @@ Particles that float upward and fade out. Perfect for background effects.
   <Tab value="Preview">
     <div className="p-6 bg-surface rounded-surface h-24 relative overflow-hidden">
       <div className="animate-float-particle absolute bottom-0 left-1/4 w-2 h-2 bg-brand rounded-full"></div>
-      <div className="animate-float-particle absolute bottom-0 left-1/2 w-2 h-2 bg-brand rounded-full" style={{ animationDelay: '1s' }}></div>
-      <div className="animate-float-particle absolute bottom-0 left-3/4 w-2 h-2 bg-brand rounded-full" style={{ animationDelay: '2s' }}></div>
+      <div
+        className="animate-float-particle absolute bottom-0 left-1/2 w-2 h-2 bg-brand rounded-full"
+        style={{ animationDelay: '1s' }}
+      ></div>
+      <div
+        className="animate-float-particle absolute bottom-0 left-3/4 w-2 h-2 bg-brand rounded-full"
+        style={{ animationDelay: '2s' }}
+      ></div>
     </div>
   </Tab>
   <Tab value="Code">
-    ```tsx
-    // Particle background
+    ```tsx // Particle background
     <div className="relative overflow-hidden">
       {[...Array(10)].map((_, i) => (
         <div
@@ -340,7 +350,7 @@ Particles that float upward and fade out. Perfect for background effects.
           className="animate-float-particle absolute bottom-0 w-2 h-2 bg-brand rounded-full"
           style={{
             left: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 5}s`
+            animationDelay: `${Math.random() * 5}s`,
           }}
         />
       ))}
@@ -363,8 +373,7 @@ Continuous rotation around a center point.
     </div>
   </Tab>
   <Tab value="Code">
-    ```tsx
-    // Orbiting element
+    ```tsx // Orbiting element
     <div className="relative w-24 h-24">
       <div className="animate-orbit absolute top-0 left-1/2 -translate-x-1/2">
         <div className="w-4 h-4 bg-brand rounded-full" />
@@ -388,8 +397,7 @@ Shape-shifting animation for organic, blob-like elements.
     </div>
   </Tab>
   <Tab value="Code">
-    ```tsx
-    // Morphing blob
+    ```tsx // Morphing blob
     <div
       className="animate-morph-blob bg-brand w-24 h-24"
       style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' }}
@@ -402,10 +410,10 @@ Shape-shifting animation for organic, blob-like elements.
 
 Slow rotations for decorative purposes.
 
-| Animation | Speed | Direction |
-| :--- | :--- | :--- |
-| `animate-spin-slow` | 60s | Clockwise |
-| `animate-reverse-spin` | 40s | Counter-clockwise |
+| Animation              | Speed | Direction         |
+| :--------------------- | :---- | :---------------- |
+| `animate-spin-slow`    | 60s   | Clockwise         |
+| `animate-reverse-spin` | 40s   | Counter-clockwise |
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
@@ -434,6 +442,7 @@ Slow rotations for decorative purposes.
       <Icon className="w-12 h-12" />
     </div>
     ```
+
   </Tab>
 </Tabs>
 
@@ -441,9 +450,9 @@ Slow rotations for decorative purposes.
 
 Infinite scrolling for tickers and carousels.
 
-| Animation | Behavior |
-| :--- | :--- |
-| `animate-marquee-scroll` | Continuous left scroll |
+| Animation                   | Behavior               |
+| :-------------------------- | :--------------------- |
+| `animate-marquee-scroll`    | Continuous left scroll |
 | `animate-marquee-ping-pong` | Bounces back and forth |
 
 <Tabs items={['Preview', 'Code']}>
@@ -462,8 +471,7 @@ Infinite scrolling for tickers and carousels.
     </div>
   </Tab>
   <Tab value="Code">
-    ```tsx
-    // Marquee ticker
+    ```tsx // Marquee ticker
     <div className="overflow-hidden">
       <div className="animate-marquee-scroll flex gap-8 whitespace-nowrap">
         {/* Duplicate content for seamless loop */}
@@ -485,10 +493,10 @@ Infinite scrolling for tickers and carousels.
 
 Special animations for toast notifications.
 
-| Animation | Purpose |
-| :--- | :--- |
-| `animate-toast-enter` | Toast appearing |
-| `animate-toast-exit` | Toast disappearing |
+| Animation             | Purpose            |
+| :-------------------- | :----------------- |
+| `animate-toast-enter` | Toast appearing    |
+| `animate-toast-exit`  | Toast disappearing |
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
@@ -532,20 +540,20 @@ This is built into the CSS:
 
 ### Best Practices
 
-| Do ✅ | Don't ❌ |
-| :--- | :--- |
+| Do ✅                                     | Don't ❌                                 |
+| :---------------------------------------- | :--------------------------------------- |
 | Use animations for feedback and hierarchy | Use animations just because they're cool |
-| Keep animations subtle and quick | Create long, distracting animations |
-| Test with reduced motion enabled | Forget about accessibility |
-| Use entrance animations for new content | Animate everything at once |
-| Respect user preferences | Override reduced motion settings |
+| Keep animations subtle and quick          | Create long, distracting animations      |
+| Test with reduced motion enabled          | Forget about accessibility               |
+| Use entrance animations for new content   | Animate everything at once               |
+| Respect user preferences                  | Override reduced motion settings         |
 
 ### Checking for Reduced Motion
 
 If you need to check programmatically:
 
 ```tsx
-"use client";
+'use client';
 import { useEffect, useState } from 'react';
 
 export function usePrefersReducedMotion() {
@@ -567,11 +575,7 @@ export function usePrefersReducedMotion() {
 function MyComponent() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  return (
-    <div className={prefersReducedMotion ? '' : 'animate-fade-in'}>
-      Content
-    </div>
-  );
+  return <div className={prefersReducedMotion ? '' : 'animate-fade-in'}>Content</div>;
 }
 ```
 
@@ -582,42 +586,45 @@ function MyComponent() {
 ### All Animations
 
 #### Entrance
-| Class | Duration | Use |
-| :--- | :--- | :--- |
-| `animate-fade-in` | 1s | Gentle appearance |
-| `animate-slide-in-left` | 1s | Sidebar, drawer |
-| `animate-slide-in-right` | 1s | Panel, offcanvas |
-| `animate-slide-in-up` | 1s | Bottom sheet |
-| `animate-slide-in-down` | 1s | Dropdown, notification |
-| `animate-bounce-in` | 1s | Success, modal |
-| `animate-flip-in-x` | 1s | Card reveal |
-| `animate-flip-in-y` | 1s | Badge pop |
-| `animate-rotate-in` | 1s | Icon entrance |
-| `animate-zoom-in` | 1s | Modal, dialog |
-| `animate-roll-in` | 1s | Playful entrance |
-| `animate-roll-in-right` | 1s | Playful entrance |
-| `animate-roll-in-up` | 1s | Playful entrance |
-| `animate-roll-in-down` | 1s | Playful entrance |
-| `animate-jack-in-the-box` | 1s | Playful pop |
-| `animate-hinge` | 2s | Exit animation |
+
+| Class                     | Duration | Use                    |
+| :------------------------ | :------- | :--------------------- |
+| `animate-fade-in`         | 1s       | Gentle appearance      |
+| `animate-slide-in-left`   | 1s       | Sidebar, drawer        |
+| `animate-slide-in-right`  | 1s       | Panel, offcanvas       |
+| `animate-slide-in-up`     | 1s       | Bottom sheet           |
+| `animate-slide-in-down`   | 1s       | Dropdown, notification |
+| `animate-bounce-in`       | 1s       | Success, modal         |
+| `animate-flip-in-x`       | 1s       | Card reveal            |
+| `animate-flip-in-y`       | 1s       | Badge pop              |
+| `animate-rotate-in`       | 1s       | Icon entrance          |
+| `animate-zoom-in`         | 1s       | Modal, dialog          |
+| `animate-roll-in`         | 1s       | Playful entrance       |
+| `animate-roll-in-right`   | 1s       | Playful entrance       |
+| `animate-roll-in-up`      | 1s       | Playful entrance       |
+| `animate-roll-in-down`    | 1s       | Playful entrance       |
+| `animate-jack-in-the-box` | 1s       | Playful pop            |
+| `animate-hinge`           | 2s       | Exit animation         |
 
 #### Cycles
-| Class | Duration | Use |
-| :--- | :--- | :--- |
-| `animate-float` | 6s | Floating elements |
-| `animate-float-particle` | 15s | Particle effects |
-| `animate-orbit` | 20s | Orbiting elements |
-| `animate-morph-blob` | 20s | Shape morphing |
-| `animate-spin-slow` | 60s | Slow rotation |
-| `animate-reverse-spin` | 40s | Reverse rotation |
-| `animate-marquee-scroll` | ∞ | Infinite scroll |
-| `animate-marquee-ping-pong` | ∞ | Bouncing scroll |
+
+| Class                       | Duration | Use               |
+| :-------------------------- | :------- | :---------------- |
+| `animate-float`             | 6s       | Floating elements |
+| `animate-float-particle`    | 15s      | Particle effects  |
+| `animate-orbit`             | 20s      | Orbiting elements |
+| `animate-morph-blob`        | 20s      | Shape morphing    |
+| `animate-spin-slow`         | 60s      | Slow rotation     |
+| `animate-reverse-spin`      | 40s      | Reverse rotation  |
+| `animate-marquee-scroll`    | ∞        | Infinite scroll   |
+| `animate-marquee-ping-pong` | ∞        | Bouncing scroll   |
 
 #### Toast
-| Class | Duration | Use |
-| :--- | :--- | :--- |
-| `animate-toast-enter` | 300ms | Toast appear |
-| `animate-toast-exit` | 300ms | Toast disappear |
+
+| Class                 | Duration | Use             |
+| :-------------------- | :------- | :-------------- |
+| `animate-toast-enter` | 300ms    | Toast appear    |
+| `animate-toast-exit`  | 300ms    | Toast disappear |
 
 ### CSS Variables
 

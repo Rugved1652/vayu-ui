@@ -1,30 +1,30 @@
 {
-    "name": "vayu-ui-mcp",
-    "version": "1.0.0",
-    "description": "MCP Server for Vayu UI — exposes the component/hook registry to AI assistants",
-    "author": "Rugved Patel",
-    "license": "MIT",
-    "type": "module",
-    "main": "dist/index.js",
-    "bin": {
-        "vayu-ui-mcp": "./bin/vayu-ui-mcp.js"
-    },
-    "scripts": {
-        "build": "tsup",
-        "start": "node dist/index.js",
-        "dev": "tsup --watch"
-    },
-    "dependencies": {
-        "@modelcontextprotocol/sdk": "^1.12.1",
-        "vayu-ui-registry": "*",
-        "zod": "^3.24.4"
-    },
-    "devDependencies": {
-        "@types/node": "^18",
-        "tsup": "^8.5.1",
-        "typescript": "^5"
-    },
-    "engines": {
-        "node": ">=18.0.0"
-    }
+  "name": "vayu-ui-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server for Vayu UI — exposes the component/hook registry to AI assistants",
+  "author": "Rugved Patel",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "vayu-ui-mcp": "./bin/vayu-ui-mcp.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "start": "node dist/index.js",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "vayu-ui-registry": "*",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18",
+    "tsup": "^8.5.1",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

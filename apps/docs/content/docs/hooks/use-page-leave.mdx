@@ -18,7 +18,7 @@ The `usePageLeave` hook triggers a callback function when the user's cursor leav
 Copy this code into `src/hooks/usePageLeave.ts`:
 
 ```tsx
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 export const usePageLeave = (callback: () => void) => {
   useEffect(() => {
@@ -28,10 +28,10 @@ export const usePageLeave = (callback: () => void) => {
       }
     };
 
-    document.addEventListener("mouseout", handleMouseOut);
+    document.addEventListener('mouseout', handleMouseOut);
 
     return () => {
-      document.removeEventListener("mouseout", handleMouseOut);
+      document.removeEventListener('mouseout', handleMouseOut);
     };
   }, [callback]);
 };
@@ -40,11 +40,11 @@ export const usePageLeave = (callback: () => void) => {
 ## Usage
 
 ```tsx
-import { usePageLeave } from "@/hooks/usePageLeave";
+import { usePageLeave } from '@/hooks/usePageLeave';
 
 const ExitIntentPopup = () => {
   usePageLeave(() => {
-    console.log("User is leaving the page!");
+    console.log('User is leaving the page!');
     // Show modal or perform action
   });
 
@@ -56,6 +56,6 @@ const ExitIntentPopup = () => {
 
 ### Parameters
 
-| Name | Type | Description |
-| :--- | :--- | :--- |
+| Name       | Type         | Description                                             |
+| :--------- | :----------- | :------------------------------------------------------ |
 | `callback` | `() => void` | The function to execute when the mouse leaves the page. |

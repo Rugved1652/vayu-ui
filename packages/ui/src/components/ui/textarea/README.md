@@ -1,6 +1,7 @@
 # TextArea
 
 ## Anatomy
+
 - textarea.tsx — Composition: Context + Root
 - label.tsx — UI: Label with optional char count
 - input.tsx — UI: Textarea input (forwardRef)
@@ -11,6 +12,7 @@
 - index.ts — Public API
 
 ## Use Cases
+
 - Multi-line text input with validation states
 - Forms requiring character limits and feedback
 - Accessible labeled textarea with error/support messaging
