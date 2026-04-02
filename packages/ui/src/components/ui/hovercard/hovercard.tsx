@@ -41,7 +41,7 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
       closeDelay,
     });
 
-    const { position, currentSide, arrowPosition, positioned } = useHoverCardPosition({
+    const { position, currentSide, arrowPosition } = useHoverCardPosition({
       side,
       align,
       sideOffset,
@@ -103,11 +103,10 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
                 top: `${position.top}px`,
                 left: `${position.left}px`,
                 zIndex: 50,
-                opacity: positioned ? 1 : 0,
               }}
               className={cn(
                 'bg-elevated border border-border rounded-overlay shadow-elevated p-4',
-                positioned && 'animate-in fade-in-0 zoom-in-95 duration-200',
+                'animate-fade-in',
                 contentClassName,
               )}
             >

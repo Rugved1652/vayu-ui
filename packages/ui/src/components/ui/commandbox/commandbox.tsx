@@ -1,325 +1,196 @@
-// commandbox.tsx
-// Composition: UI + logic
+// CommandBox.tsx
+// Root: context provider, state management, item registration, filtering
 
 'use client';
 
 import { clsx } from 'clsx';
-import { CornerDownLeft } from 'lucide-react';
-import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from 'react';
-import { defaultFilter, sizeClasses, variantClasses } from './config';
-import { CommandBoxFooter } from './CommandBoxFooter';
-import { useFilteredItems } from './hooks';
-import { CommandBoxSearchInput } from './CommandBoxSearchInput';
-import { CommandBoxTrigger } from './CommandBoxTrigger';
-import type { CommandBoxProps, CommandItem } from './types';
+import React, { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
-const CommandBox = forwardRef<HTMLDivElement, CommandBoxProps>(
+import { CommandBoxContext } from './hooks';
+import { fuzzyScore } from './hooks';
+import type { CommandBoxContextValue, CommandBoxItemData, CommandBoxRootProps } from './types';
+
+const CommandBoxRoot = forwardRef<HTMLDivElement, CommandBoxRootProps>(
   (
     {
-      items = [],
-      groups = [],
-      placeholder = 'Type a command or search...',
-      emptyText = 'No results found.',
-      variant = 'default',
-      size = 'medium',
-      open = false,
+      children,
+      open: controlledOpen,
+      defaultOpen = false,
       onOpenChange,
       onSelect,
-      filter,
-      className,
-      contentClassName,
-      inputClassName,
-      disabled = false,
+      filter: customFilter,
       showShortcuts = true,
-      maxHeight = '400px',
+      loading = false,
+      className,
       ...props
     },
     ref,
   ) => {
-    const [isOpen, setIsOpen] = useState(open);
-    const [search, setSearch] = useState('');
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [internalOpen, setInternalOpen] = useState(defaultOpen);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [highlightedIndex, setHighlightedIndex] = useState(0);
+    const [itemCount, setItemCount] = useState(0);
 
-    const uniqueId = useId();
-    const listboxId = `${uniqueId}-listbox`;
-    const inputId = `${uniqueId}-input`;
+    const itemsMap = useRef(new Map<string, CommandBoxItemData>());
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const listRef = useRef<HTMLDivElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const inputRef = useRef<HTMLInputElement>(null);
-    const listRef = useRef<HTMLDivElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
+    const id = useId();
+    const inputId = `commandbox-input-${id}`;
+    const listboxId = `commandbox-listbox-${id}`;
 
-    // Sync internal state with prop
-    useEffect(() => {
-      setIsOpen(open);
-    }, [open]);
+    const isControlled = controlledOpen !== undefined;
+    const open = isControlled ? controlledOpen : internalOpen;
 
-    const { groupedItems, flatItems } = useFilteredItems(
-      items,
-      groups,
-      search,
-      filter || defaultFilter,
+    const setOpen = useCallback(
+      (newOpen: boolean) => {
+        if (!isControlled) {
+          setInternalOpen(newOpen);
+        }
+        onOpenChange?.(newOpen);
+      },
+      [isControlled, onOpenChange],
     );
 
-    // Handlers
-    const handleClose = useCallback(() => {
-      setIsOpen(false);
-      setSearch('');
-      setSelectedIndex(0);
-      onOpenChange?.(false);
-    }, [onOpenChange]);
+    // Item registration
+    const registerItem = useCallback((item: CommandBoxItemData) => {
+      itemsMap.current.set(item.id, item);
+      setItemCount((c) => c + 1);
+    }, []);
 
-    const handleOpen = useCallback(() => {
-      if (disabled) return;
-      setIsOpen(true);
-      onOpenChange?.(true);
-    }, [disabled, onOpenChange]);
+    const unregisterItem = useCallback((id: string) => {
+      itemsMap.current.delete(id);
+      setItemCount((c) => c - 1);
+    }, []);
 
+    // Filtered items
+    const filteredItems = useMemo(() => {
+      const items = Array.from(itemsMap.current.values());
+      if (!searchQuery) return items;
+
+      const filterFn =
+        customFilter ||
+        ((item: CommandBoxItemData, search: string) => {
+          const titleScore = fuzzyScore(item.title, search);
+          const descScore = item.description ? fuzzyScore(item.description, search) * 0.5 : 0;
+          return Math.max(titleScore, descScore);
+        });
+
+      return items
+        .map((item) => ({ item, score: filterFn(item, searchQuery) }))
+        .filter(({ score }) => score > 0)
+        .sort((a, b) => b.score - a.score)
+        .map(({ item }) => item);
+    }, [searchQuery, customFilter, itemCount]);
+
+    // Highlighted ID
+    const highlightedId = useMemo(() => {
+      const enabledItems = filteredItems.filter((item) => !item.disabled);
+      if (enabledItems.length === 0) return null;
+      const index = Math.min(highlightedIndex, enabledItems.length - 1);
+      return enabledItems[index]?.id ?? null;
+    }, [filteredItems, highlightedIndex]);
+
+    // Handle item selection
     const handleSelect = useCallback(
-      (item: CommandItem) => {
+      (item: CommandBoxItemData) => {
         if (item.disabled) return;
         item.onSelect?.();
         onSelect?.(item);
-        handleClose();
+        setOpen(false);
+        setSearchQuery('');
       },
-      [onSelect, handleClose],
+      [onSelect, setOpen],
     );
 
-    // Keyboard navigation
+    // Reset highlighted index when search changes
     useEffect(() => {
-      if (!isOpen) return;
-
-      const handleKeyDown = (e: KeyboardEvent) => {
-        switch (e.key) {
-          case 'ArrowDown':
-            e.preventDefault();
-            setSelectedIndex((prev) => (prev < flatItems.length - 1 ? prev + 1 : 0));
-            break;
-          case 'ArrowUp':
-            e.preventDefault();
-            setSelectedIndex((prev) => (prev > 0 ? prev - 1 : flatItems.length - 1));
-            break;
-          case 'Enter':
-            e.preventDefault();
-            if (flatItems[selectedIndex] && !flatItems[selectedIndex].disabled) {
-              handleSelect(flatItems[selectedIndex]);
-            }
-            break;
-          case 'Escape':
-            e.preventDefault();
-            handleClose();
-            break;
-        }
-      };
-
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [isOpen, selectedIndex, flatItems, handleSelect, handleClose]);
-
-    // Scroll selected into view
-    useEffect(() => {
-      if (isOpen && listRef.current) {
-        const el = listRef.current.querySelector(`[data-index="${selectedIndex}"]`);
-        el?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
-    }, [selectedIndex, isOpen]);
+      setHighlightedIndex(0);
+    }, [searchQuery]);
 
     // Focus input when opened
     useEffect(() => {
-      if (isOpen && inputRef.current) {
-        inputRef.current.focus();
+      if (open) {
+        requestAnimationFrame(() => {
+          inputRef.current?.focus();
+        });
+      } else {
+        setSearchQuery('');
+        setHighlightedIndex(0);
       }
-    }, [isOpen]);
+    }, [open]);
 
-    // Click outside
+    // Click outside to close
     useEffect(() => {
-      if (!isOpen) return;
+      if (!open) return;
 
       const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-          handleClose();
+        const target = event.target as Node;
+        if (containerRef.current && !containerRef.current.contains(target)) {
+          setOpen(false);
         }
       };
 
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen, handleClose]);
+      const timeoutId = setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+      }, 0);
 
-    // Active descendant ID
-    const activeDescendantId = flatItems[selectedIndex]?.id
-      ? `${uniqueId}-option-${flatItems[selectedIndex].id}`
-      : undefined;
+      return () => {
+        clearTimeout(timeoutId);
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [open, setOpen]);
 
-    // Shortcut renderer
-    const renderShortcut = (shortcut: string[]) => {
-      if (!showShortcuts || !shortcut.length) return null;
-      return (
-        <div className="flex items-center gap-1" aria-hidden="true">
-          {shortcut.map((key, index) => (
-            <kbd
-              key={index}
-              className="px-1.5 py-0.5 text-xs font-secondary font-medium bg-neutral-100 border border-neutral-300 rounded-sm dark:bg-neutral-700 dark:border-neutral-600 dark:text-neutral-300"
-            >
-              {key}
-            </kbd>
-          ))}
-        </div>
-      );
+    // Escape to close
+    useEffect(() => {
+      if (!open) return;
+
+      const handleEscape = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          setOpen(false);
+        }
+      };
+
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }, [open, setOpen]);
+
+    const contextValue: CommandBoxContextValue = {
+      open,
+      setOpen,
+      id,
+      inputId,
+      listboxId,
+      searchQuery,
+      setSearchQuery,
+      registerItem,
+      unregisterItem,
+      itemsMap,
+      filteredItems,
+      highlightedIndex,
+      setHighlightedIndex,
+      highlightedId,
+      onSelect: handleSelect,
+      inputRef,
+      listRef,
+      containerRef,
+      filter: customFilter ?? null,
+      showShortcuts,
+      loading,
     };
 
-    // ---- Closed State (Trigger) ----
-    if (!isOpen) {
-      return (
-        <CommandBoxTrigger
-          ref={ref}
-          onClick={handleOpen}
-          disabled={disabled}
-          placeholder={placeholder}
-          size={size}
-          variant={variant}
-          className={className}
-          {...props}
-        />
-      );
-    }
-
-    // ---- Open State ----
     return (
-      <div
-        ref={ref}
-        className={clsx('relative w-full', sizeClasses[size].container, className)}
-        {...props}
-      >
-        <div
-          ref={containerRef}
-          role="dialog"
-          aria-label="Command palette"
-          className={clsx(
-            'absolute top-0 left-0 right-0 rounded-lg border-2 overflow-hidden z-50',
-            variantClasses[variant],
-            contentClassName,
-          )}
-          style={{ maxHeight }}
-        >
-          {/* Search Input */}
-          <CommandBoxSearchInput
-            inputRef={inputRef}
-            inputId={inputId}
-            value={search}
-            onChange={(value) => {
-              setSearch(value);
-              setSelectedIndex(0);
-            }}
-            onClose={handleClose}
-            placeholder={placeholder}
-            size={size}
-            activeDescendantId={activeDescendantId}
-            listboxId={listboxId}
-            inputClassName={inputClassName}
-          />
-
-          {/* Results */}
-          <div
-            ref={listRef}
-            id={listboxId}
-            role="listbox"
-            aria-label="Search results"
-            className="overflow-y-auto"
-            style={{
-              maxHeight: `calc(${maxHeight} - 120px)`,
-            }}
-          >
-            {Object.keys(groupedItems).length === 0 ? (
-              <div
-                className="px-4 py-8 text-center text-neutral-500 dark:text-neutral-400 font-secondary"
-                role="status"
-              >
-                {emptyText}
-              </div>
-            ) : (
-              Object.entries(groupedItems).map(([groupName, groupItems]) => (
-                <div key={groupName} role="group" aria-label={groupName}>
-                  {Object.keys(groupedItems).length > 1 && (
-                    <div
-                      className="px-4 py-2 text-xs font-primary font-semibold text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-neutral-900/50 uppercase tracking-wider"
-                      aria-hidden="true"
-                    >
-                      {groupName}
-                    </div>
-                  )}
-                  {groupItems.map((item) => {
-                    const globalIndex = flatItems.indexOf(item);
-                    const isSelected = globalIndex === selectedIndex;
-                    const optionId = `${uniqueId}-option-${item.id}`;
-
-                    return (
-                      <div
-                        key={item.id}
-                        id={optionId}
-                        role="option"
-                        aria-selected={isSelected}
-                        aria-disabled={item.disabled || undefined}
-                        data-index={globalIndex}
-                        onClick={() => handleSelect(item)}
-                        className={clsx(
-                          'flex items-center gap-3 cursor-pointer transition-colors duration-150 font-secondary',
-                          sizeClasses[size].item,
-                          isSelected &&
-                            !item.disabled &&
-                            'bg-primary-50 text-primary-900 dark:bg-primary-900/20 dark:text-primary-100',
-                          !isSelected &&
-                            !item.disabled &&
-                            'hover:bg-neutral-50 dark:hover:bg-neutral-700/50 text-neutral-900 dark:text-white',
-                          item.disabled && 'opacity-50 cursor-not-allowed',
-                        )}
-                      >
-                        {item.icon && (
-                          <span
-                            className={clsx(
-                              sizeClasses[size].icon,
-                              'shrink-0',
-                              isSelected
-                                ? 'text-primary-600 dark:text-primary-400'
-                                : 'text-neutral-500 dark:text-neutral-400',
-                            )}
-                            aria-hidden="true"
-                          >
-                            {item.icon}
-                          </span>
-                        )}
-
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium truncate">{item.title}</div>
-                          {item.description && (
-                            <div className="text-sm text-neutral-500 dark:text-neutral-400 truncate">
-                              {item.description}
-                            </div>
-                          )}
-                        </div>
-
-                        {item.shortcut && renderShortcut(item.shortcut)}
-
-                        {isSelected && !item.disabled && (
-                          <CornerDownLeft
-                            className="w-4 h-4 text-neutral-400 dark:text-neutral-500 shrink-0"
-                            aria-hidden="true"
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))
-            )}
-          </div>
-
-          {/* Footer */}
-          <CommandBoxFooter />
+      <CommandBoxContext.Provider value={contextValue}>
+        <div ref={ref} className={clsx('relative', className)} {...props}>
+          {children}
         </div>
-      </div>
+      </CommandBoxContext.Provider>
     );
   },
 );
 
-CommandBox.displayName = 'CommandBox';
+CommandBoxRoot.displayName = 'CommandBox';
 
-export default CommandBox;
+export default CommandBoxRoot;

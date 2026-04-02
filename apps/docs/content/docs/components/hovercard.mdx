@@ -1,10 +1,24 @@
 ---
 title: HoverCard
-description: A popover card revealed on hover/focus with collision-aware positioning, directional arrows, and keyboard support.
+description: A popover card revealed on hover/focus with collision-aware positioning and directional arrow.
 ---
 
 import HoverCardDemo from '@/components/demos/hovercard-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add hovercard
+```
+
+```bash
+npx vayu-ui add -t hovercard #with test case needs
+```
 
 ## Usage
 
@@ -16,61 +30,101 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { HoverCard } from "@/components/ui/hovercard"
+    <HoverCard
+      content={
+        <div className="w-48">
+          <p className="font-semibold text-sm">Preview</p>
+          <p className="text-xs text-muted-content">
+            Rich content on hover.
+          </p>
+        </div>
+      }
+    >
+      <button>Hover me</button>
+    </HoverCard>
 
-    export function Example() {
-      return (
-        <HoverCard
-          content={
-            <div className="w-48">
-              <p className="font-semibold text-sm">Preview</p>
-              <p className="text-xs text-neutral-500">
-                Rich content on hover.
-              </p>
-            </div>
-          }
-        >
-          <button>Hover me</button>
-        </HoverCard>
-      )
-    }
+    <HoverCard
+      side="right"
+      align="start"
+      content={
+        <div className="w-48">
+          <p className="font-semibold text-sm">User Profile</p>
+          <p className="text-xs text-muted-content">
+            john@example.com
+          </p>
+        </div>
+      }
+    >
+      <button>Hover for profile</button>
+    </HoverCard>
+
+    <HoverCard
+      openDelay={500}
+      closeDelay={100}
+      showArrow={false}
+      content={
+        <div className="w-48">
+          <p className="font-semibold text-sm">Delayed Card</p>
+          <p className="text-xs text-muted-content">
+            Opens slowly, closes quickly.
+          </p>
+        </div>
+      }
+    >
+      <button>Hover me slowly</button>
+    </HoverCard>
     ```
-
   </Tab>
 </Tabs>
 
-## Installation
+## Anatomy
 
-```tsx title="src/components/ui/hovercard.tsx"
-// Copy the full component code
+- `HoverCard` — Root container that wraps the trigger element
+- `HoverCardArrow` — Directional arrow pointing to the trigger (internal)
+
+The `HoverCard` component uses a compound-like pattern where you pass the trigger as children and the card content via the `content` prop.
+
+## Accessibility
+
+- **Keyboard support**: Tab to focus, Escape to dismiss
+- **Focus management**: Card opens on focus and closes on blur
+- **ARIA attributes**:
+  - `aria-haspopup="true"` — Indicates the trigger displays a popup
+  - `aria-expanded` — Reflects open/closed state
+  - `aria-describedby` — Links trigger to card content via `useId`
+- **Delays**: Configurable `openDelay` and `closeDelay` prevent accidental triggers
+- **Disabled state**: Set `disabled={true}` to disable hover behavior
+
+## Screen reader behavior
+
+Screen readers announce the trigger element normally. When focused, the card content becomes available via `aria-describedby`, allowing screen readers to read the content as additional description. The `aria-expanded` state change is also announced when the card opens or closes.
+
+## Component Folder Structure
+
 ```
-
-## Features
-
-- Portal-rendered with collision-aware side flipping
-- Four sides — `top`, `bottom`, `left`, `right`
-- Three alignment options — `start`, `center`, `end`
-- Directional arrow with proper border clipping
-- `aria-haspopup`, `aria-expanded`, `aria-describedby` via `useId`
-- Focus & blur triggers for keyboard users
-- Escape key dismisses card
-- Configurable open and close delays
-- Scroll & resize repositioning
-- Disabled state
-- `forwardRef` for ref forwarding
+HoverCard/
+├── HoverCard.tsx       # Root component with portal rendering
+├── HoverCardArrow.tsx  # Directional arrow component
+├── hooks.ts            # Positioning and open/close logic
+├── types.ts            # Type definitions
+├── index.ts            # Public API exports
+└── README.md           # Component documentation
+```
 
 ## Props
 
-| Prop               | Type                             | Default    | Description                  |
-| :----------------- | :------------------------------- | :--------- | :--------------------------- |
-| `content`          | `ReactNode`                      | —          | Card content                 |
-| `side`             | `top \| bottom \| left \| right` | `"bottom"` | Preferred side               |
-| `align`            | `start \| center \| end`         | `"center"` | Alignment along the edge     |
-| `sideOffset`       | `number`                         | `8`        | Gap between trigger and card |
-| `alignOffset`      | `number`                         | `0`        | Alignment shift (px)         |
-| `openDelay`        | `number`                         | `200`      | Open delay (ms)              |
-| `closeDelay`       | `number`                         | `300`      | Close delay (ms)             |
-| `contentClassName` | `string`                         | —          | Class on card container      |
-| `disabled`         | `boolean`                        | `false`    | Disable hover card           |
-| `showArrow`        | `boolean`                        | `true`     | Show directional arrow       |
-| `className`        | `string`                         | —          | Class on trigger wrapper     |
+### HoverCard
+
+| Prop               | Type                                 | Default    | Description                          |
+| :----------------- | :----------------------------------- | :--------- | :----------------------------------- |
+| `content`          | `ReactNode`                          | —          | Card content                         |
+| `side`             | `'top' \| 'right' \| 'bottom' \| 'left'` | `"bottom"` | Preferred side                       |
+| `align`            | `'start' \| 'center' \| 'end'`       | `"center"` | Alignment along the edge             |
+| `sideOffset`       | `number`                             | `8`        | Gap between trigger and card (px)    |
+| `alignOffset`      | `number`                             | `0`        | Alignment shift (px)                 |
+| `openDelay`        | `number`                             | `200`      | Delay before opening (ms)            |
+| `closeDelay`       | `number`                             | `300`      | Delay before closing (ms)            |
+| `contentClassName` | `string`                             | —          | Extra class on the card container    |
+| `disabled`         | `boolean`                            | `false`    | Disable the hover card entirely      |
+| `showArrow`        | `boolean`                            | `true`     | Show the directional arrow           |
+| `className`        | `string`                             | —          | Extra class on the trigger wrapper   |

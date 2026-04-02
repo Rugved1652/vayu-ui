@@ -1,12 +1,36 @@
 // index.ts
-// Public API
+// Public API — compound component export
 
-export { default, default as CommandBox } from './CommandBox';
+import CommandBoxRoot from './CommandBox';
+import { CommandBoxEmpty } from './CommandBoxEmpty';
+import { CommandBoxGroup } from './CommandBoxGroup';
+import { CommandBoxInput } from './CommandBoxInput';
+import { CommandBoxItem } from './CommandBoxItem';
+import { CommandBoxList } from './CommandBoxList';
+import { CommandBoxOverlay } from './CommandBoxOverlay';
+import { CommandBoxSeparator } from './CommandBoxSeparator';
+
+const CommandBox = Object.assign(CommandBoxRoot, {
+  Input: CommandBoxInput,
+  List: CommandBoxList,
+  Item: CommandBoxItem,
+  Group: CommandBoxGroup,
+  Empty: CommandBoxEmpty,
+  Separator: CommandBoxSeparator,
+  Overlay: CommandBoxOverlay,
+});
+
+export { CommandBox as default };
+export { CommandBox };
 
 export type {
-  CommandBoxProps,
-  CommandBoxSize,
-  CommandBoxVariant,
-  CommandGroup,
-  CommandItem,
+  CommandBoxRootProps,
+  CommandBoxItemData,
+  CommandBoxInputProps,
+  CommandBoxListProps,
+  CommandBoxItemProps,
+  CommandBoxGroupProps,
+  CommandBoxEmptyProps,
+  CommandBoxSeparatorProps,
+  CommandBoxOverlayProps,
 } from './types';

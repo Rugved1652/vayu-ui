@@ -1,12 +1,13 @@
 // types.ts
-// Types
+// Types for CommandBox compound component
 
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, InputHTMLAttributes, ReactNode, RefObject } from 'react';
 
-export type CommandBoxVariant = 'default' | 'bordered' | 'elevated' | 'minimal';
-export type CommandBoxSize = 'small' | 'medium' | 'large';
+// ============================================================================
+// Item Data
+// ============================================================================
 
-export interface CommandItem {
+export interface CommandBoxItemData {
   id: string;
   title: string;
   description?: string;
@@ -15,51 +16,101 @@ export interface CommandItem {
   group?: string;
   disabled?: boolean;
   onSelect?: () => void;
+  data?: Record<string, unknown>;
 }
 
-export interface CommandGroup {
-  title: string;
-  items: CommandItem[];
+// ============================================================================
+// Context
+// ============================================================================
+
+export interface CommandBoxContextValue {
+  // Open state
+  open: boolean;
+  setOpen: (open: boolean) => void;
+
+  // IDs for ARIA
+  id: string;
+  inputId: string;
+  listboxId: string;
+
+  // Search/filtering
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+
+  // Item registration
+  registerItem: (item: CommandBoxItemData) => void;
+  unregisterItem: (id: string) => void;
+  itemsMap: React.MutableRefObject<Map<string, CommandBoxItemData>>;
+
+  // Filtered items (memoized)
+  filteredItems: CommandBoxItemData[];
+
+  // Keyboard navigation
+  highlightedIndex: number;
+  setHighlightedIndex: (index: number | ((prev: number) => number)) => void;
+  highlightedId: string | null;
+
+  // Selection
+  onSelect: (item: CommandBoxItemData) => void;
+
+  // Refs
+  inputRef: RefObject<HTMLInputElement | null>;
+  listRef: RefObject<HTMLDivElement | null>;
+  containerRef: RefObject<HTMLDivElement | null>;
+
+  // Configuration
+  filter: ((item: CommandBoxItemData, search: string) => number) | null;
+  showShortcuts: boolean;
+
+  // Loading
+  loading?: boolean;
 }
 
-export interface CommandBoxProps extends Omit<
-  HTMLAttributes<HTMLDivElement>,
-  'onSelect' | 'onClick'
-> {
-  items?: CommandItem[];
-  groups?: CommandGroup[];
-  placeholder?: string;
-  emptyText?: string;
-  variant?: CommandBoxVariant;
-  size?: CommandBoxSize;
+// ============================================================================
+// Component Props
+// ============================================================================
+
+export interface CommandBoxRootProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'> {
+  children: ReactNode;
   open?: boolean;
+  defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
-  onSelect?: (item: CommandItem) => void;
-  filter?: (value: string, search: string) => number;
-  contentClassName?: string;
-  inputClassName?: string;
-  disabled?: boolean;
+  onSelect?: (item: CommandBoxItemData) => void;
+  filter?: (item: CommandBoxItemData, search: string) => number;
   showShortcuts?: boolean;
+  loading?: boolean;
+}
+
+export interface CommandBoxInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
+  placeholder?: string;
+  icon?: ReactNode;
+}
+
+export interface CommandBoxListProps extends HTMLAttributes<HTMLDivElement> {
   maxHeight?: string;
 }
 
-export interface CommandBoxTriggerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onClick'> {
-  onClick: () => void;
-  disabled: boolean;
-  placeholder: string;
-  size: CommandBoxSize;
-  variant: CommandBoxVariant;
+export interface CommandBoxItemProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'onSelect'> {
+  id: string;
+  disabled?: boolean;
+  shortcut?: string[];
+  icon?: ReactNode;
+  description?: string;
+  title?: string;
 }
 
-export interface CommandBoxSearchInputProps {
-  inputRef: React.RefObject<HTMLInputElement | null>;
-  inputId: string;
-  value: string;
-  onChange: (value: string) => void;
-  onClose: () => void;
-  placeholder: string;
-  size: CommandBoxSize;
-  activeDescendantId?: string;
-  listboxId: string;
-  inputClassName?: string;
+export interface CommandBoxGroupProps extends HTMLAttributes<HTMLDivElement> {
+  label: string;
+}
+
+export interface CommandBoxEmptyProps extends HTMLAttributes<HTMLDivElement> {
+  children?: ReactNode;
+}
+
+export interface CommandBoxSeparatorProps extends HTMLAttributes<HTMLDivElement> {}
+
+export interface CommandBoxOverlayProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
 }

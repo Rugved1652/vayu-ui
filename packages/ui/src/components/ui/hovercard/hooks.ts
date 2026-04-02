@@ -24,7 +24,6 @@ interface HoverCardPositionReturn {
   position: Position;
   currentSide: HoverCardSide;
   arrowPosition: Position;
-  positioned: boolean;
 }
 
 export function useHoverCardPosition({
@@ -40,7 +39,6 @@ export function useHoverCardPosition({
   const [position, setPosition] = useState<Position>({ top: 0, left: 0 });
   const [currentSide, setCurrentSide] = useState(side);
   const [arrowPosition, setArrowPosition] = useState<Position>({ top: 0, left: 0 });
-  const [positioned, setPositioned] = useState(false);
 
   const reposition = useCallback(() => {
     if (!triggerRef.current || !contentRef.current) return;
@@ -127,7 +125,6 @@ export function useHoverCardPosition({
     }
 
     setPosition({ top, left });
-    setPositioned(true);
 
     // Arrow
     if (showArrow) {
@@ -179,12 +176,7 @@ export function useHoverCardPosition({
     };
   }, [isOpen, reposition]);
 
-  // Reset positioned state when card closes
-  useEffect(() => {
-    if (!isOpen) setPositioned(false);
-  }, [isOpen]);
-
-  return { position, currentSide, arrowPosition, positioned };
+  return { position, currentSide, arrowPosition };
 }
 
 // ------------------------------------------------------------------

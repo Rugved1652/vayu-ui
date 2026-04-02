@@ -1,55 +1,63 @@
 // hooks.ts
-// Logic: filtering and grouping
+// Context creation + useCommandBox hook + fuzzy search utility
 
-import { useMemo } from 'react';
-import type { CommandGroup, CommandItem } from './types';
+import { createContext, useContext } from 'react';
+import type { CommandBoxContextValue } from './types';
 
-interface FilteredItemsResult {
-  groupedItems: Record<string, CommandItem[]>;
-  flatItems: CommandItem[];
-}
+// ============================================================================
+// Context
+// ============================================================================
 
-export function useFilteredItems(
-  items: CommandItem[],
-  groups: CommandGroup[],
-  search: string,
-  filter: (value: string, search: string) => number,
-): FilteredItemsResult {
-  const allItems = useMemo(
-    () => [
-      ...items,
-      ...groups.flatMap((group) =>
-        group.items.map((item) => ({
-          ...item,
-          group: group.title,
-        })),
-      ),
-    ],
-    [items, groups],
-  );
+export const CommandBoxContext = createContext<CommandBoxContextValue | undefined>(undefined);
 
-  const filteredItems = useMemo(
-    () =>
-      allItems.filter((item) => {
-        if (search === '') return true;
-        return filter(item.title + ' ' + (item.description || ''), search) > 0;
-      }),
-    [allItems, search, filter],
-  );
+export const useCommandBox = (): CommandBoxContextValue => {
+  const context = useContext(CommandBoxContext);
+  if (!context) {
+    throw new Error('CommandBox compound components must be used within CommandBox');
+  }
+  return context;
+};
 
-  const groupedItems = useMemo(() => {
-    return filteredItems.reduce(
-      (acc, item) => {
-        const groupName = item.group || 'Commands';
-        if (!acc[groupName]) acc[groupName] = [];
-        acc[groupName].push(item);
-        return acc;
-      },
-      {} as Record<string, CommandItem[]>,
-    );
-  }, [filteredItems]);
+// ============================================================================
+// Fuzzy Search Utility
+// ============================================================================
 
-  const flatItems = useMemo(() => Object.values(groupedItems).flat(), [groupedItems]);
+/**
+ * Fuzzy search scoring algorithm.
+ * Returns a score (0-100) indicating match quality:
+ * - 100: Exact match
+ * - 80: Starts with query
+ * - 60: Contains query as substring
+ * - 20-40: Fuzzy character match (consecutive bonus)
+ * - 0: No match
+ */
+export function fuzzyScore(itemValue: string, search: string): number {
+  if (!search) return 1;
+  const lowerValue = itemValue.toLowerCase();
+  const lowerSearch = search.toLowerCase();
 
-  return { groupedItems, flatItems };
+  if (lowerValue === lowerSearch) return 100;
+  if (lowerValue.startsWith(lowerSearch)) return 80;
+  if (lowerValue.includes(lowerSearch)) return 60;
+
+  // Fuzzy character match — all characters must appear in order
+  let searchIndex = 0;
+  let consecutiveCount = 0;
+  let maxConsecutive = 0;
+
+  for (let i = 0; i < lowerValue.length && searchIndex < lowerSearch.length; i++) {
+    if (lowerValue[i] === lowerSearch[searchIndex]) {
+      searchIndex++;
+      consecutiveCount++;
+      maxConsecutive = Math.max(maxConsecutive, consecutiveCount);
+    } else {
+      consecutiveCount = 0;
+    }
+  }
+
+  if (searchIndex === lowerSearch.length) {
+    return 20 + Math.min(maxConsecutive * 5, 20);
+  }
+
+  return 0;
 }
