@@ -1,64 +1,178 @@
-// types.ts
-// Types
+import { createContext, type ReactNode } from "react";
 
-import { createContext, HTMLAttributes, ReactNode } from 'react';
+/* ------------------------------------------------------------------ */
+/*  Types                                                              */
+/* ------------------------------------------------------------------ */
 
-export type DraggableDirection = 'vertical' | 'horizontal' | 'grid';
+export type ContainersMap = Record<string, string[]>;
 
-export interface DraggableItem {
-  id: string;
-  [key: string]: unknown;
+export interface DraggableContextValue {
+  /* state */
+  items: string[];
+  activeId: string | null;
+  overIndex: number;
+  layout: "list" | "grid";
+  columns: number;
+  focusedId: string | null;
+  isKeyboardDragging: boolean;
+
+  /* multi-container */
+  isMultiContainer: boolean;
+  containers: ContainersMap;
+  containerItems: (containerId: string) => string[];
+  overContainerId: string | null;
+  sourceContainerId: string | null;
+
+  /* refs */
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  containerRefs: Map<string, HTMLDivElement>;
+  itemRefs: Map<string, HTMLDivElement>;
+
+  /* drag geometry — captured at drag start, used by Preview */
+  initialRect: { width: number; height: number } | null;
+  dragOffset: { x: number; y: number };
+
+  /* item/container registration */
+  registerItem: (value: string, el: HTMLDivElement) => void;
+  unregisterItem: (value: string) => void;
+  registerContainer: (id: string, el: HTMLDivElement) => void;
+  unregisterContainer: (id: string) => void;
+  /* pointer drag */
+  startDrag: (
+    id: string,
+    containerId: string | null,
+    offsetX?: number,
+    offsetY?: number
+  ) => void;
+  moveDrag: (x: number, y: number) => void;
+  endDrag: () => void;
+  cancelDrag: () => void;
+
+  /* keyboard drag */
+  keyboardGrab: (id: string) => void;
+  keyboardMove: (direction: "up" | "down" | "left" | "right") => void;
+  keyboardDrop: () => void;
+  keyboardCancel: () => void;
+
+  /* focus */
+  setFocusedId: (id: string | null) => void;
+
+  /* screen reader */
+  announce: (message: string) => void;
 }
 
-export interface DraggableListProps<T extends DraggableItem> extends Omit<
-  HTMLAttributes<HTMLDivElement>,
-  'children'
-> {
-  /** Items array — each must have a unique `id`. */
-  items: T[];
-  /** Called with the reordered array after a drop. */
-  onReorder: (items: T[]) => void;
-  /** Layout direction. */
-  direction?: DraggableDirection;
-  /** Grid columns (only used when `direction="grid"`). */
+/* ---- Root props ---- */
+export interface DraggableRootProps {
+  children: ReactNode;
+  items?: string[];
+  defaultItems?: string[];
+  onReorder?: (items: string[]) => void;
+  containers?: ContainersMap;
+  defaultContainers?: ContainersMap;
+  onContainersChange?: (containers: ContainersMap) => void;
+  className?: string;
+}
+
+/* ---- Container props ---- */
+export interface DraggableContainerProps {
+  children: ReactNode;
+  layout?: "list" | "grid";
   columns?: number;
-  /** Render each item. */
-  children: (
-    item: T,
-    props: {
-      dragHandleProps: DragHandleProps;
-      isDragging: boolean;
-      isOver: boolean;
-    },
-  ) => ReactNode;
+  containerId?: string;
+  "aria-label"?: string;
+  className?: string;
 }
 
-export interface DragHandleProps {
-  role: string;
-  tabIndex: number;
-  'aria-roledescription': string;
-  'aria-describedby': string;
-  'aria-pressed': boolean | undefined;
-  onKeyDown: (e: React.KeyboardEvent) => void;
-  onMouseDown: (e: React.MouseEvent) => void;
-  onTouchStart: (e: React.TouchEvent) => void;
+/* ---- Item props ---- */
+export interface DraggableItemProps {
+  children: ReactNode;
+  value: string;
+  className?: string;
+  disabled?: boolean;
 }
 
-export interface Ctx {
-  draggedId: string | null;
-  overId: string | null;
+/* ---- Handle props ---- */
+export interface DraggableHandleProps {
+  className?: string;
+  children?: ReactNode;
 }
 
-export const DraggableContext = createContext<Ctx>({
-  draggedId: null,
-  overId: null,
-});
+/* ---- Preview props ---- */
+export interface DraggablePreviewProps {
+  className?: string;
+  children?: ReactNode;
+}
 
-// Helpers
+/* ---- Placeholder props ---- */
+export interface DraggablePlaceholderProps {
+  className?: string;
+}
 
-export function reorder<T>(list: T[], from: number, to: number): T[] {
-  const result = [...list];
-  const [moved] = result.splice(from, 1);
-  result.splice(to, 0, moved);
+/* ---- DropIndicator props ---- */
+export interface DraggableDropIndicatorProps {
+  className?: string;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Item-level context (Handle → Item communication)                   */
+/* ------------------------------------------------------------------ */
+
+export interface DraggableItemContextValue {
+  hasHandle: React.MutableRefObject<boolean>;
+  disabled: boolean;
+  value: string;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Utilities                                                          */
+/* ------------------------------------------------------------------ */
+
+export function arrayMove<T>(arr: T[], fromIndex: number, toIndex: number): T[] {
+  const result = arr.slice();
+  const [item] = result.splice(fromIndex, 1);
+  result.splice(toIndex, 0, item);
   return result;
 }
+
+export function getClosestIndex(
+  x: number,
+  y: number,
+  itemRefs: Map<string, HTMLDivElement>,
+  items: string[],
+  layout: "list" | "grid",
+  activeId: string | null
+): number {
+  let closest = -1;
+  let minDist = Infinity;
+  items.forEach((id, index) => {
+    if (id === activeId) return;
+    const el = itemRefs.get(id);
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dist = layout === "grid" ? Math.hypot(x - cx, y - cy) : Math.abs(y - cy);
+    if (dist < minDist) { minDist = dist; closest = index; }
+  });
+  return closest >= 0 ? closest : items.indexOf(activeId ?? "");
+}
+
+export function getContainerAtPoint(
+  x: number,
+  y: number,
+  containerRefs: Map<string, HTMLDivElement>
+): string | null {
+  for (const [id, el] of containerRefs) {
+    const rect = el.getBoundingClientRect();
+    if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) return id;
+  }
+  return null;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Contexts                                                           */
+/* ------------------------------------------------------------------ */
+
+export const DraggableContext = createContext<DraggableContextValue | null>(null);
+export const ContainerIdContext = createContext<string | null>(null);
+export const DraggableItemContext = createContext<DraggableItemContextValue | null>(null);

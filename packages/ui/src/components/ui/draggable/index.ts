@@ -1,10 +1,43 @@
-// index.ts
-// Public API
+import DraggableRoot from "./Draggable";
+import { DraggableContainer } from "./DraggableContainer";
+import { DraggableItem } from "./DraggableItem";
+import { DraggableHandle } from "./DraggableHandle";
+import { DraggablePreview } from "./DraggablePreview";
+import { DraggablePlaceholder } from "./DraggablePlaceholder";
+import { DraggableDropIndicator } from "./DraggableDropIndicator";
 
-export { DraggableList, DragHandle } from './Draggable';
+import type {
+  DraggableRootProps,
+  DraggableContainerProps,
+  DraggableItemProps,
+  DraggableHandleProps,
+  DraggablePreviewProps,
+  DraggablePlaceholderProps,
+  DraggableDropIndicatorProps,
+  DraggableContextValue,
+  ContainersMap,
+} from "./types";
+
+const Draggable = Object.assign(DraggableRoot, {
+  Container: DraggableContainer,
+  Item: DraggableItem,
+  Handle: DraggableHandle,
+  Preview: DraggablePreview,
+  Placeholder: DraggablePlaceholder,
+  DropIndicator: DraggableDropIndicator,
+});
+
+export { Draggable };
+export default Draggable;
+
 export type {
-  DraggableDirection,
-  DraggableItem,
-  DraggableListProps,
-  DragHandleProps,
-} from './types';
+  DraggableRootProps,
+  DraggableContainerProps,
+  DraggableItemProps,
+  DraggableHandleProps,
+  DraggablePreviewProps,
+  DraggablePlaceholderProps,
+  DraggableDropIndicatorProps,
+  DraggableContextValue,
+  ContainersMap,
+};

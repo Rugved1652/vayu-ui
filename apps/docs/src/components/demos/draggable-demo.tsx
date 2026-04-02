@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { DraggableList, DragHandle, type DraggableItem } from 'vayu-ui';
+import { useState } from 'react';
+import { Draggable, type ContainersMap } from 'vayu-ui';
 import { Mail, Image, FileText, Music, Video, Archive, Star, Heart, Zap } from 'lucide-react';
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -16,13 +16,7 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   zap: Zap,
 };
 
-type FileItem = DraggableItem & {
-  title: string;
-  subtitle: string;
-  icon: string;
-};
-
-const listItems: FileItem[] = [
+const listItems = [
   { id: '1', title: 'Inbox', subtitle: '12 unread', icon: 'mail' },
   { id: '2', title: 'Photos', subtitle: '3,429 items', icon: 'image' },
   { id: '3', title: 'Documents', subtitle: '156 files', icon: 'document' },
@@ -31,7 +25,7 @@ const listItems: FileItem[] = [
   { id: '6', title: 'Archives', subtitle: '24 files', icon: 'archive' },
 ];
 
-const gridItems: FileItem[] = [
+const gridItems = [
   { id: 'g1', title: 'Inbox', subtitle: '12', icon: 'mail' },
   { id: 'g2', title: 'Photos', subtitle: '3,429', icon: 'image' },
   { id: 'g3', title: 'Docs', subtitle: '156', icon: 'document' },
@@ -43,78 +37,180 @@ const gridItems: FileItem[] = [
   { id: 'g9', title: 'Quick', subtitle: '5', icon: 'zap' },
 ];
 
-export default function DraggableDemo() {
-  const [list, setList] = useState(listItems);
-  const [grid, setGrid] = useState(gridItems);
+/* ------------------------------------------------------------------ */
+/*  List Demo                                                          */
+/* ------------------------------------------------------------------ */
 
-  const handleListReorder = useCallback((items: FileItem[]) => setList(items), []);
-  const handleGridReorder = useCallback((items: FileItem[]) => setGrid(items), []);
+function DraggableListDemo() {
+  const [items, setItems] = useState(listItems);
+
+  const handleReorder = (newOrder: string[]) => {
+    setItems((prev) => newOrder.map((id) => prev.find((i) => i.id === id)!));
+  };
 
   return (
-    <div className="not-prose flex flex-col gap-10 w-full">
-      {/* ── List mode ── */}
-      <div className="max-w-md">
-        <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
-          List — Drag or keyboard (Space → Arrow ↑↓ → Space)
-        </p>
+    <div className="max-w-md">
+      <p className="text-xs font-secondary text-muted-content mb-3">
+        List — Drag or keyboard (Space → Arrow ↑↓ → Space)
+      </p>
 
-        <DraggableList items={list} onReorder={handleListReorder} aria-label="File categories">
-          {(item, { dragHandleProps }) => {
+      <Draggable items={items.map((i) => i.id)} onReorder={handleReorder}>
+        <Draggable.Container layout="list">
+          {items.map((item) => {
             const Icon = ICONS[item.icon] ?? FileText;
             return (
-              <div className="flex items-center gap-3 p-3 bg-white dark:bg-ground-900 border-2 border-ground-200 dark:border-ground-800 rounded-lg hover:border-ground-300 dark:hover:border-ground-700 transition-colors">
-                <DragHandle handleProps={dragHandleProps} />
-                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary-50 dark:bg-primary-900/20">
-                  <Icon className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+              <Draggable.Item key={item.id} value={item.id}>
+                <div className="flex items-center gap-3 p-3 bg-surface border border-border rounded-surface hover:border-brand/30 transition-colors">
+                  <Draggable.Handle />
+                  <div className="flex items-center justify-center w-9 h-9 rounded-control bg-brand/10">
+                    <Icon className="w-4 h-4 text-brand" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-secondary font-semibold text-surface-content truncate">
+                      {item.title}
+                    </p>
+                    <p className="text-xs font-secondary text-muted-content">
+                      {item.subtitle}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-secondary font-semibold text-ground-900 dark:text-ground-100 truncate">
+              </Draggable.Item>
+            );
+          })}
+        </Draggable.Container>
+
+        <Draggable.Preview />
+        <Draggable.DropIndicator />
+      </Draggable>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Grid Demo                                                          */
+/* ------------------------------------------------------------------ */
+
+function DraggableGridDemo() {
+  const [items, setItems] = useState(gridItems);
+
+  const handleReorder = (newOrder: string[]) => {
+    setItems((prev) => newOrder.map((id) => prev.find((i) => i.id === id)!));
+  };
+
+  return (
+    <div>
+      <p className="text-xs font-secondary text-muted-content mb-3">
+        Grid — Drag or keyboard (Space → Arrow ←→↑↓ → Space)
+      </p>
+
+      <Draggable items={items.map((i) => i.id)} onReorder={handleReorder}>
+        <Draggable.Container layout="grid" columns={3}>
+          {items.map((item) => {
+            const Icon = ICONS[item.icon] ?? FileText;
+            return (
+              <Draggable.Item key={item.id} value={item.id}>
+                <div className="flex flex-col items-center gap-2 p-4 bg-surface border border-border rounded-surface hover:border-brand/30 transition-colors">
+                  <div className="flex items-center justify-between w-full">
+                    <Draggable.Handle />
+                    <span className="text-[10px] font-secondary text-muted-content">
+                      {item.subtitle}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center w-10 h-10 rounded-control bg-brand/10">
+                    <Icon className="w-5 h-5 text-brand" />
+                  </div>
+                  <p className="text-xs font-secondary font-semibold text-surface-content">
                     {item.title}
                   </p>
-                  <p className="text-xs font-secondary text-ground-500 dark:text-ground-400">
-                    {item.subtitle}
-                  </p>
                 </div>
-              </div>
+              </Draggable.Item>
             );
-          }}
-        </DraggableList>
-      </div>
+          })}
+        </Draggable.Container>
 
-      {/* ── Grid mode ── */}
-      <div>
-        <p className="text-xs font-secondary text-ground-500 dark:text-ground-400 mb-3">
-          Grid — Drag or keyboard (Space → Arrow ←→↑↓ → Space)
-        </p>
+        <Draggable.Preview />
+        <Draggable.DropIndicator />
+      </Draggable>
+    </div>
+  );
+}
 
-        <DraggableList
-          items={grid}
-          onReorder={handleGridReorder}
-          direction="grid"
-          columns={3}
-          aria-label="Grid items"
-        >
-          {(item, { dragHandleProps }) => {
-            const Icon = ICONS[item.icon] ?? FileText;
-            return (
-              <div className="flex flex-col items-center gap-2 p-4 bg-white dark:bg-ground-900 border-2 border-ground-200 dark:border-ground-800 rounded-xl hover:border-ground-300 dark:hover:border-ground-700 transition-colors">
-                <div className="flex items-center justify-between w-full">
-                  <DragHandle handleProps={dragHandleProps} />
-                  <span className="text-[10px] font-secondary text-ground-400">
-                    {item.subtitle}
-                  </span>
-                </div>
-                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/20">
-                  <Icon className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                </div>
-                <p className="text-xs font-secondary font-semibold text-ground-900 dark:text-ground-100">
-                  {item.title}
-                </p>
-              </div>
-            );
-          }}
-        </DraggableList>
-      </div>
+/* ------------------------------------------------------------------ */
+/*  Cross-List Demo                                                    */
+/* ------------------------------------------------------------------ */
+
+function DraggableCrossListDemo() {
+  const [containers, setContainers] = useState<ContainersMap>({
+    todo: ['t1', 't2', 't3'],
+    done: ['t4', 't5'],
+  });
+
+  const taskMap: Record<string, string> = {
+    t1: 'Write unit tests',
+    t2: 'Review PR #42',
+    t3: 'Update changelog',
+    t4: 'Setup CI pipeline',
+    t5: 'Design token audit',
+  };
+
+  return (
+    <div className="max-w-2xl">
+      <p className="text-xs font-secondary text-muted-content mb-3">
+        Cross-list — Drag items between columns
+      </p>
+
+      <Draggable containers={containers} onContainersChange={setContainers}>
+        <div className="grid grid-cols-2 gap-6">
+          <div className="bg-canvas rounded-surface p-4 border border-border">
+            <h3 className="text-sm font-secondary font-bold text-surface-content mb-3 uppercase tracking-wide">
+              To Do ({containers.todo.length})
+            </h3>
+            <Draggable.Container containerId="todo" layout="list" aria-label="To Do items" className="min-h-[80px]">
+              {containers.todo.map((id) => (
+                <Draggable.Item key={id} value={id}>
+                  <div className="flex items-center gap-3 p-3 bg-surface rounded-surface border border-border">
+                    <Draggable.Handle />
+                    <span className="text-sm font-secondary text-surface-content">{taskMap[id]}</span>
+                  </div>
+                </Draggable.Item>
+              ))}
+            </Draggable.Container>
+          </div>
+
+          <div className="bg-canvas rounded-surface p-4 border border-border">
+            <h3 className="text-sm font-secondary font-bold text-surface-content mb-3 uppercase tracking-wide">
+              Done ({containers.done.length})
+            </h3>
+            <Draggable.Container containerId="done" layout="list" aria-label="Done items" className="min-h-[80px]">
+              {containers.done.map((id) => (
+                <Draggable.Item key={id} value={id}>
+                  <div className="flex items-center gap-3 p-3 bg-surface rounded-surface border border-border">
+                    <Draggable.Handle />
+                    <span className="text-sm font-secondary text-surface-content">{taskMap[id]}</span>
+                  </div>
+                </Draggable.Item>
+              ))}
+            </Draggable.Container>
+          </div>
+        </div>
+
+        <Draggable.Preview />
+        <Draggable.DropIndicator />
+      </Draggable>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Default Export                                                     */
+/* ------------------------------------------------------------------ */
+
+export default function DraggableDemo() {
+  return (
+    <div className="not-prose flex flex-col gap-10 w-full">
+      <DraggableListDemo />
+      <DraggableGridDemo />
+      <DraggableCrossListDemo />
     </div>
   );
 }
