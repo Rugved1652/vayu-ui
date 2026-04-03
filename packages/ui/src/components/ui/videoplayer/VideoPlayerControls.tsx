@@ -1,36 +1,54 @@
-// controls.tsx
-// UI: Controls container
+"use client";
 
-'use client';
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { clsx } from "clsx";
+import { useVideoPlayer } from "./VideoPlayer";
+import type { VideoPlayerControlsProps } from "./types";
 
-import { clsx } from 'clsx';
-import { forwardRef } from 'react';
+export const VideoPlayerControls = forwardRef<HTMLDivElement, VideoPlayerControlsProps>(
+  ({ children, autoHide = true, autoHideDelay = 3000, className, ...props }, ref) => {
+    const { isPlaying } = useVideoPlayer();
+    const [visible, setVisible] = useState(true);
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-import { useVideoPlayer } from './VideoPlayer';
-import type { ControlsProps } from './types';
+    const resetTimer = useCallback(() => {
+      setVisible(true);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (autoHide && isPlaying) {
+        timeoutRef.current = setTimeout(() => setVisible(false), autoHideDelay);
+      }
+    }, [autoHide, autoHideDelay, isPlaying]);
 
-export const Controls = forwardRef<HTMLDivElement, ControlsProps>(
-  ({ className, children, ...props }, ref) => {
-    const { showControls, setIsHoveringControls } = useVideoPlayer();
+    useEffect(() => {
+      if (isPlaying && autoHide) {
+        resetTimer();
+      } else {
+        setVisible(true);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      }
+      return () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      };
+    }, [isPlaying, autoHide, resetTimer]);
 
     return (
       <div
         ref={ref}
+        role="group"
+        aria-label="Video controls"
         className={clsx(
-          'absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/90 via-black/60 to-transparent transition-all duration-300',
-          showControls
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-2 pointer-events-none',
-          className,
+          "transition-opacity duration-300",
+          !visible && autoHide && isPlaying && "opacity-0 pointer-events-none",
+          className
         )}
-        onMouseEnter={() => setIsHoveringControls(true)}
-        onMouseLeave={() => setIsHoveringControls(false)}
+        onMouseMove={resetTimer}
+        onTouchStart={resetTimer}
         {...props}
       >
-        <div className="p-4 space-y-2">{children}</div>
+        {children}
       </div>
     );
-  },
+  }
 );
 
-Controls.displayName = 'VideoPlayer.Controls';
+VideoPlayerControls.displayName = "VideoPlayer.Controls";

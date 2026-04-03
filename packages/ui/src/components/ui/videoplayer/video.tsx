@@ -1,31 +1,40 @@
-// video.tsx
-// UI: Video element wrapper
+"use client";
 
-'use client';
+import { forwardRef } from "react";
+import { clsx } from "clsx";
+import { useVideoPlayer } from "./VideoPlayer";
+import type { VideoPlayerVideoProps } from "./types";
+import { isHLS } from "./utils";
 
-import { clsx } from 'clsx';
-import { forwardRef } from 'react';
-
-import { useVideoPlayer } from './VideoPlayer';
-import type { VideoProps } from './types';
-
-export const Video = forwardRef<HTMLVideoElement, VideoProps>(
-  ({ src, poster, className, ...props }, _ref) => {
-    const { videoRef, togglePlay } = useVideoPlayer();
+export const VideoPlayerVideo = forwardRef<HTMLDivElement, VideoPlayerVideoProps>(
+  ({ className, poster, objectFit = "contain", ...props }, ref) => {
+    const { videoRef, togglePlay, currentTrack, registerVideo } = useVideoPlayer();
 
     return (
-      <video
-        ref={videoRef}
-        src={src}
-        poster={poster}
-        className={clsx('w-full h-full', className)}
+      <div
+        ref={ref}
+        className={clsx("relative w-full aspect-video bg-black rounded-surface overflow-hidden", className)}
         onClick={togglePlay}
+        role="presentation"
         {...props}
       >
-        Your browser does not support the video tag.
-      </video>
+        <video
+          ref={(el: HTMLVideoElement | null) => {
+            if (videoRef) (videoRef as React.MutableRefObject<HTMLVideoElement | null>).current = el;
+            registerVideo(el);
+          }}
+          src={currentTrack?.src && !isHLS(currentTrack.src) ? currentTrack.src : undefined}
+          poster={poster || currentTrack?.poster || undefined}
+          playsInline
+          className={clsx(
+            "w-full h-full",
+            objectFit === "contain" ? "object-contain" : "object-cover"
+          )}
+          aria-label="Video player"
+        />
+      </div>
     );
-  },
+  }
 );
 
-Video.displayName = 'VideoPlayer.Video';
+VideoPlayerVideo.displayName = "VideoPlayer.Video";

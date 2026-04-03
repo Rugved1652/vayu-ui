@@ -1,117 +1,224 @@
-// progress.tsx
-// UI: Progress bar with seeking + hover time preview
+"use client";
 
-'use client';
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { clsx } from "clsx";
+import { useVideoPlayer } from "./VideoPlayer";
+import { formatTime as formatTimeUtil } from "./utils";
+import type {
+  VideoPlayerProgressProps,
+  VideoPlayerSeekProps,
+  VideoPlayerTimeProps,
+  VideoPlayerBufferProps,
+} from "./types";
 
-import { clsx } from 'clsx';
-import { forwardRef, HTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
+// ============================================================================
+// Progress (read-only)
+// ============================================================================
 
-import { useVideoPlayer } from './VideoPlayer';
-import { formatTime } from './utils';
-import type { ProgressBarProps } from './types';
-
-export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
+export const VideoPlayerProgress = forwardRef<HTMLDivElement, VideoPlayerProgressProps>(
   ({ showBuffer = true, className, ...props }, ref) => {
-    const { currentTime, duration, buffered, seek } = useVideoPlayer();
-    const [isSeeking, setIsSeeking] = useState(false);
-    const [hoverTime, setHoverTime] = useState<number | null>(null);
-    const progressRef = useRef<HTMLDivElement>(null);
-
+    const { currentTime, duration, buffered } = useVideoPlayer();
     const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
     const bufferProgress = duration > 0 ? (buffered / duration) * 100 : 0;
 
-    const updateSeek = useCallback(
+    return (
+      <div
+        ref={ref}
+        role="progressbar"
+        aria-label="Video progress"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(progress)}
+        className={clsx("relative h-2 w-full rounded-full bg-muted overflow-hidden", className)}
+        {...props}
+      >
+        {showBuffer && (
+          <div
+            className="absolute h-full bg-muted-content/30 transition-all"
+            style={{ width: `${bufferProgress}%` }}
+          />
+        )}
+        <div
+          className="absolute h-full bg-brand transition-all"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+    );
+  }
+);
+
+VideoPlayerProgress.displayName = "VideoPlayer.Progress";
+
+// ============================================================================
+// Seek (interactive slider)
+// ============================================================================
+
+export const VideoPlayerSeek = forwardRef<HTMLDivElement, VideoPlayerSeekProps>(
+  ({ showBuffer = true, showThumb = true, className, ...props }, ref) => {
+    const {
+      currentTime, duration, buffered, seek,
+      seekForward, seekBackward, setSeeking, isSeeking,
+    } = useVideoPlayer();
+
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [localProgress, setLocalProgress] = useState<number | null>(null);
+
+    const progress = localProgress ?? (duration > 0 ? (currentTime / duration) * 100 : 0);
+    const bufferProgress = duration > 0 ? (buffered / duration) * 100 : 0;
+
+    const handleSeek = useCallback(
       (clientX: number) => {
-        const rect = progressRef.current?.getBoundingClientRect();
-        if (!rect) return;
-        const pos = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-        seek(pos * duration);
+        if (!containerRef.current || duration === 0) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+        seek(percent * duration);
+        setLocalProgress(null);
       },
-      [seek, duration],
+      [duration, seek]
     );
 
     const handleMouseDown = useCallback(
       (e: React.MouseEvent) => {
-        setIsSeeking(true);
-        updateSeek(e.clientX);
+        e.preventDefault();
+        setSeeking(true);
+        handleSeek(e.clientX);
+
+        const handleMouseMove = (e: MouseEvent) => {
+          if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            setLocalProgress(percent * 100);
+          }
+        };
+
+        const handleMouseUp = (e: MouseEvent) => {
+          handleSeek(e.clientX);
+          setSeeking(false);
+          document.removeEventListener("mousemove", handleMouseMove);
+          document.removeEventListener("mouseup", handleMouseUp);
+        };
+
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
       },
-      [updateSeek],
+      [handleSeek, setSeeking]
     );
 
-    const handleMouseMove = useCallback(
-      (e: React.MouseEvent) => {
-        const rect = progressRef.current?.getBoundingClientRect();
-        if (rect) {
-          setHoverTime(((e.clientX - rect.left) / rect.width) * duration);
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        switch (e.key) {
+          case "ArrowRight": e.preventDefault(); seekForward(); break;
+          case "ArrowLeft": e.preventDefault(); seekBackward(); break;
+          case "Home": e.preventDefault(); seek(0); break;
+          case "End": e.preventDefault(); seek(duration); break;
         }
-        if (isSeeking) updateSeek(e.clientX);
       },
-      [isSeeking, updateSeek, duration],
+      [seekForward, seekBackward, seek, duration]
     );
-
-    const handleMouseLeave = useCallback(() => setHoverTime(null), []);
-
-    useEffect(() => {
-      if (!isSeeking) return;
-      const up = () => setIsSeeking(false);
-      document.addEventListener('mouseup', up);
-      return () => document.removeEventListener('mouseup', up);
-    }, [isSeeking]);
 
     return (
-      <div ref={ref} className={clsx('group/progress', className)} {...props}>
+      <div
+        ref={containerRef}
+        role="slider"
+        aria-label="Seek"
+        aria-valuemin={0}
+        aria-valuemax={Math.floor(duration)}
+        aria-valuenow={Math.floor(currentTime)}
+        aria-valuetext={`${Math.floor(currentTime)} of ${Math.floor(duration)}`}
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        onMouseDown={handleMouseDown}
+        className={clsx(
+          "relative h-2 w-full rounded-full bg-muted cursor-pointer group",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
+          className
+        )}
+        {...props}
+      >
+        {showBuffer && (
+          <div
+            className="absolute h-full bg-muted-content/30 rounded-full transition-all"
+            style={{ width: `${bufferProgress}%` }}
+          />
+        )}
         <div
-          ref={progressRef}
-          role="slider"
-          tabIndex={0}
-          aria-label="Seek video"
-          aria-valuemin={0}
-          aria-valuemax={duration}
-          aria-valuenow={currentTime}
-          aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
-          className="relative h-1.5 bg-white/20 rounded-full cursor-pointer group-hover/progress:h-2 transition-all"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-        >
-          {showBuffer && (
-            <div
-              className="absolute inset-y-0 left-0 bg-white/30 rounded-full transition-all"
-              style={{ width: `${bufferProgress}%` }}
-              aria-hidden="true"
-            />
+          className={clsx(
+            "absolute h-full bg-brand rounded-full transition-all",
+            isSeeking && "transition-none"
           )}
-
+          style={{ width: `${progress}%` }}
+        />
+        {showThumb && (
           <div
-            className="absolute inset-y-0 left-0 bg-primary-500 rounded-full transition-all"
-            style={{ width: `${progress}%` }}
-            aria-hidden="true"
+            className={clsx(
+              "absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full",
+              "bg-brand border-2 border-elevated shadow-sm",
+              "opacity-0 group-hover:opacity-100 group-focus:opacity-100",
+              "transition-opacity",
+              isSeeking && "opacity-100"
+            )}
+            style={{ left: `${progress}%`, transform: "translate(-50%, -50%)" }}
           />
-
-          <div
-            className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg opacity-0 group-hover/progress:opacity-100 transition-all"
-            style={{
-              left: `${progress}%`,
-              transform: 'translate(-50%, -50%)',
-            }}
-            aria-hidden="true"
-          />
-
-          {hoverTime !== null && (
-            <div
-              className="absolute -top-8 -translate-x-1/2 bg-black/90 text-white text-xs font-secondary px-2 py-1 rounded pointer-events-none"
-              style={{
-                left: `${(hoverTime / duration) * 100}%`,
-              }}
-              aria-hidden="true"
-            >
-              {formatTime(hoverTime)}
-            </div>
-          )}
-        </div>
+        )}
       </div>
     );
-  },
+  }
 );
 
-ProgressBar.displayName = 'VideoPlayer.ProgressBar';
+VideoPlayerSeek.displayName = "VideoPlayer.Seek";
+
+// ============================================================================
+// Time display
+// ============================================================================
+
+export const VideoPlayerTime = forwardRef<HTMLDivElement, VideoPlayerTimeProps>(
+  ({ showRemaining = false, className, ...props }, ref) => {
+    const { currentTime, duration, formatTime } = useVideoPlayer();
+    const remaining = duration - currentTime;
+
+    return (
+      <div
+        ref={ref}
+        className={clsx("flex items-center gap-1 text-xs text-muted-content font-mono select-none", className)}
+        {...props}
+      >
+        <span>{formatTime(currentTime)}</span>
+        <span aria-hidden="true">/</span>
+        <span>{showRemaining ? `-${formatTime(remaining)}` : formatTime(duration)}</span>
+      </div>
+    );
+  }
+);
+
+VideoPlayerTime.displayName = "VideoPlayer.Time";
+
+// ============================================================================
+// Buffer bar
+// ============================================================================
+
+export const VideoPlayerBuffer = forwardRef<HTMLDivElement, VideoPlayerBufferProps>(
+  ({ className, ...props }, ref) => {
+    const { buffered, duration } = useVideoPlayer();
+    const bufferPercent = duration > 0 ? (buffered / duration) * 100 : 0;
+
+    return (
+      <div
+        ref={ref}
+        role="progressbar"
+        aria-label="Buffered"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.floor(bufferPercent)}
+        className={clsx("h-1 w-full rounded-full bg-muted overflow-hidden", className)}
+        {...props}
+      >
+        <div
+          className="h-full bg-muted-content/50 transition-all"
+          style={{ width: `${bufferPercent}%` }}
+        />
+      </div>
+    );
+  }
+);
+
+VideoPlayerBuffer.displayName = "VideoPlayer.Buffer";
