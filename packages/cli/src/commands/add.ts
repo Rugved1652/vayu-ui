@@ -103,7 +103,9 @@ Examples:
       }
 
       // Collect npm deps
-      allDependencies.push(...current.dependencies)
+      if (current.dependencies) {
+        allDependencies.push(...current.dependencies)
+      }
     }
 
     // ── 4. Install npm dependencies (deduped) ─────────────────────────────

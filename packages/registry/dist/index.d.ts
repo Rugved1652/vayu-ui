@@ -1,3 +1,18 @@
+type ItemType = 'component' | 'hook' | 'template';
+type RegistryItem = {
+    name: string;
+    slug: string;
+    type: ItemType;
+    category: string;
+    since?: string;
+    description: string;
+    targetPath: string;
+    fileName: string;
+    dependencies?: string[];
+    registryDependencies?: string[];
+    tags?: string[];
+    internal?: boolean;
+};
 type VayuComponentDoc = {
     component: string;
     slug: string;
@@ -94,9 +109,11 @@ type ComponentExample = {
     description?: string;
     code: string;
 };
-type Registry = Record<string, VayuComponentDoc>;
-declare function findItem(slug: string): VayuComponentDoc | undefined;
-declare function findWithDependencies(slug: string): VayuComponentDoc[];
+type Registry = Record<string, RegistryItem>;
+type DetailedRegistry = Record<string, VayuComponentDoc>;
 declare const registry: Registry;
+declare function findItem(slug: string): RegistryItem | undefined;
+declare function findWithDependencies(slug: string): RegistryItem[];
+declare const allRegistryItems: RegistryItem[];
 
-export { type ComponentExample, type ComponentProp, type ComponentVariant, type Registry, type VayuComponentDoc, findItem, findWithDependencies, registry };
+export { type ComponentExample, type ComponentProp, type ComponentVariant, type DetailedRegistry, type ItemType, type Registry, type RegistryItem, type VayuComponentDoc, allRegistryItems, findItem, findWithDependencies, registry };

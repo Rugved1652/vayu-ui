@@ -192,7 +192,9 @@ Examples:
           results.push({item, status: 'updated'})
 
           // Collect new deps
-          allNewDeps.push(...item.dependencies)
+          if (item.dependencies) {
+            allNewDeps.push(...item.dependencies)
+          }
         } catch (error) {
           this.log(chalk.red('  ✖ ') + chalk.white(item.fileName) + chalk.dim(` — ${(error as Error).message}`))
           results.push({item, status: 'error', error: (error as Error).message})

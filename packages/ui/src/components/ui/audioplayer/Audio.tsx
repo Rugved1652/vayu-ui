@@ -1,6 +1,3 @@
-// audioplayer.tsx
-// Composition: UI + logic
-
 'use client';
 
 import { clsx } from 'clsx';
@@ -25,16 +22,21 @@ import type {
 import { GLOBAL_PLAY_EVENT } from './utils';
 
 // ============================================================================
-// Types & Context
+// Context
 // ============================================================================
 
-type AudioPlayerContextValue = AudioPlayerState & AudioPlayerActions & AudioPlayerGetters;
+type AudioPlayerContextValue = AudioPlayerState &
+  AudioPlayerActions &
+  AudioPlayerGetters;
 
-const AudioPlayerContext = createContext<AudioPlayerContextValue | undefined>(undefined);
+const AudioPlayerContext = createContext<AudioPlayerContextValue | undefined>(
+  undefined,
+);
 
 export const useAudioPlayer = (): AudioPlayerContextValue => {
   const ctx = useContext(AudioPlayerContext);
-  if (!ctx) throw new Error('AudioPlayer components must be inside <AudioPlayer>.');
+  if (!ctx)
+    throw new Error('AudioPlayer components must be inside <AudioPlayer>.');
   return ctx;
 };
 
@@ -162,7 +164,10 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
 
     const seek = useCallback((time: number) => {
       if (audioRef.current) {
-        audioRef.current.currentTime = Math.max(0, Math.min(time, audioRef.current.duration || 0));
+        audioRef.current.currentTime = Math.max(
+          0,
+          Math.min(time, audioRef.current.duration || 0),
+        );
       }
     }, []);
 
@@ -220,9 +225,40 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
         else if (loopPlaylist) playTrack(playlist.length - 1);
         else seek(0);
       }
-    }, [currentTrackIndex, playlist.length, loopPlaylist, currentTime, seek, playTrack]);
+    }, [
+      currentTrackIndex,
+      playlist.length,
+      loopPlaylist,
+      currentTime,
+      seek,
+      playTrack,
+    ]);
 
-    const getTrack = useCallback((idx: number) => playlist[idx] || null, [playlist]);
+    const getTrack = useCallback(
+      (idx: number) => playlist[idx] || null,
+      [playlist],
+    );
+
+    // ── RAF Time Polling (smooth progress) ──
+    useEffect(() => {
+      if (!isPlaying) return;
+      let rafId: number;
+      const tick = () => {
+        if (audioRef.current) {
+          setCurrentTime(audioRef.current.currentTime);
+          if (audioRef.current.buffered.length > 0) {
+            setBuffered(
+              audioRef.current.buffered.end(
+                audioRef.current.buffered.length - 1,
+              ),
+            );
+          }
+        }
+        rafId = requestAnimationFrame(tick);
+      };
+      rafId = requestAnimationFrame(tick);
+      return () => cancelAnimationFrame(rafId);
+    }, [isPlaying]);
 
     // ── Audio Events ──
     useEffect(() => {
@@ -233,7 +269,9 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
         setIsPlaying(true);
         setHasEnded(false);
         if (!allowMultiple) {
-          window.dispatchEvent(new CustomEvent(GLOBAL_PLAY_EVENT, { detail: { id: playerId } }));
+          window.dispatchEvent(
+            new CustomEvent(GLOBAL_PLAY_EVENT, { detail: { id: playerId } }),
+          );
         }
         onPlay?.();
         setError(null);
@@ -262,7 +300,8 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
         setIsMuted(audio.muted);
         setPlaybackRateState(audio.playbackRate);
       };
-      const handleError = (e: Event) => setError(new Error('Playback error occurred.'));
+      const handleError = () =>
+        setError(new Error('Playback error occurred.'));
 
       audio.addEventListener('play', handlePlay);
       audio.addEventListener('pause', handlePause);
@@ -292,46 +331,51 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
     }, [playerId, allowMultiple, autoPlayNext, next, onPlay, onPause, onEnded]);
 
     // ── HLS & Source Management ──
-    const initHls = useCallback(async (src: string, audio: HTMLAudioElement) => {
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
-        hlsRef.current = null;
-      }
-
-      if (src.endsWith('.m3u8')) {
-        try {
-          const HlsModule = (await import('hls.js')).default;
-          if (HlsModule.isSupported()) {
-            const hls = new HlsModule();
-            hlsRef.current = hls;
-            hls.loadSource(src);
-            hls.attachMedia(audio);
-            hls.on(HlsModule.Events.ERROR, (_evt, data) => {
-              if (data.fatal) {
-                switch (data.type) {
-                  case HlsModule.ErrorTypes.NETWORK_ERROR:
-                    hls.startLoad();
-                    break;
-                  case HlsModule.ErrorTypes.MEDIA_ERROR:
-                    hls.recoverMediaError();
-                    break;
-                  default:
-                    hls.destroy();
-                    setError(new Error('HLS Fatal playback error'));
-                }
-              }
-            });
-          } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-            audio.src = src;
-          }
-        } catch (err) {
-          console.error('Failed to load hls.js', err);
-          setError(new Error('Failed to load HLS playback support.'));
+    const initHls = useCallback(
+      async (src: string, audio: HTMLAudioElement) => {
+        if (hlsRef.current) {
+          hlsRef.current.destroy();
+          hlsRef.current = null;
         }
-      } else {
-        audio.src = src;
-      }
-    }, []);
+
+        if (src.endsWith('.m3u8')) {
+          try {
+            const HlsModule = (await import('hls.js')).default;
+            if (HlsModule.isSupported()) {
+              const hls = new HlsModule();
+              hlsRef.current = hls;
+              hls.loadSource(src);
+              hls.attachMedia(audio);
+              hls.on(HlsModule.Events.ERROR, (_evt, data) => {
+                if (data.fatal) {
+                  switch (data.type) {
+                    case HlsModule.ErrorTypes.NETWORK_ERROR:
+                      hls.startLoad();
+                      break;
+                    case HlsModule.ErrorTypes.MEDIA_ERROR:
+                      hls.recoverMediaError();
+                      break;
+                    default:
+                      hls.destroy();
+                      setError(new Error('HLS Fatal playback error'));
+                  }
+                }
+              });
+            } else if (
+              audio.canPlayType('application/vnd.apple.mpegurl')
+            ) {
+              audio.src = src;
+            }
+          } catch (err) {
+            console.error('Failed to load hls.js', err);
+            setError(new Error('Failed to load HLS playback support.'));
+          }
+        } else {
+          audio.src = src;
+        }
+      },
+      [],
+    );
 
     useEffect(() => {
       if (!currentTrack || !audioRef.current) return;
@@ -401,7 +445,11 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
     // ── Keyboard Support ──
     useEffect(() => {
       const handler = (e: KeyboardEvent) => {
-        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+        if (
+          e.target instanceof HTMLInputElement ||
+          e.target instanceof HTMLTextAreaElement
+        )
+          return;
         switch (e.key) {
           case ' ':
             e.preventDefault();
@@ -433,12 +481,22 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
             break;
         }
       };
-      const el = ref && typeof ref !== 'function' ? ref.current : null;
+      const el =
+        ref && typeof ref !== 'function' ? ref.current : null;
       if (el) el.addEventListener('keydown', handler);
       return () => {
         if (el) el.removeEventListener('keydown', handler);
       };
-    }, [togglePlay, seek, currentTime, setVolume, volume, next, previous, ref]);
+    }, [
+      togglePlay,
+      seek,
+      currentTime,
+      setVolume,
+      volume,
+      next,
+      previous,
+      ref,
+    ]);
 
     return (
       <AudioPlayerContext.Provider value={ctx}>
@@ -453,7 +511,12 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
           )}
           {...props}
         >
-          <audio ref={audioRef} preload="metadata" crossOrigin="anonymous" className="hidden" />
+          <audio
+            ref={audioRef}
+            preload="metadata"
+            crossOrigin="anonymous"
+            className="hidden"
+          />
           {children}
         </div>
       </AudioPlayerContext.Provider>
@@ -463,15 +526,15 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
 AudioPlayer.displayName = 'AudioPlayer';
 
 // ============================================================================
-// Internal Source (Optional Fallback)
+// Source (renderless — optional fallback)
 // ============================================================================
+
 export const AudioPlayerSource = ({ src }: { src?: string }) => null;
 
 // ============================================================================
-// Default Export
+// Default Export (compound assembly)
 // ============================================================================
 
-// Import subcomponents for compound API
 import { AudioPlayerPlaylist, AudioPlayerTrack } from './AudioPlaylist';
 import { AudioPlayerTrackInfo } from './AudioTrackInfo';
 import {
@@ -484,7 +547,11 @@ import {
 import { AudioPlayerSeek, AudioPlayerProgress } from './AudioProgress';
 import { AudioPlayerVolume, AudioPlayerMute } from './AudioVolume';
 import { AudioPlayerRate } from './AudioRate';
-import { AudioPlayerLoading, AudioPlayerError, AudioPlayerBuffer } from './AudioStatus';
+import {
+  AudioPlayerLoading,
+  AudioPlayerError,
+  AudioPlayerBuffer,
+} from './AudioStatus';
 import { AudioPlayerWaveform } from './AudioWaveform';
 
 const DefaultAudioPlayer = Object.assign(AudioPlayer, {

@@ -1,6 +1,3 @@
-// utils.ts
-// Helpers
-
 export const formatTime = (seconds: number): string => {
   if (isNaN(seconds) || !isFinite(seconds)) return '0:00';
   const m = Math.floor(seconds / 60);
@@ -12,7 +9,8 @@ export const formatTime = (seconds: number): string => {
 
 export const hashString = (str: string) => {
   let hash = 0;
-  for (let i = 0; i < str.length; i++) hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0;
+  for (let i = 0; i < str.length; i++)
+    hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0;
   return hash;
 };
 

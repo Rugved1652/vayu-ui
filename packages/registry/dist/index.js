@@ -3753,26 +3753,27 @@ var templates = [
   // Add project templates here
 ];
 
-// src/registryData.ts
-var all = [...hooks, ...components, ...templates];
-var registry = Object.fromEntries(all.map((item) => [item.name, item]));
-
 // src/index.ts
+var allItems = [...hooks, ...components, ...templates];
+var registry = Object.fromEntries(
+  allItems.map((item) => [item.name, item])
+);
 function findItem(slug) {
-  return Object.values(registry).find((item) => item.slug === slug);
+  return allItems.find((item) => item.slug === slug);
 }
 function findWithDependencies(slug) {
   const item = findItem(slug);
   if (!item) return [];
-  const deps = (item.dependencies?.components ?? []).flatMap(
+  const deps = (item.registryDependencies ?? []).flatMap(
     (depSlug) => findWithDependencies(depSlug)
   );
   return [...deps, item];
 }
-var registry2 = registry;
+var allRegistryItems = allItems;
 export {
+  allRegistryItems,
   findItem,
   findWithDependencies,
-  registry2 as registry
+  registry
 };
 //# sourceMappingURL=index.js.map

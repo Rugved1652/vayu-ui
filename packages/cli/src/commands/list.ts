@@ -40,7 +40,7 @@ Examples:
       items = items.filter((i: RegistryItem) => i.type === flags.type)
     }
     if (flags.tag) {
-      items = items.filter((i: RegistryItem) => i.tags.includes(flags.tag!))
+      items = items.filter((i: RegistryItem) => i.tags?.includes(flags.tag!))
     }
 
     if (items.length === 0) {

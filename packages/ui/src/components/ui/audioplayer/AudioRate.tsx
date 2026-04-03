@@ -1,10 +1,11 @@
-// rate.tsx
-// UI: Rate control
-
 'use client';
 
 import { clsx } from 'clsx';
-import { forwardRef, HTMLAttributes, ButtonHTMLAttributes } from 'react';
+import {
+  forwardRef,
+  HTMLAttributes,
+  ButtonHTMLAttributes,
+} from 'react';
 import { useAudioPlayer } from './Audio';
 
 export const AudioPlayerRate = forwardRef<

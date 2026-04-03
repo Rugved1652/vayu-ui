@@ -3,6 +3,25 @@
 // Designed for AI-native UI development with 16 MCP tools
 // ============================================================================
 
+// Simple registry item type for CLI usage
+export type ItemType = 'component' | 'hook' | 'template';
+
+export type RegistryItem = {
+  name: string;
+  slug: string;
+  type: ItemType;
+  category: string;
+  since?: string;
+  description: string;
+  targetPath: string;
+  fileName: string;
+  dependencies?: string[];
+  registryDependencies?: string[];
+  tags?: string[];
+  internal?: boolean;
+};
+
+// Detailed component documentation type for AI tools
 export type VayuComponentDoc = {
   // Basic metadata
   component: string;
@@ -142,28 +161,37 @@ export type ComponentExample = {
   code: string;
 };
 
-// Registry type
-export type Registry = Record<string, VayuComponentDoc>;
+// Registry types
+export type Registry = Record<string, RegistryItem>;
+export type DetailedRegistry = Record<string, VayuComponentDoc>;
 
 // ============================================================================
 // Registry Data & Helpers
 // ============================================================================
 
-import { registry as registryData } from './registryData';
+import { hooks } from './hooks';
+import { components } from './components';
+import { templates } from './templates';
 
-export function findItem(slug: string): VayuComponentDoc | undefined {
-  return Object.values(registryData).find((item) => item.slug === slug);
+const allItems = [...hooks, ...components, ...templates];
+
+export const registry: Registry = Object.fromEntries(
+  allItems.map((item) => [item.name, item]),
+);
+
+export function findItem(slug: string): RegistryItem | undefined {
+  return allItems.find((item) => item.slug === slug);
 }
 
-export function findWithDependencies(slug: string): VayuComponentDoc[] {
+export function findWithDependencies(slug: string): RegistryItem[] {
   const item = findItem(slug);
   if (!item) return [];
 
-  const deps = (item.dependencies?.components ?? []).flatMap((depSlug) =>
+  const deps = (item.registryDependencies ?? []).flatMap((depSlug) =>
     findWithDependencies(depSlug),
   );
 
   return [...deps, item];
 }
 
-export const registry = registryData;
+export const allRegistryItems = allItems;

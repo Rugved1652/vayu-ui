@@ -55,7 +55,9 @@ export default function AudioPlayerDemo() {
       </div>
 
       <div className="p-6 bg-surface rounded-surface shadow-surface border border-border/20">
-        <h3 className="text-h3 font-primary mb-2 text-surface-content">Full Playlist Flow</h3>
+        <h3 className="text-h3 font-primary mb-2 text-surface-content">
+          Full Playlist Flow
+        </h3>
         <p className="text-text-sm text-muted-content mb-6">
           Queue management, auto-play next, and separated components
         </p>

@@ -2,16 +2,15 @@
 
 ## Anatomy
 
-- `audioplayer.tsx` — Composition: Root component + context + core logic
-- `playlist.tsx` — UI: Playlist + Track subcomponents
-- `track-info.tsx` — UI: Track info display
-- `controls.tsx` — UI: Controls + PlayPause + Next + Previous + Time
-- `progress.tsx` — UI: Seek + Progress (alias)
-- `volume.tsx` — UI: Volume + Mute
-- `rate.tsx` — UI: Rate control
-- `status.tsx` — UI: Loading + Error + Buffer (alias)
-- `waveform.tsx` — UI: Waveform visualization
-- `hooks.ts` — Logic: (tightly coupled to Root, no separate hooks)
+- `Audio.tsx` — Composition: Root component + context + core logic
+- `AudioPlaylist.tsx` — UI: Playlist + Track subcomponents
+- `AudioTrackInfo.tsx` — UI: Track info display
+- `AudioControls.tsx` — UI: Controls + PlayPause + Next + Previous + Time
+- `AudioProgress.tsx` — UI: Seek + Progress (alias)
+- `AudioVolume.tsx` — UI: Volume + Mute
+- `AudioRate.tsx` — UI: Rate control
+- `AudioStatus.tsx` — UI: Loading + Error + Buffer (alias)
+- `AudioWaveform.tsx` — UI: Waveform visualization
 - `utils.ts` — Helpers: formatTime, hashString, pseudoRandom
 - `types.ts` — Types: TypeScript interfaces
 - `index.ts` — Public API: Exports
