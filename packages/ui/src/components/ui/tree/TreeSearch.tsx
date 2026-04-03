@@ -1,12 +1,11 @@
-// tree-search.tsx
-// UI: search input
+// TreeSearch.tsx
+// Search input for Tree
 
 'use client';
 
 import { clsx } from 'clsx';
 import { Search, X } from 'lucide-react';
 import React, { useCallback, useId } from 'react';
-
 import type { TreeSearchProps } from './types';
 
 const TreeSearch: React.FC<TreeSearchProps> = ({
@@ -24,7 +23,7 @@ const TreeSearch: React.FC<TreeSearchProps> = ({
   return (
     <div className={clsx('relative', className)}>
       <Search
-        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400"
+        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-content"
         aria-hidden="true"
       />
       <input
@@ -34,13 +33,20 @@ const TreeSearch: React.FC<TreeSearchProps> = ({
         value={searchQuery}
         onChange={(e) => onSearchChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-10 pr-10 py-2 bg-white dark:bg-neutral-900 border-2 border-neutral-300 dark:border-neutral-700 rounded-md text-sm font-secondary text-neutral-900 dark:text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+        className={clsx(
+          'w-full min-h-11 pl-10 pr-10 py-2 text-sm',
+          'bg-surface border border-field rounded-control',
+          'text-surface-content placeholder:text-muted-content',
+          'focus:outline-none focus:ring-2 focus:ring-focus focus:border-focus',
+          'transition-colors duration-200',
+          'font-secondary',
+        )}
         aria-label="Search tree"
       />
       {searchQuery && (
         <button
           onClick={handleClear}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-content hover:text-surface-content transition-colors"
           aria-label="Clear search"
         >
           <X className="w-4 h-4" aria-hidden="true" />

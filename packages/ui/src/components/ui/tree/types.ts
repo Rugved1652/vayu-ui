@@ -1,12 +1,11 @@
 // types.ts
-// Types
+// All TypeScript types for the Tree component
 
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-export type TreeMode = 'normal' | 'checkbox';
-export type TreeVariant = 'default' | 'filled' | 'bordered' | 'minimal';
-export type TreeSize = 'sm' | 'md' | 'lg';
-export type CheckboxState = 'checked' | 'unchecked' | 'indeterminate';
+// ---------------------------------------------------------------------------
+// Data
+// ---------------------------------------------------------------------------
 
 export interface TreeNode {
   id: string | number;
@@ -17,6 +16,19 @@ export interface TreeNode {
   selectable?: boolean;
   metadata?: Record<string, unknown>;
 }
+
+// ---------------------------------------------------------------------------
+// Config
+// ---------------------------------------------------------------------------
+
+export type TreeMode = 'normal' | 'checkbox';
+export type TreeVariant = 'default' | 'filled' | 'bordered' | 'minimal';
+export type TreeSize = 'sm' | 'md' | 'lg';
+export type CheckboxState = 'checked' | 'unchecked' | 'indeterminate';
+
+// ---------------------------------------------------------------------------
+// Context
+// ---------------------------------------------------------------------------
 
 export interface TreeContextType {
   mode: TreeMode;
@@ -29,14 +41,22 @@ export interface TreeContextType {
   selectedKey: string | number | null;
   checkedKeys: (string | number)[];
   disabled: boolean;
+  checkStrictly: boolean;
+  treeId: string;
+  focusedKey: string | number | null;
+  setFocusedKey: (key: string | number | null) => void;
   toggleExpand: (nodeId: string | number) => void;
   handleSelect: (node: TreeNode) => void;
   handleCheck: (node: TreeNode, checked: boolean) => void;
   getCheckboxState: (node: TreeNode) => CheckboxState;
   renderActions?: (node: TreeNode) => ReactNode;
-  checkStrictly: boolean;
-  treeId: string;
+  /** Return all visible node ids in DOM order for keyboard nav */
+  getVisibleNodeIds: () => (string | number)[];
 }
+
+// ---------------------------------------------------------------------------
+// Props
+// ---------------------------------------------------------------------------
 
 export interface TreeRootProps {
   children: ReactNode;

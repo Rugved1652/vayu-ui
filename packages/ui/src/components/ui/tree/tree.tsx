@@ -1,73 +1,22 @@
-// tree.tsx
-// Composition: TreeRoot (state, context provider), TreeNodes
+// Tree.tsx
+// TreeRoot (state management, context provider) + TreeNodes + compound assembly
 
 'use client';
 
 import { clsx } from 'clsx';
-import React, { ReactNode, useCallback, useId, useMemo, useState } from 'react';
+import React, { useCallback, useId, useMemo, useState } from 'react';
 
 import { TreeContext } from './hooks';
 import TreeNodeItem from './TreeNode';
 import TreeSearch from './TreeSearch';
 import TreeActions from './TreeActions';
 import TreeContainer from './TreeContainer';
+import { getAllNodeIds, getParentIds, getChildIds, findNodeInTree, getVisibleNodeIds as computeVisibleIds } from './utils';
 import type { CheckboxState, TreeNode, TreeRootProps, TreeNodesProps } from './types';
 
-// Utilities
-
-function getAllNodeIds(nodes: TreeNode[]): (string | number)[] {
-  const ids: (string | number)[] = [];
-  const traverse = (node: TreeNode) => {
-    ids.push(node.id);
-    node.children?.forEach(traverse);
-  };
-  nodes.forEach(traverse);
-  return ids;
-}
-
-function getParentIds(nodeId: string | number, nodes: TreeNode[]): (string | number)[] {
-  const parents: (string | number)[] = [];
-
-  const findParent = (
-    targetId: string | number,
-    currentNodes: TreeNode[],
-    parentId?: string | number,
-  ): boolean => {
-    for (const node of currentNodes) {
-      if (node.id === targetId) {
-        if (parentId !== undefined) parents.push(parentId);
-        return true;
-      }
-      if (node.children && findParent(targetId, node.children, node.id)) {
-        if (parentId !== undefined) parents.push(parentId);
-        return true;
-      }
-    }
-    return false;
-  };
-
-  findParent(nodeId, nodes);
-  return parents.reverse();
-}
-
-function getChildIds(node: TreeNode): (string | number)[] {
-  const ids: (string | number)[] = [node.id];
-  node.children?.forEach((child) => ids.push(...getChildIds(child)));
-  return ids;
-}
-
-function findNodeInTree(nodeId: string | number, nodes: TreeNode[]): TreeNode | null {
-  for (const node of nodes) {
-    if (node.id === nodeId) return node;
-    if (node.children) {
-      const found = findNodeInTree(nodeId, node.children);
-      if (found) return found;
-    }
-  }
-  return null;
-}
-
+// ---------------------------------------------------------------------------
 // TreeRoot
+// ---------------------------------------------------------------------------
 
 const TreeRoot: React.FC<TreeRootProps> = ({
   children,
@@ -97,20 +46,31 @@ const TreeRoot: React.FC<TreeRootProps> = ({
 }) => {
   const treeId = useId();
 
-  const [internalExpandedKeys, setInternalExpandedKeys] = useState<(string | number)[]>(() =>
-    defaultExpandAll ? getAllNodeIds(data) : defaultExpandedKeys,
-  );
+  // ---- Internal state ----
 
-  const [internalSelectedKey, setInternalSelectedKey] = useState<string | number | null>(
-    defaultSelectedKey ?? null,
-  );
+  const [internalExpandedKeys, setInternalExpandedKeys] = useState<
+    (string | number)[]
+  >(() => (defaultExpandAll ? getAllNodeIds(data) : defaultExpandedKeys));
 
-  const [internalCheckedKeys, setInternalCheckedKeys] =
-    useState<(string | number)[]>(defaultCheckedKeys);
+  const [internalSelectedKey, setInternalSelectedKey] = useState<
+    string | number | null
+  >(defaultSelectedKey ?? null);
+
+  const [internalCheckedKeys, setInternalCheckedKeys] = useState<
+    (string | number)[]
+  >(defaultCheckedKeys);
+
+  const [focusedKey, setFocusedKey] = useState<string | number | null>(null);
+
+  // ---- Controlled / uncontrolled resolution ----
 
   const expandedKeys = controlledExpandedKeys ?? internalExpandedKeys;
-  const selectedKey = mode === 'normal' ? (controlledSelectedKey ?? internalSelectedKey) : null;
-  const checkedKeys = mode === 'checkbox' ? (controlledCheckedKeys ?? internalCheckedKeys) : [];
+  const selectedKey =
+    mode === 'normal' ? (controlledSelectedKey ?? internalSelectedKey) : null;
+  const checkedKeys =
+    mode === 'checkbox' ? (controlledCheckedKeys ?? internalCheckedKeys) : [];
+
+  // ---- Actions ----
 
   const toggleExpand = useCallback(
     (nodeId: string | number) => {
@@ -145,21 +105,25 @@ const TreeRoot: React.FC<TreeRootProps> = ({
       let next = [...checkedKeys];
 
       if (checkStrictly) {
-        next = checked ? [...next, node.id] : next.filter((k) => k !== node.id);
+        next = checked
+          ? [...next, node.id]
+          : next.filter((k) => k !== node.id);
       } else {
+        // Check/uncheck self + all descendants
         const childIds = getChildIds(node);
-
         if (checked) {
           next = [...new Set([...next, ...childIds])];
         } else {
           next = next.filter((k) => !childIds.includes(k));
         }
 
-        // Cascade parent state
+        // Cascade up: re-evaluate each ancestor
         getParentIds(node.id, data).forEach((parentId) => {
           const parent = findNodeInTree(parentId, data);
           if (parent?.children) {
-            const allChecked = parent.children.every((c) => next.includes(c.id));
+            const allChecked = parent.children.every((c) =>
+              next.includes(c.id),
+            );
             if (allChecked) {
               if (!next.includes(parentId)) next.push(parentId);
             } else {
@@ -171,7 +135,9 @@ const TreeRoot: React.FC<TreeRootProps> = ({
 
       if (controlledCheckedKeys === undefined) setInternalCheckedKeys(next);
 
-      const checkedNodes = next.map((k) => findNodeInTree(k, data)).filter(Boolean) as TreeNode[];
+      const checkedNodes = next
+        .map((k) => findNodeInTree(k, data))
+        .filter(Boolean) as TreeNode[];
       onCheck?.(next, checkedNodes);
     },
     [mode, checkedKeys, checkStrictly, data, controlledCheckedKeys, onCheck],
@@ -183,7 +149,8 @@ const TreeRoot: React.FC<TreeRootProps> = ({
       if (!node.children?.length) return 'unchecked';
 
       const childIds = getChildIds(node).filter((id) => id !== node.id);
-      const checkedCount = childIds.filter((id) => checkedKeys.includes(id)).length;
+      const checkedCount = childIds.filter((id) => checkedKeys.includes(id))
+        .length;
 
       if (checkedCount === 0) return 'unchecked';
       if (checkedCount === childIds.length) return 'checked';
@@ -191,6 +158,12 @@ const TreeRoot: React.FC<TreeRootProps> = ({
     },
     [checkedKeys],
   );
+
+  const getVisibleNodeIds = useCallback(() => {
+    return computeVisibleIds(data, new Set(expandedKeys));
+  }, [data, expandedKeys]);
+
+  // ---- Context value ----
 
   const contextValue = useMemo(
     () => ({
@@ -204,13 +177,16 @@ const TreeRoot: React.FC<TreeRootProps> = ({
       selectedKey,
       checkedKeys,
       disabled,
+      checkStrictly,
+      treeId,
+      focusedKey,
+      setFocusedKey,
       toggleExpand,
       handleSelect,
       handleCheck,
       getCheckboxState,
       renderActions,
-      checkStrictly,
-      treeId,
+      getVisibleNodeIds,
     }),
     [
       mode,
@@ -223,13 +199,15 @@ const TreeRoot: React.FC<TreeRootProps> = ({
       selectedKey,
       checkedKeys,
       disabled,
+      checkStrictly,
+      treeId,
+      focusedKey,
       toggleExpand,
       handleSelect,
       handleCheck,
       getCheckboxState,
       renderActions,
-      checkStrictly,
-      treeId,
+      getVisibleNodeIds,
     ],
   );
 
@@ -250,7 +228,9 @@ const TreeRoot: React.FC<TreeRootProps> = ({
 
 TreeRoot.displayName = 'Tree';
 
+// ---------------------------------------------------------------------------
 // TreeNodes
+// ---------------------------------------------------------------------------
 
 const TreeNodes: React.FC<TreeNodesProps> = ({ nodes }) => (
   <>
@@ -262,7 +242,9 @@ const TreeNodes: React.FC<TreeNodesProps> = ({ nodes }) => (
 
 TreeNodes.displayName = 'Tree.Nodes';
 
+// ---------------------------------------------------------------------------
 // Compound assembly
+// ---------------------------------------------------------------------------
 
 const Tree = Object.assign(TreeRoot, {
   Search: TreeSearch,

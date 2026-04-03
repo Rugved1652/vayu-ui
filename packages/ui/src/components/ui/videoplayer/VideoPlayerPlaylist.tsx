@@ -14,7 +14,7 @@ import type {
 // Source (renderless — sets a single track)
 // ============================================================================
 
-export const VideoPlayerSource = ({ src, title, artist, poster, subtitleSrc }: VideoPlayerSourceProps) => {
+export const VideoPlayerSource = ({ src }: VideoPlayerSourceProps) => {
   const { playTrack, playlist } = useVideoPlayer();
 
   // On mount, find and play the matching track
