@@ -1,12 +1,12 @@
 'use client';
 import { Pagination, Typography, Divider } from 'vayu-ui';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 // Helper function to build page URLs for the demo
 const buildPageUrl = (page: number) => `?page=${page}`;
 
-export default function PaginationDemo() {
+function PaginationDemoContent() {
   const searchParams = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
@@ -96,5 +96,13 @@ export default function PaginationDemo() {
         />
       </div>
     </div>
+  );
+}
+
+export default function PaginationDemo() {
+  return (
+    <Suspense fallback={<div className="h-40 flex items-center justify-center">Loading...</div>}>
+      <PaginationDemoContent />
+    </Suspense>
   );
 }

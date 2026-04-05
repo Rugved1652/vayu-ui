@@ -3,8 +3,8 @@
 
 import TextInput from './TextInput';
 import { useTextInput } from './TextInput';
-import { Label } from './TextInputLabel';
-import { Field } from './TextInputField';
+import { TextInputLabel as Label } from './TextInputLabel';
+import { TextInputField as Field } from './TextInputField';
 import { Input } from './Input';
 import { PasswordInput } from './TextInputPasswordInput';
 import { NumberInput } from './TextInputNumberInput';

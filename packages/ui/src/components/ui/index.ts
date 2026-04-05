@@ -62,7 +62,8 @@ export * from './Skeleton';
 export * from './Slider';
 export { Spinner, type SpinnerProps, type SpinnerSize } from './Spinner';
 export * from './Stepper';
-export * from './Switch';
+export { default as ToggleSwitch } from './Switch';
+export type { SwitchProps as ToggleSwitchProps } from './Switch';
 export { default as Tabs } from './Tab';
 export {
   default as Table,

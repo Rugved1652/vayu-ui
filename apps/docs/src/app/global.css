@@ -10,45 +10,83 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root{
-  --canvas: #e7e5e4;
-  --canvas-content: #1c1917;
-  --surface: #f5f5f4;
-  --surface-content: #1c1917;
-  --sidebar: #ecebe9;
-  --sidebar-content: #292524;
-  --elevated: #fff;
-  --elevated-content: #1c1917;
-  --brand: #059669;
-  --brand-content: #fff;
-  --success: #16a34a; --success-content: #fff;
-  --warning: #d97706; --warning-content: #fff;
-  --destructive: #dc2626; --destructive-content: #fff;
-  --info: #2563eb; --info-content: #fff;
-  --muted: #d6d3d1; --muted-content: #57534e;
-  --border: #a8a29e; --field: #78716c; --focus: #059669; --shadow: #000;
+/* ═════════════════════════════════════════════════════════════════════════════════════════════
+     BASE LAYERS - Pure, airy whites
+     ═════════════════════════════════════════════════════════════════════════════════════════════ */
+ --canvas: #f8fafc;                    /* Barely-there cool gray to offset the white surfaces */
+  --canvas-content: #0f172a;            /* Deep slate for crisp reading */
+  --surface: #fff;                   /* Pure white */
+  --surface-content: #0f172a;
+  --sidebar: #f1f5f9;                   /* Slight gray to ground the navigation */
+  --sidebar-content: #1e293b;
+  --elevated: #fff;                  /* Pure white */
+  --elevated-content: #0f172a;
+
+  /* ═════════════════════════════════════════════════════════════════════════════════════════════
+     SEMANTIC COLORS
+     ═════════════════════════════════════════════════════════════════════════════════════════════ */
+  --brand: #ef4444;                     /* A classic, highly visible true red */
+  --brand-content: #fff;             /* Perfect WCAG contrast on the red */
+  --success: #10b981; --success-content: #fff;
+  --warning: #f59e0b; --warning-content: #fff;
+  --destructive: #b91c1c; --destructive-content: #fff; /* Slightly darker than brand so they don't blend */
+  --info: #3b82f6; --info-content: #fff;
+  --muted: #e2e8f0; --muted-content: #64748b;
+
+  /* ═════════════════════════════════════════════════════════════════════════════════════════════
+     STRUCTURAL ELEMENTS
+     ═════════════════════════════════════════════════════════════════════════════════════════════ */
+  --border: #cbd5e1;                    
+  --field: #94a3b8;                     
+  --focus: #ef4444;                     
+  --shadow: #000;
 }
 
 :root.dark {
---canvas: #0c0a09;
-  --canvas-content: #fafaf9;
-  --surface: #1c1917;
-  --surface-content: #f5f5f4;
-  --sidebar: #13100f;
-  --sidebar-content: #e7e5e4;
-  --elevated: #292524;
+--canvas: #0f120c;                    /* Near-black with a hint of green */
+  --canvas-content: #f4f5f0;            /* Soft off-white */
+  --surface: #181c14;                   /* Elevated dark green-gray */
+  --surface-content: #fff;
+  --sidebar: #131710;                   /* Deepest structural element */
+  --sidebar-content: #d2d5cc;
+  --elevated: #1f241a;                  /* Lightest dark surface */
   --elevated-content: #fff;
-  --brand: #34d399;
-  --brand-content: #0c0a09;
-  --success: #4ade80; --success-content: #0c0a09;
-  --warning: #fcd34d; --warning-content: #0c0a09;
-  --destructive: #fca5a5; --destructive-content: #0c0a09;
-  --info: #93c5fd; --info-content: #0c0a09;
-  --muted: #44403c; --muted-content: #a8a29e;
-  --border: #44403c; --field: #57534e; --focus: #34d399; --shadow: #000; 
 
+  /* SEMANTIC COLORS */
+  --brand: #a3e635;                     /* High-visibility neon lime */
+  --brand-content: #0f120c;             /* Dark text on bright lime */
+  --success: #34d399; --success-content: #0f120c;
+  --warning: #facc15; --warning-content: #0f120c;
+  --destructive: #f87171; --destructive-content: #0f120c;
+  --info: #38bdf8; --info-content: #0f120c;
+  --muted: #2b3025; --muted-content: #9ca395;
+
+  /* STRUCTURAL ELEMENTS */
+  --border: #2b3025; 
+  --field: #454d3c; 
+  --focus: #a3e635; 
+  --shadow: #000;
 }
 
 @theme {
+  /* ── Fumadocs Colors ── */
+  --color-fd-background: var(--canvas);
+  --color-fd-foreground: var(--canvas-content);
+  --color-fd-muted: var(--surface);
+  --color-fd-muted-foreground: var(--muted-content);
+  --color-fd-popover: var(--elevated);
+  --color-fd-popover-foreground: var(--elevated-content);
+  --color-fd-card: var(--surface);
+  --color-fd-card-foreground: var(--surface-content);
+  --color-fd-border: var(--border);
+  --color-fd-primary: var(--brand);
+  --color-fd-primary-foreground: var(--brand-content);
+  --color-fd-secondary: var(--muted);
+  --color-fd-secondary-foreground: var(--surface-content);
+  --color-fd-accent: var(--surface);
+  --color-fd-accent-foreground: var(--surface-content);
+  --color-fd-ring: var(--brand);
+
   /* ── Base Layers ── */
   --color-canvas: var(--canvas);
   --color-canvas-content: var(--canvas-content);

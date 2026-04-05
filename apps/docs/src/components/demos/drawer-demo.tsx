@@ -132,9 +132,9 @@ export default function DrawerDemo() {
             </Drawer.Header>
             <Divider spacing="md" />
             <div className="py-4 flex items-center space-x-2">
-              <TextInput className="flex-1">
+              <TextInput className="flex-1" value="https://example.com/share/x8j92" readOnly>
                 <TextInput.Field>
-                  <TextInput.Input readOnly value="https://example.com/share/x8j92" />
+                  <TextInput.Input />
                 </TextInput.Field>
               </TextInput>
               <Button variant="secondary">Copy</Button>

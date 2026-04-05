@@ -1,21 +1,15 @@
 import { Hero } from './Hero';
-import { ProblemSection } from './ProblemSection';
-import { Features } from './Features';
-import { HowItWorks } from './HowItWorks';
-import { AIEraSection } from './AIEraSection';
-import { CodePreview } from './CodePreview';
-import { FinalCTA } from './FinalCTA';
+import { ComponentShowcase } from './ComponentShowcase';
+import { WhyVedUI } from './WhyVedUI';
+import { GetStarted } from './GetStarted';
 
 export function LandingPage() {
   return (
     <div className="bg-canvas text-canvas-content min-h-screen">
       <Hero />
-      <ProblemSection />
-      <Features />
-      <HowItWorks />
-      <AIEraSection />
-      <CodePreview />
-      <FinalCTA />
+      <ComponentShowcase />
+      <WhyVedUI />
+      <GetStarted />
     </div>
   );
 }

@@ -83,7 +83,7 @@ function ToastDemoContent() {
       </div>
 
       <Divider spacing="md">
-        <Divider.Line color="ground" />
+        <Divider.Line color="default" />
       </Divider>
 
       {/* With Actions Section */}
@@ -120,7 +120,7 @@ function ToastDemoContent() {
       </div>
 
       <Divider spacing="md">
-        <Divider.Line color="ground" />
+        <Divider.Line color="default" />
       </Divider>
 
       {/* Promise & Loading Section */}
@@ -174,7 +174,7 @@ function ToastDemoContent() {
       </div>
 
       <Divider spacing="md">
-        <Divider.Line color="ground" />
+        <Divider.Line color="default" />
       </Divider>
 
       {/* Duration Control Section */}
@@ -200,7 +200,7 @@ function ToastDemoContent() {
       </div>
 
       <Divider spacing="md">
-        <Divider.Line color="ground" />
+        <Divider.Line color="default" />
       </Divider>
 
       {/* Positions Section */}
@@ -251,7 +251,7 @@ function ToastDemoContent() {
       </div>
 
       <Divider spacing="md">
-        <Divider.Line color="ground" />
+        <Divider.Line color="default" />
       </Divider>
 
       {/* Stack Test Section */}
@@ -272,7 +272,7 @@ function ToastDemoContent() {
       </div>
 
       <Divider spacing="md">
-        <Divider.Line color="ground" />
+        <Divider.Line color="default" />
       </Divider>
 
       {/* Custom Toast Section */}
@@ -284,7 +284,7 @@ function ToastDemoContent() {
       </div>
 
       <Divider spacing="md">
-        <Divider.Line color="ground" />
+        <Divider.Line color="default" />
       </Divider>
 
       {/* Non-Dismissible Section */}
@@ -305,7 +305,7 @@ function ToastDemoContent() {
       </div>
 
       <Divider spacing="md">
-        <Divider.Line color="ground" />
+        <Divider.Line color="default" />
       </Divider>
 
       {/* Custom Icon Section */}

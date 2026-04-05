@@ -1,39 +1,40 @@
 
+
 > vayu-ui-cli@0.0.0 build
 > shx rm -rf dist && tsup
 
-CLI Building entry: src/index.ts, src/commands/add.ts, src/commands/create.ts, src/commands/init.ts, src/commands/list.ts, src/commands/update.ts, src/registry/templates.ts, src/utils/installer.ts
-CLI Using tsconfig: tsconfig.json
-CLI tsup v8.5.1
-CLI Using tsup config: /Users/rugvedpatel/Desktop/Workspace/VedUI/packages/cli/tsup.config.ts
-CLI Target: es2022
-CLI Cleaning output folder
-ESM Build start
-ESM dist/index.js                  178.00 B
-ESM dist/registry/templates.js     183.00 B
-ESM dist/chunk-TGNBMJTW.js         195.00 B
-ESM dist/utils/installer.js        343.00 B
-ESM dist/chunk-66NST2TF.js         3.98 KB
-ESM dist/chunk-VIAPASDQ.js         1.31 KB
-ESM dist/commands/add.js           3.78 KB
-ESM dist/commands/list.js          2.57 KB
-ESM dist/commands/update.js        8.17 KB
-ESM dist/commands/create.js        5.00 KB
-ESM dist/commands/init.js          10.90 KB
-ESM dist/registry/templates.js.map 71.00 B
-ESM dist/chunk-TGNBMJTW.js.map     626.00 B
-ESM dist/utils/installer.js.map    71.00 B
-ESM dist/index.js.map              71.00 B
-ESM dist/chunk-VIAPASDQ.js.map     3.15 KB
-ESM dist/chunk-66NST2TF.js.map     8.53 KB
-ESM dist/commands/list.js.map      4.06 KB
-ESM dist/commands/add.js.map       7.19 KB
-ESM dist/commands/create.js.map    8.89 KB
-ESM dist/commands/update.js.map    15.50 KB
-ESM dist/commands/init.js.map      16.84 KB
-ESM ⚡️ Build success in 38ms
+[1G[0K[34mCLI[39m Building entry: src/index.ts, src/commands/add.ts, src/commands/create.ts, src/commands/init.ts, src/commands/list.ts, src/commands/update.ts, src/registry/templates.ts, src/utils/installer.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v8.5.1
+[34mCLI[39m Using tsup config: /Users/rugvedpatel/Desktop/Workspace/VedUI/packages/cli/tsup.config.ts
+[34mCLI[39m Target: es2022
+[34mCLI[39m Cleaning output folder
+[34mESM[39m Build start
+[32mESM[39m [1mdist/index.js                  [22m[32m178.00 B[39m
+[32mESM[39m [1mdist/commands/add.js           [22m[32m3.78 KB[39m
+[32mESM[39m [1mdist/registry/templates.js     [22m[32m183.00 B[39m
+[32mESM[39m [1mdist/utils/installer.js        [22m[32m343.00 B[39m
+[32mESM[39m [1mdist/commands/create.js        [22m[32m5.00 KB[39m
+[32mESM[39m [1mdist/commands/init.js          [22m[32m10.90 KB[39m
+[32mESM[39m [1mdist/commands/list.js          [22m[32m2.57 KB[39m
+[32mESM[39m [1mdist/commands/update.js        [22m[32m8.17 KB[39m
+[32mESM[39m [1mdist/chunk-TGNBMJTW.js         [22m[32m195.00 B[39m
+[32mESM[39m [1mdist/chunk-VIAPASDQ.js         [22m[32m1.31 KB[39m
+[32mESM[39m [1mdist/chunk-66NST2TF.js         [22m[32m3.98 KB[39m
+[32mESM[39m [1mdist/utils/installer.js.map    [22m[32m71.00 B[39m
+[32mESM[39m [1mdist/index.js.map              [22m[32m71.00 B[39m
+[32mESM[39m [1mdist/commands/add.js.map       [22m[32m7.19 KB[39m
+[32mESM[39m [1mdist/registry/templates.js.map [22m[32m71.00 B[39m
+[32mESM[39m [1mdist/commands/create.js.map    [22m[32m8.89 KB[39m
+[32mESM[39m [1mdist/commands/init.js.map      [22m[32m16.84 KB[39m
+[32mESM[39m [1mdist/commands/list.js.map      [22m[32m4.06 KB[39m
+[32mESM[39m [1mdist/chunk-TGNBMJTW.js.map     [22m[32m626.00 B[39m
+[32mESM[39m [1mdist/commands/update.js.map    [22m[32m15.50 KB[39m
+[32mESM[39m [1mdist/chunk-66NST2TF.js.map     [22m[32m8.53 KB[39m
+[32mESM[39m [1mdist/chunk-VIAPASDQ.js.map     [22m[32m3.15 KB[39m
+[32mESM[39m ⚡️ Build success in 58ms
 DTS Build start
-DTS ⚡️ Build success in 10056ms
+DTS ⚡️ Build success in 5135ms
 DTS dist/index.d.ts              101.00 B
 DTS dist/commands/add.d.ts       557.00 B
 DTS dist/commands/create.d.ts    678.00 B
@@ -42,3 +43,4 @@ DTS dist/commands/list.d.ts      500.00 B
 DTS dist/commands/update.d.ts    681.00 B
 DTS dist/registry/templates.d.ts 846.00 B
 DTS dist/utils/installer.d.ts    993.00 B
+[1G[0K⠙[1G[0K

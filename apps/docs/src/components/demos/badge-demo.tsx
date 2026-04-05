@@ -41,7 +41,7 @@ export default function BadgeDemoPage() {
         </div>
 
         <Divider spacing="lg">
-          <Divider.Line color="ground" />
+          <Divider.Line color="default" />
         </Divider>
 
         {/* Section 1: Variants */}
@@ -60,7 +60,7 @@ export default function BadgeDemoPage() {
         </section>
 
         <Divider spacing="lg">
-          <Divider.Line color="ground" />
+          <Divider.Line color="default" />
         </Divider>
 
         {/* Section 2: Sizes */}
@@ -82,7 +82,7 @@ export default function BadgeDemoPage() {
         </section>
 
         <Divider spacing="lg">
-          <Divider.Line color="ground" />
+          <Divider.Line color="default" />
         </Divider>
 
         {/* Section 3: Interactive (Clickable) */}
@@ -105,7 +105,7 @@ export default function BadgeDemoPage() {
         </section>
 
         <Divider spacing="lg">
-          <Divider.Line color="ground" />
+          <Divider.Line color="default" />
         </Divider>
 
         {/* Section 4: Dismissible (Stateful) */}
@@ -140,7 +140,7 @@ export default function BadgeDemoPage() {
         </section>
 
         <Divider spacing="lg">
-          <Divider.Line color="ground" />
+          <Divider.Line color="default" />
         </Divider>
 
         {/* Section 5: Interactive & Dismissible (Complex) */}

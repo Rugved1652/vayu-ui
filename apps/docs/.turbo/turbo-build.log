@@ -1,37 +1,54 @@
 
+
 > vayu-ui-docs@0.0.0 build
 > next build
 
-⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+[1G[0K[33m[1m⚠[22m[39m Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /Users/rugvedpatel/package-lock.json as the root directory.
  To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
    See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
  Detected additional lockfiles: 
    * /Users/rugvedpatel/Desktop/Workspace/VedUI/package-lock.json
 
-[MDX] generated files in 30.32725000000005ms
-▲ Next.js 16.1.6 (Turbopack)
+[1m[38;2;173;127;168m▲ Next.js 16.1.6[39m[22m (Turbopack)
 
-  Creating an optimized production build ...
-✓ Compiled successfully in 21.9s
-  Running TypeScript ...
-Failed to compile.
+[MDX] generated files in 14.76516700000002ms
+[37m[1m [22m[39m Creating an optimized production build ...
+[32m[1m✓[22m[39m Compiled successfully in 12.8s
+[?25l[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[?25h[?25l[37m[1m [22m[39m Finished TypeScript in 4.8s  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finished TypeScript in 4.8s    [32m[1m✓[22m[39m Finished TypeScript in 4.8s 
+[?25l[37m[1m [22m[39m Collecting page data using 7 workers  [36m.[39m[2K[1G[37m[1m [22m[39m Collecting page data using 7 workers  [36m..[39m[2K[1G[37m[1m [22m[39m Collecting page data using 7 workers  [36m...[39m[2K[1G[?25h[37m[1m [22m[39m Collecting page data using 7 workers in 562.1ms    [32m[1m✓[22m[39m Collecting page data using 7 workers in 562.1ms 
+[?25l[37m[1m [22m[39m Generating static pages using 7 workers (0/312)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (69/312)  [36m[=   ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (70/312)  [36m[==  ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (86/312)  [36m[=== ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (86/312)  [36m[ ===][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (109/312)  [36m[  ==][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (149/312)  [36m[   =][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (162/312)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (178/312)  [36m[   =][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (207/312)  [36m[  ==][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (223/312)  [36m[ ===][39m[2K[1G[?25hError reading localStorage key: demo-key ReferenceError: localStorage is not defined
+    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_c9f20133._.js:1:50898)
+    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_c9f20133._.js:1:50882)
+    at d (.next/server/chunks/ssr/Desktop_Workspace_VedUI_c9f20133._.js:1:51349)
+[?25h[32m[1m✓[22m[39m Generating static pages using 7 workers (312/312) in 3.8s
+[?25l[37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finalizing page optimization in 31.5ms    [32m[1m✓[22m[39m Finalizing page optimization in 31.5ms 
 
-./src/app/docs/[[...slug]]/page.tsx:14:25
-Type error: Property 'body' does not exist on type 'PageData'.
+[4mRoute (app)[24m
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/search
+├ ● /docs/[[...slug]]
+│ ├ /docs
+│ ├ /docs/maintainers
+│ ├ /docs/test
+│ └ [+99 more paths]
+├ ○ /llms-full.txt
+├ ● /llms.mdx/docs/[[...slug]]
+│ ├ /llms.mdx/docs
+│ ├ /llms.mdx/docs/maintainers
+│ ├ /llms.mdx/docs/test
+│ └ [+99 more paths]
+├ ○ /llms.txt
+└ ● /og/docs/[...slug]
+  ├ /og/docs/image.png
+  ├ /og/docs/maintainers/image.png
+  ├ /og/docs/test/image.png
+  └ [+99 more paths]
 
-[0m [90m 12 |[39m   [36mif[39m ([33m![39mpage) notFound()[33m;[39m
- [90m 13 |[39m
-[31m[1m>[22m[39m[90m 14 |[39m   [36mconst[39m [33mMDX[39m [33m=[39m page[33m.[39mdata[33m.[39mbody[33m;[39m
- [90m    |[39m                         [31m[1m^[22m[39m
- [90m 15 |[39m   [36mconst[39m gitConfig [33m=[39m {
- [90m 16 |[39m     user[33m:[39m [32m'username'[39m[33m,[39m
- [90m 17 |[39m     repo[33m:[39m [32m'repo'[39m[33m,[39m[0m
-Next.js build worker exited with code: 1 and signal: null
-npm error Lifecycle script `build` failed with error:
-npm error code 1
-npm error path /Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs
-npm error workspace vayu-ui-docs@0.0.0
-npm error location /Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs
-npm error command failed
-npm error command sh -c next build
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses [36mgenerateStaticParams[39m)
+ƒ  (Dynamic)  server-rendered on demand
+
+[?25h[1G[0K⠙[1G[0K
