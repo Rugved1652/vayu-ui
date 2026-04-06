@@ -10,62 +10,71 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root{
-/* ═════════════════════════════════════════════════════════════════════════════════════════════
-     BASE LAYERS - Pure, airy whites
+  /* ═════════════════════════════════════════════════════════════════════════════════════════════
+     BASE LAYERS - Strictly neutral grayscale (No color tints)
      ═════════════════════════════════════════════════════════════════════════════════════════════ */
- --canvas: #f8fafc;                    /* Barely-there cool gray to offset the white surfaces */
-  --canvas-content: #0f172a;            /* Deep slate for crisp reading */
+  --canvas: #f4f4f5;                    /* Neutral light gray to make the white surfaces pop */
+  --canvas-content: #09090b;            /* Near-black text for maximum readability */
   --surface: #fff;                   /* Pure white */
-  --surface-content: #0f172a;
-  --sidebar: #f1f5f9;                   /* Slight gray to ground the navigation */
-  --sidebar-content: #1e293b;
-  --elevated: #fff;                  /* Pure white */
-  --elevated-content: #0f172a;
+  --surface-content: #09090b;
+  --sidebar: #fafafa;                   /* Just barely off-white */
+  --sidebar-content: #18181b;
+  --elevated: #fff;                  /* Pure white (relies on shadow for depth) */
+  --elevated-content: #09090b;
 
   /* ═════════════════════════════════════════════════════════════════════════════════════════════
-     SEMANTIC COLORS
+     SEMANTIC COLORS - High Contrast Lime Accent
      ═════════════════════════════════════════════════════════════════════════════════════════════ */
-  --brand: #ef4444;                     /* A classic, highly visible true red */
-  --brand-content: #fff;             /* Perfect WCAG contrast on the red */
+  --brand: #84cc16;                     /* Bright, electric lime */
+  --brand-content: #052e16;             /* Very dark green text for WCAG compliance on the bright button */
   --success: #10b981; --success-content: #fff;
   --warning: #f59e0b; --warning-content: #fff;
-  --destructive: #b91c1c; --destructive-content: #fff; /* Slightly darker than brand so they don't blend */
-  --info: #3b82f6; --info-content: #fff;
-  --muted: #e2e8f0; --muted-content: #64748b;
+  --destructive: #ef4444; --destructive-content: #fff;
+  --info: #0ea5e9; --info-content: #fff;
+  --muted: #e4e4e7;                     /* Neutral gray for disabled states */
+  --muted-content: #71717a;             
 
   /* ═════════════════════════════════════════════════════════════════════════════════════════════
      STRUCTURAL ELEMENTS
      ═════════════════════════════════════════════════════════════════════════════════════════════ */
-  --border: #cbd5e1;                    
-  --field: #94a3b8;                     
-  --focus: #ef4444;                     
-  --shadow: #000;
+  --border: #d4d4d8;                    /* Neutral gray border */
+  --field: #a1a1aa;                     
+  --focus: #84cc16;                     
+  --shadow: #000;                       
 }
 
 :root.dark {
---canvas: #0f120c;                    /* Near-black with a hint of green */
-  --canvas-content: #f4f5f0;            /* Soft off-white */
-  --surface: #181c14;                   /* Elevated dark green-gray */
+  /* ═════════════════════════════════════════════════════════════════════════════════════════════
+     BASE LAYERS - True Blacks and Deep Charcoals
+     ═════════════════════════════════════════════════════════════════════════════════════════════ */
+  --canvas: #000;                    /* Pure OLED black */
+  --canvas-content: #fafafa;            /* Crisp white text */
+  --surface: #0a0a0a;                   /* Just one step above pure black */
   --surface-content: #fff;
-  --sidebar: #131710;                   /* Deepest structural element */
-  --sidebar-content: #d2d5cc;
-  --elevated: #1f241a;                  /* Lightest dark surface */
+  --sidebar: #121212;                   /* Standard dark mode navigation gray */
+  --sidebar-content: #e4e4e7;
+  --elevated: #1a1a1a;                  /* Lightest gray for dropdowns/modals */
   --elevated-content: #fff;
 
-  /* SEMANTIC COLORS */
-  --brand: #a3e635;                     /* High-visibility neon lime */
-  --brand-content: #0f120c;             /* Dark text on bright lime */
-  --success: #34d399; --success-content: #0f120c;
-  --warning: #facc15; --warning-content: #0f120c;
-  --destructive: #f87171; --destructive-content: #0f120c;
-  --info: #38bdf8; --info-content: #0f120c;
-  --muted: #2b3025; --muted-content: #9ca395;
+  /* ═════════════════════════════════════════════════════════════════════════════════════════════
+     SEMANTIC COLORS - Neon Glow
+     ═════════════════════════════════════════════════════════════════════════════════════════════ */
+  --brand: #bef264;                     /* Ultra-bright neon lime */
+  --brand-content: #000;             /* Pure black text for aggressive, sharp contrast */
+  --success: #34d399; --success-content: #000;
+  --warning: #facc15; --warning-content: #000;
+  --destructive: #f87171; --destructive-content: #000;
+  --info: #38bdf8; --info-content: #000;
+  --muted: #27272a;                     /* Deep, dark gray */
+  --muted-content: #a1a1aa;             
 
-  /* STRUCTURAL ELEMENTS */
-  --border: #2b3025; 
-  --field: #454d3c; 
-  --focus: #a3e635; 
-  --shadow: #000;
+  /* ═════════════════════════════════════════════════════════════════════════════════════════════
+     STRUCTURAL ELEMENTS
+     ═════════════════════════════════════════════════════════════════════════════════════════════ */
+  --border: #27272a;                    /* Barely visible borders to separate dark areas */
+  --field: #3f3f46;                     
+  --focus: #bef264;                     
+  --shadow: #000;                       
 }
 
 @theme {

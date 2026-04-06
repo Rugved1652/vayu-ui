@@ -1,30 +1,33 @@
 
-
 > vayu-ui-docs@0.0.0 build
 > next build
 
-[1G[0K[33m[1m⚠[22m[39m Warning: Next.js inferred your workspace root, but it may not be correct.
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /Users/rugvedpatel/package-lock.json as the root directory.
  To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
    See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
  Detected additional lockfiles: 
    * /Users/rugvedpatel/Desktop/Workspace/VedUI/package-lock.json
 
-[MDX] generated files in 15.19520799999998ms
-[1m[38;2;173;127;168m▲ Next.js 16.1.6[39m[22m (Turbopack)
+▲ Next.js 16.1.6 (Turbopack)
 
-[37m[1m [22m[39m Creating an optimized production build ...
-[32m[1m✓[22m[39m Compiled successfully in 14.5s
-[?25l[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[?25h[?25l[37m[1m [22m[39m Finished TypeScript in 4.7s  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finished TypeScript in 4.7s    [32m[1m✓[22m[39m Finished TypeScript in 4.7s 
-[?25l[37m[1m [22m[39m Collecting page data using 7 workers  [36m.[39m[2K[1G[37m[1m [22m[39m Collecting page data using 7 workers  [36m..[39m[2K[1G[37m[1m [22m[39m Collecting page data using 7 workers  [36m...[39m[2K[1G[?25h[37m[1m [22m[39m Collecting page data using 7 workers in 561.2ms    [32m[1m✓[22m[39m Collecting page data using 7 workers in 561.2ms 
-[?25l[37m[1m [22m[39m Generating static pages using 7 workers (0/312)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (69/312)  [36m[=   ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (69/312)  [36m[==  ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (86/312)  [36m[=== ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (87/312)  [36m[ ===][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (101/312)  [36m[  ==][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (154/312)  [36m[   =][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (170/312)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (178/312)  [36m[   =][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (207/312)  [36m[  ==][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (223/312)  [36m[ ===][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (239/312)  [36m[====][39m[2K[1G[?25hError reading localStorage key: demo-key ReferenceError: localStorage is not defined
+[MDX] generated files in 13.370000000000005ms
+  Creating an optimized production build ...
+✓ Compiled successfully in 11.5s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/312) ...
+  Generating static pages using 7 workers (78/312) 
+  Generating static pages using 7 workers (156/312) 
+  Generating static pages using 7 workers (234/312) 
+Error reading localStorage key: demo-key ReferenceError: localStorage is not defined
     at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_c9f20133._.js:1:50898)
     at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_c9f20133._.js:1:50882)
     at d (.next/server/chunks/ssr/Desktop_Workspace_VedUI_c9f20133._.js:1:51349)
-[?25h[32m[1m✓[22m[39m Generating static pages using 7 workers (312/312) in 3.7s
-[?25l[37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finalizing page optimization in 23.5ms    [32m[1m✓[22m[39m Finalizing page optimization in 23.5ms 
+✓ Generating static pages using 7 workers (312/312) in 3.7s
+  Finalizing page optimization ...
 
-[4mRoute (app)[24m
+Route (app)
 ┌ ○ /
 ├ ○ /_not-found
 ├ ƒ /api/search
@@ -48,7 +51,6 @@
 
 
 ○  (Static)   prerendered as static content
-●  (SSG)      prerendered as static HTML (uses [36mgenerateStaticParams[39m)
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
 ƒ  (Dynamic)  server-rendered on demand
 
-[?25h[1G[0K⠙[1G[0K

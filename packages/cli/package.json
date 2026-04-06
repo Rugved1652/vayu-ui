@@ -18,16 +18,7 @@
   "bugs": "https://github.com/VayuUI/vayu-ui-cli/issues",
   "dependencies": {
     "@oclif/core": "^4",
-    "@oclif/plugin-help": "^6",
-    "@oclif/plugin-plugins": "^5",
-    "@types/fs-extra": "^11.0.4",
-    "@types/tar": "^6.1.13",
-    "chalk": "^5.6.2",
-    "clsx": "^2.1.1",
-    "fs-extra": "^11.3.3",
-    "ora": "^9.3.0",
-    "tar": "^7.5.9",
-    "vayu-ui-registry": "*"
+    "@oclif/plugin-help": "^6"
   },
   "devDependencies": {
     "@eslint/compat": "^1",
@@ -67,12 +58,7 @@
       "@oclif/plugin-help",
       "@oclif/plugin-plugins"
     ],
-    "topicSeparator": " ",
-    "topics": {
-      "hello": {
-        "description": "Say hello to the world and others"
-      }
-    }
+    "topicSeparator": " "
   },
   "repository": "VayuUI/vayu-ui-cli",
   "scripts": {
