@@ -9,139 +9,65 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init
+npx vayu-ui init #one time only
 ```
 
 ```bash
 npx vayu-ui add animation
 ```
 
+```bash
+npx vayu-ui add -t animation #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <AnimationDemo />
+    <div className="not-prose flex w-full justify-center p-4">
+      <AnimationDemo />
+    </div>
   </Tab>
   <Tab value="Code">
     ```tsx
     <Animation.Fade>
-      <div className="w-14 h-14 bg-indigo-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-sm">
-        Fade
-      </div>
-    </Animation.Fade>
-
-    <Animation.Fade delay="long">
-      <div className="w-14 h-14 bg-indigo-400 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-sm">
-        Delay
-      </div>
+      <div className="bg-indigo-500 rounded-md p-4 text-white">Fading in</div>
     </Animation.Fade>
 
     <Animation.Slide direction="left">
-      <div className="w-14 h-14 bg-blue-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Left
-      </div>
+      <div className="bg-blue-500 rounded-md p-4 text-white">Sliding from left</div>
     </Animation.Slide>
-
-    <Animation.Slide direction="right">
-      <div className="w-14 h-14 bg-blue-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Right
-      </div>
-    </Animation.Slide>
-
-    <Animation.Slide direction="up">
-      <div className="w-14 h-14 bg-blue-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Up
-      </div>
-    </Animation.Slide>
-
-    <Animation.Slide direction="down">
-      <div className="w-14 h-14 bg-blue-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Down
-      </div>
-    </Animation.Slide>
-
-    <Animation.Zoom scale="small">
-      <div className="w-14 h-14 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Sm
-      </div>
-    </Animation.Zoom>
-
-    <Animation.Zoom scale="medium">
-      <div className="w-14 h-14 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Md
-      </div>
-    </Animation.Zoom>
-
-    <Animation.Zoom scale="large">
-      <div className="w-14 h-14 bg-green-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Lg
-      </div>
-    </Animation.Zoom>
-
-    <Animation.Bounce scale="small">
-      <div className="w-14 h-14 bg-yellow-500 rounded-md shadow-lg flex items-center justify-center text-black font-bold text-xs">
-        Bnc
-      </div>
-    </Animation.Bounce>
 
     <Animation.Bounce scale="large">
-      <div className="w-14 h-14 bg-yellow-500 rounded-md shadow-lg flex items-center justify-center text-black font-bold text-xs">
-        Bnc
-      </div>
+      <div className="bg-yellow-500 rounded-md p-4 text-black">Bouncing in</div>
     </Animation.Bounce>
 
     <Animation.Flip direction="up">
-      <div className="w-14 h-14 bg-purple-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Flip
-      </div>
-    </Animation.Flip>
-
-    <Animation.Flip direction="left">
-      <div className="w-14 h-14 bg-purple-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Flip
-      </div>
+      <div className="bg-purple-500 rounded-md p-4 text-white">Flipping on X-axis</div>
     </Animation.Flip>
 
     <Animation.Rotate degrees={180}>
-      <div className="w-14 h-14 bg-red-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        180
-      </div>
+      <div className="bg-red-500 rounded-md p-4 text-white">Rotating 180 degrees</div>
     </Animation.Rotate>
 
-    <Animation.Rotate degrees={-200}>
-      <div className="w-14 h-14 bg-red-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        -200
-      </div>
-    </Animation.Rotate>
-
-    <Animation.Roll direction="left">
-      <div className="w-14 h-14 bg-pink-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Roll
-      </div>
-    </Animation.Roll>
+    <Animation.Zoom scale="medium">
+      <div className="bg-green-500 rounded-full p-4 text-white">Zooming in</div>
+    </Animation.Zoom>
 
     <Animation.Roll direction="right">
-      <div className="w-14 h-14 bg-pink-600 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Roll
-      </div>
+      <div className="bg-pink-500 rounded-md p-4 text-white">Rolling in</div>
     </Animation.Roll>
 
     <Animation.JackInTheBox>
-      <div className="w-14 h-14 bg-teal-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-[8px] text-center leading-tight">
-        Jack In
-      </div>
+      <div className="bg-teal-500 rounded-md p-4 text-white">Jack in the box</div>
     </Animation.JackInTheBox>
 
     <Animation.Hinge duration="slower">
-      <div className="w-14 h-14 bg-orange-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Hinge
-      </div>
+      <div className="bg-orange-500 rounded-md p-4 text-white">Hinge effect</div>
     </Animation.Hinge>
 
     <Animation.Bounce iteration="infinite">
-      <div className="w-14 h-14 bg-cyan-500 rounded-full shadow-lg flex items-center justify-center text-white font-bold text-xs">
-        Loop
-      </div>
+      <div className="bg-cyan-500 rounded-full p-4 text-white">Infinite loop</div>
     </Animation.Bounce>
     ```
 
@@ -151,143 +77,175 @@ npx vayu-ui add animation
 ## Anatomy
 
 ```tsx
-<Animation.Fade duration="normal" delay="none" iteration={1} fillMode="none">
-  {/* Content to animate */}
+import { Animation } from 'vayu-ui';
+
+// Fade — simple opacity transition
+<Animation.Fade duration="normal" delay="none">
+  {children}
 </Animation.Fade>
 
-<Animation.Slide direction="left" duration="normal" delay="none">
-  {/* Content to animate */}
+// Slide — directional entrance
+<Animation.Slide direction="left" duration="fast">
+  {children}
 </Animation.Slide>
 
-<Animation.Bounce scale="medium" duration="normal">
-  {/* Content to animate */}
+// Bounce — scale-based entrance
+<Animation.Bounce scale="medium" iteration={2}>
+  {children}
 </Animation.Bounce>
 
-<Animation.Flip direction="up" duration="normal">
-  {/* Content to animate */}
+// Flip — axis-based rotation entrance
+<Animation.Flip direction="up">
+  {children}
 </Animation.Flip>
 
-<Animation.Rotate degrees={-200} duration="normal">
-  {/* Content to animate */}
+// Rotate — custom degree rotation
+<Animation.Rotate degrees={-200}>
+  {children}
 </Animation.Rotate>
 
-<Animation.Zoom scale="medium" duration="normal">
-  {/* Content to animate */}
+// Zoom — scale-based entrance
+<Animation.Zoom scale="large">
+  {children}
 </Animation.Zoom>
 
-<Animation.Roll direction="left" duration="normal">
-  {/* Content to animate */}
+// Roll — rolling entrance with direction
+<Animation.Roll direction="left">
+  {children}
 </Animation.Roll>
 
-<Animation.JackInTheBox duration="normal">
-  {/* Content to animate */}
+// JackInTheBox — playful spring entrance
+<Animation.JackInTheBox>
+  {children}
 </Animation.JackInTheBox>
 
-<Animation.Hinge duration="normal" fillMode="forwards">
-  {/* Content to animate */}
+// Hinge — element swings and falls
+<Animation.Hinge duration="slower">
+  {children}
 </Animation.Hinge>
 ```
 
+- **Animation.Fade** — Smooth opacity transition from invisible to visible.
+- **Animation.Slide** — Translates the element in from a specified direction.
+- **Animation.Bounce** — Scales in with an elastic bounce effect.
+- **Animation.Flip** — Rotates the element on the X or Y axis.
+- **Animation.Rotate** — Rotates the element by a custom number of degrees.
+- **Animation.Zoom** — Scales the element from a smaller or larger size.
+- **Animation.Roll** — Rolls the element in from a specified direction.
+- **Animation.JackInTheBox** — Playful spring-loaded entrance animation.
+- **Animation.Hinge** — Element swings and falls off the page.
+
 ## Accessibility
 
-- **Reduced Motion**: All animation components detect the `prefers-reduced-motion: reduce` media query via the `usePrefersReducedMotion` hook. When enabled, animations are replaced with `opacity-100` so content appears instantly without motion.
-- **Keyboard Support**: Animation wrappers are standard `<div>` elements. They do not trap focus or intercept keyboard events.
-- **Focus Behavior**: Animations do not affect focus management. The animated wrapper is transparent to focus order.
-- **ARIA Attributes**: No ARIA attributes are added by the animation wrapper. Consumers should add appropriate roles and labels to the content inside.
+- **Reduced Motion Support**:
+  - Automatically detects OS-level `prefers-reduced-motion: reduce` setting via the `usePrefersReducedMotion` hook.
+  - When enabled, all animations are skipped and content is rendered with `opacity: 1` to ensure visibility.
+  - Fully compliant with **WCAG 2.2 Success Criterion 2.3.3** (Animation from Interactions).
+- **CSS-Only Approach**:
+  - Animations are purely visual decorations applied via CSS classes. No ARIA roles or live regions are needed.
+  - Content inside animation wrappers remains fully accessible to assistive technologies regardless of animation state.
+- **Animation Events**:
+  - `onAnimationStart` and `onAnimationEnd` callbacks are supported for programmatic state changes.
+  - Use these to manage focus or announce state transitions when needed.
+- **No Focus Impact**:
+  - Animations do not trap or steal focus. Interactive elements inside animation wrappers maintain normal tab order and focus behavior.
 
 ## Screen reader behavior
 
-Screen readers are not affected by CSS animations. Content inside animation wrappers is announced normally as soon as it enters the DOM, regardless of the visual animation state. When `prefers-reduced-motion` is active, the element renders with `opacity-100`, ensuring no delay in content accessibility for assistive technologies.
+Animation components are decorative CSS wrappers. Screen readers announce the content inside the animation as-is, without referencing the animation effect. When `prefers-reduced-motion` is enabled, the animation is silently disabled and content renders immediately. Since animations do not convey meaning or state, no additional ARIA attributes are applied. Users who rely on assistive technology receive the same content without any loss of information.
 
 ## Component Folder Structure
 
 ```
 Animation/
-├── Animation.tsx              # Root compound component and sub-component composition
-├── FadeAnimation.tsx          # Fade-in animation
-├── SlideAnimation.tsx         # Slide-in animation (directional)
-├── BounceAnimation.tsx        # Bounce-in animation (scale variants)
-├── FlipAnimation.tsx          # Flip-in animation (X/Y axis)
-├── RotateAnimation.tsx        # Rotate-in animation (custom degrees)
-├── ZoomAnimation.tsx          # Zoom-in animation (scale variants)
-├── RollAnimation.tsx          # Roll-in animation (directional)
-├── JackInTheBoxAnimation.tsx  # Pop-up animation
-├── HingeAnimation.tsx         # Swing-and-drop exit animation
+├── Animation.tsx              # Root component with compound composition
+├── FadeAnimation.tsx          # Fade variant
+├── SlideAnimation.tsx         # Slide variant (directional)
+├── BounceAnimation.tsx        # Bounce variant (scale-based)
+├── FlipAnimation.tsx          # Flip variant (axis-based)
+├── RotateAnimation.tsx        # Rotate variant (degree-based)
+├── ZoomAnimation.tsx          # Zoom variant (scale-based)
+├── RollAnimation.tsx          # Roll variant (directional)
+├── JackInTheBoxAnimation.tsx  # JackInTheBox variant
+├── HingeAnimation.tsx         # Hinge variant
+├── types.ts                   # TypeScript type definitions and mappings
 ├── hooks.ts                   # usePrefersReducedMotion hook
 ├── utils.ts                   # buildAnimationClasses utility
-├── types.ts                   # TypeScript types and mapping objects
-├── index.ts                   # Public API exports
-└── README.md                  # Internal documentation
+├── index.ts                   # Re-exports all components and types
+└── README.md                  # Component usage reference
 ```
 
 ## Props
 
-### Base Props
+### Common Props (All Variants)
 
-All animation sub-components accept these props:
+| Prop              | Type                                     | Default   | Description                                       |
+| :---------------- | :--------------------------------------- | :-------- | :------------------------------------------------ |
+| `children`        | `ReactNode`                              | —         | Content to animate.                               |
+| `duration`        | `'slower' \| 'slow' \| 'normal' \| 'fast' \| 'faster'` | `'normal'` | Animation duration.                               |
+| `delay`           | `'none' \| 'short' \| 'medium' \| 'long'` | `'none'`  | Delay before animation starts.                    |
+| `iteration`       | `1 \| 2 \| 3 \| 'infinite'`              | `1`       | Number of times the animation repeats.            |
+| `fillMode`        | `'none' \| 'forwards' \| 'backwards' \| 'both'` | `'none'`  | How styles are applied before and after animation. |
+| `onAnimationEnd`  | `AnimationEventHandler<HTMLDivElement>`   | —         | Callback fired when animation completes.          |
+| `onAnimationStart`| `AnimationEventHandler<HTMLDivElement>`   | —         | Callback fired when animation starts.             |
+| `className`       | `string`                                 | —         | Additional CSS classes.                           |
 
-| Prop               | Type                                                           | Default    | Description                               |
-| :----------------- | :------------------------------------------------------------- | :--------- | :---------------------------------------- |
-| `children`         | `ReactNode`                                                    | —          | Content to animate                        |
-| `duration`         | `"slower"` \| `"slow"` \| `"normal"` \| `"fast"` \| `"faster"` | `"normal"` | Animation speed                           |
-| `delay`            | `"none"` \| `"short"` \| `"medium"` \| `"long"`                | `"none"`   | Delay before the animation starts         |
-| `iteration`        | `1` \| `2` \| `3` \| `"infinite"`                              | `1`        | Number of times the animation repeats     |
-| `fillMode`         | `"none"` \| `"forwards"` \| `"backwards"` \| `"both"`          | `"none"`   | How styles persist before/after animation |
-| `className`        | `string`                                                       | —          | Additional CSS classes                    |
-| `onAnimationEnd`   | `AnimationEventHandler<HTMLDivElement>`                        | —          | Fires when the animation completes        |
-| `onAnimationStart` | `AnimationEventHandler<HTMLDivElement>`                        | —          | Fires when the animation starts           |
+### Animation.Fade
+
+Uses common props only. No additional props.
 
 ### Animation.Slide
 
-| Prop        | Type                                        | Default  | Description                          |
-| :---------- | :------------------------------------------ | :------- | :----------------------------------- |
-| `direction` | `"up"` \| `"down"` \| `"left"` \| `"right"` | `"left"` | Direction the content slides in from |
+| Prop        | Type                                   | Default  | Description                        |
+| :---------- | :------------------------------------- | :------- | :--------------------------------- |
+| `direction` | `'up' \| 'down' \| 'left' \| 'right'` | `'left'` | Direction the element slides in from. |
 
-### Animation.Flip
-
-| Prop        | Type                                        | Default | Description                                                             |
-| :---------- | :------------------------------------------ | :------ | :---------------------------------------------------------------------- |
-| `direction` | `"up"` \| `"down"` \| `"left"` \| `"right"` | `"up"`  | Flip axis and direction (`up`/`down` = X-axis, `left`/`right` = Y-axis) |
-
-### Animation.Roll
-
-| Prop        | Type                                        | Default  | Description                         |
-| :---------- | :------------------------------------------ | :------- | :---------------------------------- |
-| `direction` | `"up"` \| `"down"` \| `"left"` \| `"right"` | `"left"` | Direction the content rolls in from |
+Plus all [Common Props](#common-props-all-variants).
 
 ### Animation.Bounce
 
-| Prop    | Type                                 | Default    | Description              |
-| :------ | :----------------------------------- | :--------- | :----------------------- |
-| `scale` | `"small"` \| `"medium"` \| `"large"` | `"medium"` | Starting scale intensity |
+| Prop    | Type                                 | Default    | Description                  |
+| :------ | :----------------------------------- | :--------- | :--------------------------- |
+| `scale` | `'small' \| 'medium' \| 'large'`     | `'medium'` | Intensity of the bounce effect. |
 
-### Animation.Zoom
+Plus all [Common Props](#common-props-all-variants).
 
-| Prop    | Type                                 | Default    | Description              |
-| :------ | :----------------------------------- | :--------- | :----------------------- |
-| `scale` | `"small"` \| `"medium"` \| `"large"` | `"medium"` | Starting scale intensity |
+### Animation.Flip
+
+| Prop        | Type                                   | Default  | Description                          |
+| :---------- | :------------------------------------- | :------- | :----------------------------------- |
+| `direction` | `'up' \| 'down' \| 'left' \| 'right'` | `'up'`   | Flip direction. `up`/`down` flip on X-axis, `left`/`right` flip on Y-axis. |
+
+Plus all [Common Props](#common-props-all-variants).
 
 ### Animation.Rotate
 
-| Prop      | Type     | Default | Description                        |
-| :-------- | :------- | :------ | :--------------------------------- |
-| `degrees` | `number` | `-200`  | Starting rotation angle in degrees |
+| Prop      | Type     | Default | Description                          |
+| :-------- | :------- | :------ | :----------------------------------- |
+| `degrees` | `number` | `-200`  | Starting rotation angle in degrees.  |
 
-### Duration Values
+Plus all [Common Props](#common-props-all-variants).
 
-| Value    | Duration |
-| :------- | :------- |
-| `slower` | 2000ms   |
-| `slow`   | 1500ms   |
-| `normal` | 1000ms   |
-| `fast`   | 700ms    |
-| `faster` | 500ms    |
+### Animation.Zoom
 
-### Delay Values
+| Prop    | Type                                 | Default    | Description                  |
+| :------ | :----------------------------------- | :--------- | :--------------------------- |
+| `scale` | `'small' \| 'medium' \| 'large'`     | `'medium'` | Starting scale intensity.    |
 
-| Value    | Delay |
-| :------- | :---- |
-| `none`   | 0ms   |
-| `short`  | 150ms |
-| `medium` | 300ms |
-| `long`   | 500ms |
+Plus all [Common Props](#common-props-all-variants).
+
+### Animation.Roll
+
+| Prop        | Type                                   | Default  | Description                       |
+| :---------- | :------------------------------------- | :------- | :-------------------------------- |
+| `direction` | `'up' \| 'down' \| 'left' \| 'right'` | `'left'` | Direction the element rolls in from. |
+
+Plus all [Common Props](#common-props-all-variants).
+
+### Animation.JackInTheBox
+
+Uses common props only. No additional props.
+
+### Animation.Hinge
+
+Uses common props only, but defaults `fillMode` to `'forwards'` instead of `'none'` so the element remains visible after the animation completes.
