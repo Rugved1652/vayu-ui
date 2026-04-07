@@ -62,7 +62,6 @@
   },
   "repository": "VayuUI/vayu-ui-cli",
   "scripts": {
-    "build": "shx rm -rf dist && tsup",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "npm run lint",

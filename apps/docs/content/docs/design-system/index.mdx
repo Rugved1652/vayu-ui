@@ -1,0 +1,622 @@
+---
+title: Design System
+description: The complete CSS foundation powering Vayu UI — tokens, semantics, and keyframes in a single stylesheet.
+---
+
+import { Alert } from 'vayu-ui';
+import { Info } from 'lucide-react';
+
+# Overview
+
+This is the complete CSS source that powers every Vayu UI component. It defines **color tokens**, **semantic layers**, **radius / shadow / blur scales**, **typography**, **transitions**, **animations**, and **keyframes** — all in one place.
+
+<div className="not-prose">
+  <Alert variant="info">
+    <Alert.Icon variant="info">
+      <Info size={18} />
+    </Alert.Icon>
+    <Alert.Content>
+      <Alert.Title>Design Tokens</Alert.Title>
+      <Alert.Description>
+        Browse the individual pages for usage guidance, or reference the raw CSS below.
+      </Alert.Description>
+    </Alert.Content>
+  </Alert>
+</div>
+---
+
+## global.css
+
+```scss
+@import 'tailwindcss';
+@import './animations.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --canvas: #f4f4f5; /* Neutral light gray to make the white surfaces pop */
+  --canvas-content: #09090b; /* Near-black text for maximum readability */
+  --surface: #fff; /* Pure white */
+  --surface-content: #09090b;
+  --sidebar: #fafafa; /* Just barely off-white */
+  --sidebar-content: #18181b;
+  --elevated: #fff; /* Pure white (relies on shadow for depth) */
+  --elevated-content: #09090b;
+  --brand: #84cc16; /* Bright, electric lime */
+  --brand-content: #052e16; /* Very dark green text for WCAG compliance on the bright button */
+  --success: #10b981;
+  --success-content: #fff;
+  --warning: #f59e0b;
+  --warning-content: #fff;
+  --destructive: #ef4444;
+  --destructive-content: #fff;
+  --info: #0ea5e9;
+  --info-content: #fff;
+  --muted: #e4e4e7; /* Neutral gray for disabled states */
+  --border: #d4d4d8; /* Neutral gray border */
+  --field: #a1a1aa;
+  --focus: #84cc16;
+  --shadow: #000;
+}
+
+:root.dark {
+  --canvas: #000; /* Pure OLED black */
+  --canvas-content: #fafafa; /* Crisp white text */
+  --surface: #0a0a0a; /* Just one step above pure black */
+  --surface-content: #fff;
+  --sidebar: #121212; /* Standard dark mode navigation gray */
+  --sidebar-content: #e4e4e7;
+  --elevated: #1a1a1a; /* Lightest gray for dropdowns/modals */
+  --elevated-content: #fff;
+  --brand: #bef264; /* Ultra-bright neon lime */
+  --brand-content: #000; /* Pure black text for aggressive, sharp contrast */
+  --success: #34d399;
+  --success-content: #000;
+  --warning: #facc15;
+  --warning-content: #000;
+  --destructive: #f87171;
+  --destructive-content: #000;
+  --info: #38bdf8;
+  --info-content: #000;
+  --muted: #27272a; /* Deep, dark gray */
+  --muted-content: #a1a1aa;
+  --border: #27272a; /* Barely visible borders to separate dark areas */
+  --field: #3f3f46;
+  --focus: #bef264;
+  --shadow: #fff;
+}
+
+@theme {
+  /* --- Base Layers --- */
+  --color-canvas: var(--canvas);
+  --color-canvas-content: var(--canvas-content);
+  --color-surface: var(--surface);
+  --color-surface-content: var(--surface-content);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-content: var(--sidebar-content);
+  --color-elevated: var(--elevated);
+  --color-elevated-content: var(--elevated-content);
+
+  /* ── Semantic Colors ── */
+  --color-brand: var(--brand);
+  --color-brand-content: var(--brand-content);
+  --color-success: var(--success);
+  --color-success-content: var(--success-content);
+  --color-warning: var(--warning);
+  --color-warning-content: var(--warning-content);
+  --color-destructive: var(--destructive);
+  --color-destructive-content: var(--destructive-content);
+  --color-info: var(--info);
+  --color-info-content: var(--info-content);
+  --color-muted: var(--muted);
+  --color-muted-content: var(--muted-content);
+
+  /* ── Structural ── */
+  --color-border: var(--border);
+  --color-field: var(--field);
+  --color-focus: var(--focus);
+
+  /* base radius */
+  --radius: 6px;
+
+  /* scale */
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+
+  /* semantic (minimal & stable) */
+  --radius-control: var(--radius-sm); /* inputs, buttons */
+  --radius-surface: var(--radius-md); /* cards, containers */
+  --radius-overlay: var(--radius-lg); /* modals, popovers */
+  --radius-full: 9999px;
+
+  /* base shadow */
+  --shadow-color: var(--shadow);
+
+  /* base scale (hidden/internal) */
+  --shadow-sm: 0 1px 2px rgb(var(--shadow-color) / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(var(--shadow-color) / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(var(--shadow-color) / 0.1);
+
+  /* semantic (like radius) */
+  --shadow-control: var(--shadow-sm); /* buttons, inputs Interactive UI */
+  --shadow-surface: var(
+    --shadow-sm
+  ); /* Use: Cards, List items, Table rows. Subtle lift to separate from canvas. */
+  --shadow-elevated: var(
+    --shadow-md
+  ); /* Use: Modals, Popovers, Dropdowns. Strong depth to imply floating above UI. */
+  --shadow-focus: var(
+    --shadow-lg
+  ); /* Use: Keyboard focus rings. Can be combined with --brand color if needed. */
+
+  --shadow-inner: inset 0 2px 4px rgb(var(--shadow-color) / 0.1); /* Use: Pressed buttons, Active inputs (sunken effect). */
+
+  --drop-shadow-subtle: 0 1px 2px rgb(0 0 0 / 0.12); /* subtle - icons - illustration */
+  --drop-shadow-elevated: 0 4px 6px rgb(0 0 0 / 0.18); /* elevated -floating icons, illustrations */
+
+  /* base text shadow */
+  --text-shadow: 0px 1px 2px rgb(0 0 0 / 0.2);
+
+  /* scale */
+  --text-shadow-sm: 0px 1px 1px rgb(0 0 0 / 0.15);
+  --text-shadow-md: var(--text-shadow);
+  --text-shadow-lg: 0px 2px 4px rgb(0 0 0 / 0.25);
+
+  /* semantic (minimal & stable) */
+  --text-shadow-subtle: var(--text-shadow-sm); /* small labels */
+  --text-shadow-surface: var(--text-shadow-md); /* headings */
+  --text-shadow-overlay: var(--text-shadow-lg); /* hero text on images */
+
+  /* base blur */
+  --blur: 12px;
+
+  /* scale */
+  --blur-sm: calc(var(--blur) - 4px);
+  --blur-md: var(--blur);
+  --blur-lg: calc(var(--blur) + 8px);
+
+  /* semantic (minimal & stable) */
+  --blur-control: var(--blur-sm); /* subtle UI, bg on hover effects (use sparingly) */
+  --blur-surface: var(--blur-md); /* cards, glass UI */
+  --blur-overlay: var(--blur-lg); /* modals, heavy backdrop */
+
+  /* fonts */
+  --font-primary: 'Oswald', sans-serif; /* Headings */
+  --font-secondary: 'Mulish', sans-serif; /* UI Body */
+  --font-tertiary: 'Geist Mono', monospace; /* Code */
+
+  --font-size: 1rem; /* base = 16px */
+
+  /* scale */
+  --text-xs: calc(var(--font-size) * 0.75); /* 12px */
+  --text-sm: calc(var(--font-size) * 0.875); /* 14px */
+  --text-md: var(--font-size); /* 16px */
+  --text-lg: calc(var(--font-size) * 1.125); /* 18px */
+  --text-xl: calc(var(--font-size) * 1.25); /* 20px */
+  --text-2xl: calc(var(--font-size) * 1.5); /* 24px */
+  --text-3xl: calc(var(--font-size) * 1.875); /* 30px */
+
+  /* semantic */
+  --text-h1: var(--text-3xl); /* Use: Hero headings, Page titles. Maximum visual weight. */
+  --text-h2: var(--text-2xl); /* Use: Section headings. Strong hierarchy. */
+  --text-h3: var(--text-xl); /* Use: Card headings, Subsection titles. */
+  --text-h4: var(--text-lg); /* Use: Form field labels, Important inline text. */
+  --text-h5: var(--text-md); /* Use: Navigation links, Button text. */
+  --text-h6: var(--text-sm); /* Use: Secondary labels, Captions. */
+  --text-para: var(--text-sm); /* Use: Body copy, Paragraphs. */
+
+  --transition-fast: 150ms ease-in-out;
+  --transition-medium: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+
+  /* Animations */
+  --animate-marquee-scroll: marquee-scroll linear infinite;
+  --animate-marquee-ping-pong: marquee-ping-pong linear infinite alternate;
+  --animate-fade-in: fade-in 1s ease-out;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-particle: float-particle 15s linear infinite;
+  --animate-morph-blob: morph-blob 20s ease-in-out infinite;
+  --animate-orbit: orbit 20s linear infinite;
+  --animate-slide-in-left: slide-in-left 1s both;
+  --animate-slide-in-right: slide-in-right 1s both;
+  --animate-slide-in-up: slide-in-up 1s both;
+  --animate-slide-in-down: slide-in-down 1s both;
+  --animate-bounce-in: bounce-in 1s ease;
+  --animate-bounce-in-small: bounce-in-small 1s ease;
+  --animate-bounce-in-large: bounce-in-large 1s ease;
+  --animate-flip-in-x: flip-in-x 1s ease-in;
+  --animate-flip-in-y: flip-in-y 1s ease-in;
+  --animate-rotate-in: rotate-in 1s ease-out;
+  --animate-zoom-in: zoom-in 1s ease-out;
+  --animate-zoom-in-small: zoom-in-small 1s ease-out;
+  --animate-zoom-in-large: zoom-in-large 1s ease-out;
+  --animate-roll-in: roll-in 1s ease-out;
+  --animate-roll-in-right: roll-in-right 1s ease-out;
+  --animate-roll-in-up: roll-in-up 1s ease-out;
+  --animate-roll-in-down: roll-in-down 1s ease-out;
+  --animate-jack-in-the-box: jack-in-the-box 1s ease-out;
+  --animate-hinge: hinge 2s ease-in-out;
+  --animate-spin-slow: spin-slow 60s linear infinite;
+  --animate-reverse-spin: reverse-spin 40s linear infinite;
+  --animate-toast-enter: toast-enter 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-toast-exit: toast-exit 300ms ease-in both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+  }
+}
+```
+
+---
+
+## animations.css
+
+```css
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-ping-pong {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes float-particle {
+  0% {
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100vh) translateX(20px);
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes morph-blob {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(1.1);
+  }
+  66% {
+    transform: scale(0.8);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-in-small {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-in-large {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes flip-in-x {
+  from {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes flip-in-y {
+  from {
+    transform: rotateY(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes rotate-in {
+  from {
+    transform: rotate(-200deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-in-small {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-in {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-in-large {
+  from {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes roll-in {
+  from {
+    transform: translateX(-100%) rotate(-120deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes roll-in-right {
+  from {
+    transform: translateX(100%) rotate(120deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes roll-in-up {
+  from {
+    transform: translateY(100%) rotate(120deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes roll-in-down {
+  from {
+    transform: translateY(-100%) rotate(-120deg);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes jack-in-the-box {
+  from {
+    opacity: 0;
+    transform: scale(0.1) rotate(30deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hinge {
+  to {
+    transform: translateY(700px);
+    opacity: 0;
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes reverse-spin {
+  to {
+    transform: rotate(0);
+  }
+}
+
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes toast-exit {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes skeleton-wave {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-wave {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-wave::after {
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.6) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: skeleton-wave 1.5s infinite;
+  content: '';
+}
+
+:root.dark .skeleton-wave::after {
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.05) 20%,
+    rgba(255, 255, 255, 0.1) 60%,
+    rgba(255, 255, 255, 0)
+  );
+}
+```

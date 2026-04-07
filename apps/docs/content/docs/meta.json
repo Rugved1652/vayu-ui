@@ -1,4 +1,4 @@
 {
   "title": "Documentation",
-  "pages": ["index", "design-system", "components", "hooks", "3D-components", "mcp-support", "cli-support", "maintainers"]
+  "pages": ["index", "design-system", "components", "hooks", "3D-Designs", "mcp-support", "cli-support", "maintainers"]
 }

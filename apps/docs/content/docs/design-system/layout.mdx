@@ -6,7 +6,7 @@ description: Learn how to properly stack layers and structure your application u
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import { Layout, Layers, Moon, Sun } from 'lucide-react';
 
-# Layout & Structure
+# Overview
 
 Building a well-structured UI is like architecture — you need a solid foundation before adding walls and decorations. This guide teaches you how to stack Vayu UI's layers correctly to create clear visual hierarchy.
 
@@ -40,6 +40,17 @@ Vayu UI uses four primary layers, ordered from bottom to top:
 | **Surface**  | 1               | Low — sits on top of canvas                |
 | **Elevated** | 2+              | Highest — floats above everything          |
 
+### Color Tokens
+
+Each layer uses a paired token — one for the background, one for the text on top of it:
+
+| Layer        | Background Token | Text Token              |
+| :----------- | :--------------- | :---------------------- |
+| **Canvas**   | `bg-canvas`      | `text-canvas-content`   |
+| **Sidebar**  | `bg-sidebar`     | `text-sidebar-content`  |
+| **Surface**  | `bg-surface`     | `text-surface-content`  |
+| **Elevated** | `bg-elevated`    | `text-elevated-content` |
+
 ---
 
 ## When to Use Each Layer
@@ -52,11 +63,11 @@ The canvas is your app's backdrop. It should always be the bottom-most layer.
 
 <Tabs items={['Example', 'Code']}>
   <Tab value="Example">
-    <div className="p-8 rounded-lg" style={{ backgroundColor: '#fafafa' }}>
-      <p className="text-canvas-content mb-4">This entire area represents the canvas layer.</p>
-      <p className="text-muted-content text-sm">
+    <div className="p-8 rounded-lg bg-canvas">
+      <div className="text-canvas-content mb-4">This entire area represents the canvas layer.</div>
+      <div className="text-muted-content text-sm">
         Notice how it's slightly off-white, not pure white. This reduces eye strain.
-      </p>
+      </div>
     </div>
   </Tab>
   <Tab value="Code">
@@ -96,11 +107,11 @@ Surfaces sit on top of the canvas to group related content. Most of your UI comp
     <div className="bg-canvas p-6 rounded-lg">
       <div className="bg-surface text-surface-content p-4 rounded-surface shadow-surface mb-4">
         <h4 className="font-medium mb-2">Card Title</h4>
-        <p className="text-sm text-muted-content">This card sits on the canvas.</p>
+        <div className="text-sm text-muted-content">This card sits on the canvas.</div>
       </div>
       <div className="bg-surface text-surface-content p-4 rounded-surface shadow-surface">
         <h4 className="font-medium mb-2">Another Card</h4>
-        <p className="text-sm text-muted-content">Multiple surfaces create visual separation.</p>
+        <div className="text-sm text-muted-content">Multiple surfaces create visual separation.</div>
       </div>
     </div>
   </Tab>
@@ -204,16 +215,16 @@ Elevated elements float above everything else. They command attention and requir
 
 <Tabs items={['Example', 'Code']}>
   <Tab value="Example">
-    <div className="relative bg-canvas p-8 rounded-lg">
-      <div className="bg-surface p-4 rounded-surface">
-        <p>Main content behind the modal</p>
+    <div className="relative bg-canvas p-8 min-h-64 rounded-lg">
+      <div className="bg-surface p-4 flex item-center justify-center  rounded-surface">
+        <div className="text-muted-content"> lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.</div>
       </div>
 
       {/* Simulated modal overlay */}
       <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
         <div className="bg-elevated text-elevated-content rounded-overlay shadow-elevated p-6 max-w-sm">
           <h3 className="font-medium mb-2">Modal Title</h3>
-          <p className="text-sm text-muted-content mb-4">This modal floats above all other content.</p>
+          <div className="text-sm text-muted-content mb-4">This modal floats above all other content.</div>
           <div className="flex gap-2">
             <button className="bg-muted text-muted-content px-3 py-1.5 rounded-control">Cancel</button>
             <button className="bg-brand text-brand-content px-3 py-1.5 rounded-control">Confirm</button>
@@ -395,57 +406,33 @@ Vayu UI uses a class-based dark mode strategy. Add `.dark` to a parent element, 
 <Tabs items={['Light Mode', 'Dark Mode']}>
   <Tab value="Light Mode">
     <div className="space-y-4">
-      <div className="p-4 rounded-lg" style={{ backgroundColor: '#fafafa' }}>
-        <p className="font-medium mb-2" style={{ color: '#18181b' }}>
-          Canvas (#fafafa)
-        </p>
-        <p className="text-sm" style={{ color: '#71717a' }}>
-          Soft off-white background
-        </p>
+      <div className="p-4 rounded-lg bg-canvas text-canvas-content">
+        <div className="font-medium mb-2">Canvas</div>
+        <div className="text-sm text-muted-content">Foundation background layer</div>
       </div>
-      <div className="p-4 rounded-lg" style={{ backgroundColor: '#fff' }}>
-        <p className="font-medium mb-2" style={{ color: '#18181b' }}>
-          Surface (#fff)
-        </p>
-        <p className="text-sm" style={{ color: '#71717a' }}>
-          Pure white, elevated from canvas
-        </p>
+      <div className="p-4 rounded-lg bg-surface text-surface-content">
+        <div className="font-medium mb-2">Surface</div>
+        <div className="text-sm text-muted-content">Elevated from canvas</div>
       </div>
-      <div className="p-4 rounded-lg" style={{ backgroundColor: '#f4f4f5' }}>
-        <p className="font-medium mb-2" style={{ color: '#18181b' }}>
-          Sidebar (#f4f4f5)
-        </p>
-        <p className="text-sm" style={{ color: '#71717a' }}>
-          Neutral gray for navigation
-        </p>
+      <div className="p-4 rounded-lg bg-sidebar text-sidebar-content">
+        <div className="font-medium mb-2">Sidebar</div>
+        <div className="text-sm text-muted-content">Navigation areas</div>
       </div>
     </div>
   </Tab>
   <Tab value="Dark Mode">
     <div className="space-y-4">
-      <div className="p-4 rounded-lg" style={{ backgroundColor: '#09090b' }}>
-        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>
-          Canvas (#09090b)
-        </p>
-        <p className="text-sm" style={{ color: '#a1a1aa' }}>
-          Near-black, not pure black
-        </p>
+      <div className="p-4 rounded-lg bg-canvas text-canvas-content">
+        <div className="font-medium mb-2">Canvas</div>
+        <div className="text-sm text-muted-content">Foundation background layer</div>
       </div>
-      <div className="p-4 rounded-lg" style={{ backgroundColor: '#18181b' }}>
-        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>
-          Surface (#18181b)
-        </p>
-        <p className="text-sm" style={{ color: '#a1a1aa' }}>
-          Elevated from canvas
-        </p>
+      <div className="p-4 rounded-lg bg-surface text-surface-content">
+        <div className="font-medium mb-2">Surface</div>
+        <div className="text-sm text-muted-content">Elevated from canvas</div>
       </div>
-      <div className="p-4 rounded-lg" style={{ backgroundColor: '#0a0a0a' }}>
-        <p className="font-medium mb-2" style={{ color: '#fafafa' }}>
-          Sidebar (#0a0a0a)
-        </p>
-        <p className="text-sm" style={{ color: '#a1a1aa' }}>
-          Darker for depth
-        </p>
+      <div className="p-4 rounded-lg bg-sidebar text-sidebar-content">
+        <div className="font-medium mb-2">Sidebar</div>
+        <div className="text-sm text-muted-content">Navigation areas</div>
       </div>
     </div>
   </Tab>

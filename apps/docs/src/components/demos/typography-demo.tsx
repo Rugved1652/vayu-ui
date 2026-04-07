@@ -2,7 +2,7 @@ import { Typography } from 'vayu-ui';
 
 export default function TypographyDemo() {
   return (
-    <div className="flex flex-col gap-10 w-full max-w-3xl">
+    <div className="flex flex-col gap-10 w-full max-w-3xl not-prose">
       {/* Headings Section */}
       <section>
         <Typography.H2 className="mb-6">Headings</Typography.H2>

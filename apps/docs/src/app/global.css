@@ -74,7 +74,7 @@
   --border: #27272a;                    /* Barely visible borders to separate dark areas */
   --field: #3f3f46;                     
   --focus: #bef264;                     
-  --shadow: #000;                       
+  --shadow: #fff;                       
 }
 
 @theme {

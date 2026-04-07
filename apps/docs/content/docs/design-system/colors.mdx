@@ -6,7 +6,7 @@ description: Learn how to use Vayu UI's semantic color system with the pairing p
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import { Palette, Layers, Contrast } from 'lucide-react';
 
-# Theming & Colors
+# Overview
 
 Welcome to the Vayu UI color system! This guide will teach you how to think about colors in a semantic, meaningful way. By the end, you'll understand why we never say "use blue" — we say "use brand".
 
@@ -81,15 +81,15 @@ The canvas is your app's foundation. It's the bottom-most layer.
 
 <Tabs items={['Light Mode', 'Dark Mode', 'Usage']}>
   <Tab value="Light Mode">
-    <div className="p-6 rounded-lg border border-border" style={{ backgroundColor: '#fafafa' }}>
-      <p style={{ color: '#18181b' }}>Canvas is a soft off-white (#fafafa)</p>
-      <p className="text-sm mt-2" style={{ color: '#71717a' }}>Easier on the eyes than pure white</p>
+    <div className="p-6 rounded-lg border border-border bg-canvas text-canvas-content">
+      <div>Canvas — the foundation layer</div>
+      <div className="text-sm mt-2 text-muted-content">Light mode canvas Color</div>
     </div>
   </Tab>
   <Tab value="Dark Mode">
-    <div className="p-6 rounded-lg border border-border" style={{ backgroundColor: '#09090b' }}>
-      <p style={{ color: '#fafafa' }}>Canvas is a rich near-black (#09090b)</p>
-      <p className="text-sm mt-2" style={{ color: '#a1a1aa' }}>Not pure black for eye comfort</p>
+    <div className="p-6 rounded-lg border border-border bg-canvas text-canvas-content">
+      <div>Canvas — the foundation layer</div>
+      <div className="text-sm mt-2 text-muted-content">Dark mode canvas Color</div>
     </div>
   </Tab>
   <Tab value="Usage">
@@ -114,15 +114,15 @@ Surfaces are containers that sit on top of the canvas. Cards, panels, and form e
 
 <Tabs items={['Light Mode', 'Dark Mode', 'Usage']}>
   <Tab value="Light Mode">
-    <div className="p-6 rounded-lg shadow-surface" style={{ backgroundColor: '#fff' }}>
-      <p style={{ color: '#18181b' }}>Surface is crisp white (#fff)</p>
-      <p className="text-sm mt-2" style={{ color: '#71717a' }}>Creates clear separation from canvas</p>
+    <div className="p-6 rounded-lg shadow-surface bg-surface text-surface-content">
+      <div>Surface — content containers</div>
+      <div className="text-sm mt-2 text-muted-content">Creates clear separation from canvas</div>
     </div>
   </Tab>
   <Tab value="Dark Mode">
-    <div className="p-6 rounded-lg shadow-surface" style={{ backgroundColor: '#18181b' }}>
-      <p style={{ color: '#fafafa' }}>Surface is elevated (#18181b)</p>
-      <p className="text-sm mt-2" style={{ color: '#a1a1aa' }}>Lighter than canvas for depth</p>
+    <div className="p-6 rounded-lg shadow-surface bg-surface text-surface-content">
+      <div>Surface — content containers</div>
+      <div className="text-sm mt-2 text-muted-content">Lighter than canvas for depth</div>
     </div>
   </Tab>
   <Tab value="Usage">
@@ -149,15 +149,15 @@ Sidebars are for navigation. They're visually distinct from the main content are
 
 <Tabs items={['Light Mode', 'Dark Mode', 'Usage']}>
   <Tab value="Light Mode">
-    <div className="p-6 rounded-lg" style={{ backgroundColor: '#f4f4f5' }}>
-      <p style={{ color: '#18181b' }}>Sidebar is neutral gray (#f4f4f5)</p>
-      <p className="text-sm mt-2" style={{ color: '#71717a' }}>Subtle difference from canvas</p>
+    <div className="p-6 rounded-lg bg-sidebar text-sidebar-content">
+      <div>Sidebar — navigation areas</div>
+      <div className="text-sm mt-2 text-muted-content">Subtle difference from canvas</div>
     </div>
   </Tab>
   <Tab value="Dark Mode">
-    <div className="p-6 rounded-lg" style={{ backgroundColor: '#0a0a0a' }}>
-      <p style={{ color: '#fafafa' }}>Sidebar is deeper black (#0a0a0a)</p>
-      <p className="text-sm mt-2" style={{ color: '#a1a1aa' }}>Darker than canvas for contrast</p>
+    <div className="p-6 rounded-lg bg-sidebar text-sidebar-content">
+      <div>Sidebar — navigation areas</div>
+      <div className="text-sm mt-2 text-muted-content">Darker than canvas for contrast</div>
     </div>
   </Tab>
   <Tab value="Usage">
@@ -183,15 +183,15 @@ Elevated surfaces appear above everything else. Think modals, tooltips, and drop
 
 <Tabs items={['Light Mode', 'Dark Mode', 'Usage']}>
   <Tab value="Light Mode">
-    <div className="p-6 rounded-lg shadow-elevated" style={{ backgroundColor: '#fff' }}>
-      <p style={{ color: '#18181b' }}>Elevated is white (#fff)</p>
-      <p className="text-sm mt-2" style={{ color: '#71717a' }}>Same as surface, but with stronger shadow</p>
+    <div className="p-6 rounded-lg shadow-elevated bg-elevated text-elevated-content">
+      <div>Elevated — floating elements</div>
+      <div className="text-sm mt-2 text-muted-content">Same as surface, but with stronger shadow</div>
     </div>
   </Tab>
   <Tab value="Dark Mode">
-    <div className="p-6 rounded-lg shadow-elevated" style={{ backgroundColor: '#27272a' }}>
-      <p style={{ color: '#fafafa' }}>Elevated is lightest layer (#27272a)</p>
-      <p className="text-sm mt-2" style={{ color: '#a1a1aa' }}>Stands out from all other layers</p>
+    <div className="p-6 rounded-lg shadow-elevated bg-elevated text-elevated-content">
+      <div>Elevated — floating elements</div>
+      <div className="text-sm mt-2 text-muted-content">Stands out from all other layers</div>
     </div>
   </Tab>
   <Tab value="Usage">
@@ -248,22 +248,22 @@ Your brand color is for primary actions and key interactive elements.
   </Tab>
   <Tab value="Light Mode">
     <div className="flex gap-4 items-center">
-      <div className="w-12 h-12 rounded-lg flex items-center justify-center text-brand-content" style={{ backgroundColor: '#6366f1' }}>
+      <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-brand text-brand-content">
         Aa
       </div>
       <div>
-        <p className="font-medium">Indigo (#6366f1)</p>
+        <div className="font-medium">Brand</div>
         <p className="text-sm text-muted-content">Confident, professional</p>
       </div>
     </div>
   </Tab>
   <Tab value="Dark Mode">
     <div className="flex gap-4 items-center">
-      <div className="w-12 h-12 rounded-lg flex items-center justify-center text-brand-content" style={{ backgroundColor: '#818cf8' }}>
+      <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-brand text-brand-content">
         Aa
       </div>
       <div>
-        <p className="font-medium">Lighter Indigo (#818cf8)</p>
+        <div className="font-medium">Brand</div>
         <p className="text-sm text-muted-content">Brighter for dark backgrounds</p>
       </div>
     </div>
