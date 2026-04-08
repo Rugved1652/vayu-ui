@@ -33,30 +33,29 @@ npx vayu-ui add -t popover #with test case needs
     <Popover>
       <Popover.Trigger>Open Popover</Popover.Trigger>
       <Popover.Content>
-        <p>Popover content goes here.</p>
+        <div className="p-2">
+          <p>Set the dimensions for the layer.</p>
+        </div>
       </Popover.Content>
     </Popover>
 
     <Popover>
       <Popover.Trigger>With Arrow</Popover.Trigger>
-      <Popover.Content showArrow side="top">
-        <p>This popover has an arrow pointing to the trigger.</p>
-      </Popover.Content>
-    </Popover>
-
-    <Popover>
-      <Popover.Trigger>Aligned Start</Popover.Trigger>
-      <Popover.Content side="bottom" align="start">
-        <p>align="start"</p>
+      <Popover.Content side="top" showArrow>
+        <div className="p-2">
+          <p>This popover appears above with an arrow.</p>
+        </div>
       </Popover.Content>
     </Popover>
 
     <Popover>
       <Popover.Trigger asChild>
-        <button className="...">Custom Trigger</button>
+        <Button variant="primary">Custom Trigger</Button>
       </Popover.Trigger>
-      <Popover.Content showArrow>
-        <p>Using asChild with a custom trigger element.</p>
+      <Popover.Content side="bottom" align="start" showArrow>
+        <div className="p-2">
+          <p>Using asChild with a custom trigger element.</p>
+        </div>
       </Popover.Content>
     </Popover>
     ```
@@ -70,78 +69,79 @@ npx vayu-ui add -t popover #with test case needs
 import { Popover } from 'vayu-ui';
 
 <Popover>
-  <Popover.Trigger>Trigger</Popover.Trigger>
-  <Popover.Content>Content goes here.</Popover.Content>
+  <Popover.Trigger>Open</Popover.Trigger>
+  <Popover.Content side="bottom" align="center" sideOffset={8} showArrow>
+    {/* Content goes here */}
+  </Popover.Content>
 </Popover>;
 ```
 
-- **Popover** — Root container. Manages open/close state and provides context to children.
-- **Popover.Trigger** — Button element that toggles the popover open or closed. Supports `asChild` to merge props onto a custom element.
-- **Popover.Content** — Floating panel positioned relative to the trigger. Supports directional placement, arrow indicator, and collision avoidance.
+- **Popover** — Root container. Manages open/close state and provides context to all subcomponents. Supports controlled and uncontrolled usage.
+- **Popover.Trigger** — Button that toggles the popover. Supports `asChild` to merge props onto a custom element.
+- **Popover.Content** — Floating panel with automatic positioning and collision detection. Renders conditionally when open.
 
 ## Accessibility
 
 - **Keyboard Support**:
-  - `Enter` / `Space` — Toggle the popover open or closed.
-  - `Escape` — Close the popover and return focus to the trigger.
+  - `Escape` — Closes the popover and returns focus to the trigger.
+  - `Enter` / `Space` — Toggles the popover open/closed when focus is on the trigger.
 - **ARIA Attributes**:
   - `aria-expanded` on `Popover.Trigger` reflects the open/closed state.
-  - `aria-haspopup="dialog"` on `Popover.Trigger` indicates a dialog will open.
+  - `aria-haspopup="dialog"` on `Popover.Trigger` indicates a popup dialog.
   - `role="dialog"` on `Popover.Content` identifies it as a dialog.
-  - `aria-modal` on `Popover.Content` reflects whether modal mode is enabled.
+  - `aria-modal` on `Popover.Content` is set to `"true"` when `modal` mode is enabled.
 - **Focus Behavior**:
-  - Focus moves to `Popover.Content` when it opens.
-  - Focus returns to the trigger when the popover closes.
-  - Clicking outside the popover closes it and returns focus to the trigger.
+  - When the popover opens, focus moves to `Popover.Content`.
+  - When the popover closes (via Escape), focus returns to the trigger element.
+  - Clicking outside the trigger or content closes the popover.
 
 ## Screen reader behavior
 
-When a user navigates to a popover trigger, the screen reader announces the button text and its expanded or collapsed state via `aria-expanded`. When the popover opens, focus moves to the content panel which has `role="dialog"`. If the popover is in modal mode, `aria-modal="true"` is set and the underlying page content becomes inert. When the popover closes via Escape or an outside click, focus returns to the trigger button and the screen reader announces the trigger again.
+When the popover opens, the screen reader announces the dialog (via `role="dialog"`) and the trigger's `aria-expanded` state updates to `true`. The content becomes focusable (`tabIndex={-1}`) so screen readers can navigate into it. In modal mode, `aria-modal="true"` restricts the assistive technology to only announce content within the popover. When the popover closes, focus returns to the trigger button and `aria-expanded` updates to `false`.
 
 ## Component Folder Structure
 
 ```
 Popover/
-├── Popover.tsx         # Root component with context provider and open/close state
-├── PopoverTrigger.tsx  # Trigger button with asChild support
-├── PopoverContent.tsx  # Positioned floating content with arrow and collision avoidance
-├── hooks.ts            # Context, usePopover hook, and usePopoverPosition positioning logic
-├── types.ts            # TypeScript type definitions and arrow position classes
-├── index.ts            # Re-exports all components and types
-└── README.md           # Component usage reference
+├── Popover.tsx            # Root component with context provider, state, and click-outside handling
+├── PopoverTrigger.tsx     # Trigger button with asChild and keyboard support
+├── PopoverContent.tsx     # Positioned floating panel with auto-focus and arrow rendering
+├── hooks.ts               # Context, usePopover, and usePopoverPosition hook
+├── types.ts               # TypeScript type definitions
+├── index.ts               # Re-exports all components and types
+└── README.md              # Component usage reference
 ```
 
 ## Props
 
 ### Popover (Root)
 
-| Prop            | Type                       | Default | Description                                |
-| :-------------- | :------------------------- | :------ | :----------------------------------------- |
-| `defaultOpen`   | `boolean`                  | `false` | Open state when initially rendered.        |
-| `open`          | `boolean`                  | —       | Controlled open state.                     |
-| `onOpenChange`  | `(open: boolean) => void`  | —       | Callback when the open state changes.      |
-| `modal`         | `boolean`                  | `false` | Render with a backdrop overlay.            |
-| `children`      | `ReactNode`                | —       | `Popover.Trigger` and `Popover.Content`.   |
-| `className`     | `string`                   | —       | Additional CSS classes.                    |
+| Prop           | Type                          | Default  | Description                                |
+| :------------- | :---------------------------- | :------- | :----------------------------------------- |
+| `open`         | `boolean`                     | —        | Controlled open state.                     |
+| `onOpenChange` | `(open: boolean) => void`     | —        | Callback when open state changes.          |
+| `defaultOpen`  | `boolean`                     | `false`  | Default open state for uncontrolled usage. |
+| `modal`        | `boolean`                     | `false`  | Shows a backdrop overlay when enabled.     |
+| `children`     | `ReactNode`                   | —        | Popover subcomponents.                     |
+| `className`    | `string`                      | —        | Additional CSS classes.                    |
 
 ### Popover.Trigger
 
-| Prop       | Type        | Default | Description                                            |
-| :--------- | :---------- | :------ | :----------------------------------------------------- |
-| `asChild`  | `boolean`   | `false` | Merge props onto the child element instead of wrapping. |
-| `disabled` | `boolean`   | `false` | Disable the trigger.                                   |
-| `children` | `ReactNode` | —       | Trigger label content.                                 |
-| `className`| `string`    | —       | Additional CSS classes.                                |
+| Prop        | Type      | Default | Description                                                   |
+| :---------- | :-------- | :------ | :------------------------------------------------------------ |
+| `asChild`   | `boolean` | `false` | Merge props onto child element instead of rendering a button. |
+| `disabled`  | `boolean` | `false` | Disables the trigger.                                         |
+| `className` | `string`  | —       | Additional CSS classes.                                       |
 
 ### Popover.Content
 
-| Prop              | Type                                     | Default     | Description                                            |
-| :---------------- | :--------------------------------------- | :---------- | :----------------------------------------------------- |
-| `side`            | `"top" \| "right" \| "bottom" \| "left"` | `"bottom"`  | Preferred side to render against the trigger.          |
-| `align`           | `"start" \| "center" \| "end"`           | `"center"`  | Preferred alignment against the trigger.               |
-| `sideOffset`      | `number`                                 | `8`         | Distance in pixels from the trigger.                   |
-| `alignOffset`     | `number`                                 | `0`         | Offset in pixels from the start or end alignment.      |
-| `showArrow`       | `boolean`                                | `false`     | Render an arrow pointing to the trigger.               |
-| `avoidCollisions` | `boolean`                                | `true`      | Automatically flip position to stay within the viewport. |
-| `children`        | `ReactNode`                              | —           | Popover content.                                       |
-| `className`       | `string`                                 | —           | Additional CSS classes.                                |
+| Prop              | Type                                        | Default  | Description                                        |
+| :---------------- | :------------------------------------------ | :------- | :------------------------------------------------- |
+| `side`            | `"top" \| "right" \| "bottom" \| "left"`   | `"bottom"` | Placement side of the popover.                   |
+| `align`           | `"start" \| "center" \| "end"`             | `"center"` | Alignment along the trigger axis.                |
+| `sideOffset`      | `number`                                    | `8`      | Distance from trigger in pixels.                   |
+| `alignOffset`     | `number`                                    | `0`      | Alignment offset in pixels.                        |
+| `showArrow`       | `boolean`                                   | `false`  | Show a directional arrow pointing to the trigger.  |
+| `avoidCollisions` | `boolean`                                   | `true`   | Flip side if there is not enough viewport space.    |
+| `children`        | `ReactNode`                                 | —        | Content to display inside the popover.             |
+| `className`       | `string`                                    | —        | Additional CSS classes.                            |

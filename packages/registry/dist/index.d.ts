@@ -423,4 +423,36 @@ interface VedUIRegistry {
 
 declare const accordionEntry: ComponentRegistryEntry;
 
-export { type A11yDefinition, type AriaAttribute, type CliConfig, type CodeExample, type ComponentA11yResponse, type ComponentCategory, type ComponentCompositionResponse, type ComponentDependenciesResponse, type ComponentDoNotResponse, type ComponentEventsResponse, type ComponentExampleResponse, type ComponentPeerComponentsResponse, type ComponentPropsResponse, type ComponentRegistryEntry, type ComponentStatesResponse, type ComponentVariantsResponse, type DesignToken, type DesignTokenCategory, type DesignTokensResponse, type DoNotRule, type EventDefinition, type FileDefinition, type FindComponentResponse, type HookCategory, type HookParameter, type HookRegistryEntry, type HookReturnValue, type KeyboardInteraction, type ListComponentsResponse, type NpmDependency, type PeerComponentSuggestion, type PropDefinition, type RegistryDependency, type RegistryEntry, type RegistryItemType, type ScaffoldResponse, type SizeDefinition, type StateDefinition, type SubComponentDefinition, type VariantDefinition, type VedUIRegistry, accordionEntry };
+declare const avatarEntry: ComponentRegistryEntry;
+
+declare const affixEntry: ComponentRegistryEntry;
+
+declare const alertEntry: ComponentRegistryEntry;
+
+declare const aspectratioEntry: ComponentRegistryEntry;
+
+declare const badgeEntry: ComponentRegistryEntry;
+
+declare const breadcrumbEntry: ComponentRegistryEntry;
+
+declare const buttonEntry: ComponentRegistryEntry;
+
+declare const cardEntry: ComponentRegistryEntry;
+
+declare const checkboxEntry: ComponentRegistryEntry;
+
+declare const radioGroupEntry: ComponentRegistryEntry;
+
+declare const skeletonEntry: ComponentRegistryEntry;
+
+declare const switchEntry: ComponentRegistryEntry;
+
+declare const typographyEntry: ComponentRegistryEntry;
+
+declare const avatarGroupEntry: ComponentRegistryEntry;
+
+declare const tableEntry: ComponentRegistryEntry;
+
+declare const tabEntry: ComponentRegistryEntry;
+
+export { type A11yDefinition, type AriaAttribute, type CliConfig, type CodeExample, type ComponentA11yResponse, type ComponentCategory, type ComponentCompositionResponse, type ComponentDependenciesResponse, type ComponentDoNotResponse, type ComponentEventsResponse, type ComponentExampleResponse, type ComponentPeerComponentsResponse, type ComponentPropsResponse, type ComponentRegistryEntry, type ComponentStatesResponse, type ComponentVariantsResponse, type DesignToken, type DesignTokenCategory, type DesignTokensResponse, type DoNotRule, type EventDefinition, type FileDefinition, type FindComponentResponse, type HookCategory, type HookParameter, type HookRegistryEntry, type HookReturnValue, type KeyboardInteraction, type ListComponentsResponse, type NpmDependency, type PeerComponentSuggestion, type PropDefinition, type RegistryDependency, type RegistryEntry, type RegistryItemType, type ScaffoldResponse, type SizeDefinition, type StateDefinition, type SubComponentDefinition, type VariantDefinition, type VedUIRegistry, accordionEntry, affixEntry, alertEntry, aspectratioEntry, avatarEntry, avatarGroupEntry, badgeEntry, breadcrumbEntry, buttonEntry, cardEntry, checkboxEntry, radioGroupEntry, skeletonEntry, switchEntry, tabEntry, tableEntry, typographyEntry };

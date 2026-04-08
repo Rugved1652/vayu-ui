@@ -3,7 +3,7 @@
 
 'use client';
 
-import { forwardRef, HTMLAttributes } from 'react';
+import { forwardRef } from 'react';
 import { cn } from '../utils';
 import { useDrawer } from './Drawer';
 import type { DrawerOverlayProps } from './types';

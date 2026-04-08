@@ -2,8 +2,9 @@
 // Composition: UI + wiring
 
 'use client';
-import React, { useState, useRef, useEffect, forwardRef } from 'react';
+import React, { useState, useRef, useCallback, useEffect, forwardRef } from 'react';
 import { cn } from '../utils';
+import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 import { PopoverContext } from './hooks';
 import type { PopoverProps } from './types';
 
@@ -27,42 +28,28 @@ const PopoverRoot = forwardRef<HTMLDivElement, PopoverProps>(
     const isControlled = controlledOpen !== undefined;
     const open = isControlled ? controlledOpen : internalOpen;
 
-    const setOpen = (newOpen: boolean) => {
+    const setOpen = useCallback((newOpen: boolean) => {
       if (!isControlled) {
         setInternalOpen(newOpen);
       }
       onOpenChange?.(newOpen);
-    };
+    }, [isControlled, onOpenChange]);
+
+    useOnClickOutside([triggerRef, contentRef] as React.RefObject<HTMLElement>[], () => {
+      if (open) setOpen(false);
+    });
 
     useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          contentRef.current &&
-          triggerRef.current &&
-          !contentRef.current.contains(event.target as Node) &&
-          !triggerRef.current.contains(event.target as Node)
-        ) {
-          setOpen(false);
-        }
-      };
-
+      if (!open) return;
       const handleEscape = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
           setOpen(false);
           triggerRef.current?.focus();
         }
       };
-
-      if (open) {
-        document.addEventListener('mousedown', handleClickOutside);
-        document.addEventListener('keydown', handleEscape);
-      }
-
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-        document.removeEventListener('keydown', handleEscape);
-      };
-    }, [open]);
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }, [open, setOpen]);
 
     return (
       <PopoverContext.Provider value={{ open, setOpen, triggerRef, contentRef, modal }}>
