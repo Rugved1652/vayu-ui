@@ -7,10 +7,16 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { cn } from '../utils';
 import type { ToastItemProps, ToastType } from './types';
 import { Icons } from './ToastIcons';
-import { typeStyles } from './constants';
+import { typeStyles, enterAnimationByPosition, exitAnimationByPosition } from './constants';
 
-const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, isAllPaused }) => {
-  const [isExiting, setIsExiting] = useState(false);
+const ToastItem: React.FC<ToastItemProps> = ({
+  toast,
+  onRemove,
+  onHeightUpdate,
+  isAllPaused,
+  position,
+  isExiting = false,
+}) => {
   const [isLocalPaused, setIsLocalPaused] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const itemRef = useRef<HTMLDivElement>(null);
@@ -41,7 +47,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, 
       timerRef.current = null;
     }
 
-    if (toast.duration === 0 || toast.type === 'loading') {
+    if (isExiting || toast.duration === 0 || toast.type === 'loading') {
       prevTypeRef.current = toast.type;
       return;
     }
@@ -61,14 +67,14 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [isPaused, toast.duration, toast.type]);
+  }, [isPaused, toast.duration, toast.type, isExiting]);
 
   // Progress bar animation
   useEffect(() => {
     if (!progressRef.current || toast.duration === 0 || toast.type === 'loading') return;
     const el = progressRef.current;
-    el.style.animationPlayState = isPaused ? 'paused' : 'running';
-  }, [isPaused, toast.duration, toast.type]);
+    el.style.animationPlayState = isPaused || isExiting ? 'paused' : 'running';
+  }, [isPaused, toast.duration, toast.type, isExiting]);
 
   // Swipe to dismiss
   const dragStartRef = useRef({ x: 0, y: 0 });
@@ -98,11 +104,8 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, 
   };
 
   const handleClose = useCallback(() => {
-    setIsExiting(true);
-    setTimeout(() => {
-      onRemove(toast.id);
-      toast.onClose?.();
-    }, 300);
+    onRemove(toast.id);
+    toast.onClose?.();
   }, [onRemove, toast]);
 
   const config = typeStyles[toast.type];
@@ -121,8 +124,8 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove, onHeightUpdate, 
         !toast.customContent && 'border-border',
         !toast.customContent && config.border,
         'transition-all duration-300 ease-out',
-        isExiting && 'animate-toast-exit',
-        !isExiting && 'animate-toast-enter',
+        isExiting && exitAnimationByPosition[position],
+        !isExiting && enterAnimationByPosition[position],
         isDragging && 'select-none cursor-grabbing',
       )}
       style={{

@@ -1,9 +1,7 @@
 // animation.tsx
 // Composition: UI + logic
 
-'use client';
-
-import { forwardRef, HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { cn } from '../utils';
 import { AnimationFade } from './FadeAnimation';
 import { AnimationSlide } from './SlideAnimation';
@@ -16,18 +14,17 @@ import { AnimationJackInTheBox } from './JackInTheBoxAnimation';
 import { AnimationHinge } from './HingeAnimation';
 
 interface AnimationRootProps extends HTMLAttributes<HTMLDivElement> {
+  ref?: Ref<HTMLDivElement>;
   children: ReactNode;
 }
 
-const AnimationRoot = forwardRef<HTMLDivElement, AnimationRootProps>(
-  ({ children, className, ...props }, ref) => {
-    return (
-      <div ref={ref} className={cn('', className)} {...props}>
-        {children}
-      </div>
-    );
-  },
-);
+function AnimationRoot({ children, className, ref, ...props }: AnimationRootProps) {
+  return (
+    <div ref={ref} className={cn('', className)} {...props}>
+      {children}
+    </div>
+  );
+}
 
 AnimationRoot.displayName = 'Animation';
 

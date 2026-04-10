@@ -437,6 +437,8 @@ declare const breadcrumbEntry: ComponentRegistryEntry;
 
 declare const buttonEntry: ComponentRegistryEntry;
 
+declare const buttonGroupEntry: ComponentRegistryEntry;
+
 declare const cardEntry: ComponentRegistryEntry;
 
 declare const checkboxEntry: ComponentRegistryEntry;
@@ -455,4 +457,54 @@ declare const tableEntry: ComponentRegistryEntry;
 
 declare const tabEntry: ComponentRegistryEntry;
 
-export { type A11yDefinition, type AriaAttribute, type CliConfig, type CodeExample, type ComponentA11yResponse, type ComponentCategory, type ComponentCompositionResponse, type ComponentDependenciesResponse, type ComponentDoNotResponse, type ComponentEventsResponse, type ComponentExampleResponse, type ComponentPeerComponentsResponse, type ComponentPropsResponse, type ComponentRegistryEntry, type ComponentStatesResponse, type ComponentVariantsResponse, type DesignToken, type DesignTokenCategory, type DesignTokensResponse, type DoNotRule, type EventDefinition, type FileDefinition, type FindComponentResponse, type HookCategory, type HookParameter, type HookRegistryEntry, type HookReturnValue, type KeyboardInteraction, type ListComponentsResponse, type NpmDependency, type PeerComponentSuggestion, type PropDefinition, type RegistryDependency, type RegistryEntry, type RegistryItemType, type ScaffoldResponse, type SizeDefinition, type StateDefinition, type SubComponentDefinition, type VariantDefinition, type VedUIRegistry, accordionEntry, affixEntry, alertEntry, aspectratioEntry, avatarEntry, avatarGroupEntry, badgeEntry, breadcrumbEntry, buttonEntry, cardEntry, checkboxEntry, radioGroupEntry, skeletonEntry, switchEntry, tabEntry, tableEntry, typographyEntry };
+declare const commandBoxEntry: ComponentRegistryEntry;
+
+declare const collapsibleEntry: ComponentRegistryEntry;
+
+declare const drawerEntry: ComponentRegistryEntry;
+
+declare const colorPickerEntry: ComponentRegistryEntry;
+
+declare const floatingDockEntry: ComponentRegistryEntry;
+
+declare const footerEntry: ComponentRegistryEntry;
+
+declare const resizablePaneEntry: ComponentRegistryEntry;
+
+declare const carouselEntry: ComponentRegistryEntry;
+
+declare const animationEntry: ComponentRegistryEntry;
+
+declare const tooltipEntry: ComponentRegistryEntry;
+
+declare const dividerEntry: ComponentRegistryEntry;
+
+declare const fileUploadEntry: ComponentRegistryEntry;
+
+declare const otpInputEntry: ComponentRegistryEntry;
+
+declare const textInputEntry: ComponentRegistryEntry;
+
+declare const textAreaEntry: ComponentRegistryEntry;
+
+declare const navbarEntry: ComponentRegistryEntry;
+
+declare const spinnerEntry: ComponentRegistryEntry;
+
+declare const modalEntry: ComponentRegistryEntry;
+
+declare const popoverEntry: ComponentRegistryEntry;
+
+declare const paginationEntry: ComponentRegistryEntry;
+
+declare const rateEntry: ComponentRegistryEntry;
+
+declare const tourEntry: ComponentRegistryEntry;
+
+declare const stepperEntry: ComponentRegistryEntry;
+
+declare const menubarEntry: ComponentRegistryEntry;
+
+declare const hoverCardEntry: ComponentRegistryEntry;
+
+export { type A11yDefinition, type AriaAttribute, type CliConfig, type CodeExample, type ComponentA11yResponse, type ComponentCategory, type ComponentCompositionResponse, type ComponentDependenciesResponse, type ComponentDoNotResponse, type ComponentEventsResponse, type ComponentExampleResponse, type ComponentPeerComponentsResponse, type ComponentPropsResponse, type ComponentRegistryEntry, type ComponentStatesResponse, type ComponentVariantsResponse, type DesignToken, type DesignTokenCategory, type DesignTokensResponse, type DoNotRule, type EventDefinition, type FileDefinition, type FindComponentResponse, type HookCategory, type HookParameter, type HookRegistryEntry, type HookReturnValue, type KeyboardInteraction, type ListComponentsResponse, type NpmDependency, type PeerComponentSuggestion, type PropDefinition, type RegistryDependency, type RegistryEntry, type RegistryItemType, type ScaffoldResponse, type SizeDefinition, type StateDefinition, type SubComponentDefinition, type VariantDefinition, type VedUIRegistry, accordionEntry, affixEntry, alertEntry, animationEntry, aspectratioEntry, avatarEntry, avatarGroupEntry, badgeEntry, breadcrumbEntry, buttonEntry, buttonGroupEntry, cardEntry, carouselEntry, checkboxEntry, collapsibleEntry, colorPickerEntry, commandBoxEntry, dividerEntry, drawerEntry, fileUploadEntry, floatingDockEntry, footerEntry, hoverCardEntry, menubarEntry, modalEntry, navbarEntry, otpInputEntry, paginationEntry, popoverEntry, radioGroupEntry, rateEntry, resizablePaneEntry, skeletonEntry, spinnerEntry, stepperEntry, switchEntry, tabEntry, tableEntry, textAreaEntry, textInputEntry, tooltipEntry, tourEntry, typographyEntry };

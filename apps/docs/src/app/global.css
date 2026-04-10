@@ -245,6 +245,12 @@
   --animate-reverse-spin: reverse-spin 40s linear infinite;
   --animate-toast-enter: toast-enter 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-toast-exit: toast-exit 300ms ease-in both;
+  --animate-toast-enter-left: toast-enter-left 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-toast-exit-left: toast-exit-left 300ms ease-in both;
+  --animate-toast-enter-top: toast-enter-top 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-toast-exit-top: toast-exit-top 300ms ease-in both;
+  --animate-toast-enter-bottom: toast-enter-bottom 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-toast-exit-bottom: toast-exit-bottom 300ms ease-in both;
 }
 
 @media (prefers-reduced-motion: reduce) {

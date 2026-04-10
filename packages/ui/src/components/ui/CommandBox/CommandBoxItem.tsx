@@ -4,9 +4,10 @@
 'use client';
 
 import { clsx } from 'clsx';
-import React, { forwardRef, useEffect, useMemo } from 'react';
+import React, { forwardRef, useContext, useEffect, useMemo } from 'react';
 
 import { useCommandBox } from './hooks';
+import { CommandBoxGroupContext } from './hooks';
 import type { CommandBoxItemProps } from './types';
 
 export const CommandBoxItem = forwardRef<HTMLDivElement, CommandBoxItemProps>(
@@ -26,6 +27,7 @@ export const CommandBoxItem = forwardRef<HTMLDivElement, CommandBoxItemProps>(
   ) => {
     const { highlightedId, onSelect, registerItem, unregisterItem, showShortcuts, filteredItems } =
       useCommandBox();
+    const groupLabel = useContext(CommandBoxGroupContext);
 
     const isHighlighted = highlightedId === itemId;
     const itemTitle = titleProp ?? (typeof children === 'string' ? children : '');
@@ -39,9 +41,10 @@ export const CommandBoxItem = forwardRef<HTMLDivElement, CommandBoxItemProps>(
         icon,
         shortcut,
         disabled,
+        group: groupLabel,
       });
       return () => unregisterItem(itemId);
-    }, [itemId, itemTitle, description, icon, shortcut, disabled, registerItem, unregisterItem]);
+    }, [itemId, itemTitle, description, icon, shortcut, disabled, groupLabel, registerItem, unregisterItem]);
 
     // Check if item is in filtered results
     const isVisible = useMemo(() => {

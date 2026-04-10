@@ -101,7 +101,7 @@ export default function SidebarDemo() {
           </SidebarContent>
 
           <SidebarFooter>
-            <div className="flex items-center gap-3 p-1">
+            <div className="flex not-prose items-center gap-3 p-1">
               <Avatar size="small" username="John Doe">
                 <Avatar.Image src="https://github.com/shadcn.png" alt="User" />
                 <Avatar.Fallback />

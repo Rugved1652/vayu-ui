@@ -5,6 +5,17 @@ import type { HTMLAttributes, ButtonHTMLAttributes } from 'react';
 
 export type SpeedMultiplier = 0.5 | 1 | 1.5 | 2;
 
+export interface ResponsiveItemsPerSlide {
+  base: number;
+  sm?: number;
+  md?: number;
+  lg?: number;
+  xl?: number;
+  '2xl'?: number;
+}
+
+export type ItemsPerSlide = number | ResponsiveItemsPerSlide;
+
 export interface GalleryItem {
   src: string;
   alt: string;
@@ -13,6 +24,8 @@ export interface GalleryItem {
 export interface CarouselContextValue {
   currentIndex: number;
   totalItems: number;
+  itemsPerSlide: number;
+  totalPages: number;
   isPlaying: boolean;
   setIsPlaying: (playing: boolean) => void;
   speed: SpeedMultiplier;
@@ -32,6 +45,7 @@ export interface CarouselProps extends HTMLAttributes<HTMLDivElement> {
   loop?: boolean;
   defaultSpeed?: SpeedMultiplier;
   defaultIndex?: number;
+  itemsPerSlide?: ItemsPerSlide;
   children: React.ReactNode;
 }
 

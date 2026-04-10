@@ -89,10 +89,8 @@ export const Step = forwardRef<HTMLDivElement, StepProps>(
     const horizontalConnectorClasses = (isActive: boolean) =>
       clsx('h-0.5 flex-1 transition-colors duration-300', isActive ? 'bg-brand' : 'bg-border');
 
-    const verticalConnectorClasses = clsx(
-      'w-0.5 flex-1 min-h-[24px] transition-colors duration-300',
-      isCompleted ? 'bg-brand' : 'bg-border',
-    );
+    const verticalTopActive = isCompleted;
+    const verticalBottomActive = activeStep > index;
 
     return (
       <StepStatusContext.Provider value={{ status }}>
@@ -154,7 +152,22 @@ export const Step = forwardRef<HTMLDivElement, StepProps>(
                   isValidElement(child) && child.type === StepIndicator ? child : null,
                 )}
 
-                {!isLast && <div className={verticalConnectorClasses} />}
+                {!isLast && (
+                  <>
+                    <div
+                      className={clsx(
+                        'w-0.5 flex-1 min-h-[12px] transition-colors duration-300',
+                        verticalTopActive ? 'bg-brand' : 'bg-border',
+                      )}
+                    />
+                    <div
+                      className={clsx(
+                        'w-0.5 flex-1 min-h-[12px] transition-colors duration-300',
+                        verticalBottomActive ? 'bg-brand' : 'bg-border',
+                      )}
+                    />
+                  </>
+                )}
               </div>
 
               <div className="flex-1">

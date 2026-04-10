@@ -10,6 +10,8 @@ import type { CommandBoxContextValue } from './types';
 
 export const CommandBoxContext = createContext<CommandBoxContextValue | undefined>(undefined);
 
+export const CommandBoxGroupContext = createContext<string | undefined>(undefined);
+
 export const useCommandBox = (): CommandBoxContextValue => {
   const context = useContext(CommandBoxContext);
   if (!context) {

@@ -84,6 +84,8 @@ export interface ToastItemProps {
   onRemove: (id: string) => void;
   onHeightUpdate: (id: string, height: number) => void;
   isAllPaused: boolean;
+  position: ToastPosition;
+  isExiting?: boolean;
 }
 
 export interface ToastProviderProps {

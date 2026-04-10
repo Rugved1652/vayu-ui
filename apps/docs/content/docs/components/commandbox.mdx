@@ -1,86 +1,220 @@
 ---
 title: CommandBox
-description: A command palette for quick navigation, search, and actions with keyboard support.
+description: A command palette for quick navigation, search, and actions with keyboard shortcuts and fuzzy search.
 ---
 
 import CommandBoxDemo from '@/components/demos/commandbox-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add commandbox
+```
+
+```bash
+npx vayu-ui add -t commandbox #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+    <div className="not-prose flex w-full justify-center p-4">
       <CommandBoxDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { CommandBox } from "@/components/ui/commandbox"
+    <CommandBox open={open} onOpenChange={setOpen} onSelect={handleSelect}>
+      <CommandBox.Overlay>
+        <CommandBox.Input placeholder="Type a command or search..." />
+        <CommandBox.List>
+          <CommandBox.Group label="Navigation">
+            <CommandBox.Item
+              id="home"
+              shortcut={['⌘', 'H']}
+              icon={<Home className="w-4 h-4" />}
+            >
+              Go to Home
+            </CommandBox.Item>
+            <CommandBox.Item
+              id="search"
+              shortcut={['⌘', 'S']}
+              icon={<Search className="w-4 h-4" />}
+            >
+              Search
+            </CommandBox.Item>
+          </CommandBox.Group>
 
-    const items = [
-      { id: "home", title: "Go to Home", shortcut: ["⌘", "H"] },
-      { id: "search", title: "Search", shortcut: ["⌘", "K"] },
-    ]
+          <CommandBox.Separator />
 
-    export function Example() {
-      return (
-        <CommandBox
-          items={items}
-          onSelect={(item) => console.log(item.title)}
-        />
-      )
-    }
+          <CommandBox.Group label="Actions">
+            <CommandBox.Item
+              id="new-file"
+              shortcut={['⌘', 'N']}
+              icon={<Plus className="w-4 h-4" />}
+            >
+              New File
+            </CommandBox.Item>
+            <CommandBox.Item id="settings" icon={<Settings className="w-4 h-4" />}>
+              Open Settings
+            </CommandBox.Item>
+          </CommandBox.Group>
+
+          <CommandBox.Empty>No commands found.</CommandBox.Empty>
+        </CommandBox.List>
+      </CommandBox.Overlay>
+    </CommandBox>
     ```
 
   </Tab>
 </Tabs>
 
-## Installation
+## Anatomy
 
-Copy the component file into your project:
+```tsx
+import { CommandBox } from 'vayu-ui';
 
-```tsx title="src/components/ui/commandbox.tsx"
-// Copy the full component code
+<CommandBox open={open} onOpenChange={setOpen}>
+  <CommandBox.Overlay>
+    <CommandBox.Input placeholder="Search..." />
+    <CommandBox.List>
+      <CommandBox.Group label="Section">
+        <CommandBox.Item id="item-1" shortcut={['⌘', 'N']} icon={<Icon />}>
+          Item Label
+        </CommandBox.Item>
+      </CommandBox.Group>
+      <CommandBox.Separator />
+      <CommandBox.Empty>No results found.</CommandBox.Empty>
+    </CommandBox.List>
+  </CommandBox.Overlay>
+</CommandBox>;
 ```
 
-## Features
+- **CommandBox** — Root container. Manages open/close state, search filtering, and keyboard navigation.
+- **CommandBox.Overlay** — Portal-based overlay with backdrop. Renders the command box centered on screen.
+- **CommandBox.Input** — Search input with combobox ARIA role. Handles arrow key navigation and Enter selection.
+- **CommandBox.List** — Scrollable listbox container for items and groups.
+- **CommandBox.Group** — Groups items under a sticky label header.
+- **CommandBox.Item** — Individual option with support for icons, descriptions, keyboard shortcuts, and disabled state.
+- **CommandBox.Separator** — Visual divider between groups.
+- **CommandBox.Empty** — No-results message shown when search yields no matches.
 
-- **Keyboard Navigation** — Arrow keys, Enter to select, Escape to close
-- **Search Filtering** — Real-time filtering with pluggable filter function
-- **Grouping** — Auto-group items via `group` property or explicit `groups` prop
-- **Shortcuts** — Display keyboard shortcuts next to items
-- **Variants** — `default`, `bordered`, `elevated`, `minimal`
+## Accessibility
+
+- **Keyboard Support**:
+  - `ArrowDown` — Move highlight to the next item.
+  - `ArrowUp` — Move highlight to the previous item.
+  - `Enter` — Select the highlighted item and close the palette.
+  - `Home` — Jump highlight to the first item.
+  - `End` — Jump highlight to the last item.
+  - `Escape` — Close the palette.
+  - Modifier shortcuts (e.g., `⌘+N`, `Ctrl+K`) — Select the matching item directly.
+- **ARIA Attributes**:
+  - Input has `role="combobox"` with `aria-expanded`, `aria-controls`, and `aria-activedescendant`.
+  - List has `role="listbox"` linked via `aria-controls`.
+  - Each item has `role="option"` with `aria-selected` and `aria-disabled`.
+  - Groups use `role="group"` with `aria-label`.
+  - Separator uses `role="separator"` with `aria-orientation="horizontal"`.
+  - Empty state uses `role="status"` with `aria-live="polite"`.
+  - Backdrop is marked `aria-hidden="true"`.
+- **Focus Behavior**:
+  - Input auto-focuses when the palette opens.
+  - Highlighted item scrolls into view automatically.
+  - Body scroll is locked while the palette is open.
+
+## Screen reader behavior
+
+When the command palette opens, the screen reader announces the search input as a combobox. As the user types, filtered results update in the live region. The highlighted item is announced via `aria-activedescendant` on the input. Each option is announced with its role ("option") and selected state. Group labels are announced when navigating into a new group via `aria-label` on the group container. The empty state message is announced through the `aria-live="polite"` region when no results match. When the palette closes, focus returns to the previously focused element.
+
+## Component Folder Structure
+
+```
+CommandBox/
+├── CommandBox.tsx            # Root component with state management and filtering
+├── CommandBoxInput.tsx       # Search input with combobox ARIA role
+├── CommandBoxList.tsx        # Scrollable listbox container
+├── CommandBoxItem.tsx        # Self-registering option with selection states
+├── CommandBoxGroup.tsx       # Grouped items with sticky label header
+├── CommandBoxSeparator.tsx   # Visual divider between groups
+├── CommandBoxEmpty.tsx       # No-results state with aria-live
+├── CommandBoxOverlay.tsx     # Portal-based overlay with backdrop
+├── hooks.ts                  # Context provider and fuzzy search utility
+├── types.ts                  # TypeScript type definitions
+└── index.ts                  # Re-exports all components and types
+```
 
 ## Props
 
-### CommandBox
+### CommandBox (Root)
 
-| Prop            | Type                                         | Default                         | Description                        |
-| :-------------- | :------------------------------------------- | :------------------------------ | :--------------------------------- |
-| `items`         | `CommandItem[]`                              | `[]`                            | Flat list of command items.        |
-| `groups`        | `CommandGroup[]`                             | `[]`                            | Grouped command items.             |
-| `placeholder`   | `string`                                     | `"Type a command or search..."` | Search input placeholder.          |
-| `emptyText`     | `string`                                     | `"No results found."`           | Text shown when no results match.  |
-| `variant`       | `default \| bordered \| elevated \| minimal` | `default`                       | Visual variant.                    |
-| `size`          | `small \| medium \| large`                   | `medium`                        | Size of the command box.           |
-| `open`          | `boolean`                                    | `false`                         | Control open state.                |
-| `onOpenChange`  | `(open: boolean) => void`                    | —                               | Callback when open state changes.  |
-| `onSelect`      | `(item: CommandItem) => void`                | —                               | Callback when an item is selected. |
-| `filter`        | `(value, search) => number`                  | built-in                        | Custom filter function.            |
-| `disabled`      | `boolean`                                    | `false`                         | Disable the command box.           |
-| `showShortcuts` | `boolean`                                    | `true`                          | Show keyboard shortcuts on items.  |
-| `maxHeight`     | `string`                                     | `"400px"`                       | Max height of the dropdown.        |
+| Prop            | Type       | Default | Description                                                |
+| :-------------- | :--------- | :------ | :--------------------------------------------------------- |
+| `open`          | `boolean`  | —       | Controlled open state.                                     |
+| `defaultOpen`   | `boolean`  | `false` | Initial open state for uncontrolled mode.                  |
+| `onOpenChange`  | `(open: boolean) => void` | — | Callback when open state changes.                   |
+| `onSelect`      | `(item: CommandBoxItemData) => void` | — | Callback when an item is selected.        |
+| `filter`        | `(item, search) => number` | —   | Custom filter scoring function.                            |
+| `showShortcuts` | `boolean`  | `true`  | Show keyboard shortcut badges on items.                    |
+| `loading`       | `boolean`  | `false` | Show loading state.                                        |
+| `children`      | `ReactNode`| —       | Component children.                                        |
+| `className`     | `string`   | —       | Additional CSS classes.                                    |
 
-### CommandItem
+### CommandBox.Input
 
-| Property      | Type         | Description                        |
-| :------------ | :----------- | :--------------------------------- |
-| `id`          | `string`     | Unique identifier.                 |
-| `title`       | `string`     | Display title.                     |
-| `description` | `string`     | Optional description text.         |
-| `icon`        | `ReactNode`  | Optional icon element.             |
-| `shortcut`    | `string[]`   | Keyboard shortcut keys to display. |
-| `group`       | `string`     | Group name for auto-grouping.      |
-| `disabled`    | `boolean`    | Disable this item.                 |
-| `onSelect`    | `() => void` | Item-level select callback.        |
+| Prop          | Type        | Default                          | Description                      |
+| :------------ | :---------- | :------------------------------- | :------------------------------- |
+| `placeholder` | `string`    | `'Type a command or search...'`  | Input placeholder text.          |
+| `icon`        | `ReactNode` | `<Search />`                     | Custom search icon.              |
+| `className`   | `string`    | —                                | Additional CSS classes.          |
+
+### CommandBox.List
+
+| Prop        | Type        | Default | Description                         |
+| :---------- | :---------- | :------ | :---------------------------------- |
+| `maxHeight` | `string`    | `'320px'` | Maximum height before scrolling.  |
+| `className` | `string`    | —       | Additional CSS classes.             |
+
+### CommandBox.Item
+
+| Prop          | Type        | Default | Description                                      |
+| :------------ | :---------- | :------ | :----------------------------------------------- |
+| `id`          | `string`    | —       | Unique identifier. Required.                     |
+| `disabled`    | `boolean`   | `false` | Disable selection.                               |
+| `shortcut`    | `string[]`  | —       | Keyboard shortcut keys (e.g., `['⌘', 'N']`).    |
+| `icon`        | `ReactNode` | —       | Icon displayed before the label.                 |
+| `description` | `string`    | —       | Secondary description text.                      |
+| `title`       | `string`    | —       | Item title (falls back to children if string).   |
+| `className`   | `string`    | —       | Additional CSS classes.                          |
+
+### CommandBox.Group
+
+| Prop        | Type        | Default | Description                    |
+| :---------- | :---------- | :------ | :----------------------------- |
+| `label`     | `string`    | —       | Group heading label. Required. |
+| `className` | `string`    | —       | Additional CSS classes.        |
+
+### CommandBox.Empty
+
+| Prop        | Type        | Default               | Description                   |
+| :---------- | :---------- | :-------------------- | :---------------------------- |
+| `children`  | `ReactNode` | `'No results found'`  | Custom empty state message.   |
+| `className` | `string`    | —                     | Additional CSS classes.       |
+
+### CommandBox.Separator
+
+| Prop        | Type     | Default | Description              |
+| :---------- | :------- | :------ | :----------------------- |
+| `className` | `string` | —       | Additional CSS classes.  |
+
+### CommandBox.Overlay
+
+| Prop        | Type        | Default | Description                  |
+| :---------- | :---------- | :------ | :--------------------------- |
+| `children`  | `ReactNode` | —       | Content to render inside.    |
+| `className` | `string`    | —       | Additional CSS classes.      |

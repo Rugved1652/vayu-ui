@@ -1,11 +1,12 @@
 // CommandBox.tsx
 // Root: context provider, state management, item registration, filtering
-
 'use client';
-
 import { clsx } from 'clsx';
 import React, { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
-
+import { useLockBodyScroll } from '../../../hooks/useLockBodyScroll';
+import { useKeyPress } from '../../../hooks/useKeyPress';
+import type { KeyBinding } from '../../../hooks/useKeyPress';
+import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 import { CommandBoxContext } from './hooks';
 import { fuzzyScore } from './hooks';
 import type { CommandBoxContextValue, CommandBoxItemData, CommandBoxRootProps } from './types';
@@ -42,6 +43,9 @@ const CommandBoxRoot = forwardRef<HTMLDivElement, CommandBoxRootProps>(
 
     const isControlled = controlledOpen !== undefined;
     const open = isControlled ? controlledOpen : internalOpen;
+
+    // Lock body scroll when open
+    useLockBodyScroll(open);
 
     const setOpen = useCallback(
       (newOpen: boolean) => {
@@ -122,40 +126,40 @@ const CommandBoxRoot = forwardRef<HTMLDivElement, CommandBoxRootProps>(
     }, [open]);
 
     // Click outside to close
-    useEffect(() => {
-      if (!open) return;
-
-      const handleClickOutside = (event: MouseEvent) => {
-        const target = event.target as Node;
-        if (containerRef.current && !containerRef.current.contains(target)) {
-          setOpen(false);
-        }
-      };
-
-      const timeoutId = setTimeout(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-      }, 0);
-
-      return () => {
-        clearTimeout(timeoutId);
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, [open, setOpen]);
+    useOnClickOutside(
+      containerRef as React.RefObject<HTMLElement>,
+      useCallback(() => {
+        if (open) setOpen(false);
+      }, [open, setOpen]),
+    );
 
     // Escape to close
-    useEffect(() => {
-      if (!open) return;
+    useKeyPress('Escape', (e) => {
+      e.preventDefault();
+      setOpen(false);
+    }, { enabled: open });
 
-      const handleEscape = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-          event.preventDefault();
-          setOpen(false);
-        }
-      };
+    // Keyboard shortcuts for items
+    const shortcutBindings: KeyBinding[] = useMemo(
+      () =>
+        filteredItems
+          .filter((item) => !item.disabled && item.shortcut && item.shortcut.length > 0)
+          .map((item) => ({
+            keys: item.shortcut!,
+            callback: (event: KeyboardEvent) => {
+              // Skip non-modifier shortcuts when typing in the search input
+              const hasModifier = item.shortcut!.some((k) =>
+                ['Ctrl', 'Control', 'Alt', 'Meta', 'Shift', '⌘'].includes(k),
+              );
+              if (!hasModifier && document.activeElement?.tagName === 'INPUT') return;
+              event.preventDefault();
+              handleSelect(item);
+            },
+          })),
+      [filteredItems, handleSelect],
+    );
 
-      document.addEventListener('keydown', handleEscape);
-      return () => document.removeEventListener('keydown', handleEscape);
-    }, [open, setOpen]);
+    useKeyPress(shortcutBindings, { enabled: open });
 
     const contextValue: CommandBoxContextValue = {
       open,

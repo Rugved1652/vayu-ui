@@ -1,14 +1,24 @@
 // viewport.tsx
 // UI: Viewport with touch and keyboard handling
 'use client';
-import React, { forwardRef, useCallback, useRef } from 'react';
+import React, { forwardRef, useCallback, useMemo, useRef } from 'react';
 import { cn } from '../utils';
 import { useCarouselContext } from './hooks';
 
 // Layout
 const CarouselViewport = forwardRef<HTMLDivElement, import('./types').CarouselViewportProps>(
   ({ className, children, ...props }, ref) => {
-    const { currentIndex, totalItems, goNext, goPrevious, goTo } = useCarouselContext();
+    const {
+      currentIndex,
+      totalItems,
+      itemsPerSlide,
+      totalPages,
+      goNext,
+      goPrevious,
+      goTo,
+    } = useCarouselContext();
+
+    const isMultiItem = itemsPerSlide > 1;
 
     // Touch handling
     const touchStartX = useRef<number | null>(null);
@@ -24,7 +34,6 @@ const CarouselViewport = forwardRef<HTMLDivElement, import('./types').CarouselVi
       const touchEndX = e.changedTouches[0].clientX;
       const diff = touchStartX.current - touchEndX;
 
-      // Minimum swipe distance of 50px
       if (Math.abs(diff) > 50) {
         if (diff > 0) {
           goNext();
@@ -53,7 +62,11 @@ const CarouselViewport = forwardRef<HTMLDivElement, import('./types').CarouselVi
           break;
         case 'End':
           e.preventDefault();
-          goTo(totalItems - 1);
+          if (isMultiItem) {
+            goTo((totalPages - 1) * itemsPerSlide);
+          } else {
+            goTo(totalItems - 1);
+          }
           break;
       }
     };
@@ -71,6 +84,45 @@ const CarouselViewport = forwardRef<HTMLDivElement, import('./types').CarouselVi
       [ref],
     );
 
+    // Track transform for multi-item mode
+    const trackStyle = useMemo(() => {
+      if (!isMultiItem) return undefined;
+      const translatePercent = currentIndex * (100 / itemsPerSlide);
+      return {
+        transform: `translateX(-${translatePercent}%)`,
+      };
+    }, [isMultiItem, currentIndex, totalItems]);
+
+    const currentPage = isMultiItem ? Math.floor(currentIndex / itemsPerSlide) + 1 : currentIndex + 1;
+    const pageCount = isMultiItem ? totalPages : totalItems;
+
+    if (isMultiItem) {
+      return (
+        <div
+          ref={setRefs}
+          role="group"
+          aria-label={`Page ${currentPage} of ${pageCount}`}
+          className={cn('overflow-hidden relative rounded-surface', className)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          {...props}
+        >
+          <div aria-live="polite" aria-atomic="true" className="sr-only">
+            Page {currentPage} of {pageCount}
+          </div>
+          <div
+            className="flex transition-transform duration-300 ease-in-out"
+            style={trackStyle}
+          >
+            {children}
+          </div>
+        </div>
+      );
+    }
+
+    // Single-item mode: original crossfade behavior
     return (
       <div
         ref={setRefs}
@@ -83,7 +135,6 @@ const CarouselViewport = forwardRef<HTMLDivElement, import('./types').CarouselVi
         tabIndex={0}
         {...props}
       >
-        {/* Live region for screen readers */}
         <div aria-live="polite" aria-atomic="true" className="sr-only">
           Slide {currentIndex + 1} of {totalItems}
         </div>

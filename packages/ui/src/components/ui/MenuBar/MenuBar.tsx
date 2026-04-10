@@ -1,8 +1,10 @@
 // menubar.tsx
 // Composition: root menubar + context provider
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { cn } from '../utils';
+import { useKeyPress } from '../../../hooks/useKeyPress';
+import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
 import { MenubarContext } from './hooks';
 import type { MenubarProps } from './types';
 
@@ -14,6 +16,7 @@ export const MenubarRoot = ({
 }: MenubarProps) => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const triggersRef = useRef<Map<string, React.RefObject<HTMLButtonElement | null>>>(new Map());
+  const menubarRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
 
   const closeAllMenus = useCallback(() => {
     setActiveMenu(null);
@@ -35,29 +38,17 @@ export const MenubarRoot = ({
   }, []);
 
   // Close menus when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest('[data-menubar]') && !target.closest('[data-menu-portal]')) {
-        closeAllMenus();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [closeAllMenus]);
+  useOnClickOutside(menubarRef, (event) => {
+    const target = event.target as HTMLElement;
+    if (!target.closest('[data-menu-portal]')) {
+      closeAllMenus();
+    }
+  });
 
   // Close menus on Escape key
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeAllMenus();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [closeAllMenus]);
+  useKeyPress('Escape', () => {
+    closeAllMenus();
+  });
 
   return (
     <MenubarContext.Provider
@@ -72,6 +63,7 @@ export const MenubarRoot = ({
       }}
     >
       <div
+        ref={menubarRef}
         data-menubar
         className={cn(
           'bg-surface dark:bg-surface',

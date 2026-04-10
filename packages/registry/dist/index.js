@@ -3274,6 +3274,426 @@ export default function DisabledDemo() {
   ]
 };
 
+// src/components/button-group.ts
+var buttonGroupEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "button-group",
+  name: "ButtonGroup",
+  type: "component",
+  category: "inputs",
+  // ── Description ───────────────────────────────────────
+  description: "A layout component that groups multiple Button elements with consistent sizing, spacing, and WCAG-compliant focus management.",
+  longDescription: "ButtonGroup wraps child <Button> elements in a flex container and enforces uniform size, spacing, and border-radius via CSS descendant selectors. It supports horizontal and vertical orientations, full-width stretching, and four radius variants using semantic design tokens. No Context or cloneElement is required \u2014 sizing is applied purely through CSS, making the component safe for Server Components. Focus management uses z-index to ensure the focus-visible ring is never clipped by adjacent buttons (WCAG 2.4.11).",
+  tags: [
+    "button",
+    "group",
+    "toolbar",
+    "action",
+    "segmented",
+    "layout",
+    "flex",
+    "orientation"
+  ],
+  useCases: [
+    "Grouping related action buttons such as text alignment (left, center, right)",
+    "Creating toolbar-style interfaces with consistent sizing and spacing",
+    "Building segmented controls with mutually exclusive button options",
+    "Displaying confirm/cancel action pairs that span the full container width",
+    "Organizing icon-only buttons into a compact horizontal or vertical strip",
+    "Ensuring uniform size and border-radius across a set of mixed-variant buttons"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "ButtonGroup",
+  files: [
+    { name: "ButtonGroup.tsx", description: 'Root component that renders a flex container with role="group", CSS-enforced sizing, radius tokens, and z-index focus management' },
+    { name: "types.ts", description: "TypeScript type definitions for ButtonGroupProps and ButtonGroupRadius union" },
+    { name: "index.ts", description: "Barrel export file re-exporting the component and all types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "ButtonGroup",
+  subComponents: [],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "orientation",
+      type: "'horizontal' | 'vertical'",
+      required: false,
+      defaultValue: "'horizontal'",
+      description: "Stack buttons in a row or column layout",
+      options: ["horizontal", "vertical"]
+    },
+    {
+      name: "size",
+      type: "'small' | 'medium' | 'large'",
+      required: false,
+      defaultValue: "'medium'",
+      description: "Forces uniform padding, font size, and min-height on all child buttons via CSS descendant selectors",
+      options: ["small", "medium", "large"]
+    },
+    {
+      name: "radius",
+      type: "ButtonGroupRadius",
+      required: false,
+      defaultValue: "'control'",
+      description: "Border radius variant using semantic design tokens, applied to the group container and all child buttons",
+      options: ["control", "surface", "overlay", "full"]
+    },
+    {
+      name: "fullWidth",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "When true, the group stretches to full container width and each child button gets flex-1"
+    },
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: false,
+      description: "Button elements to group together"
+    },
+    {
+      name: "aria-label",
+      type: "string",
+      required: false,
+      description: "Accessible label for the button group; essential for screen readers to announce the group purpose"
+    },
+    {
+      name: "aria-labelledby",
+      type: "string",
+      required: false,
+      description: "ID of an element that labels this button group, as an alternative to aria-label"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  sizes: {
+    propName: "size",
+    options: ["small", "medium", "large"],
+    default: "medium"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "orientation",
+      prop: "orientation",
+      values: ["horizontal", "vertical"],
+      isBoolean: false,
+      defaultValue: "horizontal",
+      description: "Controls whether buttons are laid out in a row (flex-row) or column (flex-col)."
+    },
+    {
+      name: "fullWidth",
+      prop: "fullWidth",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "When true, the group becomes w-full and each child button receives flex-1 to distribute space evenly."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onClick",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fired when the group container is clicked; individual button clicks bubble up to this handler"
+    },
+    {
+      name: "onFocus",
+      signature: "(event: React.FocusEvent<HTMLDivElement>) => void",
+      description: "Fired when any element within the group receives focus"
+    },
+    {
+      name: "onBlur",
+      signature: "(event: React.FocusEvent<HTMLDivElement>) => void",
+      description: "Fired when focus leaves the group container"
+    },
+    {
+      name: "onKeyDown",
+      signature: "(event: React.KeyboardEvent<HTMLDivElement>) => void",
+      description: "Fired on key press while the group or a child button has focus"
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "group",
+    attributes: [
+      {
+        name: 'role="group"',
+        description: "Applied to the root div to semantically group the child buttons as a related set of controls.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label",
+        description: "Passed through from the aria-label prop to provide an accessible name for the group. Required when there is no visible group heading.",
+        managedByComponent: false
+      },
+      {
+        name: "aria-labelledby",
+        description: "Passed through from the aria-labelledby prop to reference an external element that labels the group.",
+        managedByComponent: false
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Tab",
+        behavior: "Moves focus to the first child button (or next focusable element if already inside the group)"
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Moves focus to the previous focusable element outside the group"
+      }
+    ],
+    focusManagement: "Child buttons receive a z-index bump on :hover and :focus-visible ([&>button:hover]:z-10, [&>button:focus-visible]:z-10) so the focus ring is never clipped by adjacent button borders (WCAG 2.4.11 Focus Appearance).",
+    wcagLevel: "AA",
+    notes: `The group uses role="group" which is announced by screen readers as a landmark for the contained buttons. Either aria-label or aria-labelledby should always be provided so assistive technology can convey the group's purpose. Individual buttons retain their native keyboard and screen reader support.`
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [
+    {
+      slug: "button",
+      reason: "ButtonGroup is designed to wrap Button elements; child buttons are required for correct sizing and spacing behavior"
+    }
+  ],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "ButtonGroup wraps Button elements \u2014 every usage requires at least two Button children"
+    },
+    {
+      slug: "tooltip",
+      reason: "Icon-only buttons inside ButtonGroup benefit from tooltips to provide accessible text descriptions on hover"
+    },
+    {
+      slug: "card",
+      reason: "Cards frequently contain grouped action buttons (e.g. edit/delete) in headers or footers"
+    },
+    {
+      slug: "popover",
+      reason: "Button groups can serve as trigger elements for popover menus with additional actions"
+    },
+    {
+      slug: "divider",
+      reason: "Dividers separate distinct button groups visually when multiple groups appear in a toolbar"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Horizontal (Outline)",
+      description: "Basic horizontal button group with outline variant buttons, the default orientation.",
+      code: `import { Button, ButtonGroup } from 'vayu-ui';
+
+export default function HorizontalOutline() {
+  return (
+    <ButtonGroup aria-label="Text alignment options">
+      <Button variant="outline">
+        <Button.Text>Left</Button.Text>
+      </Button>
+      <Button variant="outline">
+        <Button.Text>Center</Button.Text>
+      </Button>
+      <Button variant="outline">
+        <Button.Text>Right</Button.Text>
+      </Button>
+    </ButtonGroup>
+  );
+}`,
+      tags: ["horizontal", "outline", "basic"]
+    },
+    {
+      title: "Primary Variant",
+      description: "Button group with primary variant buttons for a prominent action set.",
+      code: `import { Button, ButtonGroup } from 'vayu-ui';
+
+export default function PrimaryGroup() {
+  return (
+    <ButtonGroup aria-label="Save options">
+      <Button variant="primary">
+        <Button.Text>Save</Button.Text>
+      </Button>
+      <Button variant="primary">
+        <Button.Text>Save &amp; Close</Button.Text>
+      </Button>
+    </ButtonGroup>
+  );
+}`,
+      tags: ["primary", "action"]
+    },
+    {
+      title: "Vertical Orientation",
+      description: 'Vertically stacked button group using orientation="vertical".',
+      code: `import { Button, ButtonGroup } from 'vayu-ui';
+
+export default function VerticalGroup() {
+  return (
+    <ButtonGroup orientation="vertical" aria-label="Vertical actions" className="w-fit">
+      <Button variant="outline">
+        <Button.Text>Top</Button.Text>
+      </Button>
+      <Button variant="outline">
+        <Button.Text>Middle</Button.Text>
+      </Button>
+      <Button variant="outline">
+        <Button.Text>Bottom</Button.Text>
+      </Button>
+    </ButtonGroup>
+  );
+}`,
+      tags: ["vertical", "orientation"]
+    },
+    {
+      title: "Full Width",
+      description: "Button group that spans the full container width with evenly distributed buttons.",
+      code: `import { Button, ButtonGroup } from 'vayu-ui';
+
+export default function FullWidthGroup() {
+  return (
+    <ButtonGroup fullWidth aria-label="Confirmation actions">
+      <Button variant="secondary">
+        <Button.Text>Cancel</Button.Text>
+      </Button>
+      <Button variant="primary">
+        <Button.Text>Confirm</Button.Text>
+      </Button>
+    </ButtonGroup>
+  );
+}`,
+      tags: ["full-width", "confirm", "cancel"]
+    },
+    {
+      title: "Mixed Variants",
+      description: "Button group combining outline, secondary, and primary variants for progressive action emphasis.",
+      code: `import { Button, ButtonGroup } from 'vayu-ui';
+
+export default function MixedVariants() {
+  return (
+    <ButtonGroup aria-label="Mixed action buttons">
+      <Button variant="outline">
+        <Button.Text>Back</Button.Text>
+      </Button>
+      <Button variant="secondary">
+        <Button.Text>Save Draft</Button.Text>
+      </Button>
+      <Button variant="primary">
+        <Button.Text>Submit</Button.Text>
+      </Button>
+    </ButtonGroup>
+  );
+}`,
+      tags: ["mixed", "variants", "wizard"]
+    },
+    {
+      title: "With Icons",
+      description: "Button group with icon-only outline buttons for a compact formatting toolbar.",
+      code: `import { Button, ButtonGroup } from 'vayu-ui';
+
+export default function IconGroup() {
+  return (
+    <ButtonGroup aria-label="Formatting options">
+      <Button variant="outline">
+        <Button.Icon>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" />
+            <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" />
+          </svg>
+        </Button.Icon>
+      </Button>
+      <Button variant="outline">
+        <Button.Icon>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="19" x2="10" y1="4" y2="4" />
+            <line x1="14" x2="15" y1="20" y2="4" />
+            <line x1="5" x2="19" y1="20" y2="20" />
+          </svg>
+        </Button.Icon>
+      </Button>
+      <Button variant="outline">
+        <Button.Icon>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 4h8a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4h-8" />
+            <path d="M14 12H6" />
+            <path d="M10 8l-4 4 4 4" />
+          </svg>
+        </Button.Icon>
+      </Button>
+    </ButtonGroup>
+  );
+}`,
+      tags: ["icons", "toolbar", "svg"]
+    },
+    {
+      title: "Radius Variants",
+      description: "All four radius options (control, surface, overlay, full) demonstrated side by side.",
+      code: `import { Button, ButtonGroup } from 'vayu-ui';
+
+export default function RadiusVariants() {
+  return (
+    <div className="flex flex-col gap-4">
+      <ButtonGroup radius="control" aria-label="Control radius">
+        <Button variant="outline"><Button.Text>A</Button.Text></Button>
+        <Button variant="outline"><Button.Text>B</Button.Text></Button>
+      </ButtonGroup>
+      <ButtonGroup radius="surface" aria-label="Surface radius">
+        <Button variant="outline"><Button.Text>A</Button.Text></Button>
+        <Button variant="outline"><Button.Text>B</Button.Text></Button>
+      </ButtonGroup>
+      <ButtonGroup radius="overlay" aria-label="Overlay radius">
+        <Button variant="outline"><Button.Text>A</Button.Text></Button>
+        <Button variant="outline"><Button.Text>B</Button.Text></Button>
+      </ButtonGroup>
+      <ButtonGroup radius="full" aria-label="Full radius">
+        <Button variant="outline"><Button.Text>A</Button.Text></Button>
+        <Button variant="outline"><Button.Text>B</Button.Text></Button>
+      </ButtonGroup>
+    </div>
+  );
+}`,
+      tags: ["radius", "control", "surface", "overlay", "full"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Missing aria-label on ButtonGroup",
+      bad: '<ButtonGroup>\n  <Button variant="outline">Left</Button>\n  <Button variant="outline">Right</Button>\n</ButtonGroup>',
+      good: '<ButtonGroup aria-label="Text alignment options">\n  <Button variant="outline">Left</Button>\n  <Button variant="outline">Right</Button>\n</ButtonGroup>',
+      reason: "Without an accessible name, screen readers announce the group role but cannot convey its purpose. Always provide aria-label or aria-labelledby so users understand what the grouped buttons control."
+    },
+    {
+      title: "Using ButtonGroup for non-button children",
+      bad: "<ButtonGroup>\n  <span>Option A</span>\n  <span>Option B</span>\n</ButtonGroup>",
+      good: '<ButtonGroup aria-label="Options">\n  <Button variant="outline"><Button.Text>Option A</Button.Text></Button>\n  <Button variant="outline"><Button.Text>Option B</Button.Text></Button>\n</ButtonGroup>',
+      reason: "ButtonGroup applies CSS descendant selectors targeting direct <button> children ([&>button]:...) for sizing, radius, and focus management. Non-button children will not receive the enforced styles or proper z-index behavior."
+    },
+    {
+      title: "Nesting ButtonGroups inside each other",
+      bad: '<ButtonGroup aria-label="Outer">\n  <ButtonGroup aria-label="Inner">\n    <Button variant="outline">A</Button>\n  </ButtonGroup>\n  <Button variant="outline">B</Button>\n</ButtonGroup>',
+      good: '<ButtonGroup aria-label="Actions">\n  <Button variant="outline">A</Button>\n  <Button variant="outline">B</Button>\n  <Button variant="outline">C</Button>\n</ButtonGroup>',
+      reason: "Nesting groups creates confusing semantics for assistive technology and breaks the [&>button] CSS selectors that only target direct child buttons. Use a single flat group or separate groups side by side."
+    },
+    {
+      title: "Using fullWidth with a single button",
+      bad: '<ButtonGroup fullWidth>\n  <Button variant="primary">Submit</Button>\n</ButtonGroup>',
+      good: '<Button variant="primary" fullWidth>Submit</Button>',
+      reason: "A ButtonGroup with a single child adds unnecessary wrapper markup and semantic noise. Use the Button component directly with its own fullWidth prop instead."
+    },
+    {
+      title: "Using vertical orientation without constraining width",
+      bad: '<ButtonGroup orientation="vertical">\n  <Button variant="outline">Short</Button>\n  <Button variant="outline">Much longer label</Button>\n</ButtonGroup>',
+      good: '<ButtonGroup orientation="vertical" className="w-fit" aria-label="Actions">\n  <Button variant="outline">Short</Button>\n  <Button variant="outline">Much longer label</Button>\n</ButtonGroup>',
+      reason: 'Without a width constraint (e.g. w-fit or a fixed width), a vertical group will stretch to the full container width. Use className="w-fit" to let the column shrink to the widest button.'
+    }
+  ]
+};
+
 // src/components/card.ts
 var cardEntry = {
   // ── Identity ──────────────────────────────────────────
@@ -8094,23 +8514,13351 @@ export default function TabsWithActionsDemo() {
     }
   ]
 };
+
+// src/components/commandbox.ts
+var commandBoxEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "command-box",
+  name: "CommandBox",
+  type: "component",
+  category: "overlay",
+  // ── Description ───────────────────────────────────────
+  description: "A command palette component with fuzzy search, keyboard navigation, grouping, and overlay support using the compound component pattern.",
+  longDescription: "The CommandBox is a combobox-driven command palette inspired by VS Code and Raycast. It uses the compound component pattern (CommandBox.Input, CommandBox.List, CommandBox.Item, CommandBox.Group, CommandBox.Empty, CommandBox.Separator, CommandBox.Overlay) to compose flexible command interfaces. It supports controlled and uncontrolled open state, fuzzy search filtering with custom filter functions, keyboard navigation with arrow keys and shortcuts, item grouping with labels, loading states, disabled items, and an overlay mode that uses a portal with backdrop. All interactions follow WAI-ARIA combobox/listbox patterns for full screen reader accessibility.",
+  tags: [
+    "command",
+    "palette",
+    "search",
+    "combobox",
+    "keyboard",
+    "shortcut",
+    "overlay",
+    "menu",
+    "navigation",
+    "fuzzy",
+    "command-palette"
+  ],
+  useCases: [
+    "Application-wide command palette triggered by a keyboard shortcut (e.g. Cmd+K)",
+    "Searchable list of actions, navigation links, or documents with grouped results",
+    "Inline search/filter dropdown embedded within a page or panel without an overlay backdrop",
+    "Quick-access menu for power users who prefer keyboard-driven workflows",
+    "Document or page search with categorized results and keyboard navigation",
+    "Action selector in IDEs, dashboards, or complex tools with many available commands"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "CommandBox",
+  files: [
+    { name: "CommandBox.tsx", description: "Root component managing open state, search filtering, keyboard navigation, and context provider" },
+    { name: "CommandBoxInput.tsx", description: "Combobox input with search icon, keyboard arrow navigation, and ARIA combobox attributes" },
+    { name: "CommandBoxList.tsx", description: "Listbox container with configurable max height and ARIA listbox role" },
+    { name: "CommandBoxItem.tsx", description: "Option item with icon, description, keyboard shortcuts, highlight state, and ARIA option role" },
+    { name: "CommandBoxGroup.tsx", description: "Labeled group container that auto-hides during search when no items match" },
+    { name: "CommandBoxEmpty.tsx", description: "Empty state shown when no results match the search query" },
+    { name: "CommandBoxSeparator.tsx", description: "Visual divider between groups that hides during single-group searches" },
+    { name: "CommandBoxOverlay.tsx", description: "Portal-based overlay backdrop that closes on click and locks body scroll" },
+    { name: "types.ts", description: "TypeScript type definitions for all CommandBox props, context, and item data" },
+    { name: "hooks.ts", description: "React context, group context, useCommandBox hook, and fuzzy search scoring utility" },
+    { name: "index.ts", description: "Barrel export assembling the compound component and re-exporting all types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "CommandBox",
+  subComponents: [
+    {
+      name: "Input",
+      fileName: "CommandBoxInput.tsx",
+      description: "Combobox input field with search icon, handling arrow key navigation, Enter selection, and Home/End jumps",
+      props: [
+        {
+          name: "placeholder",
+          type: "string",
+          required: false,
+          defaultValue: "'Type a command or search...'",
+          description: "Placeholder text shown in the search input"
+        },
+        {
+          name: "icon",
+          type: "React.ReactNode",
+          required: false,
+          description: "Custom icon replacing the default Search icon in the input"
+        }
+      ]
+    },
+    {
+      name: "List",
+      fileName: "CommandBoxList.tsx",
+      description: "Scrollable listbox container with configurable max height and ARIA listbox role",
+      props: [
+        {
+          name: "maxHeight",
+          type: "string",
+          required: false,
+          defaultValue: "'320px'",
+          description: 'Maximum height of the list area as a CSS value (e.g. "320px", "50vh")'
+        }
+      ]
+    },
+    {
+      name: "Item",
+      fileName: "CommandBoxItem.tsx",
+      description: "Selectable option with icon, description, keyboard shortcut display, highlight/disabled states, and ARIA option role",
+      props: [
+        {
+          name: "id",
+          type: "string",
+          required: true,
+          description: "Unique identifier for this item, used for selection, registration, and keyboard navigation"
+        },
+        {
+          name: "disabled",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, the item is visible but non-interactive with reduced opacity"
+        },
+        {
+          name: "shortcut",
+          type: "string[]",
+          required: false,
+          description: 'Keyboard shortcut keys displayed on the right side of the item (e.g. ["\u2318", "K"])'
+        },
+        {
+          name: "icon",
+          type: "React.ReactNode",
+          required: false,
+          description: "Icon element displayed on the left side of the item"
+        },
+        {
+          name: "description",
+          type: "string",
+          required: false,
+          description: "Secondary text shown below the item title for additional context"
+        },
+        {
+          name: "title",
+          type: "string",
+          required: false,
+          description: "Item title used for search filtering; falls back to children text content"
+        }
+      ]
+    },
+    {
+      name: "Group",
+      fileName: "CommandBoxGroup.tsx",
+      description: "Labeled group of items with a visible header; auto-hides when no items match the search query",
+      props: [
+        {
+          name: "label",
+          type: "string",
+          required: true,
+          description: "Group header label displayed above the grouped items"
+        }
+      ]
+    },
+    {
+      name: "Empty",
+      fileName: "CommandBoxEmpty.tsx",
+      description: "Empty state message displayed when the search query returns no results",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: false,
+          description: 'Custom empty state content; defaults to "No results found"'
+        }
+      ]
+    },
+    {
+      name: "Separator",
+      fileName: "CommandBoxSeparator.tsx",
+      description: "Visual horizontal divider between groups; auto-hides during single-group filtered searches",
+      props: []
+    },
+    {
+      name: "Overlay",
+      fileName: "CommandBoxOverlay.tsx",
+      description: "Portal-based overlay wrapper that renders children in a centered modal with backdrop click-to-close",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content rendered inside the centered overlay portal"
+        }
+      ]
+    }
+  ],
+  hooks: ["useKeyPress", "useLockBodyScroll", "useOnClickOutside"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "open",
+      type: "boolean",
+      required: false,
+      description: "Controlled open state; use with onOpenChange for fully controlled behavior"
+    },
+    {
+      name: "defaultOpen",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Initial open state for uncontrolled usage"
+    },
+    {
+      name: "onOpenChange",
+      type: "(open: boolean) => void",
+      required: false,
+      description: "Callback fired when the open state changes, useful for controlled mode"
+    },
+    {
+      name: "onSelect",
+      type: "(item: CommandBoxItemData) => void",
+      required: false,
+      description: "Callback fired when an item is selected, receiving the item data object"
+    },
+    {
+      name: "filter",
+      type: "((item: CommandBoxItemData, search: string) => number) | null",
+      required: false,
+      description: "Custom filter function returning a relevance score (0\u2013100); defaults to built-in fuzzy search"
+    },
+    {
+      name: "showShortcuts",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "When true, displays keyboard shortcut badges on items that have the shortcut prop"
+    },
+    {
+      name: "loading",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "When true, indicates the command box is loading; suppresses the empty state"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  // No variants or size props — uses fixed design system styling
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "open",
+      prop: "open",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Controls visibility of the command box. Supports both controlled (open + onOpenChange) and uncontrolled (defaultOpen) modes."
+    },
+    {
+      name: "loading",
+      prop: "loading",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "When true, indicates async loading. Suppresses the empty state so a custom loading indicator can be shown instead."
+    },
+    {
+      name: "disabled",
+      prop: "disabled",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Applies to individual CommandBox.Item elements. Disabled items are visible but non-interactive with reduced opacity and pointer-events-none."
+    },
+    {
+      name: "highlighted",
+      prop: "highlightedIndex",
+      isBoolean: false,
+      values: ["number (0 to items.length - 1)"],
+      description: "Internally managed index tracking which item is visually highlighted via arrow key navigation. Applied as data-highlighted attribute and bg-brand/90 styling."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onOpenChange",
+      signature: "(open: boolean) => void",
+      description: "Fired when the command box opens or closes, including via Escape key, backdrop click, or programmatic setOpen"
+    },
+    {
+      name: "onSelect",
+      signature: "(item: CommandBoxItemData) => void",
+      description: "Fired when an item is selected via Enter key, click, or Space key. Receives the full CommandBoxItemData object with id, title, description, icon, shortcut, group, disabled, onSelect, and data fields."
+    },
+    {
+      name: "onKeyDown (Input)",
+      signature: "(event: React.KeyboardEvent<HTMLInputElement>) => void",
+      description: "Internal handler on the input for ArrowDown (next), ArrowUp (previous), Enter (select), Home (first), End (last)"
+    },
+    {
+      name: "onKeyDown (Item)",
+      signature: "(event: React.KeyboardEvent<HTMLDivElement>) => void",
+      description: "Internal handler on each item for Enter and Space to trigger selection"
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    attributes: [
+      {
+        name: 'role="combobox" (Input)',
+        description: "Identifies the input as a combobox widget that controls a listbox popup",
+        managedByComponent: true
+      },
+      {
+        name: "aria-expanded (Input)",
+        description: "Set to true when the command box is open, indicating the listbox popup is visible",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-haspopup="listbox" (Input)',
+        description: "Declares that the combobox controls a listbox element",
+        managedByComponent: true
+      },
+      {
+        name: "aria-controls (Input)",
+        description: "References the listbox element ID for programmatic association between combobox and listbox",
+        managedByComponent: true
+      },
+      {
+        name: "aria-activedescendant (Input)",
+        description: "References the currently highlighted item ID, keeping screen reader focus in sync with visual highlight",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-autocomplete="list" (Input)',
+        description: "Indicates the combobox provides list-style autocomplete suggestions",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-label="Search commands" (Input)',
+        description: "Provides an accessible name for the search input",
+        managedByComponent: true
+      },
+      {
+        name: 'role="listbox" (List)',
+        description: "Identifies the list container as a listbox widget",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-label="Command suggestions" (List)',
+        description: "Provides an accessible name for the listbox",
+        managedByComponent: true
+      },
+      {
+        name: 'role="option" (Item)',
+        description: "Identifies each item as an option within the listbox",
+        managedByComponent: true
+      },
+      {
+        name: "aria-selected (Item)",
+        description: "Set to true when the item is currently highlighted via keyboard navigation",
+        managedByComponent: true
+      },
+      {
+        name: "aria-disabled (Item)",
+        description: "Set to true on disabled items to communicate non-interactive state to assistive technology",
+        managedByComponent: true
+      },
+      {
+        name: 'role="group" (Group)',
+        description: "Identifies the group container as a group of related options",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Group)",
+        description: "Set to the group label value, providing an accessible name for the option group",
+        managedByComponent: true
+      },
+      {
+        name: 'role="status" (Empty)',
+        description: "Identifies the empty state message as a live status region",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-live="polite" (Empty)',
+        description: 'Announces "no results" messages to screen readers without interrupting current speech',
+        managedByComponent: true
+      },
+      {
+        name: 'role="separator" (Separator)',
+        description: "Identifies the separator as a structural divider between groups",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-orientation="horizontal" (Separator)',
+        description: "Declares the separator orientation as horizontal",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-hidden="true" (Overlay backdrop)',
+        description: "Hides the backdrop overlay from the accessibility tree since it is purely decorative",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "ArrowDown",
+        behavior: "Moves highlight to the next item; cycles to the first item from the last"
+      },
+      {
+        key: "ArrowUp",
+        behavior: "Moves highlight to the previous item; cycles to the last item from the first"
+      },
+      {
+        key: "Enter",
+        behavior: "Selects the currently highlighted item and fires the onSelect callback"
+      },
+      {
+        key: "Escape",
+        behavior: "Closes the command box and fires onOpenChange with false"
+      },
+      {
+        key: "Home",
+        behavior: "Moves highlight to the first item in the list"
+      },
+      {
+        key: "End",
+        behavior: "Moves highlight to the last item in the list"
+      },
+      {
+        key: "Space (on focused Item)",
+        behavior: "Selects the focused item, same as Enter"
+      },
+      {
+        key: "Custom shortcuts",
+        behavior: "Registered via useKeyPress on the root; triggers the corresponding item's onSelect callback"
+      }
+    ],
+    focusManagement: "The input is automatically focused when the command box opens. Keyboard navigation moves a visual highlight between items using aria-activedescendant, keeping DOM focus on the input. When using overlay mode, body scroll is locked and clicking the backdrop closes the palette.",
+    wcagLevel: "AA",
+    notes: 'Follows the WAI-ARIA combobox pattern with listbox popup. The input uses role="combobox" with aria-controls pointing to the listbox, and aria-activedescendant tracks the highlighted option. Items use role="option" with aria-selected. Groups use role="group" with aria-label. The empty state uses role="status" with aria-live="polite" for dynamic announcements. All items have a minimum height of 44px for touch target compliance.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "lucide-react" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: 'Buttons commonly trigger the command palette open state (e.g. "Open Command Box" button)'
+    },
+    {
+      slug: "modal",
+      reason: "Similar overlay pattern; CommandBox.Overlay uses portal-based rendering like modals"
+    },
+    {
+      slug: "tooltip",
+      reason: "Tooltips can display keyboard shortcut hints on trigger buttons that open the command palette"
+    },
+    {
+      slug: "card",
+      reason: "Cards serve as containers for inline CommandBox instances without overlay"
+    },
+    {
+      slug: "text-input",
+      reason: "TextInput pairs with CommandBox in search-driven UIs where one triggers the other"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Command Palette with Overlay",
+      description: "A full command palette triggered by keyboard shortcut with overlay backdrop, grouped items, and shortcuts.",
+      code: `import { useState } from 'react';
+import { CommandBox, Button } from 'vayu-ui';
+import { useKeyPress } from 'vayu-ui';
+import { Home, Search, Settings, Plus } from 'lucide-react';
+
+export default function CommandPaletteDemo() {
+  const [open, setOpen] = useState(false);
+
+  useKeyPress([
+    {
+      keys: ['Ctrl', 'Shift', 'P'],
+      callback: (e) => {
+        e.preventDefault();
+        setOpen((prev) => !prev);
+      },
+    },
+  ]);
+
+  const handleSelect = (item: { id: string; title: string }) => {
+    console.log('Selected:', item);
+  };
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)} variant="outline">
+        Open Command Box
+      </Button>
+
+      <CommandBox open={open} onOpenChange={setOpen} onSelect={handleSelect}>
+        <CommandBox.Overlay>
+          <CommandBox.Input placeholder="Type a command or search..." />
+          <CommandBox.List>
+            <CommandBox.Group label="Navigation">
+              <CommandBox.Item id="home" shortcut={['\u2318', 'H']} icon={<Home className="w-4 h-4" />}>
+                Go to Home
+              </CommandBox.Item>
+              <CommandBox.Item id="search" shortcut={['\u2318', 'S']} icon={<Search className="w-4 h-4" />}>
+                Search
+              </CommandBox.Item>
+            </CommandBox.Group>
+
+            <CommandBox.Separator />
+
+            <CommandBox.Group label="Actions">
+              <CommandBox.Item id="new-file" shortcut={['\u2318', 'N']} icon={<Plus className="w-4 h-4" />}>
+                New File
+              </CommandBox.Item>
+              <CommandBox.Item id="settings" shortcut={['\u2318', ',']} icon={<Settings className="w-4 h-4" />}>
+                Open Settings
+              </CommandBox.Item>
+            </CommandBox.Group>
+
+            <CommandBox.Empty>No commands found. Try a different search.</CommandBox.Empty>
+          </CommandBox.List>
+        </CommandBox.Overlay>
+      </CommandBox>
+    </>
+  );
+}`,
+      tags: ["overlay", "keyboard-shortcut", "command-palette", "groups", "shortcuts"]
+    },
+    {
+      title: "Inline CommandBox",
+      description: "An embedded command box without overlay backdrop, useful inside panels or cards.",
+      code: `import { CommandBox } from 'vayu-ui';
+import { User, Mail, Calendar, Star, Trash2 } from 'lucide-react';
+
+export default function InlineDemo() {
+  return (
+    <div className="border border-border rounded-overlay overflow-hidden">
+      <CommandBox>
+        <CommandBox.Input placeholder="Search commands..." />
+        <CommandBox.List maxHeight="240px">
+          <CommandBox.Item id="profile" icon={<User className="w-4 h-4" />} description="View and edit your profile">
+            View Profile
+          </CommandBox.Item>
+          <CommandBox.Item id="email" icon={<Mail className="w-4 h-4" />} description="Open email inbox">
+            Email Inbox
+          </CommandBox.Item>
+          <CommandBox.Item id="calendar" icon={<Calendar className="w-4 h-4" />} description="View your calendar">
+            Calendar
+          </CommandBox.Item>
+          <CommandBox.Item id="starred" icon={<Star className="w-4 h-4" />} description="View starred items">
+            Starred Items
+          </CommandBox.Item>
+          <CommandBox.Item id="trash" icon={<Trash2 className="w-4 h-4" />} description="View deleted items" disabled>
+            Trash (Disabled)
+          </CommandBox.Item>
+          <CommandBox.Empty>No results</CommandBox.Empty>
+        </CommandBox.List>
+      </CommandBox>
+    </div>
+  );
+}`,
+      tags: ["inline", "embedded", "descriptions", "disabled"]
+    },
+    {
+      title: "With Descriptions and Groups",
+      description: "Grouped items with descriptions and shortcuts hidden, ideal for documentation search.",
+      code: `import { CommandBox } from 'vayu-ui';
+import { FileText, Download, Layers, Code, Zap } from 'lucide-react';
+
+export default function DescriptionsDemo() {
+  return (
+    <div className="border border-border rounded-overlay overflow-hidden">
+      <CommandBox showShortcuts={false}>
+        <CommandBox.Input placeholder="Search documentation..." />
+        <CommandBox.List maxHeight="280px">
+          <CommandBox.Group label="Getting Started">
+            <CommandBox.Item
+              id="intro"
+              icon={<FileText className="w-4 h-4" />}
+              description="Learn the basics of the component library"
+            >
+              Introduction
+            </CommandBox.Item>
+            <CommandBox.Item
+              id="installation"
+              icon={<Download className="w-4 h-4" />}
+              description="Install and configure VedUI in your project"
+            >
+              Installation Guide
+            </CommandBox.Item>
+          </CommandBox.Group>
+
+          <CommandBox.Separator />
+
+          <CommandBox.Group label="Core Concepts">
+            <CommandBox.Item
+              id="components"
+              icon={<Layers className="w-4 h-4" />}
+              description="Understanding the compound component pattern"
+            >
+              Components
+            </CommandBox.Item>
+            <CommandBox.Item
+              id="theming"
+              icon={<Code className="w-4 h-4" />}
+              description="Customize the look and feel with design tokens"
+            >
+              Theming
+            </CommandBox.Item>
+            <CommandBox.Item
+              id="hooks"
+              icon={<Zap className="w-4 h-4" />}
+              description="Reusable hooks for common patterns"
+            >
+              Hooks
+            </CommandBox.Item>
+          </CommandBox.Group>
+
+          <CommandBox.Empty>No documentation found for your search.</CommandBox.Empty>
+        </CommandBox.List>
+      </CommandBox>
+    </div>
+  );
+}`,
+      tags: ["descriptions", "groups", "documentation", "no-shortcuts"]
+    },
+    {
+      title: "Simple List",
+      description: "A minimal command box without groups or shortcuts, for flat option lists.",
+      code: `import { CommandBox } from 'vayu-ui';
+
+export default function SimpleListDemo() {
+  return (
+    <div className="border border-border rounded-overlay overflow-hidden">
+      <CommandBox showShortcuts={false}>
+        <CommandBox.Input placeholder="Quick search..." />
+        <CommandBox.List maxHeight="200px">
+          <CommandBox.Item id="opt1">Option One</CommandBox.Item>
+          <CommandBox.Item id="opt2">Option Two</CommandBox.Item>
+          <CommandBox.Item id="opt3">Option Three</CommandBox.Item>
+          <CommandBox.Item id="opt4">Option Four</CommandBox.Item>
+          <CommandBox.Item id="opt5">Option Five</CommandBox.Item>
+          <CommandBox.Item id="opt6" disabled>
+            Option Six (Disabled)
+          </CommandBox.Item>
+          <CommandBox.Empty>No options found</CommandBox.Empty>
+        </CommandBox.List>
+      </CommandBox>
+    </div>
+  );
+}`,
+      tags: ["simple", "minimal", "flat-list", "disabled"]
+    },
+    {
+      title: "Loading State",
+      description: "Command box in loading state with disabled input and a spinner, for async command loading.",
+      code: `import { CommandBox } from 'vayu-ui';
+
+export default function LoadingDemo() {
+  return (
+    <div className="border border-border rounded-overlay overflow-hidden">
+      <CommandBox showShortcuts={false} loading={true}>
+        <CommandBox.Input placeholder="Loading commands..." disabled />
+        <CommandBox.List>
+          <div
+            role="status"
+            aria-live="polite"
+            aria-busy="true"
+            className="py-8 text-center text-muted-content text-sm"
+          >
+            <div className="flex items-center justify-center gap-2">
+              <div className="w-4 h-4 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+              Loading commands...
+            </div>
+          </div>
+        </CommandBox.List>
+      </CommandBox>
+    </div>
+  );
+}`,
+      tags: ["loading", "async", "spinner", "disabled-input"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using CommandBox without an id on Items",
+      bad: "<CommandBox.Item>Home</CommandBox.Item>",
+      good: '<CommandBox.Item id="home">Home</CommandBox.Item>',
+      reason: "The id prop is required on every Item for registration, keyboard navigation, ARIA activedescendant, and selection callbacks. Without it, the item cannot be tracked or selected."
+    },
+    {
+      title: "Using CommandBox.Overlay without controlled open state",
+      bad: "<CommandBox><CommandBox.Overlay>...</CommandBox.Overlay></CommandBox>",
+      good: "<CommandBox open={open} onOpenChange={setOpen}><CommandBox.Overlay>...</CommandBox.Overlay></CommandBox>",
+      reason: "The Overlay renders via a portal and needs to know when to show/hide. Without controlled or defaultOpen state, the overlay has no trigger mechanism and the command box will remain invisible."
+    },
+    {
+      title: "Nesting interactive elements inside CommandBox.Item",
+      bad: '<CommandBox.Item id="link"><a href="/page">Go to page</a></CommandBox.Item>',
+      good: '<CommandBox.Item id="link" onSelect={() => router.push("/page")}>Go to page</CommandBox.Item>',
+      reason: "Items already handle click and keyboard selection. Nesting interactive elements (links, buttons, inputs) breaks the ARIA option role and causes double-activation or focus management issues."
+    },
+    {
+      title: "Using CommandBox.Group without a label",
+      bad: '<CommandBox.Group><CommandBox.Item id="x">Item</CommandBox.Item></CommandBox.Group>',
+      good: '<CommandBox.Group label="Actions"><CommandBox.Item id="x">Item</CommandBox.Item></CommandBox.Group>',
+      reason: "The label prop is required for the group's aria-label attribute. Without it, screen readers cannot identify the group, violating accessibility requirements."
+    },
+    {
+      title: "Placing CommandBox.Input outside the list context",
+      bad: "<CommandBox><CommandBox.Input /></CommandBox><CommandBox.List>...</CommandBox.List>",
+      good: "<CommandBox><CommandBox.Input /><CommandBox.List>...</CommandBox.List></CommandBox>",
+      reason: "Input, List, Item, Group, and Empty all depend on the CommandBox context provider. Placing them outside the CommandBox root will crash because useCommandBox() returns undefined."
+    }
+  ]
+};
+
+// src/components/collapsible.ts
+var collapsibleEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "collapsible",
+  name: "Collapsible",
+  type: "component",
+  category: "data-display",
+  // ── Description ───────────────────────────────────────
+  description: "A toggleable content section with line-clamp truncation and smooth show/hide behavior.",
+  longDescription: "The Collapsible component uses the compound component pattern (Collapsible.Content, Collapsible.Trigger) to create accessible expand/collapse sections with CSS line-clamp truncation. It supports both controlled and uncontrolled open state via context, with auto-generated ARIA IDs for screen reader compliance.",
+  tags: [
+    "collapsible",
+    "expandable",
+    "collapse",
+    "show-more",
+    "toggle",
+    "truncate",
+    "line-clamp",
+    "disclosure"
+  ],
+  useCases: [
+    'Truncating long text with a "Show more" toggle to reduce initial page height',
+    "Creating expandable/collapsible content sections in product descriptions or article previews",
+    "Building controlled collapsible panels where open state is managed externally by parent logic",
+    "Displaying FAQ answers or support content that starts collapsed and expands on demand",
+    'Showing preview snippets of reviews or comments with a "Read more" link for the full text'
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Collapsible",
+  files: [
+    { name: "Collapsible.tsx", description: "Root component with context provider and state management" },
+    { name: "CollapsibleContent.tsx", description: "Content panel with CSS line-clamp truncation when collapsed" },
+    { name: "CollapsibleTrigger.tsx", description: "Button trigger that toggles content with customizable labels" },
+    { name: "types.ts", description: "TypeScript type definitions for all props and context" },
+    { name: "index.ts", description: "Barrel export file re-exporting the compound component and types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Collapsible",
+  subComponents: [
+    {
+      name: "Content",
+      fileName: "CollapsibleContent.tsx",
+      description: "Content panel that displays text with CSS line-clamp truncation when collapsed and full text when expanded",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content to display inside the collapsible panel"
+        },
+        {
+          name: "lines",
+          type: "number",
+          required: false,
+          defaultValue: "3",
+          description: "Number of visible lines when the content is collapsed"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the content wrapper div"
+        }
+      ]
+    },
+    {
+      name: "Trigger",
+      fileName: "CollapsibleTrigger.tsx",
+      description: "Button that toggles the collapsible content open or closed, displaying configurable label text",
+      props: [
+        {
+          name: "showText",
+          type: "string",
+          required: false,
+          defaultValue: "'Show more'",
+          description: "Label text displayed when the content is collapsed"
+        },
+        {
+          name: "hideText",
+          type: "string",
+          required: false,
+          defaultValue: "'Show less'",
+          description: "Label text displayed when the content is expanded"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the trigger button element"
+        }
+      ]
+    }
+  ],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Collapsible.Content and Collapsible.Trigger sub-components"
+    },
+    {
+      name: "defaultOpen",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Whether the collapsible starts in the expanded state (uncontrolled mode)"
+    },
+    {
+      name: "open",
+      type: "boolean",
+      required: false,
+      description: "Controlled open state \u2014 when provided, the component ignores internal state"
+    },
+    {
+      name: "onOpenChange",
+      type: "(open: boolean) => void",
+      required: false,
+      description: "Callback fired when the open state changes, receives the new boolean value"
+    },
+    {
+      name: "className",
+      type: "string",
+      required: false,
+      description: "Additional CSS classes applied to the root container div"
+    }
+  ],
+  rendersAs: "div",
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "open",
+      prop: "open / defaultOpen",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Controls whether the content is fully visible or truncated. Supports both controlled (via open prop) and uncontrolled (via defaultOpen prop) modes."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onOpenChange",
+      signature: "(open: boolean) => void",
+      description: "Fired when the trigger is clicked or external logic changes the open state. Receives the new open value."
+    },
+    {
+      name: "onClick (internal)",
+      signature: "() => void",
+      description: "Trigger button click handler that toggles the open state. Handled internally via context toggle function."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: void 0,
+    attributes: [
+      {
+        name: "aria-expanded",
+        description: "Applied to Collapsible.Trigger button; true when content is visible, false when collapsed.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-controls",
+        description: "Applied to Collapsible.Trigger button; references the auto-generated content panel ID to associate the trigger with its content.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-labelledby",
+        description: "Applied to Collapsible.Content panel; references the auto-generated trigger button ID to label the region.",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Enter",
+        behavior: "Toggles the collapsible content open/closed when the trigger button is focused."
+      },
+      {
+        key: "Space",
+        behavior: "Toggles the collapsible content open/closed when the trigger button is focused."
+      }
+    ],
+    focusManagement: "Focus remains on the trigger button after toggling. Content does not steal focus when expanded or collapsed.",
+    wcagLevel: "AA",
+    notes: 'Content panel uses role="region" to identify it as a live content region. ARIA IDs are auto-generated via React.useId() ensuring uniqueness. Content remains in the accessibility tree even when collapsed via line-clamp \u2014 screen readers can still navigate to the region.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "tailwind-merge" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "typography",
+      reason: "Commonly used alongside Collapsible for headings above collapsible sections"
+    },
+    {
+      slug: "card",
+      reason: "Collapsible is often placed inside Card containers for grouped content sections"
+    },
+    {
+      slug: "accordion",
+      reason: "Alternative pattern for multiple expand/collapse sections with single-expand support"
+    },
+    {
+      slug: "tab",
+      reason: "Alternative to Collapsible for switching between content sections without collapsing"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Collapsible",
+      description: 'Default uncontrolled collapsible with 3-line truncation and "Show more"/"Show less" toggle.',
+      code: `import { Collapsible } from 'vayu-ui';
+
+const longText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...';
+
+export default function BasicCollapsible() {
+  return (
+    <Collapsible>
+      <Collapsible.Content lines={3}>{longText}</Collapsible.Content>
+      <Collapsible.Trigger />
+    </Collapsible>
+  );
+}`,
+      tags: ["basic", "uncontrolled", "default"]
+    },
+    {
+      title: "Custom Trigger Text",
+      description: 'Collapsible with custom "Read more"/"Read less" labels and 2-line clamp.',
+      code: `import { Collapsible } from 'vayu-ui';
+
+const longText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...';
+
+export default function CustomTextCollapsible() {
+  return (
+    <Collapsible>
+      <Collapsible.Content lines={2}>{longText}</Collapsible.Content>
+      <Collapsible.Trigger showText="Read more" hideText="Read less" />
+    </Collapsible>
+  );
+}`,
+      tags: ["custom-labels", "line-clamp"]
+    },
+    {
+      title: "Controlled State",
+      description: "Collapsible with externally managed open state, allowing programmatic toggle via an external button.",
+      code: `import { useState } from 'react';
+import { Collapsible } from 'vayu-ui';
+
+export default function ControlledCollapsible() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Collapsible open={open} onOpenChange={setOpen}>
+        <Collapsible.Content lines={2}>
+          This is a controlled collapsible. The open state is managed externally.
+        </Collapsible.Content>
+        <Collapsible.Trigger />
+      </Collapsible>
+      <button onClick={() => setOpen(!open)}>
+        External Toggle ({open ? 'Open' : 'Closed'})
+      </button>
+    </>
+  );
+}`,
+      tags: ["controlled", "external-state"]
+    },
+    {
+      title: "Default Open",
+      description: "Collapsible that starts in the expanded state using defaultOpen prop.",
+      code: `import { Collapsible } from 'vayu-ui';
+
+export default function DefaultOpenCollapsible() {
+  return (
+    <Collapsible defaultOpen>
+      <Collapsible.Content lines={2}>
+        This collapsible starts in the open state by default. Click "Show less" to collapse it.
+      </Collapsible.Content>
+      <Collapsible.Trigger />
+    </Collapsible>
+  );
+}`,
+      tags: ["default-open", "uncontrolled"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using sub-components outside Collapsible root",
+      bad: "<div><Collapsible.Trigger /></div>",
+      good: "<Collapsible><Collapsible.Content>...</Collapsible.Content><Collapsible.Trigger /></Collapsible>",
+      reason: 'Content and Trigger depend on CollapsibleContext provided by the root Collapsible. Using them standalone throws a runtime error: "Collapsible components must be used within Collapsible.Root".'
+    },
+    {
+      title: "Mixing controlled and uncontrolled props",
+      bad: "<Collapsible defaultOpen={true} open={isOpen} onOpenChange={setIsOpen}>...</Collapsible>",
+      good: "<Collapsible open={isOpen} onOpenChange={setIsOpen}>...</Collapsible>",
+      reason: "When the open prop is provided, the component runs in controlled mode and ignores defaultOpen. Supplying both is misleading \u2014 pick one pattern and stick with it."
+    },
+    {
+      title: "Omitting Content before Trigger",
+      bad: "<Collapsible><Collapsible.Trigger /></Collapsible>",
+      good: "<Collapsible><Collapsible.Content lines={3}>Content here</Collapsible.Content><Collapsible.Trigger /></Collapsible>",
+      reason: "The Trigger toggles content visibility. Without a Content sibling, the trigger button has nothing to expand/collapse, resulting in a broken UI."
+    },
+    {
+      title: "Using onOpenChange without open prop",
+      bad: "<Collapsible onOpenChange={handleChange}>...</Collapsible>",
+      good: "<Collapsible open={isOpen} onOpenChange={setIsOpen}>...</Collapsible>",
+      reason: "While onOpenChange works in uncontrolled mode (it fires as a side-effect callback), relying on it to sync external state without the open prop will cause the UI and state to diverge. Use the controlled pattern (open + onOpenChange) when syncing external state."
+    },
+    {
+      title: "Setting lines to 0 or negative values",
+      bad: "<Collapsible.Content lines={0}>Content</Collapsible.Content>",
+      good: "<Collapsible.Content lines={3}>Content</Collapsible.Content>",
+      reason: "The lines prop maps to -webkit-line-clamp. A value of 0 or negative results in undefined browser behavior \u2014 the content may not clamp at all or disappear entirely. Use a positive integer (default is 3)."
+    }
+  ]
+};
+
+// src/components/drawer.ts
+var drawerEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "drawer",
+  name: "Drawer",
+  type: "component",
+  category: "overlay",
+  // ── Description ───────────────────────────────────────
+  description: "A slide-in panel component that opens from any screen edge, supporting four positions, modal/non-modal modes, focus trapping, and the compound component pattern.",
+  longDescription: "The Drawer component slides in from the left, right, top, or bottom of the viewport and overlays the main content. It uses the compound component pattern (Drawer.Trigger, Drawer.Overlay, Drawer.Content, Drawer.Header, Drawer.Title, Drawer.Description, Drawer.Footer, Drawer.Close, Drawer.Portal) to compose rich panel layouts. It supports controlled and uncontrolled open state, modal mode with a backdrop overlay and body scroll lock, focus trapping within the drawer content, and keyboard navigation (Escape to close, Tab cycling). The built-in close button uses the Lucide X icon. All sub-components forward refs and accept className overrides.",
+  tags: [
+    "drawer",
+    "panel",
+    "sidebar",
+    "slide-in",
+    "overlay",
+    "modal",
+    "dialog",
+    "sheet",
+    "navigation",
+    "off-canvas"
+  ],
+  useCases: [
+    "Side navigation panel that slides in from the left or right on mobile viewports",
+    "Edit forms or detail panels that overlay the page without full navigation",
+    "Notification or message trays that slide down from the top of the screen",
+    "Share sheets or action sheets that slide up from the bottom on mobile",
+    "Filter panels in data-heavy interfaces that let users refine results without leaving the page",
+    "Multi-step workflows presented as a focused overlay without a full-page modal"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Drawer",
+  files: [
+    { name: "Drawer.tsx", description: "Root component providing DrawerContext, controlled/uncontrolled state, and body scroll lock in modal mode" },
+    { name: "DrawerTrigger.tsx", description: "Button that opens the drawer; supports asChild for custom trigger elements with aria-expanded and aria-haspopup" },
+    { name: "DrawerOverlay.tsx", description: "Semi-transparent backdrop behind the drawer content in modal mode; optionally dismissible on click" },
+    { name: "DrawerContent.tsx", description: "Positioned panel container with focus trapping, keyboard navigation, slide animations, and a built-in close button" },
+    { name: "DrawerHeader.tsx", description: "Flex column layout for the header area containing Title and Description" },
+    { name: "DrawerTitle.tsx", description: "Heading element with auto-generated id linked to aria-labelledby on the content" },
+    { name: "DrawerDescription.tsx", description: "Paragraph element with auto-generated id linked to aria-describedby on the content" },
+    { name: "DrawerFooter.tsx", description: "Flex row layout at the bottom of the drawer for action buttons" },
+    { name: "DrawerClose.tsx", description: "Button that closes the drawer; supports asChild for custom close elements" },
+    { name: "DrawerPortal.tsx", description: "Pass-through placeholder for future portal rendering support" },
+    { name: "types.ts", description: "TypeScript type definitions for DrawerRootProps, DrawerSide, DrawerContextType, and all sub-component props" },
+    { name: "index.ts", description: "Barrel export file assembling the compound component via Object.assign and re-exporting all types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Drawer",
+  subComponents: [
+    {
+      name: "Trigger",
+      fileName: "DrawerTrigger.tsx",
+      description: "Button that opens the drawer. When asChild is true, clones the child element instead of rendering a default button.",
+      props: [
+        {
+          name: "asChild",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, merges event handlers and ARIA attributes onto the child element instead of rendering a wrapping button"
+        },
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content to render; either a custom element (with asChild) or the button label text"
+        }
+      ],
+      supportsAsChild: true
+    },
+    {
+      name: "Overlay",
+      fileName: "DrawerOverlay.tsx",
+      description: "Semi-transparent backdrop rendered behind the drawer content. Only visible when modal is true and the drawer is open.",
+      props: [
+        {
+          name: "dismissible",
+          type: "boolean",
+          required: false,
+          defaultValue: "true",
+          description: "When true, clicking the overlay closes the drawer"
+        }
+      ]
+    },
+    {
+      name: "Content",
+      fileName: "DrawerContent.tsx",
+      description: "The main panel container. Handles positioning based on the side prop, slide animations, focus trapping, and keyboard navigation. Includes a built-in close button.",
+      props: [
+        {
+          name: "trapFocus",
+          type: "boolean",
+          required: false,
+          defaultValue: "true",
+          description: "When true, Tab and Shift+Tab cycle focus within the drawer content and auto-focus the first focusable element on open"
+        }
+      ]
+    },
+    {
+      name: "Header",
+      fileName: "DrawerHeader.tsx",
+      description: "Flex column layout for the header area, typically containing Title and Description sub-components.",
+      props: []
+    },
+    {
+      name: "Title",
+      fileName: "DrawerTitle.tsx",
+      description: "Heading element whose auto-generated id is linked to the content panel via aria-labelledby for screen reader access.",
+      props: []
+    },
+    {
+      name: "Description",
+      fileName: "DrawerDescription.tsx",
+      description: "Paragraph element whose auto-generated id is linked to the content panel via aria-describedby for screen reader access.",
+      props: []
+    },
+    {
+      name: "Footer",
+      fileName: "DrawerFooter.tsx",
+      description: "Flex row layout pinned to the bottom of the drawer for action buttons (Save, Cancel, etc.).",
+      props: []
+    },
+    {
+      name: "Close",
+      fileName: "DrawerClose.tsx",
+      description: "Button that closes the drawer. When asChild is true, clones the child element instead of rendering a default button.",
+      props: [
+        {
+          name: "asChild",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, merges the close handler onto the child element instead of rendering a wrapping button"
+        }
+      ],
+      supportsAsChild: true
+    },
+    {
+      name: "Portal",
+      fileName: "DrawerPortal.tsx",
+      description: "Pass-through wrapper for future portal rendering. Currently renders children directly.",
+      props: []
+    }
+  ],
+  hooks: ["useDrawer"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Drawer sub-components (Trigger, Overlay, Content, etc.) composing the full drawer UI"
+    },
+    {
+      name: "open",
+      type: "boolean",
+      required: false,
+      description: "Controlled open state. Use with onOpenChange for fully controlled mode."
+    },
+    {
+      name: "onOpenChange",
+      type: "(open: boolean) => void",
+      required: false,
+      description: "Callback fired when the drawer open state changes, for controlled usage"
+    },
+    {
+      name: "side",
+      type: "DrawerSide",
+      required: false,
+      defaultValue: "'right'",
+      description: "Edge of the viewport the drawer slides in from",
+      options: ["left", "right", "top", "bottom"]
+    },
+    {
+      name: "modal",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "When true, renders a backdrop overlay and locks body scroll while the drawer is open"
+    },
+    {
+      name: "defaultOpen",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Initial open state for uncontrolled mode"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  // No variant or size props — side positioning is the primary visual differentiator.
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "open",
+      prop: "open",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Whether the drawer is visible. In controlled mode, set via the open prop; in uncontrolled mode, toggled by Trigger and Close."
+    },
+    {
+      name: "modal",
+      prop: "modal",
+      isBoolean: true,
+      defaultValue: "true",
+      description: "When true, a semi-transparent overlay covers the page behind the drawer and body scroll is locked. When false, the drawer renders without a backdrop and does not trap focus."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onOpenChange",
+      signature: "(open: boolean) => void",
+      description: "Fired when the drawer open state changes (opened via Trigger, closed via Close/Escape/overlay click). Use this in controlled mode."
+    },
+    {
+      name: "onClick (Trigger)",
+      signature: "(event: React.MouseEvent<HTMLButtonElement>) => void",
+      description: "Fired when the Trigger is clicked, before the drawer opens. Call event.preventDefault() to prevent opening."
+    },
+    {
+      name: "onClick (Overlay)",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fired when the Overlay is clicked. If dismissible is true (default), the drawer closes after the handler."
+    },
+    {
+      name: "onClick (Close)",
+      signature: "(event: React.MouseEvent<HTMLButtonElement>) => void",
+      description: "Fired when the Close button is clicked, before the drawer closes."
+    },
+    {
+      name: "onKeyDown (Content)",
+      signature: "(event: React.KeyboardEvent<HTMLDivElement>) => void",
+      description: "Fired on key down within the drawer content. Escape closes the drawer; Tab/Shift+Tab cycle focus when trapFocus is true."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "dialog",
+    attributes: [
+      {
+        name: "aria-modal",
+        description: 'Set to "true" on Drawer.Content, informing screen readers that content outside the dialog is inert',
+        managedByComponent: true
+      },
+      {
+        name: "aria-labelledby",
+        description: "Set on Drawer.Content with the auto-generated id from Drawer.Title, linking the dialog to its accessible name",
+        managedByComponent: true
+      },
+      {
+        name: "aria-describedby",
+        description: "Set on Drawer.Content with the auto-generated id from Drawer.Description, linking the dialog to its description",
+        managedByComponent: true
+      },
+      {
+        name: "aria-expanded",
+        description: "Set on Drawer.Trigger to indicate whether the drawer is currently open or closed",
+        managedByComponent: true
+      },
+      {
+        name: "aria-haspopup",
+        description: 'Set to "dialog" on Drawer.Trigger to indicate that activating it opens a dialog',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: 'Set to "true" on Drawer.Overlay to hide the backdrop from the accessibility tree',
+        managedByComponent: true
+      },
+      {
+        name: "aria-label",
+        description: 'Set to "Close drawer" on the built-in close button inside Drawer.Content',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Escape",
+        behavior: "Closes the drawer when focus is inside the content panel"
+      },
+      {
+        key: "Tab",
+        behavior: "Cycles focus to the next focusable element inside the drawer; wraps from last to first when trapFocus is true"
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Cycles focus to the previous focusable element inside the drawer; wraps from first to last when trapFocus is true"
+      }
+    ],
+    focusManagement: "When the drawer opens and trapFocus is true, the first focusable element inside the content is auto-focused after a 50ms delay. Tab and Shift+Tab wrap focus within the drawer. Body scroll is locked in modal mode to prevent background interaction.",
+    wcagLevel: "AA",
+    notes: "Title and Description ids are generated via React.useId() and automatically linked to the dialog via aria-labelledby and aria-describedby. When using the drawer, always include a Drawer.Title for a valid accessible name. The built-in close button includes both an aria-label and sr-only text for screen readers."
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "lucide-react" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Used as the trigger element via asChild on Drawer.Trigger and as footer actions (Save, Cancel) via Drawer.Close"
+    },
+    {
+      slug: "text-input",
+      reason: "Form drawers commonly contain TextInput fields for editing data (profile, settings, filters)"
+    },
+    {
+      slug: "typography",
+      reason: "Used for body text and labels inside drawer content for consistent styling"
+    },
+    {
+      slug: "divider",
+      reason: "Separates the header area from the body content in standard drawer layouts"
+    },
+    {
+      slug: "alert",
+      reason: "Alerts can appear inside a drawer for form validation feedback or confirmation messages"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Right Drawer (Default)",
+      description: "A form drawer sliding in from the right side with profile editing fields and Save/Cancel footer actions.",
+      code: `import { Drawer, Button, TextInput, Divider } from 'vayu-ui';
+
+export default function RightDrawerDemo() {
+  return (
+    <Drawer side="right">
+      <Drawer.Trigger asChild>
+        <Button variant="outline">Open Right</Button>
+      </Drawer.Trigger>
+      <Drawer.Overlay />
+      <Drawer.Content>
+        <Drawer.Header>
+          <Drawer.Title>Edit Profile</Drawer.Title>
+          <Drawer.Description>
+            Make changes to your profile here. Click save when you're done.
+          </Drawer.Description>
+        </Drawer.Header>
+        <Divider spacing="md" />
+        <div className="py-4 space-y-4">
+          <TextInput>
+            <TextInput.Label>Name</TextInput.Label>
+            <TextInput.Field>
+              <TextInput.Input placeholder="John Doe" />
+            </TextInput.Field>
+          </TextInput>
+          <TextInput>
+            <TextInput.Label>Username</TextInput.Label>
+            <TextInput.Field>
+              <TextInput.Input placeholder="@johndoe" />
+            </TextInput.Field>
+          </TextInput>
+        </div>
+        <Drawer.Footer>
+          <Drawer.Close asChild>
+            <Button variant="outline">Cancel</Button>
+          </Drawer.Close>
+          <Button>Save changes</Button>
+        </Drawer.Footer>
+      </Drawer.Content>
+    </Drawer>
+  );
+}`,
+      tags: ["right", "form", "edit", "default"]
+    },
+    {
+      title: "Left Navigation Drawer",
+      description: "A navigation drawer sliding in from the left side with a menu of ghost-styled button links.",
+      code: `import { Drawer, Button, Divider } from 'vayu-ui';
+
+export default function LeftDrawerDemo() {
+  return (
+    <Drawer side="left">
+      <Drawer.Trigger asChild>
+        <Button variant="outline">Open Left</Button>
+      </Drawer.Trigger>
+      <Drawer.Overlay />
+      <Drawer.Content>
+        <Drawer.Header>
+          <Drawer.Title>Navigation</Drawer.Title>
+          <Drawer.Description>Navigate through the application.</Drawer.Description>
+        </Drawer.Header>
+        <Divider spacing="md" />
+        <div className="py-4">
+          <ul className="space-y-2">
+            <li>
+              <Button variant="ghost" className="w-full justify-start">
+                Home
+              </Button>
+            </li>
+            <li>
+              <Button variant="ghost" className="w-full justify-start">
+                Settings
+              </Button>
+            </li>
+            <li>
+              <Button variant="ghost" className="w-full justify-start">
+                Profile
+              </Button>
+            </li>
+          </ul>
+        </div>
+      </Drawer.Content>
+    </Drawer>
+  );
+}`,
+      tags: ["left", "navigation", "menu", "sidebar"]
+    },
+    {
+      title: "Top Notifications Drawer",
+      description: 'A notifications tray sliding down from the top of the viewport with unread message cards and a "Mark all as read" action.',
+      code: `import { Drawer, Button, Typography, Divider } from 'vayu-ui';
+
+export default function TopDrawerDemo() {
+  return (
+    <Drawer side="top">
+      <Drawer.Trigger asChild>
+        <Button variant="outline">Open Top</Button>
+      </Drawer.Trigger>
+      <Drawer.Overlay />
+      <Drawer.Content>
+        <Drawer.Header>
+          <Drawer.Title>Notifications</Drawer.Title>
+          <Drawer.Description>You have 3 unread messages.</Drawer.Description>
+        </Drawer.Header>
+        <Divider spacing="md" />
+        <div className="py-4 space-y-2">
+          <div className="rounded-surface bg-muted p-4">
+            <Typography.P variant="primary" className="text-sm font-medium">
+              New comment on your post
+            </Typography.P>
+            <Typography.P variant="secondary" className="text-xs">
+              2 minutes ago
+            </Typography.P>
+          </div>
+          <div className="rounded-surface bg-muted p-4">
+            <Typography.P variant="primary" className="text-sm font-medium">
+              System update completed
+            </Typography.P>
+            <Typography.P variant="secondary" className="text-xs">
+              1 hour ago
+            </Typography.P>
+          </div>
+        </div>
+        <Drawer.Footer>
+          <Drawer.Close asChild>
+            <Button className="w-full">Mark all as read</Button>
+          </Drawer.Close>
+        </Drawer.Footer>
+      </Drawer.Content>
+    </Drawer>
+  );
+}`,
+      tags: ["top", "notifications", "tray", "messages"]
+    },
+    {
+      title: "Bottom Share Drawer",
+      description: "A share sheet sliding up from the bottom with a read-only URL input and a copy button.",
+      code: `import { Drawer, Button, TextInput, Divider } from 'vayu-ui';
+
+export default function BottomDrawerDemo() {
+  return (
+    <Drawer side="bottom">
+      <Drawer.Trigger asChild>
+        <Button variant="outline">Open Bottom</Button>
+      </Drawer.Trigger>
+      <Drawer.Overlay />
+      <Drawer.Content>
+        <Drawer.Header>
+          <Drawer.Title>Share this page</Drawer.Title>
+          <Drawer.Description>Anyone with the link can view this content.</Drawer.Description>
+        </Drawer.Header>
+        <Divider spacing="md" />
+        <div className="py-4 flex items-center space-x-2">
+          <TextInput className="flex-1" value="https://example.com/share/x8j92" readOnly>
+            <TextInput.Field>
+              <TextInput.Input />
+            </TextInput.Field>
+          </TextInput>
+          <Button variant="secondary">Copy</Button>
+        </div>
+        <Drawer.Footer>
+          <Drawer.Close asChild>
+            <Button variant="outline" className="w-full">
+              Close
+            </Button>
+          </Drawer.Close>
+        </Drawer.Footer>
+      </Drawer.Content>
+    </Drawer>
+  );
+}`,
+      tags: ["bottom", "share", "action-sheet", "url"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Omitting Drawer.Title",
+      bad: "<Drawer.Content><Drawer.Header><Drawer.Description>Settings</Drawer.Description></Drawer.Header></Drawer.Content>",
+      good: "<Drawer.Content><Drawer.Header><Drawer.Title>Settings</Drawer.Title><Drawer.Description>Configure your preferences.</Drawer.Description></Drawer.Header></Drawer.Content>",
+      reason: "The dialog requires an accessible name via aria-labelledby, which is linked to Drawer.Title. Without it, screen readers cannot identify the drawer purpose."
+    },
+    {
+      title: "Mixing controlled and uncontrolled props",
+      bad: "<Drawer open={isVisible} defaultOpen={true}>",
+      good: "<Drawer open={isVisible} onOpenChange={setIsVisible}>",
+      reason: "Passing both open and defaultOpen creates conflicting state management. Use open + onOpenChange for controlled mode, or defaultOpen for uncontrolled mode \u2014 never both."
+    },
+    {
+      title: "Using Drawer.Overlay without modal mode",
+      bad: "<Drawer modal={false}><Drawer.Overlay /><Drawer.Content>...</Drawer.Content></Drawer>",
+      good: "<Drawer modal={false}><Drawer.Content>...</Drawer.Content></Drawer>",
+      reason: "The Overlay only renders when modal is true. Setting modal={false} with an Overlay will result in the Overlay never appearing, creating dead code and confusion."
+    },
+    {
+      title: "Nesting drawers inside each other",
+      bad: "<Drawer><Drawer.Content><Drawer><Drawer.Trigger>Open inner</Drawer.Trigger></Drawer></Drawer.Content></Drawer>",
+      good: "Close the first drawer before opening the second, or use a different overlay pattern like a modal for the second layer.",
+      reason: "Nesting drawers creates conflicting focus traps, z-index stacking issues, and broken body scroll lock management. Each drawer expects to be the top-level overlay."
+    }
+  ]
+};
+
+// src/components/colorpicker.ts
+var colorPickerEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "color-picker",
+  name: "ColorPicker",
+  type: "component",
+  category: "inputs",
+  // ── Description ───────────────────────────────────────
+  description: "A color picker component with hex/rgb/hsl format support, native palette, eyedropper, preset swatches, and clipboard copy using the compound component pattern.",
+  longDescription: "The ColorPicker provides a complete color selection interface using the compound component pattern (ColorPicker.Label, ColorPicker.Description, ColorPicker.Error, ColorPicker.Trigger, ColorPicker.Input, ColorPicker.CopyButton, ColorPicker.Content, ColorPicker.Palette, ColorPicker.Eyedropper, ColorPicker.Presets, ColorPicker.Swatches). It supports controlled and uncontrolled color values, three color formats (hex, rgb, hsl), validation states, disabled mode, a native browser color palette, an EyeDropper API integration for screen color picking, customizable preset color grids, a standalone Swatches component, and clipboard copy with visual feedback. The dropdown supports top/bottom placement with viewport-aware positioning and keyboard-driven interactions following WAI-ARIA dialog and listbox patterns.",
+  tags: [
+    "color",
+    "picker",
+    "palette",
+    "eyedropper",
+    "swatch",
+    "hex",
+    "rgb",
+    "hsl",
+    "input",
+    "clipboard",
+    "dropdown",
+    "dialog"
+  ],
+  useCases: [
+    "Theme or brand color customization in settings panels and admin dashboards",
+    "Inline color selection within forms for product variants, labels, or design tokens",
+    "Standalone color swatch grid for quick color picking without a full dropdown",
+    "Design tool color picker with eyedropper for picking colors from the screen",
+    "Form field for color input with hex/rgb/hsl format validation and error states",
+    "Copy-to-clipboard color value display in style guides and token editors"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "ColorPicker",
+  files: [
+    { name: "ColorPicker.tsx", description: "Root component managing color state, open state, context provider, click-outside, and Escape key handling" },
+    { name: "ColorPickerLabel.tsx", description: "Accessible label linked to the input via htmlFor/id" },
+    { name: "ColorPickerDescription.tsx", description: "Helper description text linked to the input via aria-describedby" },
+    { name: "ColorPickerError.tsx", description: 'Error message with role="alert" that renders only in error validation state' },
+    { name: "ColorPickerTrigger.tsx", description: "Color swatch button that toggles the dropdown, with size variants and ARIA attributes" },
+    { name: "ColorPickerInput.tsx", description: "Text input for hex/rgb/hsl values with validation, focus sync, and aria-invalid support" },
+    { name: "ColorPickerCopyButton.tsx", description: "Clipboard copy button with check icon feedback and 2-second reset" },
+    { name: "ColorPickerContent.tsx", description: "Dropdown dialog with fixed positioning, viewport boundary detection, and placement props" },
+    { name: "ColorPickerPalette.tsx", description: "Native browser color picker input with label and Pipette icon" },
+    { name: "ColorPickerEyeDropper.tsx", description: "EyeDropper API button for picking colors from the screen, with unsupported browser fallback" },
+    { name: "ColorPickerPresets.tsx", description: "Grid of preset color swatches using listbox/option ARIA pattern with selection indicator" },
+    { name: "ColorPickerSwatches.tsx", description: "Standalone swatch grid component usable outside the ColorPicker context" },
+    { name: "types.ts", description: "TypeScript type definitions for all props, context, ColorFormat, ValidationState, RGB, and HSL types" },
+    { name: "hooks.ts", description: "React context, ColorPickerContext, and useColorPicker hook for accessing component state" },
+    { name: "utils.ts", description: "Color parsing, formatting, validation, and contrast calculation utilities with DEFAULT_PRESETS constant" },
+    { name: "index.ts", description: "Barrel export assembling the compound component and re-exporting all types, hooks, and utilities" },
+    { name: "README.md", description: "Component documentation and usage guide", optional: true }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "ColorPicker",
+  subComponents: [
+    {
+      name: "Label",
+      fileName: "ColorPickerLabel.tsx",
+      description: "Accessible label element linked to the input via htmlFor/id association",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Label text or content"
+        },
+        {
+          name: "optional",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: 'When true, appends "(optional)" text after the label content'
+        }
+      ]
+    },
+    {
+      name: "Description",
+      fileName: "ColorPickerDescription.tsx",
+      description: "Helper text element linked to the input via aria-describedby",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Description text content"
+        }
+      ]
+    },
+    {
+      name: "Error",
+      fileName: "ColorPickerError.tsx",
+      description: 'Error message with role="alert" and aria-live="polite", rendered only when validationState is "error"',
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Error message content"
+        }
+      ]
+    },
+    {
+      name: "Trigger",
+      fileName: "ColorPickerTrigger.tsx",
+      description: "Color swatch button that toggles the dropdown open state with keyboard support",
+      props: [
+        {
+          name: "size",
+          type: "'sm' | 'md' | 'lg'",
+          required: false,
+          defaultValue: "'md'",
+          description: "Trigger button size: sm (32px), md (48px), lg (64px)",
+          options: ["sm", "md", "lg"]
+        }
+      ]
+    },
+    {
+      name: "Input",
+      fileName: "ColorPickerInput.tsx",
+      description: "Text input displaying the current color value in the active format, with live parsing and validation",
+      props: [
+        {
+          name: "placeholder",
+          type: "string",
+          required: false,
+          defaultValue: "'#000000'",
+          description: "Placeholder text shown when the input is empty"
+        }
+      ]
+    },
+    {
+      name: "CopyButton",
+      fileName: "ColorPickerCopyButton.tsx",
+      description: "Button that copies the current formatted color to the clipboard with a 2-second check icon feedback",
+      props: [
+        {
+          name: "copiedText",
+          type: "string",
+          required: false,
+          defaultValue: "'Copied!'",
+          description: "Text shown in the aria-label when the color has been copied"
+        }
+      ]
+    },
+    {
+      name: "Content",
+      fileName: "ColorPickerContent.tsx",
+      description: "Dropdown dialog container with fixed positioning, viewport-aware placement, and focus management",
+      props: [
+        {
+          name: "side",
+          type: "'top' | 'bottom'",
+          required: false,
+          defaultValue: "'bottom'",
+          description: "Vertical placement of the dropdown relative to the trigger",
+          options: ["top", "bottom"]
+        },
+        {
+          name: "align",
+          type: "'start' | 'center' | 'end'",
+          required: false,
+          defaultValue: "'start'",
+          description: "Horizontal alignment of the dropdown relative to the trigger",
+          options: ["start", "center", "end"]
+        },
+        {
+          name: "sideOffset",
+          type: "number",
+          required: false,
+          defaultValue: "8",
+          description: "Distance in pixels between the trigger and the dropdown"
+        }
+      ]
+    },
+    {
+      name: "Palette",
+      fileName: "ColorPickerPalette.tsx",
+      description: "Native browser color picker input wrapped with a label and Pipette icon",
+      props: [
+        {
+          name: "label",
+          type: "string",
+          required: false,
+          defaultValue: "'Pick a color'",
+          description: "Label text displayed above the native color input"
+        }
+      ]
+    },
+    {
+      name: "Eyedropper",
+      fileName: "ColorPickerEyeDropper.tsx",
+      description: "EyeDropper API integration for picking colors from the screen, with graceful unsupported-browser fallback",
+      props: [
+        {
+          name: "label",
+          type: "string",
+          required: false,
+          defaultValue: "'Pick from screen'",
+          description: "Button text and aria-label for the eyedropper"
+        },
+        {
+          name: "unsupportedText",
+          type: "string",
+          required: false,
+          defaultValue: "'Eyedropper not supported in this browser'",
+          description: "Fallback text shown when the EyeDropper API is unavailable"
+        }
+      ]
+    },
+    {
+      name: "Presets",
+      fileName: "ColorPickerPresets.tsx",
+      description: "Grid of preset color swatches using listbox/option ARIA pattern with selection check indicator",
+      props: [
+        {
+          name: "label",
+          type: "string",
+          required: false,
+          defaultValue: "'Preset Colors'",
+          description: "Section label for the presets grid and listbox aria-label"
+        },
+        {
+          name: "colors",
+          type: "string[]",
+          required: false,
+          description: "Custom preset color array; falls back to the root presets prop or DEFAULT_PRESETS"
+        },
+        {
+          name: "columns",
+          type: "number",
+          required: false,
+          defaultValue: "8",
+          description: "Number of columns in the swatch grid"
+        }
+      ]
+    },
+    {
+      name: "Swatches",
+      fileName: "ColorPickerSwatches.tsx",
+      description: "Standalone color swatch grid usable independently without ColorPicker context, with controlled/uncontrolled value support",
+      props: [
+        {
+          name: "colors",
+          type: "string[]",
+          required: true,
+          description: "Array of color hex codes to display as swatches"
+        },
+        {
+          name: "value",
+          type: "string",
+          required: false,
+          description: "Controlled selected color value"
+        },
+        {
+          name: "onChange",
+          type: "(color: string) => void",
+          required: false,
+          description: "Callback fired when a swatch is selected"
+        },
+        {
+          name: "size",
+          type: "'sm' | 'md' | 'lg'",
+          required: false,
+          defaultValue: "'md'",
+          description: "Swatch button size: sm (24px), md (32px), lg (40px)",
+          options: ["sm", "md", "lg"]
+        },
+        {
+          name: "columns",
+          type: "number",
+          required: false,
+          defaultValue: "8",
+          description: "Number of columns in the swatch grid"
+        },
+        {
+          name: "label",
+          type: "string",
+          required: false,
+          description: "Optional label displayed above the swatch grid"
+        },
+        {
+          name: "disabled",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, all swatches are non-interactive with reduced opacity"
+        }
+      ]
+    }
+  ],
+  hooks: ["useColorPicker"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "value",
+      type: "string",
+      required: false,
+      description: "Controlled color value; use with onChange for fully controlled behavior"
+    },
+    {
+      name: "defaultValue",
+      type: "string",
+      required: false,
+      defaultValue: "'#3b82f6'",
+      description: "Initial color value for uncontrolled usage"
+    },
+    {
+      name: "onChange",
+      type: "(color: string) => void",
+      required: false,
+      description: "Callback fired when the color value changes, receiving the new color string"
+    },
+    {
+      name: "format",
+      type: "ColorFormat",
+      required: false,
+      defaultValue: "'hex'",
+      description: "Color output format for the input display and clipboard copy",
+      options: ["hex", "rgb", "hsl"]
+    },
+    {
+      name: "presets",
+      type: "string[]",
+      required: false,
+      description: "Array of hex color codes for the Presets sub-component; defaults to 24 Tailwind-inspired colors"
+    },
+    {
+      name: "disabled",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "When true, disables all interactions including trigger, input, and content"
+    },
+    {
+      name: "validationState",
+      type: "ValidationState",
+      required: false,
+      defaultValue: "'default'",
+      description: "Visual validation state applied to the input border and error message visibility",
+      options: ["default", "error", "warning", "success"]
+    },
+    {
+      name: "open",
+      type: "boolean",
+      required: false,
+      description: "Controlled open state for the dropdown; use with onOpenChange for fully controlled behavior"
+    },
+    {
+      name: "defaultOpen",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Initial open state for uncontrolled usage"
+    },
+    {
+      name: "onOpenChange",
+      type: "(open: boolean) => void",
+      required: false,
+      description: "Callback fired when the dropdown opens or closes"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  // No root-level variant prop; Trigger and Swatches have their own size props
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "open",
+      prop: "open",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Controls dropdown visibility. Supports controlled (open + onOpenChange) and uncontrolled (defaultOpen) modes. Closes on Escape key or click-outside."
+    },
+    {
+      name: "disabled",
+      prop: "disabled",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "When true, all interactive elements are non-interactive with reduced opacity. The trigger becomes non-clickable, the input is disabled, and the content cannot open."
+    },
+    {
+      name: "validationState",
+      prop: "validationState",
+      isBoolean: false,
+      values: ["default", "error", "warning", "success"],
+      defaultValue: "'default'",
+      description: 'Controls the input border color and ring style. The "error" state also makes the Error sub-component visible and sets aria-invalid on the input.'
+    },
+    {
+      name: "picking",
+      prop: "Eyedropper internal state",
+      isBoolean: true,
+      defaultValue: "false",
+      description: 'Internal state tracking whether the EyeDropper API is actively sampling a color from the screen. Shows "Picking..." text and animated icon.'
+    },
+    {
+      name: "copied",
+      prop: "CopyButton internal state",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Internal state on the CopyButton showing a check icon and updated aria-label for 2 seconds after a successful clipboard copy."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onChange",
+      signature: "(color: string) => void",
+      description: "Fired when the color value changes via any method \u2014 palette selection, text input, preset click, eyedropper pick, or swatch selection"
+    },
+    {
+      name: "onOpenChange",
+      signature: "(open: boolean) => void",
+      description: "Fired when the dropdown opens or closes, including trigger click, Escape key, or click-outside dismissal"
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    attributes: [
+      {
+        name: "aria-expanded (Trigger)",
+        description: "Set to true when the dropdown is open, indicating the dialog popup is visible",
+        managedByComponent: true
+      },
+      {
+        name: "aria-controls (Trigger)",
+        description: "References the dropdown content element ID for programmatic association",
+        managedByComponent: true
+      },
+      {
+        name: "aria-labelledby (Trigger)",
+        description: "References the label element ID so screen readers announce the label when the trigger is focused",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-haspopup="dialog" (Trigger)',
+        description: "Declares that the trigger opens a dialog popup",
+        managedByComponent: true
+      },
+      {
+        name: 'role="dialog" (Content)',
+        description: "Identifies the dropdown content as a dialog widget",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-modal="false" (Content)',
+        description: "Indicates the dialog is not fully modal; background content remains interactive",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-label="Color picker" (Content)',
+        description: "Provides an accessible name for the dialog content",
+        managedByComponent: true
+      },
+      {
+        name: "aria-invalid (Input)",
+        description: 'Set to true when validationState is "error", signaling the invalid state to assistive technology',
+        managedByComponent: true
+      },
+      {
+        name: "aria-labelledby (Input)",
+        description: "References the label element ID for associating the input with its label",
+        managedByComponent: true
+      },
+      {
+        name: "aria-describedby (Input)",
+        description: "Dynamically references description and/or error element IDs based on current validation state",
+        managedByComponent: true
+      },
+      {
+        name: 'role="alert" (Error)',
+        description: "Identifies the error message as an alert that screen readers should announce immediately",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-live="polite" (Error)',
+        description: "Announces error message changes to screen readers without interrupting current speech",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (CopyButton)",
+        description: 'Dynamic label: "Copy color to clipboard" by default, or the copiedText value after a successful copy',
+        managedByComponent: true
+      },
+      {
+        name: "aria-busy (Eyedropper)",
+        description: "Set to true during active screen color picking to indicate the busy state",
+        managedByComponent: true
+      },
+      {
+        name: 'role="listbox" (Presets/Swatches)',
+        description: "Identifies the swatch grid as a listbox widget for screen reader navigation",
+        managedByComponent: true
+      },
+      {
+        name: 'role="option" (Preset/Swatch buttons)',
+        description: "Identifies each individual swatch as an option within the listbox",
+        managedByComponent: true
+      },
+      {
+        name: "aria-selected (Preset/Swatch buttons)",
+        description: "Set to true on the currently selected swatch, communicating the active selection",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Enter",
+        behavior: "On Trigger: toggles the dropdown open state. On Eyedropper: initiates screen color picking."
+      },
+      {
+        key: "Space",
+        behavior: "On Trigger: toggles the dropdown open state (same as Enter)."
+      },
+      {
+        key: "Escape",
+        behavior: "Closes the dropdown and returns focus to the trigger button."
+      },
+      {
+        key: "Tab",
+        behavior: "Moves focus between interactive elements. Tabbing out of the dropdown closes it via click-outside detection."
+      }
+    ],
+    focusManagement: "The trigger button receives focus on initialization and after Escape closes the dropdown. The content dialog receives programmatic focus when opened. The input receives focus when clicked for text editing. All interactive elements have visible focus rings using focus-visible:ring-2 ring-focus styling.",
+    wcagLevel: "AA",
+    notes: 'Follows WAI-ARIA dialog pattern for the dropdown content and listbox/option pattern for preset and swatch grids. The trigger uses aria-haspopup="dialog" with aria-expanded and aria-controls. The input uses aria-labelledby and aria-describedby with dynamic error association. The Error sub-component uses role="alert" with aria-live="polite". The EyeDropper gracefully degrades to a text message in unsupported browsers. All interactive elements meet a minimum 32px touch target size.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "lucide-react" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "text-input",
+      reason: "TextInput pairs with ColorPicker in forms that collect both text and color values (e.g. product configuration)"
+    },
+    {
+      slug: "popover",
+      reason: "Popover provides a similar dropdown pattern; ColorPicker uses custom positioning but the two are often used together in design tool UIs"
+    },
+    {
+      slug: "button",
+      reason: "Buttons commonly trigger color picker open state or confirm a selected color"
+    },
+    {
+      slug: "card",
+      reason: "Cards serve as containers for color picker panels in settings pages and theme editors"
+    },
+    {
+      slug: "tooltip",
+      reason: "Tooltips can display hex/rgb/hsl values on hover over trigger swatches or preset colors"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Full-Featured ColorPicker",
+      description: "Complete color picker with label, description, trigger, input, copy button, palette, eyedropper, and presets.",
+      code: `import { useState } from 'react';
+import { ColorPicker } from 'vayu-ui';
+
+export default function ColorPickerDemo() {
+  const [color, setColor] = useState('#3b82f6');
+
+  return (
+    <ColorPicker value={color} onChange={setColor}>
+      <ColorPicker.Label>Brand Color</ColorPicker.Label>
+      <ColorPicker.Description>Choose a primary color for your brand.</ColorPicker.Description>
+      <div className="flex items-center gap-2">
+        <ColorPicker.Trigger />
+        <ColorPicker.Input />
+        <ColorPicker.CopyButton />
+      </div>
+      <ColorPicker.Content>
+        <div className="flex flex-col gap-4">
+          <ColorPicker.Palette />
+          <ColorPicker.Eyedropper />
+          <ColorPicker.Presets />
+        </div>
+      </ColorPicker.Content>
+    </ColorPicker>
+  );
+}`,
+      tags: ["full", "controlled", "all-subcomponents"]
+    },
+    {
+      title: "RGB Format",
+      description: "Color picker using RGB format with custom trigger size and preset column count.",
+      code: `import { useState } from 'react';
+import { ColorPicker } from 'vayu-ui';
+
+export default function RGBPicker() {
+  const [color, setColor] = useState('#22c55e');
+
+  return (
+    <ColorPicker value={color} onChange={setColor} format="rgb">
+      <ColorPicker.Label>Background Color (RGB)</ColorPicker.Label>
+      <div className="flex items-center gap-2">
+        <ColorPicker.Trigger size="sm" />
+        <ColorPicker.Input />
+        <ColorPicker.CopyButton />
+      </div>
+      <ColorPicker.Content>
+        <div className="flex flex-col gap-4">
+          <ColorPicker.Palette label="Choose background" />
+          <ColorPicker.Presets columns={6} />
+        </div>
+      </ColorPicker.Content>
+    </ColorPicker>
+  );
+}`,
+      tags: ["rgb", "format", "columns"]
+    },
+    {
+      title: "HSL Format with End Alignment",
+      description: "Color picker using HSL format with the dropdown aligned to the right edge of the trigger.",
+      code: `import { useState } from 'react';
+import { ColorPicker } from 'vayu-ui';
+
+export default function HSLPicker() {
+  const [color, setColor] = useState('#8b5cf6');
+
+  return (
+    <ColorPicker value={color} onChange={setColor} format="hsl">
+      <ColorPicker.Label>Accent Color (HSL)</ColorPicker.Label>
+      <div className="flex items-center gap-2">
+        <ColorPicker.Trigger size="lg" />
+        <ColorPicker.Input />
+        <ColorPicker.CopyButton />
+      </div>
+      <ColorPicker.Content align="end">
+        <div className="flex flex-col gap-4">
+          <ColorPicker.Palette />
+          <ColorPicker.Eyedropper label="Pick accent from screen" />
+          <ColorPicker.Presets label="Theme Colors" />
+        </div>
+      </ColorPicker.Content>
+    </ColorPicker>
+  );
+}`,
+      tags: ["hsl", "format", "align", "custom-labels"]
+    },
+    {
+      title: "Standalone Swatches",
+      description: "Independent swatch grid that works outside the ColorPicker context, useful for quick color selection.",
+      code: `import { useState } from 'react';
+import { ColorPicker } from 'vayu-ui';
+
+export default function SwatchesDemo() {
+  const [color, setColor] = useState('#ef4444');
+
+  return (
+    <ColorPicker.Swatches
+      label="Quick Pick"
+      colors={[
+        '#ef4444', '#f97316', '#eab308', '#22c55e',
+        '#3b82f6', '#8b5cf6', '#ec4899', '#171717',
+      ]}
+      value={color}
+      onChange={setColor}
+      size="lg"
+      columns={4}
+    />
+  );
+}`,
+      tags: ["swatches", "standalone", "grid"]
+    },
+    {
+      title: "Disabled and Error States",
+      description: "Color picker in disabled state preventing all interaction, and an error state showing validation feedback.",
+      code: `import { ColorPicker } from 'vayu-ui';
+
+export default function StatesDemo() {
+  return (
+    <div className="flex flex-col gap-8">
+      {/* Disabled */}
+      <ColorPicker defaultValue="#6366f1" disabled>
+        <ColorPicker.Label>Locked Color</ColorPicker.Label>
+        <div className="flex items-center gap-2">
+          <ColorPicker.Trigger />
+          <ColorPicker.Input />
+        </div>
+      </ColorPicker>
+
+      {/* Error */}
+      <ColorPicker validationState="error">
+        <ColorPicker.Label>Theme Color</ColorPicker.Label>
+        <ColorPicker.Description>Select a color for your theme.</ColorPicker.Description>
+        <div className="flex items-center gap-2">
+          <ColorPicker.Trigger />
+          <ColorPicker.Input />
+        </div>
+        <ColorPicker.Error>This color does not meet contrast requirements.</ColorPicker.Error>
+      </ColorPicker>
+    </div>
+  );
+}`,
+      tags: ["disabled", "error", "validation", "states"]
+    },
+    {
+      title: "Minimal Picker",
+      description: "Simplest color picker with just a trigger and palette, no input or copy button.",
+      code: `import { ColorPicker } from 'vayu-ui';
+
+export default function MinimalPicker() {
+  return (
+    <ColorPicker defaultValue="#10b981">
+      <ColorPicker.Label>Minimal Picker</ColorPicker.Label>
+      <ColorPicker.Trigger />
+      <ColorPicker.Content>
+        <ColorPicker.Palette />
+      </ColorPicker.Content>
+    </ColorPicker>
+  );
+}`,
+      tags: ["minimal", "simple", "trigger-only"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using Swatches without the colors prop",
+      bad: "<ColorPicker.Swatches />",
+      good: '<ColorPicker.Swatches colors={["#ef4444", "#3b82f6", "#22c55e"]} />',
+      reason: "The colors prop is required on Swatches because it is a standalone component with no ColorPicker context to fall back to. Omitting it results in an empty grid."
+    },
+    {
+      title: "Mixing controlled and uncontrolled patterns",
+      bad: '<ColorPicker value={color} defaultValue="#3b82f6" onChange={setColor}>',
+      good: "<ColorPicker value={color} onChange={setColor}>",
+      reason: "Passing both value and defaultValue is contradictory. Use value + onChange for controlled mode, or defaultValue alone for uncontrolled mode. Never mix the two."
+    },
+    {
+      title: "Placing sub-components outside the ColorPicker root",
+      bad: "<ColorPicker /><ColorPicker.Trigger />",
+      good: "<ColorPicker><ColorPicker.Trigger /></ColorPicker>",
+      reason: "All sub-components except Swatches depend on the ColorPicker context via useColorPicker(). Placing them outside the root will throw an error because the context is undefined."
+    },
+    {
+      title: "Setting validationState to error without providing an Error sub-component",
+      bad: '<ColorPicker validationState="error"><ColorPicker.Trigger /></ColorPicker>',
+      good: '<ColorPicker validationState="error"><ColorPicker.Trigger /><ColorPicker.Error>Invalid color</ColorPicker.Error></ColorPicker>',
+      reason: "Without the Error sub-component, the input shows error styling but no message is communicated to the user. Always pair error state with a descriptive error message for accessibility."
+    },
+    {
+      title: "Relying on EyeDropper in production without a fallback",
+      bad: "<ColorPicker.Eyedropper />",
+      good: '<ColorPicker.Eyedropper label="Pick from screen" unsupportedText="Not supported \u2014 enter a hex value instead" />',
+      reason: "The EyeDropper API is only available in Chromium browsers. The component provides a built-in fallback, but custom unsupportedText provides better UX guidance for users on unsupported browsers."
+    }
+  ]
+};
+
+// src/components/floatingdock.ts
+var floatingDockEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "floating-dock",
+  name: "FloatingDock",
+  type: "component",
+  category: "navigation",
+  // ── Description ───────────────────────────────────────
+  description: "A fixed-position navigation dock with icon-based items, tooltips, a glassmorphism container, and a brand logo area using the compound component pattern.",
+  longDescription: "The FloatingDock component renders a fixed navigation bar at the top of the viewport. It uses the compound component pattern (FloatingDock.Container, FloatingDock.Item, FloatingDock.Logo, FloatingDock.Divider) to compose dock layouts. Items support icons with Lucide-style components, optional navigation links or click handlers, and built-in tooltips. The container applies a glassmorphism backdrop-blur effect. The Logo sub-component provides a branded anchor or static element. FloatingDock.Divider is re-exported from the shared Divider component for visual grouping.",
+  tags: [
+    "dock",
+    "navigation",
+    "navbar",
+    "toolbar",
+    "fixed",
+    "floating",
+    "icon",
+    "tooltip",
+    "glassmorphism",
+    "brand",
+    "menu"
+  ],
+  useCases: [
+    "Application-level navigation bar fixed to the top of the viewport with icon shortcuts",
+    "Dashboard toolbar providing quick access to search, notifications, and settings",
+    "Brand header combining a logo with icon-based action items",
+    "Contextual action strip for tools and utilities in productivity apps",
+    "Compact icon-only navigation for mobile or sidebar-free layouts"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "FloatingDock",
+  files: [
+    { name: "FloatingDock.tsx", description: "Root nav wrapper component, fixed-positioned at the top of the viewport" },
+    { name: "FloatingDockContainer.tsx", description: "Glassmorphism flex container that injects linkComponent into children via cloneElement" },
+    { name: "FloatingDockItem.tsx", description: "Interactive navigation item with icon, tooltip, hover scale animation, and link or button rendering" },
+    { name: "FloatingDockLogo.tsx", description: "Brand logo element with optional href link and hover color transition" },
+    { name: "types.ts", description: "TypeScript type definitions for DockBaseProps, DockItemProps, DockLogoProps, and InjectedDockProps" },
+    { name: "index.ts", description: "Barrel export file assembling the compound component with Container, Item, Logo, and Divider sub-components" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "FloatingDock",
+  subComponents: [
+    {
+      name: "Container",
+      fileName: "FloatingDockContainer.tsx",
+      description: "Glassmorphism flex container that wraps dock items and injects a shared linkComponent prop into children via React.cloneElement",
+      props: [
+        {
+          name: "linkComponent",
+          type: "React.ElementType",
+          required: false,
+          description: "Custom link component to inject into child DockItem and DockLogo elements (defaults to Next.js Link)"
+        },
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Dock items, logos, and dividers to render inside the container"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the container div"
+        }
+      ]
+    },
+    {
+      name: "Item",
+      fileName: "FloatingDockItem.tsx",
+      description: "Interactive navigation item with icon, tooltip, hover animation, and conditional link or button rendering based on href prop",
+      props: [
+        {
+          name: "icon",
+          type: "React.ComponentType<{ className?: string; strokeWidth?: number }>",
+          required: false,
+          description: "Icon component to render (e.g. a Lucide icon). Receives className and strokeWidth props."
+        },
+        {
+          name: "label",
+          type: "string",
+          required: true,
+          description: "Accessible label and tooltip text for the dock item"
+        },
+        {
+          name: "href",
+          type: "string",
+          required: false,
+          description: "When provided, renders as a link; when omitted, renders as a button"
+        },
+        {
+          name: "onClick",
+          type: "() => void",
+          required: false,
+          description: "Click handler for the dock item"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the item element"
+        }
+      ]
+    },
+    {
+      name: "Logo",
+      fileName: "FloatingDockLogo.tsx",
+      description: "Brand logo element that renders as a link when href is provided, or a static div otherwise, with hover color transition",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Logo content to display (e.g. brand name text or an image)"
+        },
+        {
+          name: "href",
+          type: "string",
+          required: false,
+          description: "When provided, renders the logo as a link (typically to home page)"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the logo element"
+        }
+      ]
+    },
+    {
+      name: "Divider",
+      fileName: "Divider.tsx",
+      description: "Visual separator between dock items, re-exported from the shared Divider component. Supports vertical orientation for use in horizontal dock layouts.",
+      props: [
+        {
+          name: "orientation",
+          type: "'horizontal' | 'vertical'",
+          required: false,
+          defaultValue: "'horizontal'",
+          description: 'Orientation of the divider line; use "vertical" inside the dock',
+          options: ["horizontal", "vertical"]
+        },
+        {
+          name: "spacing",
+          type: "'none' | 'sm' | 'md' | 'lg'",
+          required: false,
+          defaultValue: "'md'",
+          description: "Spacing around the divider",
+          options: ["none", "sm", "md", "lg"]
+        },
+        {
+          name: "decorative",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, marks the divider as decorative (aria-hidden) rather than a semantic separator"
+        }
+      ]
+    }
+  ],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Dock content, typically a FloatingDock.Container wrapping items, logos, and dividers"
+    },
+    {
+      name: "aria-label",
+      type: "string",
+      required: false,
+      defaultValue: "'Floating dock'",
+      description: "Accessible label for the navigation landmark, announced by screen readers"
+    },
+    {
+      name: "className",
+      type: "string",
+      required: false,
+      description: "Additional CSS classes applied to the root nav element"
+    }
+  ],
+  rendersAs: "nav",
+  // ── Variants & Sizes ──────────────────────────────────
+  // No variant or size props — FloatingDock uses design tokens directly
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "hovered",
+      prop: "motion-safe:hover",
+      isBoolean: true,
+      description: "Dock items scale up 110% and translate upward 2px on hover with a smooth transition and muted background appears"
+    },
+    {
+      name: "focused",
+      prop: "focus-visible",
+      isBoolean: true,
+      description: "Focus-visible ring appears on keyboard focus with ring-focus color and 2px offset from surface background"
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onClick",
+      signature: "() => void",
+      description: "Fired when a DockItem without an href is clicked"
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "navigation",
+    attributes: [
+      {
+        name: "aria-label",
+        description: 'Applied to the root nav element to identify the navigation landmark. Defaults to "Floating dock" but should be overridden with a descriptive label.',
+        managedByComponent: false
+      },
+      {
+        name: "aria-label (Item)",
+        description: "Each DockItem receives an aria-label matching its label prop for screen reader identification.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden (Icon)",
+        description: 'Icons inside DockItem are marked aria-hidden="true" since the label prop provides the accessible text.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Logo)",
+        description: 'When Logo renders as a link, it receives aria-label="Home" for screen reader context.',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Tab",
+        behavior: "Moves focus to the next dock item or logo link"
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Moves focus to the previous dock item or logo link"
+      },
+      {
+        key: "Enter",
+        behavior: "Activates the focused dock item link or button"
+      },
+      {
+        key: "Space",
+        behavior: "Activates the focused dock item button (href-less items only)"
+      }
+    ],
+    focusManagement: "Each DockItem is focusable via keyboard Tab navigation. Focus-visible ring (ring-focus with surface offset) appears on keyboard focus only, not on pointer hover.",
+    wcagLevel: "AA",
+    notes: 'The root element uses a <nav> landmark with aria-label. Dock items with href render as links (native focus and activation); those without href render as <button type="button">. Icons are decorative (aria-hidden) since the label prop provides accessible text. Tooltips provide visual labels on hover but are supplementary \u2014 all items have aria-label for screen readers.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [
+    {
+      slug: "divider",
+      reason: "FloatingDock.Divider is re-exported from the shared Divider component for visual grouping between dock items"
+    },
+    {
+      slug: "tooltip",
+      reason: "FloatingDock.Item uses the Tooltip component internally to display item labels on hover"
+    }
+  ],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "tooltip",
+      reason: "Used internally by DockItem to show labels on hover; can also wrap additional dock elements for custom tooltips"
+    },
+    {
+      slug: "avatar",
+      reason: "Commonly used alongside FloatingDock for a user profile avatar as the last dock item"
+    },
+    {
+      slug: "button",
+      reason: "Dock items without href render as buttons; Button may be used for additional dock-adjacent actions"
+    },
+    {
+      slug: "badge",
+      reason: "Notification badges are frequently paired with dock items (e.g. notification bell with count)"
+    },
+    {
+      slug: "divider",
+      reason: "FloatingDock.Divider separates logical groups of items (e.g. navigation vs. actions)"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "FloatingDock with Navigation Items",
+      description: "A complete dock with logo, dividers, and icon-based navigation items with click handlers.",
+      code: `import { FloatingDock } from 'vayu-ui';
+import { Home, Search, Bell, Settings, User, Mail, Heart } from 'lucide-react';
+
+export default function DockDemo() {
+  const handleClick = (label: string) => {
+    console.log('Clicked:', label);
+  };
+
+  return (
+    <FloatingDock aria-label="Main navigation">
+      <FloatingDock.Container>
+        <FloatingDock.Logo href="/">Vayu UI</FloatingDock.Logo>
+        <FloatingDock.Divider orientation="vertical" spacing="none" decorative />
+        <FloatingDock.Item icon={Search} label="Search" onClick={() => handleClick('Search')} />
+        <FloatingDock.Item icon={Mail} label="Messages" onClick={() => handleClick('Messages')} />
+        <FloatingDock.Item icon={Bell} label="Notifications" onClick={() => handleClick('Notifications')} />
+        <FloatingDock.Item icon={Heart} label="Favorites" onClick={() => handleClick('Favorites')} />
+        <FloatingDock.Divider orientation="vertical" spacing="none" decorative />
+        <FloatingDock.Item icon={User} label="Profile" onClick={() => handleClick('Profile')} />
+        <FloatingDock.Item icon={Settings} label="Settings" onClick={() => handleClick('Settings')} />
+      </FloatingDock.Container>
+    </FloatingDock>
+  );
+}`,
+      tags: ["basic", "navigation", "icons", "click-handlers", "logo"]
+    },
+    {
+      title: "FloatingDock with Link Items",
+      description: "Dock items with href prop render as navigable links instead of buttons.",
+      code: `import { FloatingDock } from 'vayu-ui';
+import { Home, Search, Bell, Settings } from 'lucide-react';
+
+export default function LinkDockDemo() {
+  return (
+    <FloatingDock aria-label="Site navigation">
+      <FloatingDock.Container>
+        <FloatingDock.Item icon={Home} label="Home" href="/" />
+        <FloatingDock.Item icon={Search} label="Search" href="/search" />
+        <FloatingDock.Item icon={Bell} label="Notifications" href="/notifications" />
+        <FloatingDock.Item icon={Settings} label="Settings" href="/settings" />
+      </FloatingDock.Container>
+    </FloatingDock>
+  );
+}`,
+      tags: ["links", "navigation", "routing"]
+    },
+    {
+      title: "FloatingDock with Custom Link Component",
+      description: "Pass a custom linkComponent to Container to use React Router, custom Link, or any routing library instead of Next.js Link.",
+      code: `import { FloatingDock } from 'vayu-ui';
+import { Link } from 'react-router-dom';
+import { Home, Search, Settings } from 'lucide-react';
+
+export default function CustomLinkDock() {
+  return (
+    <FloatingDock aria-label="App navigation">
+      <FloatingDock.Container linkComponent={Link}>
+        <FloatingDock.Item icon={Home} label="Home" href="/" />
+        <FloatingDock.Item icon={Search} label="Search" href="/search" />
+        <FloatingDock.Item icon={Settings} label="Settings" href="/settings" />
+      </FloatingDock.Container>
+    </FloatingDock>
+  );
+}`,
+      tags: ["custom-link", "react-router", "routing"]
+    },
+    {
+      title: "FloatingDock Logo Only",
+      description: "A minimal dock with only a logo, demonstrating that the Logo renders as a static div when no href is provided.",
+      code: `import { FloatingDock } from 'vayu-ui';
+
+export default function LogoOnlyDock() {
+  return (
+    <FloatingDock aria-label="Brand bar">
+      <FloatingDock.Container>
+        <FloatingDock.Logo>MyApp</FloatingDock.Logo>
+      </FloatingDock.Container>
+    </FloatingDock>
+  );
+}`,
+      tags: ["logo", "minimal", "brand"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Omitting aria-label on the dock",
+      bad: "<FloatingDock><FloatingDock.Container>...</FloatingDock.Container></FloatingDock>",
+      good: '<FloatingDock aria-label="Main navigation"><FloatingDock.Container>...</FloatingDock.Container></FloatingDock>',
+      reason: 'The root <nav> element requires an aria-label to distinguish it from other navigation landmarks on the page. While the component defaults to "Floating dock", you should provide a descriptive label specific to your use case.'
+    },
+    {
+      title: "Placing DockItem outside Container",
+      bad: '<FloatingDock><FloatingDock.Item icon={Home} label="Home" /></FloatingDock>',
+      good: '<FloatingDock><FloatingDock.Container><FloatingDock.Item icon={Home} label="Home" /></FloatingDock.Container></FloatingDock>',
+      reason: "DockItem expects to receive the injected linkComponent prop from Container via cloneElement. Items placed outside Container will not receive this prop and will fall back to Next.js Link, which may fail in non-Next.js projects."
+    },
+    {
+      title: "Using label as visible text instead of accessible name",
+      bad: "<FloatingDock.Item icon={Search}>Search</FloatingDock.Item>",
+      good: '<FloatingDock.Item icon={Search} label="Search" />',
+      reason: "DockItem does not render children as visible text \u2014 the label prop is used for both the tooltip content and the aria-label. Passing children instead of the label prop will result in no accessible name and no tooltip."
+    },
+    {
+      title: "Mixing next/link in non-Next.js projects without linkComponent",
+      bad: '<FloatingDock.Container><FloatingDock.Item icon={Home} label="Home" href="/" /></FloatingDock.Container>',
+      good: '<FloatingDock.Container linkComponent={CustomLink}><FloatingDock.Item icon={Home} label="Home" href="/" /></FloatingDock.Container>',
+      reason: "Without a custom linkComponent, DockItem and DockLogo default to Next.js Link. In non-Next.js projects (React Router, Remix, etc.), this will cause import errors. Always pass your router's Link component via Container's linkComponent prop."
+    },
+    {
+      title: "Overriding the fixed positioning",
+      bad: '<FloatingDock className="relative bottom-4">...</FloatingDock>',
+      good: "<FloatingDock>...</FloatingDock>",
+      reason: "The FloatingDock is designed as a fixed-position element pinned to the top of the viewport. Overriding its positioning with relative, absolute, or bottom classes breaks the intended floating behavior and may cause layout issues."
+    }
+  ]
+};
+
+// src/components/footer.ts
+var footerEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "footer",
+  name: "Footer",
+  type: "component",
+  category: "layout",
+  // ── Description ───────────────────────────────────────
+  description: "A compound component for building responsive site footers with navigation sections, social links, copyright, and multiple layout variants.",
+  longDescription: 'The Footer component uses the compound component pattern to compose flexible page footers. It provides Container, Grid, Section, Link, Logo, Social, SocialLink, Copyright, Divider, and Bottom sub-components for building multi-column layouts. Three variants (default, centered, minimal) control responsive grid behavior and alignment via Tailwind group-data attributes. External links automatically receive target="_blank", rel="noopener noreferrer", and an external link icon. All links and social links include proper ARIA attributes, keyboard navigation, and focus-visible styles. The root element uses role="contentinfo" for landmark navigation.',
+  tags: [
+    "footer",
+    "navigation",
+    "links",
+    "social",
+    "copyright",
+    "layout",
+    "site-footer",
+    "page-footer",
+    "responsive",
+    "landmark"
+  ],
+  useCases: [
+    "Multi-section site footer with grouped navigation links, social icons, and copyright notice",
+    "Centered footer layout for single-column branding-focused pages such as portfolios or landing pages",
+    "Minimal footer bar with just logo, copyright text, and social icon links",
+    "Footer with a call-to-action section above navigation links for conversion-focused pages",
+    "Blog or documentation footer with categorized link sections organized into columns"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Footer",
+  files: [
+    { name: "Footer.tsx", description: "Composition file assembling the compound component with all sub-components" },
+    { name: "FooterRoot.tsx", description: 'Root footer element with variant prop, role="contentinfo", and canvas-level theming' },
+    { name: "FooterLayout.tsx", description: "Layout primitives: Container (max-width wrapper), Grid (variant-responsive columns), Bottom (flex row)" },
+    { name: "FooterContent.tsx", description: "Content elements: Section (nav grouping with title), Link (with external indicator), Logo (with optional href)" },
+    { name: "FooterSocial.tsx", description: 'Social elements: Social container (role="list") and SocialLink (always opens in new tab)' },
+    { name: "FooterUtilities.tsx", description: "Utility elements: Copyright text wrapper and Divider separator with ARIA attributes" },
+    { name: "types.ts", description: "TypeScript type definitions for FooterVariant and all sub-component prop interfaces" },
+    { name: "index.ts", description: "Barrel export file re-exporting the compound component and all types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Footer",
+  subComponents: [
+    {
+      name: "Container",
+      fileName: "FooterLayout.tsx",
+      description: "Max-width centered wrapper with responsive horizontal padding and vertical spacing",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Footer content to wrap in the container"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes for the container"
+        }
+      ]
+    },
+    {
+      name: "Grid",
+      fileName: "FooterLayout.tsx",
+      description: "Responsive grid layout that adapts columns based on the parent Footer variant",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Grid items (typically Footer.Section elements)"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes for the grid"
+        }
+      ]
+    },
+    {
+      name: "Section",
+      fileName: "FooterContent.tsx",
+      description: "Grouping element with an optional title heading and an accessible nav landmark for links",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Link elements or other content within the section"
+        },
+        {
+          name: "title",
+          type: "string",
+          required: false,
+          description: "Section heading displayed as an uppercase h3; also used to generate the nav aria-label"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes for the section"
+        }
+      ]
+    },
+    {
+      name: "Link",
+      fileName: "FooterContent.tsx",
+      description: "Footer navigation link with hover styles, focus ring, and optional external link indicator with automatic ARIA label",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Link text or content"
+        },
+        {
+          name: "href",
+          type: "string",
+          required: false,
+          description: "URL the link points to"
+        },
+        {
+          name: "external",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, opens link in new tab with external indicator icon and computed aria-label"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes for the link"
+        }
+      ]
+    },
+    {
+      name: "Logo",
+      fileName: "FooterContent.tsx",
+      description: "Logo wrapper with optional clickable link, used to display brand identity in the footer",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Logo content (image, text, or typography component)"
+        },
+        {
+          name: "href",
+          type: "string",
+          required: false,
+          defaultValue: "'/'",
+          description: "URL for the logo link; renders a plain wrapper when omitted or empty string"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes for the logo container"
+        }
+      ]
+    },
+    {
+      name: "Social",
+      fileName: "FooterSocial.tsx",
+      description: 'Horizontal container for social media links with role="list" and accessible label',
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Footer.SocialLink elements"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes for the social container"
+        }
+      ]
+    },
+    {
+      name: "SocialLink",
+      fileName: "FooterSocial.tsx",
+      description: "Individual social media link rendered as a circular icon button that always opens in a new tab",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Icon element (e.g. a Lucide icon component)"
+        },
+        {
+          name: "href",
+          type: "string",
+          required: false,
+          description: "URL of the social media profile"
+        },
+        {
+          name: "aria-label",
+          type: "string",
+          required: false,
+          description: 'Accessible label describing the social platform (e.g. "Twitter", "GitHub")'
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes for the social link"
+        }
+      ]
+    },
+    {
+      name: "Copyright",
+      fileName: "FooterUtilities.tsx",
+      description: "Muted text wrapper for copyright notices and legal disclaimers",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Copyright text content"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes for the copyright element"
+        }
+      ]
+    },
+    {
+      name: "Divider",
+      fileName: "FooterUtilities.tsx",
+      description: 'Horizontal separator line between footer sections with role="separator"',
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes for the divider"
+        }
+      ]
+    },
+    {
+      name: "Bottom",
+      fileName: "FooterLayout.tsx",
+      description: "Flex row for the bottom bar (copyright, legal links), alignment adapts to the Footer variant",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Bottom bar content (typically Copyright and legal links)"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes for the bottom bar"
+        }
+      ]
+    }
+  ],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "variant",
+      type: "FooterVariant",
+      required: false,
+      defaultValue: "'default'",
+      description: "Controls the responsive grid layout and alignment of footer content",
+      options: ["default", "minimal", "centered"]
+    }
+  ],
+  rendersAs: "footer",
+  // ── Variants ──────────────────────────────────────────
+  variants: {
+    propName: "variant",
+    options: ["default", "minimal", "centered"],
+    default: "default"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onClick (Link)",
+      signature: "(event: React.MouseEvent<HTMLAnchorElement>) => void",
+      description: "Fired when a Footer.Link is clicked; useful for tracking outbound navigation"
+    },
+    {
+      name: "onClick (SocialLink)",
+      signature: "(event: React.MouseEvent<HTMLAnchorElement>) => void",
+      description: "Fired when a Footer.SocialLink is clicked; useful for social referral tracking"
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "contentinfo",
+    attributes: [
+      {
+        name: 'role="contentinfo"',
+        description: "Applied to the root <footer> element to identify it as a landmark region for page-level footer content",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Section nav)",
+        description: 'Applied to the <nav> inside Footer.Section. Uses the title prop to generate a label like "Product links", or falls back to "Footer navigation" when no title is provided.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Link external)",
+        description: 'When Footer.Link has external=true and a string child, the component automatically appends "(opens in new tab)" to the aria-label.',
+        managedByComponent: true
+      },
+      {
+        name: 'aria-hidden="true" (external icon)',
+        description: "Applied to the SVG external-link icon inside Footer.Link so screen readers do not announce the decorative icon.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Social)",
+        description: 'The Footer.Social container has aria-label="Social media links" to identify the group.',
+        managedByComponent: true
+      },
+      {
+        name: 'role="list" (Social)',
+        description: 'Footer.Social uses role="list" to avoid creating a nested nav landmark inside Footer.Section.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (SocialLink)",
+        description: "Each Footer.SocialLink requires an aria-label describing the social platform. Must be provided by the developer.",
+        managedByComponent: false
+      },
+      {
+        name: 'role="separator" (Divider)',
+        description: 'Footer.Divider renders an <hr> with role="separator" and aria-orientation="horizontal".',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Tab",
+        behavior: "Moves focus through Footer.Link and Footer.SocialLink elements in document order"
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Moves focus backward through links"
+      },
+      {
+        key: "Enter",
+        behavior: "Activates the focused link (native anchor behavior)"
+      }
+    ],
+    focusManagement: "All interactive elements (Footer.Link, Footer.SocialLink, Footer.Logo anchor) display a focus-visible ring (ring-2 ring-focus with offset) on keyboard focus only. Pointer clicks do not trigger the ring.",
+    wcagLevel: "AA",
+    notes: 'The root <footer> element with role="contentinfo" serves as a navigable landmark. Footer.Section wraps links in a <nav> element with a descriptive aria-label derived from the title prop. External links automatically receive target="_blank", rel="noopener noreferrer", and an appended "(opens in new tab)" aria-label to meet WCAG 2.4.4 Link Purpose. Footer.Social uses role="list" instead of a nested <nav> to avoid landmark duplication. The minimum touch target for social links is 44x44px (min-w-11 min-h-11).'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "typography",
+      reason: "Footer commonly uses Typography.H5 for logo text and Typography.P for descriptions"
+    },
+    {
+      slug: "button",
+      reason: "CTA buttons in footer sections for conversion-focused layouts"
+    },
+    {
+      slug: "divider",
+      reason: "Used in demos to separate footer sections, though Footer.Divider is built-in"
+    },
+    {
+      slug: "card",
+      reason: "Card components and Footer often appear together as page-level layout elements"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Default Footer",
+      description: "Multi-column footer with logo, social links, navigation sections, divider, and bottom bar with copyright.",
+      code: `import { Footer, Typography, Divider } from 'vayu-ui';
+import { Twitter, Github, Instagram } from 'lucide-react';
+
+export default function DefaultFooter() {
+  return (
+    <Footer>
+      <Footer.Container>
+        <Footer.Grid>
+          <Footer.Section>
+            <Footer.Logo href="#">
+              <Typography.H5 variant="gradient" className="font-bold">
+                Vayu UI
+              </Typography.H5>
+            </Footer.Logo>
+            <Typography.P variant="secondary" className="mt-2">
+              Building beautiful user interfaces with modern web technologies.
+            </Typography.P>
+            <Footer.Social className="mt-4">
+              <Footer.SocialLink href="#" aria-label="Twitter">
+                <Twitter size={18} />
+              </Footer.SocialLink>
+              <Footer.SocialLink href="#" aria-label="GitHub">
+                <Github size={18} />
+              </Footer.SocialLink>
+              <Footer.SocialLink href="#" aria-label="Instagram">
+                <Instagram size={18} />
+              </Footer.SocialLink>
+            </Footer.Social>
+          </Footer.Section>
+
+          <Footer.Section title="Product">
+            <Footer.Link href="#">Features</Footer.Link>
+            <Footer.Link href="#">Integrations</Footer.Link>
+            <Footer.Link href="#">Pricing</Footer.Link>
+            <Footer.Link href="#">Changelog</Footer.Link>
+          </Footer.Section>
+
+          <Footer.Section title="Resources">
+            <Footer.Link href="#">Documentation</Footer.Link>
+            <Footer.Link href="#">API Reference</Footer.Link>
+            <Footer.Link href="#">Community</Footer.Link>
+            <Footer.Link href="#">Blog</Footer.Link>
+          </Footer.Section>
+
+          <Footer.Section title="Company">
+            <Footer.Link href="#">About</Footer.Link>
+            <Footer.Link href="#">Careers</Footer.Link>
+            <Footer.Link href="#">Legal</Footer.Link>
+            <Footer.Link href="#">Contact</Footer.Link>
+          </Footer.Section>
+        </Footer.Grid>
+
+        <Divider />
+
+        <Footer.Bottom>
+          <Footer.Copyright>
+            \xA9 {new Date().getFullYear()} Vayu UI. All rights reserved.
+          </Footer.Copyright>
+          <div className="flex gap-4">
+            <Footer.Link href="#">Privacy Policy</Footer.Link>
+            <Footer.Link href="#">Terms of Service</Footer.Link>
+          </div>
+        </Footer.Bottom>
+      </Footer.Container>
+    </Footer>
+  );
+}`,
+      tags: ["default", "multi-column", "sections", "social", "copyright"]
+    },
+    {
+      title: "Centered Footer",
+      description: "Centered footer variant with logo, inline navigation links, social icons, and copyright.",
+      code: `import { Footer, Typography, Divider } from 'vayu-ui';
+import { Twitter, Github, Linkedin } from 'lucide-react';
+
+export default function CenteredFooter() {
+  return (
+    <Footer variant="centered">
+      <Footer.Container>
+        <Footer.Grid>
+          <Footer.Section>
+            <div className="flex flex-col items-center gap-4">
+              <Footer.Logo href="#">
+                <Typography.H5 variant="gradient" className="font-bold">
+                  Vayu UI
+                </Typography.H5>
+              </Footer.Logo>
+              <nav className="flex flex-wrap justify-center gap-6 mt-4">
+                <Footer.Link href="#">Home</Footer.Link>
+                <Footer.Link href="#">About</Footer.Link>
+                <Footer.Link href="#">Services</Footer.Link>
+                <Footer.Link href="#">Contact</Footer.Link>
+              </nav>
+              <Footer.Social className="mt-4">
+                <Footer.SocialLink href="#" aria-label="Twitter">
+                  <Twitter size={18} />
+                </Footer.SocialLink>
+                <Footer.SocialLink href="#" aria-label="GitHub">
+                  <Github size={18} />
+                </Footer.SocialLink>
+                <Footer.SocialLink href="#" aria-label="Linkedin">
+                  <Linkedin size={18} />
+                </Footer.SocialLink>
+              </Footer.Social>
+            </div>
+          </Footer.Section>
+        </Footer.Grid>
+        <Divider />
+        <Footer.Bottom>
+          <Footer.Copyright>
+            \xA9 {new Date().getFullYear()} Vayu UI. All rights reserved.
+          </Footer.Copyright>
+        </Footer.Bottom>
+      </Footer.Container>
+    </Footer>
+  );
+}`,
+      tags: ["centered", "variant", "single-column"]
+    },
+    {
+      title: "Minimal Footer",
+      description: "Minimal footer variant with logo, copyright, and social links in a compact bottom bar.",
+      code: `import { Footer, Typography } from 'vayu-ui';
+import { Github, Twitter } from 'lucide-react';
+
+export default function MinimalFooter() {
+  return (
+    <Footer variant="minimal">
+      <Footer.Container>
+        <Footer.Bottom>
+          <Footer.Logo href="#">
+            <Typography.Label className="font-bold">Vayu UI</Typography.Label>
+          </Footer.Logo>
+          <Footer.Copyright>\xA9 {new Date().getFullYear()} Vayu UI. Inc.</Footer.Copyright>
+          <Footer.Social>
+            <Footer.SocialLink href="#" aria-label="GitHub">
+              <Github size={16} />
+            </Footer.SocialLink>
+            <Footer.SocialLink href="#" aria-label="Twitter">
+              <Twitter size={16} />
+            </Footer.SocialLink>
+          </Footer.Social>
+        </Footer.Bottom>
+      </Footer.Container>
+    </Footer>
+  );
+}`,
+      tags: ["minimal", "variant", "compact"]
+    },
+    {
+      title: "Footer with CTA Button",
+      description: "Default footer with a call-to-action section featuring heading, description, and action buttons above the standard bottom bar.",
+      code: `import { Footer, Typography, Divider, Button } from 'vayu-ui';
+
+export default function CTAFooter() {
+  return (
+    <Footer>
+      <Footer.Container>
+        <div className="flex flex-col md:flex-row gap-8 items-center justify-between">
+          <div className="flex flex-col gap-2">
+            <Typography.H5 variant="gradient" className="font-bold">
+              Ready to get started?
+            </Typography.H5>
+            <Typography.P variant="secondary">
+              Join thousands of developers building with Vayu UI.
+            </Typography.P>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="primary" size="medium">
+              <Button.Text>Get Started</Button.Text>
+            </Button>
+            <Button variant="outline" size="medium">
+              <Button.Text>Documentation</Button.Text>
+            </Button>
+          </div>
+        </div>
+        <Divider />
+        <Footer.Bottom>
+          <Footer.Copyright>
+            \xA9 {new Date().getFullYear()} Vayu UI. All rights reserved.
+          </Footer.Copyright>
+          <div className="flex gap-4">
+            <Footer.Link href="#">Privacy Policy</Footer.Link>
+            <Footer.Link href="#">Terms of Service</Footer.Link>
+          </div>
+        </Footer.Bottom>
+      </Footer.Container>
+    </Footer>
+  );
+}`,
+      tags: ["cta", "button", "call-to-action", "conversion"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "SocialLink without aria-label",
+      bad: '<Footer.SocialLink href="https://twitter.com"><Twitter /></Footer.SocialLink>',
+      good: '<Footer.SocialLink href="https://twitter.com" aria-label="Twitter"><Twitter /></Footer.SocialLink>',
+      reason: "Without an aria-label, screen readers announce an unlabeled link. Icon-only links must have a descriptive label identifying the social platform."
+    },
+    {
+      title: "Using Footer.Link for in-app navigation",
+      bad: '<Footer.Link href="/about" onClick={(e) => { e.preventDefault(); navigate("/about"); }}>About</Footer.Link>',
+      good: "Use a router Link component or handle navigation via onClick without overriding native anchor behavior",
+      reason: "Footer.Link renders a native <a> element. Intercepting clicks with preventDefault and manual navigation breaks middle-click, Ctrl+click, and accessibility expectations. Use your framework's Link component for client-side routing instead."
+    },
+    {
+      title: "Omitting Footer.Container",
+      bad: "<Footer><Footer.Grid>...</Footer.Grid></Footer>",
+      good: "<Footer><Footer.Container><Footer.Grid>...</Footer.Grid></Footer.Container></Footer>",
+      reason: "Footer.Container provides the max-width constraint and responsive horizontal padding. Without it, content stretches edge-to-edge and loses its centered layout."
+    },
+    {
+      title: "Nesting Footer.Section inside another nav landmark",
+      bad: '<nav><Footer.Section title="Links">...</Footer.Section></nav>',
+      good: '<Footer.Section title="Links">...</Footer.Section>',
+      reason: "Footer.Section already renders an internal <nav> element with aria-label. Nesting it inside another <nav> creates a landmark nesting violation and confuses screen reader landmark navigation."
+    },
+    {
+      title: "Using external prop without string children",
+      bad: '<Footer.Link href="#" external><strong>Visit</strong></Footer.Link>',
+      good: '<Footer.Link href="#" external>Visit our partner site</Footer.Link>',
+      reason: 'The external prop auto-generates an aria-label by appending "(opens in new tab)" to the string children. With non-string children (elements, components), the automatic aria-label cannot be computed and you must provide aria-label manually.'
+    }
+  ]
+};
+
+// src/components/resizablepane.ts
+var resizablePaneEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "resizable-pane",
+  name: "ResizablePane",
+  type: "component",
+  category: "layout",
+  // ── Description ───────────────────────────────────────
+  description: "Accessible, draggable split-pane layout with mouse, touch, and keyboard resize support.",
+  longDescription: "The ResizablePane component uses the compound component pattern (ResizablePane.Panel, ResizablePane.Handle) to create split-pane layouts with draggable dividers. Panels are sized as percentages of the container, support min/max constraints, and can be nested for complex grid layouts. Handles support mouse drag, touch drag, and full keyboard navigation with WAI-ARIA separator semantics.",
+  tags: [
+    "resizable",
+    "split-pane",
+    "panel",
+    "layout",
+    "divider",
+    "drag",
+    "handle",
+    "sidebar"
+  ],
+  useCases: [
+    "Building IDE-style layouts with a resizable sidebar and main content area",
+    "Creating dashboard layouts where users adjust panel proportions to focus on specific data",
+    "Implementing split-view editors or diff viewers with adjustable column widths",
+    "Designing file explorer + detail panel layouts common in file management UIs",
+    "Building nested resizable grids for complex data visualization workspaces",
+    "Creating top/bottom split layouts for log viewers or terminal emulators"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "ResizablePane",
+  files: [
+    { name: "ResizablePane.tsx", description: "Root component with context provider, panel registration, and resize logic" },
+    { name: "ResizablePanel.tsx", description: "Individual panel that registers itself and renders content within sized flex slots" },
+    { name: "ResizablePaneHandle.tsx", description: "Draggable divider handle with mouse, touch, and keyboard resize support" },
+    { name: "types.ts", description: "TypeScript type definitions for Direction, ResizablePaneProps, PanelProps, and HandleProps" },
+    { name: "index.ts", description: "Barrel export re-exporting the compound component, types, and useResizablePane hook" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "ResizablePane",
+  subComponents: [
+    {
+      name: "Panel",
+      fileName: "ResizablePanel.tsx",
+      description: "A single resizable panel that registers with the parent ResizablePane and renders children in a proportionally sized flex slot",
+      props: [
+        {
+          name: "defaultSize",
+          type: "number",
+          required: false,
+          defaultValue: "50",
+          description: "Initial size as a percentage of the container (0\u2013100)"
+        },
+        {
+          name: "minSize",
+          type: "number",
+          required: false,
+          defaultValue: "10",
+          description: "Minimum size as a percentage; panel cannot be resized below this value"
+        },
+        {
+          name: "maxSize",
+          type: "number",
+          required: false,
+          defaultValue: "90",
+          description: "Maximum size as a percentage; panel cannot be resized above this value"
+        },
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content rendered inside the resizable panel"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the panel wrapper div"
+        }
+      ]
+    },
+    {
+      name: "Handle",
+      fileName: "ResizablePaneHandle.tsx",
+      description: "Draggable divider between two panels with visual grip indicator, supporting mouse, touch, and keyboard resize",
+      props: [
+        {
+          name: "step",
+          type: "number",
+          required: false,
+          defaultValue: "2",
+          description: "Percentage change per arrow key press; multiplied by 5 when Shift is held"
+        },
+        {
+          name: "aria-label",
+          type: "string",
+          required: false,
+          description: 'Accessible label for the handle; defaults to "Resize columns" or "Resize rows"'
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the handle wrapper div"
+        }
+      ]
+    }
+  ],
+  hooks: ["useResizablePane"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "direction",
+      type: "'horizontal' | 'vertical'",
+      required: false,
+      defaultValue: "'horizontal'",
+      description: "Layout direction: horizontal arranges panels in a row, vertical in a column",
+      options: ["horizontal", "vertical"]
+    },
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "ResizablePane.Panel and ResizablePane.Handle components in alternating order"
+    },
+    {
+      name: "className",
+      type: "string",
+      required: false,
+      description: "Additional CSS classes applied to the root flex container"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants ──────────────────────────────────────────
+  variants: {
+    propName: "direction",
+    options: ["horizontal", "vertical"],
+    default: "horizontal"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "sizes",
+      prop: "defaultSize (internal state via context)",
+      isBoolean: false,
+      values: ["number[] (percentage values)"],
+      defaultValue: "[]",
+      description: "Array of panel sizes in percentages, managed internally. Each panel registers its defaultSize on mount and is adjusted during drag/keyboard resize."
+    },
+    {
+      name: "dragging",
+      prop: "handle interaction (internal)",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Active drag state on a Handle. While dragging, the body cursor is set to col-resize or row-resize and text selection is disabled."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onMouseDown (internal)",
+      signature: "(e: React.MouseEvent) => void",
+      description: "Handle mouse-down initiates drag mode, attaching mousemove and mouseup listeners to the document. Handled internally."
+    },
+    {
+      name: "onTouchStart (internal)",
+      signature: "(e: React.TouchEvent) => void",
+      description: "Handle touch-start initiates drag mode for mobile, attaching touchmove and touchend listeners. Prevents page scroll during drag. Handled internally."
+    },
+    {
+      name: "onKeyDown (internal)",
+      signature: "(e: React.KeyboardEvent) => void",
+      description: "Handle keyboard handler for Arrow keys (resize by step), Shift+Arrow (resize by step\xD75), Home (resize to minimum), and End (resize to maximum). Handled internally."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    attributes: [
+      {
+        name: 'role="separator"',
+        description: "Applied to each Handle to identify it as a draggable divider between sections.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-orientation",
+        description: 'Applied to Handle; set to "vertical" when direction is horizontal (columns split vertically) and "horizontal" when direction is vertical.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-valuenow",
+        description: "Applied to Handle; reflects the current size of the preceding panel as a rounded percentage.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-valuemin",
+        description: "Applied to Handle; set to the preceding panel's minSize constraint.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-valuemax",
+        description: "Applied to Handle; set to the preceding panel's maxSize constraint.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label",
+        description: 'Applied to Handle; defaults to "Resize columns" for horizontal or "Resize rows" for vertical. Can be overridden per handle.',
+        managedByComponent: true
+      },
+      {
+        name: "tabIndex={0}",
+        description: "Applied to Handle to make it keyboard focusable for WCAG 2.4.7 focus visibility.",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "ArrowRight / ArrowDown",
+        behavior: "Increases the preceding panel size by step%. In horizontal mode, ArrowRight resizes; in vertical mode, ArrowDown resizes."
+      },
+      {
+        key: "ArrowLeft / ArrowUp",
+        behavior: "Decreases the preceding panel size by step%. In horizontal mode, ArrowLeft resizes; in vertical mode, ArrowUp resizes."
+      },
+      {
+        key: "Shift + Arrow",
+        behavior: "Increases or decreases the preceding panel size by step\xD75% for faster adjustment."
+      },
+      {
+        key: "Home",
+        behavior: "Resizes the preceding panel to its minimum size (minSize)."
+      },
+      {
+        key: "End",
+        behavior: "Resizes the preceding panel to its maximum size (maxSize)."
+      }
+    ],
+    focusManagement: "Handles are focusable via Tab. A visible focus ring (focus-visible:ring-2 ring-focus) appears on keyboard focus, satisfying WCAG 2.4.7. The handle hit area is at least 24\xD724px (WCAG 2.5.8).",
+    wcagLevel: "AA",
+    notes: "The handle grip indicator uses bg-brand for visibility. During active drag, document body cursor is set and text selection is disabled to prevent interference. Touch events call preventDefault to stop page scrolling during resize."
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "card",
+      reason: "ResizablePane is often placed inside a Card container for bordered, rounded split layouts"
+    },
+    {
+      slug: "tab",
+      reason: "Tabs can be placed inside resizable panels for multi-view layouts like IDEs"
+    },
+    {
+      slug: "typography",
+      reason: "Commonly used inside panels for headings, descriptions, and content text"
+    },
+    {
+      slug: "scroll-area",
+      reason: "Panels with overflow content often need scroll containers alongside the resize behavior"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Horizontal Split",
+      description: "Two panels arranged side by side with a draggable handle. Drag the handle left or right to resize panels.",
+      code: `import { ResizablePane } from 'vayu-ui';
+
+export default function HorizontalSplit() {
+  return (
+    <div className="h-48 border-2 border-border rounded-surface overflow-hidden">
+      <ResizablePane direction="horizontal">
+        <ResizablePane.Panel defaultSize={30} minSize={15}>
+          <div className="h-full p-4 bg-brand/10">Sidebar</div>
+        </ResizablePane.Panel>
+        <ResizablePane.Handle />
+        <ResizablePane.Panel defaultSize={70} minSize={30}>
+          <div className="h-full p-4">Dashboard</div>
+        </ResizablePane.Panel>
+      </ResizablePane>
+    </div>
+  );
+}`,
+      tags: ["horizontal", "basic", "two-panel"]
+    },
+    {
+      title: "Vertical Split",
+      description: "Two panels stacked vertically with a horizontal draggable handle. Drag up or down to resize panels.",
+      code: `import { ResizablePane } from 'vayu-ui';
+
+export default function VerticalSplit() {
+  return (
+    <div className="h-64 border-2 border-border rounded-surface overflow-hidden">
+      <ResizablePane direction="vertical">
+        <ResizablePane.Panel defaultSize={40} minSize={20}>
+          <div className="h-full p-4 bg-brand/10">Top Panel</div>
+        </ResizablePane.Panel>
+        <ResizablePane.Handle />
+        <ResizablePane.Panel defaultSize={60} minSize={20}>
+          <div className="h-full p-4">Bottom Panel</div>
+        </ResizablePane.Panel>
+      </ResizablePane>
+    </div>
+  );
+}`,
+      tags: ["vertical", "basic", "two-panel"]
+    },
+    {
+      title: "Nested Horizontal and Vertical",
+      description: "A horizontal split with a nested vertical split in the second panel, creating a 2\xD72 grid layout.",
+      code: `import { ResizablePane } from 'vayu-ui';
+
+export default function NestedLayout() {
+  return (
+    <div className="h-48 border-2 border-border rounded-surface overflow-hidden">
+      <ResizablePane direction="horizontal">
+        <ResizablePane.Panel defaultSize={30} minSize={15}>
+          <div className="h-full p-4 bg-brand/10">Sidebar</div>
+        </ResizablePane.Panel>
+        <ResizablePane.Handle />
+        <ResizablePane.Panel defaultSize={70} minSize={30}>
+          <ResizablePane direction="vertical">
+            <ResizablePane.Panel defaultSize={40} minSize={20}>
+              <div className="h-full p-4 bg-brand/10">Top Panel</div>
+            </ResizablePane.Panel>
+            <ResizablePane.Handle />
+            <ResizablePane.Panel defaultSize={60} minSize={20}>
+              <div className="h-full p-4">Bottom Panel</div>
+            </ResizablePane.Panel>
+          </ResizablePane>
+        </ResizablePane.Panel>
+      </ResizablePane>
+    </div>
+  );
+}`,
+      tags: ["nested", "grid", "horizontal", "vertical", "advanced"]
+    },
+    {
+      title: "Three Panels",
+      description: "Three side-by-side panels with two handles. Each handle has a custom aria-label for accessibility.",
+      code: `import { ResizablePane } from 'vayu-ui';
+
+export default function ThreePanels() {
+  return (
+    <div className="h-48 border-2 border-border rounded-surface overflow-hidden">
+      <ResizablePane direction="horizontal">
+        <ResizablePane.Panel defaultSize={25} minSize={15}>
+          <div className="h-full p-4 bg-brand/10">Nav</div>
+        </ResizablePane.Panel>
+        <ResizablePane.Handle aria-label="Resize navigation and content" />
+        <ResizablePane.Panel defaultSize={50} minSize={25}>
+          <div className="h-full p-4">Content</div>
+        </ResizablePane.Panel>
+        <ResizablePane.Handle aria-label="Resize content and aside" />
+        <ResizablePane.Panel defaultSize={25} minSize={15}>
+          <div className="h-full p-4 bg-brand/10">Aside</div>
+        </ResizablePane.Panel>
+      </ResizablePane>
+    </div>
+  );
+}`,
+      tags: ["three-panel", "horizontal", "custom-label", "advanced"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Omitting Handle between panels",
+      bad: "<ResizablePane><ResizablePane.Panel /><ResizablePane.Panel /></ResizablePane>",
+      good: "<ResizablePane><ResizablePane.Panel /><ResizablePane.Handle /><ResizablePane.Panel /></ResizablePane>",
+      reason: "Panels must be separated by Handle components. Without handles, panels cannot be resized and the layout becomes static."
+    },
+    {
+      title: "Using size values outside 0\u2013100",
+      bad: "<ResizablePane.Panel defaultSize={200} minSize={-10}>",
+      good: "<ResizablePane.Panel defaultSize={50} minSize={10} maxSize={90}>",
+      reason: "Panel sizes are percentages (0\u2013100). Values outside this range break the flex layout calculation and may cause panels to overflow or collapse."
+    },
+    {
+      title: "Using Panel or Handle outside ResizablePane",
+      bad: "<div><ResizablePane.Panel>Content</ResizablePane.Panel></div>",
+      good: "<ResizablePane><ResizablePane.Panel>Content</ResizablePane.Panel></ResizablePane>",
+      reason: "Panel and Handle depend on the ResizablePaneContext provided by the root ResizablePane. Using them standalone throws a runtime error."
+    },
+    {
+      title: "Setting minSize greater than maxSize",
+      bad: "<ResizablePane.Panel minSize={80} maxSize={20}>",
+      good: "<ResizablePane.Panel minSize={20} maxSize={80}>",
+      reason: "minSize must be less than or equal to maxSize. Inverted constraints break the resize clamp logic and produce unpredictable layout behavior."
+    },
+    {
+      title: "Forgetting overflow-hidden on the container",
+      bad: "<div><ResizablePane>...</ResizablePane></div>",
+      good: '<div className="overflow-hidden border border-border rounded-surface"><ResizablePane>...</ResizablePane></div>',
+      reason: "The parent container must have overflow-hidden (and a defined height for vertical layouts). Without it, resized panels can overflow the viewport and cause layout shifts."
+    }
+  ]
+};
+
+// src/components/carousel.ts
+var carouselEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "carousel",
+  name: "Carousel",
+  type: "component",
+  category: "media",
+  // ── Description ───────────────────────────────────────
+  description: "An accessible image/content carousel with auto-play, speed control, thumbnails, and responsive multi-item-per-slide support.",
+  longDescription: "The Carousel component uses the compound component pattern (Carousel.Viewport, Carousel.Slide, Carousel.Next, Carousel.Previous, Carousel.Bullets, Carousel.PlayPause, Carousel.SpeedControl, Carousel.Gallery) to create fully accessible slideshows. It supports single-item crossfade transitions, multi-item horizontal sliding with responsive breakpoints, auto-play with configurable speed, touch swipe gestures, and full keyboard navigation. Respects prefers-reduced-motion.",
+  tags: [
+    "carousel",
+    "slideshow",
+    "gallery",
+    "slider",
+    "image",
+    "autoplay",
+    "swipe",
+    "testimonial",
+    "product-showcase",
+    "media"
+  ],
+  useCases: [
+    "Displaying hero image galleries with crossfade transitions and auto-play",
+    "Showcasing product cards in a multi-item per slide layout on e-commerce pages",
+    "Building testimonial carousels with autoplay and manual navigation controls",
+    "Creating responsive image portfolios that adapt the number of visible items per breakpoint",
+    "Presenting featured content with thumbnail navigation and speed control",
+    "Building landing page hero sections with looping image slideshows"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Carousel",
+  files: [
+    { name: "Carousel.tsx", description: "Root component with state management, navigation logic, and context provider" },
+    { name: "CarouselViewport.tsx", description: "Overflow container with touch swipe, keyboard navigation, and sliding track wrapper" },
+    { name: "CarouselSlide.tsx", description: "Individual slide wrapper supporting crossfade (single) and flex (multi-item) layouts" },
+    { name: "CarouselPrevious.tsx", description: "Previous navigation button with ChevronLeft icon and boundary disable logic" },
+    { name: "CarouselNext.tsx", description: "Next navigation button with ChevronRight icon and boundary disable logic" },
+    { name: "CarouselBullets.tsx", description: "Dot pagination indicators with page-aware active state for multi-item mode" },
+    { name: "CarouselPlayPause.tsx", description: "Toggle button to play/pause auto-play with Play and Pause icons" },
+    { name: "CarouselSpeedControl.tsx", description: "Speed selector dropdown with options 0.5x, 1x, 1.5x, 2x" },
+    { name: "CarouselGallery.tsx", description: "Thumbnail strip for direct slide navigation with visual active indicator" },
+    { name: "hooks.ts", description: "Context hook, usePrefersReducedMotion, and useResolvedItemsPerSlide for responsive breakpoints" },
+    { name: "types.ts", description: "TypeScript type definitions for all props, context, and responsive breakpoint types" },
+    { name: "index.ts", description: "Barrel export file re-exporting the compound component and all types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Carousel",
+  subComponents: [
+    {
+      name: "Viewport",
+      fileName: "CarouselViewport.tsx",
+      description: "Overflow-hidden container that wraps slides, handles touch swipe gestures and keyboard navigation, and renders the sliding track in multi-item mode",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Carousel.Slide components to render inside the viewport"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the viewport container div"
+        }
+      ]
+    },
+    {
+      name: "Slide",
+      fileName: "CarouselSlide.tsx",
+      description: "Individual slide wrapper that adapts between crossfade (single-item) and flex (multi-item) rendering modes",
+      props: [
+        {
+          name: "index",
+          type: "number",
+          required: true,
+          description: "Zero-based position of this slide in the total sequence, used for active state and ARIA labels"
+        },
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content rendered inside the slide (typically images, cards, or media)"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the slide wrapper div"
+        }
+      ]
+    },
+    {
+      name: "Previous",
+      fileName: "CarouselPrevious.tsx",
+      description: "Absolutely positioned previous navigation button with ChevronLeft icon, auto-disabled at the first slide or page when loop is off",
+      props: [
+        {
+          name: "showLabel",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: 'When true, shows a "Previous" text label alongside the chevron icon'
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the button element"
+        }
+      ]
+    },
+    {
+      name: "Next",
+      fileName: "CarouselNext.tsx",
+      description: "Absolutely positioned next navigation button with ChevronRight icon, auto-disabled at the last slide or page when loop is off",
+      props: [
+        {
+          name: "showLabel",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: 'When true, shows a "Next" text label alongside the chevron icon'
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the button element"
+        }
+      ]
+    },
+    {
+      name: "Bullets",
+      fileName: "CarouselBullets.tsx",
+      description: "Dot pagination indicators that adapt between per-slide (single-item) and per-page (multi-item) mode with direct navigation on click",
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the bullet container div"
+        }
+      ]
+    },
+    {
+      name: "PlayPause",
+      fileName: "CarouselPlayPause.tsx",
+      description: "Toggle button that plays or pauses the auto-play slideshow with Play and Pause icons and aria-pressed state",
+      props: [
+        {
+          name: "showLabel",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: 'When true, shows "Play" or "Pause" text label alongside the icon'
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the button element"
+        }
+      ]
+    },
+    {
+      name: "SpeedControl",
+      fileName: "CarouselSpeedControl.tsx",
+      description: "Playback speed selector dropdown with options 0.5x, 1x, 1.5x, 2x that adjusts the auto-play interval",
+      props: [
+        {
+          name: "showLabel",
+          type: "boolean",
+          required: false,
+          defaultValue: "true",
+          description: 'When true, shows a "Speed:" label before the select dropdown'
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the wrapper div"
+        }
+      ]
+    },
+    {
+      name: "Gallery",
+      fileName: "CarouselGallery.tsx",
+      description: "Horizontally scrollable thumbnail strip for direct slide navigation with visual active indicator border",
+      props: [
+        {
+          name: "items",
+          type: "GalleryItem[]",
+          required: true,
+          description: "Array of { src, alt } objects for thumbnail images, must match totalItems count"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the gallery container div"
+        }
+      ]
+    }
+  ],
+  // ── Internal Hooks ────────────────────────────────────
+  hooks: ["useCarouselContext", "usePrefersReducedMotion", "useResolvedItemsPerSlide"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "totalItems",
+      type: "number",
+      required: true,
+      description: "Total number of slides in the carousel. Must match the number of Carousel.Slide children rendered."
+    },
+    {
+      name: "autoPlay",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Enables automatic slide advancement at the configured interval"
+    },
+    {
+      name: "interval",
+      type: "number",
+      required: false,
+      defaultValue: "3000",
+      description: "Time in milliseconds between auto-play slide transitions. Actual interval is divided by the current speed multiplier."
+    },
+    {
+      name: "loop",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "When true, wraps from last slide back to first. When false, stops at boundaries and disables navigation buttons."
+    },
+    {
+      name: "defaultSpeed",
+      type: "SpeedMultiplier",
+      required: false,
+      defaultValue: "1",
+      description: "Initial playback speed multiplier for auto-play",
+      options: ["0.5", "1", "1.5", "2"]
+    },
+    {
+      name: "defaultIndex",
+      type: "number",
+      required: false,
+      defaultValue: "0",
+      description: "Zero-based index of the slide to show initially on mount"
+    },
+    {
+      name: "itemsPerSlide",
+      type: "ItemsPerSlide",
+      required: false,
+      defaultValue: "1",
+      description: "Number of items visible per slide. Accepts a static number or a responsive object { base, sm?, md?, lg?, xl?, 2xl? } matching Tailwind breakpoints. Values > 1 switch from crossfade to horizontal sliding track."
+    },
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Carousel sub-components (Viewport, Slide, Previous, Next, Bullets, PlayPause, SpeedControl, Gallery)"
+    },
+    {
+      name: "className",
+      type: "string",
+      required: false,
+      description: "Additional CSS classes applied to the root container div"
+    }
+  ],
+  rendersAs: "div",
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "playing",
+      prop: "autoPlay / internal isPlaying",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Controls whether the carousel auto-advances slides. Toggled by PlayPause button, paused on hover, and stops at the end when loop is false."
+    },
+    {
+      name: "pausedByHover",
+      prop: "internal isPausedByHover",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Temporarily pauses auto-play while the mouse hovers over the carousel region. Resumes on mouse leave."
+    },
+    {
+      name: "speed",
+      prop: "defaultSpeed / setSpeed",
+      isBoolean: false,
+      values: ["0.5", "1", "1.5", "2"],
+      defaultValue: "1",
+      description: "Playback speed multiplier. Effective interval = interval / speed. Higher values advance slides faster."
+    },
+    {
+      name: "currentIndex",
+      prop: "defaultIndex / internal state",
+      isBoolean: false,
+      defaultValue: "0",
+      description: "The zero-based index of the currently visible slide (or page start in multi-item mode). Advanced by navigation and auto-play."
+    },
+    {
+      name: "looping",
+      prop: "loop",
+      isBoolean: true,
+      defaultValue: "true",
+      description: "When true, navigation wraps around from last to first. When false, navigation buttons are disabled at boundaries."
+    },
+    {
+      name: "reducedMotion",
+      prop: "prefers-reduced-motion (system)",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Automatically detected from the user OS preference. When true, auto-play is suppressed to prevent motion."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onMouseEnter",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fires when the mouse enters the carousel region. Pauses auto-play by setting isPausedByHover to true."
+    },
+    {
+      name: "onMouseLeave",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fires when the mouse leaves the carousel region. Resumes auto-play by setting isPausedByHover to false."
+    },
+    {
+      name: "onTouchStart (Viewport)",
+      signature: "(event: React.TouchEvent<HTMLDivElement>) => void",
+      description: "Records the starting X position of a touch gesture for swipe detection."
+    },
+    {
+      name: "onTouchEnd (Viewport)",
+      signature: "(event: React.TouchEvent<HTMLDivElement>) => void",
+      description: "Completes swipe detection; if the gesture exceeds 50px horizontal, triggers goNext or goPrevious."
+    },
+    {
+      name: "onKeyDown (Viewport)",
+      signature: "(event: React.KeyboardEvent<HTMLDivElement>) => void",
+      description: "Handles ArrowLeft (goPrevious), ArrowRight (goNext), Home (goTo first), End (goTo last) keyboard navigation."
+    },
+    {
+      name: "onClick (Next/Previous)",
+      signature: "(event: React.MouseEvent<HTMLButtonElement>) => void",
+      description: "Triggers goNext or goPrevious navigation. Disabled at boundaries when loop is false."
+    },
+    {
+      name: "onClick (Bullets)",
+      signature: "(event: React.MouseEvent<HTMLButtonElement>) => void",
+      description: "Navigates directly to the clicked bullet page or slide index."
+    },
+    {
+      name: "onClick (PlayPause)",
+      signature: "(event: React.MouseEvent<HTMLButtonElement>) => void",
+      description: "Toggles the auto-play state between playing and paused."
+    },
+    {
+      name: "onChange (SpeedControl)",
+      signature: "(event: React.ChangeEvent<HTMLSelectElement>) => void",
+      description: "Sets the playback speed multiplier from the selected option value."
+    },
+    {
+      name: "onClick (Gallery)",
+      signature: "(event: React.MouseEvent<HTMLButtonElement>) => void",
+      description: "Navigates directly to the clicked thumbnail slide index."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "region",
+    attributes: [
+      {
+        name: 'aria-roledescription="carousel"',
+        description: "Applied to the root div to communicate the carousel pattern to screen readers.",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-label="Image carousel"',
+        description: "Applied to the root div as a persistent label for the carousel region.",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-roledescription="slide"',
+        description: "Applied to each Carousel.Slide div to identify it as a slide within the carousel.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Slide)",
+        description: 'Applied to each Slide with value "Slide N" (e.g. "Slide 1", "Slide 2") for identification.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden (Slide)",
+        description: "Applied to inactive slides to hide them from screen readers. Only the visible slide(s) are accessible.",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-live="polite"',
+        description: "Applied to a visually hidden div inside the Viewport to announce slide/page changes to screen readers without interrupting.",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-atomic="true"',
+        description: "Applied alongside aria-live to ensure the entire live region content is announced atomically.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Viewport)",
+        description: 'Dynamic label reading "Slide N of M" (single-item) or "Page N of M" (multi-item) to convey current position.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-pressed (PlayPause)",
+        description: "Applied to the play/pause button; true when playing, false when paused.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (PlayPause)",
+        description: 'Dynamic label reading "Pause slideshow" or "Play slideshow" based on current state.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (SpeedControl)",
+        description: 'Applied to the speed select element with value "Playback speed".',
+        managedByComponent: true
+      },
+      {
+        name: 'role="tablist" (Bullets)',
+        description: "Applied to the bullet container to indicate a tab-like selection interface.",
+        managedByComponent: true
+      },
+      {
+        name: 'role="tab" / aria-selected (Bullets)',
+        description: "Applied to each bullet button; aria-selected is true on the active bullet.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-current (Bullets)",
+        description: 'Applied to the active bullet with value "true" for additional current-item semantics.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Gallery)",
+        description: 'Applied to each thumbnail button with value "Go to slide N: {alt}" for descriptive navigation.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-current (Gallery)",
+        description: 'Applied to the active thumbnail with value "true".',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden (Icons)",
+        description: "Applied to all decorative icons (ChevronLeft, ChevronRight, Play, Pause) since they are supplementary to the text labels.",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "ArrowRight",
+        behavior: "Advances to the next slide (single-item) or next page (multi-item). Wraps if loop is enabled."
+      },
+      {
+        key: "ArrowLeft",
+        behavior: "Goes to the previous slide (single-item) or previous page (multi-item). Wraps if loop is enabled."
+      },
+      {
+        key: "Home",
+        behavior: "Jumps directly to the first slide or page."
+      },
+      {
+        key: "End",
+        behavior: "Jumps directly to the last slide (single-item) or last page start (multi-item)."
+      }
+    ],
+    focusManagement: "The viewport has tabIndex={0} for keyboard focus. Navigation buttons receive standard button focus. Bullets and gallery thumbnails are focusable buttons with focus-visible ring styles.",
+    wcagLevel: "AA",
+    notes: 'The carousel respects prefers-reduced-motion by suppressing auto-play. All slides have aria-roledescription="slide" and dynamic aria-hidden. The live region announces position changes politely. Touch swipe threshold is 50px to prevent accidental navigation.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "tailwind-merge" },
+    { name: "lucide-react" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "card",
+      reason: "Often used inside Carousel.Slide to display product cards, testimonials, or content blocks"
+    },
+    {
+      slug: "badge",
+      reason: 'Used to overlay status indicators (e.g. "New", "Sale") on carousel product slides'
+    },
+    {
+      slug: "avatar",
+      reason: "Commonly featured in testimonial carousels alongside quote text"
+    },
+    {
+      slug: "button",
+      reason: "Used for carousel section CTAs or custom navigation controls outside the built-in Next/Previous"
+    },
+    {
+      slug: "skeleton",
+      reason: "Used as placeholder content inside Carousel.Slide while images are loading"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Auto-Play Carousel",
+      description: "Single-item crossfade carousel with auto-play, play/pause, speed control, navigation buttons, bullet indicators, and thumbnail gallery.",
+      code: `import { Carousel, type GalleryItem } from 'vayu-ui';
+
+const galleryItems: GalleryItem[] = [
+  { src: 'https://picsum.photos/seed/slide1/800/400', alt: 'Abstract Landscape 1' },
+  { src: 'https://picsum.photos/seed/slide2/800/400', alt: 'Abstract Landscape 2' },
+  { src: 'https://picsum.photos/seed/slide3/800/400', alt: 'Abstract Landscape 3' },
+  { src: 'https://picsum.photos/seed/slide4/800/400', alt: 'Abstract Landscape 4' },
+  { src: 'https://picsum.photos/seed/slide5/800/400', alt: 'Abstract Landscape 5' },
+];
+
+export default function BasicCarouselDemo() {
+  return (
+    <Carousel totalItems={galleryItems.length} autoPlay={true} interval={3000}>
+      <div className="flex justify-between items-center bg-sidebar p-3 rounded-lg border border-border">
+        <Carousel.PlayPause />
+        <Carousel.SpeedControl />
+      </div>
+
+      <div className="relative group mt-4">
+        <Carousel.Viewport>
+          {galleryItems.map((item, index) => (
+            <Carousel.Slide key={index} index={index}>
+              <div className="aspect-video w-full bg-elevated flex items-center justify-center">
+                <img src={item.src} alt={item.alt} className="w-full h-full object-cover" />
+              </div>
+            </Carousel.Slide>
+          ))}
+        </Carousel.Viewport>
+
+        <Carousel.Previous />
+        <Carousel.Next />
+      </div>
+
+      <Carousel.Bullets />
+
+      <div className="mt-6 pt-4 border-t border-border">
+        <Carousel.Gallery items={galleryItems} />
+      </div>
+    </Carousel>
+  );
+}`,
+      tags: ["basic", "autoplay", "single-item", "crossfade", "gallery"]
+    },
+    {
+      title: "Responsive Multi-Item Carousel",
+      description: "Product showcase carousel using itemsPerSlide with responsive breakpoints \u2014 1 item on mobile, 2 on sm, 3 on lg. Uses horizontal sliding track transitions.",
+      code: `import { Carousel, type GalleryItem } from 'vayu-ui';
+
+const productItems: GalleryItem[] = [
+  { src: 'https://picsum.photos/seed/prod1/400/400', alt: 'Product 1' },
+  { src: 'https://picsum.photos/seed/prod2/400/400', alt: 'Product 2' },
+  { src: 'https://picsum.photos/seed/prod3/400/400', alt: 'Product 3' },
+  { src: 'https://picsum.photos/seed/prod4/400/400', alt: 'Product 4' },
+  { src: 'https://picsum.photos/seed/prod5/400/400', alt: 'Product 5' },
+  { src: 'https://picsum.photos/seed/prod6/400/400', alt: 'Product 6' },
+  { src: 'https://picsum.photos/seed/prod7/400/400', alt: 'Product 7' },
+  { src: 'https://picsum.photos/seed/prod8/400/400', alt: 'Product 8' },
+];
+
+export default function MultiItemCarouselDemo() {
+  return (
+    <Carousel
+      totalItems={productItems.length}
+      itemsPerSlide={{ base: 1, sm: 2, lg: 3 }}
+      loop={true}
+      autoPlay={true}
+      interval={4000}
+    >
+      <div className="relative group mt-4">
+        <Carousel.Viewport>
+          {productItems.map((item, index) => (
+            <Carousel.Slide key={index} index={index}>
+              <div className="aspect-square bg-elevated rounded-surface border border-border overflow-hidden p-2">
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  className="w-full h-full object-cover rounded-surface"
+                />
+              </div>
+            </Carousel.Slide>
+          ))}
+        </Carousel.Viewport>
+
+        <Carousel.Previous />
+        <Carousel.Next />
+      </div>
+
+      <Carousel.Bullets />
+    </Carousel>
+  );
+}`,
+      tags: ["multi-item", "responsive", "product-showcase", "sliding"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Mismatching totalItems and rendered slides",
+      bad: "<Carousel totalItems={5}>{items.slice(0, 3).map(...)}</Carousel>",
+      good: "<Carousel totalItems={items.length}>{items.map(...)}</Carousel>",
+      reason: "totalItems must exactly match the number of Carousel.Slide children. A mismatch breaks bullet count, navigation boundaries, ARIA labels, and auto-play end detection."
+    },
+    {
+      title: "Using sub-components outside Carousel",
+      bad: "<div><Carousel.Slide index={0}>...</Carousel.Slide></div>",
+      good: "<Carousel totalItems={1}><Carousel.Viewport><Carousel.Slide index={0}>...</Carousel.Slide></Carousel.Viewport></Carousel>",
+      reason: "All sub-components depend on CarouselContext. Using them outside the root Carousel throws a runtime error."
+    },
+    {
+      title: "Skipping the Viewport wrapper",
+      bad: "<Carousel totalItems={3}><Carousel.Slide index={0}>...</Carousel.Slide></Carousel>",
+      good: "<Carousel totalItems={3}><Carousel.Viewport><Carousel.Slide index={0}>...</Carousel.Slide></Carousel.Viewport></Carousel>",
+      reason: "Slides must be inside Carousel.Viewport which provides overflow-hidden, touch handling, keyboard navigation, and the sliding track in multi-item mode."
+    },
+    {
+      title: "Using itemsPerSlide with non-integer values",
+      bad: "<Carousel totalItems={6} itemsPerSlide={2.5}>",
+      good: "<Carousel totalItems={6} itemsPerSlide={{ base: 1, md: 2, lg: 3 }}>",
+      reason: "itemsPerSlide must be a positive integer. Non-integer values produce broken flex calculations and undefined slide widths. Use responsive breakpoints instead of fractional values."
+    },
+    {
+      title: "Placing Next/Previous outside a relative container",
+      bad: "<Carousel.Viewport>...<Carousel.Next /></Carousel.Viewport>",
+      good: '<div className="relative"><Carousel.Viewport>...</Carousel.Viewport><Carousel.Previous /><Carousel.Next /></div>',
+      reason: "Next and Previous are absolutely positioned (absolute right-2 / left-2). They need a relative-positioned parent to anchor correctly over the viewport."
+    }
+  ]
+};
+
+// src/components/animation.ts
+var animationEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "animation",
+  name: "Animation",
+  type: "component",
+  category: "animation",
+  // ── Description ───────────────────────────────────────
+  description: "A collection of pure CSS entrance animations with WCAG 2.2 accessibility support, including fade, slide, bounce, flip, rotate, zoom, roll, jack-in-the-box, and hinge effects.",
+  longDescription: "The Animation component uses the compound component pattern (Animation.Fade, Animation.Slide, Animation.Bounce, Animation.Flip, Animation.Rotate, Animation.Zoom, Animation.Roll, Animation.JackInTheBox, Animation.Hinge) to provide 9 entrance animation variants. All animations are CSS-only (no JavaScript runtime), making them fully server-side compatible. Each variant supports configurable duration, delay, iteration count, and fill mode. Accessibility is handled via Tailwind motion-reduce: variant and a global CSS @media rule for prefers-reduced-motion, ensuring content remains visible when animations are suppressed.",
+  tags: [
+    "animation",
+    "entrance",
+    "fade",
+    "slide",
+    "bounce",
+    "flip",
+    "rotate",
+    "zoom",
+    "roll",
+    "hinge",
+    "motion",
+    "transition",
+    "css-animation",
+    "wcag",
+    "reduced-motion"
+  ],
+  useCases: [
+    "Adding entrance animations to modals, dialogs, and tooltips when they appear",
+    "Creating staggered page-load reveal effects for hero sections or feature cards",
+    "Animating content into view during route transitions in single-page applications",
+    "Building loading state reveals where skeleton placeholders transition into real content",
+    "Adding playful micro-interactions for onboarding flows or empty states",
+    "Creating attention-drawing effects for notifications, badges, or call-to-action elements"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Animation",
+  files: [
+    { name: "Animation.tsx", description: "Root component with compound composition wrapping all animation variants" },
+    { name: "FadeAnimation.tsx", description: "Fade-in opacity transition variant" },
+    { name: "SlideAnimation.tsx", description: "Directional slide-in variant (up, down, left, right)" },
+    { name: "BounceAnimation.tsx", description: "Scale-based bounce entrance variant (small, medium, large)" },
+    { name: "FlipAnimation.tsx", description: "Axis-based flip rotation variant (X-axis or Y-axis)" },
+    { name: "RotateAnimation.tsx", description: "Custom degree rotation entrance variant" },
+    { name: "ZoomAnimation.tsx", description: "Scale-based zoom entrance variant (small, medium, large)" },
+    { name: "RollAnimation.tsx", description: "Directional rolling entrance variant" },
+    { name: "JackInTheBoxAnimation.tsx", description: "Playful spring-loaded entrance variant" },
+    { name: "HingeAnimation.tsx", description: "Element swings and falls off the page variant" },
+    { name: "types.ts", description: "TypeScript type definitions, prop interfaces, and Tailwind class mapping objects" },
+    { name: "utils.ts", description: "buildAnimationClasses utility for composing animation CSS classes" },
+    { name: "index.ts", description: "Barrel export file re-exporting the compound component and all types" },
+    { name: "README.md", description: "Component anatomy and use-case reference", optional: true }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Animation",
+  subComponents: [
+    {
+      name: "Fade",
+      fileName: "FadeAnimation.tsx",
+      description: "Smooth opacity transition from invisible to visible",
+      props: []
+    },
+    {
+      name: "Slide",
+      fileName: "SlideAnimation.tsx",
+      description: "Translates the element in from a specified direction (up, down, left, right)",
+      props: [
+        {
+          name: "direction",
+          type: "AnimationDirection",
+          required: false,
+          defaultValue: "'left'",
+          description: "Direction the element slides in from",
+          options: ["up", "down", "left", "right"]
+        }
+      ]
+    },
+    {
+      name: "Bounce",
+      fileName: "BounceAnimation.tsx",
+      description: "Scales in with an elastic bounce effect at small, medium, or large intensity",
+      props: [
+        {
+          name: "scale",
+          type: "AnimationScale",
+          required: false,
+          defaultValue: "'medium'",
+          description: "Intensity of the bounce entrance effect",
+          options: ["small", "medium", "large"]
+        }
+      ]
+    },
+    {
+      name: "Flip",
+      fileName: "FlipAnimation.tsx",
+      description: "Rotates the element on the X or Y axis (up/down flip on X-axis, left/right flip on Y-axis)",
+      props: [
+        {
+          name: "direction",
+          type: "AnimationDirection",
+          required: false,
+          defaultValue: "'up'",
+          description: "Flip direction. up/down flip on X-axis, left/right flip on Y-axis",
+          options: ["up", "down", "left", "right"]
+        }
+      ]
+    },
+    {
+      name: "Rotate",
+      fileName: "RotateAnimation.tsx",
+      description: "Rotates the element in from a custom starting degree angle",
+      props: [
+        {
+          name: "degrees",
+          type: "number",
+          required: false,
+          defaultValue: "-200",
+          description: "Starting rotation angle in degrees. Negative values rotate counter-clockwise."
+        }
+      ]
+    },
+    {
+      name: "Zoom",
+      fileName: "ZoomAnimation.tsx",
+      description: "Scales the element in from a smaller or larger size",
+      props: [
+        {
+          name: "scale",
+          type: "AnimationScale",
+          required: false,
+          defaultValue: "'medium'",
+          description: "Starting scale intensity before zooming to full size",
+          options: ["small", "medium", "large"]
+        }
+      ]
+    },
+    {
+      name: "Roll",
+      fileName: "RollAnimation.tsx",
+      description: "Rolls the element in from a specified direction",
+      props: [
+        {
+          name: "direction",
+          type: "AnimationDirection",
+          required: false,
+          defaultValue: "'left'",
+          description: "Direction the element rolls in from",
+          options: ["up", "down", "left", "right"]
+        }
+      ]
+    },
+    {
+      name: "JackInTheBox",
+      fileName: "JackInTheBoxAnimation.tsx",
+      description: "Playful spring-loaded entrance animation that pops the element into view",
+      props: []
+    },
+    {
+      name: "Hinge",
+      fileName: "HingeAnimation.tsx",
+      description: "Element swings from the top and falls off the page; defaults fillMode to forwards so the element stays in final position",
+      props: []
+    }
+  ],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "ReactNode",
+      required: true,
+      description: "Content to animate. Rendered inside the animation wrapper div."
+    },
+    {
+      name: "duration",
+      type: "AnimationDuration",
+      required: false,
+      defaultValue: "'normal'",
+      description: "Animation duration controlling how long the entrance takes to complete",
+      options: ["slower", "slow", "normal", "fast", "faster"]
+    },
+    {
+      name: "delay",
+      type: "AnimationDelay",
+      required: false,
+      defaultValue: "'none'",
+      description: "Delay before the animation starts. Useful for staggered entrance sequences.",
+      options: ["none", "short", "medium", "long"]
+    },
+    {
+      name: "iteration",
+      type: "AnimationIteration",
+      required: false,
+      defaultValue: "1",
+      description: 'Number of times the animation repeats. Use "infinite" for looping effects.',
+      options: ["1", "2", "3", "infinite"]
+    },
+    {
+      name: "fillMode",
+      type: "AnimationFillMode",
+      required: false,
+      defaultValue: "'none'",
+      description: 'How the animation applies styles before and after execution. Animation.Hinge defaults to "forwards".',
+      options: ["none", "forwards", "backwards", "both"]
+    },
+    {
+      name: "className",
+      type: "string",
+      required: false,
+      description: "Additional CSS classes applied to the animation wrapper div"
+    }
+  ],
+  rendersAs: "div",
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "animating",
+      prop: "CSS animation state",
+      isBoolean: true,
+      defaultValue: "true",
+      description: "The animation plays on mount by default. Duration and fill mode control when it completes and whether styles persist."
+    },
+    {
+      name: "delayed",
+      prop: "delay",
+      isBoolean: false,
+      values: ["none", "short", "medium", "long"],
+      defaultValue: "'none'",
+      description: "The element waits for the configured delay before starting the entrance animation."
+    },
+    {
+      name: "repeating",
+      prop: "iteration",
+      isBoolean: false,
+      values: ["1", "2", "3", "infinite"],
+      defaultValue: "1",
+      description: 'Controls how many times the animation repeats. "infinite" creates a perpetual loop.'
+    },
+    {
+      name: "reducedMotion",
+      prop: "prefers-reduced-motion (system)",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Automatically detected from the user OS preference. When enabled, animations are suppressed via CSS and content is shown at full opacity."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    attributes: [
+      {
+        name: "motion-reduce:opacity-100",
+        description: "Applied via Tailwind CSS class to ensure content remains visible at full opacity when the user OS prefers-reduced-motion setting is active.",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [],
+    wcagLevel: "AA",
+    notes: "Animation components are purely decorative CSS wrappers. No ARIA roles or live regions are needed because animations do not convey meaning or state. Screen readers announce content as-is regardless of animation. The global CSS rule @media (prefers-reduced-motion: reduce) { * { animation: none !important } } provides a safety net. The Tailwind motion-reduce:opacity-100 class prevents invisible content when animations are suppressed, since keyframes start at opacity: 0. Fully compliant with WCAG 2.2 Success Criterion 2.3.3 (Animation from Interactions)."
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "tailwind-merge" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=19.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "card",
+      reason: "Cards are commonly animated into view using Animation.Fade or Animation.Slide for staggered entrance effects"
+    },
+    {
+      slug: "button",
+      reason: "Buttons can be wrapped with Animation.Bounce or Animation.JackInTheBox for attention-drawing call-to-action effects"
+    },
+    {
+      slug: "skeleton",
+      reason: "Skeleton placeholders can transition into real content using Animation.Fade for a smooth loading reveal"
+    },
+    {
+      slug: "badge",
+      reason: "Badges use Animation.Bounce or Animation.Zoom for notification count updates and status change highlights"
+    },
+    {
+      slug: "alert",
+      reason: "Alerts and toast notifications use Animation.Slide or Animation.Fade for entrance and exit transitions"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Fade and Slide Animations",
+      description: "Simple entrance animations using Fade with a long delay and Slide from the left.",
+      code: `import { Animation } from 'vayu-ui';
+
+export default function BasicAnimationDemo() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Animation.Fade>
+        <div className="bg-indigo-500 rounded-md p-4 text-white">Fading in</div>
+      </Animation.Fade>
+
+      <Animation.Fade delay="long">
+        <div className="bg-indigo-400 rounded-md p-4 text-white">Delayed fade</div>
+      </Animation.Fade>
+
+      <Animation.Slide direction="left">
+        <div className="bg-blue-500 rounded-md p-4 text-white">Sliding from left</div>
+      </Animation.Slide>
+    </div>
+  );
+}`,
+      tags: ["basic", "fade", "slide", "delay"]
+    },
+    {
+      title: "Directional Animations (Slide, Flip, Roll)",
+      description: "Slide, Flip, and Roll variants with different direction options.",
+      code: `import { Animation } from 'vayu-ui';
+
+export default function DirectionalDemo() {
+  return (
+    <div className="grid grid-cols-2 gap-4">
+      <Animation.Slide direction="right">
+        <div className="bg-blue-500 rounded-md p-4 text-white">Slide Right</div>
+      </Animation.Slide>
+
+      <Animation.Slide direction="up">
+        <div className="bg-blue-600 rounded-md p-4 text-white">Slide Up</div>
+      </Animation.Slide>
+
+      <Animation.Flip direction="up">
+        <div className="bg-purple-500 rounded-md p-4 text-white">Flip Up (X-Axis)</div>
+      </Animation.Flip>
+
+      <Animation.Flip direction="left">
+        <div className="bg-purple-600 rounded-md p-4 text-white">Flip Left (Y-Axis)</div>
+      </Animation.Flip>
+
+      <Animation.Roll direction="right">
+        <div className="bg-pink-500 rounded-md p-4 text-white">Roll Right</div>
+      </Animation.Roll>
+
+      <Animation.Slide direction="down">
+        <div className="bg-blue-600 rounded-md p-4 text-white">Slide Down</div>
+      </Animation.Slide>
+    </div>
+  );
+}`,
+      tags: ["directional", "slide", "flip", "roll"]
+    },
+    {
+      title: "Scale-Based Animations (Bounce, Zoom)",
+      description: "Bounce and Zoom variants with different scale options and an infinite looping bounce.",
+      code: `import { Animation } from 'vayu-ui';
+
+export default function ScaleDemo() {
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      <Animation.Bounce scale="small">
+        <div className="bg-yellow-500 rounded-md p-4 text-black">Small Bounce</div>
+      </Animation.Bounce>
+
+      <Animation.Bounce scale="large">
+        <div className="bg-yellow-500 rounded-md p-4 text-black">Large Bounce</div>
+      </Animation.Bounce>
+
+      <Animation.Zoom scale="small">
+        <div className="bg-green-500 rounded-full p-4 text-white">Small Zoom</div>
+      </Animation.Zoom>
+
+      <Animation.Zoom scale="medium">
+        <div className="bg-green-500 rounded-full p-4 text-white">Medium Zoom</div>
+      </Animation.Zoom>
+
+      <Animation.Zoom scale="large">
+        <div className="bg-green-500 rounded-full p-4 text-white">Large Zoom</div>
+      </Animation.Zoom>
+
+      <Animation.Bounce iteration="infinite">
+        <div className="bg-cyan-500 rounded-full p-4 text-white">Infinite Loop</div>
+      </Animation.Bounce>
+    </div>
+  );
+}`,
+      tags: ["scale", "bounce", "zoom", "infinite", "loop"]
+    },
+    {
+      title: "Custom Rotation and Special Effects",
+      description: "Rotate with custom degrees, JackInTheBox spring effect, and Hinge fall-off animation.",
+      code: `import { Animation } from 'vayu-ui';
+
+export default function SpecialDemo() {
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      <Animation.Rotate degrees={180}>
+        <div className="bg-red-500 rounded-md p-4 text-white">Rotate 180\xB0</div>
+      </Animation.Rotate>
+
+      <Animation.Rotate degrees={-200}>
+        <div className="bg-red-600 rounded-md p-4 text-white">Rotate -200\xB0</div>
+      </Animation.Rotate>
+
+      <Animation.JackInTheBox>
+        <div className="bg-teal-500 rounded-md p-4 text-white">Jack In The Box</div>
+      </Animation.JackInTheBox>
+
+      <Animation.Hinge duration="slower">
+        <div className="bg-orange-500 rounded-md p-4 text-white">Hinge Effect</div>
+      </Animation.Hinge>
+    </div>
+  );
+}`,
+      tags: ["rotate", "custom-degrees", "jackinthebox", "hinge", "special"]
+    },
+    {
+      title: "Staggered Card Entrance",
+      description: "Multiple cards entering with increasing delays to create a staggered reveal effect.",
+      code: `import { Animation } from 'vayu-ui';
+
+export default function StaggeredDemo() {
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      <Animation.Fade duration="normal" delay="none">
+        <div className="rounded-lg border p-6 shadow-surface">
+          <h3 className="font-semibold">Feature One</h3>
+          <p className="text-muted-content mt-2">First card appears immediately.</p>
+        </div>
+      </Animation.Fade>
+
+      <Animation.Fade duration="normal" delay="short">
+        <div className="rounded-lg border p-6 shadow-surface">
+          <h3 className="font-semibold">Feature Two</h3>
+          <p className="text-muted-content mt-2">Second card follows shortly.</p>
+        </div>
+      </Animation.Fade>
+
+      <Animation.Fade duration="normal" delay="medium">
+        <div className="rounded-lg border p-6 shadow-surface">
+          <h3 className="font-semibold">Feature Three</h3>
+          <p className="text-muted-content mt-2">Third card completes the set.</p>
+        </div>
+      </Animation.Fade>
+    </div>
+  );
+}`,
+      tags: ["staggered", "delay", "cards", "reveal", "entrance"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Wrapping interactive elements that depend on initial visibility",
+      bad: '<Animation.Fade><input placeholder="Enter name" /></Animation.Fade>',
+      good: '<div><input placeholder="Enter name" /></div>',
+      reason: "Animation keyframes start at opacity: 0. If the animation fails to load or is suppressed, form inputs could be invisible or unclickable. Use animations on decorative wrappers, not directly on interactive elements."
+    },
+    {
+      title: 'Setting iteration="infinite" on content that users need to read',
+      bad: '<Animation.Bounce iteration="infinite"><p>Important notice text</p></Animation.Bounce>',
+      good: "<Animation.Bounce iteration={1}><p>Important notice text</p></Animation.Bounce>",
+      reason: "Infinite animations cause continuous motion that makes text hard to read and violates WCAG 2.3.3. Use iteration={1} for content that conveys meaning."
+    },
+    {
+      title: 'Using Animation.Hinge without fillMode="forwards"',
+      bad: '<Animation.Hinge fillMode="none">...</Animation.Hinge>',
+      good: "<Animation.Hinge>...</Animation.Hinge>",
+      reason: 'Hinge defaults to fillMode="forwards" for a reason: the animation ends with the element fallen off-screen. Without "forwards", the element snaps back to its original position, creating a jarring visual glitch.'
+    },
+    {
+      title: "Nesting animation components inside each other",
+      bad: '<Animation.Fade><Animation.Slide direction="left">...</Animation.Slide></Animation.Fade>',
+      good: '<Animation.Slide direction="left">...</Animation.Slide>',
+      reason: "Nesting animations creates conflicting opacity and transform transitions that produce unpredictable visual results. Use a single animation variant per element."
+    },
+    {
+      title: "Overriding the motion-reduce class via className",
+      bad: '<Animation.Fade className="!opacity-0">...</Animation.Fade>',
+      good: '<Animation.Fade className="mt-4">...</Animation.Fade>',
+      reason: "Overriding opacity or animation properties via className breaks the reduced-motion fallback. The motion-reduce:opacity-100 class ensures content stays visible for users who prefer reduced motion. Avoid overriding animation-related CSS properties."
+    }
+  ]
+};
+
+// src/components/tooltip.ts
+var tooltipEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "tooltip",
+  name: "Tooltip",
+  type: "component",
+  category: "overlay",
+  // ── Description ───────────────────────────────────────
+  description: "A portal-based tooltip component that displays contextual content on hover or focus, with four placement positions, seven color variants, configurable show/hide delays, directional arrows, and WCAG 2.2 AA accessibility.",
+  longDescription: "The Tooltip component renders a floating portal element positioned relative to a trigger. It supports four placements (top, bottom, left, right) with automatic viewport-edge clamping. Seven color variants map to design tokens (default/elevated, brand, muted, success, warning, destructive, info). Show and hide delays are independently configurable. A directional arrow is rendered via a rotated square div. The tooltip body is hoverable (WCAG 2.5.7) \u2014 the hide delay keeps it visible while the cursor moves toward it. Touch targets are enforced at a minimum of 44\xD744px (WCAG 2.5.8) by default, but can be disabled for inline text usage. The component uses React portals for z-index layering and requestAnimationFrame for flicker-free positioning.",
+  tags: [
+    "tooltip",
+    "overlay",
+    "popover",
+    "hover",
+    "focus",
+    "hint",
+    "label",
+    "portal",
+    "positioning",
+    "a11y",
+    "wcag"
+  ],
+  useCases: [
+    "Display helpful hints or descriptions when users hover over or focus on interactive elements",
+    "Provide accessible labels for icon-only buttons that have no visible text",
+    "Show contextual status information (success, warning, error) near relevant UI elements",
+    "Add supplementary detail to form fields, badges, or truncated text without cluttering the layout",
+    "Create hoverable info panels that users can move their cursor into without the tooltip disappearing"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Tooltip",
+  files: [
+    { name: "Tooltip.tsx", description: "ForwardRef component with portal rendering, positioning logic, show/hide timing, and variant styling" },
+    { name: "types.ts", description: "TypeScript interfaces for TooltipProps, TooltipPosition, and TooltipVariant" },
+    { name: "index.ts", description: "Barrel export file re-exporting Tooltip and all type definitions" },
+    { name: "README.md", description: "Component anatomy and use-case documentation" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Tooltip",
+  subComponents: [],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "content",
+      type: "React.ReactNode",
+      required: true,
+      description: "Tooltip content \u2014 plain string or rich JSX rendered inside the tooltip body"
+    },
+    {
+      name: "position",
+      type: "'top' | 'bottom' | 'left' | 'right'",
+      required: false,
+      defaultValue: "'top'",
+      description: "Placement of the tooltip relative to the trigger element",
+      options: ["top", "bottom", "left", "right"]
+    },
+    {
+      name: "delay",
+      type: "number",
+      required: false,
+      defaultValue: "200",
+      description: "Delay in milliseconds before the tooltip becomes visible after hover/focus"
+    },
+    {
+      name: "hideDelay",
+      type: "number",
+      required: false,
+      defaultValue: "150",
+      description: "Delay in milliseconds before the tooltip disappears after the cursor leaves the trigger"
+    },
+    {
+      name: "variant",
+      type: "'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'destructive' | 'info'",
+      required: false,
+      defaultValue: "'default'",
+      description: "Color variant applied to the tooltip background and text via design tokens",
+      options: ["default", "primary", "secondary", "success", "warning", "destructive", "info"]
+    },
+    {
+      name: "disabled",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "When true, the tooltip will not appear on hover or focus"
+    },
+    {
+      name: "showArrow",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "Whether to render a directional arrow pointing from the tooltip to the trigger"
+    },
+    {
+      name: "ensureTouchTarget",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "Enforce a minimum 24\xD724px touch target on the trigger for WCAG 2.5.8 compliance; set false for inline text tooltips"
+    },
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "The trigger element that shows the tooltip on hover or focus"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  variants: {
+    propName: "variant",
+    options: ["default", "primary", "secondary", "success", "warning", "destructive", "info"],
+    default: "default"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "visible",
+      prop: "isVisible (internal)",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "The tooltip portal is mounted and positioned; controlled internally by hover/focus timeouts"
+    },
+    {
+      name: "disabled",
+      prop: "disabled",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Tooltip is completely suppressed \u2014 no portal renders on hover or focus"
+    },
+    {
+      name: "mounted",
+      prop: "mounted (internal)",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Client-side hydration flag; portal only renders after mount to avoid SSR mismatches"
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onMouseEnter",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fires on the trigger wrapper; starts the show delay timer"
+    },
+    {
+      name: "onMouseLeave",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fires on the trigger wrapper; starts the hide delay timer"
+    },
+    {
+      name: "onFocus",
+      signature: "(event: React.FocusEvent<HTMLDivElement>) => void",
+      description: "Fires when the trigger receives keyboard focus; starts the show delay timer"
+    },
+    {
+      name: "onBlur",
+      signature: "(event: React.FocusEvent<HTMLDivElement>) => void",
+      description: "Fires when the trigger loses focus; starts the hide delay timer"
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "tooltip",
+    attributes: [
+      {
+        name: "aria-describedby",
+        description: "Applied to the trigger element when the tooltip is visible; references the tooltip portal element by auto-generated ID to associate descriptive content with the trigger",
+        managedByComponent: true
+      },
+      {
+        name: 'role="tooltip"',
+        description: "Applied to the tooltip portal element to identify it as a tooltip for assistive technology",
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: "Applied to the directional arrow div to hide the decorative element from the accessibility tree",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Tab",
+        behavior: "Focuses the trigger element, which initiates the show delay and displays the tooltip"
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Moves focus away from the trigger, which initiates the hide delay and dismisses the tooltip"
+      },
+      {
+        key: "Escape",
+        behavior: "Immediately dismisses the visible tooltip regardless of hide delay"
+      }
+    ],
+    focusManagement: "The trigger element is focusable via keyboard Tab navigation. onFocus triggers the tooltip show timer; onBlur triggers the hide timer. The tooltip body is mouse-interactive (pointer-events-auto) to allow hover persistence per WCAG 2.5.7.",
+    wcagLevel: "AA",
+    notes: 'Implements WCAG 2.5.7 (Dragging Movements) by making the tooltip body hoverable with a configurable hide delay. Implements WCAG 2.5.8 (Target Size \u2014 Minimum) with a default 24\xD724px minimum touch target on the trigger (ensureTouchTarget). The tooltip portal uses role="tooltip" and the trigger uses aria-describedby to create the required programmatic association. The decorative arrow is hidden with aria-hidden="true".'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Tooltips are most commonly attached to Button elements, especially icon-only buttons that need a text label"
+    },
+    {
+      slug: "badge",
+      reason: "Badges with truncated or abbreviated text benefit from tooltips showing the full label"
+    },
+    {
+      slug: "typography",
+      reason: "Typography.Link and inline text elements can use tooltips for supplementary context or definitions"
+    },
+    {
+      slug: "avatar",
+      reason: "Avatars often display the user name in a tooltip on hover for compact layouts"
+    },
+    {
+      slug: "card",
+      reason: "Cards with metadata or truncated descriptions can surface full content via tooltips"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Positions",
+      description: "Four directional placements (top, bottom, left, right) around trigger buttons.",
+      code: `import { Tooltip, Button } from 'vayu-ui';
+
+export default function PositionsDemo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      {(['top', 'bottom', 'left', 'right'] as const).map((pos) => (
+        <Tooltip key={pos} content={\`Tooltip on \${pos}\`} position={pos}>
+          <Button variant="outline" size="small" className="capitalize">
+            {pos}
+          </Button>
+        </Tooltip>
+      ))}
+    </div>
+  );
+}`,
+      tags: ["position", "top", "bottom", "left", "right"]
+    },
+    {
+      title: "Variants",
+      description: "Color variants matching status tokens \u2014 default, success, warning, destructive, and primary.",
+      code: `import { Tooltip, Button } from 'vayu-ui';
+import { Info, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
+
+export default function VariantsDemo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <Tooltip content="Default tooltip" variant="default">
+        <Button variant="ghost" size="small">
+          <Button.Icon>
+            <Info className="w-4 h-4" aria-hidden="true" />
+          </Button.Icon>
+          <span className="sr-only">Info</span>
+        </Button>
+      </Tooltip>
+      <Tooltip content="Success!" variant="success">
+        <Button variant="ghost" size="small">
+          <Button.Icon>
+            <CheckCircle className="w-4 h-4 text-success" aria-hidden="true" />
+          </Button.Icon>
+          <span className="sr-only">Success</span>
+        </Button>
+      </Tooltip>
+      <Tooltip content="Warning \u2014 check this" variant="warning">
+        <Button variant="ghost" size="small">
+          <Button.Icon>
+            <AlertTriangle className="w-4 h-4 text-warning" aria-hidden="true" />
+          </Button.Icon>
+          <span className="sr-only">Warning</span>
+        </Button>
+      </Tooltip>
+      <Tooltip content="Error occurred" variant="destructive">
+        <Button variant="ghost" size="small">
+          <Button.Icon>
+            <XCircle className="w-4 h-4 text-destructive" aria-hidden="true" />
+          </Button.Icon>
+          <span className="sr-only">Error</span>
+        </Button>
+      </Tooltip>
+      <Tooltip content="Primary action" variant="primary">
+        <Button variant="primary" size="small">
+          Primary
+        </Button>
+      </Tooltip>
+    </div>
+  );
+}`,
+      tags: ["variant", "default", "success", "warning", "destructive", "primary"]
+    },
+    {
+      title: "Options",
+      description: "Disabled tooltip, arrow hidden, and custom show delay configuration.",
+      code: `import { Tooltip, Button } from 'vayu-ui';
+
+export default function OptionsDemo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <Tooltip content="This won't show" disabled>
+        <Button variant="secondary" size="small" disabled>
+          Disabled
+        </Button>
+      </Tooltip>
+      <Tooltip content="No arrow" showArrow={false}>
+        <Button variant="outline" size="small">
+          No Arrow
+        </Button>
+      </Tooltip>
+      <Tooltip content="Slow delay" delay={800}>
+        <Button variant="outline" size="small">
+          800ms Delay
+        </Button>
+      </Tooltip>
+    </div>
+  );
+}`,
+      tags: ["disabled", "arrow", "delay", "options"]
+    },
+    {
+      title: "Accessibility",
+      description: "Hoverable tooltip with extended hide delay (WCAG 2.5.7) and inline text tooltip with touch target disabled.",
+      code: `import { Tooltip, Button, Typography } from 'vayu-ui';
+import { Accessibility } from 'lucide-react';
+
+export default function AccessibilityDemo() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      <Tooltip
+        content="You can hover over this tooltip without it disappearing (WCAG 2.5.7)"
+        hideDelay={300}
+      >
+        <Button variant="outline" size="small">
+          <Button.Icon>
+            <Accessibility className="w-4 h-4" aria-hidden="true" />
+          </Button.Icon>
+          Hoverable
+        </Button>
+      </Tooltip>
+      <Tooltip
+        content="No minimum touch target enforced (useful for inline text)"
+        ensureTouchTarget={false}
+      >
+        <Typography.Link className="cursor-help">Inline text</Typography.Link>
+      </Tooltip>
+    </div>
+  );
+}`,
+      tags: ["a11y", "accessibility", "wcag", "hoverable", "touch-target"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Putting critical information only in a tooltip",
+      bad: '<Tooltip content="Deleting this item is permanent and cannot be undone"><Button variant="destructive">Delete</Button></Tooltip>',
+      good: '<Button variant="destructive" onClick={openConfirmDialog}>Delete</Button> with a confirmation Modal showing the warning',
+      reason: "Tooltips are supplementary \u2014 they disappear on mouse leave, Escape, or scroll. Critical actions, warnings, or required instructions must be persistently visible, not hidden behind a hover interaction."
+    },
+    {
+      title: "Using Tooltip for form validation messages",
+      bad: '<Tooltip content="Email is required" variant="destructive"><TextInput /></Tooltip>',
+      good: '<TextInput error="Email is required" /> with visible inline error text below the field',
+      reason: "Validation errors must be persistently visible and programmatically associated via aria-describedby on the input. Tooltips are transient and will not pass WCAG 3.3.1 (Error Identification) or 3.3.3 (Error Suggestion)."
+    },
+    {
+      title: "Wrapping non-interactive elements without ensuring focusability",
+      bad: '<Tooltip content="Detail"><span>Some text</span></Tooltip>',
+      good: '<Tooltip content="Detail"><button type="button" className="...">Some text</button></Tooltip>',
+      reason: "The tooltip trigger uses onFocus/onBlur to show/hide. Plain <span> elements are not keyboard-focusable by default, so the tooltip will be invisible to keyboard and assistive technology users."
+    },
+    {
+      title: "Setting hideDelay to 0",
+      bad: '<Tooltip content="Gone instantly" hideDelay={0}>...',
+      good: '<Tooltip content="Persists briefly" hideDelay={150}>...',
+      reason: "A zero hide delay makes the tooltip disappear the instant the cursor leaves the trigger, violating WCAG 2.5.7 (Dragging Movements). Users need time to move their cursor into the tooltip body. Use at least 100\u2013150ms."
+    },
+    {
+      title: "Disabling ensureTouchTarget on interactive triggers",
+      bad: '<Tooltip ensureTouchTarget={false}><Button size="small">Tiny</Button></Tooltip>',
+      good: '<Tooltip ensureTouchTarget><Button size="small">Small</Button></Tooltip>',
+      reason: "ensureTouchTarget enforces WCAG 2.5.8 minimum target sizes. Only disable it for inline text tooltips where the surrounding text provides sufficient hit area. Interactive triggers like buttons need the minimum size."
+    }
+  ]
+};
+
+// src/divider.ts
+var dividerEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "divider",
+  name: "Divider",
+  type: "component",
+  category: "layout",
+  // ── Description ───────────────────────────────────────
+  description: "A compound divider component providing horizontal or vertical visual separation with labeled variants, customizable line styles, colors, thicknesses, and WCAG 2.2 AA accessibility.",
+  longDescription: "The Divider component uses the compound component pattern (Divider, Divider.Line, Divider.Label) to render visual separators between content sections. The root Divider controls orientation (horizontal/vertical) and spacing via design tokens. Divider.Line offers variant (solid/dashed/dotted), color (default/brand/success/warning/destructive/info), size (thin/normal/thick/bold), custom thickness, and opacity controls. Divider.Label renders text between line segments for labeled separators. The component automatically applies ARIA separator semantics when unlabeled, hides decorative dividers from assistive technology, and maps all colors to semantic design tokens via Tailwind classes.",
+  tags: [
+    "divider",
+    "separator",
+    "horizontal",
+    "vertical",
+    "line",
+    "label",
+    "layout",
+    "visual-separation",
+    "hr",
+    "a11y"
+  ],
+  useCases: [
+    "Separating distinct content sections within cards, panels, or page layouts",
+    'Creating labeled dividers with text like "OR" or "Continue with" between form sections',
+    "Vertical dividers between inline navigation items, breadcrumbs, or button groups",
+    "Decorative dividers with dashed, dotted, or colored lines for visual hierarchy",
+    "Themed status dividers using brand, success, warning, destructive, or info colors",
+    "Adjusting spacing between content blocks with consistent design token margins"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Divider",
+  files: [
+    { name: "Divider.tsx", description: "Root compound object assembling DividerRoot, DividerLine, and DividerLabel into a single namespace" },
+    { name: "DividerLine.tsx", description: "Line sub-component with variant, color, size, thickness, opacity, and orientation controls" },
+    { name: "DividerLabel.tsx", description: "Label sub-component rendering text between divider lines with color variants" },
+    { name: "types.ts", description: "TypeScript interfaces for all props plus design token maps for spacing, variants, colors, and sizes" },
+    { name: "index.ts", description: "Barrel export file re-exporting the Divider namespace and all type definitions" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Divider",
+  subComponents: [
+    {
+      name: "Line",
+      fileName: "DividerLine.tsx",
+      description: 'Renders a horizontal or vertical border line with variant, color, size, thickness, and opacity controls; always marked aria-hidden="true"',
+      props: [
+        {
+          name: "variant",
+          type: "'solid' | 'dashed' | 'dotted'",
+          required: false,
+          defaultValue: "'solid'",
+          description: "Line style variant mapped to CSS border-style",
+          options: ["solid", "dashed", "dotted"]
+        },
+        {
+          name: "color",
+          type: "'default' | 'brand' | 'success' | 'warning' | 'destructive' | 'info'",
+          required: false,
+          defaultValue: "'default'",
+          description: "Semantic color mapped to design tokens (border-border, border-brand, etc.)",
+          options: ["default", "brand", "success", "warning", "destructive", "info"]
+        },
+        {
+          name: "size",
+          type: "'thin' | 'normal' | 'thick' | 'bold'",
+          required: false,
+          defaultValue: "'normal'",
+          description: "Preset thickness mapped to pixel values (1/2/3/4px)",
+          options: ["thin", "normal", "thick", "bold"]
+        },
+        {
+          name: "thickness",
+          type: "number",
+          required: false,
+          description: "Custom thickness in pixels; overrides the size preset when provided"
+        },
+        {
+          name: "opacity",
+          type: "number",
+          required: false,
+          defaultValue: "1",
+          description: "Opacity value applied to the line (0\u20131)"
+        },
+        {
+          name: "orientation",
+          type: "'horizontal' | 'vertical'",
+          required: false,
+          defaultValue: "'horizontal'",
+          description: "Direction of the line; horizontal uses border-top, vertical uses border-left",
+          options: ["horizontal", "vertical"]
+        }
+      ]
+    },
+    {
+      name: "Label",
+      fileName: "DividerLabel.tsx",
+      description: "Renders a <span> with text between divider lines, styled with color variants and whitespace-nowrap",
+      props: [
+        {
+          name: "color",
+          type: "'default' | 'brand' | 'success' | 'warning' | 'destructive' | 'info'",
+          required: false,
+          defaultValue: "'default'",
+          description: "Semantic text color mapped to design tokens (text-muted-content, text-brand, etc.)",
+          options: ["default", "brand", "success", "warning", "destructive", "info"]
+        }
+      ]
+    }
+  ],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "orientation",
+      type: "'horizontal' | 'vertical'",
+      required: false,
+      defaultValue: "'horizontal'",
+      description: "Direction of the divider layout; horizontal uses flex-row, vertical uses flex-col",
+      options: ["horizontal", "vertical"]
+    },
+    {
+      name: "spacing",
+      type: "'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'",
+      required: false,
+      defaultValue: "'md'",
+      description: "Margin around the divider mapped to design tokens (my-0 through my-12 / mx-0 through mx-12)",
+      options: ["none", "sm", "md", "lg", "xl", "2xl"]
+    },
+    {
+      name: "decorative",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: 'When true, marks the divider as decorative with aria-hidden="true" to exclude it from the accessibility tree'
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  variants: {
+    propName: "variant",
+    options: ["solid", "dashed", "dotted"],
+    default: "solid"
+  },
+  sizes: {
+    propName: "size",
+    options: ["thin", "normal", "thick", "bold"],
+    default: "normal"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "decorative",
+      prop: "decorative",
+      isBoolean: true,
+      defaultValue: "false",
+      description: 'Hides the divider from assistive technology by applying aria-hidden="true" and removing the separator role'
+    },
+    {
+      name: "orientation",
+      prop: "orientation",
+      values: ["horizontal", "vertical"],
+      isBoolean: false,
+      defaultValue: "'horizontal'",
+      description: "Controls the layout direction and which border axis the line renders on"
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onClick",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fired when the root divider element is clicked; inherited from HTMLDivElement attributes"
+    },
+    {
+      name: "onMouseEnter",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fired when the mouse enters the root divider element"
+    },
+    {
+      name: "onMouseLeave",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fired when the mouse leaves the root divider element"
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "separator",
+    attributes: [
+      {
+        name: "role",
+        description: 'Applied as "separator" on unlabeled, non-decorative dividers to convey structural separation to assistive technology',
+        managedByComponent: true
+      },
+      {
+        name: "aria-orientation",
+        description: 'Set to match the orientation prop ("horizontal" or "vertical") on unlabeled, non-decorative dividers',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: 'Set to "true" on decorative dividers and on all Divider.Line elements to hide them from the accessibility tree',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [],
+    focusManagement: "Dividers are not focusable and do not participate in keyboard navigation.",
+    wcagLevel: "AA",
+    notes: 'Unlabeled dividers receive role="separator" and aria-orientation per WAI-ARIA separator pattern. Decorative dividers use aria-hidden="true". Labeled dividers (those with children/Label) omit the separator role since their text content is readable by assistive technology. Divider.Line elements are always aria-hidden="true" as decorative borders.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [{ name: "clsx" }],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "card",
+      reason: "Cards frequently use dividers to separate header, body, and footer sections"
+    },
+    {
+      slug: "button",
+      reason: "Vertical dividers commonly separate button groups in toolbars and action bars"
+    },
+    {
+      slug: "typography",
+      reason: "Divider.Label pairs with Typography elements for labeled section breaks"
+    },
+    {
+      slug: "modal",
+      reason: "Modals use dividers to separate header, content, and footer areas"
+    },
+    {
+      slug: "popover",
+      reason: "Popovers use dividers to separate menu groups and action sections"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Default Divider",
+      description: "A simple horizontal divider with default solid style, normal size, and medium spacing.",
+      code: `import { Divider } from 'vayu-ui';
+
+export default function DefaultDivider() {
+  return <Divider />;
+}`,
+      tags: ["basic", "default", "horizontal"]
+    },
+    {
+      title: "Vertical Divider",
+      description: "A vertical divider separating inline text items like navigation breadcrumbs.",
+      code: `import { Divider, Typography } from 'vayu-ui';
+
+export default function VerticalDivider() {
+  return (
+    <div className="flex items-center h-5 gap-2">
+      <Typography.P variant="secondary" className="text-sm">Blog</Typography.P>
+      <Divider orientation="vertical" />
+      <Typography.P variant="secondary" className="text-sm">Docs</Typography.P>
+      <Divider orientation="vertical" />
+      <Typography.P variant="secondary" className="text-sm">Source</Typography.P>
+    </div>
+  );
+}`,
+      tags: ["vertical", "navigation", "inline"]
+    },
+    {
+      title: "Labeled Divider",
+      description: "A divider with a text label between two line segments using the compound pattern.",
+      code: `import { Divider } from 'vayu-ui';
+
+export default function LabeledDivider() {
+  return (
+    <Divider>
+      <Divider.Line />
+      <Divider.Label>OR</Divider.Label>
+      <Divider.Line />
+    </Divider>
+  );
+}`,
+      tags: ["label", "compound", "text"]
+    },
+    {
+      title: "Variants and Colors",
+      description: "Dividers with dashed, dotted, and solid variants in brand, success, warning, destructive, and info colors.",
+      code: `import { Divider } from 'vayu-ui';
+
+export default function VariantColorDivider() {
+  return (
+    <div className="space-y-4">
+      <Divider>
+        <Divider.Line variant="dashed" />
+        <Divider.Label>Dashed</Divider.Label>
+      </Divider>
+
+      <Divider>
+        <Divider.Label>Dotted</Divider.Label>
+        <Divider.Line variant="dotted" />
+      </Divider>
+
+      <Divider>
+        <Divider.Line variant="solid" color="brand" />
+        <Divider.Label color="brand">Solid Brand</Divider.Label>
+        <Divider.Line variant="solid" color="brand" />
+      </Divider>
+
+      <Divider>
+        <Divider.Line variant="solid" color="success" />
+        <Divider.Label color="success">Success</Divider.Label>
+        <Divider.Line variant="solid" color="success" />
+      </Divider>
+    </div>
+  );
+}`,
+      tags: ["variants", "dashed", "dotted", "colors", "brand", "success"]
+    },
+    {
+      title: "Sizes",
+      description: "Dividers with thin, normal, thick, and bold line sizes using the size prop.",
+      code: `import { Divider } from 'vayu-ui';
+
+export default function SizeDivider() {
+  return (
+    <div className="space-y-4">
+      <Divider spacing="sm">
+        <Divider.Line size="thin" />
+        <Divider.Label>Thin</Divider.Label>
+        <Divider.Line size="thin" />
+      </Divider>
+      <Divider spacing="sm">
+        <Divider.Line size="normal" />
+        <Divider.Label>Normal</Divider.Label>
+        <Divider.Line size="normal" />
+      </Divider>
+      <Divider spacing="sm">
+        <Divider.Line size="thick" />
+        <Divider.Label>Thick</Divider.Label>
+        <Divider.Line size="thick" />
+      </Divider>
+      <Divider spacing="sm">
+        <Divider.Line size="bold" />
+        <Divider.Label>Bold</Divider.Label>
+        <Divider.Line size="bold" />
+      </Divider>
+    </div>
+  );
+}`,
+      tags: ["sizes", "thin", "normal", "thick", "bold"]
+    },
+    {
+      title: "Spacing",
+      description: "Dividers with all spacing options from none to 2xl, demonstrating consistent design token margins.",
+      code: `import { Divider } from 'vayu-ui';
+
+export default function SpacingDivider() {
+  return (
+    <div className="space-y-4">
+      <Divider spacing="none" />
+      <Divider spacing="sm" />
+      <Divider spacing="md" />
+      <Divider spacing="lg" />
+      <Divider spacing="xl" />
+      <Divider spacing="2xl" />
+    </div>
+  );
+}`,
+      tags: ["spacing", "margins", "none", "sm", "md", "lg", "xl"]
+    },
+    {
+      title: "With Buttons",
+      description: "A vertical divider separating two buttons in an inline button group.",
+      code: `import { Divider, Button } from 'vayu-ui';
+
+export default function ButtonDivider() {
+  return (
+    <div className="flex items-center gap-4">
+      <Button variant="primary" size="small">Sign In</Button>
+      <Divider orientation="vertical" spacing="none" />
+      <Button variant="outline" size="small">Register</Button>
+    </div>
+  );
+}`,
+      tags: ["buttons", "vertical", "group", "action"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using a labeled divider without Divider.Line children",
+      bad: "<Divider><Divider.Label>OR</Divider.Label></Divider>",
+      good: "<Divider><Divider.Line /><Divider.Label>OR</Divider.Label><Divider.Line /></Divider>",
+      reason: "Without Divider.Line children, the label has no visual line segments flanking it. Always pair Label with at least one Line for a proper visual divider."
+    },
+    {
+      title: 'Setting decorative="true" on a labeled divider',
+      bad: "<Divider decorative><Divider.Label>Section</Divider.Label></Divider>",
+      good: "<Divider decorative /><Divider.Label>Section</Divider.Label>",
+      reason: 'Decorative hides the divider from assistive technology with aria-hidden="true", but a labeled divider has readable content. Use decorative only on visual-only dividers, and keep label text accessible.'
+    },
+    {
+      title: "Hardcoding colors instead of using the color prop",
+      bad: '<Divider.Line className="border-red-500" />',
+      good: '<Divider.Line color="destructive" />',
+      reason: "Hardcoded Tailwind colors bypass design tokens and will not adapt to theme changes (light/dark mode). The color prop maps to semantic tokens that ensure consistent theming."
+    },
+    {
+      title: 'Using a horizontal divider inside a vertical flex container without orientation="vertical"',
+      bad: '<div className="flex flex-col"><Divider /></div>',
+      good: '<div className="flex flex-col"><Divider orientation="vertical" /></div>',
+      reason: "A horizontal divider inside a vertical flex container will not render correctly. Match the divider orientation to the flex direction of its parent for proper visual alignment."
+    },
+    {
+      title: "Overriding spacing with arbitrary margins instead of the spacing prop",
+      bad: '<Divider className="my-8" />',
+      good: '<Divider spacing="xl" />',
+      reason: "Using arbitrary margins breaks the design token system. The spacing prop uses consistent token values (none/sm/md/lg/xl/2xl) that adapt to both horizontal and vertical orientations automatically."
+    }
+  ]
+};
+
+// src/components/fileupload.ts
+var fileUploadEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "file-upload",
+  name: "FileUpload",
+  type: "component",
+  category: "inputs",
+  // ── Description ───────────────────────────────────────
+  description: "A compound file upload component providing drag-and-drop zone, file list with progress, validation errors, and action buttons with WCAG 2.2 AA accessibility.",
+  longDescription: 'The FileUpload component uses the compound component pattern (FileUpload, FileUpload.DropZone, FileUpload.DropZoneContent, FileUpload.ErrorMessage, FileUpload.List, FileUpload.Actions) to provide a complete file upload experience. The root FileUpload manages state via React Context \u2014 tracking files with metadata (id, progress, status), validation errors, and drag state. DropZone handles drag-and-drop events, keyboard activation, and hidden file input. DropZoneContent renders default upload instructions with icon. List renders selected files with per-item progress bars, file type icons, and remove buttons. ErrorMessage displays validation alerts with aria-live="polite". Actions provides Clear All and Upload Files buttons. The component validates file size, type, and count, supports keyboard navigation (Enter/Space to open dialog), manages focus back to DropZone when the file list empties, and uses ARIA roles throughout (region, button, alert, progressbar, list).',
+  tags: [
+    "file-upload",
+    "upload",
+    "drag-and-drop",
+    "dropzone",
+    "file-input",
+    "progress",
+    "validation",
+    "input",
+    "form",
+    "a11y"
+  ],
+  useCases: [
+    "Uploading documents (PDF, DOC, TXT) with size and type validation",
+    "Uploading images with format restrictions and file count limits",
+    "Drag-and-drop file selection with visual feedback during hover",
+    "Multi-file upload with per-file progress bars and status tracking",
+    "File upload forms with validation error messages for oversized or unsupported files"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "FileUpload",
+  files: [
+    { name: "FileUpload.tsx", description: "Root provider component managing file state, validation, upload simulation, and context distribution" },
+    { name: "DropZone.tsx", description: "Drag-and-drop zone with keyboard activation, hidden file input, and visual drag feedback" },
+    { name: "DropZoneContent.tsx", description: "Default drop zone content with upload icon, instructions, and file size hint" },
+    { name: "FileUploadList.tsx", description: "File list wrapper with focus management back to DropZone when list empties" },
+    { name: "FileUploadItem.tsx", description: "Individual file row with icon, name, size, progress bar, and remove button" },
+    { name: "FileUploadActions.tsx", description: "Clear All and Upload Files action buttons shown when files are present" },
+    { name: "FileUploadErrorMessage.tsx", description: 'Validation error alert with icon and aria-live="polite" announcement' },
+    { name: "hooks.ts", description: "React Context and useFileUpload hook for accessing upload state from sub-components" },
+    { name: "utils.tsx", description: "formatFileSize helper and getFileIcon utility returning SVG icons by file extension" },
+    { name: "types.ts", description: "TypeScript interfaces for FileWithMeta, FileUploadProps, and FileUploadContextValue" },
+    { name: "index.ts", description: "Barrel export assembling the compound FileUpload namespace and re-exporting FileWithMeta type" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "FileUpload",
+  subComponents: [
+    {
+      name: "DropZone",
+      fileName: "DropZone.tsx",
+      description: 'Drag-and-drop zone with role="button", keyboard activation (Enter/Space), hidden file input, and visual drag-over feedback',
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content rendered inside the drop zone, typically DropZoneContent"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the drop zone container"
+        }
+      ]
+    },
+    {
+      name: "DropZoneContent",
+      fileName: "DropZoneContent.tsx",
+      description: 'Default drop zone content with upload SVG icon, "Drop files here" heading, browse instructions, and max size hint',
+      props: []
+    },
+    {
+      name: "ErrorMessage",
+      fileName: "FileUploadErrorMessage.tsx",
+      description: 'Validation error alert rendered as role="alert" with aria-live="polite", displays file size, type, and count errors',
+      props: []
+    },
+    {
+      name: "List",
+      fileName: "FileUploadList.tsx",
+      description: 'File list rendered as <ul role="list"> with per-item progress bars; auto-focuses DropZone when list empties',
+      props: []
+    },
+    {
+      name: "Actions",
+      fileName: "FileUploadActions.tsx",
+      description: "Clear All and Upload Files action buttons shown only when files are present",
+      props: []
+    }
+  ],
+  hooks: ["useFileUpload"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Compound sub-components composing the upload UI (DropZone, ErrorMessage, List, Actions)"
+    },
+    {
+      name: "maxSize",
+      type: "number",
+      required: false,
+      defaultValue: "10485760",
+      description: "Maximum file size in bytes (default 10MB); files exceeding this are rejected with an error message"
+    },
+    {
+      name: "accept",
+      type: "string",
+      required: false,
+      defaultValue: "'.pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.txt,.csv'",
+      description: "Comma-separated list of accepted file extensions passed to the hidden file input and used for validation"
+    },
+    {
+      name: "maxFiles",
+      type: "number",
+      required: false,
+      defaultValue: "5",
+      description: "Maximum number of files allowed; attempts to exceed this trigger a validation error"
+    },
+    {
+      name: "onUpload",
+      type: "(files: FileWithMeta[]) => void",
+      required: false,
+      description: "Callback fired when the simulated upload completes for all files, receiving the full file list with completed status"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "dragging",
+      prop: "isDragging",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Indicates a file is being dragged over the drop zone; triggers visual feedback (brand border, scale, pulse animation)"
+    },
+    {
+      name: "uploading",
+      prop: "file.status",
+      values: ["pending", "uploading", "completed", "error"],
+      isBoolean: false,
+      defaultValue: "'pending'",
+      description: "Per-file upload status tracked in FileWithMeta; uploading shows a progress bar, completed stops animation"
+    },
+    {
+      name: "error",
+      prop: "errorMsg",
+      isBoolean: false,
+      defaultValue: "null",
+      description: 'Current validation error message; displayed by ErrorMessage component with role="alert" when non-null'
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onUpload",
+      signature: "(files: FileWithMeta[]) => void",
+      description: 'Fired when all file uploads complete; receives the full array of files with status "completed"'
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "region",
+    attributes: [
+      {
+        name: "aria-label",
+        description: 'Root container has aria-label="File Upload"; DropZone has aria-label="Upload files by dropping them here or clicking to browse"; hidden input has aria-label="Select files to upload"; progress bars have aria-label="${filename} upload progress"; remove buttons have aria-label="Remove ${filename}"',
+        managedByComponent: true
+      },
+      {
+        name: "aria-describedby",
+        description: 'DropZone links to id="upload-instructions" in DropZoneContent for screen reader instructions',
+        managedByComponent: true
+      },
+      {
+        name: 'aria-live="polite"',
+        description: 'ErrorMessage component uses aria-live="polite" to announce validation errors to screen readers without interrupting',
+        managedByComponent: true
+      },
+      {
+        name: "aria-valuenow",
+        description: 'Progress bar on each uploading file uses aria-valuenow, aria-valuemin="0", and aria-valuemax="100" for progress announcements',
+        managedByComponent: true
+      },
+      {
+        name: 'role="button"',
+        description: 'DropZone has role="button" and tabIndex={0} for keyboard-accessible file selection',
+        managedByComponent: true
+      },
+      {
+        name: 'role="alert"',
+        description: 'ErrorMessage container uses role="alert" to ensure validation errors are announced by screen readers',
+        managedByComponent: true
+      },
+      {
+        name: 'role="progressbar"',
+        description: `Each uploading file's progress bar uses role="progressbar" with aria-valuenow/min/max for assistive technology`,
+        managedByComponent: true
+      },
+      {
+        name: 'role="list"',
+        description: 'File list uses role="list" with aria-label="Selected files" for structured file enumeration',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Enter",
+        behavior: "Opens the native file picker dialog when DropZone is focused"
+      },
+      {
+        key: "Space",
+        behavior: "Opens the native file picker dialog when DropZone is focused"
+      },
+      {
+        key: "Tab",
+        behavior: "Moves focus between DropZone, file list items, remove buttons, and action buttons"
+      }
+    ],
+    focusManagement: "When the file list becomes empty (all files removed or cleared), focus automatically returns to the DropZone element via dropZoneRef.current?.focus(). Remove buttons are disabled during upload to prevent accidental removal.",
+    wcagLevel: "AA",
+    notes: 'The root container uses role="region" with aria-label="File Upload" to create a landmark. DropZone is keyboard-accessible via role="button" + tabIndex={0} + Enter/Space handlers. Validation errors use aria-live="polite" and role="alert" for non-intrusive announcements. Progress bars include full ARIA progressbar attributes. Focus is programmatically returned to DropZone when the file list empties per WCAG focus management guidelines.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "FileUpload.Actions renders Clear All and Upload Files buttons alongside the upload component"
+    },
+    {
+      slug: "typography",
+      reason: "Typography headings and labels commonly label upload sections and describe accepted formats"
+    },
+    {
+      slug: "card",
+      reason: "File upload is often placed inside a Card container for structured form layouts"
+    },
+    {
+      slug: "divider",
+      reason: "Dividers separate multiple upload sections (e.g., image upload vs document upload) on the same page"
+    },
+    {
+      slug: "alert",
+      reason: "Upload error states align with Alert status patterns for consistent error feedback across the app"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic File Upload",
+      description: "A basic file upload with default settings accepting common document and image formats, up to 5 files at 10MB each.",
+      code: `import { FileUpload } from 'vayu-ui';
+
+export default function BasicUpload() {
+  return (
+    <FileUpload>
+      <FileUpload.DropZone>
+        <FileUpload.DropZoneContent />
+      </FileUpload.DropZone>
+      <FileUpload.ErrorMessage />
+      <FileUpload.List />
+      <FileUpload.Actions />
+    </FileUpload>
+  );
+}`,
+      tags: ["basic", "default", "upload"]
+    },
+    {
+      title: "Image Upload",
+      description: "An image-only upload restricted to image/* types with a 5MB size limit and maximum of 3 files.",
+      code: `import { FileUpload } from 'vayu-ui';
+
+export default function ImageUpload() {
+  return (
+    <FileUpload
+      accept="image/*"
+      maxSize={5 * 1024 * 1024}
+      maxFiles={3}
+      onUpload={(files) => console.log('Uploading:', files)}
+    >
+      <FileUpload.DropZone>
+        <FileUpload.DropZoneContent />
+      </FileUpload.DropZone>
+      <FileUpload.ErrorMessage />
+      <FileUpload.List />
+      <FileUpload.Actions />
+    </FileUpload>
+  );
+}`,
+      tags: ["image", "restrict", "accept", "validation"]
+    },
+    {
+      title: "Document Upload",
+      description: "A document upload restricted to PDF, DOC, DOCX, and TXT files with a 10MB size limit and 5 files maximum.",
+      code: `import { FileUpload } from 'vayu-ui';
+
+export default function DocumentUpload() {
+  return (
+    <FileUpload accept=".pdf,.doc,.docx,.txt" maxSize={10 * 1024 * 1024} maxFiles={5}>
+      <FileUpload.DropZone>
+        <FileUpload.DropZoneContent />
+      </FileUpload.DropZone>
+      <FileUpload.ErrorMessage />
+      <FileUpload.List />
+      <FileUpload.Actions />
+    </FileUpload>
+  );
+}`,
+      tags: ["document", "pdf", "doc", "restrict"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using sub-components outside the FileUpload provider",
+      bad: "<FileUpload.DropZone>...</FileUpload.DropZone>",
+      good: "<FileUpload><FileUpload.DropZone>...</FileUpload.DropZone></FileUpload>",
+      reason: 'Sub-components use the useFileUpload hook which requires FileUploadContext. Using them outside the provider throws "FileUpload components must be used within <FileUpload>".'
+    },
+    {
+      title: "Omitting DropZone from the composition",
+      bad: "<FileUpload><FileUpload.List /></FileUpload>",
+      good: "<FileUpload><FileUpload.DropZone><FileUpload.DropZoneContent /></FileUpload.DropZone><FileUpload.List /></FileUpload>",
+      reason: "Without DropZone, users have no way to select or drag files. DropZone renders the hidden file input and drag-and-drop handlers that make file selection possible."
+    },
+    {
+      title: "Hardcoding maxSize instead of using the prop",
+      bad: '<FileUpload><FileUpload.DropZone className="max-w-md" /></FileUpload>',
+      good: "<FileUpload maxSize={20 * 1024 * 1024}>",
+      reason: 'The maxSize prop drives both server-side validation and the default "Max 10MB per file" hint in DropZoneContent. Hardcoding styles or custom text breaks the validation-UI consistency.'
+    },
+    {
+      title: "Overriding DropZone drag event handlers",
+      bad: "<FileUpload.DropZone onDragOver={(e) => e.preventDefault()}>",
+      good: "<FileUpload.DropZone>",
+      reason: "DropZone internally manages onDragOver, onDragLeave, onDrop, and onkeydown for state management. Overriding these handlers breaks drag-and-drop functionality and keyboard activation."
+    },
+    {
+      title: "Removing files during upload without checking status",
+      bad: "files.forEach(f => removeFile(f.id))",
+      good: 'files.filter(f => f.status !== "uploading").forEach(f => removeFile(f.id))',
+      reason: "The remove button is disabled during upload for a reason. Programmatically removing uploading files can leave the upload simulation in an inconsistent state. Always check file.status before removing."
+    }
+  ]
+};
+
+// src/components/otp-input.ts
+var otpInputEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "otp-input",
+  name: "OTPInput",
+  type: "component",
+  category: "inputs",
+  // ── Description ───────────────────────────────────────
+  description: "An accessible one-time password input component with individual character slots, auto-advance, and support for grouped layouts with separators.",
+  longDescription: 'The OTPInput component uses the compound component pattern (OTPInput.Root, OTPInput.Group, OTPInput.Slot, OTPInput.Separator) to build accessible OTP/PIN entry fields. It renders a hidden native input with inputMode="numeric" and autoComplete="one-time-code" for mobile autofill, while displaying individual character slots with a blinking caret. Supports controlled and uncontrolled modes, error states with aria-invalid, disabled state, and grouped layouts with visual separators for patterns like 3-3 or 4-2 splits.',
+  tags: [
+    "otp",
+    "pin",
+    "verification",
+    "authentication",
+    "2fa",
+    "two-factor",
+    "code",
+    "input",
+    "numeric",
+    "form"
+  ],
+  useCases: [
+    "Two-factor authentication code entry during login flows",
+    "PIN verification for account recovery or transaction confirmation",
+    "Numeric confirmation dialogs for sensitive actions",
+    "SMS-based one-time code verification with mobile autofill support",
+    "Email verification code entry during signup",
+    "Grouped OTP layouts with separators for readability (e.g. 3-3 split)"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "OTPInput",
+  files: [
+    { name: "OTPInput.tsx", description: "Root component with context provider and hidden native input handling focus, value, and keyboard events" },
+    { name: "OTPInputGroup.tsx", description: "Presentational wrapper for grouping character slots" },
+    { name: "OTPInputSlot.tsx", description: "Individual character slot with active focus ring, filled state styling, and blinking caret" },
+    { name: "OTPSeparator.tsx", description: "Visual separator between slot groups with a default dot indicator" },
+    { name: "types.ts", description: "TypeScript type definitions for all component props and context value" },
+    { name: "index.ts", description: "Barrel export file assembling the compound component and re-exporting types" },
+    { name: "README.md", description: "Component documentation and usage guidelines", optional: true }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "OTPInput",
+  subComponents: [
+    {
+      name: "Group",
+      fileName: "OTPInputGroup.tsx",
+      description: "Presentational flex wrapper for grouping character slots. Use multiple Groups with Separators between them for split layouts (e.g. 3-3).",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: false,
+          description: "Slot elements to group together."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the group wrapper div."
+        }
+      ]
+    },
+    {
+      name: "Slot",
+      fileName: "OTPInputSlot.tsx",
+      description: "Renders an individual character slot with active focus ring, filled state background, error styling, and an animated blinking caret on the active empty slot.",
+      props: [
+        {
+          name: "index",
+          type: "number",
+          required: true,
+          description: "Zero-based position of this slot within the OTP code. Determines which character to display and which slot shows the caret."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the slot div."
+        }
+      ]
+    },
+    {
+      name: "Separator",
+      fileName: "OTPSeparator.tsx",
+      description: "Renders a visual separator between Groups. Displays a small dot by default, or custom children.",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: false,
+          description: "Custom separator content. Defaults to a small muted dot."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the separator div."
+        }
+      ]
+    }
+  ],
+  hooks: ["useOTPInput"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "value",
+      type: "string",
+      required: false,
+      description: "Controlled OTP value. When provided, the component operates in controlled mode."
+    },
+    {
+      name: "onChange",
+      type: "(value: string) => void",
+      required: false,
+      description: "Callback fired when the value changes. Receives the current numeric string (digits only)."
+    },
+    {
+      name: "maxLength",
+      type: "number",
+      required: false,
+      defaultValue: "6",
+      description: "Maximum number of digits in the OTP code. Determines how many Slots to render and when onComplete fires."
+    },
+    {
+      name: "onComplete",
+      type: "(code: string) => void",
+      required: false,
+      description: "Callback fired when all digits are entered. Receives the complete code string."
+    },
+    {
+      name: "label",
+      type: "string",
+      required: false,
+      defaultValue: '"One-time password"',
+      description: "Accessible label for the input group. Applied as aria-label on both the group container and hidden input."
+    },
+    {
+      name: "hasError",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Whether the input has a validation error. Applies destructive styling to slots and sets aria-invalid on the input."
+    },
+    {
+      name: "errorMessageId",
+      type: "string",
+      required: false,
+      description: "ID of the element that describes the error message. Linked to the input via aria-errormessage."
+    },
+    {
+      name: "containerClassName",
+      type: "string",
+      required: false,
+      description: "CSS classes applied to the outermost container div wrapping the visual slots."
+    },
+    {
+      name: "autoFocus",
+      type: "boolean",
+      required: false,
+      description: "Whether the input should auto-focus on mount."
+    },
+    {
+      name: "disabled",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Disables the input, preventing user interaction and applying reduced opacity."
+    },
+    {
+      name: "id",
+      type: "string",
+      required: false,
+      description: "Custom ID for the hidden input element. Auto-generated via useId() if not provided."
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  // No variant or size props — fixed styling with state-based theming
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "focused",
+      prop: "autoFocus",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "The active slot shows a ring-2 focus indicator and a blinking caret when the input is focused. Auto-focusable on mount via autoFocus."
+    },
+    {
+      name: "disabled",
+      prop: "disabled",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Prevents user interaction, applies opacity-50 and cursor-not-allowed, and sets aria-disabled on the group container."
+    },
+    {
+      name: "error",
+      prop: "hasError",
+      isBoolean: true,
+      defaultValue: "false",
+      description: 'Applies destructive border and text color to slots, sets aria-invalid="true" on the hidden input, and shows destructive focus ring on the active slot.'
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onChange",
+      signature: "(value: string) => void",
+      description: "Fired each time a digit is entered or deleted. Receives the current numeric string value with only digits."
+    },
+    {
+      name: "onComplete",
+      signature: "(code: string) => void",
+      description: "Fired when the value length reaches maxLength. Receives the complete OTP code string. Useful for auto-submitting verification."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "group",
+    attributes: [
+      {
+        name: "aria-label",
+        description: 'Applied to both the group container and the hidden input. Defaults to "One-time password" via the label prop.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-disabled",
+        description: "Applied to the group container when the disabled prop is true.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-invalid",
+        description: "Set to true on the hidden input when hasError is true, indicating a validation error to screen readers.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-errormessage",
+        description: "Set on the hidden input to reference the error message element by ID when errorMessageId is provided.",
+        managedByComponent: false
+      },
+      {
+        name: "aria-describedby",
+        description: "Combined from errorMessageId and any user-provided aria-describedby on the root. Links descriptive content to the input.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: 'Set to "true" on all Slot and Separator elements to prevent double-announcement \u2014 the hidden native input handles screen reader output.',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "0-9",
+        behavior: "Appends a digit to the value. Non-numeric characters are stripped automatically."
+      },
+      {
+        key: "Backspace",
+        behavior: "Removes the last digit from the value."
+      },
+      {
+        key: "Tab",
+        behavior: "Moves focus to or from the hidden input element."
+      }
+    ],
+    focusManagement: "A single hidden input element manages focus. Clicking anywhere on the slot group focuses the input. The active slot (determined by current value length) shows a ring-2 focus indicator and a blinking caret animation.",
+    wcagLevel: "AA",
+    notes: 'Uses a hidden native input with inputMode="numeric" and autoComplete="one-time-code" for mobile browser autofill compatibility. All visual slot and separator elements use aria-hidden="true" to prevent double-announcement. The group container uses role="group" with an aria-label. Error states are communicated via aria-invalid and aria-errormessage on the input. The input strips non-digit characters and enforces maxLength.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Used for submit/reset actions alongside the OTP input in verification forms"
+    },
+    {
+      slug: "text-input",
+      reason: "Commonly paired with email/phone inputs in authentication flows"
+    },
+    {
+      slug: "typography",
+      reason: "Used for labels, descriptions, and error messages around the OTP input"
+    },
+    {
+      slug: "alert",
+      reason: "Used to display verification status feedback (success or error) after OTP submission"
+    },
+    {
+      slug: "divider",
+      reason: "Used to separate different OTP configuration examples in demo layouts"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Controlled OTP Input",
+      description: "A controlled 6-digit OTP input with value state tracking and an onComplete callback.",
+      code: `import { OTPInput } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function BasicOTP() {
+  const [value, setValue] = useState('');
+
+  return (
+    <OTPInput.Root
+      value={value}
+      onChange={setValue}
+      maxLength={6}
+      onComplete={(code) => console.log('Complete:', code)}
+    >
+      <OTPInput.Group>
+        <OTPInput.Slot index={0} />
+        <OTPInput.Slot index={1} />
+        <OTPInput.Slot index={2} />
+        <OTPInput.Slot index={3} />
+        <OTPInput.Slot index={4} />
+        <OTPInput.Slot index={5} />
+      </OTPInput.Group>
+    </OTPInput.Root>
+  );
+}`,
+      tags: ["basic", "controlled", "default"]
+    },
+    {
+      title: "Grouped with Separator",
+      description: "A 6-digit OTP input split into two groups of 3 with a visual separator between them.",
+      code: `import { OTPInput } from 'vayu-ui';
+
+export default function GroupedOTP() {
+  return (
+    <OTPInput.Root maxLength={6}>
+      <OTPInput.Group>
+        <OTPInput.Slot index={0} />
+        <OTPInput.Slot index={1} />
+        <OTPInput.Slot index={2} />
+      </OTPInput.Group>
+      <OTPInput.Separator />
+      <OTPInput.Group>
+        <OTPInput.Slot index={3} />
+        <OTPInput.Slot index={4} />
+        <OTPInput.Slot index={5} />
+      </OTPInput.Group>
+    </OTPInput.Root>
+  );
+}`,
+      tags: ["grouped", "separator", "layout"]
+    },
+    {
+      title: "Error State",
+      description: "An OTP input displaying error styling with a validation error message.",
+      code: `import { OTPInput } from 'vayu-ui';
+
+export default function ErrorOTP() {
+  return (
+    <>
+      <OTPInput.Root maxLength={6} hasError>
+        <OTPInput.Group>
+          <OTPInput.Slot index={0} />
+          <OTPInput.Slot index={1} />
+          <OTPInput.Slot index={2} />
+          <OTPInput.Slot index={3} />
+          <OTPInput.Slot index={4} />
+          <OTPInput.Slot index={5} />
+        </OTPInput.Group>
+      </OTPInput.Root>
+      <p className="text-destructive text-sm">Invalid code. Please try again.</p>
+    </>
+  );
+}`,
+      tags: ["error", "validation", "destructive"]
+    },
+    {
+      title: "Disabled",
+      description: "A disabled OTP input preventing user interaction with reduced opacity.",
+      code: `import { OTPInput } from 'vayu-ui';
+
+export default function DisabledOTP() {
+  return (
+    <OTPInput.Root maxLength={6} disabled>
+      <OTPInput.Group>
+        <OTPInput.Slot index={0} />
+        <OTPInput.Slot index={1} />
+        <OTPInput.Slot index={2} />
+        <OTPInput.Slot index={3} />
+        <OTPInput.Slot index={4} />
+        <OTPInput.Slot index={5} />
+      </OTPInput.Group>
+    </OTPInput.Root>
+  );
+}`,
+      tags: ["disabled", "readonly"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using Slot outside OTPInput.Root",
+      bad: "<div><OTPInput.Slot index={0} /></div>",
+      good: "<OTPInput.Root><OTPInput.Group><OTPInput.Slot index={0} /></OTPInput.Group></OTPInput.Root>",
+      reason: "OTPInput.Slot reads state from OTPInputContext via useOTPInput(). Using it outside OTPInput.Root throws an error because no context provider exists."
+    },
+    {
+      title: "Using onChange with React.ChangeEvent signature",
+      bad: "<OTPInput.Root onChange={(e: React.ChangeEvent<HTMLInputElement>) => ...} />",
+      good: "<OTPInput.Root onChange={(value: string) => ...} />",
+      reason: "The OTPInput onChange prop receives a string (the current numeric value), not a React ChangeEvent. The component's types omit the HTML input onChange to prevent this mistake."
+    },
+    {
+      title: "Hardcoding error styling on Slots",
+      bad: '<OTPInput.Slot index={0} className="border-red-500 text-red-500" />',
+      good: "<OTPInput.Root hasError><OTPInput.Slot index={0} /></OTPInput.Root>",
+      reason: 'Hardcoding colors bypasses design tokens (destructive) and does not set aria-invalid="true" on the input. Always use the hasError prop for proper styling and accessibility.'
+    },
+    {
+      title: "Rendering non-numeric input characters",
+      bad: '<OTPInput.Root maxLength={6}><input type="text" /></OTPInput.Root>',
+      good: 'Use the component as-is \u2014 the hidden input already has inputMode="numeric" and pattern="[0-9]*" to enforce digits only.',
+      reason: "The hidden input strips non-digit characters (\\D) automatically. Adding your own input element inside OTPInput.Root breaks the compound pattern and conflicts with internal state management."
+    },
+    {
+      title: "Using errorMessageId without a matching error element",
+      bad: '<OTPInput.Root hasError errorMessageId="otp-error" />',
+      good: '<OTPInput.Root hasError errorMessageId="otp-error" />\n<p id="otp-error" role="alert">Invalid code</p>',
+      reason: "errorMessageId sets aria-errormessage on the input, referencing an element by ID. Without a matching element, screen readers cannot locate the error description, making the error state inaccessible."
+    }
+  ]
+};
+
+// src/components/text-input.ts
+var textInputEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "text-input",
+  name: "TextInput",
+  type: "component",
+  category: "inputs",
+  // ── Description ───────────────────────────────────────
+  description: "A compound text input component supporting multiple input types, validation states, character counting, and specialized variants like password, number, and search inputs.",
+  longDescription: "The TextInput component uses the compound component pattern (TextInput.Label, TextInput.Field, TextInput.Input, etc.) to build accessible form inputs. It supports controlled and uncontrolled modes, multiple input types (text, email, password, number, tel, url, search), four validation states (default, error, warning, success), three sizes (sm, md, lg), character counting with configurable display modes, a clear button, and a loading spinner. Specialized sub-components include PasswordInput with a visibility toggle, NumberInput with keyboard-filtered numeric validation and min/max constraints, and SearchInput with a built-in search icon. All ARIA attributes (labelledby, describedby, invalid, required) are managed automatically via React context.",
+  tags: [
+    "input",
+    "text",
+    "email",
+    "password",
+    "number",
+    "search",
+    "tel",
+    "url",
+    "form",
+    "validation",
+    "field",
+    "text-field"
+  ],
+  useCases: [
+    "Email address input with icon and validation message",
+    "Password entry with show/hide toggle and strength feedback",
+    "Numeric input with integer, decimal, positive, or natural number constraints",
+    "Search bar with clear button and controlled value",
+    "Form fields with required/optional indicators and description text",
+    "Input with character count limit and near-limit warning",
+    "Multi-state form validation displaying error, warning, or success messages"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "TextInput",
+  files: [
+    { name: "TextInput.tsx", description: "Root component with context provider managing value, focus, validation, and state for all sub-components" },
+    { name: "Input.tsx", description: "Base input element with ARIA attributes (labelledby, describedby, invalid, required) and icon slot support" },
+    { name: "TextInputField.tsx", description: "Field wrapper applying size-based padding, validation border colors, and focus ring styling" },
+    { name: "TextInputLabel.tsx", description: "Label with htmlFor linkage, required asterisk indicator, and optional badge support" },
+    { name: "TextInputDescription.tsx", description: "Helper text linked to the input via aria-describedby" },
+    { name: "TextInputErrorMessage.tsx", description: 'Error message with role="alert" and aria-live, conditionally shown when validationState is "error"' },
+    { name: "TextInputWarningMessage.tsx", description: 'Warning message with role="status" and aria-live, conditionally shown when validationState is "warning"' },
+    { name: "TextInputSuccessMessage.tsx", description: 'Success message with role="status" and aria-live, conditionally shown when validationState is "success"' },
+    { name: "TextInputIcon.tsx", description: "Icon wrapper for left/right icons within the field" },
+    { name: "TextInputClearButton.tsx", description: 'Clear button that appears when the input has a value, with aria-label="Clear input"' },
+    { name: "TextInputCharacterCount.tsx", description: "Character count display with configurable visibility (always, focus, near-limit) and threshold" },
+    { name: "TextInputLoadingSpinner.tsx", description: "Animated spinner shown when the loading prop is true" },
+    { name: "TextInputPasswordInput.tsx", description: "Password input with visibility toggle (Eye/EyeClosed icons) and aria-label on toggle button" },
+    { name: "TextInputNumberInput.tsx", description: "Number input with keyboard filtering, paste validation, and min/max blur constraints per numberType" },
+    { name: "TextInputSearchInput.tsx", description: "Search input with built-in Search icon from lucide-react" },
+    { name: "types.ts", description: "TypeScript type definitions for all component props, context value, and union types" },
+    { name: "index.ts", description: "Barrel export file assembling the compound component and re-exporting types" },
+    { name: "README.md", description: "Component documentation and usage guidelines", optional: true }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "TextInput",
+  subComponents: [
+    {
+      name: "Label",
+      fileName: "TextInputLabel.tsx",
+      description: 'Renders a label element linked to the input via htmlFor/id. Shows a required asterisk when the root required prop is true, or an "(optional)" badge when the optional prop is set.',
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Label text content."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the label element."
+        },
+        {
+          name: "optional",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: 'When true, displays an "(optional)" badge next to the label text.'
+        }
+      ]
+    },
+    {
+      name: "Field",
+      fileName: "TextInputField.tsx",
+      description: "Wraps the input and icons in a styled container. Applies size-based padding, validation border colors (destructive, warning, success), and focus ring styling. Handles focus/blur events to update context state.",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Input element and optional icons to render inside the field."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the field wrapper."
+        }
+      ]
+    },
+    {
+      name: "Input",
+      fileName: "Input.tsx",
+      description: "The base HTML input element with automatic ARIA attributes (aria-labelledby, aria-describedby, aria-invalid, aria-required). Merges the internal ref with a forwarded ref. Supports left and right icon slots.",
+      props: [
+        {
+          name: "leftIcon",
+          type: "React.ReactNode",
+          required: false,
+          description: "Icon element rendered on the left side of the input."
+        },
+        {
+          name: "rightIcon",
+          type: "React.ReactNode",
+          required: false,
+          description: "Icon element rendered on the right side of the input."
+        },
+        {
+          name: "type",
+          type: "InputType",
+          required: false,
+          description: "Overrides the inputType set on the root TextInput component.",
+          options: ["text", "email", "password", "number", "tel", "url", "search"]
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the input element."
+        }
+      ]
+    },
+    {
+      name: "PasswordInput",
+      fileName: "TextInputPasswordInput.tsx",
+      description: 'Password-specific input with a visibility toggle button (Eye/EyeClosed icons). Automatically shows/hides the password. Should be used inside TextInput.Field when the root inputType is "password".',
+      props: [
+        {
+          name: "leftIcon",
+          type: "React.ReactNode",
+          required: false,
+          description: "Icon element rendered on the left side of the input."
+        },
+        {
+          name: "rightIcon",
+          type: "React.ReactNode",
+          required: false,
+          description: "Icon element rendered on the right side of the input (shown alongside the visibility toggle)."
+        },
+        {
+          name: "type",
+          type: "InputType",
+          required: false,
+          description: "Overrides the inputType set on the root TextInput component.",
+          options: ["text", "email", "password", "number", "tel", "url", "search"]
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the input element."
+        }
+      ]
+    },
+    {
+      name: "NumberInput",
+      fileName: "TextInputNumberInput.tsx",
+      description: "Numeric input with keyboard filtering, paste validation, and blur constraints based on numberType. Supports integer, decimal, positive, and natural number modes with min/max enforcement.",
+      props: [
+        {
+          name: "numberType",
+          type: "NumberType",
+          required: false,
+          defaultValue: "'decimal'",
+          description: "Type of number validation to apply. Controls allowed keys, paste validation, and accepted character patterns.",
+          options: ["integer", "decimal", "positive", "natural"]
+        },
+        {
+          name: "min",
+          type: "number",
+          required: false,
+          description: "Minimum allowed value. The value is constrained to this minimum on blur."
+        },
+        {
+          name: "max",
+          type: "number",
+          required: false,
+          description: "Maximum allowed value. The value is constrained to this maximum on blur."
+        },
+        {
+          name: "step",
+          type: "number",
+          required: false,
+          description: "Step increment for the native number input. Passed through to the HTML input element."
+        }
+      ]
+    },
+    {
+      name: "SearchInput",
+      fileName: "TextInputSearchInput.tsx",
+      description: "Search-specific input with a built-in Search icon from lucide-react. Extends native input attributes (except type, value, onChange, size).",
+      props: []
+    },
+    {
+      name: "Description",
+      fileName: "TextInputDescription.tsx",
+      description: "Helper text rendered below the field. Linked to the input via the auto-generated descriptionId and aria-describedby.",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Description text content."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the description element."
+        }
+      ]
+    },
+    {
+      name: "ErrorMessage",
+      fileName: "TextInputErrorMessage.tsx",
+      description: 'Error message with an AlertCircle icon, role="alert", and aria-live="polite". Only rendered when the root validationState is "error".',
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Error message text content."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the error message element."
+        }
+      ]
+    },
+    {
+      name: "WarningMessage",
+      fileName: "TextInputWarningMessage.tsx",
+      description: 'Warning message with an AlertCircle icon, role="status", and aria-live="polite". Only rendered when the root validationState is "warning".',
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Warning message text content."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the warning message element."
+        }
+      ]
+    },
+    {
+      name: "SuccessMessage",
+      fileName: "TextInputSuccessMessage.tsx",
+      description: 'Success message with a CheckCircle icon, role="status", and aria-live="polite". Only rendered when the root validationState is "success".',
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Success message text content."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the success message element."
+        }
+      ]
+    },
+    {
+      name: "Icon",
+      fileName: "TextInputIcon.tsx",
+      description: "Wrapper for rendering icons inside the field. Positions the icon and applies muted text color.",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Icon element to render (e.g. a lucide-react icon component)."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the icon wrapper."
+        }
+      ]
+    },
+    {
+      name: "ClearButton",
+      fileName: "TextInputClearButton.tsx",
+      description: 'A button that clears the input value. Only visible when the input has a value. Uses an X icon and has aria-label="Clear input".',
+      props: [
+        {
+          name: "onClear",
+          type: "() => void",
+          required: false,
+          description: "Additional callback fired after the value is cleared."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the clear button."
+        }
+      ]
+    },
+    {
+      name: "CharacterCount",
+      fileName: "TextInputCharacterCount.tsx",
+      description: "Displays current character count relative to maxLength. Supports configurable visibility (always, on focus, or near limit) with threshold-based color changes.",
+      props: [
+        {
+          name: "maxLength",
+          type: "number",
+          required: true,
+          description: "Maximum allowed character count. Used to calculate remaining count and near-limit percentage."
+        },
+        {
+          name: "showCount",
+          type: "'always' | 'focus' | 'near-limit'",
+          required: false,
+          defaultValue: "'always'",
+          description: "When to display the character count: always, only when the input is focused, or only when near the limit.",
+          options: ["always", "focus", "near-limit"]
+        },
+        {
+          name: "threshold",
+          type: "number",
+          required: false,
+          defaultValue: "0.8",
+          description: 'Fraction of maxLength at which the count is considered "near limit" and switches to warning color (0 to 1).'
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          defaultValue: "''",
+          description: "Additional CSS classes applied to the character count element."
+        }
+      ]
+    },
+    {
+      name: "LoadingSpinner",
+      fileName: "TextInputLoadingSpinner.tsx",
+      description: 'Animated spinner (Loader2 icon) shown inside the field when the root loading prop is true. Uses aria-label="Loading" for accessibility.',
+      props: []
+    }
+  ],
+  hooks: ["useTextInput"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "value",
+      type: "string",
+      required: false,
+      description: "Controlled input value. When provided, the component operates in controlled mode."
+    },
+    {
+      name: "defaultValue",
+      type: "string",
+      required: false,
+      defaultValue: "''",
+      description: "Initial value for uncontrolled mode."
+    },
+    {
+      name: "onChange",
+      type: "(value: string) => void",
+      required: false,
+      description: "Callback fired when the input value changes. Receives the new string value."
+    },
+    {
+      name: "inputType",
+      type: "InputType",
+      required: false,
+      defaultValue: "'text'",
+      description: "The HTML input type. Determines which specialized input variant is used (e.g. password shows a toggle, number enables numeric filtering).",
+      options: ["text", "email", "password", "number", "tel", "url", "search"]
+    },
+    {
+      name: "size",
+      type: "InputSize",
+      required: false,
+      defaultValue: "'md'",
+      description: "Input size affecting padding, text size, and icon sizing.",
+      options: ["sm", "md", "lg"]
+    },
+    {
+      name: "validationState",
+      type: "ValidationState",
+      required: false,
+      defaultValue: "'default'",
+      description: "Current validation state. Controls border color, ring color, and which message sub-component is visible.",
+      options: ["default", "error", "warning", "success"]
+    },
+    {
+      name: "disabled",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Disables the input, preventing user interaction."
+    },
+    {
+      name: "readOnly",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Makes the input read-only. The value is visible but cannot be edited."
+    },
+    {
+      name: "required",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Marks the input as required. Shows a required asterisk on the Label and sets aria-required on the input."
+    },
+    {
+      name: "loading",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Shows a loading spinner inside the field when true."
+    },
+    {
+      name: "className",
+      type: "string",
+      required: false,
+      defaultValue: "''",
+      description: "Additional CSS classes applied to the root container div."
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  sizes: {
+    propName: "size",
+    options: ["sm", "md", "lg"],
+    default: "md"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "focused",
+      prop: "isFocused",
+      isBoolean: true,
+      defaultValue: "false",
+      description: 'Applied when the input element has focus. Shows a focus ring on the Field wrapper and may trigger CharacterCount display in "focus" mode.'
+    },
+    {
+      name: "disabled",
+      prop: "disabled",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Prevents user interaction with the input. Applied to the HTML input element via the disabled attribute."
+    },
+    {
+      name: "readOnly",
+      prop: "readOnly",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Makes the input non-editable while keeping it focusable and selectable."
+    },
+    {
+      name: "required",
+      prop: "required",
+      isBoolean: true,
+      defaultValue: "false",
+      description: 'Marks the input as required. Sets aria-required="true" and shows an asterisk on the Label.'
+    },
+    {
+      name: "loading",
+      prop: "loading",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Shows a spinning Loader2 icon inside the field via the LoadingSpinner sub-component."
+    },
+    {
+      name: "validation",
+      prop: "validationState",
+      values: ["default", "error", "warning", "success"],
+      isBoolean: false,
+      defaultValue: "'default'",
+      description: "Controls the visual validation state. Applies themed border and ring colors, and determines which message sub-component (Error, Warning, Success) is visible."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onChange",
+      signature: "(value: string) => void",
+      description: "Fired each time the input value changes. Receives the new string value, not a React ChangeEvent."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    attributes: [
+      {
+        name: "aria-labelledby",
+        description: "Automatically links the input to the Label component via a generated labelId. Applied to the Input element.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-describedby",
+        description: 'References the Description element via a generated descriptionId. When validationState is "error", also includes the ErrorMessage element via errorId.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-invalid",
+        description: 'Set to true on the Input element when validationState is "error", indicating a validation error to screen readers.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-required",
+        description: "Set to true on the Input element when the required prop is true.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label",
+        description: 'Applied to the ClearButton ("Clear input"), LoadingSpinner ("Loading"), and the PasswordInput toggle button ("Show password"/"Hide password").',
+        managedByComponent: true
+      },
+      {
+        name: "aria-live",
+        description: 'Set to "polite" on ErrorMessage (role="alert"), WarningMessage (role="status"), SuccessMessage (role="status"), and CharacterCount (aria-atomic="true").',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: 'Set to "true" on required asterisk icons, validation message icons, and the PasswordInput toggle icon to prevent screen reader announcement.',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Tab",
+        behavior: "Moves focus to or from the input element."
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Moves focus backwards from the input element."
+      }
+    ],
+    focusManagement: "The input element receives focus via Tab. The Field wrapper visually responds with a focus ring (ring-2 ring-focus/20). Focus state is tracked in context and shared with sub-components like CharacterCount.",
+    wcagLevel: "AA",
+    notes: 'All label/input associations use auto-generated IDs via useId(). The Description is linked via aria-describedby, and when in error state the ErrorMessage is also included in aria-describedby. Error messages use role="alert" for immediate screen reader announcement. Validation icons use aria-hidden to prevent redundant announcement. The PasswordInput toggle uses aria-label to communicate its purpose. NumberInput uses inputMode="numeric" for mobile numeric keyboards and filters keyboard/paste input to valid characters per numberType.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "lucide-react" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Used for submit/reset actions alongside text inputs in forms"
+    },
+    {
+      slug: "checkbox",
+      reason: "Commonly paired with text inputs in form layouts for agreement/consent fields"
+    },
+    {
+      slug: "otp-input",
+      reason: "Used alongside text inputs in authentication flows (email + OTP verification)"
+    },
+    {
+      slug: "card",
+      reason: "Used as a container for grouping text inputs in form layouts"
+    },
+    {
+      slug: "tooltip",
+      reason: "Used to provide contextual help or hints for text input fields"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Input with Icon",
+      description: "A text input with an email icon, label, and description.",
+      code: `import { TextInput } from 'vayu-ui';
+import { Mail } from 'lucide-react';
+
+export default function BasicInput() {
+  return (
+    <TextInput>
+      <TextInput.Label>Email Address</TextInput.Label>
+      <TextInput.Field>
+        <TextInput.Icon>
+          <Mail className="w-4 h-4" />
+        </TextInput.Icon>
+        <TextInput.Input placeholder="Enter your email" />
+      </TextInput.Field>
+      <TextInput.Description>We'll never share your email.</TextInput.Description>
+    </TextInput>
+  );
+}`,
+      tags: ["basic", "icon", "description"]
+    },
+    {
+      title: "Required and Optional Fields",
+      description: 'A required field showing a red asterisk and an optional field with an "(optional)" badge.',
+      code: `import { TextInput } from 'vayu-ui';
+import { User } from 'lucide-react';
+
+export default function RequiredOptional() {
+  return (
+    <>
+      <TextInput required>
+        <TextInput.Label>Full Name</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Icon>
+            <User className="w-4 h-4" />
+          </TextInput.Icon>
+          <TextInput.Input placeholder="Enter your full name" />
+        </TextInput.Field>
+      </TextInput>
+      <TextInput>
+        <TextInput.Label optional>Nickname</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Input placeholder="What should we call you?" />
+        </TextInput.Field>
+      </TextInput>
+    </>
+  );
+}`,
+      tags: ["required", "optional", "form"]
+    },
+    {
+      title: "Password Input with Toggle",
+      description: "A password input with a visibility toggle button and a description.",
+      code: `import { TextInput } from 'vayu-ui';
+import { Lock } from 'lucide-react';
+
+export default function PasswordInput() {
+  return (
+    <TextInput inputType="password">
+      <TextInput.Label>Password</TextInput.Label>
+      <TextInput.Field>
+        <TextInput.Icon>
+          <Lock className="w-4 h-4" />
+        </TextInput.Icon>
+        <TextInput.PasswordInput placeholder="Enter password" />
+      </TextInput.Field>
+      <TextInput.Description>Must be at least 8 characters.</TextInput.Description>
+    </TextInput>
+  );
+}`,
+      tags: ["password", "visibility-toggle", "auth"]
+    },
+    {
+      title: "Search Input with Clear Button",
+      description: "A controlled search input with a built-in search icon and a clear button.",
+      code: `import { TextInput } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function SearchInput() {
+  const [value, setValue] = useState('');
+
+  return (
+    <TextInput value={value} onChange={setValue}>
+      <TextInput.Label>Search</TextInput.Label>
+      <TextInput.Field>
+        <TextInput.SearchInput placeholder="Search users..." />
+        <TextInput.ClearButton />
+      </TextInput.Field>
+    </TextInput>
+  );
+}`,
+      tags: ["search", "clear", "controlled"]
+    },
+    {
+      title: "Number Inputs with Constraints",
+      description: "Natural number, integer, and positive decimal inputs with different numberType constraints and min/max clamping.",
+      code: `import { TextInput } from 'vayu-ui';
+import { DollarSign } from 'lucide-react';
+
+export default function NumberInputs() {
+  return (
+    <>
+      <TextInput inputType="number">
+        <TextInput.Label>Age (Natural numbers only)</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.NumberInput numberType="natural" placeholder="Enter your age" />
+        </TextInput.Field>
+      </TextInput>
+      <TextInput inputType="number">
+        <TextInput.Label>Temperature (Integer)</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.NumberInput numberType="integer" placeholder="e.g., -10 or 25" />
+        </TextInput.Field>
+      </TextInput>
+      <TextInput inputType="number">
+        <TextInput.Label>Price (Positive decimal)</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Icon>
+            <DollarSign className="w-4 h-4" />
+          </TextInput.Icon>
+          <TextInput.NumberInput numberType="positive" placeholder="0.00" />
+        </TextInput.Field>
+      </TextInput>
+      <TextInput inputType="number" defaultValue="5">
+        <TextInput.Label>Quantity (0-10)</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.NumberInput numberType="natural" min={0} max={10} />
+        </TextInput.Field>
+        <TextInput.Description>
+          Value constrained between 0 and 10 on blur.
+        </TextInput.Description>
+      </TextInput>
+    </>
+  );
+}`,
+      tags: ["number", "integer", "decimal", "constraints"]
+    },
+    {
+      title: "Validation States",
+      description: "Inputs demonstrating error, warning, and success validation states with their respective message components.",
+      code: `import { TextInput } from 'vayu-ui';
+import { Mail, User } from 'lucide-react';
+
+export default function ValidationStates() {
+  return (
+    <>
+      <TextInput validationState="error" defaultValue="invalid-email">
+        <TextInput.Label>Email</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Icon>
+            <Mail className="w-4 h-4" />
+          </TextInput.Icon>
+          <TextInput.Input />
+        </TextInput.Field>
+        <TextInput.ErrorMessage>Please enter a valid email address.</TextInput.ErrorMessage>
+      </TextInput>
+      <TextInput validationState="warning" defaultValue="weak">
+        <TextInput.Label>Password Strength</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Input />
+        </TextInput.Field>
+        <TextInput.WarningMessage>
+          Password is weak. Consider adding special characters.
+        </TextInput.WarningMessage>
+      </TextInput>
+      <TextInput validationState="success" defaultValue="john.doe">
+        <TextInput.Label>Username</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Icon>
+            <User className="w-4 h-4" />
+          </TextInput.Icon>
+          <TextInput.Input />
+        </TextInput.Field>
+        <TextInput.SuccessMessage>Username is available!</TextInput.SuccessMessage>
+      </TextInput>
+    </>
+  );
+}`,
+      tags: ["validation", "error", "warning", "success"]
+    },
+    {
+      title: "Character Count",
+      description: "A controlled input with character count display and a clear button.",
+      code: `import { TextInput } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function CharacterCount() {
+  const [value, setValue] = useState('');
+
+  return (
+    <TextInput value={value} onChange={setValue}>
+      <TextInput.Label>Bio</TextInput.Label>
+      <TextInput.Field>
+        <TextInput.Input placeholder="Tell us about yourself" maxLength={50} />
+        <TextInput.ClearButton />
+      </TextInput.Field>
+      <TextInput.CharacterCount maxLength={50} showCount="always" />
+    </TextInput>
+  );
+}`,
+      tags: ["character-count", "controlled", "clear"]
+    },
+    {
+      title: "Input Sizes",
+      description: "Text inputs in small, medium (default), and large sizes.",
+      code: `import { TextInput } from 'vayu-ui';
+
+export default function InputSizes() {
+  return (
+    <>
+      <TextInput size="sm">
+        <TextInput.Label>Small</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Input placeholder="Small input" />
+        </TextInput.Field>
+      </TextInput>
+      <TextInput size="md">
+        <TextInput.Label>Medium (default)</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Input placeholder="Medium input" />
+        </TextInput.Field>
+      </TextInput>
+      <TextInput size="lg">
+        <TextInput.Label>Large</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Input placeholder="Large input" />
+        </TextInput.Field>
+      </TextInput>
+    </>
+  );
+}`,
+      tags: ["sizes", "sm", "md", "lg"]
+    },
+    {
+      title: "Loading, Disabled, and Read-Only States",
+      description: "Inputs demonstrating loading spinner, disabled, and read-only states.",
+      code: `import { TextInput } from 'vayu-ui';
+
+export default function InputStates() {
+  return (
+    <>
+      <TextInput loading>
+        <TextInput.Label>Loading</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Input placeholder="Checking..." />
+          <TextInput.LoadingSpinner />
+        </TextInput.Field>
+      </TextInput>
+      <TextInput disabled>
+        <TextInput.Label>Disabled</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Input placeholder="Cannot edit" />
+        </TextInput.Field>
+      </TextInput>
+      <TextInput readOnly defaultValue="Read-only value">
+        <TextInput.Label>Read Only</TextInput.Label>
+        <TextInput.Field>
+          <TextInput.Input />
+        </TextInput.Field>
+      </TextInput>
+    </>
+  );
+}`,
+      tags: ["loading", "disabled", "readonly", "states"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using sub-components outside TextInput root",
+      bad: '<div><TextInput.Input placeholder="..." /></div>',
+      good: '<TextInput><TextInput.Field><TextInput.Input placeholder="..." /></TextInput.Field></TextInput>',
+      reason: "Sub-components like Input, Label, and Field read state from TextInputContext via useTextInput(). Using them outside the TextInput root throws an error because no context provider exists."
+    },
+    {
+      title: "Using onChange with React.ChangeEvent signature",
+      bad: "<TextInput onChange={(e: React.ChangeEvent<HTMLInputElement>) => ...} />",
+      good: "<TextInput onChange={(value: string) => ...} />",
+      reason: "The TextInput onChange prop receives a string (the current value), not a React ChangeEvent. The component's types omit the HTML input onChange to prevent this mistake."
+    },
+    {
+      title: 'Setting inputType="password" without PasswordInput',
+      bad: '<TextInput inputType="password"><TextInput.Field><TextInput.Input /></TextInput.Field></TextInput>',
+      good: '<TextInput inputType="password"><TextInput.Field><TextInput.PasswordInput /></TextInput.Field></TextInput>',
+      reason: 'When inputType is "password", use TextInput.PasswordInput instead of TextInput.Input. PasswordInput provides the visibility toggle button with proper aria-label for accessibility.'
+    },
+    {
+      title: "Hardcoding validation colors on the Field",
+      bad: '<TextInput validationState="error"><TextInput.Field className="border-red-500"><TextInput.Input /></TextInput.Field></TextInput>',
+      good: '<TextInput validationState="error"><TextInput.Field><TextInput.Input /></TextInput.Field></TextInput>',
+      reason: "The Field component already applies design-token-based validation colors (border-destructive, border-warning, border-success). Hardcoding colors bypasses the design system and does not update with theme changes."
+    },
+    {
+      title: "Placing ErrorMessage outside the TextInput root",
+      bad: '<TextInput validationState="error">...</TextInput><p className="text-red-500">Error message</p>',
+      good: '<TextInput validationState="error"><TextInput.Label>Email</TextInput.Label><TextInput.Field><TextInput.Input /></TextInput.Field><TextInput.ErrorMessage>Please enter a valid email.</TextInput.ErrorMessage></TextInput>',
+      reason: "The ErrorMessage sub-component is automatically linked to the input via aria-describedby using a generated errorId. Placing it outside the TextInput root breaks this association and the message will not be announced by screen readers."
+    }
+  ]
+};
+
+// src/components/textarea.ts
+var textAreaEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "text-area",
+  name: "TextArea",
+  type: "component",
+  category: "inputs",
+  // ── Description ───────────────────────────────────────
+  description: "A compound multi-line text input component with character counting, validation states, resize control, and accessible label/error/support text sub-components.",
+  longDescription: "The TextArea component uses the compound component pattern (TextArea.Label, TextArea.Input, TextArea.SupportText, TextArea.ErrorText, TextArea.CharCount) to build accessible multi-line text inputs. It supports controlled and uncontrolled modes, three sizes (sm, md, lg), error and disabled states, configurable resize behavior (none, vertical, horizontal, both), character counting with maxLength enforcement, and string or string-array content for support and error text. All ARIA attributes (labelledby, describedby, invalid, errormessage, required, disabled) are managed automatically via React context.",
+  tags: [
+    "textarea",
+    "multi-line",
+    "input",
+    "form",
+    "validation",
+    "character-count",
+    "text-field",
+    "comment",
+    "message"
+  ],
+  useCases: [
+    "Multi-line comment or feedback form with character limit enforcement",
+    "Bio or about-me fields with character counting in the label",
+    "Form text areas with validation error messages and support text",
+    "Accessible labeled textareas with required indicators and ARIA attributes",
+    "Contact or message forms with resize-controlled input areas",
+    "Form fields displaying multiple validation guidelines as a list"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "TextArea",
+  files: [
+    {
+      name: "TextArea.tsx",
+      description: "Root component with context provider managing focus, character count, error state, and auto-generated ARIA IDs"
+    },
+    {
+      name: "TextAreaLabel.tsx",
+      description: "Label element linked to the input via htmlFor/id, with optional inline character count display"
+    },
+    {
+      name: "TextAreaInput.tsx",
+      description: "Textarea element with forwardRef, resize control, size-based styling, focus ring, and ARIA attributes"
+    },
+    {
+      name: "TextAreaSupportText.tsx",
+      description: "Helper text linked to the input via aria-describedby, supports string or string-array children"
+    },
+    {
+      name: "TextAreaErrorText.tsx",
+      description: 'Error message with role="alert", destructive styling, and AlertCircle icon, supports string or string-array children'
+    },
+    {
+      name: "TextAreaCharCount.tsx",
+      description: 'Standalone character counter with aria-live="polite" for screen reader announcements'
+    },
+    {
+      name: "types.ts",
+      description: "TypeScript type definitions for all component props, context value, and union types"
+    },
+    {
+      name: "index.ts",
+      description: "Barrel export file assembling the compound component and re-exporting types"
+    },
+    {
+      name: "README.md",
+      description: "Component documentation and usage guidelines",
+      optional: true
+    }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "TextArea",
+  subComponents: [
+    {
+      name: "Label",
+      fileName: "TextAreaLabel.tsx",
+      description: 'Renders a label element linked to the input via htmlFor/id. Optionally displays an inline character count with aria-live="polite".',
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Label text content."
+        },
+        {
+          name: "showCharCount",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "Whether to display the character count inline next to the label text."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes for the label element."
+        }
+      ]
+    },
+    {
+      name: "Input",
+      fileName: "TextAreaInput.tsx",
+      description: "The textarea element with forwardRef support. Manages focus ring styling, resize behavior, size-based padding, and ARIA attributes. Fires onChange to update character count in context.",
+      props: [
+        {
+          name: "resize",
+          type: "'none' | 'vertical' | 'horizontal' | 'both'",
+          required: false,
+          defaultValue: "'vertical'",
+          description: "Controls the resize direction of the textarea element.",
+          options: ["none", "vertical", "horizontal", "both"]
+        },
+        {
+          name: "rows",
+          type: "number",
+          required: false,
+          defaultValue: "4",
+          description: "Number of visible text rows for the textarea."
+        },
+        {
+          name: "value",
+          type: "string",
+          required: false,
+          description: "Controlled value for the textarea."
+        },
+        {
+          name: "onChange",
+          type: "(event: React.ChangeEvent<HTMLTextAreaElement>) => void",
+          required: false,
+          description: "Called when the textarea value changes. Also updates the internal character count."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes for the textarea element."
+        }
+      ]
+    },
+    {
+      name: "SupportText",
+      fileName: "TextAreaSupportText.tsx",
+      description: "Renders helper text linked to the input via aria-describedby. Renders a paragraph for string children or an unordered list for string-array children.",
+      props: [
+        {
+          name: "children",
+          type: "string | string[]",
+          required: true,
+          description: "Support text content. A string renders as a paragraph; an array renders as a bulleted list."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes for the support text container."
+        }
+      ]
+    },
+    {
+      name: "ErrorText",
+      fileName: "TextAreaErrorText.tsx",
+      description: 'Renders an error message with role="alert", destructive styling, and an AlertCircle icon. Renders a paragraph for string children or an unordered list for string-array children.',
+      props: [
+        {
+          name: "children",
+          type: "string | string[]",
+          required: true,
+          description: "Error text content. A string renders as a paragraph with icon; an array renders as a bulleted list."
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes for the error text container."
+        }
+      ]
+    },
+    {
+      name: "CharCount",
+      fileName: "TextAreaCharCount.tsx",
+      description: 'Standalone character counter displayed outside the label. Announces count changes to screen readers via aria-live="polite".',
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes for the character count element."
+        }
+      ]
+    }
+  ],
+  hooks: ["useTextAreaContext"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Compound sub-components (Label, Input, SupportText, ErrorText, CharCount)."
+    },
+    {
+      name: "size",
+      type: "'sm' | 'md' | 'lg'",
+      required: false,
+      defaultValue: "'md'",
+      description: "Controls the padding and font size of the textarea input.",
+      options: ["sm", "md", "lg"]
+    },
+    {
+      name: "error",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Whether the textarea is in an error state. Applies destructive border, ring styling, and links error text via aria-errormessage."
+    },
+    {
+      name: "maxLength",
+      type: "number",
+      required: false,
+      description: "Maximum character count. Enforced as the HTML maxLength attribute and displayed in character count sub-components."
+    },
+    {
+      name: "disabled",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Whether the textarea is disabled. Applies opacity, cursor, and muted background styling."
+    },
+    {
+      name: "className",
+      type: "string",
+      required: false,
+      description: "Additional CSS classes for the root wrapper div."
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  sizes: {
+    propName: "size",
+    options: ["sm", "md", "lg"],
+    default: "md"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "focused",
+      prop: "isFocused (internal)",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Textarea has focus. Applies focus ring (ring-focus/20) and focus border color."
+    },
+    {
+      name: "error",
+      prop: "error",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Error validation state. Applies destructive border, error ring, and links error text via aria-errormessage."
+    },
+    {
+      name: "disabled",
+      prop: "disabled",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Disabled state. Applies opacity-60, cursor-not-allowed, muted background, and aria-disabled."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onChange",
+      signature: "(event: React.ChangeEvent<HTMLTextAreaElement>) => void",
+      description: "Fires when the textarea value changes. Also updates the internal character count."
+    },
+    {
+      name: "onFocus",
+      signature: "(event: React.FocusEvent<HTMLTextAreaElement>) => void",
+      description: "Fires when the textarea gains focus. Also sets internal focus state for styling."
+    },
+    {
+      name: "onBlur",
+      signature: "(event: React.FocusEvent<HTMLTextAreaElement>) => void",
+      description: "Fires when the textarea loses focus. Also clears internal focus state."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "group",
+    attributes: [
+      {
+        name: "aria-labelledby",
+        description: "Root wrapper references the label ID so screen readers associate the group with its label.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-invalid",
+        description: "Set to true on the textarea when the error prop is true on the root.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-describedby",
+        description: "Dynamically composed from supportTextId and errorTextId based on which sub-components are present.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-errormessage",
+        description: "Set to errorTextId when error state is active, pointing to the ErrorText sub-component.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-required",
+        description: "Set to true on the textarea when the required HTML attribute is passed to TextArea.Input.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-disabled",
+        description: "Set to true on the textarea when the disabled prop is true on the root.",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-live="polite"',
+        description: "Applied to CharCount and inline label char count so screen readers announce count changes without interrupting.",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-atomic="true"',
+        description: "Applied alongside aria-live on character count elements so the entire count is announced as a whole.",
+        managedByComponent: true
+      },
+      {
+        name: 'role="alert"',
+        description: "Applied to ErrorText sub-component so screen readers immediately announce error messages.",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Tab",
+        behavior: "Moves focus to the textarea. Focus ring and border styling are applied via internal isFocused state."
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Moves focus away from the textarea to the previous focusable element."
+      }
+    ],
+    focusManagement: "Focus ring with ring-focus/20 and border-focus is shown on focus and removed on blur via internal isFocused state.",
+    wcagLevel: "AA",
+    notes: "The component uses auto-generated IDs (via React.useId) for label, input, support text, and error text elements, ensuring aria-labelledby, htmlFor, aria-describedby, and aria-errormessage are always correctly linked. SupportText registers its presence via context so aria-describedby is only populated when support text exists."
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [{ name: "clsx" }, { name: "lucide-react" }],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "text-input",
+      reason: "Single-line counterpart \u2014 use TextInput for short inputs and TextArea for multi-line inputs within the same form."
+    },
+    {
+      slug: "button",
+      reason: "Submit and cancel actions are commonly placed below TextArea fields in forms."
+    },
+    {
+      slug: "form",
+      reason: "TextArea fields are typically wrapped in a form component for submission and validation orchestration."
+    },
+    {
+      slug: "divider",
+      reason: "Used to separate multiple TextArea sections or form field groups in demos and layouts."
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Default TextArea",
+      description: "Basic usage with a label and placeholder text.",
+      code: `import { TextArea } from 'vayu-ui';
+
+export default function DefaultTextArea() {
+  return (
+    <TextArea>
+      <TextArea.Label>Description</TextArea.Label>
+      <TextArea.Input placeholder="Enter a description..." />
+    </TextArea>
+  );
+}`,
+      tags: ["basic", "default"]
+    },
+    {
+      title: "With Character Count",
+      description: "TextArea with a maxLength constraint and character count displayed in the label.",
+      code: `import { TextArea } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function CharCountTextArea() {
+  const [bio, setBio] = useState('');
+
+  return (
+    <TextArea maxLength={200}>
+      <TextArea.Label showCharCount>Bio</TextArea.Label>
+      <TextArea.Input
+        placeholder="Tell us about yourself"
+        value={bio}
+        onChange={(e) => setBio(e.target.value)}
+      />
+    </TextArea>
+  );
+}`,
+      tags: ["character-count", "controlled", "max-length"]
+    },
+    {
+      title: "Validation with Error and Support Text",
+      description: "TextArea showing error state with error text and support text, including array-based messages.",
+      code: `import { TextArea } from 'vayu-ui';
+
+export default function ValidationTextArea() {
+  return (
+    <TextArea error>
+      <TextArea.Label>Feedback Guidelines</TextArea.Label>
+      <TextArea.Input placeholder="Enter your feedback" />
+      <TextArea.SupportText>
+        {[
+          'Be specific and constructive',
+          'Include examples when possible',
+          'Keep it respectful',
+        ]}
+      </TextArea.SupportText>
+      <TextArea.ErrorText>
+        {['Minimum 20 characters required', 'Must include specific details']}
+      </TextArea.ErrorText>
+    </TextArea>
+  );
+}`,
+      tags: ["validation", "error", "support-text", "array"]
+    },
+    {
+      title: "Resize Options",
+      description: "All four resize modes: none, vertical (default), horizontal, and both.",
+      code: `import { TextArea } from 'vayu-ui';
+
+export default function ResizeTextArea() {
+  return (
+    <div className="space-y-4">
+      <TextArea>
+        <TextArea.Label>No Resize</TextArea.Label>
+        <TextArea.Input resize="none" placeholder="Fixed size" />
+      </TextArea>
+      <TextArea>
+        <TextArea.Label>Vertical Resize (default)</TextArea.Label>
+        <TextArea.Input resize="vertical" placeholder="Resizes vertically" />
+      </TextArea>
+      <TextArea>
+        <TextArea.Label>Horizontal Resize</TextArea.Label>
+        <TextArea.Input resize="horizontal" placeholder="Resizes horizontally" />
+      </TextArea>
+      <TextArea>
+        <TextArea.Label>Both Resize</TextArea.Label>
+        <TextArea.Input resize="both" placeholder="Resizes both directions" />
+      </TextArea>
+    </div>
+  );
+}`,
+      tags: ["resize", "layout"]
+    },
+    {
+      title: "Standalone Character Count",
+      description: "Character count displayed below the input instead of in the label.",
+      code: `import { TextArea } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function StandaloneCharCount() {
+  const [message, setMessage] = useState('');
+
+  return (
+    <TextArea maxLength={100}>
+      <TextArea.Label>Message</TextArea.Label>
+      <TextArea.Input
+        placeholder="Type your message..."
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+      <TextArea.CharCount />
+    </TextArea>
+  );
+}`,
+      tags: ["character-count", "standalone"]
+    },
+    {
+      title: "With Form Actions",
+      description: "TextArea paired with submit and cancel buttons in a form layout.",
+      code: `import { TextArea, Button } from 'vayu-ui';
+
+export default function FormTextArea() {
+  return (
+    <>
+      <TextArea>
+        <TextArea.Label>Your Message</TextArea.Label>
+        <TextArea.Input placeholder="Write something..." rows={4} />
+        <TextArea.SupportText>Press submit when you're done.</TextArea.SupportText>
+      </TextArea>
+      <div className="flex gap-3">
+        <Button variant="primary">Submit</Button>
+        <Button variant="outline">Cancel</Button>
+      </div>
+    </>
+  );
+}`,
+      tags: ["form", "buttons", "actions"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using ErrorText without error prop",
+      bad: `<TextArea>
+  <TextArea.Label>Comment</TextArea.Label>
+  <TextArea.Input placeholder="..." />
+  <TextArea.ErrorText>Too short</TextArea.ErrorText>
+</TextArea>`,
+      good: `<TextArea error>
+  <TextArea.Label>Comment</TextArea.Label>
+  <TextArea.Input placeholder="..." />
+  <TextArea.ErrorText>Too short</TextArea.ErrorText>
+</TextArea>`,
+      reason: "Without error={true} on the root, the textarea won't get destructive styling, aria-invalid, or aria-errormessage. The error state must be driven from the root."
+    },
+    {
+      title: "Wrapping textarea directly instead of using compound sub-components",
+      bad: `<TextArea className="flex gap-4">
+  <label>Notes</label>
+  <textarea placeholder="..." />
+</TextArea>`,
+      good: `<TextArea>
+  <TextArea.Label>Notes</TextArea.Label>
+  <TextArea.Input placeholder="..." />
+</TextArea>`,
+      reason: "Native label/textarea elements bypass context-based ID linking, ARIA attribute management, character counting, and focus styling. Always use the compound sub-components."
+    },
+    {
+      title: "Setting maxLength only on the Input instead of the root",
+      bad: `<TextArea>
+  <TextArea.Label>Bio</TextArea.Label>
+  <TextArea.Input maxLength={200} />
+  <TextArea.CharCount />
+</TextArea>`,
+      good: `<TextArea maxLength={200}>
+  <TextArea.Label>Bio</TextArea.Label>
+  <TextArea.Input />
+  <TextArea.CharCount />
+</TextArea>`,
+      reason: "maxLength must be set on the root TextArea so the context can share it with CharCount and Label (showCharCount). Setting it only on Input breaks character count display."
+    },
+    {
+      title: "Using sub-components outside of TextArea root",
+      bad: `<div>
+  <TextArea.Label>Name</TextArea.Label>
+  <TextArea.Input />
+</div>`,
+      good: `<TextArea>
+  <TextArea.Label>Name</TextArea.Label>
+  <TextArea.Input />
+</TextArea>`,
+      reason: "All sub-components rely on useTextAreaContext which throws if used outside a TextArea root. They need the context provider for IDs, state, and ARIA linking."
+    },
+    {
+      title: "Passing non-string content to SupportText or ErrorText",
+      bad: `<TextArea.SupportText><span>Helper text</span></TextArea.SupportText>`,
+      good: `<TextArea.SupportText>Helper text</TextArea.SupportText>`,
+      reason: "SupportText and ErrorText accept only string or string[] as children \u2014 they render as <p>/<ul> elements. Passing React nodes will cause a runtime type error."
+    }
+  ]
+};
+
+// src/components/navbar.ts
+var navbarEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "navbar",
+  name: "Navbar",
+  type: "component",
+  category: "navigation",
+  // ── Description ───────────────────────────────────────
+  description: "A responsive navigation bar with compound sub-components for brand, desktop items, actions, and a mobile slide-out menu with focus trapping and body scroll locking.",
+  longDescription: 'The Navbar component uses the compound component pattern (Navbar.Container, Navbar.Brand, Navbar.Items, Navbar.Item, Navbar.Actions, Navbar.Toggle, Navbar.MobileMenu, Navbar.MobileItem, Navbar.Separator) to compose fully responsive navigation bars. Desktop mode displays items and actions inline; mobile mode provides a hamburger toggle that opens a slide-out dialog panel. The component manages accessibility automatically: aria-expanded/aria-controls link the toggle to the mobile menu, the menu has role="dialog" and aria-modal="true", a focus trap keeps Tab/Shift+Tab within the open panel, and the Escape key closes it with focus returned to the toggle. Body scroll is locked and background content is set to inert when the mobile menu is open. A scrollbar-width compensation prevents layout shift. Items support an active prop that applies aria-current="page" and brand styling. Both Navbar.Item and Navbar.MobileItem accept a linkComponent prop (defaults to Next.js Link) for custom routing integration.',
+  tags: [
+    "navbar",
+    "navigation",
+    "header",
+    "nav",
+    "menu",
+    "responsive",
+    "mobile",
+    "hamburger",
+    "sidebar",
+    "link",
+    "brand"
+  ],
+  useCases: [
+    "Build a top-level site navigation bar with logo, page links, and CTA buttons",
+    "Create a responsive navigation that collapses to a hamburger menu on mobile viewports",
+    'Display the current page with active link styling and aria-current="page" for screen readers',
+    "Organize action buttons (sign in, sign up) alongside navigation links in the desktop header",
+    "Implement a mobile slide-out menu with focus trapping, backdrop dismiss, and Escape key support",
+    "Use a custom router Link component by injecting linkComponent into Navbar.Item or Navbar.MobileItem"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "NavBar",
+  files: [
+    { name: "NavBar.tsx", description: "Root component with context provider, mobile open state, escape key handler, body scroll lock, and background inert management" },
+    { name: "NavbarContainer.tsx", description: "Responsive max-width wrapper that centers and pads the navigation content" },
+    { name: "NavBarBrand.tsx", description: "Brand/logo area rendered as a flex container with gap" },
+    { name: "NavbarMenuItems.tsx", description: "Desktop navigation list (NavbarItems) and individual navigation link items (NavbarItem) with active state styling" },
+    { name: "NavBarActions.tsx", description: "Desktop action buttons area hidden on mobile, rendered as a flex row" },
+    { name: "NavBarToggle.tsx", description: "Mobile hamburger/X toggle button with animated icon transitions and ARIA expanded state" },
+    { name: "NavBarMobileMenu.tsx", description: "Mobile slide-out panel with backdrop, close button, focus trap, and mobile navigation items (NavbarMobileMenu + NavbarMobileItem)" },
+    { name: "NavBarSeparator.tsx", description: "Horizontal divider for separating sections within the mobile menu" },
+    { name: "types.ts", description: "TypeScript interfaces for all Navbar sub-component props, context value, and injected link props" },
+    { name: "index.ts", description: "Barrel export file assembling the compound component and re-exporting all types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Navbar",
+  subComponents: [
+    {
+      name: "Container",
+      fileName: "NavbarContainer.tsx",
+      description: "Responsive max-width wrapper that centers content horizontally with configurable breakpoint",
+      props: [
+        {
+          name: "maxWidth",
+          type: "'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'",
+          required: false,
+          defaultValue: "'xl'",
+          description: "Maximum width breakpoint for the navigation content area",
+          options: ["sm", "md", "lg", "xl", "2xl", "full"]
+        }
+      ]
+    },
+    {
+      name: "Brand",
+      fileName: "NavBarBrand.tsx",
+      description: "Brand/logo area rendered as a shrink-0 flex container for logo and company name",
+      props: []
+    },
+    {
+      name: "Items",
+      fileName: "NavbarMenuItems.tsx",
+      description: "Desktop navigation list container; hidden on mobile, displayed as a horizontal flex row on md+ breakpoints",
+      props: []
+    },
+    {
+      name: "Item",
+      fileName: "NavbarMenuItems.tsx",
+      description: "Individual desktop navigation link with active state styling and aria-current support",
+      props: [
+        {
+          name: "active",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: 'Marks the item as the current page; applies brand styling and aria-current="page"'
+        },
+        {
+          name: "href",
+          type: "string",
+          required: false,
+          defaultValue: "'#'",
+          description: "Navigation URL passed to the link component"
+        },
+        {
+          name: "linkComponent",
+          type: "ElementType",
+          required: false,
+          defaultValue: "Link (from next/link)",
+          description: "Custom component used for rendering the link; defaults to Next.js Link"
+        }
+      ]
+    },
+    {
+      name: "Actions",
+      fileName: "NavBarActions.tsx",
+      description: "Desktop action buttons area; hidden on mobile, displayed as a flex row with gap on md+ breakpoints",
+      props: []
+    },
+    {
+      name: "Toggle",
+      fileName: "NavBarToggle.tsx",
+      description: "Mobile hamburger/X button with animated three-line icon that toggles the mobile menu",
+      props: []
+    },
+    {
+      name: "MobileMenu",
+      fileName: "NavBarMobileMenu.tsx",
+      description: "Mobile slide-out panel with backdrop overlay, close button, focus trap, and scrollable content area",
+      props: []
+    },
+    {
+      name: "MobileItem",
+      fileName: "NavBarMobileMenu.tsx",
+      description: "Mobile navigation link that closes the menu on click and supports active state styling",
+      props: [
+        {
+          name: "active",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: 'Marks the item as the current page; applies brand styling and aria-current="page"'
+        },
+        {
+          name: "href",
+          type: "string",
+          required: false,
+          defaultValue: "'#'",
+          description: "Navigation URL passed to the link component"
+        },
+        {
+          name: "onClick",
+          type: "() => void",
+          required: false,
+          description: "Click handler called after the mobile menu closes"
+        },
+        {
+          name: "linkComponent",
+          type: "ElementType",
+          required: false,
+          defaultValue: "Link (from next/link)",
+          description: "Custom component used for rendering the link; defaults to Next.js Link"
+        }
+      ]
+    },
+    {
+      name: "Separator",
+      fileName: "NavBarSeparator.tsx",
+      description: "Horizontal divider for visually separating sections within the mobile menu",
+      props: []
+    }
+  ],
+  hooks: ["useNavbar"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "mainContentSelector",
+      type: "string",
+      required: false,
+      defaultValue: "'main'",
+      description: "CSS selector for the main content element that gets set to inert when the mobile menu is open, preventing background interaction"
+    }
+  ],
+  rendersAs: "nav",
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "mobileOpen",
+      prop: "mobileOpen (internal)",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Controls the mobile menu open/close state. When true: menu slides in, backdrop appears, body scroll is locked, and main content is set to inert. Managed internally via NavbarToggle click."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onToggle (NavbarToggle)",
+      signature: "() => void",
+      description: "Fired when the hamburger/X toggle button is clicked; flips the mobileOpen state between true and false"
+    },
+    {
+      name: "onClose (MobileMenu)",
+      signature: "() => void",
+      description: "Fired when the mobile menu is closed via backdrop click, close button click, or Escape key. Returns focus to the toggle button."
+    },
+    {
+      name: "onClick (MobileItem)",
+      signature: "() => void",
+      description: "Fired when a mobile navigation item is clicked; closes the mobile menu first, then calls the provided onClick handler"
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "navigation",
+    attributes: [
+      {
+        name: 'aria-label="Main navigation"',
+        description: "Applied to the root <nav> element to identify the primary navigation landmark",
+        managedByComponent: true
+      },
+      {
+        name: "aria-expanded",
+        description: "Applied to the toggle button; reflects the mobile menu open/close state for screen readers",
+        managedByComponent: true
+      },
+      {
+        name: "aria-controls",
+        description: "Applied to the toggle button; references the mobile menu panel ID to associate the control with its target",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Toggle)",
+        description: 'Dynamic label on the toggle button: "Open navigation menu" when closed, "Close navigation menu" when open',
+        managedByComponent: true
+      },
+      {
+        name: 'role="dialog"',
+        description: "Applied to the mobile menu panel to signal a dialog overlay to assistive technology",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-modal="true"',
+        description: "Applied to the mobile menu panel to indicate that background content is inert while the menu is open",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-label="Navigation menu" (MobileMenu)',
+        description: "Labels the mobile menu dialog for screen reader identification",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-label="Close navigation menu" (Close button)',
+        description: "Labels the close button inside the mobile menu panel",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-hidden="true" (Backdrop)',
+        description: "Hides the backdrop overlay from the accessibility tree since it is purely decorative",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-current="page"',
+        description: "Applied to Navbar.Item and Navbar.MobileItem when the active prop is true, indicating the current page to screen readers",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Escape",
+        behavior: "Closes the mobile menu and returns focus to the toggle button"
+      },
+      {
+        key: "Tab",
+        behavior: "Moves focus to the next focusable element within the mobile menu (trapped when menu is open)"
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Moves focus to the previous focusable element within the mobile menu (trapped when menu is open)"
+      }
+    ],
+    focusManagement: "When the mobile menu opens, focus is moved to the close button after a 50ms delay. Tab and Shift+Tab are trapped within the menu panel so focus cannot escape to background content. When the menu closes (via Escape, backdrop click, close button, or item click), focus is returned to the toggle button via document.getElementById(triggerId).focus().",
+    wcagLevel: "AA",
+    notes: 'The root renders as a <nav> landmark with aria-label. The mobile menu uses role="dialog" with aria-modal="true" and a manual focus trap. Background content is set to the inert attribute (not aria-hidden) to prevent all interaction. The toggle button uses id/aria-controls to link to the menu panel, and aria-expanded to communicate state. Body scroll is locked with overflow:hidden and scrollbar-width padding compensation to prevent layout shift.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: 'Buttons are commonly placed in Navbar.Actions for CTAs like "Sign in" and "Get started", and in the mobile menu for mobile CTAs'
+    },
+    {
+      slug: "typography",
+      reason: "Typography.H5 or similar headings are used inside Navbar.Brand to render the site name or logo text"
+    },
+    {
+      slug: "divider",
+      reason: "Dividers separate navigation items from action buttons in the mobile menu using Navbar.Separator"
+    },
+    {
+      slug: "avatar",
+      reason: "Avatars can appear in Navbar.Brand or Navbar.Actions for user profile indicators and account menus"
+    },
+    {
+      slug: "badge",
+      reason: "Badges can be used on Navbar.Item elements to indicate notification counts or new feature labels"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Default Navbar",
+      description: "A complete responsive navbar with brand, navigation items with active state, action buttons, and a mobile menu.",
+      code: `import { Navbar, Button, Typography, Divider } from 'vayu-ui';
+
+export default function NavbarDemo() {
+  return (
+    <Navbar>
+      <Navbar.Container>
+        <Navbar.Brand>
+          <Typography.H5 variant="primary" font="primary" className="text-lg font-bold">
+            Acme
+          </Typography.H5>
+        </Navbar.Brand>
+
+        <Navbar.Items>
+          <Navbar.Item active>Home</Navbar.Item>
+          <Navbar.Item>Products</Navbar.Item>
+          <Navbar.Item>About</Navbar.Item>
+          <Navbar.Item>Contact</Navbar.Item>
+        </Navbar.Items>
+
+        <Navbar.Actions>
+          <Button variant="ghost" size="small">
+            <Button.Text>Sign in</Button.Text>
+          </Button>
+          <Button variant="primary" size="small">
+            <Button.Text>Get started</Button.Text>
+          </Button>
+        </Navbar.Actions>
+
+        <Navbar.Toggle />
+      </Navbar.Container>
+
+      <Navbar.MobileMenu>
+        <Navbar.MobileItem active>Home</Navbar.MobileItem>
+        <Navbar.MobileItem>Products</Navbar.MobileItem>
+        <Navbar.MobileItem>About</Navbar.MobileItem>
+        <Navbar.MobileItem>Contact</Navbar.MobileItem>
+        <Divider spacing="sm" decorative />
+        <div className="flex flex-col gap-2 px-4">
+          <Button variant="ghost" size="small" fullWidth>
+            <Button.Text>Sign in</Button.Text>
+          </Button>
+          <Button variant="primary" size="small" fullWidth>
+            <Button.Text>Get started</Button.Text>
+          </Button>
+        </div>
+      </Navbar.MobileMenu>
+    </Navbar>
+  );
+}`,
+      tags: ["default", "responsive", "mobile", "brand", "actions", "active"]
+    },
+    {
+      title: "Narrow Container Navbar",
+      description: "A navbar using a narrower max-width container for compact page layouts.",
+      code: `import { Navbar, Button, Typography } from 'vayu-ui';
+
+export default function NarrowNavbar() {
+  return (
+    <Navbar>
+      <Navbar.Container maxWidth="md">
+        <Navbar.Brand>
+          <Typography.H5 variant="primary" font="primary" className="text-lg font-bold">
+            Docs
+          </Typography.H5>
+        </Navbar.Brand>
+
+        <Navbar.Items>
+          <Navbar.Item active>Getting Started</Navbar.Item>
+          <Navbar.Item>API Reference</Navbar.Item>
+          <Navbar.Item>Examples</Navbar.Item>
+        </Navbar.Items>
+
+        <Navbar.Toggle />
+      </Navbar.Container>
+
+      <Navbar.MobileMenu>
+        <Navbar.MobileItem active>Getting Started</Navbar.MobileItem>
+        <Navbar.MobileItem>API Reference</Navbar.MobileItem>
+        <Navbar.MobileItem>Examples</Navbar.MobileItem>
+      </Navbar.MobileMenu>
+    </Navbar>
+  );
+}`,
+      tags: ["narrow", "container", "max-width", "docs"]
+    },
+    {
+      title: "Navbar with Separators",
+      description: "A navbar using Separator to divide mobile menu sections into groups.",
+      code: `import { Navbar, Button, Typography } from 'vayu-ui';
+
+export default function SeparatedNavbar() {
+  return (
+    <Navbar>
+      <Navbar.Container>
+        <Navbar.Brand>
+          <Typography.H5 variant="primary" font="primary" className="text-lg font-bold">
+            MyApp
+          </Typography.H5>
+        </Navbar.Brand>
+
+        <Navbar.Items>
+          <Navbar.Item active>Dashboard</Navbar.Item>
+          <Navbar.Item>Settings</Navbar.Item>
+        </Navbar.Items>
+
+        <Navbar.Actions>
+          <Button variant="ghost" size="small">
+            <Button.Text>Log out</Button.Text>
+          </Button>
+        </Navbar.Actions>
+
+        <Navbar.Toggle />
+      </Navbar.Container>
+
+      <Navbar.MobileMenu>
+        <Navbar.MobileItem active>Dashboard</Navbar.MobileItem>
+        <Navbar.MobileItem>Settings</Navbar.MobileItem>
+        <Navbar.Separator />
+        <Navbar.MobileItem>Help</Navbar.MobileItem>
+        <Navbar.MobileItem>Log out</Navbar.MobileItem>
+      </Navbar.MobileMenu>
+    </Navbar>
+  );
+}`,
+      tags: ["separator", "sections", "grouped", "mobile"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using Navbar sub-components outside of <Navbar>",
+      bad: "<Navbar.Items><Navbar.Item>Home</Navbar.Item></Navbar.Items>",
+      good: "<Navbar><Navbar.Container><Navbar.Items><Navbar.Item>Home</Navbar.Item></Navbar.Items></Navbar.Container></Navbar>",
+      reason: 'All Navbar sub-components except the root use the Navbar context via useNavbar(). Rendering them outside <Navbar> throws an error: "Navbar compound components must be used inside <Navbar>".'
+    },
+    {
+      title: "Forgetting Navbar.Toggle when using MobileMenu",
+      bad: "<Navbar><Navbar.Container><Navbar.Brand>Logo</Navbar.Brand></Navbar.Container><Navbar.MobileMenu>...</Navbar.MobileMenu></Navbar>",
+      good: "<Navbar><Navbar.Container><Navbar.Brand>Logo</Navbar.Brand><Navbar.Toggle /></Navbar.Container><Navbar.MobileMenu>...</Navbar.MobileMenu></Navbar>",
+      reason: "Without Navbar.Toggle, users have no way to open the mobile menu. The toggle button provides aria-expanded, aria-controls, and the click handler that sets mobileOpen to true."
+    },
+    {
+      title: "Putting mobile-only content in Navbar.Items or Navbar.Actions",
+      bad: '<Navbar.Items><Navbar.Item className="md:hidden">Menu</Navbar.Item></Navbar.Items>',
+      good: "Place mobile-only items inside Navbar.MobileMenu instead; Navbar.Items and Navbar.Actions are hidden on mobile via md: breakpoints",
+      reason: 'Navbar.Items and Navbar.Actions use "hidden md:flex" \u2014 they are invisible below the md breakpoint. Adding mobile content there wastes renders. Use Navbar.MobileMenu for mobile-specific items.'
+    },
+    {
+      title: "Using Navbar.Item href with onClick simultaneously for navigation",
+      bad: '<Navbar.Item href="/page" onClick={() => doSomething()}>Link</Navbar.Item>',
+      good: '<Navbar.Item href="/page">Link</Navbar.Item>  // handle side effects in the page component or router middleware',
+      reason: "Navbar.Item renders as a Link component. Combining href with a custom onClick can cause race conditions between client-side navigation and your handler. If you need custom click behavior, use a plain element inside the list instead."
+    },
+    {
+      title: "Nesting Navbar inside another landmark nav element",
+      bad: "<nav><Navbar>...</Navbar></nav>",
+      good: '<Navbar>...</Navbar>  // Navbar already renders as <nav aria-label="Main navigation">',
+      reason: 'Navbar renders as a <nav> element with aria-label="Main navigation". Nesting it inside another <nav> creates a confusing landmark structure for screen readers.'
+    }
+  ]
+};
+
+// src/components/spinner.ts
+var spinnerEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "spinner",
+  name: "Spinner",
+  type: "component",
+  category: "feedback",
+  // ── Description ───────────────────────────────────────
+  description: "A WCAG 2.2 AA compliant animated circular loading indicator with three sizes, accessible ARIA attributes, and reduced-motion support.",
+  longDescription: `The Spinner component renders an animated circular border spinner as an inline loading indicator. It uses design system tokens (border-brand) for consistent styling and supports three sizes: sm (w-4 h-4), md (w-6 h-6), and lg (w-8 h-8). The component includes built-in accessibility with role="status", aria-live="polite", aria-busy="true", and a screen-reader-only text node. Animations automatically respect prefers-reduced-motion via Tailwind's motion-reduce:animate-none. Custom colors can be applied via the className prop using semantic tokens like border-info, border-success, border-warning, or border-destructive.`,
+  tags: [
+    "spinner",
+    "loading",
+    "loader",
+    "progress",
+    "indicator",
+    "spinner",
+    "pending",
+    "async",
+    "feedback",
+    "span",
+    "animation",
+    "aria"
+  ],
+  useCases: [
+    "Indicating loading state inside buttons, forms, or action areas during async operations",
+    "Providing accessible inline loading feedback with proper ARIA announcements for screen readers",
+    "Displaying page-level or section-level loading indicators while data is being fetched",
+    "Showing loading state alongside descriptive text to communicate what is currently loading",
+    "Customizing loading indicator colors to match semantic status (info, success, warning, error)"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Spinner",
+  files: [
+    { name: "index.ts", description: "Barrel export for Spinner component and types" },
+    { name: "types.ts", description: "TypeScript type definitions for SpinnerProps and SpinnerSize" },
+    { name: "Spinner.tsx", description: "Spinner component with size configuration, ARIA attributes, and reduced-motion support" },
+    { name: "README.md", description: "Component documentation, anatomy, and use cases" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Spinner",
+  subComponents: [],
+  hooks: [],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "size",
+      type: "SpinnerSize",
+      required: false,
+      defaultValue: "'md'",
+      description: "Size of the spinner: sm (w-4 h-4), md (w-6 h-6), lg (w-8 h-8).",
+      options: ["sm", "md", "lg"]
+    },
+    {
+      name: "aria-label",
+      type: "string",
+      required: false,
+      defaultValue: "'Loading'",
+      description: "Accessible label announced by screen readers to describe what is loading."
+    }
+  ],
+  rendersAs: "span",
+  // ── Variants ──────────────────────────────────────────
+  // No variant prop — Spinner has a fixed border-based visual style
+  // ── Sizes ─────────────────────────────────────────────
+  sizes: {
+    propName: "size",
+    options: ["sm", "md", "lg"],
+    default: "md"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "spinning",
+      prop: "animation",
+      isBoolean: true,
+      defaultValue: "true",
+      description: "The spinner is always in a spinning state when rendered. Animations respect prefers-reduced-motion via motion-reduce:animate-none, rendering a static circle for users who prefer reduced motion."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "status",
+    attributes: [
+      {
+        name: 'role="status"',
+        description: "Creates an ARIA live region that announces the loading state to screen readers.",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-live="polite"',
+        description: "Announces loading state changes without interrupting the user. Screen readers will announce the aria-label when the spinner appears.",
+        managedByComponent: true
+      },
+      {
+        name: 'aria-busy="true"',
+        description: "Indicates the element is currently being updated and content is not yet available.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label",
+        description: 'Defaults to "Loading" and should be overridden to describe what is loading (e.g. "Loading user profile"). Required for screen reader users to understand context.',
+        managedByComponent: false
+      }
+    ],
+    keyboardInteractions: [],
+    focusManagement: 'The Spinner is a non-interactive status indicator. It does not receive focus or participate in keyboard navigation. Screen readers detect it via role="status" and aria-live="polite".',
+    wcagLevel: "AA",
+    notes: `Includes a screen-reader-only text node (<span className="sr-only">) with the aria-label value as a fallback for assistive technologies. Animations respect prefers-reduced-motion via Tailwind's motion-reduce:animate-none class.`
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Spinner is commonly used inside buttons to indicate loading/processing state during async actions"
+    },
+    {
+      slug: "skeleton",
+      reason: "Both are loading feedback components \u2014 Spinner for inline indicators, Skeleton for content placeholders"
+    },
+    {
+      slug: "text-input",
+      reason: "Spinner can indicate async validation or search-in-progress state within text input fields"
+    },
+    {
+      slug: "card",
+      reason: "Spinner can serve as a loading indicator inside cards while card content is being fetched"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Spinner Sizes",
+      description: "Three available sizes: sm, md (default), and lg.",
+      code: `import { Spinner } from 'vayu-ui';
+
+export default function SpinnerSizes() {
+  return (
+    <div className="flex items-center gap-6">
+      <Spinner size="sm" aria-label="Loading (small)" />
+      <Spinner size="md" aria-label="Loading (medium)" />
+      <Spinner size="lg" aria-label="Loading (large)" />
+    </div>
+  );
+}`,
+      tags: ["basic", "sizes"]
+    },
+    {
+      title: "Spinner with Loading Text",
+      description: "Pair the spinner with descriptive text to communicate what is loading.",
+      code: `import { Spinner } from 'vayu-ui';
+
+export default function SpinnerWithText() {
+  return (
+    <div
+      className="flex items-center gap-3"
+      role="status"
+      aria-live="polite"
+    >
+      <Spinner size="sm" aria-label="Fetching user data" />
+      <p className="text-sm text-muted-content">Fetching user data...</p>
+    </div>
+  );
+}`,
+      tags: ["text", "loading", "inline"]
+    },
+    {
+      title: "Spinner Button Integration",
+      description: "Using Spinner inside a Button to indicate async processing state.",
+      code: `import { Button, Status } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function SpinnerButton() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = () => {
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 2000);
+  };
+
+  return (
+    <Button
+      variant="primary"
+      size="medium"
+      loading={isLoading ? Status.PENDING : Status.IDLE}
+      onClick={handleSubmit}
+      loadingText="Processing..."
+    >
+      Submit Form
+    </Button>
+  );
+}`,
+      tags: ["button", "async", "loading"]
+    },
+    {
+      title: "Custom Color Spinners",
+      description: "Override border colors using semantic design tokens via className.",
+      code: `import { Spinner } from 'vayu-ui';
+
+export default function CustomColorSpinners() {
+  return (
+    <div className="flex items-center gap-6">
+      <Spinner size="md" className="border-info border-t-transparent" aria-label="Loading info" />
+      <Spinner size="md" className="border-success border-t-transparent" aria-label="Loading success" />
+      <Spinner size="md" className="border-warning border-t-transparent" aria-label="Loading warning" />
+      <Spinner size="md" className="border-destructive border-t-transparent" aria-label="Loading error" />
+    </div>
+  );
+}`,
+      tags: ["custom", "colors", "semantic"]
+    },
+    {
+      title: "Accessible Spinner",
+      description: "Providing a descriptive aria-label for screen reader users.",
+      code: `import { Spinner } from 'vayu-ui';
+
+export default function AccessibleSpinner() {
+  return (
+    <div className="flex items-center gap-3">
+      <Spinner size="md" aria-label="Loading your dashboard preferences" />
+      <p className="text-sm text-muted-content">
+        Screen readers announce "Loading your dashboard preferences"
+      </p>
+    </div>
+  );
+}`,
+      tags: ["accessible", "aria", "screen-reader"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Omitting the aria-label prop",
+      bad: '<Spinner size="md" />',
+      good: '<Spinner size="md" aria-label="Loading search results" />',
+      reason: 'While the component defaults aria-label to "Loading", a generic label does not tell screen reader users what is actually loading. Always provide a descriptive aria-label that identifies the specific loading context.'
+    },
+    {
+      title: "Using Spinner for non-loading decorative purposes",
+      bad: '<Spinner size="sm" className="border-muted" />',
+      good: '<span className="inline-block w-4 h-4 rounded-full border-2 border-muted border-t-transparent animate-spin" />',
+      reason: 'Spinner includes ARIA attributes (role="status", aria-busy="true", aria-live="polite") that signal a loading state to assistive technology. Using it decoratively creates false accessibility announcements.'
+    },
+    {
+      title: "Hiding the Spinner with display:none instead of conditional rendering",
+      bad: '<Spinner style={{ display: isLoading ? "inline-block" : "none" }} />',
+      good: '{isLoading && <Spinner aria-label="Loading data" />}',
+      reason: "Using display:none keeps the spinner's ARIA live region in the DOM, which may cause screen readers to announce a loading state that is not visible. Conditional rendering cleanly adds and removes the element."
+    },
+    {
+      title: "Overriding the animation with custom CSS keyframes",
+      bad: '<Spinner className="animate-bounce" />',
+      good: "<Spinner />  /* uses built-in animate-spin with motion-reduce support */",
+      reason: "The built-in animate-spin animation is paired with motion-reduce:animate-none to respect prefers-reduced-motion. Custom animations bypass this accessibility safeguard and may cause discomfort for motion-sensitive users."
+    }
+  ]
+};
+
+// src/components/modal.ts
+var modalEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "modal",
+  name: "Modal",
+  type: "component",
+  category: "overlay",
+  // ── Description ───────────────────────────────────────
+  description: "An accessible dialog component with focus trapping, keyboard navigation, body scroll locking, and the compound component pattern.",
+  longDescription: "The Modal component renders a centered dialog overlay using React portals. It uses the compound component pattern (Modal.Trigger, Modal.Content, Modal.Header, Modal.Title, Modal.Description, Modal.Body, Modal.Footer, Modal.Close) to compose rich dialog layouts. It supports controlled and uncontrolled open state, five size presets (sm, md, lg, xl, full), configurable overlay click and Escape key dismissal, automatic focus trapping within the modal content, body scroll locking with scrollbar compensation, and automatic focus return to the trigger element on close. The built-in close button uses the Lucide X icon. All sub-components forward refs and accept className overrides.",
+  tags: [
+    "modal",
+    "dialog",
+    "overlay",
+    "popup",
+    "lightbox",
+    "confirmation",
+    "form-dialog",
+    "portal",
+    "focus-trap"
+  ],
+  useCases: [
+    "Confirmation dialogs for destructive actions like deleting an account or removing data",
+    "Form dialogs for creating or editing records without navigating away from the current page",
+    "Informational popups that display detailed content, terms of service, or privacy policies",
+    "Multi-step wizards presented as a focused overlay within a single page application",
+    "Image or content lightboxes that display media at larger sizes over the page",
+    "Cookie consent or announcement banners that require explicit user acknowledgment"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Modal",
+  files: [
+    { name: "Modal.tsx", description: "Root component providing ModalContext, controlled/uncontrolled state management, body scroll lock, and compound component assembly" },
+    { name: "ModalTrigger.tsx", description: "Button that opens the modal; supports asChild for custom trigger elements with aria-expanded and aria-haspopup" },
+    { name: "ModalOverlay.tsx", description: "Semi-transparent backdrop with backdrop blur; optionally dismissible on click based on closeOnOverlayClick prop" },
+    { name: "ModalContent.tsx", description: "Portal-rendered dialog container with focus trapping, keyboard navigation, Escape handling, and auto-generated ARIA attributes" },
+    { name: "ModalHeader.tsx", description: "Flex row layout for the header area, typically containing Title, Description, and Close sub-components" },
+    { name: "ModalTitle.tsx", description: "Heading element with auto-generated id linked to aria-labelledby on the dialog" },
+    { name: "ModalDescription.tsx", description: "Paragraph element with auto-generated id linked to aria-describedby on the dialog" },
+    { name: "ModalBody.tsx", description: "Scrollable content area with flex-1 to fill available space between header and footer" },
+    { name: "ModalFooter.tsx", description: "Flex row layout at the bottom of the modal for action buttons (Confirm, Cancel, etc.)" },
+    { name: "ModalClose.tsx", description: "Button that closes the modal; renders a Lucide X icon by default, supports asChild for custom close elements" },
+    { name: "types.ts", description: "TypeScript type definitions for ModalProps, ModalSize, ModalContextType, and all sub-component prop interfaces" },
+    { name: "index.ts", description: "Barrel export file assembling the compound component via Object.assign and re-exporting all types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Modal",
+  subComponents: [
+    {
+      name: "Trigger",
+      fileName: "ModalTrigger.tsx",
+      description: "Button that opens the modal. When asChild is true, clones the child element instead of rendering a default button.",
+      props: [
+        {
+          name: "asChild",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, merges event handlers and ARIA attributes onto the child element instead of rendering a wrapping button"
+        },
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content to render; either a custom element (with asChild) or the button label text"
+        }
+      ],
+      supportsAsChild: true
+    },
+    {
+      name: "Overlay",
+      fileName: "ModalOverlay.tsx",
+      description: "Semi-transparent backdrop with backdrop blur rendered behind the modal content. Clicking it closes the modal when closeOnOverlayClick is true.",
+      props: []
+    },
+    {
+      name: "Content",
+      fileName: "ModalContent.tsx",
+      description: "Portal-rendered dialog container. Handles focus trapping, keyboard navigation (Escape and Tab), and links Title/Description via ARIA attributes.",
+      props: []
+    },
+    {
+      name: "Header",
+      fileName: "ModalHeader.tsx",
+      description: "Flex row layout for the header area, typically containing Title, Description, and Close sub-components.",
+      props: []
+    },
+    {
+      name: "Title",
+      fileName: "ModalTitle.tsx",
+      description: "Heading element whose auto-generated id is linked to the dialog via aria-labelledby for screen reader access.",
+      props: []
+    },
+    {
+      name: "Description",
+      fileName: "ModalDescription.tsx",
+      description: "Paragraph element whose auto-generated id is linked to the dialog via aria-describedby for screen reader access.",
+      props: []
+    },
+    {
+      name: "Body",
+      fileName: "ModalBody.tsx",
+      description: "Scrollable content area with flex-1 to fill available space between the header and footer.",
+      props: []
+    },
+    {
+      name: "Footer",
+      fileName: "ModalFooter.tsx",
+      description: "Flex row layout pinned to the bottom of the modal for action buttons (Confirm, Cancel, etc.).",
+      props: []
+    },
+    {
+      name: "Close",
+      fileName: "ModalClose.tsx",
+      description: "Button that closes the modal. Renders a Lucide X icon by default. When asChild is true, clones the child element instead.",
+      props: [
+        {
+          name: "asChild",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, merges the close handler onto the child element instead of rendering the default X icon button"
+        },
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: false,
+          description: "Custom content for the close button; when omitted, renders the default Lucide X icon"
+        }
+      ],
+      supportsAsChild: true
+    }
+  ],
+  hooks: ["useModal"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Modal sub-components (Trigger, Content, Header, etc.) composing the full modal UI"
+    },
+    {
+      name: "open",
+      type: "boolean",
+      required: false,
+      description: "Controlled open state. Use with onOpenChange for fully controlled mode."
+    },
+    {
+      name: "onOpenChange",
+      type: "(open: boolean) => void",
+      required: false,
+      description: "Callback fired when the modal open state changes, for controlled usage"
+    },
+    {
+      name: "defaultOpen",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Initial open state for uncontrolled mode"
+    },
+    {
+      name: "size",
+      type: "ModalSize",
+      required: false,
+      defaultValue: "'md'",
+      description: "Width preset for the modal dialog. Maps to maxWidth: sm=28rem, md=32rem, lg=40rem, xl=48rem, full=calc(100vw - 4rem)",
+      options: ["sm", "md", "lg", "xl", "full"]
+    },
+    {
+      name: "closeOnOverlayClick",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "When true, clicking the overlay backdrop closes the modal"
+    },
+    {
+      name: "closeOnEscape",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "When true, pressing the Escape key closes the modal"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  // No variant prop — size is the primary visual differentiator.
+  sizes: {
+    propName: "size",
+    options: ["sm", "md", "lg", "xl", "full"],
+    default: "md"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "open",
+      prop: "open",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Whether the modal is visible. In controlled mode, set via the open prop; in uncontrolled mode, toggled by Trigger and Close."
+    },
+    {
+      name: "size",
+      prop: "size",
+      isBoolean: false,
+      values: ["sm", "md", "lg", "xl", "full"],
+      defaultValue: "'md'",
+      description: "Width preset controlling the maximum width of the modal dialog."
+    },
+    {
+      name: "closeOnOverlayClick",
+      prop: "closeOnOverlayClick",
+      isBoolean: true,
+      defaultValue: "true",
+      description: "Whether clicking the overlay backdrop dismisses the modal. Disable for critical confirmation dialogs."
+    },
+    {
+      name: "closeOnEscape",
+      prop: "closeOnEscape",
+      isBoolean: true,
+      defaultValue: "true",
+      description: "Whether pressing Escape dismisses the modal. Disable for mandatory user-action dialogs."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onOpenChange",
+      signature: "(open: boolean) => void",
+      description: "Fired when the modal open state changes (opened via Trigger, closed via Close/Escape/overlay click). Use this in controlled mode."
+    },
+    {
+      name: "onClick (Trigger)",
+      signature: "(event: React.MouseEvent<HTMLButtonElement>) => void",
+      description: "Fired when the Trigger is clicked, before the modal opens. Call event.preventDefault() to prevent opening."
+    },
+    {
+      name: "onClick (Overlay)",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fired when the Overlay is clicked. If closeOnOverlayClick is true (default), the modal closes after the handler."
+    },
+    {
+      name: "onClick (Close)",
+      signature: "(event: React.MouseEvent<HTMLButtonElement>) => void",
+      description: "Fired when the Close button is clicked, before the modal closes. Call event.preventDefault() to prevent closing."
+    },
+    {
+      name: "onKeyDown (Content)",
+      signature: "(event: React.KeyboardEvent<HTMLDivElement>) => void",
+      description: "Fired on key down within the modal content. Escape closes the modal; Tab/Shift+Tab cycle focus within the trap."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "dialog",
+    attributes: [
+      {
+        name: "aria-modal",
+        description: 'Set to "true" on Modal.Content, informing screen readers that content outside the dialog is inert',
+        managedByComponent: true
+      },
+      {
+        name: "aria-labelledby",
+        description: "Set on Modal.Content with the auto-generated id from Modal.Title, linking the dialog to its accessible name",
+        managedByComponent: true
+      },
+      {
+        name: "aria-describedby",
+        description: "Set on Modal.Content with the auto-generated id from Modal.Description, linking the dialog to its description",
+        managedByComponent: true
+      },
+      {
+        name: "aria-expanded",
+        description: "Set on Modal.Trigger to indicate whether the modal is currently open or closed",
+        managedByComponent: true
+      },
+      {
+        name: "aria-haspopup",
+        description: 'Set to "dialog" on Modal.Trigger to indicate that activating it opens a dialog',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: 'Set to "true" on Modal.Overlay to hide the backdrop from the accessibility tree',
+        managedByComponent: true
+      },
+      {
+        name: "aria-label",
+        description: 'Set to "Close" on the default close button rendered by Modal.Close',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Escape",
+        behavior: "Closes the modal when focus is inside the content panel (unless closeOnEscape is false)"
+      },
+      {
+        key: "Tab",
+        behavior: "Cycles focus to the next focusable element inside the modal; wraps from last to first element"
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Cycles focus to the previous focusable element inside the modal; wraps from first to last element"
+      }
+    ],
+    focusManagement: "When the modal opens, the first focusable element inside Modal.Content is auto-focused after a 50ms delay. Tab and Shift+Tab wrap focus within the modal content. When the modal closes, focus returns to the trigger element that opened it. Body scroll is locked while the modal is open, with scrollbar width compensation to prevent layout shift.",
+    wcagLevel: "AA",
+    notes: "Title and Description ids are generated via React.useId() and automatically linked to the dialog via aria-labelledby and aria-describedby. Always include a Modal.Title for a valid accessible name. The default close button includes both an aria-label and sr-only text for screen readers."
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "lucide-react" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Used as the trigger element via asChild on Modal.Trigger and as footer actions (Confirm, Cancel) via Modal.Close"
+    },
+    {
+      slug: "text-input",
+      reason: "Form modals commonly contain TextInput fields for editing data (profile, settings, filters)"
+    },
+    {
+      slug: "typography",
+      reason: "Used for body text, headings, and labels inside modal content for consistent styling"
+    },
+    {
+      slug: "alert",
+      reason: "Alerts can appear inside a modal for form validation feedback or warning messages before destructive actions"
+    },
+    {
+      slug: "divider",
+      reason: "Separates the header area from the body content in standard modal layouts"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Uncontrolled Modal",
+      description: "State is managed internally. Use Modal.Trigger to open and Modal.Close or overlay/Escape to close.",
+      code: `import { Modal, Button, Typography } from 'vayu-ui';
+
+export default function UncontrolledModalDemo() {
+  return (
+    <Modal>
+      <Modal.Trigger asChild>
+        <Button variant="primary">Open Modal</Button>
+      </Modal.Trigger>
+
+      <Modal.Content>
+        <Modal.Header>
+          <div className="flex-1">
+            <Modal.Title>Welcome Message</Modal.Title>
+            <Modal.Description>
+              This modal manages its own open state internally.
+            </Modal.Description>
+          </div>
+          <Modal.Close />
+        </Modal.Header>
+
+        <Modal.Body>
+          <Typography.P>
+            This is a simple modal dialog. You can close it by clicking the X
+            button, clicking outside the modal, or pressing the Escape key.
+          </Typography.P>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Modal.Close asChild>
+            <Button variant="secondary">Close</Button>
+          </Modal.Close>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>
+  );
+}`,
+      tags: ["uncontrolled", "basic", "trigger", "default"]
+    },
+    {
+      title: "Controlled Modal",
+      description: "Control the modal state externally with open and onOpenChange props for programmatic opening.",
+      code: `import { useState } from 'react';
+import { Modal, Button, Typography } from 'vayu-ui';
+
+export default function ControlledModalDemo() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="primary" onClick={() => setIsOpen(true)}>
+        Open Controlled Modal
+      </Button>
+
+      <Modal open={isOpen} onOpenChange={setIsOpen}>
+        <Modal.Content>
+          <Modal.Header>
+            <div className="flex-1">
+              <Modal.Title>Controlled State</Modal.Title>
+              <Modal.Description>
+                This modal is controlled by external state.
+              </Modal.Description>
+            </div>
+            <Modal.Close />
+          </Modal.Header>
+
+          <Modal.Body>
+            <Typography.P>
+              The open state is managed by the parent component. This is useful
+              when you need to open the modal programmatically or track the
+              state.
+            </Typography.P>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Modal.Close asChild>
+              <Button variant="secondary">Cancel</Button>
+            </Modal.Close>
+            <Button variant="primary" onClick={() => setIsOpen(false)}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+    </>
+  );
+}`,
+      tags: ["controlled", "state", "programmatic"]
+    },
+    {
+      title: "Form Modal",
+      description: "Modal containing a form with labeled inputs for editing user profile information.",
+      code: `import { Modal, Button, Typography } from 'vayu-ui';
+
+export default function FormModalDemo() {
+  return (
+    <Modal>
+      <Modal.Trigger asChild>
+        <Button variant="primary">Edit Profile</Button>
+      </Modal.Trigger>
+
+      <Modal.Content>
+        <Modal.Header>
+          <div className="flex-1">
+            <Modal.Title>Edit Profile</Modal.Title>
+            <Modal.Description>
+              Update your personal information below.
+            </Modal.Description>
+          </div>
+          <Modal.Close />
+        </Modal.Header>
+
+        <Modal.Body>
+          <form className="space-y-4">
+            <div>
+              <Typography.Label htmlFor="name-input" className="block mb-1.5">
+                Full Name
+              </Typography.Label>
+              <input
+                type="text"
+                id="name-input"
+                placeholder="John Doe"
+                className="w-full px-3 py-2 rounded-control border border-field bg-surface text-surface-content focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              />
+            </div>
+            <div>
+              <Typography.Label htmlFor="email-input" className="block mb-1.5">
+                Email Address
+              </Typography.Label>
+              <input
+                type="email"
+                id="email-input"
+                placeholder="john@example.com"
+                className="w-full px-3 py-2 rounded-control border border-field bg-surface text-surface-content focus:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+              />
+            </div>
+          </form>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Modal.Close asChild>
+            <Button variant="secondary">Cancel</Button>
+          </Modal.Close>
+          <Button variant="primary">Save Changes</Button>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>
+  );
+}`,
+      tags: ["form", "edit", "input", "profile"]
+    },
+    {
+      title: "Destructive Action Confirmation",
+      description: "Small modal for confirming destructive actions with closeOnOverlayClick disabled to force explicit user choice.",
+      code: `import { useState } from 'react';
+import { Modal, Button, Typography } from 'vayu-ui';
+
+export default function DestructiveModalDemo() {
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="destructive" onClick={() => setIsDeleteOpen(true)}>
+        Delete Account
+      </Button>
+
+      <Modal
+        open={isDeleteOpen}
+        onOpenChange={setIsDeleteOpen}
+        size="sm"
+        closeOnOverlayClick={false}
+      >
+        <Modal.Content>
+          <Modal.Header>
+            <div className="flex-1">
+              <Modal.Title>Delete Account?</Modal.Title>
+              <Modal.Description>This action cannot be undone.</Modal.Description>
+            </div>
+            <Modal.Close />
+          </Modal.Header>
+
+          <Modal.Body>
+            <Typography.P>
+              Are you sure you want to delete your account? All of your data will
+              be permanently removed.
+            </Typography.P>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Modal.Close asChild>
+              <Button variant="secondary">Cancel</Button>
+            </Modal.Close>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                alert('Account deleted!');
+                setIsDeleteOpen(false);
+              }}
+            >
+              Delete Account
+            </Button>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+    </>
+  );
+}`,
+      tags: ["destructive", "confirmation", "delete", "size-sm"]
+    },
+    {
+      title: "Size Variants",
+      description: "Demonstrates all five size presets (sm, md, lg, xl, full) for different content needs.",
+      code: `import { Modal, Button, Typography } from 'vayu-ui';
+
+export default function SizeModalDemo() {
+  const sizes = ['sm', 'md', 'lg', 'xl', 'full'] as const;
+
+  return (
+    <div className="flex flex-wrap gap-3">
+      {sizes.map((size) => (
+        <Modal key={size} size={size}>
+          <Modal.Trigger asChild>
+            <Button variant="outline">{size.toUpperCase()}</Button>
+          </Modal.Trigger>
+
+          <Modal.Content>
+            <Modal.Header>
+              <div className="flex-1">
+                <Modal.Title>{size.toUpperCase()} Modal</Modal.Title>
+                <Modal.Description>
+                  This modal uses the {size} size variant.
+                </Modal.Description>
+              </div>
+              <Modal.Close />
+            </Modal.Header>
+
+            <Modal.Body>
+              <Typography.P>
+                This modal demonstrates the <strong>{size}</strong> size option.
+                {size === 'full' && ' It takes up almost the entire viewport width.'}
+              </Typography.P>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Modal.Close asChild>
+                <Button variant="secondary">Close</Button>
+              </Modal.Close>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
+      ))}
+    </div>
+  );
+}`,
+      tags: ["sizes", "sm", "md", "lg", "xl", "full"]
+    },
+    {
+      title: "Configuration Options",
+      description: "Demonstrates disabling overlay click close and Escape key close for important notices.",
+      code: `import { Modal, Button, Typography } from 'vayu-ui';
+
+export default function ConfigModalDemo() {
+  return (
+    <div className="flex flex-wrap gap-3">
+      <Modal closeOnOverlayClick={false}>
+        <Modal.Trigger asChild>
+          <Button variant="outline">No Overlay Close</Button>
+        </Modal.Trigger>
+
+        <Modal.Content>
+          <Modal.Header>
+            <div className="flex-1">
+              <Modal.Title>Important Notice</Modal.Title>
+              <Modal.Description>
+                This modal cannot be closed by clicking outside.
+              </Modal.Description>
+            </div>
+            <Modal.Close />
+          </Modal.Header>
+
+          <Modal.Body>
+            <Typography.P>
+              You must explicitly close this modal using the X button or the
+              close button below. Clicking the overlay won't work.
+            </Typography.P>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Modal.Close asChild>
+              <Button variant="primary">Got it</Button>
+            </Modal.Close>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+
+      <Modal closeOnEscape={false}>
+        <Modal.Trigger asChild>
+          <Button variant="outline">No Escape Close</Button>
+        </Modal.Trigger>
+
+        <Modal.Content>
+          <Modal.Header>
+            <div className="flex-1">
+              <Modal.Title>No Escape Key</Modal.Title>
+              <Modal.Description>
+                Pressing Escape won't close this modal.
+              </Modal.Description>
+            </div>
+            <Modal.Close />
+          </Modal.Header>
+
+          <Modal.Body>
+            <Typography.P>
+              The Escape key is disabled for this modal. Use the close buttons
+              instead.
+            </Typography.P>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Modal.Close>
+              <Button variant="primary">Close</Button>
+            </Modal.Close>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+    </div>
+  );
+}`,
+      tags: ["configuration", "overlay-click", "escape", "no-close"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Omitting Modal.Title",
+      bad: "<Modal.Content><Modal.Header><Modal.Description>Settings</Modal.Description></Modal.Header></Modal.Content>",
+      good: "<Modal.Content><Modal.Header><Modal.Title>Settings</Modal.Title><Modal.Description>Configure your preferences.</Modal.Description></Modal.Header></Modal.Content>",
+      reason: "The dialog requires an accessible name via aria-labelledby, which is linked to Modal.Title. Without it, screen readers cannot identify the modal purpose."
+    },
+    {
+      title: "Mixing controlled and uncontrolled props",
+      bad: "<Modal open={isVisible} defaultOpen={true}>",
+      good: "<Modal open={isVisible} onOpenChange={setIsVisible}>",
+      reason: "Passing both open and defaultOpen creates conflicting state management. Use open + onOpenChange for controlled mode, or defaultOpen for uncontrolled mode \u2014 never both."
+    },
+    {
+      title: "Using Modal.Close without asChild for custom content",
+      bad: '<Modal.Close><Button variant="destructive">Delete</Button></Modal.Close>',
+      good: '<Modal.Close asChild><Button variant="destructive">Delete</Button></Modal.Close>',
+      reason: "Without asChild, Modal.Close wraps children in a <button> element, resulting in a nested <button> inside <button> which is invalid HTML and causes accessibility issues."
+    },
+    {
+      title: "Nesting modals inside each other",
+      bad: "<Modal><Modal.Content><Modal><Modal.Trigger>Open inner</Modal.Trigger></Modal></Modal.Content></Modal>",
+      good: "Close the first modal before opening the second, or use a different overlay pattern like a drawer for the second layer.",
+      reason: "Nesting modals creates conflicting focus traps, z-index stacking issues, and broken body scroll lock management. Each modal expects to be the top-level overlay."
+    }
+  ]
+};
+
+// src/components/popover.ts
+var popoverEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "popover",
+  name: "Popover",
+  type: "component",
+  category: "overlay",
+  // ── Description ───────────────────────────────────────
+  description: "A floating panel component with automatic positioning, collision detection, arrow rendering, and the compound component pattern.",
+  longDescription: "The Popover component renders a floating panel anchored to a trigger element. It uses the compound component pattern (Popover.Trigger, Popover.Content) to compose popover layouts. It supports controlled and uncontrolled open state, four placement sides (top, right, bottom, left) with three alignment options each (start, center, end), configurable side and alignment offsets, optional directional arrows, intelligent viewport collision detection with automatic side flipping, modal mode with a backdrop overlay, click-outside dismissal, Escape key handling, and automatic focus management. The trigger supports asChild for custom elements while maintaining all ARIA attributes.",
+  tags: [
+    "popover",
+    "popup",
+    "overlay",
+    "dropdown",
+    "tooltip",
+    "floating",
+    "dialog",
+    "menu",
+    "positioned"
+  ],
+  useCases: [
+    "Dropdown menus and action menus that appear on click near a trigger element",
+    "Informational popovers that display supplementary content, descriptions, or hints without navigating away",
+    "Form controls embedded in a floating panel, such as date pickers, color pickers, or inline selects",
+    "Contextual toolbars or formatting options that appear near selected content",
+    "Interactive card previews or profile cards that expand on click with richer details",
+    "Modal-style confirmation dialogs using the modal prop for critical actions that require focused attention"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Popover",
+  files: [
+    { name: "Popover.tsx", description: "Root component providing PopoverContext, controlled/uncontrolled state management, click-outside dismissal, and Escape key handling" },
+    { name: "PopoverTrigger.tsx", description: "Trigger button that toggles the popover; supports asChild for custom trigger elements with aria-expanded and aria-haspopup" },
+    { name: "PopoverContent.tsx", description: "Positioned floating panel with collision detection, arrow rendering, auto-focus on open, and optional modal backdrop" },
+    { name: "hooks.ts", description: "PopoverContext, usePopover hook for consuming context, and usePopoverPosition hook for viewport-aware positioning logic" },
+    { name: "types.ts", description: "TypeScript type definitions for PopoverProps, PopoverTriggerProps, PopoverContentProps, PopoverContextType, and arrow position classes" },
+    { name: "index.ts", description: "Barrel export file assembling the compound component via Object.assign and re-exporting all types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Popover",
+  subComponents: [
+    {
+      name: "Trigger",
+      fileName: "PopoverTrigger.tsx",
+      description: "Button that toggles the popover open/closed. When asChild is true, merges event handlers and ARIA attributes onto the child element instead of rendering a default button.",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content to render; either a custom element (with asChild) or the default button label text"
+        },
+        {
+          name: "asChild",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, merges event handlers and ARIA attributes onto the child element instead of rendering a wrapping button"
+        },
+        {
+          name: "disabled",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "Disables the trigger, preventing popover toggling on click or keyboard activation"
+        }
+      ],
+      supportsAsChild: true
+    },
+    {
+      name: "Content",
+      fileName: "PopoverContent.tsx",
+      description: "Positioned floating panel anchored to the trigger. Handles auto-focus on open, collision detection with side flipping, optional arrow rendering, and modal backdrop mode.",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content to display inside the popover panel"
+        },
+        {
+          name: "side",
+          type: "'top' | 'right' | 'bottom' | 'left'",
+          required: false,
+          defaultValue: "'bottom'",
+          description: "Preferred placement side of the popover relative to the trigger",
+          options: ["top", "right", "bottom", "left"]
+        },
+        {
+          name: "align",
+          type: "'start' | 'center' | 'end'",
+          required: false,
+          defaultValue: "'center'",
+          description: "Alignment of the popover along the trigger axis",
+          options: ["start", "center", "end"]
+        },
+        {
+          name: "sideOffset",
+          type: "number",
+          required: false,
+          defaultValue: "8",
+          description: "Distance in pixels between the trigger and the popover content"
+        },
+        {
+          name: "alignOffset",
+          type: "number",
+          required: false,
+          defaultValue: "0",
+          description: "Offset in pixels along the alignment axis"
+        },
+        {
+          name: "showArrow",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, renders a small directional arrow pointing from the popover to the trigger"
+        },
+        {
+          name: "avoidCollisions",
+          type: "boolean",
+          required: false,
+          defaultValue: "true",
+          description: "When true, automatically flips the popover to the opposite side if there is not enough viewport space"
+        }
+      ]
+    }
+  ],
+  hooks: ["usePopover", "usePopoverPosition"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Popover sub-components (Trigger, Content) composing the full popover UI"
+    },
+    {
+      name: "open",
+      type: "boolean",
+      required: false,
+      description: "Controlled open state. Use with onOpenChange for fully controlled mode."
+    },
+    {
+      name: "onOpenChange",
+      type: "(open: boolean) => void",
+      required: false,
+      description: "Callback fired when the popover open state changes, for controlled usage"
+    },
+    {
+      name: "defaultOpen",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Initial open state for uncontrolled mode"
+    },
+    {
+      name: "modal",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: 'When true, renders a semi-transparent backdrop overlay behind the popover and sets aria-modal to "true"'
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  // No variant or size props — positioning props (side, align, offsets) are the primary visual differentiators.
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "open",
+      prop: "open",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Whether the popover is visible. In controlled mode, set via the open prop; in uncontrolled mode, toggled by Trigger click, Escape key, or click-outside."
+    },
+    {
+      name: "modal",
+      prop: "modal",
+      isBoolean: true,
+      defaultValue: "false",
+      description: 'When true, renders a backdrop overlay that blocks interaction with the rest of the page and sets aria-modal="true" on the content.'
+    },
+    {
+      name: "disabled",
+      prop: "disabled",
+      values: void 0,
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Disables the Trigger sub-component, preventing the popover from opening on click or keyboard activation."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onOpenChange",
+      signature: "(open: boolean) => void",
+      description: "Fired when the popover open state changes (toggled by Trigger click, closed via Escape key or click-outside). Use this in controlled mode."
+    },
+    {
+      name: "onClick (Trigger)",
+      signature: "(event: React.MouseEvent<HTMLElement>) => void",
+      description: "Fired when the Trigger is clicked, before the popover toggles. Respects the disabled prop."
+    },
+    {
+      name: "onKeyDown (Trigger)",
+      signature: "(event: React.KeyboardEvent<HTMLElement>) => void",
+      description: "Fired on key down while the trigger has focus. Enter and Space toggle the popover open state."
+    },
+    {
+      name: "onClick (Backdrop)",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fired when the modal backdrop is clicked (only when modal=true), which closes the popover."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "dialog",
+    attributes: [
+      {
+        name: "aria-expanded",
+        description: "Set on Popover.Trigger to reflect whether the popover is currently open or closed",
+        managedByComponent: true
+      },
+      {
+        name: "aria-haspopup",
+        description: 'Set to "dialog" on Popover.Trigger to indicate that activating it opens a popup dialog',
+        managedByComponent: true
+      },
+      {
+        name: 'role="dialog"',
+        description: "Set on Popover.Content to identify it as a dialog for screen readers",
+        managedByComponent: true
+      },
+      {
+        name: "aria-modal",
+        description: 'Set to "true" on Popover.Content when modal mode is enabled, restricting screen reader navigation to the popover content',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden (arrow)",
+        description: 'Set to "true" on the arrow element to hide the decorative arrow from the accessibility tree',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden (backdrop)",
+        description: 'Set to "true" on the modal backdrop overlay to hide it from the accessibility tree',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Escape",
+        behavior: "Closes the popover and returns focus to the trigger element"
+      },
+      {
+        key: "Enter",
+        behavior: "Toggles the popover open/closed when focus is on the trigger"
+      },
+      {
+        key: "Space",
+        behavior: "Toggles the popover open/closed when focus is on the trigger"
+      },
+      {
+        key: "Tab",
+        behavior: "Moves focus to the next focusable element inside the popover content"
+      }
+    ],
+    focusManagement: "When the popover opens, focus moves to Popover.Content via a double requestAnimationFrame delay with tabIndex={-1}. When the popover closes via Escape, focus returns to the trigger element. Clicking outside the trigger or content closes the popover.",
+    wcagLevel: "AA",
+    notes: 'The popover uses role="dialog" on the content and aria-haspopup="dialog" on the trigger. Focus management uses a double-RAF pattern to ensure the content is rendered before focusing. The arrow and backdrop elements use aria-hidden="true" to avoid polluting the accessibility tree.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [
+    {
+      slug: "button",
+      reason: "Popover.Trigger renders a Button component by default when asChild is not used"
+    }
+  ],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Commonly used as a custom trigger element via asChild on Popover.Trigger"
+    },
+    {
+      slug: "modal",
+      reason: "Alternative overlay pattern for center-screen dialogs; both share controlled/uncontrolled state patterns"
+    },
+    {
+      slug: "tooltip",
+      reason: "Similar floating panel pattern for hover-triggered information; used alongside popovers for different interaction patterns"
+    },
+    {
+      slug: "typography",
+      reason: "Frequently used inside Popover.Content for headings, descriptions, and body text"
+    },
+    {
+      slug: "divider",
+      reason: "Used inside popover content to separate sections of a dropdown menu or action list"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Popover",
+      description: "A simple popover with a default trigger button and content panel positioned below.",
+      code: `import { Popover, Typography } from 'vayu-ui';
+
+export default function BasicPopoverDemo() {
+  return (
+    <Popover>
+      <Popover.Trigger>Open Popover</Popover.Trigger>
+      <Popover.Content>
+        <div className="p-2">
+          <Typography.H4 variant="primary" className="mb-1">
+            Dimensions
+          </Typography.H4>
+          <Typography.P variant="secondary">
+            Set the dimensions for the layer.
+          </Typography.P>
+        </div>
+      </Popover.Content>
+    </Popover>
+  );
+}`,
+      tags: ["basic", "default", "uncontrolled"]
+    },
+    {
+      title: "Popover with Arrow",
+      description: "A popover that renders above the trigger with a directional arrow pointing to it.",
+      code: `import { Popover, Typography } from 'vayu-ui';
+
+export default function ArrowPopoverDemo() {
+  return (
+    <Popover>
+      <Popover.Trigger>With Arrow</Popover.Trigger>
+      <Popover.Content showArrow side="top">
+        <div className="p-2">
+          <Typography.P variant="secondary">
+            This popover has an arrow pointing to the trigger.
+          </Typography.P>
+        </div>
+      </Popover.Content>
+    </Popover>
+  );
+}`,
+      tags: ["arrow", "top", "directional"]
+    },
+    {
+      title: "Position Variants",
+      description: "All four placement sides (top, bottom, left, right) with arrows demonstrating directional positioning.",
+      code: `import { Popover, Typography } from 'vayu-ui';
+
+export default function PositionPopoverDemo() {
+  return (
+    <div className="flex gap-4 flex-wrap justify-center">
+      <Popover>
+        <Popover.Trigger>Top</Popover.Trigger>
+        <Popover.Content side="top" align="center" showArrow>
+          <div className="p-2">
+            <Typography.P variant="secondary">Top Position</Typography.P>
+          </div>
+        </Popover.Content>
+      </Popover>
+
+      <Popover>
+        <Popover.Trigger>Bottom</Popover.Trigger>
+        <Popover.Content side="bottom" align="center" showArrow>
+          <div className="p-2">
+            <Typography.P variant="secondary">Bottom Position</Typography.P>
+          </div>
+        </Popover.Content>
+      </Popover>
+
+      <Popover>
+        <Popover.Trigger>Left</Popover.Trigger>
+        <Popover.Content side="left" align="center" showArrow>
+          <div className="p-2">
+            <Typography.P variant="secondary">Left Position</Typography.P>
+          </div>
+        </Popover.Content>
+      </Popover>
+
+      <Popover>
+        <Popover.Trigger>Right</Popover.Trigger>
+        <Popover.Content side="right" align="center" showArrow>
+          <div className="p-2">
+            <Typography.P variant="secondary">Right Position</Typography.P>
+          </div>
+        </Popover.Content>
+      </Popover>
+    </div>
+  );
+}`,
+      tags: ["positions", "top", "bottom", "left", "right"]
+    },
+    {
+      title: "Alignment Options",
+      description: "All three alignment options (start, center, end) for bottom-positioned popovers.",
+      code: `import { Popover, Typography } from 'vayu-ui';
+
+export default function AlignmentPopoverDemo() {
+  return (
+    <div className="flex gap-4 flex-wrap justify-center">
+      <Popover>
+        <Popover.Trigger>Start</Popover.Trigger>
+        <Popover.Content side="bottom" align="start">
+          <div className="p-2">
+            <Typography.P variant="secondary">align="start"</Typography.P>
+          </div>
+        </Popover.Content>
+      </Popover>
+
+      <Popover>
+        <Popover.Trigger>Center</Popover.Trigger>
+        <Popover.Content side="bottom" align="center">
+          <div className="p-2">
+            <Typography.P variant="secondary">align="center" (default)</Typography.P>
+          </div>
+        </Popover.Content>
+      </Popover>
+
+      <Popover>
+        <Popover.Trigger>End</Popover.Trigger>
+        <Popover.Content side="bottom" align="end">
+          <div className="p-2">
+            <Typography.P variant="secondary">align="end"</Typography.P>
+          </div>
+        </Popover.Content>
+      </Popover>
+    </div>
+  );
+}`,
+      tags: ["alignment", "start", "center", "end"]
+    },
+    {
+      title: "Custom Trigger with asChild",
+      description: "Using the asChild pattern to render a custom Button component as the popover trigger while maintaining all ARIA attributes.",
+      code: `import { Popover, Button, Typography } from 'vayu-ui';
+
+export default function CustomTriggerPopoverDemo() {
+  return (
+    <Popover>
+      <Popover.Trigger asChild>
+        <Button variant="primary">Custom Trigger</Button>
+      </Popover.Trigger>
+      <Popover.Content showArrow>
+        <div className="p-2">
+          <Typography.P variant="secondary">
+            Using asChild pattern with custom trigger element
+          </Typography.P>
+        </div>
+      </Popover.Content>
+    </Popover>
+  );
+}`,
+      tags: ["aschild", "custom-trigger", "button"]
+    },
+    {
+      title: "Controlled Popover",
+      description: "Popover with externally managed open state using open and onOpenChange props for programmatic control.",
+      code: `import { useState } from 'react';
+import { Popover, Button, Typography } from 'vayu-ui';
+
+export default function ControlledPopoverDemo() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="primary" onClick={() => setIsOpen(true)}>
+        Open Controlled Popover
+      </Button>
+
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <Popover.Trigger>Toggle</Popover.Trigger>
+        <Popover.Content showArrow>
+          <div className="p-2">
+            <Typography.P variant="secondary">
+              This popover is controlled by external state.
+            </Typography.P>
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={() => setIsOpen(false)}
+            >
+              Close
+            </Button>
+          </div>
+        </Popover.Content>
+      </Popover>
+    </>
+  );
+}`,
+      tags: ["controlled", "state", "programmatic"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Mixing controlled and uncontrolled props",
+      bad: "<Popover open={isVisible} defaultOpen={true}>",
+      good: "<Popover open={isVisible} onOpenChange={setIsVisible}>",
+      reason: "Passing both open and defaultOpen creates conflicting state management. Use open + onOpenChange for controlled mode, or defaultOpen for uncontrolled mode \u2014 never both."
+    },
+    {
+      title: "Using Popover.Trigger without asChild for custom elements",
+      bad: '<Popover.Trigger><Button variant="primary">Open</Button></Popover.Trigger>',
+      good: '<Popover.Trigger asChild><Button variant="primary">Open</Button></Popover.Trigger>',
+      reason: "Without asChild, Popover.Trigger wraps children in a <button> element, resulting in a nested <button> inside <button> which is invalid HTML and causes accessibility issues."
+    },
+    {
+      title: "Using Popover.Content outside of Popover",
+      bad: "<div><Popover.Content>Content</Popover.Content></div>",
+      good: "<Popover><Popover.Trigger>Open</Popover.Trigger><Popover.Content>Content</Popover.Content></Popover>",
+      reason: "Popover.Content requires the Popover context (open state, trigger/content refs, positioning) provided by the root Popover component. Using it outside Popover throws a runtime error."
+    },
+    {
+      title: "Setting avoidCollisions to false without testing viewport edges",
+      bad: '<Popover.Content side="right" avoidCollisions={false}>',
+      good: '<Popover.Content side="right" avoidCollisions={true}>',
+      reason: "Disabling collision detection can cause the popover to render outside the viewport, making content unreachable. Only disable it if you have guaranteed viewport space or custom overflow handling."
+    },
+    {
+      title: "Omitting accessible content in Popover.Content",
+      bad: '<Popover.Content><img src="chart.png" /></Popover.Content>',
+      good: '<Popover.Content><img src="chart.png" alt="Q4 revenue chart" /><Typography.P variant="secondary">Revenue increased 15%</Typography.P></Popover.Content>',
+      reason: 'The content panel uses role="dialog" which screen readers announce as a dialog. Ensure there is readable text content (headings, descriptions) so users understand the popover purpose.'
+    }
+  ]
+};
+
+// src/components/pagination.ts
+var paginationEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "pagination",
+  name: "Pagination",
+  type: "component",
+  category: "navigation",
+  // ── Description ───────────────────────────────────────
+  description: "Navigation component for browsing through paged content with full page buttons, compact prev/next, and item info display.",
+  longDescription: 'The Pagination component uses the compound component pattern (Pagination.Root, Pagination.Info, Pagination.Buttons, Pagination.Compact) to provide flexible page navigation. Root renders a semantic <nav> landmark, Info displays "Showing X to Y of Z results" with live region updates, Buttons provides full first/prev/page-numbers/next/last navigation with configurable page ranges (compact, extended, full), and Compact offers a mobile-friendly prev/next-only variant. All navigation uses Next.js Link for server-rendered routing.',
+  tags: [
+    "pagination",
+    "navigation",
+    "pager",
+    "pages",
+    "nav",
+    "page-numbers",
+    "next-previous",
+    "browsing",
+    "data-table",
+    "list"
+  ],
+  useCases: [
+    "Navigating through paginated table data or search results",
+    "Providing page controls below content lists with item count info",
+    "Mobile-friendly pagination with a compact prev/next-only layout",
+    'Displaying "Showing X to Y of Z" item ranges for data views',
+    "Full page navigation with first, last, and numbered page buttons",
+    "Configuring page range display density (compact, extended, or full) based on available space"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Pagination",
+  files: [
+    { name: "Pagination.tsx", description: "Compound export composing Root, Info, Buttons, and Compact sub-components" },
+    { name: "PaginationRoot.tsx", description: 'Nav landmark wrapper with aria-label="Pagination" and flex column layout' },
+    { name: "PaginationInfo.tsx", description: '"Showing X to Y of Z results" display with role="status" and aria-live="polite"' },
+    { name: "PaginationButtons.tsx", description: "Full page navigation rendering first/prev/page-numbers/next/last buttons with Next.js Link" },
+    { name: "CompactPagination.tsx", description: "Mobile-friendly prev/next-only variant with inline page indicator and nav landmark" },
+    { name: "utils.ts", description: "Page range calculation logic with compact/extended/full modes and ellipsis placement" },
+    { name: "types.ts", description: "TypeScript interfaces for all pagination props and PageRange type" },
+    { name: "index.ts", description: "Barrel export file re-exporting the compound component and all types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Pagination",
+  subComponents: [
+    {
+      name: "Root",
+      fileName: "PaginationRoot.tsx",
+      description: "Semantic <nav> landmark wrapper that provides aria-label and vertical flex layout for Info and Buttons",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "PaginationInfo and/or PaginationButtons components to display inside the nav"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the root <nav> element"
+        },
+        {
+          name: "aria-label",
+          type: "string",
+          required: false,
+          defaultValue: "'Pagination'",
+          description: 'Accessible label for the navigation landmark; defaults to "Pagination"'
+        }
+      ]
+    },
+    {
+      name: "Info",
+      fileName: "PaginationInfo.tsx",
+      description: 'Displays "Showing X to Y of Z results" with live region announcements for screen readers',
+      props: [
+        {
+          name: "totalItems",
+          type: "number",
+          required: true,
+          description: "Total number of items across all pages"
+        },
+        {
+          name: "pageSize",
+          type: "number",
+          required: true,
+          description: "Number of items displayed per page"
+        },
+        {
+          name: "currentPage",
+          type: "number",
+          required: true,
+          description: "The currently active page number (1-based)"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the <p> element"
+        }
+      ]
+    },
+    {
+      name: "Buttons",
+      fileName: "PaginationButtons.tsx",
+      description: "Full page navigation with first/prev/page-numbers/next/last buttons, configurable page range modes, and Next.js Link routing",
+      props: [
+        {
+          name: "currentPage",
+          type: "number",
+          required: true,
+          description: "The currently active page number (1-based)"
+        },
+        {
+          name: "totalPages",
+          type: "number",
+          required: true,
+          description: "Total number of pages"
+        },
+        {
+          name: "hrefBuilder",
+          type: "(page: number) => string",
+          required: true,
+          description: "Function that returns the URL for a given page number, used by Next.js Link href"
+        },
+        {
+          name: "pageRange",
+          type: "PageRange",
+          required: false,
+          defaultValue: "'compact'",
+          description: "Controls how many page numbers are shown: compact (ellipsis for distant pages), extended (more visible pages), or full (all pages)",
+          options: ["compact", "extended", "full"]
+        },
+        {
+          name: "siblingCount",
+          type: "number",
+          required: false,
+          defaultValue: "1",
+          description: "Number of sibling pages to show on each side of the current page in compact/extended modes"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the buttons container <div>"
+        }
+      ]
+    },
+    {
+      name: "Compact",
+      fileName: "CompactPagination.tsx",
+      description: 'Mobile-friendly prev/next-only pagination with inline "Page X of Y" indicator, rendering its own <nav> landmark',
+      props: [
+        {
+          name: "currentPage",
+          type: "number",
+          required: true,
+          description: "The currently active page number (1-based)"
+        },
+        {
+          name: "totalPages",
+          type: "number",
+          required: true,
+          description: "Total number of pages"
+        },
+        {
+          name: "hrefBuilder",
+          type: "(page: number) => string",
+          required: true,
+          description: "Function that returns the URL for a given page number, used by Next.js Link href"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the root <nav> element"
+        },
+        {
+          name: "aria-label",
+          type: "string",
+          required: false,
+          defaultValue: "'Pagination'",
+          description: 'Accessible label for the navigation landmark; defaults to "Pagination"'
+        }
+      ]
+    }
+  ],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "PaginationInfo and/or PaginationButtons components to render inside the navigation landmark"
+    },
+    {
+      name: "className",
+      type: "string",
+      required: false,
+      description: "Additional CSS classes applied to the root <nav> element"
+    },
+    {
+      name: "aria-label",
+      type: "string",
+      required: false,
+      defaultValue: "'Pagination'",
+      description: "Accessible label for the navigation landmark"
+    }
+  ],
+  rendersAs: "nav",
+  // ── Variants & Sizes ──────────────────────────────────
+  variants: {
+    propName: "pageRange",
+    options: ["compact", "extended", "full"],
+    default: "compact"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "active",
+      prop: "currentPage",
+      isBoolean: false,
+      defaultValue: "undefined (required)",
+      description: 'The currently active page receives aria-current="page", brand-colored background, and distinct visual styling to indicate the selected page.'
+    },
+    {
+      name: "disabled",
+      prop: "currentPage (boundary detection)",
+      isBoolean: true,
+      defaultValue: "false",
+      description: 'First/Previous buttons are disabled when currentPage === 1; Next/Last buttons are disabled when currentPage === totalPages. Disabled buttons use aria-disabled="true", reduced opacity, and pointer-events-none.'
+    },
+    {
+      name: "page-range",
+      prop: "pageRange",
+      isBoolean: false,
+      values: ["compact", "extended", "full"],
+      defaultValue: "'compact'",
+      description: 'Controls the density of displayed page numbers. "compact" uses ellipsis with 1 sibling, "extended" shows more pages with configurable siblingCount, and "full" shows every page number.'
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    attributes: [
+      {
+        name: "aria-label",
+        description: 'Applied to the <nav> element with value "Pagination" (customizable) to identify the navigation landmark for screen readers.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-current",
+        description: 'Applied to the active page button with value "page" to indicate the currently selected page to assistive technologies.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-disabled",
+        description: 'Applied to disabled navigation buttons (first/prev at page 1, next/last at last page) with value "true" to communicate non-interactive state.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: 'Applied to chevron icons and ellipsis indicators with value "true" since they are decorative and not meant for screen readers.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-live",
+        description: 'Applied to the PaginationInfo paragraph and Compact page indicator with value "polite" so screen readers announce page changes.',
+        managedByComponent: true
+      },
+      {
+        name: 'role="status"',
+        description: "Applied to PaginationInfo and Compact page indicator elements to mark them as live regions for page change announcements.",
+        managedByComponent: true
+      },
+      {
+        name: 'role="group"',
+        description: "Applied to the PaginationButtons container <div> to group the navigation buttons as a single control set.",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Tab",
+        behavior: "Moves focus between page number links and first/prev/next/last navigation links in order."
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Moves focus backward through navigation links."
+      },
+      {
+        key: "Enter",
+        behavior: "Activates the focused page link and navigates to the corresponding page URL."
+      }
+    ],
+    focusManagement: "All navigation links are focusable via Tab. Focus-visible styles show a ring (focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1) to indicate the currently focused link. Disabled buttons are rendered as non-interactive spans and are not focusable.",
+    wcagLevel: "AA",
+    notes: 'Follows WAI-ARIA Navigation Pattern. The root element renders a semantic <nav> landmark. Page changes are announced via aria-live="polite" on the info/status regions. Disabled boundary buttons use aria-disabled="true" rather than removing elements to maintain consistent layout. Active page uses aria-current="page" per WAI-ARIA pagination best practices.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "tailwind-merge" },
+    { name: "lucide-react" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "table",
+      reason: "Pagination is most commonly paired with data tables for browsing large datasets"
+    },
+    {
+      slug: "typography",
+      reason: "Used alongside pagination for page titles and section headings that contextualize the paginated content"
+    },
+    {
+      slug: "divider",
+      reason: "Commonly placed between different pagination variants in layouts showing multiple pagination styles"
+    },
+    {
+      slug: "breadcrumb",
+      reason: "Both are navigation landmarks \u2014 breadcrumbs show hierarchical position while pagination shows sequential position"
+    },
+    {
+      slug: "card",
+      reason: "Paginated content is often wrapped in cards with pagination controls placed in the card footer"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Default Pagination with Info",
+      description: 'Standard pagination showing item count info ("Showing X to Y of Z") and full page navigation with compact page range.',
+      code: `import { Pagination } from 'vayu-ui';
+
+const buildPageUrl = (page: number) => \`?page=\${page}\`;
+
+export default function DefaultPagination() {
+  const currentPage = 1;
+  const totalItems = 450;
+  const pageSize = 10;
+  const totalPages = Math.ceil(totalItems / pageSize);
+
+  return (
+    <Pagination.Root aria-label="Default pagination">
+      <Pagination.Info
+        totalItems={totalItems}
+        pageSize={pageSize}
+        currentPage={currentPage}
+      />
+      <div className="flex justify-center">
+        <Pagination.Buttons
+          currentPage={currentPage}
+          totalPages={totalPages}
+          hrefBuilder={buildPageUrl}
+        />
+      </div>
+    </Pagination.Root>
+  );
+}`,
+      tags: ["basic", "default", "info", "compact"]
+    },
+    {
+      title: "Extended Page Range",
+      description: 'Pagination with more visible page numbers using pageRange="extended" and siblingCount={2} to show 2 sibling pages on each side of the current page.',
+      code: `import { Pagination } from 'vayu-ui';
+
+const buildPageUrl = (page: number) => \`?page=\${page}\`;
+
+export default function ExtendedPagination() {
+  const currentPage = 5;
+  const totalPages = 45;
+
+  return (
+    <Pagination.Root>
+      <div className="flex justify-center">
+        <Pagination.Buttons
+          currentPage={currentPage}
+          totalPages={totalPages}
+          hrefBuilder={buildPageUrl}
+          pageRange="extended"
+          siblingCount={2}
+        />
+      </div>
+    </Pagination.Root>
+  );
+}`,
+      tags: ["extended", "sibling-count", "page-range"]
+    },
+    {
+      title: "Full Page Range",
+      description: 'Pagination showing every page number without ellipsis using pageRange="full". Best for small page counts.',
+      code: `import { Pagination } from 'vayu-ui';
+
+const buildPageUrl = (page: number) => \`?page=\${page}\`;
+
+export default function FullPagination() {
+  const currentPage = 3;
+  const totalPages = 8;
+
+  return (
+    <Pagination.Root>
+      <div className="flex justify-center">
+        <Pagination.Buttons
+          currentPage={currentPage}
+          totalPages={totalPages}
+          hrefBuilder={buildPageUrl}
+          pageRange="full"
+        />
+      </div>
+    </Pagination.Root>
+  );
+}`,
+      tags: ["full", "all-pages", "no-ellipsis"]
+    },
+    {
+      title: "Compact Pagination",
+      description: 'Mobile-friendly prev/next-only variant showing "Page X of Y" between navigation buttons. Renders its own nav landmark.',
+      code: `import { Pagination } from 'vayu-ui';
+
+const buildPageUrl = (page: number) => \`?page=\${page}\`;
+
+export default function CompactPaginationExample() {
+  const currentPage = 3;
+  const totalPages = 45;
+
+  return (
+    <Pagination.Compact
+      currentPage={currentPage}
+      totalPages={totalPages}
+      hrefBuilder={buildPageUrl}
+    />
+  );
+}`,
+      tags: ["compact", "mobile", "prev-next", "minimal"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using Buttons without Root",
+      bad: "<Pagination.Buttons currentPage={1} totalPages={10} hrefBuilder={url} />",
+      good: "<Pagination.Root>\n  <Pagination.Buttons currentPage={1} totalPages={10} hrefBuilder={url} />\n</Pagination.Root>",
+      reason: "PaginationButtons does not render a <nav> landmark. Without PaginationRoot, the buttons lack the semantic navigation role and aria-label required by WCAG for page navigation."
+    },
+    {
+      title: "Passing out-of-range page numbers",
+      bad: "<Pagination.Buttons currentPage={0} totalPages={10} hrefBuilder={url} />",
+      good: "<Pagination.Buttons currentPage={1} totalPages={10} hrefBuilder={url} />",
+      reason: "currentPage must be a 1-based integer between 1 and totalPages. Passing 0, negative numbers, or values exceeding totalPages produces incorrect info text and disables wrong navigation buttons."
+    },
+    {
+      title: "Omitting hrefBuilder",
+      bad: "<Pagination.Buttons currentPage={1} totalPages={10} />",
+      good: "<Pagination.Buttons currentPage={1} totalPages={10} hrefBuilder={(page) => `/page/${page}`} />",
+      reason: "hrefBuilder is a required prop that generates URLs for each page link. Without it, the component cannot render navigation links and TypeScript will report a compile error."
+    },
+    {
+      title: "Using Compact on desktop layouts",
+      bad: "<Pagination.Compact currentPage={1} totalPages={100} hrefBuilder={url} />",
+      good: "<Pagination.Root>\n  <Pagination.Info totalItems={1000} pageSize={10} currentPage={1} />\n  <Pagination.Buttons currentPage={1} totalPages={100} hrefBuilder={url} />\n</Pagination.Root>",
+      reason: "Compact hides page numbers and only shows prev/next. On desktop with sufficient space, full Pagination.Buttons gives users direct access to any page, improving usability for large datasets."
+    },
+    {
+      title: "Not syncing currentPage with URL state",
+      bad: "const [page, setPage] = useState(1); // never reads from URL",
+      good: 'useEffect(() => {\n  const p = searchParams.get("page");\n  if (p) setCurrentPage(parseInt(p, 10));\n}, [searchParams]);',
+      reason: "Since Pagination uses Next.js Link for server-rendered navigation, the currentPage prop must be kept in sync with the URL. Not reading page state from URL params causes the active page indicator to stay on page 1 after clicking a different page."
+    }
+  ]
+};
+
+// src/components/rate.ts
+var rateEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "rate",
+  name: "Rate",
+  type: "component",
+  category: "inputs",
+  // ── Description ───────────────────────────────────────
+  description: "A star rating component with half-star precision, custom icons, text labels, and WCAG 2.2 AA accessibility using the compound component pattern.",
+  longDescription: "The Rate component provides interactive star ratings with support for half-star precision, configurable star counts, custom empty/filled/half icons, text labels per rating level, and read-only display mode. It uses the compound component pattern (Rate.Label, Rate.Stars, Rate.Value, Rate.TextLabel, Rate.Description, Rate.Container, Rate.ErrorText) for flexible composition. Controlled and uncontrolled modes are supported, with keyboard navigation (Arrow keys, Home/End) and full ARIA slider semantics on the stars container.",
+  tags: [
+    "rate",
+    "rating",
+    "star",
+    "review",
+    "feedback",
+    "score",
+    "input",
+    "form",
+    "interactive"
+  ],
+  useCases: [
+    "Product or content rating inputs where users select a score from 1 to N stars",
+    "Read-only rating display showing an average or user-submitted score",
+    'Review forms with labels like "Poor", "Fair", "Good" mapped to each star level',
+    "Half-star precision ratings for finer-grained feedback",
+    "Custom icon ratings using any SVG (hearts, thumbs-up, etc.) instead of stars",
+    "Form validation with error states when a required rating is missing"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Rate",
+  files: [
+    {
+      name: "Rate.tsx",
+      description: "Root component providing the RateContext provider, internal state management, default star SVG, and size class mappings"
+    },
+    {
+      name: "RateStars.tsx",
+      description: "Stars container with ARIA slider role and keyboard navigation, plus individual star rendering with fill percentages and hover zones"
+    },
+    {
+      name: "RateLabel.tsx",
+      description: "Label element linked to the stars container via htmlFor, scaling with the active size"
+    },
+    {
+      name: "RateDescription.tsx",
+      description: "Descriptive text rendered below the label for helper text or instructions"
+    },
+    {
+      name: "RateValue.tsx",
+      description: 'Numeric value display (e.g. "3.5 / 5") and text label display mapped from the labels array'
+    },
+    {
+      name: "RateContainer.tsx",
+      description: "Flex layout container for composing Label, Stars, Value, and TextLabel in a horizontal row"
+    },
+    {
+      name: "RateErrorText.tsx",
+      description: 'Error message text that renders only when the error prop is true, with role="alert"'
+    },
+    {
+      name: "hooks.ts",
+      description: "RateContext creation and useRate hook for accessing rating state from compound sub-components"
+    },
+    {
+      name: "types.ts",
+      description: "TypeScript type definitions for all Rate props, context, and sub-component prop interfaces"
+    },
+    {
+      name: "index.ts",
+      description: "Barrel export file assembling the compound component (Rate.Label, Rate.Stars, etc.) and re-exporting all types"
+    }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Rate",
+  subComponents: [
+    {
+      name: "Label",
+      fileName: "RateLabel.tsx",
+      description: "Renders a label element linked to the stars container via htmlFor, scaling font size with the active rate size",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Label text content"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the label element"
+        }
+      ]
+    },
+    {
+      name: "Description",
+      fileName: "RateDescription.tsx",
+      description: "Renders helper or instructional text below the label in a muted, smaller font",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Description text content"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the description element"
+        },
+        {
+          name: "id",
+          type: "string",
+          required: false,
+          description: "HTML id attribute for the description element"
+        }
+      ]
+    },
+    {
+      name: "Stars",
+      fileName: "RateStars.tsx",
+      description: "Renders the interactive star row with ARIA slider role, keyboard navigation, hover preview, and click selection",
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the stars container"
+        },
+        {
+          name: "aria-label",
+          type: "string",
+          required: false,
+          defaultValue: "'Rating'",
+          description: 'Accessible label for the stars slider; defaults to "Rating" if not provided'
+        }
+      ]
+    },
+    {
+      name: "Star",
+      fileName: "RateStars.tsx",
+      description: "Renders a single star with layered empty/filled icons and half-star hover zones. Not typically used directly \u2014 Stars renders Star instances automatically.",
+      props: [
+        {
+          name: "index",
+          type: "number",
+          required: true,
+          description: "1-based index of this star within the rating row"
+        }
+      ]
+    },
+    {
+      name: "Value",
+      fileName: "RateValue.tsx",
+      description: 'Displays the current numeric rating value, optionally with a "/ total" suffix',
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the value span"
+        },
+        {
+          name: "showTotal",
+          type: "boolean",
+          required: false,
+          defaultValue: "true",
+          description: 'When true, appends "/ {count}" after the numeric value'
+        },
+        {
+          name: "decimals",
+          type: "number",
+          required: false,
+          description: "Number of decimal places to display. Defaults to 1 when allowHalf is true, 0 otherwise."
+        }
+      ]
+    },
+    {
+      name: "TextLabel",
+      fileName: "RateValue.tsx",
+      description: 'Displays the text label from the labels array corresponding to the current rating value, with role="status" for live announcements',
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the text label span"
+        }
+      ]
+    },
+    {
+      name: "Container",
+      fileName: "RateContainer.tsx",
+      description: "Flex layout container for arranging Label, Stars, Value, and TextLabel in a horizontal row with gap spacing",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Sub-components to lay out in the container"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the container div"
+        }
+      ]
+    },
+    {
+      name: "ErrorText",
+      fileName: "RateErrorText.tsx",
+      description: 'Conditionally renders an error message when the error state is active, with role="alert" and aria-live="polite"',
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Error message text content"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes applied to the error text element"
+        },
+        {
+          name: "id",
+          type: "string",
+          required: false,
+          description: "HTML id attribute for the error text element"
+        }
+      ]
+    }
+  ],
+  hooks: ["useRate"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "count",
+      type: "number",
+      required: false,
+      defaultValue: "5",
+      description: "Number of stars to render"
+    },
+    {
+      name: "value",
+      type: "number",
+      required: false,
+      description: "Controlled rating value. When provided, the component operates in controlled mode."
+    },
+    {
+      name: "defaultValue",
+      type: "number",
+      required: false,
+      defaultValue: "0",
+      description: "Initial rating value for uncontrolled mode"
+    },
+    {
+      name: "onChange",
+      type: "(value: number) => void",
+      required: false,
+      description: "Callback fired when the user selects a new rating value"
+    },
+    {
+      name: "readOnly",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "When true, the rating is displayed as read-only with no interaction or hover effects"
+    },
+    {
+      name: "disabled",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Disables all interaction and reduces opacity to 50%"
+    },
+    {
+      name: "allowHalf",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "When true, enables half-star selection by clicking the left or right half of a star"
+    },
+    {
+      name: "allowClear",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "When true, clicking the already-selected value resets the rating to 0"
+    },
+    {
+      name: "size",
+      type: "RateSize",
+      required: false,
+      defaultValue: "'md'",
+      description: "Size of the stars and associated text",
+      options: ["sm", "md", "lg", "xl"]
+    },
+    {
+      name: "icon",
+      type: "React.ReactElement",
+      required: false,
+      description: "Custom empty icon element. Defaults to an outlined star SVG. Receives injected size, className, and strokeWidth props via cloneElement."
+    },
+    {
+      name: "filledIcon",
+      type: "React.ReactElement",
+      required: false,
+      description: "Custom filled icon element. Falls back to the icon prop if not provided."
+    },
+    {
+      name: "halfIcon",
+      type: "React.ReactElement",
+      required: false,
+      description: "Custom half-filled icon element. Falls back to filledIcon, then icon if not provided."
+    },
+    {
+      name: "error",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "When true, activates error styling (destructive color on filled stars) and makes ErrorText visible"
+    },
+    {
+      name: "labels",
+      type: "string[]",
+      required: false,
+      description: 'Array of text labels for each rating level (e.g. ["Poor", "Fair", "Good", "Very Good", "Excellent"]), displayed by Rate.TextLabel'
+    },
+    {
+      name: "id",
+      type: "string",
+      required: false,
+      description: "HTML id for the stars container element. Auto-generated via useId() if not provided."
+    },
+    {
+      name: "aria-label",
+      type: "string",
+      required: false,
+      description: "Accessible label for the root rating group element"
+    },
+    {
+      name: "aria-labelledby",
+      type: "string",
+      required: false,
+      description: "ID of an element that labels the root rating group, applied as aria-labelledby on the group container"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  sizes: {
+    propName: "size",
+    options: ["sm", "md", "lg", "xl"],
+    default: "md"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "disabled",
+      prop: "disabled",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Disables pointer and keyboard interaction. Stars become non-focusable, cursor changes to not-allowed, and opacity is reduced to 50%."
+    },
+    {
+      name: "readOnly",
+      prop: "readOnly",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Displays the rating as read-only. Stars render at full opacity but all interaction (click, hover, keyboard) is disabled. Sets aria-readonly on the slider."
+    },
+    {
+      name: "error",
+      prop: "error",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Activates error styling \u2014 filled stars use destructive colors instead of warning. Also gates the visibility of Rate.ErrorText."
+    },
+    {
+      name: "hover",
+      prop: "hoverValue",
+      isBoolean: false,
+      defaultValue: "null",
+      description: "Internal hover preview state. When the user hovers over a star, the preview value updates to show what the rating would be if clicked. Resets to null on mouse leave."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onChange",
+      signature: "(value: number) => void",
+      description: "Fired when the user selects a new rating by clicking a star or pressing a keyboard key. Receives the new numeric value (0 when cleared)."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "group",
+    attributes: [
+      {
+        name: "aria-labelledby (root)",
+        description: "Applied to the root group container from the aria-labelledby prop, linking it to an external label element.",
+        managedByComponent: false
+      },
+      {
+        name: 'role="slider" (Stars)',
+        description: 'The stars container has role="slider", making it recognized as a range input by screen readers.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-valuemin",
+        description: "Applied to the stars slider element, always set to 0.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-valuemax",
+        description: "Applied to the stars slider element, reflecting the count prop (number of stars).",
+        managedByComponent: true
+      },
+      {
+        name: "aria-valuenow",
+        description: "Applied to the stars slider element, reflecting the current rating value.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-readonly",
+        description: "Applied to the stars slider element when the readOnly prop is true.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-disabled",
+        description: "Applied to the stars slider element when the disabled prop is true or when readOnly is true.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Stars)",
+        description: 'Applied to the stars slider element from the Stars aria-label prop, defaulting to "Rating".',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden (Star)",
+        description: 'Each individual star rendering element is marked aria-hidden="true" since the slider role on the container already conveys the value.',
+        managedByComponent: true
+      },
+      {
+        name: 'role="alert" (ErrorText)',
+        description: 'The error text element uses role="alert" with aria-live="polite" so screen readers announce validation errors when they appear.',
+        managedByComponent: true
+      },
+      {
+        name: 'role="status" (TextLabel)',
+        description: 'The text label element uses role="status" with aria-live="polite" so screen readers announce label changes as the user hovers or selects.',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "ArrowRight / ArrowUp",
+        behavior: "Increases the rating by the current step (1 for full-star, 0.5 for half-star mode)"
+      },
+      {
+        key: "ArrowLeft / ArrowDown",
+        behavior: "Decreases the rating by the current step (1 for full-star, 0.5 for half-star mode)"
+      },
+      {
+        key: "Home",
+        behavior: "Resets the rating to 0"
+      },
+      {
+        key: "End",
+        behavior: "Sets the rating to the maximum (count)"
+      }
+    ],
+    focusManagement: "The stars container is focusable with tabIndex=0 (or -1 when disabled/readOnly). Keyboard focus shows a visible focus ring (ring-2 ring-focus ring-offset-2) on the star matching the current value. Focus and blur state are tracked to conditionally render the ring.",
+    wcagLevel: "AA",
+    notes: 'The Rate component follows the WAI-ARIA slider design pattern for the stars container. Individual stars are aria-hidden since the slider role on the container exposes the value through aria-valuenow. The Rate.Label uses htmlFor linked to the auto-generated stars container ID. Error messages use role="alert" for immediate screen reader announcement, and text labels use role="status" for polite announcements.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "text-input",
+      reason: "Commonly paired in review forms where a text input collects a written review alongside the star rating"
+    },
+    {
+      slug: "textarea",
+      reason: "Used together in feedback forms where a textarea collects detailed comments alongside the numeric rating"
+    },
+    {
+      slug: "button",
+      reason: "Submit and reset buttons are needed in rating forms to send or clear the selected rating"
+    },
+    {
+      slug: "card",
+      reason: "Cards frequently display ratings in product listings, reviews, or feedback summaries"
+    },
+    {
+      slug: "tooltip",
+      reason: "Tooltips can show the exact numeric value or label description on star hover for additional context"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Controlled Rating",
+      description: "A controlled star rating with external state management, displaying the current value.",
+      code: `import { Rate } from 'vayu-ui';
+import React, { useState } from 'react';
+
+export default function BasicRate() {
+  const [value, setValue] = useState(3);
+
+  return (
+    <div className="space-y-2">
+      <Rate value={value} onChange={setValue} />
+      <p>Current value: {value}</p>
+    </div>
+  );
+}`,
+      tags: ["basic", "controlled", "state"]
+    },
+    {
+      title: "Read-Only Display",
+      description: "A read-only rating that displays a value without allowing user interaction.",
+      code: `import { Rate } from 'vayu-ui';
+
+export default function ReadOnlyRate() {
+  return <Rate defaultValue={3.5} readOnly />;
+}`,
+      tags: ["read-only", "display", "uncontrolled"]
+    },
+    {
+      title: "All Sizes",
+      description: "The Rate component in all four sizes: sm (16px), md (24px), lg (32px), xl (40px).",
+      code: `import { Rate } from 'vayu-ui';
+
+export default function RateSizes() {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2">
+        <span className="text-sm w-12">Small</span>
+        <Rate defaultValue={3} size="sm" />
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-sm w-12">Medium</span>
+        <Rate defaultValue={3} size="md" />
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-sm w-12">Large</span>
+        <Rate defaultValue={3} size="lg" />
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-sm w-12">XLarge</span>
+        <Rate defaultValue={3} size="xl" />
+      </div>
+    </div>
+  );
+}`,
+      tags: ["sizes", "sm", "md", "lg", "xl"]
+    },
+    {
+      title: "With Labels and Container",
+      description: "A fully composed rating with label, description, text label mapping, and layout container.",
+      code: `import { Rate } from 'vayu-ui';
+
+export default function RateWithLabels() {
+  return (
+    <Rate defaultValue={3} labels={['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']}>
+      <Rate.Container>
+        <Rate.Label>Product Rating</Rate.Label>
+        <Rate.Stars />
+        <Rate.TextLabel />
+      </Rate.Container>
+      <Rate.Description>Rate the product quality.</Rate.Description>
+    </Rate>
+  );
+}`,
+      tags: ["labels", "compound", "container", "description"]
+    },
+    {
+      title: "With Value Display",
+      description: "Rating with a numeric value display showing the current and total stars.",
+      code: `import { Rate } from 'vayu-ui';
+
+export default function RateWithValue() {
+  return (
+    <Rate defaultValue={3.5}>
+      <Rate.Container>
+        <Rate.Stars />
+        <Rate.Value />
+      </Rate.Container>
+    </Rate>
+  );
+}`,
+      tags: ["value", "display", "compound"]
+    },
+    {
+      title: "Custom Icons",
+      description: "Rating with custom empty, filled, and half-filled icons from Lucide.",
+      code: `import { Rate } from 'vayu-ui';
+import { Star, StarHalf } from 'lucide-react';
+
+export default function CustomIconsRate() {
+  return (
+    <Rate
+      defaultValue={3.5}
+      allowHalf
+      icon={<Star className="text-muted-content" />}
+      filledIcon={<Star className="fill-warning text-warning" strokeWidth={0} />}
+      halfIcon={<StarHalf className="fill-warning text-warning" strokeWidth={0} />}
+    />
+  );
+}`,
+      tags: ["custom", "icons", "lucide", "half"]
+    },
+    {
+      title: "Error State",
+      description: "Rating with validation error styling and error message text.",
+      code: `import { Rate } from 'vayu-ui';
+
+export default function ErrorRate() {
+  return (
+    <Rate defaultValue={0} error>
+      <Rate.Label>Rating Required</Rate.Label>
+      <Rate.Stars />
+      <Rate.ErrorText>Please select a rating</Rate.ErrorText>
+    </Rate>
+  );
+}`,
+      tags: ["error", "validation", "form"]
+    },
+    {
+      title: "Half Star vs Full Star Only",
+      description: "Comparison of half-star mode (default) and full-star-only mode.",
+      code: `import { Rate } from 'vayu-ui';
+
+export default function HalfVsFull() {
+  return (
+    <div className="space-y-4">
+      <Rate defaultValue={3.5} allowHalf />
+      <Rate defaultValue={3} allowHalf={false} />
+    </div>
+  );
+}`,
+      tags: ["half", "full", "allow-half"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using sub-components outside Rate",
+      bad: "<Rate.Label>Rating</Rate.Label><Rate.Stars />",
+      good: "<Rate defaultValue={3}><Rate.Label>Rating</Rate.Label><Rate.Stars /></Rate>",
+      reason: 'All Rate sub-components depend on the RateContext provided by the root Rate component. Rendering them outside Rate throws a "must be used within Rate" error.'
+    },
+    {
+      title: "Passing a non-ReactElement as icon",
+      bad: '<Rate icon="star" />',
+      good: "<Rate icon={<StarIcon />} />",
+      reason: "The icon, filledIcon, and halfIcon props expect ReactElement (not a string or component). The component uses React.cloneElement to inject size, className, and strokeWidth props into the provided element."
+    },
+    {
+      title: "Using both value and defaultValue",
+      bad: "<Rate value={3} defaultValue={3} onChange={handleChange} />",
+      good: "<Rate value={3} onChange={handleChange} />",
+      reason: "When value is provided the component is in controlled mode and defaultValue is ignored. Passing both is misleading \u2014 pick one pattern."
+    },
+    {
+      title: "Omitting aria-label on standalone Rate",
+      bad: "<Rate defaultValue={3} />",
+      good: '<Rate defaultValue={3} aria-label="Product rating" />',
+      reason: 'Without an aria-label or Rate.Label, the stars slider falls back to a generic "Rating" label. Every rating should have a descriptive label so screen reader users understand what is being rated.'
+    },
+    {
+      title: "Using onChange for read-only display",
+      bad: "<Rate value={avgRating} readOnly onChange={handleChange} />",
+      good: "<Rate value={avgRating} readOnly />",
+      reason: "When readOnly is true, interaction is disabled and onChange will never fire. Including it is misleading and suggests the component is interactive when it is not."
+    }
+  ]
+};
+
+// src/components/tour.ts
+var tourEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "tour",
+  name: "Tour",
+  type: "component",
+  category: "overlay",
+  // ── Description ───────────────────────────────────────
+  description: "A step-by-step guided tour component that highlights page elements with a spotlight overlay, positions a popover with an arrow pointer, and provides navigation controls for onboarding and feature discovery.",
+  longDescription: "The Tour component guides users through a sequence of highlighted elements on the page. It renders a fixed SVG mask overlay with a spotlight cutout around the target element and a popover dialog with a directional arrow. The popover contains a header (title, step badge, close button), a body (string or JSX content), an optional progress bar, and a footer with Skip, Previous, and Next/Finish buttons. Steps are defined as an array of TourStep objects, each specifying a CSS selector target, placement direction, and optional overrides. The component supports controlled open state, keyboard navigation (ArrowRight, ArrowLeft, Escape), body scroll locking, automatic target scrolling, MutationObserver-based target detection, viewport clamping, and resize/scroll repositioning. The useTour hook provides imperative access to tour state and actions from anywhere within the Tour subtree.",
+  tags: [
+    "tour",
+    "onboarding",
+    "guided-tour",
+    "walkthrough",
+    "feature-discovery",
+    "spotlight",
+    "overlay",
+    "popover",
+    "step",
+    "tutorial"
+  ],
+  useCases: [
+    "Onboarding new users by walking them through key features of the application step by step",
+    "Highlighting newly released features after a product update to drive adoption",
+    "Guiding users through a complex multi-step workflow or form with contextual explanations",
+    "Providing contextual help tooltips that progress through a sequence of UI elements",
+    "Creating interactive product demos that highlight different parts of a dashboard or interface"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Tour",
+  files: [
+    { name: "Tour.tsx", description: "Root component providing TourContext, controlled state management, keyboard navigation, body scroll lock, and portal rendering" },
+    { name: "TourPopover.tsx", description: "Popover dialog with directional arrow, header (title, step badge, close button), body content, progress bar, and footer navigation buttons" },
+    { name: "TourOverlay.tsx", description: "SVG mask overlay with spotlight cutout around the target element and a branded highlight border" },
+    { name: "use-position.ts", description: "Hook that calculates popover position relative to the target element with viewport clamping" },
+    { name: "use-target.ts", description: "Hook that resolves the target element via CSS selector, observes DOM mutations, handles scroll-into-view, and tracks resize/scroll repositioning" },
+    { name: "hooks.ts", description: "Export of the useTour hook for imperative access to tour state and navigation actions" },
+    { name: "types.ts", description: "TypeScript type definitions for TourStep, TourContextValue, and TourProps" },
+    { name: "index.ts", description: "Barrel export file re-exporting Tour, useTour, and all public types" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Tour",
+  subComponents: [],
+  hooks: ["useTour"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "The page content containing the elements targeted by tour steps (identified by CSS selectors)"
+    },
+    {
+      name: "steps",
+      type: "TourStep[]",
+      required: true,
+      description: "Array of tour step definitions, each with a target selector, title, content, and optional placement/behavior overrides"
+    },
+    {
+      name: "isOpen",
+      type: "boolean",
+      required: false,
+      description: "Controlled open state. When provided, the tour relies on the parent to manage visibility."
+    },
+    {
+      name: "onClose",
+      type: "() => void",
+      required: false,
+      description: "Callback fired when the tour is closed via the close button, Escape key, or mask click"
+    },
+    {
+      name: "onComplete",
+      type: "() => void",
+      required: false,
+      description: "Callback fired when the user finishes the last step of the tour"
+    },
+    {
+      name: "onSkip",
+      type: "() => void",
+      required: false,
+      description: "Callback fired when the user skips the tour before completing all steps"
+    },
+    {
+      name: "showProgress",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "Show a progress bar between the body and footer indicating tour completion percentage"
+    },
+    {
+      name: "showStepNumbers",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: 'Show a "1 / N" step badge in the popover header'
+    },
+    {
+      name: "maskClickable",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Allow pointer events to pass through the overlay mask so users can interact with the page behind the tour"
+    },
+    {
+      name: "closeOnEscape",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "Close the tour when the Escape key is pressed"
+    },
+    {
+      name: "closeOnMaskClick",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "Close the tour when the user clicks on the overlay mask"
+    },
+    {
+      name: "scrollBehavior",
+      type: "ScrollBehavior",
+      required: false,
+      defaultValue: "'smooth'",
+      description: "Scroll behavior when scrolling the target element into view (smooth, auto, or instant)",
+      options: ["smooth", "auto", "instant"]
+    },
+    {
+      name: "highlightedAreaClassName",
+      type: "string",
+      required: false,
+      description: "Additional CSS class name applied to the spotlight border element around the highlighted target"
+    },
+    {
+      name: "maskClassName",
+      type: "string",
+      required: false,
+      description: "Additional CSS class name applied to the overlay mask container"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  // No variant or size props — the tour popover has a fixed max-w-md width.
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "isOpen",
+      prop: "isOpen",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Whether the tour is currently visible. In controlled mode, set via isOpen; otherwise toggled programmatically."
+    },
+    {
+      name: "isTransitioning",
+      prop: "isTransitioning",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Brief opacity transition state (300ms) applied when navigating between steps for a smooth fade effect."
+    },
+    {
+      name: "closeOnEscape",
+      prop: "closeOnEscape",
+      isBoolean: true,
+      defaultValue: "true",
+      description: "Whether pressing Escape dismisses the tour. Disable for mandatory walkthroughs."
+    },
+    {
+      name: "closeOnMaskClick",
+      prop: "closeOnMaskClick",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Whether clicking the overlay mask dismisses the tour."
+    },
+    {
+      name: "maskClickable",
+      prop: "maskClickable",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Whether pointer events pass through the mask to allow interaction with the page behind the tour."
+    },
+    {
+      name: "scrollBehavior",
+      prop: "scrollBehavior",
+      isBoolean: false,
+      values: ["smooth", "auto", "instant"],
+      defaultValue: "'smooth'",
+      description: "Scroll behavior used when bringing the target element into view."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onClose",
+      signature: "() => void",
+      description: "Fired when the tour is closed by any method (close button, Escape key, or mask click)"
+    },
+    {
+      name: "onComplete",
+      signature: "() => void",
+      description: "Fired when the user finishes the last step by clicking the Finish button"
+    },
+    {
+      name: "onSkip",
+      signature: "() => void",
+      description: 'Fired when the user clicks the "Skip Tour" button before completing all steps'
+    },
+    {
+      name: "TourStep.onNext",
+      signature: "() => void | Promise<void>",
+      description: "Per-step async hook called before advancing to the next step. Await it to gate progression."
+    },
+    {
+      name: "TourStep.onPrev",
+      signature: "() => void | Promise<void>",
+      description: "Per-step async hook called before going back to the previous step."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "dialog",
+    attributes: [
+      {
+        name: "aria-modal",
+        description: 'Set to "true" on the popover dialog, informing screen readers that content outside the tour is inert',
+        managedByComponent: true
+      },
+      {
+        name: "aria-labelledby",
+        description: "Set on the popover dialog with an auto-generated id linked to the step title heading, providing an accessible name",
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: 'Set to "true" on the overlay mask, arrow element, and decorative icons to exclude them from the accessibility tree',
+        managedByComponent: true
+      },
+      {
+        name: "aria-label",
+        description: "Applied to navigation buttons (Close, Skip Tour, Previous, Next/Finish) with descriptive labels for screen readers",
+        managedByComponent: true
+      },
+      {
+        name: "aria-live",
+        description: 'A "polite" live region announces the current step number and title when navigating between steps',
+        managedByComponent: true
+      },
+      {
+        name: "aria-atomic",
+        description: 'Set to "true" on the live region to ensure the entire step announcement is read as a whole',
+        managedByComponent: true
+      },
+      {
+        name: 'role="progressbar"',
+        description: "Applied to the progress bar container with aria-valuenow, aria-valuemin, and aria-valuemax for step progress tracking",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Escape",
+        behavior: "Closes the tour when closeOnEscape is true (default)"
+      },
+      {
+        key: "ArrowRight",
+        behavior: "Advances to the next step (equivalent to clicking Next)"
+      },
+      {
+        key: "ArrowLeft",
+        behavior: "Goes back to the previous step (equivalent to clicking Previous)"
+      }
+    ],
+    focusManagement: "Body scroll is locked while the tour is open. The target element is scrolled into view with the configured scroll behavior. The popover renders via React portal at the document body level. A live region announces step changes for screen readers.",
+    wcagLevel: "AA",
+    notes: 'The popover uses role="dialog" with aria-modal="true" and is labeled via an auto-generated id linked to the step title. Navigation buttons have descriptive aria-labels. The SVG overlay and decorative elements are marked aria-hidden. The progress bar uses the progressbar role with appropriate aria attributes. Step changes are announced via an aria-live="polite" region.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "lucide-react" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Used as the trigger to start the tour and commonly placed inside tour step content for custom call-to-action elements"
+    },
+    {
+      slug: "typography",
+      reason: "Used for page headings and body text that serve as tour targets and for content within tour steps"
+    },
+    {
+      slug: "modal",
+      reason: "Tours often guide users to open and interact with modal dialogs; the two overlay patterns complement each other"
+    },
+    {
+      slug: "tooltip",
+      reason: "Can be used alongside tours \u2014 tooltips for quick hover hints, tours for structured multi-step onboarding"
+    },
+    {
+      slug: "divider",
+      reason: "Used in page layouts between content sections that are highlighted as tour targets"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Tour",
+      description: "Controlled tour with four steps targeting different page elements using various placements.",
+      code: `import { useState } from 'react';
+import { Tour, type TourStep, Typography, Button, Divider } from 'vayu-ui';
+
+const steps: TourStep[] = [
+  {
+    target: '#tour-title',
+    title: 'Welcome!',
+    content:
+      'This is the Tour component. It highlights elements on the page and guides the user step-by-step.',
+    placement: 'bottom',
+  },
+  {
+    target: '#tour-card-1',
+    title: 'Feature Cards',
+    content: 'Each card represents a feature. The spotlight draws attention to the relevant area.',
+    placement: 'right',
+  },
+  {
+    target: '#tour-card-2',
+    title: 'Second Card',
+    content: 'Navigate with arrow keys, or use the Previous / Next buttons.',
+    placement: 'left',
+  },
+  {
+    target: '#tour-cta',
+    title: 'Call to Action',
+    content:
+      'Click Finish to complete the tour. You can also press Escape or click Skip at any time.',
+    placement: 'top',
+  },
+];
+
+export default function TourDemo() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="not-prose flex flex-col gap-6 w-full max-w-lg">
+      <Tour
+        steps={steps}
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onComplete={() => setOpen(false)}
+        onSkip={() => setOpen(false)}
+      >
+        <div className="flex flex-col gap-4">
+          <Typography.H3 id="tour-title" className="text-lg">
+            Tour Demo
+          </Typography.H3>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div id="tour-card-1" className="p-4 rounded-surface border border-border bg-surface">
+              <Typography.P className="text-sm">Feature A</Typography.P>
+            </div>
+            <div id="tour-card-2" className="p-4 rounded-surface border border-border bg-surface">
+              <Typography.P className="text-sm">Feature B</Typography.P>
+            </div>
+          </div>
+
+          <Divider spacing="sm" decorative />
+
+          <Button
+            id="tour-cta"
+            onClick={() => setOpen(true)}
+            variant="primary"
+            size="medium"
+            className="w-fit"
+          >
+            <Button.Text>Start Tour</Button.Text>
+          </Button>
+        </div>
+      </Tour>
+    </div>
+  );
+}`,
+      tags: ["basic", "controlled", "placement", "onboarding"]
+    },
+    {
+      title: "Tour with Custom Buttons",
+      description: "Override the default navigation buttons for a step using the customButtons prop.",
+      code: `import { useState } from 'react';
+import { Tour, type TourStep, Button, Typography } from 'vayu-ui';
+
+const steps: TourStep[] = [
+  {
+    target: '#intro-heading',
+    title: 'Custom Buttons',
+    content: 'This step uses custom buttons instead of the default Previous/Next controls.',
+    placement: 'bottom',
+    customButtons: (
+      <div className="flex items-center justify-between w-full">
+        <button className="text-sm text-muted-content">Dismiss</button>
+        <div className="flex gap-2">
+          <Button variant="secondary" size="small">
+            <Button.Text>Learn More</Button.Text>
+          </Button>
+          <Button variant="primary" size="small">
+            <Button.Text>Got It</Button.Text>
+          </Button>
+        </div>
+      </div>
+    ),
+  },
+];
+
+export default function CustomButtonsTour() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Tour
+      steps={steps}
+      isOpen={open}
+      onClose={() => setOpen(false)}
+    >
+      <div>
+        <Typography.H3 id="intro-heading">Custom Buttons Demo</Typography.H3>
+        <Button variant="primary" onClick={() => setOpen(true)}>
+          <Button.Text>Start</Button.Text>
+        </Button>
+      </div>
+    </Tour>
+  );
+}`,
+      tags: ["custom-buttons", "advanced", "override"]
+    },
+    {
+      title: "Tour with Async Step Hooks",
+      description: "Use onNext and onPrev async hooks on steps to gate progression, such as waiting for data or user confirmation.",
+      code: `import { useState } from 'react';
+import { Tour, type TourStep, Button, Typography } from 'vayu-ui';
+
+const steps: TourStep[] = [
+  {
+    target: '#async-target',
+    title: 'Async Step',
+    content: 'This step waits for an async operation before allowing progression.',
+    placement: 'bottom',
+    onNext: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      console.log('Async onNext completed');
+    },
+    onPrev: async () => {
+      console.log('Going back...');
+    },
+  },
+  {
+    target: '#async-target',
+    title: 'Second Step',
+    content: 'You arrived here after the async hook completed.',
+    placement: 'bottom',
+  },
+];
+
+export default function AsyncTourDemo() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Tour
+      steps={steps}
+      isOpen={open}
+      onClose={() => setOpen(false)}
+    >
+      <div>
+        <Typography.H3 id="async-target">Async Hooks Demo</Typography.H3>
+        <Button variant="primary" onClick={() => setOpen(true)}>
+          <Button.Text>Start Async Tour</Button.Text>
+        </Button>
+      </div>
+    </Tour>
+  );
+}`,
+      tags: ["async", "hooks", "advanced", "gated"]
+    },
+    {
+      title: "Imperative Control with useTour",
+      description: "Use the useTour hook to control the tour programmatically from anywhere in the Tour subtree.",
+      code: `import { Tour, useTour, type TourStep, Button, Typography } from 'vayu-ui';
+
+const steps: TourStep[] = [
+  { target: '#hook-target', title: 'Step 1', content: 'First step.', placement: 'bottom' },
+  { target: '#hook-target', title: 'Step 2', content: 'Second step.', placement: 'bottom' },
+  { target: '#hook-target', title: 'Step 3', content: 'Third step.', placement: 'bottom' },
+];
+
+function TourControls() {
+  const { isOpen, currentStep, nextStep, prevStep, goToStep, close } = useTour();
+
+  return (
+    <div className="flex gap-2">
+      <Button variant="secondary" size="small" onClick={prevStep}>
+        <Button.Text>Prev</Button.Text>
+      </Button>
+      <Typography.P className="text-sm">
+        Step {isOpen ? currentStep + 1 : 0}
+      </Typography.P>
+      <Button variant="secondary" size="small" onClick={nextStep}>
+        <Button.Text>Next</Button.Text>
+      </Button>
+      <Button variant="outline" size="small" onClick={() => goToStep(2)}>
+        <Button.Text>Jump to 3</Button.Text>
+      </Button>
+      <Button variant="outline" size="small" onClick={close}>
+        <Button.Text>Close</Button.Text>
+      </Button>
+    </div>
+  );
+}
+
+export default function ImperativeTourDemo() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Tour steps={steps} isOpen={open} onClose={() => setOpen(false)}>
+      <div className="flex flex-col gap-4">
+        <Typography.H3 id="hook-target">useTour Hook Demo</Typography.H3>
+        <Button variant="primary" onClick={() => setOpen(true)}>
+          <Button.Text>Start Tour</Button.Text>
+        </Button>
+        <TourControls />
+      </div>
+    </Tour>
+  );
+}`,
+      tags: ["useTour", "hook", "imperative", "programmatic"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using a target selector that does not exist in the DOM",
+      bad: '{ target: "#nonexistent-element", title: "Missing", content: "..." }',
+      good: '{ target: "#real-element", title: "Found", content: "..." }',
+      reason: "The tour uses document.querySelector to resolve targets. If the selector matches nothing, the spotlight and popover will not render correctly. Ensure target elements exist in the DOM before the tour step activates."
+    },
+    {
+      title: "Using useTour outside of a Tour provider",
+      bad: "function MyComponent() { const { nextStep } = useTour(); return <button onClick={nextStep}>Next</button>; }",
+      good: "Place MyComponent as a child of <Tour> so useTour can access the TourContext.",
+      reason: "useTour relies on TourContext which is only available within the <Tour> component subtree. Calling it outside throws an error."
+    },
+    {
+      title: "Setting maskClickable and closeOnMaskClick both to true",
+      bad: "<Tour maskClickable={true} closeOnMaskClick={true}>",
+      good: "<Tour maskClickable={false} closeOnMaskClick={true}>",
+      reason: "When maskClickable is true, pointer events pass through the mask and the overlay click handler never fires, making closeOnMaskClick ineffective. Use closeOnMaskClick only when the mask captures clicks."
+    },
+    {
+      title: "Hardcoding CSS colors instead of design tokens for custom buttons",
+      bad: '<button style={{ background: "#3b82f6", color: "white" }}>Next</button>',
+      good: '<Button variant="primary"><Button.Text>Next</Button.Text></Button>',
+      reason: "The tour uses design tokens (bg-elevated, border-border, bg-brand) for consistent theming. Custom buttons should use the same token system to match the popover styling across light and dark modes."
+    },
+    {
+      title: "Targeting elements inside other portals or iframes",
+      bad: '{ target: ".modal-inside-portal", title: "Portal Target", content: "..." }',
+      good: "Ensure target elements are in the main document DOM, or delay the tour until portal content is mounted.",
+      reason: "The tour uses document.querySelector and getBoundingClientRect to find and measure targets. Elements inside nested portals or iframes may not be resolvable by the top-level query selector, causing positioning failures."
+    }
+  ]
+};
+
+// src/stepper-entry.ts
+var stepperEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "stepper",
+  name: "Stepper",
+  type: "component",
+  category: "navigation",
+  // ── Description ───────────────────────────────────────
+  description: "A progress indicator that displays steps in a horizontal or vertical workflow with connectors, statuses, and keyboard navigation.",
+  longDescription: "Stepper shows a multi-step process progress using compound subcomponents. It supports horizontal and vertical orientations, five step statuses (active, completed, inactive, loading, error), clickable steps with keyboard navigation, and custom step indicators with icons or content.",
+  tags: ["stepper", "steps", "progress", "wizard", "workflow", "navigation", "form-steps", "multi-step", "indicator"],
+  useCases: [
+    "Multi-step form wizards (account creation, checkout, onboarding)",
+    "Displaying progress through a sequential process or workflow",
+    "Showing step-by-step instructions or guides",
+    "Tracking completion status in a linear task flow",
+    "Interactive step navigation allowing users to jump between completed steps"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Stepper",
+  files: [
+    { name: "Stepper.tsx", description: "Root component with context providers and compound assembly" },
+    { name: "step.tsx", description: "Individual step with connectors, layout, and keyboard handling" },
+    { name: "StepperIndicator.tsx", description: "Step indicator circle with status-based styling" },
+    { name: "StepperContent.tsx", description: "Content wrapper with orientation-aware layout" },
+    { name: "hooks.ts", description: "Context definitions and status helper" },
+    { name: "types.ts", description: "TypeScript type definitions" },
+    { name: "index.ts", description: "Public API exports" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "StepperRoot",
+  subComponents: [
+    {
+      name: "Step",
+      fileName: "step.tsx",
+      description: "Individual step container that renders indicator, connectors, and content based on orientation",
+      props: [
+        {
+          name: "status",
+          type: "'active' | 'completed' | 'inactive' | 'loading' | 'error'",
+          required: false,
+          description: "Override the automatically computed step status. When omitted, status is derived from activeStep and step index.",
+          options: ["active", "completed", "inactive", "loading", "error"]
+        }
+      ]
+    },
+    {
+      name: "Indicator",
+      fileName: "StepperIndicator.tsx",
+      description: "Circular step indicator that displays status-based styling, check marks, error icons, or custom content",
+      props: [
+        {
+          name: "icon",
+          type: "ReactNode",
+          required: false,
+          description: "Custom icon to display inside the indicator circle instead of the default check or error symbol"
+        }
+      ]
+    },
+    {
+      name: "Content",
+      fileName: "StepperContent.tsx",
+      description: "Container for step title and description with orientation-aware padding and alignment",
+      props: []
+    },
+    {
+      name: "Title",
+      fileName: "StepperContent.tsx",
+      description: "Step title rendered as an h3 element with status-based text color",
+      props: []
+    },
+    {
+      name: "Description",
+      fileName: "StepperContent.tsx",
+      description: "Step description rendered as a p element with muted styling and horizontal line-clamping",
+      props: []
+    }
+  ],
+  hooks: ["useStepperContext", "useStepIndexContext", "useStepStatusContext"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "activeStep",
+      type: "number",
+      required: true,
+      description: "Zero-based index of the currently active step. Determines which step is highlighted and which connectors are filled."
+    },
+    {
+      name: "orientation",
+      type: "'horizontal' | 'vertical'",
+      required: false,
+      defaultValue: "'horizontal'",
+      description: "Layout direction for the stepper. Horizontal arranges steps in a row; vertical stacks them in a column.",
+      options: ["horizontal", "vertical"]
+    },
+    {
+      name: "onStepClick",
+      type: "((step: number) => void) | undefined",
+      required: false,
+      description: "Callback when a step is clicked. Receives the zero-based step index. When provided, steps become focusable and clickable with keyboard support."
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  variants: {
+    propName: "orientation",
+    options: ["horizontal", "vertical"],
+    default: "horizontal"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "active",
+      prop: "status",
+      values: ["active"],
+      isBoolean: false,
+      description: "The current step. Indicator shows brand-colored circle with a ring glow. Connectors to this step are highlighted."
+    },
+    {
+      name: "completed",
+      prop: "status",
+      values: ["completed"],
+      isBoolean: false,
+      description: "A step that has been finished. Indicator shows a brand-filled circle with a check mark by default."
+    },
+    {
+      name: "inactive",
+      prop: "status",
+      values: ["inactive"],
+      isBoolean: false,
+      defaultValue: "'inactive'",
+      description: "A step not yet reached. Indicator shows a bordered muted circle."
+    },
+    {
+      name: "loading",
+      prop: "status",
+      values: ["loading"],
+      isBoolean: false,
+      description: "A step currently processing. Indicator pulses with an animation."
+    },
+    {
+      name: "error",
+      prop: "status",
+      values: ["error"],
+      isBoolean: false,
+      description: "A step that encountered an error. Indicator shows a destructive-colored circle with an exclamation mark by default."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onStepClick",
+      signature: "(step: number) => void",
+      description: "Fires when a user clicks a step. Receives the zero-based step index. Only fires when onStepClick is provided to Stepper.Root."
+    },
+    {
+      name: "onClick",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Native click handler on a Step element, fired alongside onStepClick."
+    },
+    {
+      name: "onKeyDown",
+      signature: "(event: React.KeyboardEvent<HTMLDivElement>) => void",
+      description: "Native keydown handler on a Step element. Fires after internal keyboard navigation is processed."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "list",
+    attributes: [
+      {
+        name: "aria-label",
+        description: 'Applied to the root element as "Progress steps, {completed} of {total} completed"',
+        managedByComponent: true
+      },
+      {
+        name: "aria-current",
+        description: 'Set to "step" on the currently active step',
+        managedByComponent: true
+      },
+      {
+        name: "aria-posinset",
+        description: "Set to the 1-based step position on each Step element",
+        managedByComponent: true
+      },
+      {
+        name: "aria-setsize",
+        description: "Set to the total number of steps on each Step element",
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: 'Set to "true" on the StepIndicator since status is communicated via sr-only text',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      { key: "Enter", behavior: "Activates the focused step (calls onStepClick)" },
+      { key: "Space", behavior: "Activates the focused step (calls onStepClick)" },
+      { key: "ArrowRight", behavior: "Moves focus to the next step in horizontal orientation" },
+      { key: "ArrowLeft", behavior: "Moves focus to the previous step in horizontal orientation" },
+      { key: "ArrowDown", behavior: "Moves focus to the next step in vertical orientation" },
+      { key: "ArrowUp", behavior: "Moves focus to the previous step in vertical orientation" },
+      { key: "Home", behavior: "Moves focus to the first step" },
+      { key: "End", behavior: "Moves focus to the last step" }
+    ],
+    focusManagement: 'Clickable steps receive tabindex="0" and support roving focus via arrow keys. Non-clickable steppers set tabindex="-1".',
+    wcagLevel: "AA",
+    notes: 'Each step includes a screen reader announcement ("Step {n} of {total}, {status}") via sr-only text. Focus-visible ring is shown on group focus-visible.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" },
+    { name: "lucide-react" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Used for Next/Back/Submit controls to navigate between stepper steps"
+    },
+    {
+      slug: "typography",
+      reason: "Used for section headings above the stepper in demo layouts"
+    },
+    {
+      slug: "divider",
+      reason: "Used to separate horizontal and vertical stepper variants in the same page"
+    },
+    {
+      slug: "card",
+      reason: "Common wrapper for stepper content panels showing the current step details"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Horizontal Clickable Stepper",
+      description: "A horizontal stepper with clickable steps, custom icons, and navigation buttons.",
+      tags: ["horizontal", "clickable", "icons"],
+      code: `import { Stepper, Button } from 'vayu-ui';
+import { useState } from 'react';
+import { User, MapPin, CreditCard, CheckCircle } from 'lucide-react';
+
+const steps = [
+  { title: 'Account', description: 'Create your account', icon: <User className="w-5 h-5" /> },
+  { title: 'Address', description: 'Enter your address', icon: <MapPin className="w-5 h-5" /> },
+  { title: 'Payment', description: 'Add payment method', icon: <CreditCard className="w-5 h-5" /> },
+  { title: 'Confirm', description: 'Review and order', icon: <CheckCircle className="w-5 h-5" /> },
+];
+
+export default function Example() {
+  const [activeStep, setActiveStep] = useState(1);
+
+  return (
+    <>
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="small"
+          disabled={activeStep === 0}
+          onClick={() => setActiveStep((p) => Math.max(0, p - 1))}
+        >
+          Back
+        </Button>
+        <Button
+          size="small"
+          disabled={activeStep === steps.length - 1}
+          onClick={() => setActiveStep((p) => Math.min(steps.length - 1, p + 1))}
+        >
+          Next
+        </Button>
+      </div>
+
+      <Stepper.Root activeStep={activeStep} onStepClick={setActiveStep}>
+        {steps.map((step) => (
+          <Stepper.Step key={step.title}>
+            <Stepper.Indicator icon={step.icon} />
+            <Stepper.Content>
+              <Stepper.Title>{step.title}</Stepper.Title>
+              <Stepper.Description>{step.description}</Stepper.Description>
+            </Stepper.Content>
+          </Stepper.Step>
+        ))}
+      </Stepper.Root>
+    </>
+  );
+}`
+    },
+    {
+      title: "Vertical Stepper with Numbered Indicators",
+      description: "A vertical stepper using numbered indicators instead of icons.",
+      tags: ["vertical", "numbered", "basic"],
+      code: `import { Stepper } from 'vayu-ui';
+import { useState } from 'react';
+
+const steps = [
+  { title: 'Account', description: 'Create your account' },
+  { title: 'Address', description: 'Enter your address' },
+  { title: 'Payment', description: 'Add payment method' },
+  { title: 'Confirm', description: 'Review and order' },
+];
+
+export default function Example() {
+  const [activeStep, setActiveStep] = useState(1);
+
+  return (
+    <Stepper.Root activeStep={activeStep} orientation="vertical" onStepClick={setActiveStep}>
+      {steps.map((step, index) => (
+        <Stepper.Step key={step.title}>
+          <Stepper.Indicator>{index + 1}</Stepper.Indicator>
+          <Stepper.Content>
+            <Stepper.Title>{step.title}</Stepper.Title>
+            <Stepper.Description>
+              Complete the {step.title.toLowerCase()} step to continue.
+            </Stepper.Description>
+          </Stepper.Content>
+        </Stepper.Step>
+      ))}
+    </Stepper.Root>
+  );
+}`
+    },
+    {
+      title: "Loading and Error States",
+      description: "Demonstrates loading and error step statuses with custom indicator icons.",
+      tags: ["loading", "error", "status", "states"],
+      code: `import { Stepper } from 'vayu-ui';
+import { CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+
+export default function Example() {
+  return (
+    <Stepper.Root activeStep={1}>
+      <Stepper.Step>
+        <Stepper.Indicator icon={<CheckCircle className="w-5 h-5" />} />
+        <Stepper.Content>
+          <Stepper.Title>Completed</Stepper.Title>
+        </Stepper.Content>
+      </Stepper.Step>
+      <Stepper.Step status="loading">
+        <Stepper.Indicator icon={<Loader2 className="w-5 h-5 animate-spin" />} />
+        <Stepper.Content>
+          <Stepper.Title>Loading</Stepper.Title>
+        </Stepper.Content>
+      </Stepper.Step>
+      <Stepper.Step status="error">
+        <Stepper.Indicator icon={<AlertCircle className="w-5 h-5" />} />
+        <Stepper.Content>
+          <Stepper.Title>Error</Stepper.Title>
+        </Stepper.Content>
+      </Stepper.Step>
+      <Stepper.Step>
+        <Stepper.Indicator>4</Stepper.Indicator>
+        <Stepper.Content>
+          <Stepper.Title>Pending</Stepper.Title>
+        </Stepper.Content>
+      </Stepper.Step>
+    </Stepper.Root>
+  );
+}`
+    },
+    {
+      title: "Non-Clickable Display Stepper",
+      description: "A display-only stepper without step click handlers for showing progress in a read-only context.",
+      tags: ["non-clickable", "display-only", "read-only"],
+      code: `import { Stepper } from 'vayu-ui';
+
+const steps = [
+  { title: 'Account' },
+  { title: 'Address' },
+  { title: 'Payment' },
+  { title: 'Confirm' },
+];
+
+export default function Example() {
+  return (
+    <Stepper.Root activeStep={2}>
+      {steps.map((step, index) => (
+        <Stepper.Step key={step.title}>
+          <Stepper.Indicator>{index + 1}</Stepper.Indicator>
+          <Stepper.Content>
+            <Stepper.Title>{step.title}</Stepper.Title>
+          </Stepper.Content>
+        </Stepper.Step>
+      ))}
+    </Stepper.Root>
+  );
+}`
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Do not nest Stepper.Root inside another Stepper",
+      bad: "<Stepper.Root><Stepper.Step><Stepper.Root>...</Stepper.Root></Stepper.Step></Stepper.Root>",
+      good: "Use a single Stepper.Root per workflow. If branching is needed, conditionally render different step arrays.",
+      reason: "Nesting steppers creates conflicting context providers and breaks keyboard navigation and ARIA semantics."
+    },
+    {
+      title: "Do not override status without understanding auto-computation",
+      bad: '<Stepper.Step status="completed"><Stepper.Indicator>1</Stepper.Indicator></Stepper.Step>',
+      good: "Omit the status prop and let it derive from activeStep, or use it intentionally for error/loading overrides.",
+      reason: "The status prop overrides automatic derivation. Setting it manually on every step defeats the purpose of activeStep-driven state."
+    },
+    {
+      title: "Do not render StepIndicator outside of Stepper.Step",
+      bad: "<div><Stepper.Indicator icon={...} /></div>",
+      good: "Always place Stepper.Indicator as a child of Stepper.Step so it receives status context.",
+      reason: "StepIndicator reads from StepStatusContext which is only provided inside a Stepper.Step."
+    },
+    {
+      title: "Do not use negative or out-of-range activeStep values",
+      bad: "<Stepper.Root activeStep={-1}>...</Stepper.Root>",
+      good: "Clamp activeStep between 0 and steps.length - 1.",
+      reason: "Negative or oversized activeStep values produce undefined visual states and incorrect ARIA labels."
+    },
+    {
+      title: "Do not hardcode step indicator colors",
+      bad: '<Stepper.Indicator className="bg-blue-500 text-white" />',
+      good: "Use the built-in status-driven styling which uses design tokens (bg-brand, bg-border, bg-destructive).",
+      reason: "Hardcoding colors bypasses design tokens and breaks theme consistency and dark mode support."
+    }
+  ]
+};
+
+// src/components/menubar.ts
+var menubarEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "menubar",
+  name: "Menubar",
+  type: "component",
+  category: "navigation",
+  // ── Description ───────────────────────────────────────
+  description: "A compound menubar component with nested menus, keyboard navigation, checkbox items, radio groups, submenus, and full ARIA accessibility.",
+  longDescription: "The Menubar component provides a horizontal or vertical navigation bar with dropdown menus, following the WAI-ARIA menubar pattern. It supports nested submenus with unlimited depth, checkbox items for toggle states, radio groups for single-choice selections, labeled groups, separators, icons, and keyboard shortcut display. Full keyboard navigation includes arrow keys, Home/End, Escape, Enter/Space, and typeahead. Menus render via portals to avoid clipping, position dynamically using element tracking, and close on outside clicks or Escape. All items support disabled and danger states.",
+  tags: [
+    "menubar",
+    "menu",
+    "navigation",
+    "dropdown",
+    "submenu",
+    "context",
+    "toolbar",
+    "accessibility",
+    "keyboard",
+    "portal",
+    "checkbox",
+    "radio",
+    "compound"
+  ],
+  useCases: [
+    "Application-level navigation bar with File, Edit, View menus (VS Code, Figma style)",
+    "Rich text editor toolbar menus with formatting options and keyboard shortcuts",
+    "Settings panels with checkbox toggles and radio group selections in dropdown menus",
+    "Context-aware actions with nested submenus for categorised operations",
+    "Dangerous action menus that visually distinguish destructive items like Delete or Clear",
+    "Dashboard or IDE layouts needing a compact, keyboard-navigable menu system"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "MenuBar",
+  files: [
+    {
+      name: "MenuBar.tsx",
+      description: "Root menubar component managing active menu state, orientation, trigger registration, and outside-click/Escape handling"
+    },
+    {
+      name: "Menu.tsx",
+      description: "Top-level menu with trigger button, dropdown panel rendered via Portal, positioning, and keyboard navigation"
+    },
+    {
+      name: "MenubarItem.tsx",
+      description: "Menu item with icon, shortcut display, danger variant, and onSelect callback"
+    },
+    {
+      name: "MenubarCheckBoxItem.tsx",
+      description: "Toggle menu item with checkmark indicator, checked/onCheckedChange controlled props"
+    },
+    {
+      name: "MenubarRadioGroup.tsx",
+      description: "Contains MenuRadioGroup (group container with value/onValueChange) and MenuRadioItem (radio option with dot indicator)"
+    },
+    {
+      name: "MenubarSubMenu.tsx",
+      description: "Nested submenu with hover-delay open/close, chevron indicator, and recursive keyboard navigation"
+    },
+    {
+      name: "MenubarLabel.tsx",
+      description: 'Non-interactive label for grouping menu items with role="presentation"'
+    },
+    {
+      name: "MenubarSeparator.tsx",
+      description: 'Visual divider between menu item groups with role="separator"'
+    },
+    {
+      name: "MenubarPortal.tsx",
+      description: "Portal wrapper that renders children into document.body to avoid clipping"
+    },
+    {
+      name: "types.ts",
+      description: "TypeScript type definitions for Orientation, MenubarContextValue, MenuContextValue, and menu item selector constants"
+    },
+    {
+      name: "hooks.ts",
+      description: "Context providers, useMenubarContext, useMenuContext, useTypeahead, useFocusItems, and useMenuNavigation hooks"
+    },
+    {
+      name: "index.ts",
+      description: "Barrel export assembling the compound Menubar component with all sub-components and type exports"
+    }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Menubar",
+  subComponents: [
+    {
+      name: "Menu",
+      fileName: "Menu.tsx",
+      description: "Top-level dropdown menu with a trigger button and a portal-rendered panel",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Menu items, separators, labels, submenus, and radio groups to render inside the dropdown"
+        },
+        {
+          name: "trigger",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content displayed on the menubar that toggles the dropdown when clicked"
+        },
+        {
+          name: "disabled",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "Disables the trigger button, preventing the menu from opening"
+        }
+      ],
+      supportsAsChild: false
+    },
+    {
+      name: "SubMenu",
+      fileName: "MenubarSubMenu.tsx",
+      description: "Nested submenu that opens to the right of its trigger on hover or keyboard activation",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Items and separators rendered inside the nested submenu"
+        },
+        {
+          name: "trigger",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content displayed as the submenu trigger label with a chevron indicator"
+        },
+        {
+          name: "disabled",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "Disables the submenu trigger, preventing it from opening"
+        }
+      ],
+      supportsAsChild: false
+    },
+    {
+      name: "Item",
+      fileName: "MenubarItem.tsx",
+      description: "Clickable menu item with optional icon, keyboard shortcut, and danger styling",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Label content for the menu item"
+        },
+        {
+          name: "icon",
+          type: "React.ReactNode",
+          required: false,
+          description: "Icon element rendered to the left of the label (aria-hidden)"
+        },
+        {
+          name: "shortcut",
+          type: "string",
+          required: false,
+          description: 'Keyboard shortcut displayed to the right of the item (e.g. "\u2318S")'
+        },
+        {
+          name: "disabled",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "Disables the item and prevents interaction"
+        },
+        {
+          name: "danger",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "Applies destructive styling (red text and hover) for dangerous actions"
+        },
+        {
+          name: "onSelect",
+          type: "() => void",
+          required: false,
+          description: "Callback fired when the item is activated; closes all menus afterward"
+        }
+      ],
+      supportsAsChild: false
+    },
+    {
+      name: "CheckboxItem",
+      fileName: "MenubarCheckBoxItem.tsx",
+      description: "Toggle menu item with a checkmark indicator and controlled checked state",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Label content for the checkbox item"
+        },
+        {
+          name: "checked",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "Controlled checked state; when true, displays a checkmark indicator"
+        },
+        {
+          name: "onCheckedChange",
+          type: "(checked: boolean) => void",
+          required: false,
+          description: "Callback fired when the checked state changes, receives the new boolean value"
+        },
+        {
+          name: "icon",
+          type: "React.ReactNode",
+          required: false,
+          description: "Icon element rendered to the left of the label (aria-hidden)"
+        },
+        {
+          name: "shortcut",
+          type: "string",
+          required: false,
+          description: "Keyboard shortcut displayed to the right of the item"
+        },
+        {
+          name: "disabled",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "Disables the checkbox item and prevents interaction"
+        }
+      ],
+      supportsAsChild: false
+    },
+    {
+      name: "RadioGroup",
+      fileName: "MenubarRadioGroup.tsx",
+      description: "Container for radio items enforcing single selection with shared value state",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "MenuRadioItem components to render as radio options"
+        },
+        {
+          name: "value",
+          type: "string",
+          required: false,
+          description: "Currently selected value matching a child RadioItem value prop"
+        },
+        {
+          name: "onValueChange",
+          type: "(value: string) => void",
+          required: false,
+          description: "Callback fired when a radio item is selected, receives the item value"
+        }
+      ],
+      supportsAsChild: false
+    },
+    {
+      name: "RadioItem",
+      fileName: "MenubarRadioGroup.tsx",
+      description: "Single-choice menu item within a RadioGroup, displaying a dot indicator when selected",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Label content for the radio item"
+        },
+        {
+          name: "value",
+          type: "string",
+          required: true,
+          description: "Unique value identifying this radio option within its RadioGroup"
+        },
+        {
+          name: "icon",
+          type: "React.ReactNode",
+          required: false,
+          description: "Icon element rendered to the left of the label (aria-hidden)"
+        },
+        {
+          name: "shortcut",
+          type: "string",
+          required: false,
+          description: "Keyboard shortcut displayed to the right of the item"
+        },
+        {
+          name: "disabled",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "Disables the radio item and prevents interaction"
+        }
+      ],
+      supportsAsChild: false
+    },
+    {
+      name: "Label",
+      fileName: "MenubarLabel.tsx",
+      description: "Non-interactive section label for grouping related menu items",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Text content to display as a section heading"
+        }
+      ],
+      supportsAsChild: false
+    },
+    {
+      name: "Separator",
+      fileName: "MenubarSeparator.tsx",
+      description: "Visual horizontal divider between menu item groups",
+      props: [],
+      supportsAsChild: false
+    }
+  ],
+  hooks: [
+    "useMenubarContext",
+    "useMenuContext",
+    "useTypeahead",
+    "useFocusItems",
+    "useMenuNavigation"
+  ],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Menu components (Menubar.Menu) to display as top-level menu entries in the bar"
+    },
+    {
+      name: "orientation",
+      type: "Orientation",
+      required: false,
+      defaultValue: "'horizontal'",
+      description: "Layout direction of the menubar; horizontal arranges menus left-to-right, vertical stacks them top-to-bottom",
+      options: ["horizontal", "vertical"]
+    }
+  ],
+  rendersAs: "div",
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "open",
+      prop: "activeMenu (internal)",
+      isBoolean: true,
+      defaultValue: "null (closed)",
+      description: "Tracks which menu dropdown is currently visible; only one menu can be open at a time. Clicking a trigger toggles its menu; clicking outside or pressing Escape closes all menus."
+    },
+    {
+      name: "disabled",
+      prop: "disabled",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Available on Menu trigger, Item, CheckboxItem, RadioItem, and SubMenu. Disables interaction, applies reduced opacity, and sets aria-disabled."
+    },
+    {
+      name: "checked",
+      prop: "checked",
+      isBoolean: true,
+      defaultValue: "false",
+      description: 'Controlled state on CheckboxItem; when true, displays a checkmark SVG indicator and sets aria-checked="true".'
+    },
+    {
+      name: "selected",
+      prop: "value (on RadioGroup)",
+      isBoolean: false,
+      description: 'Determined by matching the RadioGroup value prop against each RadioItem value. The matching item shows a filled-circle indicator and aria-checked="true".'
+    },
+    {
+      name: "danger",
+      prop: "danger",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Applied to Item to indicate a destructive action; uses destructive color tokens for text and hover states."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onSelect",
+      signature: "() => void",
+      description: "Fired when a Menubar.Item is activated via click or keyboard; closes all menus after invocation"
+    },
+    {
+      name: "onCheckedChange",
+      signature: "(checked: boolean) => void",
+      description: "Fired when a CheckboxItem is toggled; receives the new boolean checked state"
+    },
+    {
+      name: "onValueChange",
+      signature: "(value: string) => void",
+      description: "Fired when a RadioItem is selected within a RadioGroup; receives the selected item value string"
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    role: "menubar",
+    attributes: [
+      {
+        name: "aria-orientation",
+        description: 'Set on the root menubar element to declare layout direction ("horizontal" or "vertical")',
+        managedByComponent: true
+      },
+      {
+        name: "aria-haspopup",
+        description: 'Set to "true" on Menu and SubMenu trigger buttons to indicate they open a popup',
+        managedByComponent: true
+      },
+      {
+        name: "aria-expanded",
+        description: "Set on trigger buttons; true when the associated menu/submenu is open, false when closed",
+        managedByComponent: true
+      },
+      {
+        name: "aria-controls",
+        description: "Links a trigger button to its dropdown panel ID when open; omitted when closed",
+        managedByComponent: true
+      },
+      {
+        name: "aria-labelledby",
+        description: 'Set on each dropdown panel (role="menu") referencing its trigger button ID',
+        managedByComponent: true
+      },
+      {
+        name: "aria-disabled",
+        description: "Set on disabled menu items, triggers, and checkbox/radio items alongside native disabled",
+        managedByComponent: true
+      },
+      {
+        name: "aria-checked",
+        description: 'Set on CheckboxItem (role="menuitemcheckbox") and RadioItem (role="menuitemradio") to reflect checked/selected state',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Enter / Space",
+        behavior: "Activates a menu item, toggles a checkbox, selects a radio item, or opens a menu/submenu trigger"
+      },
+      {
+        key: "ArrowDown",
+        behavior: "Opens a menu and focuses the first item, or moves focus to the next item in a dropdown"
+      },
+      {
+        key: "ArrowUp",
+        behavior: "Opens a menu and focuses the last item, or moves focus to the previous item in a dropdown"
+      },
+      {
+        key: "ArrowRight",
+        behavior: "In horizontal menubar, moves focus to the next menu trigger. Inside a menu, opens a submenu. Inside a submenu, moves focus to next item."
+      },
+      {
+        key: "ArrowLeft",
+        behavior: "In horizontal menubar, moves focus to the previous menu trigger. Inside a submenu, closes it and returns focus to the parent trigger."
+      },
+      {
+        key: "Home",
+        behavior: "Moves focus to the first menu item or first menubar trigger"
+      },
+      {
+        key: "End",
+        behavior: "Moves focus to the last menu item or last menubar trigger"
+      },
+      {
+        key: "Escape",
+        behavior: "Closes the current menu/submenu and returns focus to its trigger. At top level, closes all menus."
+      },
+      {
+        key: "Typeahead (printable characters)",
+        behavior: "Types into a 500ms buffer to jump to the first matching menu item label (case-insensitive)"
+      }
+    ],
+    focusManagement: "Focus-visible ring (ring-2 ring-focus ring-offset-2) appears on keyboard focus for trigger buttons and menu items. Focus moves between triggers and dropdown items via arrow keys. Outside clicks and Escape return focus to the originating trigger.",
+    wcagLevel: "AA",
+    notes: 'Uses WAI-ARIA menubar pattern with proper role hierarchy: menubar > menu > menuitem/menuitemcheckbox/menuitemradio. Separator uses role="separator", labels use role="presentation". All menus render via React portals into document.body for z-index reliability. Each trigger and panel receives a unique auto-generated ID via useId().'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [{ name: "clsx" }],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Toolbar action buttons commonly placed alongside a menubar in application chrome"
+    },
+    {
+      slug: "tooltip",
+      reason: "Provides supplemental context for menu items or toolbar buttons near the menubar"
+    },
+    {
+      slug: "popover",
+      reason: "Similar overlay pattern for contextual panels triggered from toolbar areas"
+    },
+    {
+      slug: "typography",
+      reason: "Used in demo layouts to label menubar sections and display state readouts"
+    },
+    {
+      slug: "divider",
+      reason: "Visual separation between the menubar and content areas in application layouts"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Menubar with Icons and Shortcuts",
+      description: "A simple menubar with File and Edit menus demonstrating items with icons, keyboard shortcuts, separators, and a disabled state.",
+      code: `'use client';
+import React from 'react';
+import { Menubar } from 'vayu-ui';
+import { File, Save, Printer, Scissors, Copy, Clipboard } from 'lucide-react';
+
+export default function BasicMenubar() {
+  return (
+    <Menubar>
+      <Menubar.Menu trigger="File">
+        <Menubar.Item icon={<File size={14} />} shortcut="\u2318N">
+          New Tab
+        </Menubar.Item>
+        <Menubar.Item icon={<Save size={14} />} shortcut="\u2318S" disabled>
+          Save
+        </Menubar.Item>
+        <Menubar.Separator />
+        <Menubar.Item icon={<Printer size={14} />} shortcut="\u2318P">
+          Print...
+        </Menubar.Item>
+      </Menubar.Menu>
+
+      <Menubar.Menu trigger="Edit">
+        <Menubar.Item icon={<Scissors size={14} />} shortcut="\u2318X">
+          Cut
+        </Menubar.Item>
+        <Menubar.Item icon={<Copy size={14} />} shortcut="\u2318C">
+          Copy
+        </Menubar.Item>
+        <Menubar.Item icon={<Clipboard size={14} />} shortcut="\u2318V">
+          Paste
+        </Menubar.Item>
+      </Menubar.Menu>
+    </Menubar>
+  );
+}`,
+      tags: ["basic", "icons", "shortcuts", "disabled"]
+    },
+    {
+      title: "Checkbox and Radio Items",
+      description: "View menu with CheckboxItem toggles for panel visibility and a RadioGroup for zoom level selection.",
+      code: `'use client';
+import React, { useState } from 'react';
+import { Menubar } from 'vayu-ui';
+
+export default function CheckboxRadioMenubar() {
+  const [showStatusBar, setShowStatusBar] = useState(true);
+  const [showPanel, setShowPanel] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState('100%');
+
+  return (
+    <Menubar>
+      <Menubar.Menu trigger="View">
+        <Menubar.CheckboxItem
+          checked={showStatusBar}
+          onCheckedChange={setShowStatusBar}
+          shortcut="\u2318/"
+        >
+          Show Status Bar
+        </Menubar.CheckboxItem>
+        <Menubar.CheckboxItem checked={showPanel} onCheckedChange={setShowPanel}>
+          Show Panel
+        </Menubar.CheckboxItem>
+        <Menubar.Separator />
+        <Menubar.Label>Zoom</Menubar.Label>
+        <Menubar.RadioGroup value={zoomLevel} onValueChange={setZoomLevel}>
+          <Menubar.RadioItem value="50%">50%</Menubar.RadioItem>
+          <Menubar.RadioItem value="100%">100%</Menubar.RadioItem>
+          <Menubar.RadioItem value="200%">200%</Menubar.RadioItem>
+        </Menubar.RadioGroup>
+      </Menubar.Menu>
+    </Menubar>
+  );
+}`,
+      tags: ["checkbox", "radio", "toggle", "controlled"]
+    },
+    {
+      title: "Nested Submenus and Danger Items",
+      description: "Menus with nested SubMenu components for categorised actions and a danger-styled item for destructive operations.",
+      code: `'use client';
+import React from 'react';
+import { Menubar } from 'vayu-ui';
+import { Share2, Bold, Italic, Trash2 } from 'lucide-react';
+
+export default function SubmenuMenubar() {
+  return (
+    <Menubar>
+      <Menubar.Menu trigger="File">
+        <Menubar.SubMenu trigger="Share">
+          <Menubar.Item icon={<Share2 size={14} />}>Email Link</Menubar.Item>
+          <Menubar.Item>Messages</Menubar.Item>
+          <Menubar.SubMenu trigger="Social Media">
+            <Menubar.Item>Twitter</Menubar.Item>
+            <Menubar.Item>Facebook</Menubar.Item>
+          </Menubar.SubMenu>
+        </Menubar.SubMenu>
+      </Menubar.Menu>
+
+      <Menubar.Menu trigger="Format">
+        <Menubar.Item icon={<Bold size={14} />} shortcut="\u2318B">
+          Bold
+        </Menubar.Item>
+        <Menubar.Item icon={<Italic size={14} />} shortcut="\u2318I">
+          Italic
+        </Menubar.Item>
+        <Menubar.Separator />
+        <Menubar.Item danger icon={<Trash2 size={14} />}>
+          Clear Formatting
+        </Menubar.Item>
+      </Menubar.Menu>
+    </Menubar>
+  );
+}`,
+      tags: ["submenu", "nested", "danger", "destructive"]
+    },
+    {
+      title: "Complete Editor Menubar",
+      description: "Full-featured menubar mimicking an IDE/editor with File, Edit, View, Format, and Help menus \u2014 demonstrates all sub-component types working together.",
+      code: `'use client';
+import React, { useState } from 'react';
+import { Menubar } from 'vayu-ui';
+import {
+  File, FolderOpen, Save, Printer, Scissors, Copy, Clipboard,
+  Undo, Redo, Share2, Trash2, Bold, Italic, Underline,
+} from 'lucide-react';
+
+export default function EditorMenubar() {
+  const [showStatusBar, setShowStatusBar] = useState(true);
+  const [showPanel, setShowPanel] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState('100%');
+
+  return (
+    <Menubar>
+      <Menubar.Menu trigger="File">
+        <Menubar.Item icon={<File size={14} />} shortcut="\u2318N">New Tab</Menubar.Item>
+        <Menubar.Item icon={<FolderOpen size={14} />} shortcut="\u2318O">Open File...</Menubar.Item>
+        <Menubar.Item icon={<Save size={14} />} shortcut="\u2318S" disabled>Save</Menubar.Item>
+        <Menubar.Separator />
+        <Menubar.SubMenu trigger="Share">
+          <Menubar.Item icon={<Share2 size={14} />}>Email Link</Menubar.Item>
+          <Menubar.SubMenu trigger="Social Media">
+            <Menubar.Item>Twitter</Menubar.Item>
+            <Menubar.Item>Facebook</Menubar.Item>
+          </Menubar.SubMenu>
+        </Menubar.SubMenu>
+        <Menubar.Separator />
+        <Menubar.Item icon={<Printer size={14} />} shortcut="\u2318P">Print...</Menubar.Item>
+      </Menubar.Menu>
+
+      <Menubar.Menu trigger="Edit">
+        <Menubar.Item icon={<Undo size={14} />} shortcut="\u2318Z">Undo</Menubar.Item>
+        <Menubar.Item icon={<Redo size={14} />} shortcut="\u21E7\u2318Z">Redo</Menubar.Item>
+        <Menubar.Separator />
+        <Menubar.Item icon={<Scissors size={14} />} shortcut="\u2318X">Cut</Menubar.Item>
+        <Menubar.Item icon={<Copy size={14} />} shortcut="\u2318C">Copy</Menubar.Item>
+        <Menubar.Item icon={<Clipboard size={14} />} shortcut="\u2318V">Paste</Menubar.Item>
+      </Menubar.Menu>
+
+      <Menubar.Menu trigger="View">
+        <Menubar.CheckboxItem checked={showStatusBar} onCheckedChange={setShowStatusBar}>
+          Show Status Bar
+        </Menubar.CheckboxItem>
+        <Menubar.CheckboxItem checked={showPanel} onCheckedChange={setShowPanel}>
+          Show Panel
+        </Menubar.CheckboxItem>
+        <Menubar.Separator />
+        <Menubar.Label>Zoom</Menubar.Label>
+        <Menubar.RadioGroup value={zoomLevel} onValueChange={setZoomLevel}>
+          <Menubar.RadioItem value="50%">50%</Menubar.RadioItem>
+          <Menubar.RadioItem value="100%">100%</Menubar.RadioItem>
+          <Menubar.RadioItem value="200%">200%</Menubar.RadioItem>
+        </Menubar.RadioGroup>
+      </Menubar.Menu>
+
+      <Menubar.Menu trigger="Format">
+        <Menubar.Item icon={<Bold size={14} />} shortcut="\u2318B">Bold</Menubar.Item>
+        <Menubar.Item icon={<Italic size={14} />} shortcut="\u2318I">Italic</Menubar.Item>
+        <Menubar.Item icon={<Underline size={14} />} shortcut="\u2318U">Underline</Menubar.Item>
+        <Menubar.Separator />
+        <Menubar.Item danger icon={<Trash2 size={14} />}>Clear Formatting</Menubar.Item>
+      </Menubar.Menu>
+
+      <Menubar.Menu trigger="Help">
+        <Menubar.Item>Documentation</Menubar.Item>
+        <Menubar.Item>Feedback</Menubar.Item>
+        <Menubar.Separator />
+        <Menubar.Item>About Vayu UI</Menubar.Item>
+      </Menubar.Menu>
+    </Menubar>
+  );
+}`,
+      tags: ["complete", "editor", "all-features", "full-demo"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using menu items outside a Menu",
+      bad: "<Menubar.Item icon={<Icon />}>Action</Menubar.Item>",
+      good: '<Menubar.Menu trigger="Actions"><Menubar.Item icon={<Icon />}>Action</Menubar.Item></Menubar.Menu>',
+      reason: "Item, CheckboxItem, RadioItem, SubMenu, Label, and Separator all require MenuContext from a parent Menu. Rendering them standalone throws a runtime error."
+    },
+    {
+      title: "CheckboxItem without onCheckedChange",
+      bad: "<Menubar.CheckboxItem checked={true}>Toggle</Menubar.CheckboxItem>",
+      good: "<Menubar.CheckboxItem checked={enabled} onCheckedChange={setEnabled}>Toggle</Menubar.CheckboxItem>",
+      reason: "Without an onCheckedChange handler, the checkbox will never update its visual state on click. Always pair checked with onCheckedChange for controlled behavior."
+    },
+    {
+      title: "RadioItem without a parent RadioGroup",
+      bad: '<Menubar.RadioItem value="a">Option A</Menubar.RadioItem>',
+      good: '<Menubar.RadioGroup value={val} onValueChange={setVal}><Menubar.RadioItem value="a">Option A</Menubar.RadioItem></Menubar.RadioGroup>',
+      reason: "RadioItem reads its selected state from RadioGroup context. Without a parent RadioGroup, it cannot determine or update its checked state."
+    },
+    {
+      title: "Deeply nested submenus beyond 2-3 levels",
+      bad: "Menubar.SubMenu > SubMenu > SubMenu > SubMenu > ...",
+      good: "Limit nesting to 2 levels (submenu within submenu). For deeper hierarchies, restructure into separate menus or a different navigation pattern.",
+      reason: "Deeply nested submenus degrade usability, make keyboard navigation cumbersome, and can overflow the viewport. Most accessibility guidelines recommend keeping nesting shallow."
+    },
+    {
+      title: "Missing trigger on Menu or SubMenu",
+      bad: "<Menubar.Menu><Menubar.Item>Action</Menubar.Item></Menubar.Menu>",
+      good: '<Menubar.Menu trigger="File"><Menubar.Item>Action</Menubar.Item></Menubar.Menu>',
+      reason: "The trigger prop is required \u2014 it provides the visible button on the menubar bar and the accessible label for the dropdown panel. Without it, the menu cannot be opened or identified."
+    }
+  ]
+};
+
+// src/components/hover-card.ts
+var hoverCardEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "hover-card",
+  name: "HoverCard",
+  type: "component",
+  category: "overlay",
+  // ── Description ───────────────────────────────────────
+  description: "A portal-based hover card component that displays rich content on hover or focus, with four placement sides, three alignment options, configurable open/close delays, auto-flipping when near viewport edges, directional arrows, and WCAG 2.2 AA accessibility.",
+  longDescription: "The HoverCard component renders a floating portal element positioned relative to a trigger. It supports four placement sides (top, bottom, left, right) with three alignment options (start, center, end) and automatic viewport-edge flipping when there is insufficient space. Open and close delays are independently configurable to allow the cursor to travel between trigger and card. A directional arrow is rendered via a rotated square div. The card body is hoverable \u2014 the close delay keeps it visible while the cursor moves into it. Content resizing is handled via a ResizeObserver for dynamic children. The component uses React portals for z-index layering, double requestAnimationFrame for flicker-free positioning, and scroll/resize listeners for continuous alignment. Body scroll is locked while the card is open.",
+  tags: [
+    "hovercard",
+    "overlay",
+    "popover",
+    "hover",
+    "focus",
+    "profile",
+    "card",
+    "portal",
+    "positioning",
+    "a11y",
+    "wcag",
+    "tooltip"
+  ],
+  useCases: [
+    "Display user profile cards with avatar, bio, and metadata when hovering over a username or avatar",
+    "Show contextual information or previews alongside triggers without requiring navigation",
+    "Present contact details, social links, or action buttons in a compact hover panel",
+    "Surface rich content (images, metadata, descriptions) for items in lists, tables, or grids",
+    "Provide quick-access detail views for data-display elements like badges, tags, or abbreviations",
+    "Preview link destinations or document summaries on hover before committing to a click"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "HoverCard",
+  files: [
+    { name: "HoverCard.tsx", description: "ForwardRef component with portal rendering, positioning, open/close timing, and arrow rendering" },
+    { name: "HoverCardArrow.tsx", description: "Presentational directional arrow sub-component using a rotated square div" },
+    { name: "types.ts", description: "TypeScript interfaces for HoverCardProps, HoverCardSide, HoverCardAlign, and arrow border helpers" },
+    { name: "hooks.ts", description: "Custom hooks: useHoverCardOpen (delayed open/close with Escape dismiss) and useHoverCardPosition (viewport-aware positioning with auto-flip)" },
+    { name: "index.ts", description: "Barrel export file re-exporting HoverCard and all type definitions" },
+    { name: "README.md", description: "Component anatomy and use-case documentation" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "HoverCard",
+  subComponents: [
+    {
+      name: "HoverCardArrow",
+      fileName: "HoverCardArrow.tsx",
+      description: "Internal directional arrow rendered at the edge of the hover card pointing toward the trigger; not exported publicly",
+      props: [
+        {
+          name: "side",
+          type: "HoverCardSide",
+          required: true,
+          description: "The current side the card is rendered on, used to determine which borders to hide on the rotated square"
+        },
+        {
+          name: "position",
+          type: "{ top: number; left: number }",
+          required: true,
+          description: "Absolute pixel offset of the arrow within the card container"
+        }
+      ]
+    }
+  ],
+  hooks: ["useHoverCardOpen", "useHoverCardPosition"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "The trigger element that shows the hover card on hover or focus"
+    },
+    {
+      name: "content",
+      type: "React.ReactNode",
+      required: true,
+      description: "Card content \u2014 can be any JSX rendered inside the hover card portal"
+    },
+    {
+      name: "side",
+      type: "'top' | 'right' | 'bottom' | 'left'",
+      required: false,
+      defaultValue: "'bottom'",
+      description: "Preferred side of the trigger to place the hover card; auto-flips if insufficient viewport space",
+      options: ["top", "right", "bottom", "left"]
+    },
+    {
+      name: "align",
+      type: "'start' | 'center' | 'end'",
+      required: false,
+      defaultValue: "'center'",
+      description: "Alignment of the hover card along the trigger edge",
+      options: ["start", "center", "end"]
+    },
+    {
+      name: "sideOffset",
+      type: "number",
+      required: false,
+      defaultValue: "8",
+      description: "Gap in pixels between the trigger and the hover card"
+    },
+    {
+      name: "alignOffset",
+      type: "number",
+      required: false,
+      defaultValue: "0",
+      description: "Additional pixel shift along the alignment axis"
+    },
+    {
+      name: "openDelay",
+      type: "number",
+      required: false,
+      defaultValue: "200",
+      description: "Delay in milliseconds before the hover card appears after the trigger is hovered or focused"
+    },
+    {
+      name: "closeDelay",
+      type: "number",
+      required: false,
+      defaultValue: "300",
+      description: "Delay in milliseconds before the hover card disappears after the cursor leaves the trigger or card"
+    },
+    {
+      name: "contentClassName",
+      type: "string",
+      required: false,
+      description: "Additional CSS class name applied to the hover card portal container"
+    },
+    {
+      name: "disabled",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "When true, the hover card will not appear on hover or focus"
+    },
+    {
+      name: "showArrow",
+      type: "boolean",
+      required: false,
+      defaultValue: "true",
+      description: "Whether to render a directional arrow pointing from the hover card to the trigger"
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  // HoverCard has no variant or size props
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "open",
+      prop: "isOpen (internal)",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "The hover card portal is mounted and positioned; controlled internally by hover/focus timeouts"
+    },
+    {
+      name: "disabled",
+      prop: "disabled",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Hover card is completely suppressed \u2014 no portal renders on hover or focus"
+    },
+    {
+      name: "mounted",
+      prop: "mounted (internal)",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Client-side hydration flag; portal only renders after mount to avoid SSR mismatches"
+    },
+    {
+      name: "flipped",
+      prop: "currentSide (internal)",
+      isBoolean: false,
+      defaultValue: "'bottom'",
+      description: "When the preferred side lacks viewport space, the card auto-flips to the opposite side"
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onMouseEnter",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fires on the trigger wrapper and card content; starts the open delay timer"
+    },
+    {
+      name: "onMouseLeave",
+      signature: "(event: React.MouseEvent<HTMLDivElement>) => void",
+      description: "Fires on the trigger wrapper and card content; starts the close delay timer"
+    },
+    {
+      name: "onFocus",
+      signature: "(event: React.FocusEvent<HTMLDivElement>) => void",
+      description: "Fires when the trigger receives keyboard focus; starts the open delay timer"
+    },
+    {
+      name: "onBlur",
+      signature: "(event: React.FocusEvent<HTMLDivElement>) => void",
+      description: "Fires when the trigger loses focus; starts the close delay timer"
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    attributes: [
+      {
+        name: "aria-haspopup",
+        description: 'Applied to the trigger element with value "true" to indicate it has an associated popup',
+        managedByComponent: true
+      },
+      {
+        name: "aria-expanded",
+        description: "Applied to the trigger element; dynamically set to true when the hover card is visible and false when hidden",
+        managedByComponent: true
+      },
+      {
+        name: "aria-describedby",
+        description: "Applied to the trigger when the card is visible; references the portal element by auto-generated ID to associate the content with the trigger",
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: "Applied to the directional arrow div to hide the decorative element from the accessibility tree",
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Tab",
+        behavior: "Focuses the trigger element, which initiates the open delay and displays the hover card"
+      },
+      {
+        key: "Shift+Tab",
+        behavior: "Moves focus away from the trigger, which initiates the close delay and dismisses the hover card"
+      },
+      {
+        key: "Escape",
+        behavior: "Immediately dismisses the visible hover card regardless of close delay"
+      }
+    ],
+    focusManagement: "The trigger element is focusable via keyboard Tab navigation. onFocus triggers the open timer; onBlur triggers the close timer. The card body is mouse-interactive (onMouseEnter/onMouseLeave) to allow hover persistence while the cursor moves into the card content.",
+    wcagLevel: "AA",
+    notes: 'Implements WCAG 2.5.7 (Dragging Movements) by making the card body hoverable with a configurable close delay (default 300ms). The trigger uses aria-haspopup, aria-expanded, and aria-describedby to create the required programmatic association with the card content. The decorative arrow is hidden with aria-hidden="true". Body scroll is locked while the card is open to prevent disorientation.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "avatar",
+      reason: "Avatars are common triggers for HoverCards showing user profile details on hover"
+    },
+    {
+      slug: "button",
+      reason: "Buttons are the most common trigger element for HoverCards, especially for link previews or action menus"
+    },
+    {
+      slug: "badge",
+      reason: "Badges with abbreviated text benefit from HoverCards showing expanded information on hover"
+    },
+    {
+      slug: "card",
+      reason: "Cards share a similar content-rich display pattern and are often used alongside HoverCards for detail views"
+    },
+    {
+      slug: "tooltip",
+      reason: "Tooltip is a lighter alternative for simple text hints when rich content is not needed"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic profile card",
+      description: "A user profile hover card with avatar, name, handle, bio, and metadata displayed on hover.",
+      code: `import { HoverCard } from 'vayu-ui';
+import { CalendarDays, MapPin } from 'lucide-react';
+
+export default function BasicHoverCard() {
+  return (
+    <HoverCard
+      content={
+        <div className="w-64 space-y-2">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-400 font-bold text-sm">
+              VU
+            </div>
+            <div>
+              <p className="font-semibold text-sm">Ved UI</p>
+              <p className="text-xs text-neutral-500">@vayuui</p>
+            </div>
+          </div>
+          <p className="text-xs text-neutral-600 dark:text-neutral-400">
+            A modern React component library with WCAG 2.2 AA compliance, compound patterns, and
+            premium design.
+          </p>
+          <div className="flex items-center gap-3 text-xs text-neutral-500">
+            <span className="flex items-center gap-1">
+              <CalendarDays className="w-3 h-3" aria-hidden="true" />
+              Joined Feb 2026
+            </span>
+            <span className="flex items-center gap-1">
+              <MapPin className="w-3 h-3" aria-hidden="true" />
+              Open Source
+            </span>
+          </div>
+        </div>
+      }
+    >
+      <button className="text-sm font-secondary text-primary-600 dark:text-primary-400 underline underline-offset-2 hover:text-primary-700 dark:hover:text-primary-300 transition-colors">
+        @vayuui
+      </button>
+    </HoverCard>
+  );
+}`,
+      tags: ["basic", "profile", "avatar", "metadata"]
+    },
+    {
+      title: "Placement sides",
+      description: "Four directional placements (top, bottom, left, right) around trigger buttons.",
+      code: `import { HoverCard } from 'vayu-ui';
+
+export default function SidesHoverCard() {
+  return (
+    <div className="flex flex-wrap items-center gap-4">
+      {(['top', 'bottom', 'left', 'right'] as const).map((s) => (
+        <HoverCard
+          key={s}
+          side={s}
+          content={
+            <p className="text-xs w-40">
+              This card appears on the <strong>{s}</strong> side.
+            </p>
+          }
+        >
+          <button className="px-3 py-1.5 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded-md hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors capitalize">
+            {s}
+          </button>
+        </HoverCard>
+      ))}
+    </div>
+  );
+}`,
+      tags: ["sides", "placement", "top", "bottom", "left", "right"]
+    },
+    {
+      title: "Rich content",
+      description: "A contact info hover card with icons, links, and an interactive action button inside the card.",
+      code: `import { HoverCard } from 'vayu-ui';
+import { Mail, ExternalLink } from 'lucide-react';
+
+export default function RichHoverCard() {
+  return (
+    <HoverCard
+      side="right"
+      content={
+        <div className="w-56 space-y-3">
+          <p className="text-sm font-semibold">Contact Info</p>
+          <div className="space-y-2 text-xs text-neutral-600 dark:text-neutral-400">
+            <p className="flex items-center gap-2">
+              <Mail className="w-3 h-3 shrink-0" aria-hidden="true" />
+              hello@vayuui.dev
+            </p>
+            <p className="flex items-center gap-2">
+              <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
+              vayu-ui.dev
+            </p>
+          </div>
+          <button className="w-full px-3 py-1.5 text-xs font-secondary bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors">
+            Send Message
+          </button>
+        </div>
+      }
+    >
+      <button className="px-4 py-2 text-sm font-secondary bg-ground-100 dark:bg-ground-800 text-ground-800 dark:text-ground-200 rounded-md hover:bg-ground-200 dark:hover:bg-ground-700 transition-colors">
+        Hover for contact
+      </button>
+    </HoverCard>
+  );
+}`,
+      tags: ["rich-content", "interactive", "icons", "action-button"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Putting critical information only in a hover card",
+      bad: '<HoverCard content="Deleting this item is permanent"><Button variant="destructive">Delete</Button></HoverCard>',
+      good: '<Button variant="destructive" onClick={openConfirmDialog}>Delete</Button> with a confirmation Modal showing the warning',
+      reason: "Hover cards are supplementary \u2014 they disappear on mouse leave, Escape, or scroll. Critical actions, warnings, or required instructions must be persistently visible, not hidden behind a hover interaction."
+    },
+    {
+      title: "Setting closeDelay to 0",
+      bad: "<HoverCard content={...} closeDelay={0}>...</HoverCard>",
+      good: "<HoverCard content={...} closeDelay={300}>...</HoverCard>",
+      reason: "A zero close delay makes the card disappear the instant the cursor leaves the trigger, violating WCAG 2.5.7. Users need time to move their cursor into the card body to interact with its content. Use at least 150\u2013300ms."
+    },
+    {
+      title: "Wrapping non-interactive elements without ensuring focusability",
+      bad: '<HoverCard content="Detail"><span>Some text</span></HoverCard>',
+      good: '<HoverCard content="Detail"><button type="button" className="...">Some text</button></HoverCard>',
+      reason: "The trigger uses onFocus/onBlur to show/hide the card. Plain <span> elements are not keyboard-focusable by default, so the hover card will be invisible to keyboard and assistive technology users."
+    },
+    {
+      title: "Using HoverCard instead of Tooltip for simple text labels",
+      bad: '<HoverCard content="Save changes"><Button>Save</Button></HoverCard>',
+      good: '<Tooltip content="Save changes"><Button><Icon /></Button></Tooltip>',
+      reason: 'HoverCard is designed for rich content (profiles, contact info, previews). For simple one-line text hints, use the lighter Tooltip component which has the proper role="tooltip" ARIA semantics.'
+    },
+    {
+      title: "Relying on interactive content inside the card for primary actions",
+      bad: "<HoverCard content={<button onClick={deleteAccount}>Delete Account</button>}>...</HoverCard>",
+      good: "Use a Button trigger that opens a confirmation Modal or Popover with the destructive action",
+      reason: "Hover cards are transient by nature and close when the cursor leaves. Interactive elements like destructive action buttons should not live inside hover cards because they can vanish mid-interaction. Use a Popover or Modal for persistent interactive panels."
+    }
+  ]
+};
 export {
   accordionEntry,
   affixEntry,
   alertEntry,
+  animationEntry,
   aspectratioEntry,
   avatarEntry,
   avatarGroupEntry,
   badgeEntry,
   breadcrumbEntry,
   buttonEntry,
+  buttonGroupEntry,
   cardEntry,
+  carouselEntry,
   checkboxEntry,
+  collapsibleEntry,
+  colorPickerEntry,
+  commandBoxEntry,
+  dividerEntry,
+  drawerEntry,
+  fileUploadEntry,
+  floatingDockEntry,
+  footerEntry,
+  hoverCardEntry,
+  menubarEntry,
+  modalEntry,
+  navbarEntry,
+  otpInputEntry,
+  paginationEntry,
+  popoverEntry,
   radioGroupEntry,
+  rateEntry,
+  resizablePaneEntry,
   skeletonEntry,
+  spinnerEntry,
+  stepperEntry,
   switchEntry,
   tabEntry,
   tableEntry,
+  textAreaEntry,
+  textInputEntry,
+  tooltipEntry,
+  tourEntry,
   typographyEntry
 };
 //# sourceMappingURL=index.js.map

@@ -29,7 +29,7 @@ export const CommandBoxList = forwardRef<HTMLDivElement, CommandBoxListProps>(
         role="listbox"
         id={listboxId}
         aria-label="Command suggestions"
-        className={clsx('overflow-y-auto p-2', className)}
+        className={clsx('overflow-y-auto', className)}
         style={{ maxHeight }}
         {...props}
       >

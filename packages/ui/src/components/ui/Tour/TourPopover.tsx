@@ -51,29 +51,29 @@ const TourPopover: React.FC<TourPopoverProps> = ({
       top: '-10px',
       left: '50%',
       transform: 'translateX(-50%) rotate(45deg)',
-      borderBottom: 'none',
-      borderRight: 'none',
+      borderBottom: '2px solid transparent',
+      borderRight: '2px solid transparent',
     },
     top: {
       bottom: '-10px',
       left: '50%',
       transform: 'translateX(-50%) rotate(45deg)',
-      borderTop: 'none',
-      borderLeft: 'none',
+      borderTop: '2px solid transparent',
+      borderLeft: '2px solid transparent',
     },
     left: {
       right: '-10px',
       top: '50%',
       transform: 'translateY(-50%) rotate(45deg)',
-      borderLeft: 'none',
-      borderBottom: 'none',
+      borderLeft: '2px solid transparent',
+      borderBottom: '2px solid transparent',
     },
     right: {
       left: '-10px',
       top: '50%',
       transform: 'translateY(-50%) rotate(45deg)',
-      borderRight: 'none',
-      borderTop: 'none',
+      borderRight: '2px solid transparent',
+      borderTop: '2px solid transparent',
     },
   };
 
@@ -98,7 +98,7 @@ const TourPopover: React.FC<TourPopoverProps> = ({
       {/* Arrow */}
       {placement !== 'center' && arrowStyles[placement] && (
         <div
-          className="absolute w-4 h-4 bg-elevated border-2 border-border rotate-45"
+          className="absolute w-4 h-4 bg-elevated border-2 border-border"
           style={arrowStyles[placement]}
           aria-hidden="true"
         />
@@ -159,7 +159,7 @@ const TourPopover: React.FC<TourPopoverProps> = ({
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between p-6 pt-0 border-t-2 border-border mt-4">
+      <div className="flex items-center justify-between px-6 py-4 border-t-2 border-border">
         <div className="flex items-center gap-2">
           {step.showSkip !== false && !isLast && (
             <button

@@ -161,7 +161,7 @@ export default function MarqueeDemo() {
         {/* Without Controls */}
         <section className="space-y-4">
           <div className="space-y-1">
-            <Typography.H2 variant="primary">No Controls (Not Recommended)</Typography.H2>
+            <Typography.H2 variant="primary">No Controls </Typography.H2>
             <Typography.P variant="secondary">
               Without pause control - fails WCAG 2.2.2 Level A
             </Typography.P>

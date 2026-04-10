@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { CommandBox, Button, Card, CardContent, CardHeader, Badge } from 'vayu-ui';
+import { useKeyPress } from 'vayu-ui';
 import {
   Home,
   Search,
@@ -29,17 +30,22 @@ export default function CommandBoxDemo() {
   const [darkMode, setDarkMode] = useState(false);
 
   // Custom keyboard shortcut (Ctrl+Shift+P) — avoids Cmd+K conflict with Fumadocs
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'P') {
+  useKeyPress([
+    {
+      keys: ['Ctrl', 'Shift', 'P'],
+      callback: (e) => {
         e.preventDefault();
         setOpen((prev) => !prev);
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+      },
+    },
+    {
+      keys: ['⌘', 'Shift', 'O'],
+      callback: (e) => {
+        e.preventDefault();
+        setOpen((prev) => !prev);
+      },
+    },
+  ]);
 
   const handleSelect = (item: { id: string; title: string }) => {
     console.log('Selected:', item);
@@ -79,14 +85,14 @@ export default function CommandBoxDemo() {
                 <CommandBox.Group label="Navigation">
                   <CommandBox.Item
                     id="home"
-                    shortcut={['G', 'H']}
+                    shortcut={['⌘', 'H']}
                     icon={<Home className="w-4 h-4" />}
                   >
                     Go to Home
                   </CommandBox.Item>
                   <CommandBox.Item
                     id="search"
-                    shortcut={['G', 'S']}
+                    shortcut={['⌘', 'S']}
                     icon={<Search className="w-4 h-4" />}
                   >
                     Search

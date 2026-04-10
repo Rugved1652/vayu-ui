@@ -2,7 +2,6 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useRef,
 } from "react";
 import { cn } from "../utils";
@@ -10,7 +9,6 @@ import type {
   ContextMenuContextValue,
   SubContextValue,
   RadioGroupCtxValue,
-  FOCUSABLE_SELECTOR,
 } from "./types";
 
 // ─── Contexts ───────────────────────────────────────────────
@@ -31,23 +29,6 @@ export const useSubCtx = () => {
   const ctx = useContext(SubContext);
   if (!ctx) throw new Error("SubMenu components must be used within <ContextMenu.Sub>");
   return ctx;
-};
-
-// ─── Body Scroll Lock ───────────────────────────────────────
-
-export const useBodyScrollLock = (enabled: boolean) => {
-  useEffect(() => {
-    if (!enabled) return;
-    const orig = document.body.style.overflow;
-    const origPR = document.body.style.paddingRight;
-    const sw = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.overflow = "hidden";
-    if (sw > 0) document.body.style.paddingRight = `${sw}px`;
-    return () => {
-      document.body.style.overflow = orig;
-      document.body.style.paddingRight = origPR;
-    };
-  }, [enabled]);
 };
 
 // ─── Typeahead ──────────────────────────────────────────────
@@ -110,7 +91,7 @@ export function getFocusableItems(container: Element | null | undefined): HTMLEl
 
 export const baseItemStyles = (disabled: boolean, variant?: "destructive") =>
   cn(
-    "px-3 py-2 mx-1 rounded-control flex items-center gap-3",
+    "px-3 py-2 rounded-control flex items-center gap-3",
     "text-sm duration-(--transition-fast) cursor-pointer",
     "focus:outline-none",
     "focus-visible:bg-muted/80 focus-visible:text-brand",

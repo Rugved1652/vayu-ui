@@ -2,9 +2,10 @@
 // Composition: UI + wiring
 
 'use client';
-import React, { useState, useRef, useCallback, useEffect, forwardRef } from 'react';
+import React, { useState, useRef, useCallback, forwardRef } from 'react';
 import { cn } from '../utils';
 import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
+import { useKeyPress } from '../../../hooks/useKeyPress';
 import { PopoverContext } from './hooks';
 import type { PopoverProps } from './types';
 
@@ -39,17 +40,11 @@ const PopoverRoot = forwardRef<HTMLDivElement, PopoverProps>(
       if (open) setOpen(false);
     });
 
-    useEffect(() => {
+    useKeyPress('Escape', () => {
       if (!open) return;
-      const handleEscape = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-          setOpen(false);
-          triggerRef.current?.focus();
-        }
-      };
-      document.addEventListener('keydown', handleEscape);
-      return () => document.removeEventListener('keydown', handleEscape);
-    }, [open, setOpen]);
+      setOpen(false);
+      triggerRef.current?.focus();
+    });
 
     return (
       <PopoverContext.Provider value={{ open, setOpen, triggerRef, contentRef, modal }}>

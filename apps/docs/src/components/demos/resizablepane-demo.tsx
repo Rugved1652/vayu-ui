@@ -1,5 +1,4 @@
 'use client';
-
 import { ResizablePane, Typography } from 'vayu-ui';
 
 export default function ResizablePaneDemo() {
@@ -24,14 +23,55 @@ export default function ResizablePaneDemo() {
             </ResizablePane.Panel>
             <ResizablePane.Handle />
             <ResizablePane.Panel defaultSize={70} minSize={30}>
-              <div className="h-full p-4">
+              <div className="h-full p-4 bg-brand/10 dark:bg-brand/5">
                 <Typography.P className="text-sm font-semibold text-surface-content">
-                  Main Content
+                  Dashboard
                 </Typography.P>
                 <Typography.P variant="secondary" className="text-xs mt-1">
-                  Resizable panel with min 30%
+                  Drag the handle →
                 </Typography.P>
               </div>
+            </ResizablePane.Panel>
+          </ResizablePane>
+        </div>
+      </div>
+
+      {/* Horizontal - Vertical Combination */}
+      <div>
+        <Typography.P variant="secondary" className="text-xs mb-3">
+          Horizontal
+        </Typography.P>
+        <div className="h-48 border-2 border-border rounded-surface overflow-hidden">
+          <ResizablePane direction="horizontal">
+            <ResizablePane.Panel defaultSize={30} minSize={15}>
+              <div className="h-full p-4 bg-brand/10 dark:bg-brand/5">
+                <Typography.P className="text-sm font-semibold text-surface-content">
+                  Sidebar
+                </Typography.P>
+                <Typography.P variant="secondary" className="text-xs mt-1">
+                  Drag the handle →
+                </Typography.P>
+              </div>
+            </ResizablePane.Panel>
+            <ResizablePane.Handle />
+            <ResizablePane.Panel defaultSize={70} minSize={30}>
+              <ResizablePane direction="vertical">
+                <ResizablePane.Panel defaultSize={40} minSize={20}>
+                  <div className="h-full p-4 bg-brand/10 dark:bg-brand/5">
+                    <Typography.P className="text-sm font-semibold text-surface-content">
+                      Top Panel
+                    </Typography.P>
+                  </div>
+                </ResizablePane.Panel>
+                <ResizablePane.Handle />
+                <ResizablePane.Panel defaultSize={60} minSize={20}>
+                  <div className="h-full p-4">
+                    <Typography.P className="text-sm font-semibold text-surface-content">
+                      Bottom Panel
+                    </Typography.P>
+                  </div>
+                </ResizablePane.Panel>
+              </ResizablePane>
             </ResizablePane.Panel>
           </ResizablePane>
         </div>
@@ -43,6 +83,7 @@ export default function ResizablePaneDemo() {
           Vertical
         </Typography.P>
         <div className="h-64 border-2 border-border rounded-surface overflow-hidden">
+
           <ResizablePane direction="vertical">
             <ResizablePane.Panel defaultSize={40} minSize={20}>
               <div className="h-full p-4 bg-brand/10 dark:bg-brand/5">

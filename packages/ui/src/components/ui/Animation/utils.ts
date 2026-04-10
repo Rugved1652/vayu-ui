@@ -17,20 +17,14 @@ export function buildAnimationClasses(
   iteration: AnimationIteration,
   fillMode: AnimationFillMode,
   className?: string,
-  reduceMotion?: boolean,
 ): string {
-  // WCAG Fix: If user prefers reduced motion, we skip the animation classes.
-  // We ensure the element is visible (opacity-100) instead of animating in.
-  if (reduceMotion) {
-    return cn('opacity-100', className);
-  }
-
   return cn(
     baseAnimation,
     durationMap[duration],
     delayMap[delay],
     iterationMap[iteration],
     fillModeMap[fillMode],
+    'motion-reduce:opacity-100',
     className,
   );
 }

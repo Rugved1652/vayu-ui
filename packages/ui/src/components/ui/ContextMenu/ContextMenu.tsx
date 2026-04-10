@@ -7,8 +7,10 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { cn } from "../utils";
-import { ContextMenuContext, useBodyScrollLock, useTypeahead } from "./hooks";
+import { cn, useMergeRefs } from "../utils";
+import { ContextMenuContext, useTypeahead } from "./hooks";
+import { useOnClickOutside } from "../../../hooks/useOnClickOutside";
+import { useLockBodyScroll } from "../../../hooks/useLockBodyScroll";
 import type { ContextMenuProps } from "./types";
 
 const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
@@ -16,8 +18,9 @@ const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
     const [isOpen, setIsOpen] = useState(false);
     const cursorPositionRef = useRef({ x: 0, y: 0 });
     const menuRef = useRef<HTMLDivElement | null>(null);
+    const rootRef = useRef<HTMLDivElement | null>(null);
 
-    useBodyScrollLock(isOpen);
+    useLockBodyScroll(isOpen);
 
     const handleTypeahead = useTypeahead(menuRef);
 
@@ -33,21 +36,12 @@ const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
       setIsOpenWrapped(false);
     }, [setIsOpenWrapped]);
 
-    // Click outside to close
-    useEffect(() => {
-      if (!isOpen) return;
-      const handleClick = (e: MouseEvent) => {
-        const target = e.target as HTMLElement;
-        if (
-          !target.closest("[data-contextmenu]") &&
-          !target.closest("[data-contextmenu-portal]")
-        ) {
-          closeMenu();
-        }
-      };
-      document.addEventListener("mousedown", handleClick);
-      return () => document.removeEventListener("mousedown", handleClick);
-    }, [isOpen, closeMenu]);
+    useOnClickOutside(
+      [rootRef, menuRef] as React.RefObject<HTMLElement>[],
+      () => {
+        if (isOpen) closeMenu();
+      },
+    );
 
     // Escape to close
     useEffect(() => {
@@ -58,6 +52,8 @@ const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
       document.addEventListener("keydown", handleKey);
       return () => document.removeEventListener("keydown", handleKey);
     }, [isOpen, closeMenu]);
+
+    const mergedRef = useMergeRefs(rootRef, ref);
 
     return (
       <ContextMenuContext.Provider
@@ -70,7 +66,7 @@ const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
           handleTypeahead,
         }}
       >
-        <div ref={ref} data-contextmenu className={cn(className)} {...props}>
+        <div ref={mergedRef} data-contextmenu className={cn(className)} {...props}>
           {children}
         </div>
       </ContextMenuContext.Provider>

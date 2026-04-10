@@ -1,0 +1,26 @@
+
+> vayu-ui-docs@0.0.0 lint
+> eslint
+
+
+Oops! Something went wrong! :(
+
+ESLint: 10.0.3
+
+TypeError: scopeManager.addGlobals is not a function
+    at addDeclaredGlobals (/Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs/node_modules/eslint/lib/languages/js/source-code/source-code.js:221:15)
+    at SourceCode.finalize (/Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs/node_modules/eslint/lib/languages/js/source-code/source-code.js:1090:3)
+    at #flatVerifyWithoutProcessors (/Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs/node_modules/eslint/lib/linter/linter.js:1245:24)
+    at Linter._verifyWithFlatConfigArrayAndWithoutProcessors (/Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs/node_modules/eslint/lib/linter/linter.js:1333:43)
+    at Linter._verifyWithFlatConfigArray (/Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs/node_modules/eslint/lib/linter/linter.js:1400:15)
+    at Linter.verify (/Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs/node_modules/eslint/lib/linter/linter.js:861:9)
+    at Linter.verifyAndFix (/Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs/node_modules/eslint/lib/linter/linter.js:1518:20)
+    at verifyText (/Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs/node_modules/eslint/lib/eslint/eslint-helpers.js:1179:45)
+    at readAndVerifyFile (/Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs/node_modules/eslint/lib/eslint/eslint-helpers.js:1320:10)
+npm error Lifecycle script `lint` failed with error:
+npm error code 2
+npm error path /Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs
+npm error workspace vayu-ui-docs@0.0.0
+npm error location /Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs
+npm error command failed
+npm error command sh -c eslint

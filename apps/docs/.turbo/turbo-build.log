@@ -11,20 +11,20 @@
 
 ▲ Next.js 16.1.6 (Turbopack)
 
-[MDX] generated files in 15.589500000000044ms
+[MDX] generated files in 25.777416000000017ms
   Creating an optimized production build ...
-✓ Compiled successfully in 11.5s
+✓ Compiled successfully in 13.2s
   Running TypeScript ...
   Collecting page data using 7 workers ...
   Generating static pages using 7 workers (0/327) ...
   Generating static pages using 7 workers (81/327) 
   Generating static pages using 7 workers (163/327) 
-Error reading localStorage key: demo-key ReferenceError: localStorage is not defined
-    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_ef4dbdd5._.js:1:41437)
-    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_ef4dbdd5._.js:1:41421)
-    at d (.next/server/chunks/ssr/Desktop_Workspace_VedUI_ef4dbdd5._.js:1:41888)
   Generating static pages using 7 workers (245/327) 
-✓ Generating static pages using 7 workers (327/327) in 4.0s
+Error reading localStorage key: demo-key ReferenceError: localStorage is not defined
+    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_002e5405._.js:1:41863)
+    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_002e5405._.js:1:41847)
+    at d (.next/server/chunks/ssr/Desktop_Workspace_VedUI_002e5405._.js:1:42314)
+✓ Generating static pages using 7 workers (327/327) in 4.3s
   Finalizing page optimization ...
 
 Route (app)

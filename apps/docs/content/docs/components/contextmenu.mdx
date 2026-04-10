@@ -6,126 +6,228 @@ description: A right-click context menu with items, checkbox items, radio groups
 import ContextMenuDemo from '@/components/demos/contextmenu-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add contextmenu
+```
+
+```bash
+npx vayu-ui add -t contextmenu #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
       <ContextMenuDemo />
-    </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { ContextMenu } from "@/components/ui/contextmenu"
+    <ContextMenu>
+      <ContextMenu.Trigger>
+        <div>Right-click here</div>
+      </ContextMenu.Trigger>
 
-    export function Example() {
-      return (
-        <ContextMenu>
-          <ContextMenu.Trigger>
-            <div>Right-click here</div>
-          </ContextMenu.Trigger>
-          <ContextMenu.Content>
-            <ContextMenu.Item onSelect={() => console.log("Cut")}>
-              Cut
-            </ContextMenu.Item>
-            <ContextMenu.Separator />
-            <ContextMenu.CheckboxItem checked onCheckedChange={() => {}}>
-              Show Bookmarks
-            </ContextMenu.CheckboxItem>
-          </ContextMenu.Content>
-        </ContextMenu>
-      )
-    }
+      <ContextMenu.Content>
+        <ContextMenu.Item shortcut="⌘Z" onSelect={() => console.log('Undo')}>
+          Undo
+        </ContextMenu.Item>
+        <ContextMenu.Item shortcut="⌘⇧Z" onSelect={() => console.log('Redo')}>
+          Redo
+        </ContextMenu.Item>
+
+        <ContextMenu.Separator />
+
+        <ContextMenu.Item shortcut="⌘X">Cut</ContextMenu.Item>
+        <ContextMenu.Item shortcut="⌘C">Copy</ContextMenu.Item>
+        <ContextMenu.Item shortcut="⌘V">Paste</ContextMenu.Item>
+
+        <ContextMenu.Separator />
+
+        <ContextMenu.Sub>
+          <ContextMenu.SubTrigger>Export As</ContextMenu.SubTrigger>
+          <ContextMenu.SubContent>
+            <ContextMenu.Item>PDF Document</ContextMenu.Item>
+            <ContextMenu.Item>PNG Image</ContextMenu.Item>
+          </ContextMenu.SubContent>
+        </ContextMenu.Sub>
+
+        <ContextMenu.Separator />
+
+        <ContextMenu.Label>View Options</ContextMenu.Label>
+        <ContextMenu.CheckboxItem checked={showBookmarks} onCheckedChange={setShowBookmarks}>
+          Show Bookmarks Bar
+        </ContextMenu.CheckboxItem>
+
+        <ContextMenu.Separator />
+
+        <ContextMenu.Label>Assignee</ContextMenu.Label>
+        <ContextMenu.RadioGroup value={person} onValueChange={setPerson}>
+          <ContextMenu.RadioItem value="andy">Andy</ContextMenu.RadioItem>
+          <ContextMenu.RadioItem value="pedro">Pedro</ContextMenu.RadioItem>
+        </ContextMenu.RadioGroup>
+
+        <ContextMenu.Separator />
+
+        <ContextMenu.Item destructive>Delete</ContextMenu.Item>
+      </ContextMenu.Content>
+    </ContextMenu>
     ```
 
   </Tab>
 </Tabs>
 
-## Installation
+## Anatomy
 
-```tsx title="src/components/ui/contextmenu.tsx"
-// Copy the full component code
+```tsx
+import { ContextMenu } from 'vayu-ui';
+
+export default () => (
+  <ContextMenu>
+    <ContextMenu.Trigger>
+      <div>Right-click target area</div>
+    </ContextMenu.Trigger>
+    <ContextMenu.Content>
+      <ContextMenu.Label>Section Label</ContextMenu.Label>
+      <ContextMenu.Item>Menu Item</ContextMenu.Item>
+      <ContextMenu.CheckboxItem checked>Checkbox Item</ContextMenu.CheckboxItem>
+      <ContextMenu.Separator />
+      <ContextMenu.Sub>
+        <ContextMenu.SubTrigger>Submenu Trigger</ContextMenu.SubTrigger>
+        <ContextMenu.SubContent>
+          <ContextMenu.Item>Sub Item</ContextMenu.Item>
+        </ContextMenu.SubContent>
+      </ContextMenu.Sub>
+      <ContextMenu.RadioGroup value="val">
+        <ContextMenu.RadioItem value="val">Radio Item</ContextMenu.RadioItem>
+      </ContextMenu.RadioGroup>
+    </ContextMenu.Content>
+  </ContextMenu>
+);
 ```
 
-## Features
+## Accessibility
 
-- Right-click trigger with disabled state
-- Portal-rendered menu with viewport clamping
-- Menu items with icons, keyboard shortcuts, and destructive style
-- Checkbox items with `aria-checked`
-- Radio groups with `aria-checked`
-- Sub-menus with hover & keyboard navigation (ArrowRight / ArrowLeft)
-- Labels and separators
-- `role="menu"`, `role="menuitem"`, `role="menuitemcheckbox"`, `role="menuitemradio"`, `role="separator"`
-- Enter / Space key activation on all items
-- Escape to close
+- Keyboard support: Right-click, `Context Menu` key, or `Shift+F10` opens the menu. `ArrowUp`/`ArrowDown` navigates items. `Enter` or `Space` selects an item. `Escape` closes the menu. `ArrowRight` opens a submenu, `ArrowLeft` closes it. `Home`/`End` jump to first/last item. Type characters to search.
+- ARIA attributes: Uses `role="menu"`, `role="menuitem"`, `role="menuitemcheckbox"`, `role="menuitemradio"`, `role="separator"`, and `role="group"` for semantic meaning. `aria-haspopup`, `aria-expanded`, and `aria-checked` communicate state.
+- Focus behavior: Focus is trapped within the open menu. First item is auto-focused on open. Focus returns to trigger on close.
 
-## Sub-components
+## Screen reader behavior
 
-| Component                  | Description                           |
-| :------------------------- | :------------------------------------ |
-| `ContextMenu`              | Root wrapper                          |
-| `ContextMenu.Trigger`      | Right-click target area               |
-| `ContextMenu.Content`      | Portal-rendered menu container        |
-| `ContextMenu.Item`         | Standard menu item                    |
-| `ContextMenu.CheckboxItem` | Toggleable checkbox item              |
-| `ContextMenu.RadioGroup`   | Radio selection group                 |
-| `ContextMenu.RadioItem`    | Radio option                          |
-| `ContextMenu.Sub`          | Sub-menu wrapper                      |
-| `ContextMenu.SubTrigger`   | Sub-menu trigger with arrow indicator |
-| `ContextMenu.SubContent`   | Sub-menu content                      |
-| `ContextMenu.Separator`    | Visual divider                        |
-| `ContextMenu.Label`        | Non-interactive heading               |
+Screen readers will announce the component as a "menu" when opened, reading each item with its role, state (checked, disabled), and available keyboard shortcuts. Submenus are announced with expanded/collapsed state to indicate hierarchy. Checkbox items announce their checked state, and radio items communicate selection within the group.
+
+## Component Folder Structure
+
+```bash
+ContextMenu/
+├── index.ts
+├── types.ts
+├── hooks.ts
+├── ContextMenu.tsx
+├── ContextMenuTrigger.tsx
+├── ContextMenuContent.tsx
+├── ContextMenuItem.tsx
+├── ContextMenuCheckBoxItem.tsx
+├── ContextMenuRadioGroup.tsx
+├── ContextMenuSub.tsx
+├── ContextMenuSeparator.tsx
+├── ContextMenuLabel.tsx
+└── README.md
+```
 
 ## Props
 
 ### ContextMenu
 
-| Prop           | Type                      | Default | Description                     |
-| :------------- | :------------------------ | :------ | :------------------------------ |
-| `onOpenChange` | `(open: boolean) => void` | —       | Callback when menu opens/closes |
+| Prop          | Type                       | Description                                      |
+| :------------ | :------------------------- | :----------------------------------------------- |
+| `onOpenChange` | `(open: boolean) => void` | Callback fired when the menu open state changes. |
+| `children`    | `React.ReactNode`          | The content of the context menu.                 |
 
 ### ContextMenu.Trigger
 
-| Prop       | Type      | Default | Description         |
-| :--------- | :-------- | :------ | :------------------ |
-| `disabled` | `boolean` | `false` | Disable right-click |
+| Prop       | Type              | Description                                                    |
+| :--------- | :---------------- | :------------------------------------------------------------- |
+| `disabled` | `boolean`         | When true, prevents the context menu from opening on right-click. |
+| `children` | `React.ReactNode` | The element that serves as the right-click target area.        |
 
 ### ContextMenu.Content
 
-| Prop         | Type                     | Default | Description        |
-| :----------- | :----------------------- | :------ | :----------------- |
-| `align`      | `start \| center \| end` | `start` | Alignment          |
-| `sideOffset` | `number`                 | `4`     | Offset from cursor |
+| Prop         | Type                                  | Default    | Description                                       |
+| :----------- | :------------------------------------ | :--------- | :------------------------------------------------ |
+| `align`      | `"start" \| "center" \| "end"`       | `"start"`  | Alignment of the menu relative to the cursor.      |
+| `sideOffset` | `number`                              | `0`        | Distance offset from the cursor position.          |
+| `children`   | `React.ReactNode`                     | —          | The menu items and groups to render.               |
 
 ### ContextMenu.Item
 
-| Prop          | Type         | Default | Description             |
-| :------------ | :----------- | :------ | :---------------------- |
-| `onSelect`    | `() => void` | —       | Selection callback      |
-| `disabled`    | `boolean`    | `false` | Disable item            |
-| `destructive` | `boolean`    | `false` | Red destructive styling |
-| `icon`        | `ReactNode`  | —       | Leading icon            |
-| `shortcut`    | `string`     | —       | Trailing shortcut label |
+| Prop         | Type              | Description                                                      |
+| :----------- | :---------------- | :--------------------------------------------------------------- |
+| `icon`       | `React.ReactNode` | An optional icon displayed before the item text.                 |
+| `shortcut`   | `string`          | A keyboard shortcut hint displayed at the end of the item.       |
+| `destructive`| `boolean`         | When true, styles the item with a danger appearance.             |
+| `disabled`   | `boolean`         | When true, prevents user interaction with the item.              |
+| `onSelect`   | `() => void`      | Event handler called when the user selects the item.             |
+| `children`   | `React.ReactNode` | The label content of the menu item.                              |
 
 ### ContextMenu.CheckboxItem
 
-| Prop              | Type                         | Default | Description     |
-| :---------------- | :--------------------------- | :------ | :-------------- |
-| `checked`         | `boolean`                    | `false` | Checked state   |
-| `onCheckedChange` | `(checked: boolean) => void` | —       | Toggle callback |
-| `disabled`        | `boolean`                    | `false` | Disable item    |
+| Prop              | Type                         | Description                                                  |
+| :---------------- | :--------------------------- | :----------------------------------------------------------- |
+| `checked`         | `boolean`                    | The controlled checked state of the item.                    |
+| `onCheckedChange` | `(checked: boolean) => void` | Event handler called when the checked state changes.         |
+| `icon`            | `React.ReactNode`            | An optional icon displayed before the item text.             |
+| `shortcut`        | `string`                     | A keyboard shortcut hint displayed at the end of the item.   |
+| `disabled`        | `boolean`                    | When true, prevents user interaction with the item.          |
+| `children`        | `React.ReactNode`            | The label content of the checkbox item.                      |
 
 ### ContextMenu.RadioGroup
 
-| Prop            | Type                      | Default | Description        |
-| :-------------- | :------------------------ | :------ | :----------------- |
-| `value`         | `string`                  | —       | Selected value     |
-| `onValueChange` | `(value: string) => void` | —       | Selection callback |
+| Prop            | Type                      | Description                                      |
+| :-------------- | :------------------------ | :----------------------------------------------- |
+| `value`         | `string`                  | The value of the currently selected radio item.  |
+| `onValueChange` | `(value: string) => void` | Event handler called when the value changes.     |
+| `children`      | `React.ReactNode`         | The radio items to render inside the group.      |
 
 ### ContextMenu.RadioItem
 
-| Prop       | Type      | Default | Description  |
-| :--------- | :-------- | :------ | :----------- |
-| `value`    | `string`  | —       | Option value |
-| `disabled` | `boolean` | `false` | Disable item |
+| Prop       | Type              | Description                                                  |
+| :--------- | :---------------- | :----------------------------------------------------------- |
+| `value`    | `string`          | The unique value that identifies this radio item.            |
+| `icon`     | `React.ReactNode` | An optional icon displayed before the item text.             |
+| `shortcut` | `string`          | A keyboard shortcut hint displayed at the end of the item.   |
+| `disabled` | `boolean`         | When true, prevents user interaction with the item.          |
+| `children` | `React.ReactNode` | The label content of the radio item.                         |
+
+### ContextMenu.Sub
+
+| Prop      | Type              | Description                                      |
+| :-------- | :---------------- | :----------------------------------------------- |
+| `children`| `React.ReactNode` | Must contain a SubTrigger and SubContent.        |
+
+### ContextMenu.SubTrigger
+
+| Prop       | Type              | Description                                                     |
+| :--------- | :---------------- | :-------------------------------------------------------------- |
+| `icon`     | `React.ReactNode` | An optional icon displayed before the trigger text.             |
+| `disabled` | `boolean`         | When true, prevents the submenu from opening.                   |
+| `children` | `React.ReactNode` | The label content of the submenu trigger.                       |
+
+### ContextMenu.SubContent
+
+| Prop      | Type              | Description                                       |
+| :-------- | :---------------- | :------------------------------------------------ |
+| `children`| `React.ReactNode` | The menu items to render inside the submenu.      |
+
+### ContextMenu.Separator
+
+No meaningful props.
+
+### ContextMenu.Label
+
+No meaningful props.

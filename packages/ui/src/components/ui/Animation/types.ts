@@ -8,17 +8,15 @@ export type AnimationDirection = 'up' | 'down' | 'left' | 'right';
 export type AnimationFillMode = 'none' | 'forwards' | 'backwards' | 'both';
 export type AnimationScale = 'small' | 'medium' | 'large';
 
-import { HTMLAttributes, ReactNode } from 'react';
+import { type HTMLAttributes, type ReactNode, type Ref } from 'react';
 
 export interface BaseAnimationProps extends HTMLAttributes<HTMLDivElement> {
+  ref?: Ref<HTMLDivElement>;
   children: ReactNode;
   duration?: AnimationDuration;
   delay?: AnimationDelay;
   iteration?: AnimationIteration;
   fillMode?: AnimationFillMode;
-  /** Fixed: Uses correct React Animation Event types */
-  onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement>;
-  onAnimationStart?: React.AnimationEventHandler<HTMLDivElement>;
 }
 
 export interface DirectionalAnimationProps extends BaseAnimationProps {

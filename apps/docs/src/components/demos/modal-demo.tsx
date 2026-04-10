@@ -55,7 +55,7 @@ export default function ModalDemo() {
               </Modal.Body>
 
               <Modal.Footer>
-                <Modal.Close>
+                <Modal.Close asChild>
                   <Button variant="secondary">Close</Button>
                 </Modal.Close>
               </Modal.Footer>
@@ -101,7 +101,7 @@ export default function ModalDemo() {
               </Modal.Body>
 
               <Modal.Footer>
-                <Modal.Close>
+                <Modal.Close asChild>
                   <Button variant="secondary">Cancel</Button>
                 </Modal.Close>
                 <Button variant="primary" onClick={() => setIsControlledOpen(false)}>
@@ -124,7 +124,7 @@ export default function ModalDemo() {
           </div>
 
           <Modal>
-            <Modal.Trigger>
+            <Modal.Trigger asChild>
               <Button variant="primary">Edit Profile</Button>
             </Modal.Trigger>
 
@@ -178,7 +178,7 @@ export default function ModalDemo() {
               </Modal.Body>
 
               <Modal.Footer>
-                <Modal.Close>
+                <Modal.Close asChild>
                   <Button variant="secondary">Cancel</Button>
                 </Modal.Close>
                 <Button variant="primary">Save Changes</Button>
@@ -232,7 +232,7 @@ export default function ModalDemo() {
               </Modal.Body>
 
               <Modal.Footer>
-                <Modal.Close>
+                <Modal.Close asChild>
                   <Button variant="secondary">Cancel</Button>
                 </Modal.Close>
                 <Button
@@ -263,7 +263,7 @@ export default function ModalDemo() {
           <div className="flex flex-wrap gap-3">
             {(['sm', 'md', 'lg', 'xl', 'full'] as const).map((size) => (
               <Modal key={size} size={size}>
-                <Modal.Trigger>
+                <Modal.Trigger asChild>
                   <Button variant="outline">{size.toUpperCase()}</Button>
                 </Modal.Trigger>
 
@@ -286,7 +286,7 @@ export default function ModalDemo() {
                   </Modal.Body>
 
                   <Modal.Footer>
-                    <Modal.Close>
+                    <Modal.Close asChild>
                       <Button variant="secondary">Close</Button>
                     </Modal.Close>
                   </Modal.Footer>
@@ -309,7 +309,7 @@ export default function ModalDemo() {
 
           <div className="flex flex-wrap gap-3">
             <Modal closeOnOverlayClick={false}>
-              <Modal.Trigger>
+              <Modal.Trigger asChild>
                 <Button variant="outline">No Overlay Close</Button>
               </Modal.Trigger>
 
@@ -332,7 +332,7 @@ export default function ModalDemo() {
                 </Modal.Body>
 
                 <Modal.Footer>
-                  <Modal.Close>
+                  <Modal.Close asChild>
                     <Button variant="primary">Got it</Button>
                   </Modal.Close>
                 </Modal.Footer>
@@ -340,7 +340,7 @@ export default function ModalDemo() {
             </Modal>
 
             <Modal closeOnEscape={false}>
-              <Modal.Trigger>
+              <Modal.Trigger asChild>
                 <Button variant="outline">No Escape Close</Button>
               </Modal.Trigger>
 

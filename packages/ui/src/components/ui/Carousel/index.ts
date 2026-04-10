@@ -14,6 +14,8 @@ import CarouselGallery from './CarouselGallery';
 // Types
 export type {
   SpeedMultiplier,
+  ResponsiveItemsPerSlide,
+  ItemsPerSlide,
   GalleryItem,
   CarouselContextValue,
   CarouselProps,

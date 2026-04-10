@@ -20,9 +20,10 @@ export const MobileMenuButton: React.FC = () => {
       aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
       aria-expanded={mobileOpen}
       aria-controls="sidebar-navigation"
-      className="fixed top-4 left-4 z-60 p-2 bg-surface rounded-lg text-surface-content border border-border
+      className={`absolute top-4 z-60 p-2 bg-surface rounded-lg text-surface-content border border-border
                 hover:bg-muted transition-colors shadow-lg
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas
+                ${mobileOpen ? 'right-4' : 'left-4'}`}
     >
       {mobileOpen ? <X size={24} /> : <Menu size={24} />}
     </button>

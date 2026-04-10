@@ -58,7 +58,7 @@ export const typeStyles = {
 
 export const PORTAL_ID = 'vayu-toast-portal';
 
-export const VISIBLE_TOASTS = 3;
+export const VISIBLE_TOASTS = 5;
 export const GAP = 14;
 export const TOAST_HEIGHT_OFFSET = 10;
 export const SCALE_STEP = 0.05;
@@ -70,4 +70,22 @@ export const positionClasses: Record<ToastPosition, string> = {
   'bottom-left': 'bottom-0 left-0',
   'bottom-center': 'bottom-0 left-1/2 -translate-x-1/2',
   'bottom-right': 'bottom-0 right-0',
+};
+
+export const enterAnimationByPosition: Record<ToastPosition, string> = {
+  'top-right': 'animate-toast-enter',
+  'bottom-right': 'animate-toast-enter',
+  'top-left': 'animate-toast-enter-left',
+  'bottom-left': 'animate-toast-enter-left',
+  'top-center': 'animate-toast-enter-top',
+  'bottom-center': 'animate-toast-enter-bottom',
+};
+
+export const exitAnimationByPosition: Record<ToastPosition, string> = {
+  'top-right': 'animate-toast-exit',
+  'bottom-right': 'animate-toast-exit',
+  'top-left': 'animate-toast-exit-left',
+  'bottom-left': 'animate-toast-exit-left',
+  'top-center': 'animate-toast-exit-top',
+  'bottom-center': 'animate-toast-exit-bottom',
 };

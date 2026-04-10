@@ -43,10 +43,7 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
         createdAt: Date.now(),
       };
 
-      setToasts((prev) => {
-        const newToasts = [toast, ...prev];
-        return newToasts.slice(0, maxToasts);
-      });
+      setToasts((prev) => [toast, ...prev]);
 
       return id;
     },

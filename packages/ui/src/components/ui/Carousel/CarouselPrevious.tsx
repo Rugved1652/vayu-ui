@@ -8,8 +8,11 @@ import { useCarouselContext } from './hooks';
 
 const CarouselPrevious = forwardRef<HTMLButtonElement, import('./types').CarouselNavigationProps>(
   ({ className, showLabel = false, ...props }, ref) => {
-    const { goPrevious, currentIndex, loop, totalItems } = useCarouselContext();
-    const isDisabled = !loop && currentIndex === 0;
+    const { goPrevious, currentIndex, loop, itemsPerSlide } = useCarouselContext();
+    const isMultiItem = itemsPerSlide > 1;
+    const isDisabled = isMultiItem
+      ? !loop && currentIndex < itemsPerSlide
+      : !loop && currentIndex === 0;
 
     return (
       <button

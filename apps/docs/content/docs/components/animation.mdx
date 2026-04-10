@@ -138,21 +138,21 @@ import { Animation } from 'vayu-ui';
 ## Accessibility
 
 - **Reduced Motion Support**:
-  - Automatically detects OS-level `prefers-reduced-motion: reduce` setting via the `usePrefersReducedMotion` hook.
-  - When enabled, all animations are skipped and content is rendered with `opacity: 1` to ensure visibility.
+  - Respects the OS-level `prefers-reduced-motion: reduce` setting via Tailwind's `motion-reduce:` CSS variant.
+  - When enabled, animations are suppressed and content is rendered with `opacity: 1` via `motion-reduce:opacity-100` to ensure visibility.
+  - A global CSS rule (`@media (prefers-reduced-motion: reduce) { * { animation: none !important } }`) provides an additional safety net.
   - Fully compliant with **WCAG 2.2 Success Criterion 2.3.3** (Animation from Interactions).
 - **CSS-Only Approach**:
   - Animations are purely visual decorations applied via CSS classes. No ARIA roles or live regions are needed.
   - Content inside animation wrappers remains fully accessible to assistive technologies regardless of animation state.
-- **Animation Events**:
-  - `onAnimationStart` and `onAnimationEnd` callbacks are supported for programmatic state changes.
-  - Use these to manage focus or announce state transitions when needed.
+- **Server Components**:
+  - All animation components are React Server Components — no client-side JavaScript is required for rendering or accessibility support.
 - **No Focus Impact**:
   - Animations do not trap or steal focus. Interactive elements inside animation wrappers maintain normal tab order and focus behavior.
 
 ## Screen reader behavior
 
-Animation components are decorative CSS wrappers. Screen readers announce the content inside the animation as-is, without referencing the animation effect. When `prefers-reduced-motion` is enabled, the animation is silently disabled and content renders immediately. Since animations do not convey meaning or state, no additional ARIA attributes are applied. Users who rely on assistive technology receive the same content without any loss of information.
+Animation components are decorative CSS wrappers. Screen readers announce the content inside the animation as-is, without referencing the animation effect. When `prefers-reduced-motion` is enabled, animations are silently disabled via CSS and content renders immediately. Since animations do not convey meaning or state, no additional ARIA attributes are applied. Users who rely on assistive technology receive the same content without any loss of information.
 
 ## Component Folder Structure
 
@@ -169,7 +169,6 @@ Animation/
 ├── JackInTheBoxAnimation.tsx  # JackInTheBox variant
 ├── HingeAnimation.tsx         # Hinge variant
 ├── types.ts                   # TypeScript type definitions and mappings
-├── hooks.ts                   # usePrefersReducedMotion hook
 ├── utils.ts                   # buildAnimationClasses utility
 ├── index.ts                   # Re-exports all components and types
 └── README.md                  # Component usage reference
@@ -186,8 +185,6 @@ Animation/
 | `delay`           | `'none' \| 'short' \| 'medium' \| 'long'` | `'none'`  | Delay before animation starts.                    |
 | `iteration`       | `1 \| 2 \| 3 \| 'infinite'`              | `1`       | Number of times the animation repeats.            |
 | `fillMode`        | `'none' \| 'forwards' \| 'backwards' \| 'both'` | `'none'`  | How styles are applied before and after animation. |
-| `onAnimationEnd`  | `AnimationEventHandler<HTMLDivElement>`   | —         | Callback fired when animation completes.          |
-| `onAnimationStart`| `AnimationEventHandler<HTMLDivElement>`   | —         | Callback fired when animation starts.             |
 | `className`       | `string`                                 | —         | Additional CSS classes.                           |
 
 ### Animation.Fade

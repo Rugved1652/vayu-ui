@@ -3,8 +3,10 @@
 
 'use client';
 
-import React, { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useId, useMemo, useRef, useState } from 'react';
 import { cn } from '../utils';
+import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
+import { useKeyPress } from '../../../hooks/useKeyPress';
 import { ColorPickerContext } from './hooks';
 import { parseColor, DEFAULT_PRESETS } from './utils';
 import type { ColorPickerRootProps, ColorPickerContextValue } from './types';
@@ -76,35 +78,16 @@ const ColorPickerRoot = forwardRef<HTMLDivElement, ColorPickerRootProps>(
     }, []);
 
     // Close on click outside
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          contentRef.current &&
-          triggerRef.current &&
-          !contentRef.current.contains(event.target as Node) &&
-          !triggerRef.current.contains(event.target as Node)
-        ) {
-          setOpen(false);
-        }
-      };
+    useOnClickOutside([triggerRef, contentRef] as React.RefObject<HTMLElement>[], () => {
+      if (open) setOpen(false);
+    });
 
-      const handleEscape = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-          setOpen(false);
-          triggerRef.current?.focus();
-        }
-      };
-
-      if (open) {
-        document.addEventListener('mousedown', handleClickOutside);
-        document.addEventListener('keydown', handleEscape);
-      }
-
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-        document.removeEventListener('keydown', handleEscape);
-      };
-    }, [open, setOpen]);
+    // Close on Escape
+    useKeyPress('Escape', () => {
+      if (!open) return;
+      setOpen(false);
+      triggerRef.current?.focus();
+    });
 
     const contextValue = useMemo<ColorPickerContextValue>(
       () => ({
