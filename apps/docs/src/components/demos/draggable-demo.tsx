@@ -165,7 +165,7 @@ function DraggableCrossListDemo() {
             <h3 className="text-sm font-secondary font-bold text-surface-content mb-3 uppercase tracking-wide">
               To Do ({containers.todo.length})
             </h3>
-            <Draggable.Container containerId="todo" layout="list" aria-label="To Do items" className="min-h-[80px]">
+            <Draggable.Container containerId="todo" layout="list" aria-label="To Do items">
               {containers.todo.map((id) => (
                 <Draggable.Item key={id} value={id}>
                   <div className="flex items-center gap-3 p-3 bg-surface rounded-surface border border-border">

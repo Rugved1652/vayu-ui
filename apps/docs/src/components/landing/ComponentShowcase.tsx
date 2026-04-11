@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardContent,
   Tabs,
-  ToggleSwitch,
+  Switch,
   TextInput,
   Tooltip,
   Animation,
@@ -63,7 +63,7 @@ function BadgesAndSwitchDemo() {
         <Badge variant="destructive" size="sm">Error</Badge>
         <Badge variant="info" size="sm">Info</Badge>
       </div>
-      <ToggleSwitch label="Enable notifications" defaultChecked />
+      <Switch label="Enable notifications" defaultChecked />
     </div>
   );
 }

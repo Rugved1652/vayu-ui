@@ -20,7 +20,6 @@ export const useToast = () => {
 const ToastProvider: React.FC<ToastProviderProps> = ({
   children,
   defaultPosition = 'bottom-right',
-  maxToasts = 5,
   defaultDuration = 5000,
 }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -47,7 +46,7 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
 
       return id;
     },
-    [maxToasts, defaultDuration, defaultPosition],
+    [defaultDuration, defaultPosition],
   );
 
   const removeToast = useCallback((id: string) => {

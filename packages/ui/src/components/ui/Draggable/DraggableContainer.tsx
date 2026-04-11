@@ -43,6 +43,7 @@ export function DraggableContainer({
       className={cn(
         "select-none",
         isGrid ? "grid gap-3" : "flex flex-col gap-2",
+        containerId != null && "h-full",
         className
       )}
       style={isGrid ? { gridTemplateColumns: `repeat(${columns}, 1fr)` } : undefined}

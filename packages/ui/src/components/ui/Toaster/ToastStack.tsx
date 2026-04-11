@@ -122,11 +122,11 @@ const ToastStack: React.FC<ToastStackProps> = ({ position, toasts, onRemove }) =
         style={{
           height: isExpanded
             ? visibleToasts.reduce(
-                (sum, t, i) => sum + (heights[t.id] || 64) + (i < visibleToasts.length - 1 ? GAP : 0),
-                0,
-              )
+              (sum, t, i) => sum + (heights[t.id] || 64) + (i < visibleToasts.length - 1 ? GAP : 0),
+              0,
+            )
             : (heights[toasts[0]?.id] || 64) +
-              (Math.min(toasts.length, VISIBLE_TOASTS) - 1) * TOAST_HEIGHT_OFFSET,
+            (Math.min(toasts.length, VISIBLE_TOASTS) - 1) * TOAST_HEIGHT_OFFSET,
           transition: 'height 300ms cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
@@ -179,7 +179,7 @@ const ToastStack: React.FC<ToastStackProps> = ({ position, toasts, onRemove }) =
           >
             <ToastItem
               toast={ghost.toast}
-              onRemove={() => {}}
+              onRemove={() => { }}
               onHeightUpdate={handleHeightUpdate}
               isAllPaused={isAllPaused}
               position={position}

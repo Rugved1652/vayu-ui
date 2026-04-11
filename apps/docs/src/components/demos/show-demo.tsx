@@ -1,6 +1,6 @@
 'use client';
 
-import { Show, Switch, Case, Default } from 'vayu-ui';
+import { Show, Match, Case, Default } from 'vayu-ui';
 import { useState } from 'react';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
@@ -70,7 +70,7 @@ export default function ShowDemo() {
           ))}
         </div>
 
-        <Switch>
+        <Match>
           <Case condition={status === 'loading'}>
             <div className="p-4 rounded-md bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-sm">
               ⏳ Loading…
@@ -91,7 +91,7 @@ export default function ShowDemo() {
               Idle — pick a status above.
             </div>
           </Default>
-        </Switch>
+        </Match>
       </div>
     </div>
   );

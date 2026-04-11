@@ -26,17 +26,45 @@ export function DraggableDropIndicator({ className }: DraggableDropIndicatorProp
     return null;
   }
 
-  const targetId = effectiveItems[ctx.overIndex];
-  const targetEl = ctx.itemRefs.get(targetId ?? "");
   const containerEl = ctx.isMultiContainer
     ? ctx.containerRefs.get(ctx.overContainerId ?? "")
     : ctx.containerRef.current;
   const containerRect = containerEl?.getBoundingClientRect();
-  if (!targetEl || !containerRect) return null;
+  if (!containerRect) return null;
+
+  const isAppendAtEnd = ctx.overIndex >= effectiveItems.length;
+  const isEmptyContainer = effectiveItems.length === 0;
+  const isVertical = ctx.layout === "list";
+
+  // Empty container: render indicator at the top of the container
+  if (isEmptyContainer) {
+    return createPortal(
+      <div
+        className={cn(
+          "fixed z-40 pointer-events-none",
+          "bg-brand rounded-full",
+          isVertical ? "h-0.5" : "w-0.5",
+          className
+        )}
+        style={
+          isVertical
+            ? { left: containerRect.left, width: containerRect.width, top: containerRect.top + 2 }
+            : { top: containerRect.top, height: containerRect.height, left: containerRect.left + 2 }
+        }
+      />,
+      document.body
+    );
+  }
+
+  // Append at end: use the last item for positioning
+  const targetId = isAppendAtEnd
+    ? effectiveItems[effectiveItems.length - 1]
+    : effectiveItems[ctx.overIndex];
+  const targetEl = ctx.itemRefs.get(targetId ?? "");
+  if (!targetEl) return null;
 
   const rect = targetEl.getBoundingClientRect();
-  const isAfter = ctx.overIndex > activeIdx || ctx.isMultiContainer;
-  const isVertical = ctx.layout === "list";
+  const isAfter = isAppendAtEnd || ctx.overIndex > activeIdx || ctx.isMultiContainer;
 
   return createPortal(
     <div

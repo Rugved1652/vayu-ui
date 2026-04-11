@@ -14,19 +14,45 @@ export function DraggablePlaceholder({ className }: DraggablePlaceholderProps) {
   const effectiveItems = ctx.isMultiContainer
     ? ctx.containerItems(ctx.overContainerId ?? "")
     : ctx.items;
-  const overId = effectiveItems[ctx.overIndex];
-  const activeIdx = effectiveItems.indexOf(ctx.activeId);
-  const overEl = ctx.itemRefs.get(overId ?? "");
-  if (!overEl) return null;
 
-  const rect = overEl.getBoundingClientRect();
+  const isAppendAtEnd = ctx.overIndex >= effectiveItems.length;
+  const isEmptyContainer = effectiveItems.length === 0;
+  const activeIdx = effectiveItems.indexOf(ctx.activeId);
+
   const containerEl = ctx.isMultiContainer
     ? ctx.containerRefs.get(ctx.overContainerId ?? "")
     : ctx.containerRef.current;
   const containerRect = containerEl?.getBoundingClientRect();
   if (!containerRect) return null;
 
-  const isAfter = ctx.overIndex > activeIdx;
+  // Empty container: render placeholder at the top
+  if (isEmptyContainer) {
+    return createPortal(
+      <div
+        className={cn(
+          "fixed z-40 pointer-events-none",
+          ctx.layout === "list" ? "h-1" : "w-1",
+          "bg-brand/30 rounded-full",
+          className
+        )}
+        style={
+          ctx.layout === "list"
+            ? { left: containerRect.left, width: containerRect.width, top: containerRect.top + 2 }
+            : { top: containerRect.top, height: containerRect.height, left: containerRect.left + 2 }
+        }
+      />,
+      document.body
+    );
+  }
+
+  const overId = isAppendAtEnd
+    ? effectiveItems[effectiveItems.length - 1]
+    : effectiveItems[ctx.overIndex];
+  const overEl = ctx.itemRefs.get(overId ?? "");
+  if (!overEl) return null;
+
+  const rect = overEl.getBoundingClientRect();
+  const isAfter = isAppendAtEnd || ctx.overIndex > activeIdx;
   const isVertical = ctx.layout === "list";
 
   return createPortal(

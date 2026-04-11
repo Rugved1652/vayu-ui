@@ -18,8 +18,8 @@ interface DefaultProps {
   children: ReactNode;
 }
 
-interface SwitchProps {
+interface MatchProps {
   children: ReactNode;
 }
 
-export type { ShowProps, CaseProps, DefaultProps, SwitchProps };
+export type { ShowProps, CaseProps, DefaultProps, MatchProps };

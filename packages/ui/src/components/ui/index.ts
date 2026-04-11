@@ -55,15 +55,15 @@ export {
   type Direction as ResizeDirection,
 } from './ResizablePane';
 export * from './Select';
-export { Show, Switch, Case, Default } from './Show';
-export type { ShowProps, SwitchProps, CaseProps, DefaultProps } from './Show';
+export { Show, Match, Case, Default } from './Show';
+export type { ShowProps, MatchProps, CaseProps, DefaultProps } from './Show';
 export * from './Sidebar';
 export * from './Skeleton';
 export * from './Slider';
 export { Spinner, type SpinnerProps, type SpinnerSize } from './Spinner';
 export * from './Stepper';
-export { default as ToggleSwitch } from './Switch';
-export type { SwitchProps as ToggleSwitchProps } from './Switch';
+export { default as Switch } from './Switch';
+export type { SwitchProps } from './Switch';
 export { default as Tabs } from './Tab';
 export {
   default as Table,

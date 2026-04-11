@@ -91,6 +91,5 @@ export interface ToastItemProps {
 export interface ToastProviderProps {
   children: React.ReactNode;
   defaultPosition?: ToastPosition;
-  maxToasts?: number;
   defaultDuration?: number;
 }

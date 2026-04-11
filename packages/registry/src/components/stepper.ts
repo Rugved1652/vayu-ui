@@ -1,4 +1,4 @@
-import { ComponentRegistryEntry } from './types.js';
+import { ComponentRegistryEntry } from '../types.js';
 
 export const stepperEntry: ComponentRegistryEntry = {
   // ── Identity ──────────────────────────────────────────

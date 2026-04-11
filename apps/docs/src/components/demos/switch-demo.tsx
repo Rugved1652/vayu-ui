@@ -1,6 +1,6 @@
 'use client';
 
-import { ToggleSwitch as Switch, Typography, Divider, Button } from 'vayu-ui';
+import { Switch, Typography, Divider, Button } from 'vayu-ui';
 import { useState } from 'react';
 
 export default function SwitchDemo() {

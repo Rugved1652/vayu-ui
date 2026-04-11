@@ -2,5 +2,5 @@
 // Public API
 
 export { Show, default } from './Show';
-export { Switch, Case, Default } from './Switch';
-export type { ShowProps, SwitchProps, CaseProps, DefaultProps } from './types';
+export { Match, Case, Default } from './Match';
+export type { ShowProps, MatchProps, CaseProps, DefaultProps } from './types';

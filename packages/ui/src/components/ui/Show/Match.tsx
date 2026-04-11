@@ -1,15 +1,15 @@
-// switch.tsx
-// Composition: Switch + Case + Default
+// match.tsx
+// Composition: Match + Case + Default
 
 import { Children, isValidElement, ReactElement, ReactNode } from 'react';
-import type { CaseProps, DefaultProps, SwitchProps } from './types';
+import type { CaseProps, DefaultProps, MatchProps } from './types';
 
-/** A single case branch inside `<Switch>`. */
+/** A single case branch inside `<Match>`. */
 function Case({ children }: CaseProps): ReactElement {
   return <>{children}</>;
 }
 
-/** Fallback branch inside `<Switch>` when no `Case` matches. */
+/** Fallback branch inside `<Match>` when no `Case` matches. */
 function Default({ children }: DefaultProps): ReactElement {
   return <>{children}</>;
 }
@@ -18,7 +18,7 @@ function Default({ children }: DefaultProps): ReactElement {
  * Evaluates `Case` children in order and renders the first match.
  * Falls back to `Default` if no case matches.
  */
-function Switch({ children }: SwitchProps): ReactNode {
+function Match({ children }: MatchProps): ReactNode {
   const childArray = Children.toArray(children);
 
   // Find first matching Case
@@ -38,4 +38,4 @@ function Switch({ children }: SwitchProps): ReactNode {
   return null;
 }
 
-export { Switch, Case, Default };
+export { Match, Case, Default };

@@ -154,7 +154,17 @@ export function getClosestIndex(
     const dist = layout === "grid" ? Math.hypot(x - cx, y - cy) : Math.abs(y - cy);
     if (dist < minDist) { minDist = dist; closest = index; }
   });
-  return closest >= 0 ? closest : items.indexOf(activeId ?? "");
+  if (closest < 0) return items.length;
+
+  const closestEl = itemRefs.get(items[closest]);
+  if (!closestEl) return items.length;
+
+  const rect = closestEl.getBoundingClientRect();
+  const isAfter = layout === "grid"
+    ? (y > rect.top + rect.height / 2) || (y >= rect.top && x > rect.left + rect.width / 2)
+    : y >= rect.top + rect.height / 2;
+
+  return isAfter ? closest + 1 : closest;
 }
 
 export function getContainerAtPoint(

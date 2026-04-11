@@ -6076,7 +6076,7 @@ export default function DarkModeToggle() {
   ]
 };
 
-// src/typography.ts
+// src/components/typography.ts
 var typographyEntry = {
   // ── Identity ──────────────────────────────────────────
   slug: "typography",
@@ -13821,7 +13821,7 @@ export default function AccessibilityDemo() {
   ]
 };
 
-// src/divider.ts
+// src/components/divider.ts
 var dividerEntry = {
   // ── Identity ──────────────────────────────────────────
   slug: "divider",
@@ -20223,7 +20223,7 @@ export default function ImperativeTourDemo() {
   ]
 };
 
-// src/stepper-entry.ts
+// src/components/stepper.ts
 var stepperEntry = {
   // ── Identity ──────────────────────────────────────────
   slug: "stepper",
@@ -21816,6 +21816,1262 @@ export default function RichHoverCard() {
     }
   ]
 };
+
+// src/components/toaster.ts
+var toasterEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "toaster",
+  name: "Toaster",
+  type: "component",
+  category: "feedback",
+  // ── Description ───────────────────────────────────────
+  description: "A Sonner-style toast notification system with stacking, swipe-to-dismiss, pause-on-hover, promise tracking, and compound sub-components for custom content.",
+  longDescription: "The Toaster component provides a complete toast notification system built on React context and portals. ToastProvider wraps the application and exposes the useToast hook, which returns convenience methods (success, error, warning, info, loading, custom, promise) for triggering notifications. Toasts render in a fixed portal at z-index 2147483647 and group by position (six options: top-left, top-center, top-right, bottom-left, bottom-center, bottom-right). The stack supports Sonner-style visual stacking with up to 5 visible toasts, expand-on-hover behavior, and ghost exit animations. Individual toasts feature a countdown progress bar, pointer-based swipe-to-dismiss, automatic pause on hover/focus, and configurable duration (set to 0 for persistent toasts). The promise method auto-transitions loading toasts to success or error based on promise resolution. The compound component pattern exposes Toast.Title, Toast.Description, and Toast.Close for fully custom toast content rendered via toast.custom(). Each toast type uses appropriate ARIA roles (status for success/info/loading, alert for error/warning) and aria-live regions for screen reader announcements.",
+  tags: [
+    "toast",
+    "notification",
+    "snackbar",
+    "alert",
+    "feedback",
+    "popup",
+    "portal",
+    "stack",
+    "sonner",
+    "promise",
+    "non-blocking"
+  ],
+  useCases: [
+    "Display transient success, error, warning, or info messages after user actions like saving, deleting, or submitting forms",
+    "Show async operation progress with auto-transitioning loading states via the promise method",
+    "Render fully custom notification content using compound sub-components (Toast.Title, Toast.Description) for rich layouts",
+    "Present non-blocking confirmations with action buttons (Undo, View) that let users respond without interrupting workflow",
+    "Display persistent notifications for critical alerts that require explicit dismissal (duration: 0)",
+    "Stack multiple notifications with visual depth and expand-on-hover to review recent activity"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Toaster",
+  files: [
+    { name: "ToastProvider.tsx", description: "Composition root: React context, ToastProvider component wrapping children with ToastContainer, and useToast hook exposing all toast methods" },
+    { name: "ToastContainer.tsx", description: "Portal-rendered container that groups toasts by position and renders a ToastStack for each active position" },
+    { name: "ToastStack.tsx", description: "Sonner-style stack with expand/collapse on hover/focus, visual depth scaling, ghost exit animations, and overflow indicator" },
+    { name: "ToastItem.tsx", description: "Individual toast with countdown timer, progress bar, swipe-to-dismiss via pointer events, pause/resume, and type-based styling" },
+    { name: "ToastUtilities.tsx", description: "Compound sub-components: ToastTitle, ToastDescription, and ToastClose with forwarded refs and design token styling" },
+    { name: "ToastIcons.tsx", description: "Inline SVG icons for each toast type (success, error, warning, info, loading) and the close button" },
+    { name: "constants.ts", description: "Type style maps (border, icon, progress, role, aria-live), layout constants (VISIBLE_TOASTS, GAP, SCALE_STEP), and position class/animation mappings" },
+    { name: "types.ts", description: "TypeScript interfaces for Toast, ToastOptions, ToastContextType, ToastContainerProps, ToastStackProps, ToastItemProps, and ToastProviderProps" },
+    { name: "index.ts", description: "Barrel export assembling the Toast compound component object (Title, Description, Close), plus ToastProvider, useToast, and all type exports" },
+    { name: "README.md", description: "Internal anatomy and use-case documentation for the Toaster component directory", optional: true }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "ToastProvider",
+  subComponents: [
+    {
+      name: "Title",
+      fileName: "ToastUtilities.tsx",
+      description: "Renders a bold heading for custom toast content. Forwards ref and accepts all div HTML attributes.",
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes to merge with the default title styling (font-semibold, text-sm)"
+        },
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: false,
+          description: "Title text content"
+        }
+      ]
+    },
+    {
+      name: "Description",
+      fileName: "ToastUtilities.tsx",
+      description: "Renders muted descriptive text for custom toast content. Forwards ref and accepts all div HTML attributes.",
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes to merge with the default description styling (text-sm, text-muted-content)"
+        },
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: false,
+          description: "Description text content"
+        }
+      ]
+    },
+    {
+      name: "Close",
+      fileName: "ToastUtilities.tsx",
+      description: "Renders a close/dismiss button for custom toast content. Forwards ref and accepts all button HTML attributes.",
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes to merge with the default close button styling"
+        },
+        {
+          name: "onClick",
+          type: "(event: React.MouseEvent<HTMLButtonElement>) => void",
+          required: false,
+          description: "Click handler for the close button"
+        },
+        {
+          name: "aria-label",
+          type: "string",
+          required: false,
+          description: "Accessible label for the close button; defaults to a visually hidden label if not provided"
+        }
+      ]
+    }
+  ],
+  hooks: ["useToast"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Application content wrapped by the ToastProvider. ToastContainer is automatically appended alongside children."
+    },
+    {
+      name: "defaultPosition",
+      type: "ToastPosition",
+      required: false,
+      defaultValue: "'bottom-right'",
+      description: "Default position for toasts that do not specify a position. Applies to all convenience methods (success, error, etc.).",
+      options: ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"]
+    },
+    {
+      name: "defaultDuration",
+      type: "number",
+      required: false,
+      defaultValue: "5000",
+      description: "Default auto-dismiss duration in milliseconds. Set to 0 to make toasts persistent by default. Individual toasts can override this."
+    }
+  ],
+  rendersAs: "div",
+  // ── Variants & Sizes ──────────────────────────────────
+  variants: {
+    propName: "type",
+    options: ["success", "error", "warning", "info", "loading"],
+    default: "info"
+  },
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "type",
+      prop: "type",
+      isBoolean: false,
+      values: ["success", "error", "warning", "info", "loading"],
+      defaultValue: "'info'",
+      description: "Visual and semantic variant of the toast. Determines icon, border color, progress bar color, ARIA role, and aria-live politeness."
+    },
+    {
+      name: "loading",
+      prop: "type",
+      isBoolean: false,
+      values: ["loading"],
+      defaultValue: "undefined",
+      description: "Loading toasts have no auto-dismiss timer, no close button, and show a spinning icon. Use toast.loading() or toast.promise() to trigger."
+    },
+    {
+      name: "paused",
+      prop: "isAllPaused",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Timers pause when the user hovers over the stack or focuses a toast. Progress bar animation also pauses. Resumes on mouse leave or blur."
+    },
+    {
+      name: "dismissible",
+      prop: "dismissible",
+      isBoolean: true,
+      defaultValue: "true",
+      description: "When true, shows a close button and allows swipe-to-dismiss. Loading toasts override this to false by default."
+    },
+    {
+      name: "exiting",
+      prop: "isExiting",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Ghost toast state during exit animation. The toast is removed from state but rendered as a ghost element for 300ms with exit animation classes."
+    },
+    {
+      name: "expanded",
+      prop: "isExpanded",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Stack expands to show all visible toasts at full size on hover/focus. Collapsed state shows Sonner-style stacked depth with scale reduction."
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onClose",
+      signature: "() => void",
+      description: "Callback fired when a toast is closed, regardless of dismissal method (close button, swipe, timer, or Escape key). Set per-toast via ToastOptions."
+    },
+    {
+      name: "action.onClick",
+      signature: "() => void",
+      description: "Callback fired when the toast action button is clicked. The toast is automatically dismissed after the action handler executes."
+    },
+    {
+      name: "onPointerDown (ToastItem)",
+      signature: "(event: React.PointerEvent<HTMLDivElement>) => void",
+      description: "Captures pointer for swipe-to-dismiss drag gesture. Sets pointer capture and pauses the toast timer."
+    },
+    {
+      name: "onPointerMove (ToastItem)",
+      signature: "(event: React.PointerEvent<HTMLDivElement>) => void",
+      description: "Tracks horizontal drag offset during swipe gesture. Updates visual translateX and opacity."
+    },
+    {
+      name: "onPointerUp (ToastItem)",
+      signature: "(event: React.PointerEvent<HTMLDivElement>) => void",
+      description: "Completes swipe gesture. Dismisses the toast if drag offset exceeds 100px, otherwise snaps back to original position."
+    },
+    {
+      name: "onKeyDown (ToastStack)",
+      signature: "(event: React.KeyboardEvent<HTMLElement>) => void",
+      description: "Handles Escape key to dismiss the first dismissible toast in the stack."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    attributes: [
+      {
+        name: "role",
+        description: 'Set to "status" for success/info/loading toasts and "alert" for error/warning toasts. Matches the urgency of each notification type.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-live",
+        description: 'Set to "polite" for success/info/loading toasts and "assertive" for error/warning toasts. Controls how screen readers announce new toasts.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-atomic",
+        description: 'Set to "true" on each toast item so screen readers announce the full toast content as a single unit.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-label",
+        description: 'Set on each toast with format "{type} notification" (e.g. "Success notification", "Error notification"). Also set on the close button as "Dismiss {type} notification".',
+        managedByComponent: true
+      },
+      {
+        name: "aria-relevant",
+        description: 'Set to "additions removals" on the stack section to announce new toasts and removed toasts to screen readers.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-hidden",
+        description: 'Set to "true" on toast items beyond the visible limit (index >= 5) to prevent hidden stacked toasts from being announced.',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Escape",
+        behavior: "Dismisses the first dismissible toast in the stack. Non-dismissible toasts are skipped."
+      },
+      {
+        key: "Enter",
+        behavior: "Activates the overflow indicator button (when more than 5 toasts exist) to expand the stack and reveal hidden toasts."
+      },
+      {
+        key: " ",
+        behavior: "Activates the overflow indicator button to expand the stack, same as Enter."
+      },
+      {
+        key: "Tab",
+        behavior: "Moves focus between the close button and action button within a toast, and between toasts in the stack."
+      }
+    ],
+    focusManagement: "Each toast is focusable (tabIndex={0}). Hovering or focusing the toast stack expands it and pauses all timers. When focus leaves the stack (onBlur checks relatedTarget), the stack collapses and timers resume. The close button and action button both have visible focus rings via focus-visible:ring-2.",
+    wcagLevel: "AA",
+    notes: 'The component uses appropriate ARIA live regions based on toast urgency \u2014 assertive for errors/warnings, polite for success/info/loading. The section element wrapping each position group has an aria-label like "Notifications (bottom-right)". Swipe-to-dismiss uses pointer events which are not keyboard-accessible, but Escape provides an equivalent dismiss mechanism. Reduced motion is respected via animation classes that can be overridden with prefers-reduced-motion.'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "button",
+      reason: "Used as the trigger element to fire toast notifications from user interactions (form submit, delete, save)"
+    },
+    {
+      slug: "typography",
+      reason: "Used in documentation and demo layouts alongside toasts for headings and descriptive text"
+    },
+    {
+      slug: "divider",
+      reason: "Used in demo layouts to visually separate different toast feature sections"
+    },
+    {
+      slug: "spinner",
+      reason: "Alternative loading indicator for page-level loading states where toasts may not be appropriate"
+    },
+    {
+      slug: "modal",
+      reason: "Used together in confirmation flows \u2014 modal for blocking confirmations, toast for post-action feedback"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Setup and Standard Variants",
+      description: "Wrap your app with ToastProvider, then use the useToast hook to trigger success, error, warning, and info toasts.",
+      code: `import { ToastProvider, useToast, Button } from 'vayu-ui';
+
+function AppContent() {
+  const toast = useToast();
+
+  return (
+    <div className="flex gap-4">
+      <Button variant="outline" onClick={() =>
+        toast.success('Operation successful', {
+          description: 'Your changes have been saved.',
+        })
+      }>
+        Success
+      </Button>
+      <Button variant="destructive" onClick={() =>
+        toast.error('Operation failed', {
+          description: 'Please try again later.',
+        })
+      }>
+        Error
+      </Button>
+      <Button variant="outline" onClick={() =>
+        toast.warning('Warning', {
+          description: 'This action cannot be undone.',
+        })
+      }>
+        Warning
+      </Button>
+      <Button variant="secondary" onClick={() =>
+        toast.info('Information', {
+          description: 'A new update is available.',
+        })
+      }>
+        Info
+      </Button>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ToastProvider>
+      <AppContent />
+    </ToastProvider>
+  );
+}`,
+      tags: ["basic", "setup", "variants", "success", "error", "warning", "info"]
+    },
+    {
+      title: "Toast with Actions",
+      description: "Add an action button to toasts for inline responses like Undo or View without interrupting the user workflow.",
+      code: `import { useToast, Button } from 'vayu-ui';
+
+function ActionToastDemo() {
+  const toast = useToast();
+
+  return (
+    <div className="flex gap-4">
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast.info('File deleted', {
+            description: 'Your file has been moved to trash.',
+            action: {
+              label: 'Undo',
+              onClick: () => console.log('Undo clicked'),
+            },
+          })
+        }
+      >
+        Delete with Undo
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast.success('Message sent', {
+            description: 'Your message has been delivered.',
+            action: {
+              label: 'View',
+              onClick: () => console.log('View clicked'),
+            },
+          })
+        }
+      >
+        Send with View
+      </Button>
+    </div>
+  );
+}`,
+      tags: ["action", "undo", "interactive", "callback"]
+    },
+    {
+      title: "Promise and Loading States",
+      description: "Use toast.promise() for automatic loading-to-success/error transitions, or manually control loading toasts with updateToast.",
+      code: `import { useToast, Button } from 'vayu-ui';
+
+function PromiseToastDemo() {
+  const toast = useToast();
+
+  const handlePromiseSuccess = () => {
+    const promise = new Promise((resolve) => setTimeout(resolve, 2000));
+    toast.promise(promise, {
+      loading: 'Loading data...',
+      success: 'Data loaded successfully!',
+      error: 'Failed to load data',
+    });
+  };
+
+  const handlePromiseError = () => {
+    const promise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('API Error')), 2000),
+    );
+    toast.promise(promise, {
+      loading: 'Uploading file...',
+      success: 'File uploaded!',
+      error: 'Upload failed',
+    }).catch(() => {});
+  };
+
+  const handleManualLoading = () => {
+    const toastId = toast.loading('Processing...', {
+      description: 'This may take a while',
+    });
+    setTimeout(() => {
+      toast.updateToast(toastId, {
+        type: 'success',
+        description: 'Processing complete!',
+      });
+    }, 3000);
+  };
+
+  return (
+    <div className="flex gap-4">
+      <Button onClick={handlePromiseSuccess}>Promise (Success)</Button>
+      <Button variant="outline" onClick={handlePromiseError}>Promise (Error)</Button>
+      <Button variant="secondary" onClick={handleManualLoading}>Manual Loading</Button>
+    </div>
+  );
+}`,
+      tags: ["promise", "loading", "async", "update"]
+    },
+    {
+      title: "Duration Control",
+      description: "Control auto-dismiss timing with the duration option. Set to 0 for persistent toasts that require manual dismissal.",
+      code: `import { useToast, Button } from 'vayu-ui';
+
+function DurationToastDemo() {
+  const toast = useToast();
+
+  return (
+    <div className="flex gap-4">
+      <Button variant="outline" onClick={() =>
+        toast.info('Quick toast', { duration: 2000 })
+      }>
+        2 Second
+      </Button>
+      <Button variant="outline" onClick={() =>
+        toast.info('Long toast', { duration: 10000 })
+      }>
+        10 Second
+      </Button>
+      <Button variant="outline" onClick={() =>
+        toast.info('Persistent toast', {
+          duration: 0,
+          description: 'Click to dismiss',
+        })
+      }>
+        Persistent
+      </Button>
+    </div>
+  );
+}`,
+      tags: ["duration", "timeout", "persistent", "auto-dismiss"]
+    },
+    {
+      title: "Position Options",
+      description: "Position toasts at any of the six supported screen edges. Set a default position on ToastProvider or override per-toast.",
+      code: `import { useToast, Button } from 'vayu-ui';
+
+function PositionToastDemo() {
+  const toast = useToast();
+
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      <Button size="small" variant="outline"
+        onClick={() => toast.info('Top Left', { position: 'top-left' })}>
+        Top Left
+      </Button>
+      <Button size="small" variant="outline"
+        onClick={() => toast.info('Top Center', { position: 'top-center' })}>
+        Top Center
+      </Button>
+      <Button size="small" variant="outline"
+        onClick={() => toast.info('Top Right', { position: 'top-right' })}>
+        Top Right
+      </Button>
+      <Button size="small" variant="outline"
+        onClick={() => toast.info('Bottom Left', { position: 'bottom-left' })}>
+        Bottom Left
+      </Button>
+      <Button size="small" variant="outline"
+        onClick={() => toast.info('Bottom Center', { position: 'bottom-center' })}>
+        Bottom Center
+      </Button>
+      <Button size="small" variant="outline"
+        onClick={() => toast.info('Bottom Right', { position: 'bottom-right' })}>
+        Bottom Right
+      </Button>
+    </div>
+  );
+}`,
+      tags: ["position", "placement", "top", "bottom", "left", "right", "center"]
+    },
+    {
+      title: "Custom Toast with Compound Components",
+      description: "Build fully custom toast content using toast.custom() with Toast.Title, Toast.Description, and Toast.Close sub-components.",
+      code: `import { useState } from 'react';
+import { useToast, Toast, ToastProvider, Button } from 'vayu-ui';
+
+function CustomToastDemo() {
+  const toast = useToast();
+
+  const showCustomToast = () => {
+    const id = toast.custom(
+      <div className="w-full max-w-sm border border-border bg-surface p-4 shadow-elevated rounded-surface">
+        <div className="flex items-start gap-4">
+          <div className="bg-brand/10 p-2 rounded-control text-brand">
+            \u{1F44B}
+          </div>
+          <div className="flex-1">
+            <Toast.Title>Hello World</Toast.Title>
+            <Toast.Description>
+              This is a fully custom toast using compound components.
+            </Toast.Description>
+            <button
+              onClick={() => toast.removeToast(id)}
+              className="mt-2 text-sm font-medium text-brand hover:underline underline-offset-2"
+            >
+              Undo
+            </button>
+          </div>
+        </div>
+      </div>,
+      { duration: 10000 },
+    );
+  };
+
+  return (
+    <Button variant="outline" onClick={showCustomToast}>
+      Show Custom Toast
+    </Button>
+  );
+}`,
+      tags: ["custom", "compound", "title", "description", "close"]
+    },
+    {
+      title: "Non-Dismissible and Custom Icon",
+      description: "Create toasts that cannot be manually dismissed (only expire via duration) and override the default icon with custom SVG.",
+      code: `import { useToast, Button } from 'vayu-ui';
+
+function SpecialToastDemo() {
+  const toast = useToast();
+
+  return (
+    <div className="flex gap-4">
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast.warning('Important notice', {
+            description: 'This toast cannot be dismissed by clicking X',
+            dismissible: false,
+            duration: 5000,
+          })
+        }
+      >
+        Non-Dismissible
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast.info('Custom Icon', {
+            description: 'This toast has a custom icon',
+            icon: (
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
+            ),
+          })
+        }
+      >
+        Custom Icon
+      </Button>
+    </div>
+  );
+}`,
+      tags: ["non-dismissible", "custom-icon", "svg", "persistent"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using useToast outside ToastProvider",
+      bad: "function App() { const toast = useToast(); return <div>...</div>; }",
+      good: "function App() { return <ToastProvider><AppContent /></ToastProvider>; } function AppContent() { const toast = useToast(); return <div>...</div>; }",
+      reason: 'useToast reads from ToastContext which is undefined outside ToastProvider. It throws an error: "useToast must be used within ToastProvider". Always call useToast in a component rendered as a child of ToastProvider.'
+    },
+    {
+      title: "Setting duration on loading toasts",
+      bad: "toast.loading('Saving...', { duration: 3000 });",
+      good: "toast.loading('Saving...'); // duration is automatically set to 0\n// Then update when done:\nsetTimeout(() => toast.updateToast(id, { type: 'success' }), 3000);",
+      reason: "The loading method always overrides duration to 0 and dismissible to false because loading toasts should persist until the operation completes. Use updateToast to transition to success/error when the async operation finishes."
+    },
+    {
+      title: "Using toast.custom without compound sub-components",
+      bad: "toast.custom(<div>Something happened</div>, { type: 'error' });",
+      good: 'toast.custom(\n  <div className="rounded-surface bg-surface p-4 shadow-elevated border border-border">\n    <Toast.Title>Error</Toast.Title>\n    <Toast.Description>Something went wrong.</Toast.Description>\n  </div>,\n);',
+      reason: "While plain HTML works, using Toast.Title and Toast.Description ensures consistent typography, color tokens, and spacing. Custom content bypasses all default toast styling (border, icon, progress bar), so you must provide your own accessible structure."
+    },
+    {
+      title: "Ignoring promise rejections from toast.promise",
+      bad: "toast.promise(someAsyncFn(), { loading: 'Loading...', success: 'Done!', error: 'Failed!' });",
+      good: "toast.promise(someAsyncFn(), { loading: 'Loading...', success: 'Done!', error: 'Failed!' }).catch(() => {});",
+      reason: "toast.promise re-throws the original error after updating the toast to show the error state. Without a .catch() handler, this results in an unhandled promise rejection warning in the console. Always handle the rejection, even if the toast already displays the error."
+    },
+    {
+      title: "Rendering toasts inline instead of via ToastProvider",
+      bad: "<div><ToastItem toast={myToast} onRemove={() => {}} /></div>",
+      good: '<ToastProvider defaultPosition="bottom-right"><App /></ToastProvider>',
+      reason: "ToastItem, ToastStack, and ToastContainer are internal components managed by ToastProvider. They depend on shared state (heights, pause state, ghost toasts) that is only available within the stack context. Always trigger toasts via the useToast hook methods."
+    }
+  ]
+};
+
+// src/components/draggable.ts
+var draggableEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "draggable",
+  name: "Draggable",
+  type: "component",
+  category: "utility",
+  // ── Description ───────────────────────────────────────
+  description: "An accessible drag-and-drop sortable component with pointer and keyboard support, FLIP animations, portal-rendered overlays (preview, placeholder, drop indicator), and single-list or multi-container (Kanban) capability.",
+  longDescription: "The Draggable component provides a complete drag-and-drop reordering system built entirely on React context, refs, and pointer events \u2014 no external DnD libraries required. It supports both single-list and multi-container (Kanban-style) modes, controlled or uncontrolled state management, and list or grid layouts. The compound component pattern exposes Draggable.Container, Draggable.Item, Draggable.Handle, Draggable.Preview, Draggable.Placeholder, and Draggable.DropIndicator for flexible composition. Dragging works via pointer events (mouse and touch) with a dedicated handle or full-item grab. Keyboard accessibility is first-class: Space to grab, Arrow keys to move, Space to drop, Escape to cancel \u2014 all announced to screen readers via an aria-live assertive region. FLIP animations provide smooth reorder transitions with a 200ms cubic-bezier easing. Visual feedback layers use React portals: a semi-transparent drag preview follows the cursor, a placeholder marks the drop position, and a brand-colored drop indicator line highlights the insertion point.",
+  tags: [
+    "drag",
+    "drop",
+    "sortable",
+    "reorder",
+    "dnd",
+    "drag-and-drop",
+    "list",
+    "grid",
+    "kanban",
+    "drag-handle",
+    "keyboard",
+    "accessible"
+  ],
+  useCases: [
+    "Reorder items in a single list with drag handles or full-item dragging, such as task priorities or playlist tracks",
+    "Build Kanban-style boards with cross-container drag-and-drop between columns (e.g., To Do, In Progress, Done)",
+    "Create sortable grid layouts with multi-column drag reordering for image galleries or dashboard widgets",
+    "Provide fully accessible reordering via keyboard navigation (Space to grab, Arrow keys to move, Space to drop) for WCAG compliance",
+    "Add rich visual feedback during drag with portal-rendered preview, placeholder, and drop indicator overlays",
+    "Implement controlled or uncontrolled sortable state with onReorder and onContainersChange callbacks for external persistence"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  directoryName: "Draggable",
+  files: [
+    { name: "Draggable.tsx", description: "Root component: manages drag state (controlled/uncontrolled), FLIP animation recording/playback, pointer and keyboard drag lifecycle, and live region for screen reader announcements" },
+    { name: "DraggableContainer.tsx", description: "Layout container that registers with the root context, applies list or grid CSS, and sets the appropriate ARIA role (list or grid)" },
+    { name: "DraggableItem.tsx", description: "Sortable item with pointer drag initiation, keyboard grab/move/drop handlers, ARIA attributes (aria-grabbed, aria-roledescription), and focus-visible ring styling" },
+    { name: "DraggableHandle.tsx", description: "Dedicated drag handle button that intercepts pointer events, renders a default grip-dot SVG icon, and marks the parent item as handle-equipped" },
+    { name: "DraggablePreview.tsx", description: "Portal-rendered drag preview that follows the cursor during pointer drag, cloning the active item's innerHTML at the captured offset" },
+    { name: "DraggablePlaceholder.tsx", description: "Portal-rendered semi-transparent placeholder bar marking the current drop position during drag" },
+    { name: "DraggableDropIndicator.tsx", description: "Portal-rendered brand-colored line indicator showing the exact insertion point during drag" },
+    { name: "hooks.ts", description: "Internal hooks: useDraggableContext reads the DraggableContext, useItemContext reads the item-level DraggableItemContext \u2014 both throw descriptive errors when used outside their providers" },
+    { name: "types.ts", description: "TypeScript interfaces for all prop types, context values (DraggableContextValue, DraggableItemContextValue), utility functions (arrayMove, getClosestIndex, getContainerAtPoint), and React contexts" },
+    { name: "index.ts", description: "Barrel export assembling the Draggable compound component object (Container, Item, Handle, Preview, Placeholder, DropIndicator) and re-exporting all type definitions" }
+  ],
+  targetPath: "src/components/ui",
+  // ── Compound Component ────────────────────────────────
+  rootComponent: "Draggable",
+  subComponents: [
+    {
+      name: "Container",
+      fileName: "DraggableContainer.tsx",
+      description: 'Layout wrapper that determines the arrangement (list or grid) of sortable items. Registers itself with the root for multi-container drag detection. Sets ARIA role to "list" or "grid" based on layout.',
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Draggable.Item elements to render in this container"
+        },
+        {
+          name: "layout",
+          type: "'list' | 'grid'",
+          required: false,
+          defaultValue: "'list'",
+          description: 'Layout mode: "list" renders a vertical flex column, "grid" renders a CSS grid with configurable columns',
+          options: ["list", "grid"]
+        },
+        {
+          name: "columns",
+          type: "number",
+          required: false,
+          defaultValue: "3",
+          description: 'Number of grid columns when layout is "grid". Ignored in list layout.'
+        },
+        {
+          name: "containerId",
+          type: "string",
+          required: false,
+          description: "Unique identifier for this container in multi-container (Kanban) mode. Omit for single-list usage."
+        },
+        {
+          name: "aria-label",
+          type: "string",
+          required: false,
+          defaultValue: "'Sortable list'",
+          description: 'Accessible label for the container. Defaults to "Sortable list" if not provided.'
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes to merge with the default container layout styles"
+        }
+      ]
+    },
+    {
+      name: "Item",
+      fileName: "DraggableItem.tsx",
+      description: "A sortable item that can be dragged and reordered. Supports pointer drag (full-item or via Handle), keyboard drag (Space/Arrow/Escape), and applies ARIA sortable semantics with screen reader instructions.",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: true,
+          description: "Content to render inside the sortable item"
+        },
+        {
+          name: "value",
+          type: "string",
+          required: true,
+          description: "Unique identifier for this item, matching an entry in the root items array or containers map"
+        },
+        {
+          name: "disabled",
+          type: "boolean",
+          required: false,
+          defaultValue: "false",
+          description: "When true, the item cannot be dragged and appears visually dimmed with cursor-not-allowed"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes to merge with the default item styles (min-height, focus ring, active state)"
+        }
+      ]
+    },
+    {
+      name: "Handle",
+      fileName: "DraggableHandle.tsx",
+      description: "A dedicated drag handle button that renders a default grip-dot SVG icon. When present inside an Item, pointer drag is restricted to the handle only instead of the full item area.",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: false,
+          description: "Custom handle content; defaults to a six-dot grip SVG icon when omitted"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes to merge with the default handle styles (8\xD78 box, hover state, grab cursor)"
+        }
+      ]
+    },
+    {
+      name: "Preview",
+      fileName: "DraggablePreview.tsx",
+      description: "Portal-rendered overlay that follows the cursor during pointer drag, showing a snapshot of the dragged item at the captured offset. Hidden during keyboard drag.",
+      props: [
+        {
+          name: "children",
+          type: "React.ReactNode",
+          required: false,
+          description: "Not used for content injection \u2014 the preview clones the active item's innerHTML automatically"
+        },
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes to merge with the default preview styles (surface background, elevated shadow, border)"
+        }
+      ]
+    },
+    {
+      name: "Placeholder",
+      fileName: "DraggablePlaceholder.tsx",
+      description: "Portal-rendered semi-transparent bar that marks the current drop position during drag. Uses brand color at 30% opacity.",
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes to merge with the default placeholder styles (brand/30 background, rounded)"
+        }
+      ]
+    },
+    {
+      name: "DropIndicator",
+      fileName: "DraggableDropIndicator.tsx",
+      description: "Portal-rendered brand-colored line indicator showing the exact insertion point during drag. Adapts orientation to list (horizontal line) or grid (vertical line) layout.",
+      props: [
+        {
+          name: "className",
+          type: "string",
+          required: false,
+          description: "Additional CSS classes to merge with the default indicator styles (brand background, rounded, 2px line)"
+        }
+      ]
+    }
+  ],
+  hooks: ["useDraggableContext", "useItemContext"],
+  // ── Props ─────────────────────────────────────────────
+  rootProps: [
+    {
+      name: "children",
+      type: "React.ReactNode",
+      required: true,
+      description: "Must include at least a Draggable.Container with Draggable.Item children. Optionally include Draggable.Preview, Draggable.Placeholder, and Draggable.DropIndicator for visual feedback."
+    },
+    {
+      name: "items",
+      type: "string[]",
+      required: false,
+      description: "Controlled array of item IDs defining the current order. Use with onReorder for externally managed state. Mutually exclusive with defaultItems in controlled mode."
+    },
+    {
+      name: "defaultItems",
+      type: "string[]",
+      required: false,
+      defaultValue: "[]",
+      description: "Initial item IDs for uncontrolled mode. The component manages order internally and calls onReorder on each change."
+    },
+    {
+      name: "onReorder",
+      type: "(items: string[]) => void",
+      required: false,
+      description: "Callback fired with the new item order after a successful drag-and-drop reorder. Called for both controlled and uncontrolled modes."
+    },
+    {
+      name: "containers",
+      type: "ContainersMap",
+      required: false,
+      description: "Controlled multi-container state mapping container IDs to arrays of item IDs. Enables Kanban-style cross-container dragging. Mutually exclusive with defaultContainers."
+    },
+    {
+      name: "defaultContainers",
+      type: "ContainersMap",
+      required: false,
+      defaultValue: "{}",
+      description: "Initial multi-container state for uncontrolled Kanban mode. The component manages container state internally."
+    },
+    {
+      name: "onContainersChange",
+      type: "(containers: ContainersMap) => void",
+      required: false,
+      description: "Callback fired with the updated container map after a cross-container or within-container reorder in multi-container mode."
+    },
+    {
+      name: "className",
+      type: "string",
+      required: false,
+      description: "Additional CSS classes applied to the root wrapper div"
+    }
+  ],
+  rendersAs: "div",
+  // ── States ────────────────────────────────────────────
+  states: [
+    {
+      name: "dragging",
+      prop: "activeId",
+      isBoolean: false,
+      defaultValue: "null",
+      description: "An item is actively being dragged. The active item becomes semi-transparent (pointer drag) or gets a brand ring (keyboard drag). Set to the dragged item's value, or null when idle."
+    },
+    {
+      name: "keyboardDragging",
+      prop: "isKeyboardDragging",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "True when the current drag operation was initiated via keyboard (Space key). Keyboard drags show a brand ring on the active item instead of hiding it."
+    },
+    {
+      name: "disabled",
+      prop: "disabled",
+      isBoolean: true,
+      defaultValue: "false",
+      description: "Per-item disabled state. Disabled items have reduced opacity, cursor-not-allowed, and ignore all drag initiation events."
+    },
+    {
+      name: "layout",
+      prop: "layout",
+      isBoolean: false,
+      values: ["list", "grid"],
+      defaultValue: "'list'",
+      description: 'Determines the container layout mode. "list" is a vertical flex column; "grid" is a CSS grid with configurable columns. Affects ARIA roles, drag geometry calculation, and drop indicator orientation.'
+    }
+  ],
+  // ── Events ────────────────────────────────────────────
+  events: [
+    {
+      name: "onReorder",
+      signature: "(items: string[]) => void",
+      description: "Fired after a successful single-list reorder with the new item order array. Called for both controlled (items prop) and uncontrolled (defaultItems prop) modes."
+    },
+    {
+      name: "onContainersChange",
+      signature: "(containers: ContainersMap) => void",
+      description: "Fired after a successful multi-container reorder (within-container or cross-container) with the updated ContainersMap. Each key is a containerId mapping to its ordered item IDs."
+    }
+  ],
+  // ── Accessibility ─────────────────────────────────────
+  a11y: {
+    attributes: [
+      {
+        name: "role (Container)",
+        description: 'Set to "list" when layout is "list" and "grid" when layout is "grid". Provides semantic structure for assistive technologies.',
+        managedByComponent: true
+      },
+      {
+        name: "role (Item)",
+        description: 'Set to "listitem" in list layout and "gridcell" in grid layout. Paired with the container role for correct semantic hierarchy.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-grabbed",
+        description: "Set to true on the actively dragged item. Undefined when the item is not being dragged, which omits the attribute from the DOM.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-roledescription",
+        description: 'Set to "sortable item" on each Draggable.Item to communicate that the item can be reordered via drag.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-disabled",
+        description: "Set to true on items with disabled=true. Undefined (omitted) when the item is enabled.",
+        managedByComponent: true
+      },
+      {
+        name: "aria-describedby",
+        description: 'Set to "draggable-instructions" on each item, pointing to a visually hidden span with the text "Press Space to grab, arrow keys to move, Space to drop, Escape to cancel."',
+        managedByComponent: true
+      },
+      {
+        name: "aria-label (Container)",
+        description: 'Set on each Draggable.Container. Defaults to "Sortable list" if not explicitly provided via the aria-label prop.',
+        managedByComponent: false
+      },
+      {
+        name: "aria-live (LiveRegion)",
+        description: 'Set to "assertive" on a visually hidden div inside the root. Polls every 100ms for new announcements and reads them to screen readers.',
+        managedByComponent: true
+      },
+      {
+        name: "aria-atomic (LiveRegion)",
+        description: 'Set to "true" on the live region div so screen readers announce the full message as a single unit.',
+        managedByComponent: true
+      }
+    ],
+    keyboardInteractions: [
+      {
+        key: "Space",
+        behavior: "Grabs the focused item (starts keyboard drag) if no item is active. Drops the item at the current position if an item is being dragged."
+      },
+      {
+        key: "Enter",
+        behavior: "Same as Space \u2014 grabs the focused item or drops the active item."
+      },
+      {
+        key: "ArrowUp",
+        behavior: "In list layout: moves the dragged item one position up. In grid layout: moves the dragged item one row up (by column count). When not dragging: moves focus to the previous item."
+      },
+      {
+        key: "ArrowDown",
+        behavior: "In list layout: moves the dragged item one position down. In grid layout: moves the dragged item one row down (by column count). When not dragging: moves focus to the next item."
+      },
+      {
+        key: "ArrowLeft",
+        behavior: "In grid layout: moves the dragged item one position left. In list layout: moves focus to the previous item (when not dragging)."
+      },
+      {
+        key: "ArrowRight",
+        behavior: "In grid layout: moves the dragged item one position right. In list layout: moves focus to the next item (when not dragging)."
+      },
+      {
+        key: "Escape",
+        behavior: "Cancels the active drag operation and returns the item to its original position. Works for both pointer and keyboard drag."
+      }
+    ],
+    focusManagement: "Items use a roving tabindex pattern \u2014 only the focused item has tabIndex={0}, all others have tabIndex={-1}. Focus moves via arrow keys when not dragging. During keyboard drag, the active item gets a visible brand ring. The handle button has tabIndex={-1} to keep it out of the tab flow since the parent item handles all keyboard interaction.",
+    wcagLevel: "AA",
+    notes: 'All drag operations are fully keyboard-accessible with the Space/Arrow/Space pattern. Screen reader announcements ("Picked up item X", "Moved to position Y", "Dropped at position Z", "Reorder cancelled") use an aria-live assertive region with 100ms polling. The visually hidden instruction text ("Press Space to grab, arrow keys to move, Space to drop, Escape to cancel") is associated via aria-describedby on every item. The compound component pattern ensures correct ARIA role nesting (list/listitem or grid/gridcell).'
+  },
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [
+    { name: "clsx" }
+  ],
+  registryDependencies: [],
+  reactPeerDependency: ">=18.0.0",
+  // ── Peer Suggestions ──────────────────────────────────
+  peerComponents: [
+    {
+      slug: "card",
+      reason: "Cards are commonly used as the visual content inside Draggable.Item for task boards and sortable lists"
+    },
+    {
+      slug: "badge",
+      reason: "Badges display counts or status labels on draggable items (e.g., priority, category)"
+    },
+    {
+      slug: "checkbox",
+      reason: "Checkboxes are often paired with draggable items in task lists to mark completion independently of reordering"
+    },
+    {
+      slug: "tooltip",
+      reason: "Tooltips provide additional context on hover for drag handles or sortable items without cluttering the layout"
+    },
+    {
+      slug: "drawer",
+      reason: "Drawers can house detailed item editors that open when a draggable item is clicked or double-clicked"
+    }
+  ],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Sortable List with Handles",
+      description: "A single-list layout where items can be reordered by dragging the handle grip icon. Uses controlled mode with onReorder callback.",
+      code: `import { useState } from 'react';
+import { Draggable } from 'vayu-ui';
+
+const listItems = [
+  { id: '1', title: 'Inbox', subtitle: '12 unread' },
+  { id: '2', title: 'Photos', subtitle: '3,429 items' },
+  { id: '3', title: 'Documents', subtitle: '156 files' },
+  { id: '4', title: 'Music', subtitle: '2,847 tracks' },
+  { id: '5', title: 'Videos', subtitle: '89 clips' },
+];
+
+function DraggableListDemo() {
+  const [items, setItems] = useState(listItems);
+
+  const handleReorder = (newOrder: string[]) => {
+    setItems((prev) => newOrder.map((id) => prev.find((i) => i.id === id)!));
+  };
+
+  return (
+    <Draggable items={items.map((i) => i.id)} onReorder={handleReorder}>
+      <Draggable.Container layout="list">
+        {items.map((item) => (
+          <Draggable.Item key={item.id} value={item.id}>
+            <div className="flex items-center gap-3 p-3 bg-surface border border-border rounded-surface hover:border-brand/30 transition-colors">
+              <Draggable.Handle />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-surface-content truncate">
+                  {item.title}
+                </p>
+                <p className="text-xs text-muted-content">
+                  {item.subtitle}
+                </p>
+              </div>
+            </div>
+          </Draggable.Item>
+        ))}
+      </Draggable.Container>
+      <Draggable.Preview />
+      <Draggable.DropIndicator />
+    </Draggable>
+  );
+}`,
+      tags: ["list", "handle", "controlled", "reorder", "basic"]
+    },
+    {
+      title: "Sortable Grid Layout",
+      description: "A 3-column grid layout where items can be reordered in both horizontal and vertical directions via drag or keyboard arrows.",
+      code: `import { useState } from 'react';
+import { Draggable } from 'vayu-ui';
+
+const gridItems = [
+  { id: 'g1', title: 'Inbox', subtitle: '12' },
+  { id: 'g2', title: 'Photos', subtitle: '3,429' },
+  { id: 'g3', title: 'Docs', subtitle: '156' },
+  { id: 'g4', title: 'Music', subtitle: '2,847' },
+  { id: 'g5', title: 'Videos', subtitle: '89' },
+  { id: 'g6', title: 'Archives', subtitle: '24' },
+];
+
+function DraggableGridDemo() {
+  const [items, setItems] = useState(gridItems);
+
+  const handleReorder = (newOrder: string[]) => {
+    setItems((prev) => newOrder.map((id) => prev.find((i) => i.id === id)!));
+  };
+
+  return (
+    <Draggable items={items.map((i) => i.id)} onReorder={handleReorder}>
+      <Draggable.Container layout="grid" columns={3}>
+        {items.map((item) => (
+          <Draggable.Item key={item.id} value={item.id}>
+            <div className="flex flex-col items-center gap-2 p-4 bg-surface border border-border rounded-surface hover:border-brand/30 transition-colors">
+              <div className="flex items-center justify-between w-full">
+                <Draggable.Handle />
+                <span className="text-[10px] text-muted-content">
+                  {item.subtitle}
+                </span>
+              </div>
+              <p className="text-xs font-semibold text-surface-content">
+                {item.title}
+              </p>
+            </div>
+          </Draggable.Item>
+        ))}
+      </Draggable.Container>
+      <Draggable.Preview />
+      <Draggable.DropIndicator />
+    </Draggable>
+  );
+}`,
+      tags: ["grid", "columns", "controlled", "multi-column"]
+    },
+    {
+      title: "Cross-Container Kanban Board",
+      description: "Multi-container drag-and-drop between two columns (To Do and Done). Items can be reordered within a column or moved between columns using the containers prop and onContainersChange callback.",
+      code: `import { useState } from 'react';
+import { Draggable, type ContainersMap } from 'vayu-ui';
+
+const taskMap: Record<string, string> = {
+  t1: 'Write unit tests',
+  t2: 'Review PR #42',
+  t3: 'Update changelog',
+  t4: 'Setup CI pipeline',
+  t5: 'Design token audit',
+};
+
+function DraggableCrossListDemo() {
+  const [containers, setContainers] = useState<ContainersMap>({
+    todo: ['t1', 't2', 't3'],
+    done: ['t4', 't5'],
+  });
+
+  return (
+    <Draggable containers={containers} onContainersChange={setContainers}>
+      <div className="grid grid-cols-2 gap-6">
+        <div className="bg-canvas rounded-surface p-4 border border-border">
+          <h3 className="text-sm font-bold text-surface-content mb-3 uppercase tracking-wide">
+            To Do ({containers.todo.length})
+          </h3>
+          <Draggable.Container containerId="todo" layout="list" aria-label="To Do items">
+            {containers.todo.map((id) => (
+              <Draggable.Item key={id} value={id}>
+                <div className="flex items-center gap-3 p-3 bg-surface rounded-surface border border-border">
+                  <Draggable.Handle />
+                  <span className="text-sm text-surface-content">{taskMap[id]}</span>
+                </div>
+              </Draggable.Item>
+            ))}
+          </Draggable.Container>
+        </div>
+
+        <div className="bg-canvas rounded-surface p-4 border border-border">
+          <h3 className="text-sm font-bold text-surface-content mb-3 uppercase tracking-wide">
+            Done ({containers.done.length})
+          </h3>
+          <Draggable.Container containerId="done" layout="list" aria-label="Done items" className="min-h-[80px]">
+            {containers.done.map((id) => (
+              <Draggable.Item key={id} value={id}>
+                <div className="flex items-center gap-3 p-3 bg-surface rounded-surface border border-border">
+                  <Draggable.Handle />
+                  <span className="text-sm text-surface-content">{taskMap[id]}</span>
+                </div>
+              </Draggable.Item>
+            ))}
+          </Draggable.Container>
+        </div>
+      </div>
+      <Draggable.Preview />
+      <Draggable.DropIndicator />
+    </Draggable>
+  );
+}`,
+      tags: ["kanban", "multi-container", "cross-list", "columns", "board"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using sub-components outside Draggable root",
+      bad: '<Draggable.Item value="a">Item</Draggable.Item>',
+      good: '<Draggable items={[...]} onReorder={fn}>\n  <Draggable.Container layout="list">\n    <Draggable.Item value="a">Item</Draggable.Item>\n  </Draggable.Container>\n</Draggable>',
+      reason: 'Draggable.Item and all other sub-components read from DraggableContext via useDraggableContext(), which throws "Draggable compound components must be used inside <Draggable>" when the context is null. Always nest sub-components within a <Draggable> root.'
+    },
+    {
+      title: "Placing Handle outside an Item",
+      bad: '<Draggable.Container layout="list">\n  <Draggable.Handle />\n  <Draggable.Item value="a">Item</Draggable.Item>\n</Draggable.Container>',
+      good: '<Draggable.Item value="a">\n  <Draggable.Handle />\n  <span>Item content</span>\n</Draggable.Item>',
+      reason: 'Draggable.Handle reads from DraggableItemContext via useItemContext(), which throws "Draggable.Handle must be used inside <Draggable.Item>" when used outside an Item. The Handle also sets itemCtx.hasHandle.current = true to disable full-item pointer drag.'
+    },
+    {
+      title: "Mixing items and containers props",
+      bad: '<Draggable items={["a","b"]} containers={{ col1: ["a"] }} onReorder={fn} />',
+      good: '// Single-list mode:\n<Draggable items={["a","b"]} onReorder={fn} />\n\n// Multi-container mode:\n<Draggable containers={{ col1: ["a","b"] }} onContainersChange={fn} />',
+      reason: "The root detects multi-container mode when containers or defaultContainers is defined (isMulti flag). Using both items and containers creates conflicting state sources. Pick one mode: items/onReorder for single-list, containers/onContainersChange for multi-container."
+    },
+    {
+      title: "Omitting containerId in multi-container mode",
+      bad: '<Draggable containers={containers} onContainersChange={setContainers}>\n  <Draggable.Container layout="list">\n    <Draggable.Item value="a">Item</Draggable.Item>\n  </Draggable.Container>\n</Draggable>',
+      good: '<Draggable containers={containers} onContainersChange={setContainers}>\n  <Draggable.Container containerId="todo" layout="list" aria-label="To Do">\n    <Draggable.Item value="a">Item</Draggable.Item>\n  </Draggable.Container>\n</Draggable>',
+      reason: 'In multi-container mode, each Draggable.Container must have a containerId that matches a key in the containers map. Without it, the container registers as "__default__" and item containment lookup fails, breaking cross-container drag detection.'
+    },
+    {
+      title: "Duplicating item values within a container",
+      bad: '<Draggable items={["a","a","b"]} onReorder={fn}>\n  <Draggable.Container layout="list">\n    <Draggable.Item value="a">First</Draggable.Item>\n    <Draggable.Item value="a">Second</Draggable.Item>\n    <Draggable.Item value="b">Third</Draggable.Item>\n  </Draggable.Container>\n</Draggable>',
+      good: '<Draggable items={["a1","a2","b"]} onReorder={fn}>\n  <Draggable.Container layout="list">\n    <Draggable.Item value="a1">First</Draggable.Item>\n    <Draggable.Item value="a2">Second</Draggable.Item>\n    <Draggable.Item value="b">Third</Draggable.Item>\n  </Draggable.Container>\n</Draggable>',
+      reason: "Item values are used as keys in itemRefs Map, DOM ids (draggable-item-${value}), and array lookup via indexOf. Duplicate values cause the second item to overwrite the first in the refs Map, breaking drag geometry and focus management. Each value must be unique within its container."
+    }
+  ]
+};
 export {
   accordionEntry,
   affixEntry,
@@ -21835,6 +23091,7 @@ export {
   colorPickerEntry,
   commandBoxEntry,
   dividerEntry,
+  draggableEntry,
   drawerEntry,
   fileUploadEntry,
   floatingDockEntry,
@@ -21857,6 +23114,7 @@ export {
   tableEntry,
   textAreaEntry,
   textInputEntry,
+  toasterEntry,
   tooltipEntry,
   tourEntry,
   typographyEntry

@@ -22,7 +22,6 @@ const ToastItem: React.FC<ToastItemProps> = ({
   const itemRef = useRef<HTMLDivElement>(null);
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const startTimeRef = useRef<number>(0);
   const remainingTimeRef = useRef<number>(toast.duration || 0);
   const prevTypeRef = useRef<ToastType>(toast.type);
 
@@ -58,7 +57,6 @@ const ToastItem: React.FC<ToastItemProps> = ({
     prevTypeRef.current = toast.type;
 
     if (!isPaused) {
-      startTimeRef.current = Date.now();
       timerRef.current = setTimeout(() => {
         handleClose();
       }, remainingTimeRef.current);
