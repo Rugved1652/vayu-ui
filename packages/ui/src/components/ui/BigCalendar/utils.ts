@@ -103,6 +103,26 @@ export const MONTH_NAMES = [
 
 export const DAY_NAMES_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+export const DAY_NAMES_FULL = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
+/** Format a date for screen reader aria-labels (e.g. "Monday, January 6, 2026"). */
+export function formatDateAria(d: Date): string {
+  return `${DAY_NAMES_FULL[d.getDay()]}, ${MONTH_NAMES[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+}
+
+/** Format a date + hour for screen reader aria-labels (e.g. "Monday, January 6, 2026 at 9:00 AM"). */
+export function formatDateHourAria(d: Date, hour: number): string {
+  return `${formatDateAria(d)} at ${formatHour(hour)}`;
+}
+
 // ============================================================================
 // Event Colors
 // ============================================================================
@@ -139,12 +159,17 @@ const EVENT_COLORS: Record<string, { bg: string; text: string; border: string }>
     border: 'border-l-pink-500',
   },
   primary: {
-    bg: 'bg-primary-100 dark:bg-primary-900/30',
-    text: 'text-primary-800 dark:text-primary-300',
-    border: 'border-l-primary-500',
+    bg: 'bg-blue-100 dark:bg-blue-900/30',
+    text: 'text-blue-800 dark:text-blue-300',
+    border: 'border-l-blue-500',
+  },
+  brand: {
+    bg: 'bg-brand/15',
+    text: 'text-brand',
+    border: 'border-l-brand',
   },
 };
 
 export function getEventColorClasses(color?: string) {
-  return EVENT_COLORS[color || 'primary'] || EVENT_COLORS.primary;
+  return EVENT_COLORS[color || 'brand'] || EVENT_COLORS.brand;
 }

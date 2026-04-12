@@ -25,6 +25,7 @@ const BigCalendarRoot = forwardRef<HTMLDivElement, BigCalendarProps>(
       onViewChange,
       onEventClick,
       onDateClick,
+      onEventRemove,
       weekStartsOn = 0,
       renderEvent,
       className,
@@ -87,15 +88,19 @@ const BigCalendarRoot = forwardRef<HTMLDivElement, BigCalendarProps>(
           weekStartsOn,
           onEventClick,
           onDateClick,
+          onEventRemove,
           renderEvent,
           navigate,
           setView,
+          setDate,
         }}
       >
         <div
           ref={ref}
+          role="application"
+          aria-label="Calendar"
           className={clsx(
-            'flex flex-col border border-ground-200 dark:border-ground-800 rounded-xl bg-white dark:bg-ground-950 overflow-hidden',
+            'flex flex-col border border-border rounded-surface bg-surface overflow-hidden',
             className,
           )}
           {...props}

@@ -552,8 +552,6 @@ import {
   AudioPlayerError,
   AudioPlayerBuffer,
 } from './AudioStatus';
-import { AudioPlayerWaveform } from './AudioWaveform';
-
 const DefaultAudioPlayer = Object.assign(AudioPlayer, {
   Root: AudioPlayer,
   Source: AudioPlayerSource,
@@ -570,7 +568,6 @@ const DefaultAudioPlayer = Object.assign(AudioPlayer, {
   Volume: AudioPlayerVolume,
   Mute: AudioPlayerMute,
   Rate: AudioPlayerRate,
-  Waveform: AudioPlayerWaveform,
   Buffer: AudioPlayerBuffer,
   Loading: AudioPlayerLoading,
   Error: AudioPlayerError,

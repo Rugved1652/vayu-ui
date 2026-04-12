@@ -228,10 +228,10 @@ function createMatrix(version: number): { modules: boolean[][]; isFunction: bool
 
   // Timing patterns
   for (let i = 8; i < size - 8; i++) {
-    isFunction[7]![i] = true;
-    modules[7]![i] = i % 2 === 0;
-    isFunction[i]![7] = true;
-    modules[i]![7] = i % 2 === 0;
+    isFunction[6]![i] = true;
+    modules[6]![i] = i % 2 === 0;
+    isFunction[i]![6] = true;
+    modules[i]![6] = i % 2 === 0;
   }
 
   // Dark module

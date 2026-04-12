@@ -10,7 +10,7 @@ export default function AudioPlayerDemo() {
           Spotify-style Single Track
         </h3>
         <p className="text-text-sm text-muted-content mb-6">
-          Demonstrating HLS fallback and seeded fake waveform
+          Demonstrating HLS fallback and playback controls
         </p>
         <AudioPlayer allowMultiple={false} className="max-w-md mx-auto shadow-elevated">
           {/* The Playlist holds tracks invisibly if we just want one */}
@@ -26,10 +26,6 @@ export default function AudioPlayerDemo() {
           <div className="flex flex-col">
             <AudioPlayer.TrackInfo className="pt-4 px-4" />
 
-            <div className="px-5 mt-2">
-              <AudioPlayer.Waveform />
-            </div>
-
             <AudioPlayer.Controls className="flex-col gap-2 w-full">
               <div className="flex flex-row items-center justify-between w-full">
                 <AudioPlayer.Time />
@@ -37,10 +33,11 @@ export default function AudioPlayerDemo() {
               <div className="flex flex-row items-center justify-between w-full mt-2">
                 <div className="flex items-center gap-1">
                   <AudioPlayer.Mute />
+                  <AudioPlayer.Volume />
                 </div>
                 <div className="flex items-center gap-4">
                   <AudioPlayer.Previous />
-                  <AudioPlayer.PlayPause className="w-12 h-12 [&>svg]:w-6 [&>svg]:h-6 shadow-md" />
+                  <AudioPlayer.PlayPause className="!w-12 !h-12 shadow-md [&>span]:w-6 [&>span]:h-6 [&_svg]:w-6 [&_svg]:h-6" />
                   <AudioPlayer.Next />
                 </div>
                 <div className="flex items-center gap-1">
@@ -75,7 +72,7 @@ export default function AudioPlayerDemo() {
               {/* Animated ring when playing */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-brand/20 rounded-full blur-xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                <AudioPlayer.PlayPause className="w-20 h-20 shadow-elevated relative z-10 [&>svg]:w-10 [&>svg]:h-10" />
+                <AudioPlayer.PlayPause className="!w-20 !h-20 shadow-elevated relative z-10 [&>span]:w-10 [&>span]:h-10 [&_svg]:w-10 [&_svg]:h-10" />
               </div>
 
               <div className="w-full space-y-2 mt-4">
@@ -89,6 +86,7 @@ export default function AudioPlayerDemo() {
                 <AudioPlayer.Previous />
                 <AudioPlayer.Rate />
                 <AudioPlayer.Mute />
+                <AudioPlayer.Volume />
                 <AudioPlayer.Next />
               </div>
             </div>

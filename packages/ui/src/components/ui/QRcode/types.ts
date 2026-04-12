@@ -10,6 +10,8 @@ export interface QRCodeImageSettings {
   width: number;
   /** Height of the logo in pixels */
   height: number;
-  /** Clear modules behind the logo for readability */
+  /** Clear modules behind the logo for readability (defaults to true when imageSettings is provided) */
   excavate?: boolean;
+  /** Number of extra cells to clear around the excavated area (default: 1) */
+  excavateMargin?: number;
 }

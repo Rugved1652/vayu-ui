@@ -6,11 +6,12 @@ import {
   forwardRef,
   HTMLAttributes,
   ButtonHTMLAttributes,
-  useCallback,
-  useRef,
+  useState,
+  useEffect,
 } from 'react';
+import { Button } from '../Button';
+import { Slider } from '../Slider';
 import { useAudioPlayer } from './Audio';
-import { useMergeRefs } from '../Popover';
 
 export const AudioPlayerMute = forwardRef<
   HTMLButtonElement,
@@ -18,22 +19,22 @@ export const AudioPlayerMute = forwardRef<
 >(({ className, ...props }, ref) => {
   const { isMuted, toggleMute, volume } = useAudioPlayer();
   return (
-    <button
+    <Button
       ref={ref}
+      variant="ghost"
       onClick={toggleMute}
-      className={clsx(
-        'p-2 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-focus hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 disabled:opacity-50 disabled:pointer-events-none text-surface-content',
-        className,
-      )}
       aria-label={isMuted ? 'Unmute' : 'Mute'}
+      className={clsx('!rounded-full !p-2 text-surface-content', className)}
       {...props}
     >
-      {isMuted || volume === 0 ? (
-        <VolumeX className="w-5 h-5" />
-      ) : (
-        <Volume2 className="w-5 h-5" />
-      )}
-    </button>
+      <Button.Icon size="medium">
+        {isMuted || volume === 0 ? (
+          <VolumeX className="w-5 h-5" />
+        ) : (
+          <Volume2 className="w-5 h-5" />
+        )}
+      </Button.Icon>
+    </Button>
   );
 });
 AudioPlayerMute.displayName = 'AudioPlayer.Mute';
@@ -43,53 +44,31 @@ export const AudioPlayerVolume = forwardRef<
   HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
   const { volume, setVolume, isMuted } = useAudioPlayer();
-  const trackRef = useRef<HTMLDivElement>(null);
-  const combinedRef = useMergeRefs(ref, trackRef);
-  const displayVol = isMuted ? 0 : volume;
+  const contextValue = Math.round((isMuted ? 0 : volume) * 100);
 
-  const updateVol = useCallback(
-    (clientX: number) => {
-      if (!trackRef.current) return;
-      const rect = trackRef.current.getBoundingClientRect();
-      const percent = Math.max(
-        0,
-        Math.min(1, (clientX - rect.left) / rect.width),
-      );
-      setVolume(percent);
-    },
-    [setVolume],
-  );
+  // Local optimistic state so the slider responds instantly to drag.
+  // The audio element fires `volumechange` asynchronously, which would
+  // make a purely-controlled slider feel laggy.
+  const [localValue, setLocalValue] = useState(contextValue);
 
-  const handlePointerDown = (e: React.PointerEvent) => {
-    updateVol(e.clientX);
-    const handlePointerMove = (ev: PointerEvent) => updateVol(ev.clientX);
-    const handlePointerUp = () => {
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', handlePointerUp);
-    };
-    window.addEventListener('pointermove', handlePointerMove);
-    window.addEventListener('pointerup', handlePointerUp);
-  };
+  // Sync local state when the context updates externally (mute toggle, keyboard)
+  useEffect(() => {
+    setLocalValue(contextValue);
+  }, [contextValue]);
 
   return (
-    <div
-      ref={combinedRef}
-      className={clsx(
-        'relative w-24 h-4 flex items-center cursor-pointer group',
-        className,
-      )}
-      onPointerDown={handlePointerDown}
-      {...props}
-    >
-      <div className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden transition-all group-hover:h-2">
-        <div
-          className="h-full bg-brand"
-          style={{ width: `${displayVol * 100}%` }}
-        />
-      </div>
-      <div
-        className="absolute w-3 h-3 bg-white rounded-full shadow-sm -translate-x-1.5 transition-transform scale-0 group-hover:scale-100"
-        style={{ left: `${displayVol * 100}%` }}
+    <div ref={ref} className={clsx('w-24', className)} {...props}>
+      <Slider
+        value={[localValue]}
+        min={0}
+        max={100}
+        step={1}
+        label="Volume"
+        onValueChange={(vals: number[]) => {
+          setLocalValue(vals[0]);
+          setVolume(vals[0] / 100);
+        }}
+        className="!py-2"
       />
     </div>
   );

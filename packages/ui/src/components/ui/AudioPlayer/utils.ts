@@ -7,19 +7,4 @@ export const formatTime = (seconds: number): string => {
   return `${m}:${s}`;
 };
 
-export const hashString = (str: string) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++)
-    hash = (Math.imul(31, hash) + str.charCodeAt(i)) | 0;
-  return hash;
-};
-
-export const pseudoRandom = (seed: number) => {
-  let s = seed;
-  return () => {
-    s = Math.sin(s) * 10000;
-    return s - Math.floor(s);
-  };
-};
-
 export const GLOBAL_PLAY_EVENT = 'vayu-audioplayer-play';

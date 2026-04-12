@@ -9,13 +9,15 @@ import React, {
   useState,
   useRef,
   useEffect,
-  ReactNode,
   useId,
   useCallback,
   useMemo,
 } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { clsx } from 'clsx';
+import { useLockBodyScroll } from '../../../hooks/useLockBodyScroll';
+import { useOnClickOutside } from '../../../hooks/useOnClickOutside';
+import { useKeyPress } from '../../../hooks/useKeyPress';
 import type {
   SelectContextValue,
   SelectRootProps,
@@ -181,11 +183,17 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
 
   const filteredOptions = useMemo(() => {
     if (onSearch) return asyncOptions;
-    if (!search) return Array.from(optionsMap.current.values());
+    const selectedLabel =
+      !multiple && value !== undefined
+        ? optionsMap.current.get(value as SingleValue)?.label
+        : undefined;
+    const searchIsSelectedLabel =
+      !!search && !!selectedLabel && search.toLowerCase() === selectedLabel.toLowerCase();
+    if (!search || searchIsSelectedLabel) return Array.from(optionsMap.current.values());
     return Array.from(optionsMap.current.values()).filter((option) =>
       option.label.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [onSearch, asyncOptions, search]);
+  }, [onSearch, asyncOptions, search, multiple, value]);
 
   const hasOptions = useMemo(() => {
     if (onSearch) {
@@ -259,34 +267,50 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
     }
   }, [onCreateOption, search, validateCreate, registerOption, handleValueChange, multiple]);
 
+  // Sync search based on open/close state
   useEffect(() => {
-    if (!multiple && value !== undefined) {
+    if (open) {
+      setSearch('');
+    } else if (!multiple && value !== undefined) {
       const label = optionsMap.current.get(value as SingleValue)?.label || String(value);
       setSearch(label);
-    } else if (!multiple && value === undefined) {
+    } else {
       setSearch('');
     }
-  }, [value, multiple]);
+  }, [open]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (!containerRef.current) return;
-      const isInsideTrigger = triggerRef.current?.contains(target);
-      const isInsideContent = contentRef.current?.contains(target);
-      if (!isInsideTrigger && !isInsideContent) {
-        setOpen(false);
-        if (!multiple && value !== undefined) {
-          const label = optionsMap.current.get(value as SingleValue)?.label || String(value);
-          setSearch(label);
-        } else {
-          setSearch('');
-        }
+  // Lock body scroll when dropdown is open
+  useLockBodyScroll(open);
+
+  // Close dropdown on outside click
+  useOnClickOutside(
+    [containerRef as React.RefObject<HTMLElement>, contentRef as React.RefObject<HTMLElement>],
+    useCallback(() => {
+      if (!open) return;
+      setOpen(false);
+      if (!multiple && value !== undefined) {
+        const label = optionsMap.current.get(value as SingleValue)?.label || String(value);
+        setSearch(label);
+      } else {
+        setSearch('');
       }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [open, value, multiple]);
+    }, [open, value, multiple]),
+  );
+
+  // Close dropdown on Escape key
+  useKeyPress(
+    'Escape',
+    useCallback(() => {
+      if (!open) return;
+      setOpen(false);
+      if (!multiple && value !== undefined) {
+        const label = optionsMap.current.get(value as SingleValue)?.label || String(value);
+        setSearch(label);
+      } else {
+        setSearch('');
+      }
+    }, [open, value, multiple]),
+  );
 
   return (
     <SelectContext.Provider

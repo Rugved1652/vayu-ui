@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { BigCalendar, CalendarEvent } from 'vayu-ui';
 
 function sampleEvents(): CalendarEvent[] {
@@ -70,14 +71,17 @@ function sampleEvents(): CalendarEvent[] {
 }
 
 export default function BigCalendarDemo() {
-  const events = sampleEvents();
+  const [events, setEvents] = useState(sampleEvents());
 
   return (
     <div className="flex flex-col not-prose gap-4 w-full">
       <BigCalendar
         events={events}
         onEventClick={(e) => alert(`Clicked: ${e.title}`)}
-        onDateClick={(d) => console.log('Date clicked:', d.toLocaleDateString())}
+        onDateClick={(d) => alert(`Date clicked: ${d.toLocaleString()}`)}
+        onEventRemove={(e) => {
+          setEvents((prev) => prev.filter((ev) => ev.id !== e.id));
+        }}
         className="min-h-[600px]"
       />
     </div>

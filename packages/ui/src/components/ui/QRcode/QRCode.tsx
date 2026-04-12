@@ -70,11 +70,23 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
     const resolvedBgColor = bgColor ?? 'var(--color-ground-50, #fafafa)';
     const resolvedFgColor = fgColor ?? 'var(--color-ground-950, #09090b)';
 
+    // Auto-upgrade error correction to 'H' when using a center image
+    const effectiveLevel: ErrorCorrectionLevel = useMemo(() => {
+      if (imageSettings && level !== 'H') {
+        console.warn(
+          `[QRCode] imageSettings requires error correction level 'H' for reliable scanning. ` +
+            `Upgrading from '${level}' to 'H'. Set level="H" explicitly to suppress this warning.`,
+        );
+        return 'H';
+      }
+      return level;
+    }, [imageSettings, level]);
+
     const { cells, numCells } = useMemo(() => {
       if (!value) return { cells: [] as boolean[][], numCells: 0 };
-      const matrix = encodeQR(value, level);
+      const matrix = encodeQR(value, effectiveLevel);
       return { cells: matrix, numCells: matrix.length };
-    }, [value, level]);
+    }, [value, effectiveLevel]);
 
     const margin = includeMargin ? 4 : 0;
     const viewBoxSize = numCells + margin * 2;
@@ -83,18 +95,50 @@ const QRCode = forwardRef<HTMLDivElement, QRCodeProps>(
     // Determine which cells to excavate (clear) for the center logo
     // Must be called before any early returns to satisfy Rules of Hooks
     const excavatedCells = useMemo(() => {
-      if (!imageSettings?.excavate || numCells === 0) return new Set<string>();
-      const imgW = (imageSettings.width / computedSize) * viewBoxSize;
-      const imgH = (imageSettings.height / computedSize) * viewBoxSize;
-      const startX = Math.floor((viewBoxSize - imgW) / 2) - margin;
-      const startY = Math.floor((viewBoxSize - imgH) / 2) - margin;
-      const endX = Math.ceil(startX + imgW);
-      const endY = Math.ceil(startY + imgH);
+      if (numCells === 0 || !imageSettings) return new Set<string>();
+
+      // Fix B: Default excavate to true when imageSettings is provided
+      const shouldExcavate = imageSettings.excavate ?? true;
+      if (!shouldExcavate) return new Set<string>();
+
+      const imgW = (imageSettings!.width / computedSize) * viewBoxSize;
+      const imgH = (imageSettings!.height / computedSize) * viewBoxSize;
+
+      // Fix E: Image size validation
+      const imgArea = imgW * imgH;
+      const qrArea = numCells * numCells;
+      const coverageRatio = imgArea / qrArea;
+      if (coverageRatio > 0.2) {
+        console.warn(
+          `[QRCode] Center image covers ${(coverageRatio * 100).toFixed(1)}% of QR area. ` +
+            `Recommended maximum is 20%. Consider reducing image size.`,
+        );
+      }
+
+      // Fix C: Buffer zone around the excavated area
+      const buffer = imageSettings?.excavateMargin ?? 1;
+      const rawStartX = Math.floor((viewBoxSize - imgW) / 2) - margin;
+      const rawStartY = Math.floor((viewBoxSize - imgH) / 2) - margin;
+      const startX = rawStartX - buffer;
+      const startY = rawStartY - buffer;
+      const endX = rawStartX + Math.ceil(imgW) + buffer;
+      const endY = rawStartY + Math.ceil(imgH) + buffer;
+
+      // Fix D: Protect finder patterns from excavation
+      const FINDER_SIZE = 9;
+      const isInFinderZone = (r: number, c: number): boolean => {
+        if (r < FINDER_SIZE && c < FINDER_SIZE) return true;
+        if (r < FINDER_SIZE && c >= numCells - FINDER_SIZE) return true;
+        if (r >= numCells - FINDER_SIZE && c < FINDER_SIZE) return true;
+        return false;
+      };
 
       const set = new Set<string>();
       for (let r = Math.max(0, startY); r < Math.min(numCells, endY); r++) {
         for (let c = Math.max(0, startX); c < Math.min(numCells, endX); c++) {
-          set.add(`${r},${c}`);
+          if (!isInFinderZone(r, c)) {
+            set.add(`${r},${c}`);
+          }
         }
       }
       return set;

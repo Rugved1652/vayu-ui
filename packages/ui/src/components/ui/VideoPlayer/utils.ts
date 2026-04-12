@@ -10,7 +10,7 @@ export function formatTime(seconds: number): string {
 }
 
 export function isHLS(src: string): boolean {
-  return src.includes(".m3u8") || src.includes("m3u8");
+  return /\.m3u8(\?.*)?$/i.test(src);
 }
 
 export function shuffleArray<T>(array: T[]): T[] {

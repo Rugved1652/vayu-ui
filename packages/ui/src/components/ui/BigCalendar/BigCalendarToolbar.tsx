@@ -35,26 +35,28 @@ export const Toolbar = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>
     return (
       <div
         ref={ref}
+        role="toolbar"
+        aria-label="Calendar navigation"
         className={clsx(
-          'flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-3 border-b border-ground-200 dark:border-ground-800',
+          'flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-3 border-b border-border',
           className,
         )}
         {...props}
       >
         {/* Nav */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" role="group" aria-label="Date navigation">
           <button
             type="button"
             onClick={() => navigate('today')}
-            className="px-3 py-1.5 text-sm font-medium font-secondary rounded-md border border-ground-300 dark:border-ground-700 hover:bg-ground-100 dark:hover:bg-ground-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+            className="px-3 py-1.5 text-sm font-medium font-secondary rounded-control border border-border hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
           >
             Today
           </button>
           <button
             type="button"
             onClick={() => navigate('prev')}
-            aria-label="Previous"
-            className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-ground-100 dark:hover:bg-ground-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+            aria-label="Previous period"
+            className="flex items-center justify-center w-8 h-8 rounded-control hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
           >
             <svg
               width="16"
@@ -65,6 +67,7 @@ export const Toolbar = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>
               strokeLinecap="round"
               strokeLinejoin="round"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path d="M15 18l-6-6 6-6" />
             </svg>
@@ -72,8 +75,8 @@ export const Toolbar = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>
           <button
             type="button"
             onClick={() => navigate('next')}
-            aria-label="Next"
-            className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-ground-100 dark:hover:bg-ground-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+            aria-label="Next period"
+            className="flex items-center justify-center w-8 h-8 rounded-control hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
           >
             <svg
               width="16"
@@ -84,28 +87,35 @@ export const Toolbar = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>
               strokeLinecap="round"
               strokeLinejoin="round"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path d="M9 18l6-6-6-6" />
             </svg>
           </button>
-          <h2 className="text-lg font-semibold font-primary text-ground-900 dark:text-white ml-2">
+          <h2 className="text-lg font-semibold font-primary text-surface-content ml-2" aria-live="polite">
             {title}
           </h2>
         </div>
 
         {/* View Switcher */}
-        <div className="flex rounded-lg border border-ground-300 dark:border-ground-700 overflow-hidden">
+        <div
+          role="radiogroup"
+          aria-label="Calendar view"
+          className="flex rounded-control border border-border overflow-hidden"
+        >
           {views.map((v) => (
             <button
               key={v}
               type="button"
+              role="radio"
+              aria-checked={view === v}
               onClick={() => setView(v)}
               className={clsx(
                 'px-3 py-1.5 text-sm font-medium font-secondary capitalize transition-colors',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:z-10',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:z-10',
                 view === v
-                  ? 'bg-primary-500 text-white'
-                  : 'bg-white dark:bg-ground-900 text-ground-700 dark:text-ground-300 hover:bg-ground-100 dark:hover:bg-ground-800',
+                  ? 'bg-brand text-brand-content'
+                  : 'bg-surface text-surface-content hover:bg-muted',
               )}
             >
               {v}

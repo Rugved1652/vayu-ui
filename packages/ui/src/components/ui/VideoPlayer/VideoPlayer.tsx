@@ -131,6 +131,7 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
     const videoRef = useRef<HTMLVideoElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const hlsRef = useRef<Hls | null>(null);
+    const recoveryAttemptsRef = useRef(0);
 
     // Track when video element is mounted (via registerVideo callback)
     const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
@@ -206,19 +207,32 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
       setIsLoading(true);
       setAvailableQualities([]);
       setSelectedQuality(-1);
+      recoveryAttemptsRef.current = 0;
 
       if (isHLS(currentTrack.src)) {
         if (Hls.isSupported()) {
-          const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+          const hls = new Hls({
+            enableWorker: true,
+            lowLatencyMode: true,
+            maxBufferLength: 30,
+            maxMaxBufferLength: 60,
+            fragLoadingMaxRetry: 4,
+            levelLoadingMaxRetry: 4,
+            manifestLoadingMaxRetry: 3,
+            startLevel: -1,
+          });
           hls.loadSource(currentTrack.src);
           hls.attachMedia(video);
 
           hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            setIsLoading(false);
             const qualities: VideoQuality[] = hls.levels.map((level) => ({
               height: level.height,
               bitrate: level.bitrate,
-              label: level.height ? `${level.height}p` : "Auto",
+              label: level.height
+                ? `${level.height}p`
+                : level.bitrate
+                  ? `${Math.round(level.bitrate / 1000)}kbps`
+                  : "Unknown",
             }));
             setAvailableQualities(qualities);
             if (autoPlay) video.play().catch(() => {});
@@ -228,20 +242,37 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
             setSelectedQuality(data.level);
           });
 
+          hls.on(Hls.Events.FRAG_LOADED, () => {
+            recoveryAttemptsRef.current = 0;
+            setIsLoading(false);
+          });
+
+          const MAX_RECOVERY_ATTEMPTS = 3;
           hls.on(Hls.Events.ERROR, (_: unknown, data: any) => {
             if (!data.fatal) return;
+
+            if (recoveryAttemptsRef.current >= MAX_RECOVERY_ATTEMPTS) {
+              setError("Playback failed — max recovery attempts reached");
+              hls.destroy();
+              hlsRef.current = null;
+              onError?.("Playback failed — max recovery attempts reached");
+              return;
+            }
+
+            recoveryAttemptsRef.current++;
             switch (data.type) {
               case Hls.ErrorTypes.NETWORK_ERROR:
-                setError("Network error - attempting recovery...");
+                setError(`Network error — retrying (${recoveryAttemptsRef.current}/${MAX_RECOVERY_ATTEMPTS})...`);
                 hls.startLoad();
                 break;
               case Hls.ErrorTypes.MEDIA_ERROR:
-                setError("Media error - attempting recovery...");
+                setError(`Media error — retrying (${recoveryAttemptsRef.current}/${MAX_RECOVERY_ATTEMPTS})...`);
                 hls.recoverMediaError();
                 break;
               default:
                 setError(`Playback error: ${data.type}`);
                 hls.destroy();
+                hlsRef.current = null;
                 break;
             }
             onError?.(`Playback error: ${data.type}`);

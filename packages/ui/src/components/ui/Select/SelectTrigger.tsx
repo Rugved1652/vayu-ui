@@ -87,6 +87,8 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
 
     const getLabel = (val: SingleValue) => optionsMap.current.get(val)?.label || String(val);
     const selectedArray = (multiple ? value || [] : []) as MultiValue;
+    const selectedLabel = !multiple && value !== undefined ? getLabel(value as SingleValue) : null;
+    const showSelectedLabel = !open && selectedLabel;
 
     return (
       <div
@@ -103,6 +105,9 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
           className,
         )}
       >
+        {showSelectedLabel && (
+          <span className="truncate">{selectedLabel}</span>
+        )}
         {multiple &&
           selectedArray.map((val) => (
             <span
@@ -136,10 +141,11 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
             if (!isProgrammaticFocus.current) setOpen(true);
           }}
           onKeyDown={handleKeyDown}
-          placeholder={selectedArray.length > 0 ? '' : placeholder}
+          placeholder={selectedArray.length > 0 ? '' : showSelectedLabel ? '' : placeholder}
           className={clsx(
             'flex-1 bg-transparent outline-none min-w-[20px]',
             multiple && selectedArray.length > 0 && 'py-0.5',
+            showSelectedLabel && 'absolute opacity-0 w-0 min-w-0',
           )}
         />
         {isLoading ? (

@@ -164,7 +164,7 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
         onMouseLeave={handleMouseLeave}
         onKeyDown={handleKeyDown}
         className={cn(
-          "px-3 py-2 w-full mx-1 rounded-control flex items-center justify-between gap-3",
+          "px-3 py-2 w-full  rounded-control flex items-center justify-between gap-3",
           "text-sm duration-(--transition-fast) cursor-pointer",
           "focus:outline-none",
           "focus-visible:bg-muted/80 focus-visible:text-brand",
