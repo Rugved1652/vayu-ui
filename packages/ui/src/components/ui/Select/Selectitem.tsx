@@ -3,7 +3,7 @@
 
 'use client';
 
-import React, { useEffect, forwardRef } from 'react';
+import React, { useEffect, useLayoutEffect, forwardRef } from 'react';
 import { Check } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useSelect } from './Select';
@@ -28,10 +28,9 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(
       : value === itemValue;
     const label = typeof children === 'string' ? children : String(itemValue);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       registerOption({ value: itemValue, label, disabled });
-      return () => unregisterOption(itemValue);
-    }, [itemValue, label, disabled, registerOption, unregisterOption]);
+    }, [itemValue, label, disabled, registerOption]);
 
     if (!onSearch && search) {
       const contentString = typeof children === 'string' ? children : '';

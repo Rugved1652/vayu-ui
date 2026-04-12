@@ -85,7 +85,7 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
       }
     };
 
-    const getLabel = (val: SingleValue) => optionsMap.current.get(val)?.label || String(val);
+    const getLabel = (val: SingleValue) => optionsMap.current.get(val)?.label;
     const selectedArray = (multiple ? value || [] : []) as MultiValue;
     const selectedLabel = !multiple && value !== undefined ? getLabel(value as SingleValue) : null;
     const showSelectedLabel = !open && selectedLabel;

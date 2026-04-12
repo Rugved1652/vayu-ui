@@ -35,7 +35,7 @@ const TimepickerContent: React.FC<TimepickerContentProps> = ({ children, classNa
 
       content.style.top = `${top}px`;
       content.style.left = `${rect.left}px`;
-      content.style.minWidth = `${Math.max(rect.width, 280)}px`;
+      content.style.minWidth = `${rect.width}px`;
     };
 
     updatePosition();

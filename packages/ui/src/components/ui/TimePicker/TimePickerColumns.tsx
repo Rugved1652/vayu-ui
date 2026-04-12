@@ -98,7 +98,7 @@ const TimeColumn: React.FC<TimeColumnProps> = ({ label, children, className }) =
         aria-label={label}
         data-timepicker-column
         onKeyDown={handleKeyDown}
-        className="relative h-48 overflow-y-auto custom-scrollbar rounded-control border border-border bg-surface"
+        className="relative w-16 h-48 overflow-y-auto custom-scrollbar rounded-control border border-border bg-surface"
       >
         {children}
       </div>

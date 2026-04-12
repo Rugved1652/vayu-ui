@@ -103,8 +103,9 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
   }, []);
 
   const registerOption = useCallback((option: OptionData) => {
+    const isNew = !optionsMap.current.has(option.value);
     optionsMap.current.set(option.value, option);
-    setOptionCount((c) => c + 1);
+    if (isNew) setOptionCount((c) => c + 1);
   }, []);
 
   const unregisterOption = useCallback((val: SingleValue) => {

@@ -165,7 +165,17 @@ const TreeNodeItem: React.FC<TreeNodeItemProps> = ({ node, level = 0 }) => {
           moveFocus(visibleIds.length - 1);
           break;
         }
-        case 'Enter':
+        case 'Enter': {
+          e.preventDefault();
+          if (hasChildren) {
+            toggleExpand(node.id);
+          } else if (mode === 'normal') {
+            handleSelect(node);
+          } else if (mode === 'checkbox') {
+            handleCheck(node, checkState !== 'checked');
+          }
+          break;
+        }
         case ' ': {
           e.preventDefault();
           if (mode === 'normal') {
