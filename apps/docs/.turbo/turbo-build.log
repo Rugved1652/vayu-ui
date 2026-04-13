@@ -2,22 +2,29 @@
 > vayu-ui-docs@0.0.0 build
 > next build
 
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/rugvedpatel/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /Users/rugvedpatel/Desktop/Workspace/VedUI/package-lock.json
+
 ▲ Next.js 16.1.6 (Turbopack)
 
-[MDX] generated files in 68.69230000000016ms
+[MDX] generated files in 13.951208999999835ms
   Creating an optimized production build ...
-✓ Compiled successfully in 48s
+✓ Compiled successfully in 15.5s
   Running TypeScript ...
-  Collecting page data using 11 workers ...
-  Generating static pages using 11 workers (0/327) ...
-  Generating static pages using 11 workers (81/327) 
-  Generating static pages using 11 workers (163/327) 
-  Generating static pages using 11 workers (245/327) 
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/327) ...
+  Generating static pages using 7 workers (81/327) 
+  Generating static pages using 7 workers (163/327) 
+  Generating static pages using 7 workers (245/327) 
 Error reading localStorage key: demo-key ReferenceError: localStorage is not defined
-    at <unknown> (C:\vayu-ui\apps\docs\.next\server\chunks\ssr\_195203bf._.js:1:51643)
-    at <unknown> (C:\vayu-ui\apps\docs\.next\server\chunks\ssr\_195203bf._.js:1:51627)
-    at d (C:\vayu-ui\apps\docs\.next\server\chunks\ssr\_195203bf._.js:1:52094)
-✓ Generating static pages using 11 workers (327/327) in 20.5s
+    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_89ed0ef2._.js:1:41863)
+    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_89ed0ef2._.js:1:41847)
+    at d (.next/server/chunks/ssr/Desktop_Workspace_VedUI_89ed0ef2._.js:1:42314)
+✓ Generating static pages using 7 workers (327/327) in 4.1s
   Finalizing page optimization ...
 
 Route (app)

@@ -2,7 +2,7 @@
 // Public API
 
 import FileUploadComponent from './FileUpload';
-import DropZone from './Dropzone';
+import DropZone from './DropZone';
 import DropZoneContent from './DropZoneContent';
 import ErrorMessage from './FileUploadErrorMessage';
 import List from './FileUploadList';
