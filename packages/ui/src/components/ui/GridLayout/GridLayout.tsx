@@ -141,11 +141,11 @@ function GridLayoutRoot({
   layoutRef.current = layout;
 
   /* Stable refs for global listener callbacks */
-  const moveDragRef = useRef<(x: number, y: number) => void>(() => {});
-  const endDragRef = useRef<() => void>(() => {});
-  const moveResizeRef = useRef<(x: number, y: number) => void>(() => {});
-  const endResizeRef = useRef<() => void>(() => {});
-  const cancelRef = useRef<() => void>(() => {});
+  const moveDragRef = useRef<(x: number, y: number) => void>(() => { });
+  const endDragRef = useRef<() => void>(() => { });
+  const moveResizeRef = useRef<(x: number, y: number) => void>(() => { });
+  const endResizeRef = useRef<() => void>(() => { });
+  const cancelRef = useRef<() => void>(() => { });
 
   /* ---- announce ---- */
   const announce = useCallback((msg: string) => {

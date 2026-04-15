@@ -1,10 +1,24 @@
 ---
 title: Select
-description: A flexible dropdown select with single, multi, grouped, searchable, and creatable modes.
+description: A flexible dropdown select with single, multi, async search, and creatable modes using compound components.
 ---
 
 import SelectDemo from '@/components/demos/select-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add select
+```
+
+```bash
+npx vayu-ui add -t select #with test case needs
+```
 
 ## Usage
 
@@ -16,57 +30,266 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
-    import Select from "@/components/ui/select"
+    {/* Single Select */}
+    <Select.Root value={value} onValueChange={setValue} label="Select Fruit">
+      <Select.Trigger placeholder="Choose a fruit..." />
+      <Select.Content>
+        <Select.List>
+          <Select.Item value="apple">Apple</Select.Item>
+          <Select.Item value="banana">Banana</Select.Item>
+          <Select.Item value="cherry">Cherry</Select.Item>
+        </Select.List>
+        <Select.NotFound />
+      </Select.Content>
+    </Select.Root>
 
-    // Single
-    <Select options={fruits} placeholder="Pick one…" searchable clearable />
+    {/* Multi Select */}
+    <Select.Root value={multiValue} onValueChange={setMultiValue} label="Technologies" multiple>
+      <Select.Trigger placeholder="Add technologies..." />
+      <Select.Content>
+        <Select.List>
+          <Select.Item value="react">React</Select.Item>
+          <Select.Item value="nextjs">Next.js</Select.Item>
+          <Select.Item value="vue">Vue</Select.Item>
+          <Select.Item value="svelte">Svelte</Select.Item>
+        </Select.List>
+        <Select.NotFound />
+      </Select.Content>
+    </Select.Root>
 
-    // Multi
-    <Select options={techs} multiple placeholder="Choose…" />
+    {/* Async Search */}
+    <Select.Root
+      value={asyncValue}
+      onValueChange={setAsyncValue}
+      label="Search Users"
+      onSearch={handleSearch}
+      searchDebounce={300}
+      minSearchLength={1}
+    >
+      <Select.Trigger placeholder="Type to search users..." showSearchIcon />
+      <Select.Content>
+        <Select.Loading />
+        <Select.SearchHint />
+        <Select.AsyncOptions />
+        <Select.NotFound>No users found</Select.NotFound>
+      </Select.Content>
+    </Select.Root>
+
+    {/* Creatable */}
+    <Select.Root
+      value={value}
+      onValueChange={setValue}
+      label="Select or Create Skill"
+      creatable
+      onCreateOption={handleCreate}
+      validateCreate={(val) => val.length >= 2 || 'Too short'}
+      createText="Add Skill"
+    >
+      <Select.Trigger placeholder="Select or create a skill..." />
+      <Select.Content>
+        <Select.List>
+          <Select.Item value="frontend">Frontend</Select.Item>
+          <Select.Item value="backend">Backend</Select.Item>
+        </Select.List>
+        <Select.CreateButton />
+        <Select.NotFound />
+        <Select.Error type="create" />
+      </Select.Content>
+    </Select.Root>
+
+    {/* Error State */}
+    <Select.Root label="Required Field" error="This field is required">
+      <Select.Trigger placeholder="Select an option..." />
+      <Select.Content>
+        <Select.List>
+          <Select.Item value="1">Option 1</Select.Item>
+          <Select.Item value="2">Option 2</Select.Item>
+        </Select.List>
+      </Select.Content>
+    </Select.Root>
     ```
 
   </Tab>
 </Tabs>
 
-## Features
+## Anatomy
 
-- Single and multi-select modes
-- Searchable dropdown with keyboard navigation
-- Grouped options with section headers
-- Creatable — let users add new options on the fly
-- Async — load options from an API with debounce
-- Error, disabled, and loading states
-- Custom sizes (`sm`, `md`, `lg`) and variants (`default`, `outline`, `filled`)
+```tsx
+import { Select } from 'vayu-ui';
+
+{/* Basic Structure */}
+<Select.Root value={value} onValueChange={setValue} label="Label">
+  <Select.Trigger placeholder="Choose..." />
+  <Select.Content>
+    <Select.List>
+      <Select.Item value="opt1">Option 1</Select.Item>
+      <Select.Item value="opt2">Option 2</Select.Item>
+    </Select.List>
+    <Select.Loading />
+    <Select.SearchHint />
+    <Select.AsyncOptions />
+    <Select.CreateButton />
+    <Select.NotFound>No results</Select.NotFound>
+    <Select.Error type="search" />
+    <Select.Footer>Footer content</Select.Footer>
+  </Select.Content>
+</Select.Root>;
+```
+
+- **Select.Root** — Root container. Manages selection state, search, and provides context to children.
+- **Select.Trigger** — Button with search input and multi-value chips. Toggles the dropdown open/close.
+- **Select.Content** — Portal-based dropdown with automatic positioning above or below the trigger.
+- **Select.List** — Hybrid renderer for static items and async options. Wraps `Select.Item` elements.
+- **Select.Item** — Individual selectable option with check icon for selected state.
+- **Select.AsyncOptions** — Renders options returned from async search results.
+- **Select.CreateButton** — Button to create a new option when `creatable` is enabled.
+- **Select.Loading** — Loading spinner shown during async search.
+- **Select.SearchHint** — Hint text shown when search input is shorter than `minSearchLength`.
+- **Select.NotFound** — Empty state displayed when no options match the search.
+- **Select.Error** — Error message for failed search or create operations.
+- **Select.Footer** — Optional footer content at the bottom of the dropdown.
+
+## Accessibility
+
+- **Keyboard Support**:
+  - `Enter` / `Space` — Select the focused option or open the dropdown.
+  - `ArrowDown` — Move focus to the next option. Wraps to first. Opens dropdown if closed.
+  - `ArrowUp` — Move focus to the previous option. Wraps to last. Opens dropdown if closed.
+  - `Escape` — Close the dropdown and return focus to the trigger input.
+  - `Tab` — Move focus between the trigger input and options. `Shift+Tab` for reverse.
+  - `Backspace` — Remove the last selected value in multi-select mode when search input is empty.
+- **ARIA Attributes**:
+  - `role="listbox"` on `Select.Content`.
+  - `role="option"` on each `Select.Item` and `Select.CreateButton`.
+  - `aria-selected` on `Select.Item` reflects the selected state.
+  - `data-disabled` on `Select.Item` when the option is disabled.
+  - Label linked to input via `htmlFor` and generated `id`.
+- **Focus Behavior**:
+  - Clicking the trigger focuses the search input and opens the dropdown.
+  - Arrow keys move focus between options within the listbox.
+  - Closing the dropdown returns focus to the trigger input.
+  - Programmatic focus is tracked to prevent unwanted dropdown open on refocus.
+
+## Screen reader behavior
+
+When a user focuses the select trigger, the screen reader announces the label and the currently selected value or placeholder. When the dropdown opens, the listbox role is announced along with the number of available options. Each option is announced with its label and selected state via `aria-selected`. Disabled options are announced as unavailable. When no results are found, the `Select.NotFound` content is announced. In multi-select mode, selecting or removing values is announced. The `Select.Loading` and `Select.SearchHint` states are announced when they appear during async search.
+
+## Component Folder Structure
+
+```
+Select/
+├── Select.tsx              # Root component with context provider and state management
+├── SelectTrigger.tsx       # Trigger with search input and multi-value chips
+├── SelectContent.tsx       # Portal-based dropdown with auto-positioning
+├── Selectitem.tsx          # Individual selectable option
+├── SelectCreateButton.tsx  # Creatable option button with validation
+├── SelectOptionList.tsx    # Static and async list renderers
+├── SelectStates.tsx        # Loading, NotFound, SearchHint, Error, Footer states
+├── types.ts                # TypeScript type definitions
+├── index.ts                # Re-exports all components and types
+└── README.md               # Component usage reference
+```
 
 ## Props
 
-| Prop          | Type                                                 | Default       | Description                 |
-| :------------ | :--------------------------------------------------- | :------------ | :-------------------------- |
-| `options`     | `SelectOption[]`                                     | `[]`          | Available options           |
-| `value`       | `string \| number \| null` or `(string \| number)[]` | —             | Controlled value            |
-| `onChange`    | `(val) => void`                                      | —             | Change handler              |
-| `multiple`    | `boolean`                                            | `false`       | Enable multi-select         |
-| `placeholder` | `string`                                             | `"Select..."` | Placeholder text            |
-| `size`        | `'sm' \| 'md' \| 'lg'`                               | `'md'`        | Trigger size                |
-| `variant`     | `'default' \| 'outline' \| 'filled'`                 | `'default'`   | Visual variant              |
-| `searchable`  | `boolean`                                            | `false`       | Show search input           |
-| `clearable`   | `boolean`                                            | `false`       | Show clear button           |
-| `creatable`   | `boolean`                                            | `false`       | Allow creating options      |
-| `disabled`    | `boolean`                                            | `false`       | Disable interaction         |
-| `error`       | `boolean`                                            | `false`       | Show error styling          |
-| `errorText`   | `string`                                             | —             | Error message               |
-| `label`       | `string`                                             | —             | Accessible label            |
-| `maxSelected` | `number`                                             | —             | Max selections (multi only) |
+### Select.Root
 
-### SelectOption
+| Prop              | Type                                                  | Default         | Description                                        |
+| :---------------- | :---------------------------------------------------- | :-------------- | :------------------------------------------------- |
+| `children`        | `ReactNode`                                           | —               | Select subcomponents.                              |
+| `value`           | `SelectValue`                                         | —               | Controlled value.                                  |
+| `defaultValue`    | `SelectValue`                                         | —               | Uncontrolled initial value.                        |
+| `onValueChange`   | `(value: SelectValue) => void`                        | —               | Callback when value changes.                       |
+| `label`           | `string`                                              | —               | Accessible label for the select.                   |
+| `error`           | `string`                                              | —               | Error message displayed below the trigger.         |
+| `multiple`        | `boolean`                                             | `false`         | Enable multi-select mode.                          |
+| `className`       | `string`                                              | —               | Additional CSS classes.                            |
+| `onSearch`        | `(searchValue: string) => Promise<OptionData[]>`      | —               | Async search handler. Enables async mode.          |
+| `searchDebounce`  | `number`                                              | `300`           | Debounce delay in ms for async search.             |
+| `minSearchLength` | `number`                                              | `1`             | Minimum characters before triggering search.       |
+| `isLoading`       | `boolean`                                             | —               | External loading state override.                   |
+| `creatable`       | `boolean`                                             | `false`         | Enable option creation.                            |
+| `onCreateOption`  | `(inputValue: string) => Promise<OptionData \| null>` | —               | Handler to create a new option.                    |
+| `isCreating`      | `boolean`                                             | —               | External creating state override.                  |
+| `createText`      | `string`                                              | `"Create option"` | Text for the create button.                      |
+| `validateCreate`  | `(inputValue: string) => boolean \| string`           | —               | Validation function. Returns `true` or error text. |
 
-```tsx
-interface SelectOption {
-  label: string;
-  value: string | number;
-  disabled?: boolean;
-  icon?: React.ReactNode;
-  description?: string;
-  group?: string;
-}
-```
+### Select.Trigger
+
+| Prop            | Type      | Default | Description                          |
+| :-------------- | :-------- | :------ | :----------------------------------- |
+| `placeholder`   | `string`  | —       | Placeholder text for the input.      |
+| `showSearchIcon` | `boolean` | `false` | Show a search icon in the trigger.   |
+| `className`     | `string`  | —       | Additional CSS classes.              |
+
+### Select.Content
+
+| Prop        | Type        | Default | Description                        |
+| :---------- | :---------- | :------ | :--------------------------------- |
+| `children`  | `ReactNode` | —       | Dropdown content subcomponents.    |
+| `className` | `string`    | —       | Additional CSS classes.            |
+
+### Select.Item
+
+| Prop        | Type             | Default | Description                  |
+| :---------- | :--------------- | :------ | :--------------------------- |
+| `value`     | `string \| number` | —     | Unique value. Required.      |
+| `children`  | `ReactNode`      | —       | Option label content.        |
+| `disabled`  | `boolean`        | `false` | Disable selection.           |
+| `className` | `string`         | —       | Additional CSS classes.      |
+
+### Select.List
+
+| Prop        | Type        | Default | Description                               |
+| :---------- | :---------- | :------ | :---------------------------------------- |
+| `children`  | `ReactNode` | —       | `Select.Item` elements for static options. |
+| `className` | `string`    | —       | Additional CSS classes.                   |
+
+### Select.AsyncOptions
+
+| Prop        | Type     | Default | Description                  |
+| :---------- | :------- | :------ | :--------------------------- |
+| `className` | `string` | —       | Additional CSS classes.      |
+
+### Select.CreateButton
+
+| Prop        | Type        | Default | Description                     |
+| :---------- | :---------- | :------ | :------------------------------ |
+| `children`  | `ReactNode` | —       | Custom button label.            |
+| `className` | `string`    | —       | Additional CSS classes.         |
+
+### Select.Loading
+
+| Prop        | Type        | Default         | Description              |
+| :---------- | :---------- | :-------------- | :----------------------- |
+| `children`  | `ReactNode` | `"Searching..."` | Custom loading text.    |
+| `className` | `string`    | —               | Additional CSS classes.  |
+
+### Select.NotFound
+
+| Prop        | Type        | Default              | Description              |
+| :---------- | :---------- | :------------------- | :----------------------- |
+| `children`  | `ReactNode` | `"No results found"` | Custom empty text.      |
+| `className` | `string`    | —                    | Additional CSS classes.  |
+
+### Select.SearchHint
+
+| Prop        | Type        | Default | Description              |
+| :---------- | :---------- | :------ | :----------------------- |
+| `children`  | `ReactNode` | —       | Custom hint text.        |
+| `className` | `string`    | —       | Additional CSS classes.  |
+
+### Select.Error
+
+| Prop        | Type                        | Default    | Description                          |
+| :---------- | :-------------------------- | :--------- | :----------------------------------- |
+| `type`      | `'search' \| 'create'`      | `'search'` | Which error state to display.        |
+| `children`  | `ReactNode`                 | —          | Custom error content.                |
+| `className` | `string`                    | —          | Additional CSS classes.              |
+
+### Select.Footer
+
+| Prop        | Type        | Default | Description              |
+| :---------- | :---------- | :------ | :----------------------- |
+| `children`  | `ReactNode` | —       | Footer content.          |
+| `className` | `string`    | —       | Additional CSS classes.  |

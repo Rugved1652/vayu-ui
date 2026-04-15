@@ -6,6 +6,20 @@ description: A full-featured calendar with month, week, and day views.
 import BigCalendarDemo from '@/components/demos/bigcalendar-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add bigcalendar
+```
+
+```bash
+npx vayu-ui add -t bigcalendar #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
@@ -16,18 +30,6 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { BigCalendar, CalendarEvent } from "@/components/ui/bigcalendar"
-
-    const events: CalendarEvent[] = [
-      {
-        id: 1,
-        title: "Team Standup",
-        start: new Date(2026, 1, 16, 9, 0),
-        end: new Date(2026, 1, 16, 9, 30),
-        color: "blue",
-      },
-    ];
-
     <BigCalendar
       events={events}
       defaultView="month"
@@ -35,55 +37,132 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
       onDateClick={(d) => console.log(d)}
     />
     ```
-
   </Tab>
 </Tabs>
 
-## Features
+## Anatomy
 
-- **3 Views**: Month, Week, Day — switch with built-in toolbar
-- **Events**: Color-coded, multi-day, all-day, overflow indicators
-- **Navigation**: Today / Prev / Next with keyboard support
-- **Compound API**: Override Toolbar, MonthView, WeekView, DayView individually
-- **Custom Renderer**: Pass `renderEvent` for fully custom event rendering
-- **Zero Dependencies**: Pure React + CSS Grid, no third-party calendar library
+```tsx
+<BigCalendar events={events} defaultView="month">
+  <BigCalendar.Toolbar />
+  <BigCalendar.MonthView />
+  <BigCalendar.WeekView />
+  <BigCalendar.DayView />
+  <BigCalendar.Event event={event} />
+</BigCalendar>
+```
 
-## BigCalendar Props
+- **BigCalendar** — Root container. Manages date, view state, and provides context to all subcomponents.
+- **BigCalendar.Toolbar** — Navigation bar with Today/Prev/Next buttons and view switcher (Month/Week/Day).
+- **BigCalendar.MonthView** — Monthly grid displaying days and events with overflow indicators.
+- **BigCalendar.WeekView** — Time-grid view showing hourly slots across a seven-day column layout.
+- **BigCalendar.DayView** — Single-day time grid with hourly slots and all-day event section.
+- **BigCalendar.Event** — Individual event card with optional remove button and color coding.
 
-| Prop           | Type                                  | Default      | Description             |
-| :------------- | :------------------------------------ | :----------- | :---------------------- |
-| `events`       | `CalendarEvent[]`                     | `[]`         | Events to display       |
-| `defaultDate`  | `Date`                                | `new Date()` | Initial date            |
-| `date`         | `Date`                                | —            | Controlled current date |
-| `defaultView`  | `CalendarView`                        | `'month'`    | Initial view            |
-| `view`         | `CalendarView`                        | —            | Controlled view         |
-| `onDateChange` | `(date: Date) => void`                | —            | Navigation callback     |
-| `onViewChange` | `(view: CalendarView) => void`        | —            | View switch callback    |
-| `onEventClick` | `(event: CalendarEvent) => void`      | —            | Event click handler     |
-| `onDateClick`  | `(date: Date) => void`                | —            | Date cell click handler |
-| `weekStartsOn` | `0 \| 1`                              | `0`          | 0 = Sunday, 1 = Monday  |
-| `renderEvent`  | `(event: CalendarEvent) => ReactNode` | —            | Custom event renderer   |
+## Accessibility
 
-## CalendarEvent
+### Keyboard Support
 
-| Field         | Type               | Required | Description                                                  |
-| :------------ | :----------------- | :------- | :----------------------------------------------------------- |
-| `id`          | `string \| number` | ✅       | Unique identifier                                            |
-| `title`       | `string`           | ✅       | Event title                                                  |
-| `start`       | `Date`             | ✅       | Start date/time                                              |
-| `end`         | `Date`             | ✅       | End date/time                                                |
-| `color`       | `string`           | —        | `blue`, `green`, `red`, `amber`, `purple`, `pink`, `primary` |
-| `allDay`      | `boolean`          | —        | All-day event                                                |
-| `description` | `string`           | —        | Optional description                                         |
+| Key             | View       | Action                                          |
+| :-------------- | :--------- | :---------------------------------------------- |
+| `ArrowLeft`     | Month      | Move focus to the previous day.                 |
+| `ArrowRight`    | Month      | Move focus to the next day.                     |
+| `ArrowUp`       | Month      | Move focus to the day one row above.            |
+| `ArrowDown`     | Month      | Move focus to the day one row below.            |
+| `ArrowLeft`     | Week       | Move focus to the previous column (day).        |
+| `ArrowRight`    | Week       | Move focus to the next column (day).            |
+| `ArrowUp`       | Week       | Move focus to the previous hour slot.           |
+| `ArrowDown`     | Week       | Move focus to the next hour slot.               |
+| `ArrowUp`       | Day        | Move focus to the previous hour slot.           |
+| `ArrowDown`     | Day        | Move focus to the next hour slot.               |
+| `Enter` / `Space` | All     | Select the focused cell (triggers `onDateClick` and switches to day view in Month). |
+| `Enter` / `Space` | Event   | Activate the focused event (triggers `onEventClick`). |
 
-## Event Colors
+### ARIA Attributes
 
-| Color     | Preview          |
-| :-------- | :--------------- |
-| `blue`    | 🔵 Blue accent   |
-| `green`   | 🟢 Green accent  |
-| `red`     | 🔴 Red accent    |
-| `amber`   | 🟡 Amber accent  |
-| `purple`  | 🟣 Purple accent |
-| `pink`    | 🩷 Pink accent   |
-| `primary` | 🎨 Theme primary |
+| Element              | Role           | ARIA Attributes                                                                   |
+| :------------------- | :------------- | :-------------------------------------------------------------------------------- |
+| Root                 | `application`  | `aria-label="Calendar"`                                                           |
+| Toolbar              | `toolbar`      | `aria-label="Calendar navigation"`                                                |
+| Navigation buttons   | `group`        | `aria-label="Previous period"` / `aria-label="Next period"`                       |
+| Title display        | —              | `aria-live="polite"`                                                              |
+| View switcher        | `radiogroup`   | `aria-label="Calendar view"`                                                      |
+| View button          | `radio`        | `aria-checked={active}`                                                           |
+| Month grid           | `grid`         | `aria-label="January 2026"`                                                       |
+| Day headers          | `columnheader` | `aria-label={fullDayName}`                                                        |
+| Day cells            | `gridcell`     | `aria-label="Monday, January 6, 2026"`, `aria-selected` for today                 |
+| Week grid            | `grid`         | `aria-label="Week of Monday, January 6, 2026"`                                    |
+| Time labels          | `rowheader`    | Hour label text                                                                   |
+| Week/Day cells       | `gridcell`     | `aria-label="Monday, January 6, 2026 at 9:00 AM"`                                |
+| Event                | `button`       | `aria-label="{title}, all day"`                                                   |
+| Remove button        | —              | `aria-label="Remove {title}"`                                                     |
+| Overflow indicator   | —              | `aria-label="3 more events"`                                                      |
+
+### Focus Behavior
+
+- The first interactive cell in each view has `tabIndex={0}`; all other cells have `tabIndex={-1}`.
+- Arrow key navigation moves focus between cells using roving tabindex.
+- All toolbar buttons and events have visible `focus-visible:ring-2 focus-visible:ring-focus` indicators.
+- The view switcher uses `focus-visible:z-10` to ensure focus rings render above siblings.
+
+## Screen reader behavior
+
+When the calendar loads, screen readers announce the root as an application landmark labeled "Calendar". The toolbar announces as a toolbar region with navigation buttons. The current date and view title are announced via `aria-live="polite"` whenever the user navigates between periods or switches views. In the month view, day cells are announced with their full formatted date (e.g., "Monday, January 6, 2026"). In week and day views, time slots are announced with both date and hour (e.g., "Monday, January 6, 2026 at 9:00 AM"). Events are announced as buttons with their title and all-day status. The view switcher is announced as a radio group, allowing users to switch between Month, Week, and Day views with standard radio button semantics.
+
+## Component Folder Structure
+
+```
+BigCalendar/
+├── BigCalendar.tsx          # Root component with context provider and state management
+├── BigCalendarToolbar.tsx   # Navigation toolbar with Today/Prev/Next and view switcher
+├── BigCalendarMonthView.tsx # Monthly grid view with day cells and event indicators
+├── BigCalendarWeekView.tsx  # Seven-day time grid with hourly slots
+├── BigCalendarDayView.tsx   # Single-day time grid with all-day section
+├── BigCalendarEvent.tsx     # Event card with color coding and remove action
+├── hooks.ts                 # CalendarContext and useCalendar hook
+├── types.ts                 # TypeScript type definitions
+├── utils.ts                 # Date helpers, formatting, and color utilities
+├── index.ts                 # Re-exports all components and types
+└── README.md                # Component usage reference
+```
+
+## Props
+
+### BigCalendar
+
+| Prop             | Type                                   | Default      | Description                                    |
+| :--------------- | :------------------------------------- | :----------- | :--------------------------------------------- |
+| `events`         | `CalendarEvent[]`                      | `[]`         | Events to display.                             |
+| `defaultDate`    | `Date`                                 | `new Date()` | Initial date for uncontrolled usage.           |
+| `date`           | `Date`                                 | —            | Controlled current date.                       |
+| `defaultView`    | `'month' \| 'week' \| 'day'`           | `'month'`    | Initial view for uncontrolled usage.           |
+| `view`           | `'month' \| 'week' \| 'day'`           | —            | Controlled active view.                        |
+| `onDateChange`   | `(date: Date) => void`                 | —            | Called when the navigated date changes.        |
+| `onViewChange`   | `(view: CalendarView) => void`         | —            | Called when the active view changes.           |
+| `onEventClick`   | `(event: CalendarEvent) => void`       | —            | Called when an event is clicked.               |
+| `onDateClick`    | `(date: Date) => void`                 | —            | Called when a date cell or time slot is clicked. |
+| `onEventRemove`  | `(event: CalendarEvent) => void`       | —            | Called when an event remove button is clicked. |
+| `weekStartsOn`   | `0 \| 1`                               | `0`          | First day of the week. `0` = Sunday, `1` = Monday. |
+| `renderEvent`    | `(event: CalendarEvent) => ReactNode`  | —            | Custom render function for event cards.        |
+| `className`      | `string`                               | —            | Additional CSS classes for the root element.   |
+
+### BigCalendar.Event
+
+| Prop         | Type                            | Default    | Description                               |
+| :----------- | :------------------------------ | :--------- | :---------------------------------------- |
+| `event`      | `CalendarEvent`                 | —          | The event data to display.                |
+| `showRemove` | `boolean`                       | `false`    | Show a remove button on the event card.   |
+| `height`     | `number`                        | —          | Pixel height for timed events in week/day views. |
+| `variant`    | `'compact' \| 'default'`        | `'default'`| Display variant for the event card.       |
+
+### CalendarEvent
+
+| Field         | Type               | Required | Description                                                   |
+| :------------ | :----------------- | :------- | :------------------------------------------------------------ |
+| `id`          | `string \| number` | Yes      | Unique identifier.                                            |
+| `title`       | `string`           | Yes      | Event title.                                                  |
+| `start`       | `Date`             | Yes      | Start date and time.                                          |
+| `end`         | `Date`             | Yes      | End date and time.                                            |
+| `color`       | `string`           | No       | Color theme: `blue`, `green`, `red`, `amber`, `purple`, `pink`, `primary`. |
+| `allDay`      | `boolean`          | No       | Marks the event as all-day.                                   |
+| `description` | `string`           | No       | Optional event description.                                   |

@@ -1,10 +1,24 @@
 ---
 title: Timepicker
-description: A flexible time picker component with 12/24 hour formats, time range selection, and disabled time options.
+description: A flexible time picker with 12/24 hour formats, time range selection, and disabled time constraints.
 ---
 
 import TimepickerDemo from '@/components/demos/timepicker-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add timepicker
+```
+
+```bash
+npx vayu-ui add -t timepicker #with test case needs
+```
 
 ## Usage
 
@@ -16,88 +30,38 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { Timepicker, TimeValue } from "vayu-ui";
-    import { useState } from "react";
+    {/* Single Select - 12h */}
+    <Timepicker.Root value={time} onValueChange={setTime} placeholder="Select time">
+      <Timepicker.Trigger />
+      <Timepicker.Content>
+        <Timepicker.TimeGrid />
+        <Timepicker.Footer />
+      </Timepicker.Content>
+    </Timepicker.Root>
 
-    function Example() {
-      const [time, setTime] = useState<TimeValue | null>(null);
+    {/* 24-Hour Format */}
+    <Timepicker.Root format="24h" placeholder="Select time">
+      <Timepicker.Trigger />
+      <Timepicker.Content>
+        <Timepicker.TimeGrid />
+        <Timepicker.Footer />
+      </Timepicker.Content>
+    </Timepicker.Root>
 
-      return (
-        <Timepicker.Root
-          value={time}
-          onValueChange={setTime}
-          placeholder="Select time"
-        >
-          <Timepicker.Trigger />
-          <Timepicker.Content>
-            <Timepicker.TimeGrid />
-            <Timepicker.Footer />
-          </Timepicker.Content>
-        </Timepicker.Root>
-      );
-    }
-    ```
+    {/* Time Range Selection */}
+    <Timepicker.Root mode="range" showApplyButton placeholder="Select time range">
+      <Timepicker.Trigger />
+      <Timepicker.Content>
+        <Timepicker.TimeGrid />
+        <Timepicker.Footer />
+      </Timepicker.Content>
+    </Timepicker.Root>
 
-  </Tab>
-</Tabs>
-
-## Features
-
-- **12h and 24h formats** - Toggle between AM/PM and 24-hour display
-- **Time range selection** - Select start and end times with mode="range"
-- **Disabled times** - Disable specific hours, time ranges, or individual times
-- **Min/Max bounds** - Restrict selection to a time window (e.g., business hours)
-- **Custom minute steps** - Configure minute intervals (5, 10, 15, 30 minutes)
-- **React Hook Form ready** - Works with Controller for form integration
-- **WCAG 2.2 AA accessible** - Full keyboard navigation and screen reader support
-- **Compound component pattern** - Flexible and composable API
-
-## Compound Components
-
-| Component                 | Description                                               |
-| :------------------------ | :-------------------------------------------------------- |
-| `Timepicker.Root`         | Context provider that manages state and configuration     |
-| `Timepicker.Trigger`      | Button that displays selected time and opens dropdown     |
-| `Timepicker.Content`      | Portal-rendered dropdown containing time columns          |
-| `Timepicker.TimeGrid`     | Pre-configured layout of Hour, Minute, and Period columns |
-| `Timepicker.HourColumn`   | Individual hour selection column                          |
-| `Timepicker.MinuteColumn` | Individual minute selection column                        |
-| `Timepicker.PeriodColumn` | AM/PM toggle (only shown in 12h format)                   |
-| `Timepicker.Footer`       | Action buttons (Clear, Apply)                             |
-
-## Examples
-
-### 24-Hour Format
-
-```tsx
-<Timepicker.Root format="24h" placeholder="Select time">
-  <Timepicker.Trigger />
-  <Timepicker.Content>
-    <Timepicker.TimeGrid />
-    <Timepicker.Footer />
-  </Timepicker.Content>
-</Timepicker.Root>
-```
-
-### Time Range Selection
-
-```tsx
-import { Timepicker, TimeRange } from 'vayu-ui';
-
-function RangeExample() {
-  const [range, setRange] = useState<TimeRange | null>(null);
-
-  const handleRangeChange = (value: TimeValue | TimeRange | null) => {
-    setRange(value as TimeRange | null);
-  };
-
-  return (
+    {/* Disabled Times */}
     <Timepicker.Root
-      value={range}
-      onValueChange={handleRangeChange}
-      mode="range"
-      showApplyButton
-      placeholder="Select time range"
+      disabledHours={[0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]}
+      disabledTimes={['12:00', '12:30', '13:00']}
+      placeholder="Business hours only"
     >
       <Timepicker.Trigger />
       <Timepicker.Content>
@@ -105,162 +69,186 @@ function RangeExample() {
         <Timepicker.Footer />
       </Timepicker.Content>
     </Timepicker.Root>
-  );
-}
-```
 
-### Disabled Times
+    {/* Min/Max Time Bounds */}
+    <Timepicker.Root minTime="09:00" maxTime="17:00" placeholder="Work hours (9AM - 5PM)">
+      <Timepicker.Trigger />
+      <Timepicker.Content>
+        <Timepicker.TimeGrid />
+        <Timepicker.Footer />
+      </Timepicker.Content>
+    </Timepicker.Root>
+
+    {/* Custom Minute Step */}
+    <Timepicker.Root minuteStep={15} placeholder="Select time (15-min intervals)">
+      <Timepicker.Trigger />
+      <Timepicker.Content>
+        <Timepicker.TimeGrid />
+        <Timepicker.Footer />
+      </Timepicker.Content>
+    </Timepicker.Root>
+
+    {/* Error State */}
+    <Timepicker.Root label="Appointment Time" error="Time is required">
+      <Timepicker.Trigger />
+      <Timepicker.Content>
+        <Timepicker.TimeGrid />
+        <Timepicker.Footer />
+      </Timepicker.Content>
+    </Timepicker.Root>
+    ```
+
+  </Tab>
+</Tabs>
+
+## Anatomy
 
 ```tsx
-<Timepicker.Root
-  disabledHours={[0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]}
-  disabledTimes={['12:00', '12:30', '13:00']}
-  placeholder="Business hours only"
->
+import { Timepicker } from 'vayu-ui';
+
+<Timepicker.Root value={time} onValueChange={setTime} format="12h" label="Start time">
   <Timepicker.Trigger />
   <Timepicker.Content>
     <Timepicker.TimeGrid />
     <Timepicker.Footer />
   </Timepicker.Content>
-</Timepicker.Root>
-```
+</Timepicker.Root>;
 
-### Min/Max Time Bounds
-
-```tsx
-<Timepicker.Root minTime="09:00" maxTime="17:00" placeholder="Work hours (9AM - 5PM)">
+{/* Custom column layout */}
+<Timepicker.Root format="24h">
   <Timepicker.Trigger />
   <Timepicker.Content>
-    <Timepicker.TimeGrid />
+    <Timepicker.HourColumn />
+    <Timepicker.MinuteColumn />
+    <Timepicker.Error />
     <Timepicker.Footer />
   </Timepicker.Content>
-</Timepicker.Root>
+</Timepicker.Root>;
 ```
 
-### Custom Minute Step
+- **Timepicker.Root** — Root container. Manages time state, format, mode, and provides context to children.
+- **Timepicker.Trigger** — Button with inline editing. Displays the selected time and opens the dropdown.
+- **Timepicker.Content** — Portal-based dropdown with focus trap and auto-positioning.
+- **Timepicker.TimeGrid** — Pre-configured layout of hour, minute, and period columns.
+- **Timepicker.HourColumn** — Individual hour selection column with scroll and keyboard navigation.
+- **Timepicker.MinuteColumn** — Individual minute selection column, respects `minuteStep`.
+- **Timepicker.PeriodColumn** — AM/PM toggle column, only rendered in 12h format.
+- **Timepicker.Footer** — Action buttons for clearing and applying selection.
+- **Timepicker.Error** — Error message display within the dropdown.
 
-```tsx
-<Timepicker.Root minuteStep={15} placeholder="Select time (15-min intervals)">
-  <Timepicker.Trigger />
-  <Timepicker.Content>
-    <Timepicker.TimeGrid />
-    <Timepicker.Footer />
-  </Timepicker.Content>
-</Timepicker.Root>
+## Accessibility
+
+- **Keyboard Support**:
+  - `Enter` / `Space` — Select the focused time item or open the dropdown.
+  - `ArrowDown` / `ArrowUp` — Navigate within a time column (wraps circularly).
+  - `ArrowLeft` / `ArrowRight` — Navigate between columns (hour, minute, period).
+  - `Home` / `End` — Jump to first / last item in the current column.
+  - `Escape` — Close the dropdown and return focus to the trigger.
+  - `Tab` — Move focus through the dropdown content (trapped while open). `Shift+Tab` reverses.
+  - `Backspace` — In trigger inline mode, decrement the focused field value.
+- **ARIA Attributes**:
+  - `role="combobox"` and `aria-expanded` on `Timepicker.Trigger`.
+  - `role="dialog"` and `aria-modal="true"` on `Timepicker.Content`.
+  - `role="listbox"` on each time column with `aria-label` ("Hour", "Minute", "Period").
+  - `role="option"` with `aria-selected` and `aria-disabled` on each time item.
+  - `aria-labelledby` links the label to the trigger for identification.
+- **Focus Behavior**:
+  - Opening the dropdown focuses the first selected option, or the first enabled item.
+  - Closing via Escape returns focus to the trigger.
+  - Focus is trapped within the dropdown while open.
+  - Selected items auto-scroll into view when the dropdown opens.
+
+## Screen reader behavior
+
+When a user focuses the trigger, the screen reader announces the label, the currently selected time or placeholder, and the expanded state via `aria-expanded`. When the dropdown opens, the dialog role is announced along with the column listboxes. Each time option is announced with its value, selected state via `aria-selected`, and disabled state via `aria-disabled`. Navigating between columns with arrow keys announces the column label. In range mode, the current phase (start or end) is announced when switching. Closing the dropdown returns focus to the trigger, which announces the updated time value.
+
+## Component Folder Structure
+
 ```
-
-### React Hook Form Integration
-
-```tsx
-import { Controller, useForm } from 'react-hook-form';
-import { Timepicker, TimeValue } from 'vayu-ui';
-
-interface FormData {
-  appointmentTime: TimeValue | null;
-}
-
-function FormExample() {
-  const { control, handleSubmit } = useForm<FormData>();
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Controller
-        name="appointmentTime"
-        control={control}
-        rules={{ required: 'Time is required' }}
-        render={({ field, fieldState }) => (
-          <Timepicker.Root
-            value={field.value}
-            onValueChange={field.onChange}
-            error={fieldState.error?.message}
-            label="Appointment Time"
-          >
-            <Timepicker.Trigger />
-            <Timepicker.Content>
-              <Timepicker.TimeGrid />
-              <Timepicker.Footer />
-            </Timepicker.Content>
-          </Timepicker.Root>
-        )}
-      />
-      <button type="submit">Submit</button>
-    </form>
-  );
-}
+TimePicker/
+├── TimePicker.tsx           # Root component with context provider and state management
+├── TimePickerTrigger.tsx    # Trigger with inline editing and keyboard navigation
+├── TimePickerContent.tsx    # Portal-based dropdown with focus trap and positioning
+├── TimePickerColumns.tsx    # Hour, Minute, Period columns with grid layout
+├── TimePickerFooter.tsx     # Footer actions (Clear, Apply) and error display
+├── utils.ts                 # Time parsing, formatting, validation utilities
+├── types.ts                 # TypeScript type definitions
+├── index.ts                 # Re-exports all components and types
+└── README.md                # Component usage reference
 ```
 
 ## Props
 
 ### Timepicker.Root
 
-| Prop              | Type                             | Default         | Description                         |
-| :---------------- | :------------------------------- | :-------------- | :---------------------------------- |
-| `value`           | `TimeValue \| TimeRange \| null` | —               | Controlled value                    |
-| `defaultValue`    | `TimeValue \| TimeRange \| null` | —               | Default uncontrolled value          |
-| `onValueChange`   | `(value) => void`                | —               | Callback when value changes         |
-| `format`          | `'12h' \| '24h'`                 | `'12h'`         | Time display format                 |
-| `mode`            | `'single' \| 'range'`            | `'single'`      | Single time or time range selection |
-| `label`           | `string`                         | —               | Accessible label text               |
-| `error`           | `string`                         | —               | Error message to display            |
-| `disabled`        | `boolean`                        | `false`         | Disable the timepicker              |
-| `placeholder`     | `string`                         | `'Select time'` | Placeholder text                    |
-| `minuteStep`      | `number`                         | `5`             | Minute increment step               |
-| `clearable`       | `boolean`                        | `true`          | Show clear button                   |
-| `showApplyButton` | `boolean`                        | `false`         | Show Apply button in footer         |
-| `minTime`         | `string`                         | —               | Minimum selectable time (HH:MM)     |
-| `maxTime`         | `string`                         | —               | Maximum selectable time (HH:MM)     |
-| `disabledTimes`   | `string[]`                       | —               | Array of disabled times (HH:MM)     |
-| `disabledHours`   | `number[]`                       | —               | Array of disabled hours (0-23)      |
+| Prop              | Type                                       | Default         | Description                              |
+| :---------------- | :----------------------------------------- | :-------------- | :--------------------------------------- |
+| `children`        | `ReactNode`                                | —               | Timepicker subcomponents.                |
+| `value`           | `TimeValue \| TimeRange \| null`           | —               | Controlled value.                        |
+| `defaultValue`    | `TimeValue \| TimeRange \| null`           | —               | Uncontrolled initial value.              |
+| `onValueChange`   | `(value: TimeValue \| TimeRange \| null) => void` | —       | Callback when value changes.             |
+| `format`          | `'12h' \| '24h'`                           | `'12h'`         | Time display format.                     |
+| `mode`            | `'single' \| 'range'`                      | `'single'`      | Single time or time range selection.     |
+| `label`           | `string`                                   | —               | Accessible label for the timepicker.     |
+| `error`           | `string`                                   | —               | Error message to display.                |
+| `disabled`        | `boolean`                                  | `false`         | Disable the timepicker.                  |
+| `placeholder`     | `string`                                   | `'Select time'` | Placeholder text in the trigger.         |
+| `minuteStep`      | `number`                                   | `5`             | Minute increment step.                   |
+| `clearable`       | `boolean`                                  | `true`          | Show clear button in footer.             |
+| `showApplyButton` | `boolean`                                  | `false`         | Show Apply button in footer.             |
+| `minTime`         | `string`                                   | —               | Minimum selectable time in HH:MM format. |
+| `maxTime`         | `string`                                   | —               | Maximum selectable time in HH:MM format. |
+| `disabledTimes`   | `string[]`                                 | —               | Array of disabled times in HH:MM format. |
+| `disabledHours`   | `number[]`                                 | —               | Array of disabled hours (0-23).          |
+| `className`       | `string`                                   | —               | Additional CSS classes.                  |
 
-### TimeValue Type
+### Timepicker.Trigger
 
-```tsx
-interface TimeValue {
-  hour: number; // 0-23
-  minute: number; // 0-59
-}
-```
+| Prop        | Type     | Default | Description              |
+| :---------- | :------- | :------ | :----------------------- |
+| `className` | `string` | —       | Additional CSS classes.  |
 
-### TimeRange Type
+### Timepicker.Content
 
-```tsx
-interface TimeRange {
-  start: TimeValue | null;
-  end: TimeValue | null;
-}
-```
+| Prop        | Type        | Default | Description                        |
+| :---------- | :---------- | :------ | :--------------------------------- |
+| `children`  | `ReactNode` | —       | Dropdown content subcomponents.    |
+| `className` | `string`    | —       | Additional CSS classes.            |
 
-## Accessibility
+### Timepicker.TimeGrid
 
-The Timepicker component follows WCAG 2.2 AA guidelines:
+| Prop        | Type     | Default | Description                                      |
+| :---------- | :------- | :------ | :----------------------------------------------- |
+| `className` | `string` | —       | Additional CSS classes.                          |
 
-- **Keyboard Navigation**
-  - `Tab` - Move focus between trigger and time columns
-  - `Arrow Up/Down` - Navigate within time columns
-  - `Enter/Space` - Select focused time item
-  - `Escape` - Close dropdown without applying
+### Timepicker.HourColumn
 
-- **Screen Reader Support**
-  - Proper ARIA roles (`listbox`, `option`, `combobox`)
-  - `aria-selected` and `aria-disabled` states
-  - Descriptive labels for all interactive elements
+| Prop        | Type     | Default | Description              |
+| :---------- | :------- | :------ | :----------------------- |
+| `className` | `string` | —       | Additional CSS classes.  |
 
-- **Focus Management**
-  - Visible focus indicators on all focusable elements
-  - Focus returns to trigger when dropdown closes
-  - Focus ring uses semantic `--color-focus` token
+### Timepicker.MinuteColumn
 
-## Styling
+| Prop        | Type     | Default | Description              |
+| :---------- | :------- | :------ | :----------------------- |
+| `className` | `string` | —       | Additional CSS classes.  |
 
-The Timepicker uses semantic design tokens from the theme:
+### Timepicker.PeriodColumn
 
-| Token             | Usage                       |
-| :---------------- | :-------------------------- |
-| `bg-surface`      | Trigger background          |
-| `bg-elevated`     | Dropdown content background |
-| `bg-brand`        | Selected item background    |
-| `border-field`    | Default border color        |
-| `border-focus`    | Focus border color          |
-| `rounded-control` | Trigger border radius       |
-| `rounded-overlay` | Dropdown border radius      |
-| `shadow-elevated` | Dropdown shadow             |
+| Prop        | Type     | Default | Description                        |
+| :---------- | :------- | :------ | :--------------------------------- |
+| `className` | `string` | —       | Additional CSS classes.            |
+
+### Timepicker.Footer
+
+| Prop        | Type        | Default | Description              |
+| :---------- | :---------- | :------ | :----------------------- |
+| `children`  | `ReactNode` | —       | Custom footer content.   |
+| `className` | `string`    | —       | Additional CSS classes.  |
+
+### Timepicker.Error
+
+| Prop        | Type        | Default | Description              |
+| :---------- | :---------- | :------ | :----------------------- |
+| `children`  | `ReactNode` | —       | Custom error content.    |
+| `className` | `string`    | —       | Additional CSS classes.  |

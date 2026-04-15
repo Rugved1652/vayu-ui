@@ -1,80 +1,228 @@
 ---
 title: Draggable
-description: An animated sortable drag-and-drop list with keyboard support, live announcements, and WCAG 2.2 AA compliance.
+description: An accessible drag-and-drop sortable component with pointer and keyboard support, FLIP animations, and single-list or multi-container layouts.
 ---
 
 import DraggableDemo from '@/components/demos/draggable-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add draggable
+```
+
+```bash
+npx vayu-ui add -t draggable #with test case needs
+```
+
 ## Usage
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-    <div className="not-prose flex w-full justify-center p-4 border rounded-lg">
+    <div className="not-prose flex w-full justify-center p-4">
       <DraggableDemo />
     </div>
   </Tab>
   <Tab value="Code">
     ```tsx
-    import { DraggableList, DragHandle } from "@/components/ui/draggable"
+    <Draggable items={items.map((i) => i.id)} onReorder={handleReorder}>
+      <Draggable.Container layout="list">
+        {items.map((item) => (
+          <Draggable.Item key={item.id} value={item.id}>
+            <div className="flex items-center gap-3 p-3 bg-surface border border-border rounded-surface">
+              <Draggable.Handle />
+              <span className="text-sm text-surface-content">{item.title}</span>
+            </div>
+          </Draggable.Item>
+        ))}
+      </Draggable.Container>
 
-    const [items, setItems] = useState([
-      { id: "1", label: "First" },
-      { id: "2", label: "Second" },
-      { id: "3", label: "Third" },
-    ])
+      <Draggable.Preview />
+      <Draggable.DropIndicator />
+    </Draggable>
 
-    <DraggableList items={items} onReorder={setItems} aria-label="My list">
-      {(item, { dragHandleProps }) => (
-        <div className="flex items-center gap-2 p-3 border rounded-lg">
-          <DragHandle handleProps={dragHandleProps} />
-          <span>{item.label}</span>
-        </div>
-      )}
-    </DraggableList>
+    <Draggable items={items.map((i) => i.id)} onReorder={handleReorder}>
+      <Draggable.Container layout="grid" columns={3}>
+        {items.map((item) => (
+          <Draggable.Item key={item.id} value={item.id}>
+            <div className="flex flex-col items-center gap-2 p-4 bg-surface border border-border rounded-surface">
+              <Draggable.Handle />
+              <span className="text-xs text-surface-content">{item.title}</span>
+            </div>
+          </Draggable.Item>
+        ))}
+      </Draggable.Container>
+
+      <Draggable.Preview />
+      <Draggable.DropIndicator />
+    </Draggable>
+
+    <Draggable containers={containers} onContainersChange={setContainers}>
+      <div className="grid grid-cols-2 gap-6">
+        <Draggable.Container containerId="todo" layout="list" aria-label="To Do items">
+          {containers.todo.map((id) => (
+            <Draggable.Item key={id} value={id}>
+              <div className="flex items-center gap-3 p-3 bg-surface rounded-surface border border-border">
+                <Draggable.Handle />
+                <span className="text-sm text-surface-content">{taskMap[id]}</span>
+              </div>
+            </Draggable.Item>
+          ))}
+        </Draggable.Container>
+
+        <Draggable.Container containerId="done" layout="list" aria-label="Done items">
+          {containers.done.map((id) => (
+            <Draggable.Item key={id} value={id}>
+              <div className="flex items-center gap-3 p-3 bg-surface rounded-surface border border-border">
+                <Draggable.Handle />
+                <span className="text-sm text-surface-content">{taskMap[id]}</span>
+              </div>
+            </Draggable.Item>
+          ))}
+        </Draggable.Container>
+      </div>
+
+      <Draggable.Preview />
+      <Draggable.DropIndicator />
+    </Draggable>
     ```
 
   </Tab>
 </Tabs>
 
-## Installation
+## Anatomy
 
-```tsx title="src/components/ui/draggable.tsx"
-// Copy the full component code
+```tsx
+import { Draggable } from 'vayu-ui';
+
+<Draggable items={['a', 'b', 'c']} onReorder={(items) => console.log(items)}>
+  <Draggable.Container layout="list">
+    <Draggable.Item value="a">
+      <Draggable.Handle />
+      <span>Item A</span>
+    </Draggable.Item>
+    <Draggable.Item value="b">
+      <Draggable.Handle />
+      <span>Item B</span>
+    </Draggable.Item>
+  </Draggable.Container>
+
+  <Draggable.Preview />
+  <Draggable.Placeholder />
+  <Draggable.DropIndicator />
+</Draggable>;
 ```
 
-## Features
+- **Draggable** — Root component. Manages drag state, item ordering, FLIP animations, and provides context to children.
+- **Draggable.Container** — Layout wrapper. Supports `list` and `grid` layouts with ARIA role and container registration.
+- **Draggable.Item** — Sortable item. Handles pointer and keyboard drag initiation, ARIA attributes, and roving tabindex focus.
+- **Draggable.Handle** — Dedicated drag handle with grip icon. Restricts drag initiation to the handle area when present.
+- **Draggable.Preview** — Cursor-following clone of the active item rendered in a portal during pointer drag.
+- **Draggable.Placeholder** — Semi-transparent marker showing the drop position during drag.
+- **Draggable.DropIndicator** — Brand-colored line indicating the exact insertion point during drag.
 
-- Render-prop pattern — full control over item rendering
-- Mouse and touch drag with animated visual clone
-- CSS transform displacement animations (cubic-bezier spring)
-- Keyboard sort: Space to grab, Arrow keys to move, Space to drop, Escape to cancel
-- Screen reader: `role="listbox"` / `role="option"` / `aria-roledescription="sortable item"`
-- `aria-live="assertive"` live region for position announcements
-- `DragHandle` convenience component with grip icon
-- Vertical and horizontal layouts
+## Accessibility
 
-## DraggableList Props
+- **Keyboard Support**:
+  - `Space` / `Enter` — Grab the focused item. Press again to drop.
+  - `ArrowUp` / `ArrowDown` — Move grabbed item up or down (list), or navigate focus when not dragging.
+  - `ArrowLeft` / `ArrowRight` — Move grabbed item left or right (grid), or navigate focus when not dragging.
+  - `Escape` — Cancel the active drag operation and return the item to its original position.
+- **ARIA Attributes**:
+  - `Draggable.Container` uses `role="list"` (list layout) or `role="grid"` (grid layout).
+  - `Draggable.Item` uses `role="listitem"` (list) or `role="gridcell"` (grid).
+  - `aria-grabbed` on `Draggable.Item` reflects whether the item is currently being dragged.
+  - `aria-roledescription="sortable item"` on `Draggable.Item` describes the interactive role.
+  - `aria-disabled` on `Draggable.Item` when the `disabled` prop is set.
+  - `aria-describedby` links items to hidden instructions explaining keyboard controls.
+  - `aria-label` on `Draggable.Container` and `Draggable.Handle` provides accessible labels.
+- **Focus Behavior**:
+  - Roving tabindex pattern — only the focused item has `tabIndex={0}`, all others have `tabIndex={-1}`.
+  - `focus-visible:ring-2 focus-visible:ring-focus` ring provides visible focus indication.
+  - During keyboard drag, the active item receives a brand-colored ring and elevated shadow.
 
-| Prop         | Type                                                           | Default           | Description                   |
-| :----------- | :------------------------------------------------------------- | :---------------- | :---------------------------- |
-| `items`      | `T[]` (each needs `id: string`)                                | —                 | Items array                   |
-| `onReorder`  | `(items: T[]) => void`                                         | —                 | Reorder callback              |
-| `direction`  | `vertical \| horizontal \| grid`                               | `"vertical"`      | Layout direction              |
-| `columns`    | `number`                                                       | `3`               | Grid columns (grid mode only) |
-| `children`   | `(item, { dragHandleProps, isDragging, isOver }) => ReactNode` | —                 | Render function               |
-| `aria-label` | `string`                                                       | `"Sortable list"` | List label                    |
+## Screen reader behavior
 
-## DragHandle Props
+When a user focuses a `Draggable.Item`, the screen reader announces the item content and its roledescription as a sortable item. A hidden instruction element (via `aria-describedby`) announces the available keyboard commands. When the user presses Space or Enter to grab an item, an `aria-live="assertive"` region announces "Picked up item. Use arrow keys to move." As the item is moved with arrow keys, the live region announces the new position. When dropped, it announces "Dropped at position." If the drag is cancelled with Escape, it announces "Reorder cancelled." In multi-container setups, cross-container moves announce the target container name.
 
-| Prop          | Type              | Description                       |
-| :------------ | :---------------- | :-------------------------------- |
-| `handleProps` | `DragHandleProps` | Pass through from render function |
+## Component Folder Structure
 
-## Keyboard Shortcuts
+```
+Draggable/
+├── Draggable.tsx              # Root component with drag state management and FLIP animations
+├── DraggableContainer.tsx     # Layout container with list/grid support and ARIA roles
+├── DraggableItem.tsx          # Sortable item with pointer/keyboard drag and focus management
+├── DraggableHandle.tsx        # Dedicated drag handle with grip icon
+├── DraggablePlaceholder.tsx   # Drop position marker during drag
+├── DraggableDropIndicator.tsx # Insertion point indicator line
+├── DraggablePreview.tsx       # Cursor-following preview clone during pointer drag
+├── types.ts                   # TypeScript type definitions and utility functions
+├── hooks.ts                   # Context access hooks
+└── index.ts                   # Re-exports with compound component assembly
+```
 
-| Key               | Action            |
-| :---------------- | :---------------- |
-| `Space` / `Enter` | Grab or drop item |
-| `↑ ↓` / `← →`     | Move grabbed item |
-| `Escape`          | Cancel reorder    |
+## Props
+
+### Draggable (Root)
+
+| Prop                  | Type                              | Default | Description                                              |
+| :-------------------- | :-------------------------------- | :------ | :------------------------------------------------------- |
+| `items`               | `string[]`                        | —       | Controlled array of item IDs for single-list mode.       |
+| `defaultItems`        | `string[]`                        | `[]`    | Initial item IDs for uncontrolled single-list mode.      |
+| `onReorder`           | `(items: string[]) => void`       | —       | Callback after single-list reorder.                      |
+| `containers`          | `ContainersMap`                   | —       | Controlled multi-container state for cross-list dragging. |
+| `defaultContainers`   | `ContainersMap`                   | `{}`    | Initial multi-container state for uncontrolled mode.     |
+| `onContainersChange`  | `(containers: ContainersMap) => void` | —   | Callback after multi-container reorder.                  |
+| `children`            | `ReactNode`                       | —       | `Draggable.Container` with items and optional overlays.  |
+| `className`           | `string`                          | —       | Additional CSS classes.                                  |
+
+### Draggable.Container
+
+| Prop         | Type              | Default          | Description                                |
+| :----------- | :---------------- | :--------------- | :----------------------------------------- |
+| `layout`     | `"list" \| "grid"` | `"list"`        | Layout mode for items.                     |
+| `columns`    | `number`          | `3`              | Number of grid columns (grid mode only).   |
+| `containerId` | `string`         | —                | Unique ID for multi-container mode.        |
+| `aria-label` | `string`          | `"Sortable list"` | Accessible label for the container.       |
+| `children`   | `ReactNode`       | —                | `Draggable.Item` elements.                 |
+| `className`  | `string`          | —                | Additional CSS classes.                    |
+
+### Draggable.Item
+
+| Prop        | Type        | Default  | Description                                   |
+| :---------- | :---------- | :------- | :-------------------------------------------- |
+| `value`     | `string`    | —        | Unique identifier matching an entry in items. Required. |
+| `disabled`  | `boolean`   | `false`  | Disables drag interaction and reduces opacity. |
+| `children`  | `ReactNode` | —        | Item content.                                 |
+| `className` | `string`    | —        | Additional CSS classes.                       |
+
+### Draggable.Handle
+
+| Prop        | Type        | Default | Description                            |
+| :---------- | :---------- | :------ | :------------------------------------- |
+| `children`  | `ReactNode` | —       | Custom content. Defaults to grip icon. |
+| `className` | `string`    | —       | Additional CSS classes.                |
+
+### Draggable.Preview
+
+| Prop        | Type        | Default | Description                                |
+| :---------- | :---------- | :------ | :----------------------------------------- |
+| `children`  | `ReactNode` | —       | Not used. Content is cloned from the active item. |
+| `className` | `string`    | —       | Additional CSS classes applied to the preview. |
+
+### Draggable.Placeholder
+
+| Prop        | Type     | Default | Description                            |
+| :---------- | :------- | :------ | :------------------------------------- |
+| `className` | `string` | —       | Additional CSS classes on the marker.  |
+
+### Draggable.DropIndicator
+
+| Prop        | Type     | Default | Description                             |
+| :---------- | :------- | :------ | :-------------------------------------- |
+| `className` | `string` | —       | Additional CSS classes on the indicator. |
