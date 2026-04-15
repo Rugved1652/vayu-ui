@@ -1,0 +1,202 @@
+---
+title: AudioPlayer
+description: A fully-featured audio player component with playlist support and keyboard controls.
+---
+
+import AudioPlayerDemo from '@/components/demos/audio-player-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Installation
+
+```bash
+npx vayu-ui init #one time only
+```
+
+```bash
+npx vayu-ui add audio-player
+```
+
+```bash
+npx vayu-ui add -t audio-player #with test case needs
+```
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+      <AudioPlayerDemo />
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    <AudioPlayer.Root defaultVolume={0.8} autoPlayNext loopPlaylist>
+      <AudioPlayer.Playlist>
+        <AudioPlayer.Track
+          src="https://example.com/track1.mp3"
+          title="Morning Vibes"
+          artist="Artist Name"
+          poster="https://example.com/poster1.jpg"
+        />
+        <AudioPlayer.Track
+          src="https://example.com/track2.mp3"
+          title="Evening Chill"
+          artist="Another Artist"
+          poster="https://example.com/poster2.jpg"
+        />
+      </AudioPlayer.Playlist>
+
+      <AudioPlayer.Controls>
+        <AudioPlayer.Previous />
+        <AudioPlayer.PlayPause />
+        <AudioPlayer.Next />
+        <AudioPlayer.Time />
+      </AudioPlayer.Controls>
+
+      <AudioPlayer.Seek />
+
+      <AudioPlayer.Volume>
+        <AudioPlayer.Mute />
+      </AudioPlayer.Volume>
+
+      <AudioPlayer.Rate />
+
+      <AudioPlayer.TrackInfo />
+      <AudioPlayer.Loading />
+      <AudioPlayer.Error />
+    </AudioPlayer.Root>
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```
+AudioPlayer.Root
+  └── AudioPlayer.Playlist
+        └── AudioPlayer.Track (repeated)
+  └── AudioPlayer.Controls
+        ├── AudioPlayer.PlayPause
+        ├── AudioPlayer.Next
+        ├── AudioPlayer.Previous
+        └── AudioPlayer.Time
+  ├── AudioPlayer.Seek (alias: AudioPlayer.Progress)
+  ├── AudioPlayer.Volume
+  │     └── AudioPlayer.Mute
+  ├── AudioPlayer.Rate
+  ├── AudioPlayer.TrackInfo
+  ├── AudioPlayer.Loading (alias: AudioPlayer.Buffer)
+  └── AudioPlayer.Error
+```
+
+## Accessibility
+
+- Keyboard navigation is supported via global shortcuts when the player is focused
+- All interactive elements have appropriate ARIA labels
+- Screen readers announce playback state, track changes, and progress updates
+- Supports HLS streams for adaptive bitrate playback
+
+### Screen reader behavior
+
+The root element is marked as a landmark region with `role="region"` and `aria-label="Audio Player"`. Screen readers will:
+
+- Announce "Audio Player" when entering the region
+- Announce "Play" or "Pause" for the play/pause button based on current state
+- Announce "Mute" or "Unmute" for the mute button based on current state
+- Announce current track position and duration when seeking
+- Announce "Next Track" and "Previous Track" for navigation buttons
+- Announce errors via an alert role when playback fails
+
+## Component Folder Structure
+
+```
+AudioPlayer/
+├── Audio.tsx              # Root component, context provider, all state logic
+├── AudioControls.tsx      # Play/Pause, Next, Previous, Time display
+├── AudioPlaylist.tsx      # Playlist container and Track items
+├── AudioProgress.tsx      # Seek bar / progress bar
+├── AudioRate.tsx          # Playback speed selector (popover)
+├── AudioStatus.tsx        # Loading spinner, Error display, Buffer (alias)
+├── AudioTrackInfo.tsx     # Current track metadata display
+├── AudioVolume.tsx        # Volume slider and Mute toggle
+├── types.ts               # TypeScript interfaces
+├── utils.ts               # Utility functions (formatTime)
+├── index.ts               # Public API exports
+└── README.md              # Component documentation
+```
+
+## Props
+
+### AudioPlayer.Root
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `defaultVolume` | `number` | `1` | Initial volume level (0-1) |
+| `allowMultiple` | `boolean` | `false` | Allow multiple players to play simultaneously |
+| `autoPlayNext` | `boolean` | `true` | Automatically advance to next track when current ends |
+| `loopPlaylist` | `boolean` | `false` | Loop back to first track after last ends |
+| `onPlay` | `() => void` | — | Callback when audio starts playing |
+| `onPause` | `() => void` | — | Callback when audio is paused |
+| `onEnded` | `() => void` | — | Callback when a track finishes |
+| `onTrackChange` | `(index: number, track: Track) => void` | — | Callback when active track changes |
+
+### AudioPlayer.Track
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `src` | `string` | — | Audio source URL (required) |
+| `title` | `string` | — | Track title |
+| `artist` | `string` | — | Track artist |
+| `poster` | `string` | — | Poster image URL |
+| `duration` | `number` | — | Track duration in seconds |
+| `id` | `string` | — | Unique track identifier |
+
+### AudioPlayer.Seek / AudioPlayer.Progress
+
+No custom props. Extends `HTMLAttributes<HTMLDivElement>`.
+
+### AudioPlayer.PlayPause
+
+No custom props. Extends `ButtonHTMLAttributes<HTMLButtonElement>`.
+
+### AudioPlayer.Next
+
+No custom props. Extends `ButtonHTMLAttributes<HTMLButtonElement>`.
+
+### AudioPlayer.Previous
+
+No custom props. Extends `ButtonHTMLAttributes<HTMLButtonElement>`.
+
+### AudioPlayer.Mute
+
+No custom props. Extends `ButtonHTMLAttributes<HTMLButtonElement>`.
+
+### AudioPlayer.Volume
+
+No custom props. Extends `HTMLAttributes<HTMLDivElement>`.
+
+### AudioPlayer.Rate
+
+No custom props. Extends `HTMLAttributes<HTMLDivElement>`.
+
+### AudioPlayer.Controls
+
+No custom props. Extends `HTMLAttributes<HTMLDivElement>`.
+
+### AudioPlayer.Playlist
+
+No custom props. Extends `HTMLAttributes<HTMLDivElement>`.
+
+### AudioPlayer.TrackInfo
+
+No custom props. Extends `HTMLAttributes<HTMLDivElement>`.
+
+### AudioPlayer.Loading / AudioPlayer.Buffer
+
+No custom props. Extends `HTMLAttributes<HTMLDivElement>`.
+
+### AudioPlayer.Error
+
+No custom props. Extends `HTMLAttributes<HTMLDivElement>`.
+
+### AudioPlayer.Source
+
+No custom props. Renderless component that returns `null`.
