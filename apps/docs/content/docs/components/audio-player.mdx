@@ -3,7 +3,6 @@ title: AudioPlayer
 description: A fully-featured audio player component with playlist support and keyboard controls.
 ---
 
-import AudioPlayerDemo from '@/components/demos/audio-player-demo';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
 ## Installation
@@ -24,46 +23,13 @@ npx vayu-ui add -t audio-player #with test case needs
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-      <AudioPlayerDemo />
+      
   </Tab>
   <Tab value="Code">
     ```tsx
-    <AudioPlayer.Root defaultVolume={0.8} autoPlayNext loopPlaylist>
-      <AudioPlayer.Playlist>
-        <AudioPlayer.Track
-          src="https://example.com/track1.mp3"
-          title="Morning Vibes"
-          artist="Artist Name"
-          poster="https://example.com/poster1.jpg"
-        />
-        <AudioPlayer.Track
-          src="https://example.com/track2.mp3"
-          title="Evening Chill"
-          artist="Another Artist"
-          poster="https://example.com/poster2.jpg"
-        />
-      </AudioPlayer.Playlist>
 
-      <AudioPlayer.Controls>
-        <AudioPlayer.Previous />
-        <AudioPlayer.PlayPause />
-        <AudioPlayer.Next />
-        <AudioPlayer.Time />
-      </AudioPlayer.Controls>
-
-      <AudioPlayer.Seek />
-
-      <AudioPlayer.Volume>
-        <AudioPlayer.Mute />
-      </AudioPlayer.Volume>
-
-      <AudioPlayer.Rate />
-
-      <AudioPlayer.TrackInfo />
-      <AudioPlayer.Loading />
-      <AudioPlayer.Error />
-    </AudioPlayer.Root>
     ```
+
   </Tab>
 </Tabs>
 
@@ -127,27 +93,27 @@ AudioPlayer/
 
 ### AudioPlayer.Root
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `defaultVolume` | `number` | `1` | Initial volume level (0-1) |
-| `allowMultiple` | `boolean` | `false` | Allow multiple players to play simultaneously |
-| `autoPlayNext` | `boolean` | `true` | Automatically advance to next track when current ends |
-| `loopPlaylist` | `boolean` | `false` | Loop back to first track after last ends |
-| `onPlay` | `() => void` | — | Callback when audio starts playing |
-| `onPause` | `() => void` | — | Callback when audio is paused |
-| `onEnded` | `() => void` | — | Callback when a track finishes |
-| `onTrackChange` | `(index: number, track: Track) => void` | — | Callback when active track changes |
+| Prop            | Type                                    | Default | Description                                           |
+| --------------- | --------------------------------------- | ------- | ----------------------------------------------------- |
+| `defaultVolume` | `number`                                | `1`     | Initial volume level (0-1)                            |
+| `allowMultiple` | `boolean`                               | `false` | Allow multiple players to play simultaneously         |
+| `autoPlayNext`  | `boolean`                               | `true`  | Automatically advance to next track when current ends |
+| `loopPlaylist`  | `boolean`                               | `false` | Loop back to first track after last ends              |
+| `onPlay`        | `() => void`                            | —       | Callback when audio starts playing                    |
+| `onPause`       | `() => void`                            | —       | Callback when audio is paused                         |
+| `onEnded`       | `() => void`                            | —       | Callback when a track finishes                        |
+| `onTrackChange` | `(index: number, track: Track) => void` | —       | Callback when active track changes                    |
 
 ### AudioPlayer.Track
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `src` | `string` | — | Audio source URL (required) |
-| `title` | `string` | — | Track title |
-| `artist` | `string` | — | Track artist |
-| `poster` | `string` | — | Poster image URL |
-| `duration` | `number` | — | Track duration in seconds |
-| `id` | `string` | — | Unique track identifier |
+| Prop       | Type     | Default | Description                 |
+| ---------- | -------- | ------- | --------------------------- |
+| `src`      | `string` | —       | Audio source URL (required) |
+| `title`    | `string` | —       | Track title                 |
+| `artist`   | `string` | —       | Track artist                |
+| `poster`   | `string` | —       | Poster image URL            |
+| `duration` | `number` | —       | Track duration in seconds   |
+| `id`       | `string` | —       | Unique track identifier     |
 
 ### AudioPlayer.Seek / AudioPlayer.Progress
 

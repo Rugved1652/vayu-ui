@@ -23,6 +23,7 @@ export { drawerEntry } from './components/drawer.js';
 export { fileUploadEntry } from './components/fileupload.js';
 export { floatingDockEntry } from './components/floatingdock.js';
 export { footerEntry } from './components/footer.js';
+export { gridLayoutEntry } from './components/grid-layout.js';
 export { hoverCardEntry } from './components/hover-card.js';
 export { marqueeEntry } from './components/marquee.js';
 export { menubarEntry } from './components/menubar.js';

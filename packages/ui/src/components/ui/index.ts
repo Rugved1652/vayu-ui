@@ -30,6 +30,7 @@ export * from './Divider';
 export * from './Draggable';
 export * from './Drawer';
 export * from './FileUpload';
+export * from './GridLayout';
 export {
   FloatingDock,
   type DockBaseProps,

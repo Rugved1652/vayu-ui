@@ -1,0 +1,175 @@
+---
+title: GridLayout
+description: A dashboard-style draggable and resizable grid layout with coordinate positioning, collision resolution, vertical compaction, responsive breakpoints, and keyboard accessibility.
+---
+
+import ComponentDemo from '@/components/demos/grid-layout-demo';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## Installation
+
+```bash
+npx vayu-ui init    # one time only
+```
+
+```bash
+npx vayu-ui add grid-layout
+```
+
+## Usage
+
+<Tabs items={['Preview', 'Code']}>
+  <Tab value="Preview">
+    <ComponentDemo />
+  </Tab>
+  <Tab value="Code">
+    ```tsx
+    import { useState } from 'react';
+    import { GridLayout, type GridLayoutItem } from 'vayu-ui';
+
+    const initialLayout: GridLayoutItem[] = [
+      { i: 'a', x: 0, y: 0, w: 4, h: 2 },
+      { i: 'b', x: 4, y: 0, w: 4, h: 2 },
+      { i: 'c', x: 8, y: 0, w: 4, h: 4 },
+      { i: 'd', x: 0, y: 2, w: 8, h: 2 },
+    ];
+
+    function Dashboard() {
+      const [layout, setLayout] = useState(initialLayout);
+
+      return (
+        <GridLayout
+          layout={layout}
+          onLayoutChange={setLayout}
+          cols={12}
+          rowHeight={80}
+          gap={16}
+        >
+          <GridLayout.Container>
+            {layout.map((item) => (
+              <GridLayout.Item key={item.i} id={item.i}>
+                <div className="flex items-center gap-3 p-3 bg-surface border border-border rounded-surface h-full">
+                  <GridLayout.DragHandle />
+                  <span className="text-sm font-semibold text-surface-content">
+                    Widget {item.i.toUpperCase()}
+                  </span>
+                </div>
+              </GridLayout.Item>
+            ))}
+          </GridLayout.Container>
+          <GridLayout.Placeholder />
+        </GridLayout>
+      );
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Anatomy
+
+```tsx
+<GridLayout layout={layout} onLayoutChange={setLayout} cols={12} rowHeight={80}>
+  <GridLayout.Container>
+    <GridLayout.Item id="a">
+      <GridLayout.DragHandle />
+      <GridLayout.ResizeHandle />
+      {/* Widget content */}
+    </GridLayout.Item>
+  </GridLayout.Container>
+  <GridLayout.Placeholder />
+</GridLayout>
+```
+
+| Element | Description |
+| :------ | :---------- |
+| `GridLayout` | Root provider managing layout state, drag/resize lifecycle, FLIP animations, and responsive breakpoints |
+| `GridLayout.Container` | Positioning context (`position: relative`) that measures width and triggers responsive matching |
+| `GridLayout.Item` | Absolutely-positioned item computing pixel position from grid coordinates (x, y, w, h) |
+| `GridLayout.DragHandle` | Optional dedicated drag handle — restricts pointer drag to the handle only |
+| `GridLayout.ResizeHandle` | Optional resize handle — renders at corners/edges (default: south-east) |
+| `GridLayout.Placeholder` | Portal-rendered dashed overlay showing the target position during drag/resize |
+
+## Layout Item
+
+Each item in the layout array has this shape:
+
+```ts
+interface GridLayoutItem {
+  i: string;       // unique ID
+  x: number;       // column position (0-based)
+  y: number;       // row position (0-based)
+  w: number;       // width in columns
+  h: number;       // height in rows
+  minW?: number;   // minimum width
+  maxW?: number;   // maximum width
+  minH?: number;   // minimum height
+  maxH?: number;   // maximum height
+  static?: boolean; // if true, immovable and unresizable
+}
+```
+
+## Accessibility
+
+- Full keyboard support: **Space** to grab, **Arrow keys** to move, **Shift+Arrow** to resize, **Space** to drop, **Escape** to cancel
+- ARIA `role="grid"` on container, `role="gridcell"` on items
+- `aria-grabbed` on active items, `aria-roledescription="draggable grid item"` on all items
+- Screen reader announcements via `aria-live="assertive"` region
+- Roving tabindex for focus management between items
+
+## Screen reader behavior
+
+- "Picked up item `id`. Use arrow keys to move. Shift plus arrow keys to resize."
+- "Moved to column `x+1`, row `y+1`"
+- "Resized to `w` columns by `h` rows"
+- "Dropped"
+- "Action cancelled"
+
+## Component Folder Structure
+
+```text
+GridLayout/
+├── GridLayout.tsx
+├── GridLayoutContainer.tsx
+├── GridItem.tsx
+├── GridDragHandle.tsx
+├── GridResizeHandle.tsx
+├── GridPlaceholder.tsx
+├── algorithms.ts
+├── hooks.ts
+├── types.ts
+└── index.ts
+```
+
+## Props
+
+### GridLayout
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `layout` | `GridLayoutItem[]` | — | **Required.** Controlled layout array |
+| `defaultLayout` | `GridLayoutItem[]` | — | Initial layout for uncontrolled mode |
+| `onLayoutChange` | `(layout: GridLayoutItem[]) => void` | — | Callback on layout change |
+| `cols` | `number` | `12` | Number of grid columns |
+| `rowHeight` | `number` | `50` | Row height in pixels |
+| `gap` | `number` | `16` | Gap between items in pixels |
+| `maxRows` | `number` | `0` | Max rows (0 = unlimited) |
+| `compactOnMove` | `boolean` | `true` | Compact vertically after each move |
+| `breakpoints` | `Breakpoints` | `lg:12, md:10, sm:6, xs:4, xxs:2` | Responsive breakpoint config |
+| `breakpointWidths` | `Record<string, number>` | `lg:1200, md:996, sm:768, xs:480, xxs:0` | Width thresholds per breakpoint |
+| `preventCollision` | `boolean` | `false` | Prevent items from overlapping |
+| `className` | `string` | — | Additional CSS classes |
+
+### GridLayout.Item
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `id` | `string` | — | **Required.** Must match an `i` value in the layout array |
+| `disabled` | `boolean` | `false` | Disable drag and resize |
+| `className` | `string` | — | Additional CSS classes |
+
+### GridLayout.ResizeHandle
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :------ | :---------- |
+| `directions` | `ResizeDirection[]` | `["se"]` | Which edges/corners get handles |
+| `className` | `string` | — | Additional CSS classes |
