@@ -1,11 +1,12 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
-interface UseCountdownOptions {
+export interface UseCountdownOptions {
   seconds: number;
   interval?: number;
   onTick?: (timeLeft: number) => void;
   onComplete?: () => void;
+  autoStart?: boolean;
 }
 
 export const useCountdown = ({
@@ -13,49 +14,68 @@ export const useCountdown = ({
   interval = 1000,
   onTick,
   onComplete,
+  autoStart = false,
 }: UseCountdownOptions) => {
   const [timeLeft, setTimeLeft] = useState(seconds);
-  const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(autoStart);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Ref-stabilize callbacks to avoid stale closures and effect restarts
+  const onTickRef = useRef(onTick);
+  const onCompleteRef = useRef(onComplete);
+
   useEffect(() => {
-    if (isRunning && timeLeft > 0) {
-      intervalRef.current = setInterval(() => {
-        setTimeLeft((prev) => {
-          const newTime = prev - 1;
-          if (onTick) onTick(newTime);
-          if (newTime <= 0) {
-            clearInterval(intervalRef.current!);
-            setIsRunning(false);
-            if (onComplete) onComplete();
-          }
-          return newTime > 0 ? newTime : 0;
-        });
-      }, interval);
-    }
+    onTickRef.current = onTick;
+  }, [onTick]);
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  // Main interval effect — depends only on isRunning and interval.
+  // Uses functional setState so it never needs timeLeft in deps.
+  useEffect(() => {
+    if (!isRunning) return;
+
+    intervalRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        const newTime = prev - 1;
+        onTickRef.current?.(newTime);
+        if (newTime <= 0) {
+          clearInterval(intervalRef.current!);
+          setIsRunning(false);
+          onCompleteRef.current?.();
+        }
+        return newTime > 0 ? newTime : 0;
+      });
+    }, interval);
+
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isRunning, timeLeft, interval, onTick, onComplete]);
+  }, [isRunning, interval]);
 
-  const start = () => {
+  // Sync timeLeft when seconds prop changes and countdown is not running
+  useEffect(() => {
     if (!isRunning) {
-      setIsRunning(true);
+      setTimeLeft(seconds);
     }
-  };
+  }, [seconds, isRunning]);
 
-  const pause = () => {
-    if (isRunning) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      setIsRunning(false);
-    }
-  };
+  const start = useCallback(() => {
+    setIsRunning(true);
+  }, []);
 
-  const reset = () => {
+  const pause = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setIsRunning(false);
+  }, []);
+
+  const reset = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setTimeLeft(seconds);
     setIsRunning(false);
-  };
+  }, [seconds]);
 
   return { timeLeft, start, pause, reset, isRunning };
 };

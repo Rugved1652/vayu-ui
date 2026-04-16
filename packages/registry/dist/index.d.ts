@@ -521,4 +521,66 @@ declare const tourEntry: ComponentRegistryEntry;
 
 declare const typographyEntry: ComponentRegistryEntry;
 
-export { type A11yDefinition, type AriaAttribute, type CliConfig, type CodeExample, type ComponentA11yResponse, type ComponentCategory, type ComponentCompositionResponse, type ComponentDependenciesResponse, type ComponentDoNotResponse, type ComponentEventsResponse, type ComponentExampleResponse, type ComponentPeerComponentsResponse, type ComponentPropsResponse, type ComponentRegistryEntry, type ComponentStatesResponse, type ComponentVariantsResponse, type DesignToken, type DesignTokenCategory, type DesignTokensResponse, type DoNotRule, type EventDefinition, type FileDefinition, type FindComponentResponse, type HookCategory, type HookParameter, type HookRegistryEntry, type HookReturnValue, type KeyboardInteraction, type ListComponentsResponse, type NpmDependency, type PeerComponentSuggestion, type PropDefinition, type RegistryDependency, type RegistryEntry, type RegistryItemType, type ScaffoldResponse, type SizeDefinition, type StateDefinition, type SubComponentDefinition, type VariantDefinition, type VedUIRegistry, accordionEntry, affixEntry, alertEntry, animationEntry, aspectratioEntry, avatarEntry, avatarGroupEntry, badgeEntry, breadcrumbEntry, buttonEntry, buttonGroupEntry, cardEntry, carouselEntry, checkboxEntry, collapsibleEntry, colorPickerEntry, commandBoxEntry, datePickerEntry, dividerEntry, draggableEntry, drawerEntry, fileUploadEntry, floatingDockEntry, footerEntry, gridLayoutEntry, hoverCardEntry, marqueeEntry, menubarEntry, modalEntry, navbarEntry, otpInputEntry, paginationEntry, popoverEntry, radioGroupEntry, rateEntry, resizablePaneEntry, sidebarEntry, skeletonEntry, sliderEntry, spinnerEntry, stepperEntry, switchEntry, tabEntry, tableEntry, textAreaEntry, textInputEntry, toasterEntry, tooltipEntry, tourEntry, typographyEntry };
+declare const useBatteryStatusEntry: HookRegistryEntry;
+
+declare const useConfirmExitEntry: HookRegistryEntry;
+
+declare const useCopyToClipboardEntry: HookRegistryEntry;
+
+declare const useDebounceEntry: HookRegistryEntry;
+
+declare const useDeviceOSEntry: HookRegistryEntry;
+
+declare const useElementPositionEntry: HookRegistryEntry;
+
+declare const useHoverEntry: HookRegistryEntry;
+
+declare const useIdleEntry: HookRegistryEntry;
+
+declare const useIndexedDBEntry: HookRegistryEntry;
+
+declare const useIntervalWhenEntry: HookRegistryEntry;
+
+declare const useKeyPressEntry: HookRegistryEntry;
+
+declare const useListEntry: HookRegistryEntry;
+
+declare const useLockBodyScrollEntry: HookRegistryEntry;
+
+declare const useLocalStorageEntry: HookRegistryEntry;
+
+declare const useMapEntry: HookRegistryEntry;
+
+declare const useMeasureEntry: HookRegistryEntry;
+
+declare const useMediaQueryEntry: HookRegistryEntry;
+
+declare const useMouseTrackEntry: HookRegistryEntry;
+
+declare const useNetworkStatusEntry: HookRegistryEntry;
+
+declare const useOnClickOutsideEntry: HookRegistryEntry;
+
+declare const usePageLeaveEntry: HookRegistryEntry;
+
+declare const usePermissionEntry: HookRegistryEntry;
+
+declare const usePreviousStateEntry: HookRegistryEntry;
+
+declare const useQueueEntry: HookRegistryEntry;
+
+declare const useRenderCountEntry: HookRegistryEntry;
+
+declare const useScrollPositionEntry: HookRegistryEntry;
+
+declare const useSetEntry: HookRegistryEntry;
+
+declare const useThrottleEntry: HookRegistryEntry;
+
+declare const useTimeoutEntry: HookRegistryEntry;
+
+declare const useVisibilityChangeEntry: HookRegistryEntry;
+
+declare const useWindowSizeEntry: HookRegistryEntry;
+
+export { type A11yDefinition, type AriaAttribute, type CliConfig, type CodeExample, type ComponentA11yResponse, type ComponentCategory, type ComponentCompositionResponse, type ComponentDependenciesResponse, type ComponentDoNotResponse, type ComponentEventsResponse, type ComponentExampleResponse, type ComponentPeerComponentsResponse, type ComponentPropsResponse, type ComponentRegistryEntry, type ComponentStatesResponse, type ComponentVariantsResponse, type DesignToken, type DesignTokenCategory, type DesignTokensResponse, type DoNotRule, type EventDefinition, type FileDefinition, type FindComponentResponse, type HookCategory, type HookParameter, type HookRegistryEntry, type HookReturnValue, type KeyboardInteraction, type ListComponentsResponse, type NpmDependency, type PeerComponentSuggestion, type PropDefinition, type RegistryDependency, type RegistryEntry, type RegistryItemType, type ScaffoldResponse, type SizeDefinition, type StateDefinition, type SubComponentDefinition, type VariantDefinition, type VedUIRegistry, accordionEntry, affixEntry, alertEntry, animationEntry, aspectratioEntry, avatarEntry, avatarGroupEntry, badgeEntry, breadcrumbEntry, buttonEntry, buttonGroupEntry, cardEntry, carouselEntry, checkboxEntry, collapsibleEntry, colorPickerEntry, commandBoxEntry, datePickerEntry, dividerEntry, draggableEntry, drawerEntry, fileUploadEntry, floatingDockEntry, footerEntry, gridLayoutEntry, hoverCardEntry, marqueeEntry, menubarEntry, modalEntry, navbarEntry, otpInputEntry, paginationEntry, popoverEntry, radioGroupEntry, rateEntry, resizablePaneEntry, sidebarEntry, skeletonEntry, sliderEntry, spinnerEntry, stepperEntry, switchEntry, tabEntry, tableEntry, textAreaEntry, textInputEntry, toasterEntry, tooltipEntry, tourEntry, typographyEntry, useBatteryStatusEntry, useConfirmExitEntry, useCopyToClipboardEntry, useDebounceEntry, useDeviceOSEntry, useElementPositionEntry, useHoverEntry, useIdleEntry, useIndexedDBEntry, useIntervalWhenEntry, useKeyPressEntry, useListEntry, useLocalStorageEntry, useLockBodyScrollEntry, useMapEntry, useMeasureEntry, useMediaQueryEntry, useMouseTrackEntry, useNetworkStatusEntry, useOnClickOutsideEntry, usePageLeaveEntry, usePermissionEntry, usePreviousStateEntry, useQueueEntry, useRenderCountEntry, useScrollPositionEntry, useSetEntry, useThrottleEntry, useTimeoutEntry, useVisibilityChangeEntry, useWindowSizeEntry };

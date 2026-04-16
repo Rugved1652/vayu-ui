@@ -25718,6 +25718,9656 @@ export default function FontDemo() {
     }
   ]
 };
+
+// src/hooks/use-battery-status.ts
+var useBatteryStatusEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-battery-status",
+  name: "useBatteryStatus",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Reactive hook that monitors device battery level, charging state, and charge/discharge time estimates via the Battery Status API.",
+  longDescription: "Wraps navigator.getBattery() into a React-friendly hook that returns a BatteryStatus object. It subscribes to all four BatteryManager events (chargingchange, chargingtimechange, dischargingtimechange, levelchange) so the component re-renders automatically whenever any battery property changes. On unsupported browsers or during SSR, isSupported stays false and safe defaults are returned (level: 1, charging: false, dischargingTime: Infinity, chargingTime: 0), avoiding hydration mismatches and runtime errors. No external dependencies beyond React are required.",
+  tags: [
+    "battery",
+    "power",
+    "charging",
+    "device",
+    "sensor",
+    "hardware",
+    "pwa",
+    "progressive-web-app",
+    "status",
+    "reactive"
+  ],
+  category: "sensor",
+  useCases: [
+    "Display a battery indicator in a PWA or mobile web app showing current charge level and charging status",
+    "Conditionally reduce background sync, animations, or data fetching when the battery is low and the device is not charging",
+    "Warn users before starting a long-running operation (e.g. file upload, video export) if battery level is critically low",
+    "Build a power-aware UI that switches to a low-power color scheme or disables auto-play media when discharging",
+    "Show estimated time remaining until full charge or until empty in a device dashboard or settings page",
+    "Detect unsupported browsers and render a graceful fallback instead of a broken battery widget"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useBatteryStatus.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useBatteryStatus(): BatteryStatus",
+  returnType: "BatteryStatus",
+  parameters: [],
+  returnValues: [
+    {
+      name: "charging",
+      type: "boolean",
+      description: "Whether the device is currently plugged in and charging. Remains false on unsupported browsers."
+    },
+    {
+      name: "chargingTime",
+      type: "number",
+      description: "Seconds remaining until the battery is fully charged. Value is Infinity when not charging or already full. Zero on unsupported browsers."
+    },
+    {
+      name: "dischargingTime",
+      type: "number",
+      description: "Seconds remaining until the battery is completely discharged. Value is Infinity when the device is charging. Defaults to Infinity on unsupported browsers."
+    },
+    {
+      name: "level",
+      type: "number",
+      description: "Battery level as a float between 0 (empty) and 1 (full). Defaults to 1 on unsupported browsers."
+    },
+    {
+      name: "isSupported",
+      type: "boolean",
+      description: "Whether the Battery Status API is available in the current browser. Check this before rendering battery-dependent UI to avoid showing misleading data."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Battery Indicator",
+      description: "A simple component that displays the current battery percentage and charging status with a color-coded progress bar.",
+      code: `import { useBatteryStatus } from 'vayu-ui';
+
+export default function BatteryIndicator() {
+  const { level, charging, isSupported } = useBatteryStatus();
+
+  if (!isSupported) {
+    return <span>Battery API not supported in this browser</span>;
+  }
+
+  const pct = Math.round(level * 100);
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex-1 h-4 bg-muted rounded-md overflow-hidden border">
+        <div
+          className={\`h-full transition-all duration-500 \${
+            pct > 60 ? 'bg-green-500' : pct > 20 ? 'bg-amber-500' : 'bg-red-500'
+          }\`}
+          style={{ width: \`\${pct}%\` }}
+        />
+      </div>
+      <span className="text-sm font-medium tabular-nums">
+        {charging ? '\u26A1' : '\u{1F50B}'} {pct}%
+      </span>
+    </div>
+  );
+}`,
+      tags: ["basic", "indicator", "progress-bar"]
+    },
+    {
+      title: "Low Battery Warning Banner",
+      description: "Shows a dismissible warning banner when the battery drops below 20% and the device is not charging, encouraging the user to plug in.",
+      code: `import { useBatteryStatus } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function LowBatteryWarning() {
+  const { level, charging, isSupported } = useBatteryStatus();
+  const [dismissed, setDismissed] = useState(false);
+
+  if (!isSupported || dismissed || charging || level > 0.2) {
+    return null;
+  }
+
+  return (
+    <div
+      className="flex items-center justify-between gap-4 p-3 rounded-md bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-800"
+      role="alert"
+    >
+      <span className="text-sm">
+        Low battery ({Math.round(level * 100)}%). Consider plugging in to avoid data loss.
+      </span>
+      <button
+        onClick={() => setDismissed(true)}
+        className="text-sm underline hover:no-underline"
+      >
+        Dismiss
+      </button>
+    </div>
+  );
+}`,
+      tags: ["warning", "low-battery", "alert", "banner"]
+    },
+    {
+      title: "Power-Aware Data Sync",
+      description: "Wraps a data-fetching operation that is skipped when the battery is below 30% and the device is discharging, conserving power.",
+      code: `import { useBatteryStatus } from 'vayu-ui';
+import { useEffect, useState } from 'react';
+
+export default function PowerAwareSync() {
+  const { level, charging, isSupported } = useBatteryStatus();
+  const [data, setData] = useState<string | null>(null);
+
+  const shouldSync = !isSupported || charging || level > 0.3;
+
+  useEffect(() => {
+    if (!shouldSync) return;
+
+    const interval = setInterval(() => {
+      setData(new Date().toISOString());
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [shouldSync]);
+
+  return (
+    <div className="text-sm space-y-1">
+      <p>Status: {shouldSync ? 'Syncing' : 'Paused (low battery)'}</p>
+      {data && <p className="text-muted-foreground">Last sync: {data}</p>}
+    </div>
+  );
+}`,
+      tags: ["sync", "power-aware", "conditional", "performance"]
+    },
+    {
+      title: "Battery Details Card",
+      description: "A card layout displaying all four battery properties including charge/discharge time estimates in a human-readable format.",
+      code: `import { useBatteryStatus } from 'vayu-ui';
+
+function formatTime(seconds: number): string {
+  if (!isFinite(seconds)) return '\u2014';
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  return hours > 0 ? \`\${hours}h \${minutes}m\` : \`\${minutes}m\`;
+}
+
+export default function BatteryDetailsCard() {
+  const { charging, chargingTime, dischargingTime, level, isSupported } = useBatteryStatus();
+
+  if (!isSupported) {
+    return (
+      <div className="p-4 rounded-md border bg-surface text-surface-content">
+        <p className="text-sm text-muted">Battery API is not available.</p>
+      </div>
+    );
+  }
+
+  const pct = Math.round(level * 100);
+
+  return (
+    <div className="p-4 rounded-surface shadow-surface border bg-surface text-surface-content w-72 space-y-3">
+      <h3 className="text-sm font-semibold">Battery Details</h3>
+      <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="p-2 rounded-md bg-muted/50 space-y-1">
+          <span className="text-muted-foreground">Status</span>
+          <p className="font-medium">{charging ? 'Charging' : 'On Battery'}</p>
+        </div>
+        <div className="p-2 rounded-md bg-muted/50 space-y-1">
+          <span className="text-muted-foreground">Level</span>
+          <p className="font-medium">{pct}%</p>
+        </div>
+        <div className="p-2 rounded-md bg-muted/50 space-y-1">
+          <span className="text-muted-foreground">Time to Full</span>
+          <p className="font-medium">{formatTime(chargingTime)}</p>
+        </div>
+        <div className="p-2 rounded-md bg-muted/50 space-y-1">
+          <span className="text-muted-foreground">Time to Empty</span>
+          <p className="font-medium">{formatTime(dischargingTime)}</p>
+        </div>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["card", "details", "time-estimate", "full-example"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Assuming Battery Status API is universally available",
+      bad: `const { level } = useBatteryStatus();
+return <span>{Math.round(level * 100)}%</span>;`,
+      good: `const { level, isSupported } = useBatteryStatus();
+if (!isSupported) return <span>Battery info unavailable</span>;
+return <span>{Math.round(level * 100)}%</span>;`,
+      reason: "The Battery Status API is not supported in all browsers (notably absent in Safari and iOS WebView). Always check isSupported before rendering battery-dependent UI to avoid showing misleading default values."
+    },
+    {
+      title: "Polling the hook or calling it in a timer",
+      bad: `useEffect(() => {
+  const id = setInterval(() => refetchBattery(), 30000);
+  return () => clearInterval(id);
+}, []);`,
+      good: `const battery = useBatteryStatus();
+// The hook subscribes to BatteryManager events internally \u2014
+// the component re-renders automatically when values change.`,
+      reason: "The hook already subscribes to all four BatteryManager change events (chargingchange, chargingtimechange, dischargingtimechange, levelchange). Polling wastes resources and adds unnecessary re-renders."
+    },
+    {
+      title: "Using on SSR without guarding",
+      bad: `export default function Page() {
+  const { level } = useBatteryStatus();
+  return <span>{level}</span>;
+}`,
+      good: `export default function Page() {
+  const { level, isSupported } = useBatteryStatus();
+  if (!isSupported) return <span>Battery info unavailable</span>;
+  return <span>{Math.round(level * 100)}%</span>;
+}`,
+      reason: "During server-side rendering, navigator is undefined. The hook guards against this internally, returning isSupported: false with safe defaults. But your component must also handle the unsupported state to avoid hydration mismatches between server (isSupported: false) and client."
+    },
+    {
+      title: "Treating level as a percentage (0-100)",
+      bad: `const { level } = useBatteryStatus();
+return <span>{level}%</span>; // Shows "1%" when fully charged`,
+      good: `const { level } = useBatteryStatus();
+return <span>{Math.round(level * 100)}%</span>;`,
+      reason: 'The level property is a float between 0 and 1, not 0 and 100. Displaying it directly will show "1%" for a full battery. Always multiply by 100 before displaying.'
+    }
+  ]
+};
+
+// src/hooks/use-confirm-exit.ts
+var useConfirmExitEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-confirm-exit",
+  name: "useConfirmExit",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Prevents accidental page navigation when the user has unsaved changes by attaching a beforeunload listener that triggers the browser's native confirmation dialog.",
+  longDescription: "Wraps the browser's `beforeunload` event into a declarative React hook controlled by a single `enabled` boolean. When enabled, it attaches a `beforeunload` listener that calls `event.preventDefault()` and sets `event.returnValue` to trigger the browser's built-in \"Leave site?\" confirmation dialog. The hook uses a `useRef` to store the current message string, so the prompt text can be updated dynamically without re-registering the event listener (avoiding stale closures and unnecessary attach/detach cycles). The `useCallback` handler is memoized on `enabled`, and `useEffect` gates listener registration behind the enabled flag. SSR-safe: the `window.addEventListener` call only runs inside `useEffect` (client-only), so no `window is not defined` errors during server rendering. Note: modern browsers ignore the custom message text for security reasons \u2014 the dialog always shows a generic browser-defined message. The hook still accepts a `message` parameter for backward compatibility and for environments or older browsers that may still display it. This is a side-effect-only hook (returns void) intended to be called unconditionally at the top level of a component.",
+  tags: [
+    "unsaved-changes",
+    "beforeunload",
+    "navigation-guard",
+    "dirty-form",
+    "form-protection",
+    "exit-confirm",
+    "browser-prompt",
+    "data-loss",
+    "page-leave"
+  ],
+  category: "side-effect",
+  useCases: [
+    "Prevent users from losing unsaved form data by showing a browser confirmation dialog when they try to close the tab or navigate away",
+    "Guard a draft content editor (blog post, email, document) so accidental back-button presses or tab closes don't discard work",
+    "Protect multi-step wizard or onboarding flows where leaving mid-process would lose partially completed state",
+    "Warn before navigating away during long-running operations like file uploads or data exports that should not be interrupted",
+    'Conditionally activate the exit guard only when a form is "dirty" (has been modified), and deactivate it after successful save or submission',
+    "Combine with a router's route-change blocker for single-page applications where `beforeunload` alone does not intercept client-side navigation"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useConfirmExit.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useConfirmExit(options: UseConfirmExitOptions): void",
+  returnType: "void",
+  parameters: [
+    {
+      name: "options.enabled",
+      type: "boolean",
+      required: true,
+      description: "Controls whether the beforeunload listener is active. Pass `true` when the user has unsaved changes, and `false` after a successful save or when the form is clean. The hook attaches and detaches the listener reactively as this value changes."
+    },
+    {
+      name: "options.message",
+      type: "string",
+      required: false,
+      defaultValue: "'You have unsaved changes. Are you sure you want to leave?'",
+      description: 'Custom text to set as `event.returnValue`. Note: modern browsers (Chrome 51+, Firefox 44+) ignore this and display a generic "Leave site?" message for security reasons. The parameter is retained for backward compatibility and older browser support.'
+    }
+  ],
+  returnValues: [],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Form Exit Guard",
+      description: "A form component that tracks dirty state and activates the exit confirmation when the user has modified any field.",
+      code: `import { useState, useCallback } from 'react';
+import { useConfirmExit } from 'vayu-ui';
+
+export default function ProfileForm() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [isDirty, setIsDirty] = useState(false);
+
+  const handleChange = (setter: (v: string) => void) =>
+    useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        setter(e.target.value);
+        setIsDirty(true);
+      },
+      [setter],
+    );
+
+  useConfirmExit({ enabled: isDirty });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // ... save logic ...
+    setIsDirty(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
+      <div>
+        <label className="block text-sm font-medium mb-1">Name</label>
+        <input
+          value={name}
+          onChange={handleChange(setName)}
+          className="w-full p-2 border rounded-control bg-surface text-surface-content"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium mb-1">Email</label>
+        <input
+          value={email}
+          onChange={handleChange(setEmail)}
+          className="w-full p-2 border rounded-control bg-surface text-surface-content"
+        />
+      </div>
+      <button
+        type="submit"
+        className="px-4 py-2 bg-brand text-brand-content rounded-control"
+      >
+        Save
+      </button>
+    </form>
+  );
+}`,
+      tags: ["basic", "form", "dirty-state", "exit-guard"]
+    },
+    {
+      title: "Conditional Activation After First Edit",
+      description: "Activates the exit guard only after the user has made at least one change to a textarea, and deactivates it on save or reset.",
+      code: `import { useState } from 'react';
+import { useConfirmExit } from 'vayu-ui';
+
+export default function NoteEditor() {
+  const [content, setContent] = useState('');
+  const [savedContent, setSavedContent] = useState('');
+  const isDirty = content !== savedContent;
+
+  useConfirmExit({
+    enabled: isDirty,
+    message: 'Your note has unsaved changes. Leave anyway?',
+  });
+
+  const handleSave = () => {
+    setSavedContent(content);
+  };
+
+  const handleReset = () => {
+    setContent(savedContent);
+  };
+
+  return (
+    <div className="space-y-3 max-w-lg">
+      <textarea
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="Write your note..."
+        rows={8}
+        className="w-full p-3 border rounded-surface bg-surface text-surface-content resize-y"
+      />
+      <div className="flex gap-2">
+        <button
+          onClick={handleSave}
+          disabled={!isDirty}
+          className="px-4 py-2 bg-brand text-brand-content rounded-control disabled:opacity-50"
+        >
+          Save
+        </button>
+        <button
+          onClick={handleReset}
+          disabled={!isDirty}
+          className="px-4 py-2 border rounded-control disabled:opacity-50"
+        >
+          Reset
+        </button>
+        {isDirty && (
+          <span className="text-sm text-warning self-center">
+            Unsaved changes
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}`,
+      tags: ["conditional", "textarea", "save", "reset", "dirty-check"]
+    },
+    {
+      title: "Multi-Step Wizard with Exit Protection",
+      description: "A multi-step form wizard that enables exit protection after the user starts step 2, and disables it once the wizard is completed or cancelled.",
+      code: `import { useState } from 'react';
+import { useConfirmExit } from 'vayu-ui';
+
+const STEPS = ['Account', 'Profile', 'Confirm'];
+
+export default function SignupWizard() {
+  const [step, setStep] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ username: '', displayName: '', bio: '' });
+
+  const isProtected = step > 0 && !submitted;
+
+  useConfirmExit({
+    enabled: isProtected,
+    message: 'Your signup progress will be lost.',
+  });
+
+  const next = () => setStep((s) => Math.min(s + 1, STEPS.length - 1));
+  const back = () => setStep((s) => Math.max(s - 1, 0));
+
+  const handleSubmit = () => {
+    // ... submit logic ...
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="max-w-md space-y-4">
+      {/* Step indicator */}
+      <div className="flex gap-2">
+        {STEPS.map((label, i) => (
+          <div
+            key={label}
+            className={\`flex-1 text-center text-xs py-1 rounded-control \${
+              i <= step ? 'bg-brand text-brand-content' : 'bg-muted text-muted-content'
+            }\`}
+          >
+            {label}
+          </div>
+        ))}
+      </div>
+
+      {/* Step content */}
+      {step === 0 && (
+        <input
+          value={form.username}
+          onChange={(e) => setForm({ ...form, username: e.target.value })}
+          placeholder="Username"
+          className="w-full p-2 border rounded-control bg-surface text-surface-content"
+        />
+      )}
+      {step === 1 && (
+        <div className="space-y-3">
+          <input
+            value={form.displayName}
+            onChange={(e) => setForm({ ...form, displayName: e.target.value })}
+            placeholder="Display name"
+            className="w-full p-2 border rounded-control bg-surface text-surface-content"
+          />
+          <textarea
+            value={form.bio}
+            onChange={(e) => setForm({ ...form, bio: e.target.value })}
+            placeholder="Short bio"
+            rows={3}
+            className="w-full p-2 border rounded-control bg-surface text-surface-content resize-y"
+          />
+        </div>
+      )}
+      {step === 2 && (
+        <div className="space-y-1 text-sm">
+          <p><strong>Username:</strong> {form.username}</p>
+          <p><strong>Display name:</strong> {form.displayName}</p>
+          <p><strong>Bio:</strong> {form.bio}</p>
+        </div>
+      )}
+
+      {/* Navigation */}
+      <div className="flex justify-between">
+        {step > 0 && (
+          <button onClick={back} className="px-4 py-2 border rounded-control">
+            Back
+          </button>
+        )}
+        <div className="ml-auto">
+          {step < STEPS.length - 1 ? (
+            <button onClick={next} className="px-4 py-2 bg-brand text-brand-content rounded-control">
+              Next
+            </button>
+          ) : (
+            <button onClick={handleSubmit} className="px-4 py-2 bg-success text-white rounded-control">
+              Submit
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["wizard", "multi-step", "stepper", "progression", "complex"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Storing the message in React state instead of letting the hook handle it",
+      bad: `const [msg, setMsg] = useState('Are you sure?');
+// Passing msg as a prop causes unnecessary listener re-registration
+useConfirmExit({ enabled: true, message: msg });`,
+      good: `// The hook uses an internal ref \u2014 just pass the value directly
+useConfirmExit({ enabled: true, message: 'Are you sure?' });
+// Or derive it inline \u2014 the ref pattern avoids stale closures
+useConfirmExit({ enabled: isDirty, message: getWarningText() });`,
+      reason: "The hook stores the message in a useRef internally, so changing the message does NOT re-register the event listener. Passing a state variable works but is unnecessary \u2014 a plain string or derived value is simpler and avoids extra renders."
+    },
+    {
+      title: "Enabling the guard unconditionally without a dirty check",
+      bad: `function MyForm() {
+  useConfirmExit({ enabled: true });
+  // User gets prompted even when nothing has changed
+}`,
+      good: `function MyForm() {
+  const [isDirty, setIsDirty] = useState(false);
+  useConfirmExit({ enabled: isDirty });
+  // Only prompts when the form actually has changes
+}`,
+      reason: "Always guarding with `enabled: true` annoys users by showing the confirmation dialog even when they haven't made any changes. Tie `enabled` to a dirty-state flag that flips on when form values differ from their saved originals."
+    },
+    {
+      title: "Expecting the custom message to appear in modern browsers",
+      bad: `useConfirmExit({
+  enabled: true,
+  message: 'Click OK to lose all your work!',
+});
+// User expects to see this exact text in the dialog`,
+      good: `useConfirmExit({ enabled: true });
+// Accept that Chrome/Firefox/Edge show a generic "Leave site?" dialog.
+// Use an in-app modal or router guard if you need a custom prompt UI.`,
+      reason: "Modern browsers (Chrome 51+, Firefox 44+, Edge 79+) ignore custom `beforeunload` messages for security/anti-phishing reasons. They always show a generic browser-controlled dialog. If you need a fully custom confirmation UI, use a router-level navigation blocker or an in-app modal instead."
+    },
+    {
+      title: "Assuming beforeunload catches SPA client-side navigation",
+      bad: `// Using Next.js, React Router, or similar SPA framework
+useConfirmExit({ enabled: isDirty });
+// User clicks a <Link> to another page \u2014 no dialog appears!`,
+      good: `// For full protection in an SPA, combine both:
+useConfirmExit({ enabled: isDirty }); // handles tab close / full page nav
+
+// PLUS a router-level guard, e.g. Next.js:
+// useRouter().beforePopState or useBlocker in React Router`,
+      reason: "The `beforeunload` event only fires for full page unloads (tab close, address bar navigation, hard refresh). Client-side navigation in SPAs (Next.js <Link>, React Router navigation) does NOT trigger `beforeunload`. You need a router-specific guard in addition to this hook for complete protection."
+    }
+  ]
+};
+
+// src/hooks/use-copy-to-clipboard.ts
+var useCopyToClipboardEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-copy-to-clipboard",
+  name: "useCopyToClipboard",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "React hook that copies text to the system clipboard with a built-in success state, error handling, and a legacy browser fallback.",
+  longDescription: `Provides an async copy function that writes text to the user's clipboard via navigator.clipboard.writeText (Clipboard API). If the Clipboard API is unavailable \u2014 for example in older browsers, non-HTTPS contexts, or environments where the Permissions Policy blocks clipboard access \u2014 it falls back to creating a hidden textarea, selecting its contents, and invoking document.execCommand("copy"). The hook returns a copied boolean that flips to true for exactly 2 seconds after a successful copy, making it trivial to show "Copied!" feedback without managing your own timer. An error field captures any failure so the UI can surface a meaningful message instead of silently failing. The hook takes no arguments at initialization; the copy function accepts the text to copy. No external dependencies beyond React are required.`,
+  tags: [
+    "clipboard",
+    "copy",
+    "paste",
+    "write-text",
+    "exec-command",
+    "fallback",
+    "feedback",
+    "clipboard-api",
+    "browser-api",
+    "ux"
+  ],
+  category: "side-effect",
+  useCases: [
+    'Add a "Copy" button next to code snippets that shows a brief "Copied!" confirmation before reverting',
+    "Let users copy shareable URLs or deep links from the UI with one click and visual confirmation",
+    "Copy generated API keys, tokens, or passwords to the clipboard after creation and display a success state",
+    'Build a "Copy all" action that copies table data, JSON output, or form values to the clipboard for pasting into spreadsheets',
+    "Provide clipboard actions inside right-click context menus or dropdown menus without managing timers and error state manually",
+    "Implement a copy-to-clipboard interaction in environments that may not support the modern Clipboard API, such as older browsers or non-HTTPS pages"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useCopyToClipboard.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useCopyToClipboard(): { copy: (text: string) => Promise<void>; copied: boolean; error: Error | null }",
+  returnType: "{ copy: (text: string) => Promise<void>; copied: boolean; error: Error | null }",
+  parameters: [],
+  returnValues: [
+    {
+      name: "copy",
+      type: "(text: string) => Promise<void>",
+      description: 'Async function that writes the provided string to the system clipboard. Uses navigator.clipboard.writeText when available; falls back to a hidden textarea with document.execCommand("copy") otherwise. Call this from an event handler \u2014 not during render.'
+    },
+    {
+      name: "copied",
+      type: "boolean",
+      description: 'True for exactly 2 seconds after a successful copy, then automatically resets to false. Use this to show transient "Copied!" feedback, icon swaps, or button state changes without managing your own setTimeout.'
+    },
+    {
+      name: "error",
+      type: "Error | null",
+      description: "Set to the Error object if the copy operation fails (e.g., clipboard permission denied, insecure HTTP context, or a thrown exception). Null when no error has occurred. Check this after calling copy to surface user-facing error messages."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Copy Button",
+      description: 'A minimal button that copies a string to the clipboard and displays a temporary "Copied!" label.',
+      code: `'use client';
+
+import { useCopyToClipboard } from 'vayu-ui';
+
+export default function BasicCopyButton() {
+  const { copy, copied } = useCopyToClipboard();
+
+  return (
+    <button
+      onClick={() => copy('Hello from Vayu UI!')}
+      className="px-4 py-2 rounded-control bg-brand text-brand-content hover:opacity-90 transition-opacity"
+    >
+      {copied ? 'Copied!' : 'Copy text'}
+    </button>
+  );
+}`,
+      tags: ["basic", "button", "feedback"]
+    },
+    {
+      title: "Copy with Error Handling",
+      description: "Demonstrates handling the error state when clipboard access is denied or unavailable, with a retry prompt.",
+      code: `'use client';
+
+import { useCopyToClipboard } from 'vayu-ui';
+
+export default function CopyWithErrorHandling() {
+  const { copy, copied, error } = useCopyToClipboard();
+
+  const handleCopy = async () => {
+    await copy('Sensitive data: abc-123-xyz');
+  };
+
+  return (
+    <div className="space-y-2">
+      <button
+        onClick={handleCopy}
+        className="px-4 py-2 rounded-control bg-brand text-brand-content"
+      >
+        {copied ? 'Copied!' : 'Copy token'}
+      </button>
+      {error && (
+        <p className="text-sm text-destructive" role="alert">
+          Copy failed: {error.message}. Please copy manually.
+        </p>
+      )}
+    </div>
+  );
+}`,
+      tags: ["error-handling", "retry", "alert"]
+    },
+    {
+      title: "Copy Code Snippet",
+      description: "A code block component with a copy button in the header that copies the code content and shows a checkmark icon on success.",
+      code: `'use client';
+
+import { useCopyToClipboard } from 'vayu-ui';
+
+const CODE_SAMPLE = \`function greet(name: string): string {
+  return \`Hello, \${name}!\`;
+}\`;
+
+export default function CopyCodeBlock() {
+  const { copy, copied } = useCopyToClipboard();
+
+  return (
+    <div className="rounded-surface border bg-surface text-surface-content overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/50">
+        <span className="text-xs font-medium text-muted-content">TypeScript</span>
+        <button
+          onClick={() => copy(CODE_SAMPLE)}
+          className="text-xs px-2 py-1 rounded-control hover:bg-surface transition-colors"
+        >
+          {copied ? '\u2713 Copied' : 'Copy'}
+        </button>
+      </div>
+      <pre className="p-4 text-sm overflow-x-auto">
+        <code>{CODE_SAMPLE}</code>
+      </pre>
+    </div>
+  );
+}`,
+      tags: ["code-block", "snippet", "syntax"]
+    },
+    {
+      title: "Copy API Key with Masked Reveal",
+      description: "An API key display that masks the key by default, lets the user reveal it, and provides a copy button with visual feedback.",
+      code: `'use client';
+
+import { useCopyToClipboard } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function CopyApiKey() {
+  const { copy, copied } = useCopyToClipboard();
+  const [visible, setVisible] = useState(false);
+  const apiKey = 'sk-vayu-1a2b3c4d5e6f7g8h9i0j';
+
+  return (
+    <div className="p-4 rounded-surface border bg-surface text-surface-content space-y-3 w-80">
+      <label className="text-sm font-medium">API Key</label>
+      <div className="flex items-center gap-2">
+        <code className="flex-1 px-3 py-2 rounded-control bg-muted text-sm font-mono truncate">
+          {visible ? apiKey : '\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'}
+        </code>
+        <button
+          onClick={() => setVisible((v) => !v)}
+          className="px-3 py-2 text-xs rounded-control border hover:bg-muted transition-colors"
+        >
+          {visible ? 'Hide' : 'Show'}
+        </button>
+        <button
+          onClick={() => copy(apiKey)}
+          className="px-3 py-2 text-xs rounded-control bg-brand text-brand-content hover:opacity-90 transition-opacity"
+        >
+          {copied ? 'Copied!' : 'Copy'}
+        </button>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["api-key", "masked", "reveal", "security"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Ignoring the error state",
+      bad: `const { copy, copied } = useCopyToClipboard();
+return <button onClick={() => copy(text)}>{copied ? 'Copied!' : 'Copy'}</button>;`,
+      good: `const { copy, copied, error } = useCopyToClipboard();
+return (
+  <div>
+    <button onClick={() => copy(text)}>{copied ? 'Copied!' : 'Copy'}</button>
+    {error && <p className="text-destructive text-sm">Copy failed: {error.message}</p>}
+  </div>
+);`,
+      reason: "The Clipboard API can fail for many reasons: the user denied the permission, the page is served over HTTP instead of HTTPS, or the browser does not support it. Always check and surface the error so the user knows the copy did not succeed."
+    },
+    {
+      title: "Calling copy during render or in useEffect",
+      bad: `const { copy } = useCopyToClipboard();
+useEffect(() => { copy('hello'); }, []);`,
+      good: `const { copy } = useCopyToClipboard();
+return <button onClick={() => copy('hello')}>Copy</button>;`,
+      reason: "The copy function triggers side effects (DOM manipulation in the fallback path, state updates via setCopied). Calling it during render or unconditionally in useEffect causes state updates outside of event handlers and may run before the DOM is ready."
+    },
+    {
+      title: "Treating copied as permanent state",
+      bad: `const { copied } = useCopyToClipboard();
+if (copied) return <span>Copied forever</span>;`,
+      good: `const { copied } = useCopyToClipboard();
+return <span>{copied ? 'Copied!' : 'Copy'}</span>;`,
+      reason: "The copied boolean auto-resets to false after 2 seconds via an internal setTimeout. It is designed for transient UI feedback, not as a persistent flag. If you need permanent state, manage your own boolean and set it in a .then() chain after calling copy."
+    },
+    {
+      title: "Assuming Clipboard API works in all environments",
+      bad: `const { copy } = useCopyToClipboard();
+await copy(text);
+// assumes it always succeeds`,
+      good: `const { copy, error } = useCopyToClipboard();
+await copy(text);
+if (error) {
+  // Fallback: select text in a readonly input for manual copy
+  inputRef.current?.select();
+}`,
+      reason: "The Clipboard API requires a secure context (HTTPS or localhost) and can be blocked by browser permissions policies. The hook provides a document.execCommand fallback, but even that can fail. Always handle the error case and provide a manual-copy alternative."
+    }
+  ]
+};
+
+// src/hooks/use-debounce.ts
+var useDebounceEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-debounce",
+  name: "useDebounce",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Returns a debounced version of a value that only updates after the specified delay has elapsed without any new changes.",
+  longDescription: "Wraps a value in a setTimeout-based debounce mechanism using React's useState and useEffect. Each time the input value changes, the previous timeout is cleared and a new one is scheduled. The returned debounced value only updates when the delay period expires without the value changing again \u2014 ideal for rate-limiting operations triggered by rapid user input. Because it relies solely on synchronous React state and useEffect cleanup, it is fully SSR-safe with no hydration mismatches: the initial render always returns the original value immediately, and debouncing only begins after mount. Choose this hook over a manual setTimeout when you need a declarative, React-friendly way to delay state propagation without managing timer lifecycle yourself.",
+  tags: [
+    "debounce",
+    "delay",
+    "search",
+    "input",
+    "performance",
+    "timeout",
+    "filter",
+    "rate-limit",
+    "typing",
+    "throttle"
+  ],
+  category: "animation",
+  useCases: [
+    "Prevent API spam when a user types rapidly in a search bar by only sending the request after they stop typing for a set duration",
+    "Delay form validation until the user has stopped typing, avoiding jarring inline errors while they are still composing input",
+    "Debounce rapidly changing values like window dimensions or scroll positions to avoid expensive re-renders or layout recalculations",
+    "Implement auto-save functionality that only triggers a save request after the user stops editing for a configurable idle period",
+    "Delay free-text filter application in data tables or lists so filtering does not fire on every keystroke",
+    "Rate-limit expensive computations or visual updates driven by slider, range, or continuous input controls"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useDebounce.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useDebounce<T>(value: T, delay: number): T",
+  typeParams: ["T"],
+  returnType: "T",
+  parameters: [
+    {
+      name: "value",
+      type: "T",
+      required: true,
+      description: "The value to debounce. Can be any type \u2014 string, number, boolean, object, or array. The hook tracks changes via React's dependency comparison, so primitive and reference types are both supported."
+    },
+    {
+      name: "delay",
+      type: "number",
+      required: true,
+      description: "The debounce delay in milliseconds. The returned value will only update after this duration elapses without the input value changing. Typical values are 250\u2013500ms for search inputs and 1000\u20132000ms for auto-save. Passing 0 effectively disables debouncing."
+    }
+  ],
+  returnValues: [
+    {
+      name: "debouncedValue",
+      type: "T",
+      description: "The delayed version of the input value. On the initial render it equals the input value immediately. On subsequent changes, it retains the previous value until the delay elapses without further changes."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Debounced Search Input",
+      description: "A search bar that only triggers an API call after the user stops typing for 400ms, preventing excessive requests during fast typing.",
+      code: `import { useDebounce } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+export default function DebouncedSearch() {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<string[]>([]);
+  const debouncedQuery = useDebounce(query, 400);
+
+  useEffect(() => {
+    if (!debouncedQuery.trim()) {
+      setResults([]);
+      return;
+    }
+
+    // Simulate API call
+    const controller = new AbortController();
+    fetch(\`/api/search?q=\${encodeURIComponent(debouncedQuery)}\`, {
+      signal: controller.signal,
+    })
+      .then((res) => res.json())
+      .then((data) => setResults(data.items))
+      .catch(() => {});
+
+    return () => controller.abort();
+  }, [debouncedQuery]);
+
+  return (
+    <div className="space-y-3">
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search..."
+        className="w-full px-3 py-2 rounded-control border bg-surface text-surface-content"
+      />
+      {results.length > 0 && (
+        <ul className="space-y-1">
+          {results.map((item) => (
+            <li key={item} className="px-2 py-1 text-sm rounded-md hover:bg-muted/50">
+              {item}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}`,
+      tags: ["search", "input", "api", "fetch"]
+    },
+    {
+      title: "Auto-Saving Form",
+      description: "A form that automatically saves its state to an API after the user stops editing for 1.5 seconds, providing visual feedback for the save status.",
+      code: `import { useDebounce } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+export default function AutoSaveForm() {
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+
+  const debouncedTitle = useDebounce(title, 1500);
+  const debouncedBody = useDebounce(body, 1500);
+
+  useEffect(() => {
+    if (!debouncedTitle && !debouncedBody) return;
+
+    setSaveStatus('saving');
+    fetch('/api/posts', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: debouncedTitle, body: debouncedBody }),
+    })
+      .then(() => setSaveStatus('saved'))
+      .catch(() => setSaveStatus('idle'));
+  }, [debouncedTitle, debouncedBody]);
+
+  return (
+    <div className="space-y-4 p-4 rounded-surface border bg-surface text-surface-content max-w-md">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold">Edit Post</h2>
+        <span className="text-xs text-muted-content">
+          {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'saved' ? 'Saved' : ''}
+        </span>
+      </div>
+      <input
+        value={title}
+        onChange={(e) => { setTitle(e.target.value); setSaveStatus('idle'); }}
+        placeholder="Title"
+        className="w-full px-3 py-2 rounded-control border"
+      />
+      <textarea
+        value={body}
+        onChange={(e) => { setBody(e.target.value); setSaveStatus('idle'); }}
+        placeholder="Body"
+        rows={5}
+        className="w-full px-3 py-2 rounded-control border resize-y"
+      />
+    </div>
+  );
+}`,
+      tags: ["auto-save", "form", "api", "feedback"]
+    },
+    {
+      title: "Debounced Window Resize",
+      description: "Debounces the window width to avoid recalculating layouts on every intermediate resize frame, only updating after the user stops resizing.",
+      code: `import { useDebounce } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+export default function ResponsiveLayout() {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  const debouncedWidth = useDebounce(width, 250);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const columns = debouncedWidth >= 1024 ? 4 : debouncedWidth >= 768 ? 2 : 1;
+
+  return (
+    <div className="space-y-2">
+      <p className="text-sm text-muted-content">
+        Viewport: {debouncedWidth}px \u2014 {columns} column{columns > 1 ? 's' : ''}
+      </p>
+      <div
+        className="grid gap-4"
+        style={{ gridTemplateColumns: \`repeat(\${columns}, minmax(0, 1fr))\` }}
+      >
+        {Array.from({ length: 8 }, (_, i) => (
+          <div key={i} className="h-24 rounded-surface bg-muted/30 border" />
+        ))}
+      </div>
+    </div>
+  );
+}`,
+      tags: ["resize", "responsive", "layout", "viewport"]
+    },
+    {
+      title: "Debounced Filter for Data Table",
+      description: "A filterable list where the text filter is debounced by 300ms, so the expensive list re-rendering only happens after the user pauses typing.",
+      code: `import { useDebounce } from 'vayu-ui';
+import { useState, useMemo } from 'react';
+
+const items = [
+  { id: 1, name: 'Alice Johnson', role: 'Engineer' },
+  { id: 2, name: 'Bob Smith', role: 'Designer' },
+  { id: 3, name: 'Charlie Lee', role: 'Engineer' },
+  { id: 4, name: 'Diana Patel', role: 'Manager' },
+  { id: 5, name: 'Ethan Brown', role: 'Designer' },
+];
+
+export default function DebouncedFilter() {
+  const [filter, setFilter] = useState('');
+  const debouncedFilter = useDebounce(filter, 300);
+
+  const filtered = useMemo(() => {
+    if (!debouncedFilter.trim()) return items;
+    const lower = debouncedFilter.toLowerCase();
+    return items.filter(
+      (item) =>
+        item.name.toLowerCase().includes(lower) ||
+        item.role.toLowerCase().includes(lower),
+    );
+  }, [debouncedFilter]);
+
+  return (
+    <div className="space-y-3">
+      <input
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        placeholder="Filter by name or role..."
+        className="w-full px-3 py-2 rounded-control border bg-surface text-surface-content"
+      />
+      <p className="text-xs text-muted-content">
+        Showing {filtered.length} of {items.length}
+      </p>
+      <ul className="divide-y border rounded-surface">
+        {filtered.map((item) => (
+          <li key={item.id} className="flex justify-between px-3 py-2 text-sm">
+            <span>{item.name}</span>
+            <span className="text-muted-content">{item.role}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}`,
+      tags: ["filter", "data-table", "list", "search"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Setting delay to 0 or a negative number",
+      bad: `const debounced = useDebounce(query, 0);`,
+      good: `const debounced = useDebounce(query, 400);`,
+      reason: "A delay of 0 means the setTimeout fires on the next event loop tick, which does not actually batch rapid changes. If you need no delay, skip the hook entirely and use the value directly."
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (isEnabled) {
+  const debounced = useDebounce(value, 300);
+}`,
+      good: `const debounced = useDebounce(isEnabled ? value : value, 300);`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling useDebounce inside a conditional, loop, or nested function violates the Rules of Hooks and will cause crashes or stale state."
+    },
+    {
+      title: "Using debounce for throttling",
+      bad: `// Expecting this to fire every 300ms while typing
+const throttled = useDebounce(query, 300);`,
+      good: `// Use a proper throttle hook for periodic execution
+// useDebounce only fires AFTER the user stops changing the value`,
+      reason: "Debouncing resets the timer on every value change and only fires once after the user stops. Throttling fires at a fixed interval regardless of changes. If you need periodic updates during continuous input (e.g., live preview), use a throttle mechanism instead."
+    },
+    {
+      title: "Debouncing callback functions instead of values",
+      bad: `const debouncedFn = useDebounce(() => fetchResults(query), 300);
+// This re-creates the function every render and debounces the reference, not the behavior`,
+      good: `const debouncedQuery = useDebounce(query, 300);
+useEffect(() => {
+  fetchResults(debouncedQuery);
+}, [debouncedQuery]);`,
+      reason: "useDebounce is designed for values, not functions. Debouncing a callback reference compares function identity on each render, which changes every time, defeating the debounce. Instead, debounce the value and trigger the side effect with useEffect."
+    },
+    {
+      title: "Expecting instant update on initial render",
+      bad: `const debounced = useDebounce(initialValue, 500);
+// Expecting debounced to be undefined or null on first render`,
+      good: `const debounced = useDebounce(initialValue, 500);
+// debounced === initialValue on first render \u2014 this is correct and SSR-safe`,
+      reason: "On the initial render, useState is initialized with the input value directly, so the debounced value matches immediately. There is no delay on mount. This is by design for SSR compatibility \u2014 server and client will produce the same initial output."
+    }
+  ]
+};
+
+// src/hooks/use-device-os.ts
+var useDeviceOSEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-device-os",
+  name: "useDeviceOS",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Detects the user's operating system, browser, device type, and touch capability by parsing navigator.userAgent and exposes them as reactive, SSR-safe state.",
+  longDescription: 'Parses navigator.userAgent via regex-based detection to identify the OS (Windows, macOS, Linux, Android, iOS, ChromeOS), browser (Chrome, Firefox, Safari, Edge, Opera, Samsung Internet), and device category (mobile, tablet, desktop). Touch capability is determined by checking for the ontouchstart event or navigator.maxTouchPoints. The hook is fully SSR-safe \u2014 it initializes with safe defaults (os: "Unknown", browser: "Unknown", deviceType: "desktop", isTouchDevice: false, userAgent: "", isReady: false) and only runs detection inside a useEffect after mount. The isReady flag is the key differentiator from naive window.navigator checks: it lets components distinguish between "detection has not run yet" (SSR or initial render) and "detection ran but could not identify the platform". This prevents hydration mismatches in Next.js, Remix, or any framework that server-renders HTML. No external dependencies beyond React are required.',
+  tags: [
+    "device",
+    "os",
+    "browser",
+    "user-agent",
+    "detection",
+    "platform",
+    "responsive",
+    "touch",
+    "mobile",
+    "ssr-safe"
+  ],
+  category: "input",
+  useCases: [
+    "Render platform-specific keyboard shortcut hints \u2014 show Cmd on macOS and Ctrl on Windows/Linux without hardcoding per platform",
+    "Conditionally switch between mobile and desktop layouts based on device type (mobile, tablet, desktop) for responsive single-page applications",
+    "Display OS-appropriate download buttons on a landing page \u2014 show App Store for iOS, Google Play for Android, .exe for Windows, .dmg for macOS",
+    "Detect touch-only devices to swap click handlers for touch-optimized interactions, or hide hover-dependent UI on touch screens",
+    "Log user device and browser demographics for analytics dashboards without adding a third-party analytics script",
+    "Show a browser upgrade prompt when users visit with an unsupported or outdated browser, improving compatibility without blocking access",
+    "Customize form input types based on device \u2014 for example, use tel input mode on mobile for phone number fields while keeping standard text input on desktop"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useDeviceOS.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useDeviceOS(): DeviceOSInfo",
+  returnType: "DeviceOSInfo",
+  parameters: [],
+  returnValues: [
+    {
+      name: "os",
+      type: "'Windows' | 'macOS' | 'Linux' | 'Android' | 'iOS' | 'ChromeOS' | 'Unknown'",
+      description: 'Detected operating system derived from user-agent string parsing. Returns "Unknown" if no known OS signature matches. On SSR or before hydration, defaults to "Unknown".'
+    },
+    {
+      name: "browser",
+      type: "'Chrome' | 'Firefox' | 'Safari' | 'Edge' | 'Opera' | 'Samsung Internet' | 'Unknown'",
+      description: 'Detected browser from user-agent string parsing. Detection order matters \u2014 Samsung Internet and Opera are checked before Chrome since their UA strings also contain "Chrome". Returns "Unknown" if no match is found.'
+    },
+    {
+      name: "deviceType",
+      type: "'mobile' | 'tablet' | 'desktop'",
+      description: 'Physical device category. "mobile" for phones with mobile UA strings (including Android Mobile and iPhone), "tablet" for iPad and non-mobile Android, and "desktop" as the fallback for laptops and desktops.'
+    },
+    {
+      name: "isTouchDevice",
+      type: "boolean",
+      description: "Whether the device supports touch input, determined by checking for the ontouchstart event or a non-zero navigator.maxTouchPoints. Returns false during SSR."
+    },
+    {
+      name: "userAgent",
+      type: "string",
+      description: "The raw navigator.userAgent string used for detection. Empty string during SSR. Useful for custom parsing or logging."
+    },
+    {
+      name: "isReady",
+      type: "boolean",
+      description: "Whether client-side detection has completed. Stays false during SSR and on the initial server-rendered HTML. Check this before rendering device-dependent UI to avoid hydration mismatches."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Platform-Specific Keyboard Shortcuts",
+      description: "Displays the correct modifier key symbol (Cmd on macOS, Ctrl elsewhere) in a keyboard shortcut hint, ensuring accuracy across platforms.",
+      code: `import { useDeviceOS } from 'vayu-ui';
+
+export default function KeyboardShortcutHint() {
+  const { os, isReady } = useDeviceOS();
+
+  if (!isReady) {
+    return <span className="text-sm text-muted">Loading shortcuts...</span>;
+  }
+
+  const mod = os === 'macOS' ? '\u2318' : 'Ctrl';
+  const alt = os === 'macOS' ? '\u2325' : 'Alt';
+
+  return (
+    <div className="space-y-1 text-sm">
+      <p>
+        <kbd className="px-1.5 py-0.5 rounded border bg-muted/50 text-xs font-mono">{mod}</kbd> +{' '}
+        <kbd className="px-1.5 py-0.5 rounded border bg-muted/50 text-xs font-mono">K</kbd>{' '}
+        Open command palette
+      </p>
+      <p>
+        <kbd className="px-1.5 py-0.5 rounded border bg-muted/50 text-xs font-mono">{mod}</kbd> +{' '}
+        <kbd className="px-1.5 py-0.5 rounded border bg-muted/50 text-xs font-mono">{alt}</kbd> +{' '}
+        <kbd className="px-1.5 py-0.5 rounded border bg-muted/50 text-xs font-mono">R</kbd>{' '}
+        Reload without cache
+      </p>
+    </div>
+  );
+}`,
+      tags: ["keyboard", "shortcuts", "macos", "windows", "modifier-key"]
+    },
+    {
+      title: "Device-Aware Layout Switcher",
+      description: "Renders a different layout structure depending on whether the user is on a mobile, tablet, or desktop device.",
+      code: `import { useDeviceOS } from 'vayu-ui';
+
+export default function ResponsiveDashboard() {
+  const { deviceType, isReady } = useDeviceOS();
+
+  if (!isReady) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <span className="text-muted">Detecting device...</span>
+      </div>
+    );
+  }
+
+  if (deviceType === 'mobile') {
+    return (
+      <div className="flex flex-col gap-2 p-2">
+        <header className="p-3 rounded-surface bg-surface border">Mobile Nav</header>
+        <main className="p-3 rounded-surface bg-surface border">Stacked Content</main>
+      </div>
+    );
+  }
+
+  if (deviceType === 'tablet') {
+    return (
+      <div className="grid grid-cols-[220px_1fr] gap-2 p-2 h-screen">
+        <aside className="p-3 rounded-surface bg-surface border">Sidebar</aside>
+        <main className="p-3 rounded-surface bg-surface border overflow-auto">Content</main>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-[260px_1fr_200px] gap-4 p-4 h-screen">
+      <aside className="p-4 rounded-surface bg-surface border">Sidebar</aside>
+      <main className="p-4 rounded-surface bg-surface border overflow-auto">Main Content</main>
+      <aside className="p-4 rounded-surface bg-surface border">Panel</aside>
+    </div>
+  );
+}`,
+      tags: ["layout", "responsive", "mobile", "tablet", "desktop"]
+    },
+    {
+      title: "OS-Specific Download Buttons",
+      description: "Shows the primary download button for the detected OS and secondary options for other platforms, ideal for product landing pages.",
+      code: `import { useDeviceOS } from 'vayu-ui';
+import { useState } from 'react';
+
+const platforms = [
+  { os: 'Windows' as const, label: 'Download for Windows', ext: '.exe' },
+  { os: 'macOS' as const, label: 'Download for macOS', ext: '.dmg' },
+  { os: 'Linux' as const, label: 'Download for Linux', ext: '.AppImage' },
+  { os: 'Android' as const, label: 'Get on Google Play', ext: '' },
+  { os: 'iOS' as const, label: 'Get on App Store', ext: '' },
+];
+
+export default function DownloadSection() {
+  const { os, isReady } = useDeviceOS();
+  const [showAll, setShowAll] = useState(false);
+
+  const primary = isReady
+    ? platforms.find((p) => p.os === os) ?? platforms[0]
+    : platforms[0];
+  const others = platforms.filter((p) => p.os !== primary.os);
+
+  return (
+    <div className="space-y-3 text-center">
+      <button className="px-6 py-3 rounded-control bg-brand text-brand-content font-medium shadow-control hover:opacity-90 transition-opacity">
+        {primary.label}
+      </button>
+      {!showAll ? (
+        <button
+          onClick={() => setShowAll(true)}
+          className="block mx-auto text-sm text-muted-content underline hover:no-underline"
+        >
+          Also available for {others.map((p) => p.os).join(', ')}
+        </button>
+      ) : (
+        <div className="flex flex-wrap justify-center gap-2 pt-1">
+          {others.map((p) => (
+            <button
+              key={p.os}
+              className="px-4 py-2 rounded-control border bg-surface text-surface-content text-sm hover:bg-muted/30 transition-colors"
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["download", "landing-page", "platform", "os-detection"]
+    },
+    {
+      title: "Browser Compatibility Warning",
+      description: "Detects the browser and renders a dismissible warning when the user is on a browser known to have limited support, guiding them to upgrade.",
+      code: `import { useDeviceOS } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function BrowserWarning() {
+  const { browser, isReady } = useDeviceOS();
+  const [dismissed, setDismissed] = useState(false);
+
+  if (!isReady || dismissed) return null;
+
+  const isLegacyOrUnsupported = browser === 'Unknown';
+
+  // You can extend this with version-specific checks if needed
+  const knownIssues: Record<string, string> = {
+    Opera: 'Some CSS features may not render correctly.',
+    'Samsung Internet': '\u67D0\u4E9B\u9AD8\u7EA7\u529F\u80FD\u53EF\u80FD\u4E0D\u53EF\u7528\u3002',
+  };
+
+  const issue = knownIssues[browser];
+  if (!isLegacyOrUnsupported && !issue) return null;
+
+  return (
+    <div
+      className="flex items-center justify-between gap-4 p-3 rounded-md bg-warning/10 text-warning border border-warning/30"
+      role="alert"
+    >
+      <span className="text-sm">
+        {isLegacyOrUnsupported
+          ? 'Your browser is not fully supported. Please update for the best experience.'
+          : issue}
+      </span>
+      <button
+        onClick={() => setDismissed(true)}
+        className="text-sm underline hover:no-underline whitespace-nowrap"
+      >
+        Dismiss
+      </button>
+    </div>
+  );
+}`,
+      tags: ["browser", "compatibility", "warning", "alert"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Trusting detection results before isReady is true",
+      bad: `const { os } = useDeviceOS();
+return <span>You are on {os}</span>;`,
+      good: `const { os, isReady } = useDeviceOS();
+if (!isReady) return <span>Detecting...</span>;
+return <span>You are on {os}</span>;`,
+      reason: 'During SSR and on the initial render, the hook returns safe defaults (os: "Unknown", deviceType: "desktop", isReady: false). Rendering device-dependent UI without checking isReady will cause hydration mismatches \u2014 the server renders "Unknown" while the client may render "macOS".'
+    },
+    {
+      title: "Using UA detection for security or auth decisions",
+      bad: `const { os } = useDeviceOS();
+if (os === 'Linux') {
+  grantAdminAccess(); // UA can be spoofed!
+}`,
+      good: `// Never trust client-side UA for security decisions.
+// Use server-side session validation and permission checks instead.`,
+      reason: "User-agent strings are trivially spoofed via browser devtools or HTTP headers. Any security-critical logic \u2014 authentication, authorization, feature gating \u2014 must be enforced server-side, not derived from client-side UA parsing."
+    },
+    {
+      title: "Using browser detection instead of feature detection",
+      bad: `const { browser } = useDeviceOS();
+const supportsViewTransitions = browser === 'Chrome';`,
+      good: `const supportsViewTransitions = typeof document !== 'undefined' && 'startViewTransition' in document;`,
+      reason: "Browser detection is fragile \u2014 new browser versions add features constantly, and UA string formats change. Always use feature detection (checking if the API exists) for capability checks. Reserve browser detection for UX hints like upgrade prompts, not functional gates."
+    },
+    {
+      title: "Polling or re-running detection on every render",
+      bad: `useEffect(() => {
+  const interval = setInterval(() => {
+    reDetectDevice();
+  }, 5000);
+  return () => clearInterval(interval);
+}, []);`,
+      good: `const { os, browser, deviceType, isReady } = useDeviceOS();
+// The hook runs detection once on mount via useEffect.
+// OS and browser do not change during a session.`,
+      reason: "The user's OS and browser do not change during a page session. The hook correctly runs detection once in a useEffect on mount. Polling wastes resources and introduces unnecessary re-renders."
+    },
+    {
+      title: "Assuming 100% detection accuracy",
+      bad: `const { deviceType } = useDeviceOS();
+if (deviceType === 'desktop') {
+  // Assume no touch support, disable all touch handlers
+  return <DesktopOnlyUI />;
+}`,
+      good: `const { deviceType, isTouchDevice } = useDeviceOS();
+// Some laptops are "desktop" devices but have touch screens.
+// Use both deviceType and isTouchDevice for decisions.`,
+      reason: 'User-agent parsing is heuristic-based. Some devices blur categories \u2014 for example, touchscreen laptops report as "desktop" but have touch capability, and some Android tablets have keyboard attachments. Combine deviceType with isTouchDevice for robust decisions rather than relying on a single field.'
+    }
+  ]
+};
+
+// src/hooks/use-element-position.ts
+var useElementPositionEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-element-position",
+  name: "useElementPosition",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Tracks the bounding rectangle of a DOM element and returns viewport-relative coordinates, keeping them synchronized across scrolls, resizes, and element size changes.",
+  longDescription: "Monitors a referenced DOM element via getBoundingClientRect and returns its viewport-relative position as a Position object with top, left, width, and height. The hook is designed to anchor floating UI layers \u2014 dropdowns, popovers, tooltips \u2014 below the trigger element. On mount it uses useLayoutEffect for a synchronous initial measurement that prevents the flash of an unpositioned overlay. While the isOpen flag is true, it subscribes to three update sources: (1) window scroll in the capture phase so scroll events inside nested scrollable containers are caught, (2) window resize for viewport changes, and (3) a ResizeObserver on the trigger element itself for content-driven size changes. All updates are wrapped in requestAnimationFrame to batch layout recalculations and avoid jank. When isOpen flips to false, every listener and observer is cleaned up, so there is zero overhead while the overlay is hidden. The hook is fully SSR-safe \u2014 all DOM access is guarded behind ref null-checks and only runs inside useEffect / useLayoutEffect. No external dependencies beyond React are required.",
+  tags: [
+    "position",
+    "bounding-rect",
+    "getBoundingClientRect",
+    "dropdown",
+    "popover",
+    "tooltip",
+    "floating",
+    "anchor",
+    "resize-observer",
+    "layout"
+  ],
+  category: "dom",
+  useCases: [
+    "Position a dropdown menu directly below its trigger button and keep it aligned when the page scrolls or the trigger resizes",
+    "Anchor a popover to a target element so it follows the element as the user scrolls through long content",
+    "Build a tooltip that tracks its trigger element across viewport changes and nested scrollable panels",
+    "Create a context menu that appears next to a right-clicked element and stays positioned correctly during scroll",
+    'Implement a "mega menu" navigation dropdown whose position updates live as the nav bar responds to responsive layout shifts',
+    "Position an autocomplete suggestion list below a text input, recalculating when the input width changes due to sibling layout shifts"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useElementPosition.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useElementPosition(triggerRef: RefObject<HTMLElement | null>, isOpen: boolean): Position",
+  returnType: "Position",
+  parameters: [
+    {
+      name: "triggerRef",
+      type: "RefObject<HTMLElement | null>",
+      required: true,
+      description: "A React ref attached to the DOM element whose position should be tracked. The hook reads getBoundingClientRect on this element to compute viewport-relative coordinates. Pass null initially \u2014 the hook guards against null refs and will return zeroes until the ref is populated."
+    },
+    {
+      name: "isOpen",
+      type: "boolean",
+      required: true,
+      description: "Controls whether the hook actively subscribes to scroll, resize, and ResizeObserver events. When false, all listeners are detached and the last known position is retained. Set this to true when the floating layer is visible and false when it is dismissed to avoid unnecessary DOM observations."
+    }
+  ],
+  returnValues: [
+    {
+      name: "top",
+      type: "number",
+      description: "The distance from the top of the viewport to the bottom edge of the trigger element (rect.bottom). Use this as the top offset for a position:fixed overlay to place it directly below the trigger."
+    },
+    {
+      name: "left",
+      type: "number",
+      description: "The distance from the left of the viewport to the left edge of the trigger element (rect.left). Use this as the left offset for a position:fixed overlay to horizontally align it with the trigger."
+    },
+    {
+      name: "width",
+      type: "number",
+      description: "The current width of the trigger element (rect.width). Useful for setting the overlay width to match the trigger, or for computing centered or right-aligned positions."
+    },
+    {
+      name: "height",
+      type: "number",
+      description: "The current height of the trigger element (rect.height). Useful for positioning overlays above the trigger (subtract overlay height from top and add trigger height) or for offset calculations."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Positioned Dropdown Menu",
+      description: "A button that toggles a dropdown menu positioned directly below it using useElementPosition. The menu stays aligned on scroll and resize.",
+      code: `'use client';
+
+import { useElementPosition } from 'vayu-ui';
+import { useRef, useState } from 'react';
+
+const options = ['Edit', 'Duplicate', 'Archive', 'Delete'];
+
+export default function PositionedDropdown() {
+  const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const { top, left, width } = useElementPosition(triggerRef, isOpen);
+
+  return (
+    <div className="relative">
+      <button
+        ref={triggerRef}
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="px-4 py-2 rounded-control bg-brand text-brand-content"
+      >
+        Options {isOpen ? '\u25B2' : '\u25BC'}
+      </button>
+
+      {isOpen && (
+        <ul
+          style={{ position: 'fixed', top, left, width }}
+          className="mt-1 rounded-surface border bg-elevated text-elevated-content shadow-elevated py-1 z-50"
+        >
+          {options.map((option) => (
+            <li key={option}>
+              <button
+                onClick={() => {
+                  console.log('Selected:', option);
+                  setIsOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 text-sm hover:bg-muted/50 transition-colors"
+              >
+                {option}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}`,
+      tags: ["dropdown", "menu", "position", "fixed"]
+    },
+    {
+      title: "Popover with Click Outside Close",
+      description: "A popover card anchored to an info button that closes when clicking outside, with the position updating live during scroll.",
+      code: `'use client';
+
+import { useElementPosition } from 'vayu-ui';
+import { useRef, useState, useEffect } from 'react';
+
+export default function PositionedPopover() {
+  const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const { top, left } = useElementPosition(triggerRef, isOpen);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        !triggerRef.current?.contains(e.target as Node) &&
+        !popoverRef.current?.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
+
+  return (
+    <div>
+      <button
+        ref={triggerRef}
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="px-3 py-1.5 rounded-control border bg-surface text-surface-content text-sm"
+      >
+        More info
+      </button>
+
+      {isOpen && (
+        <div
+          ref={popoverRef}
+          style={{ position: 'fixed', top, left }}
+          className="mt-2 w-72 p-4 rounded-surface border bg-elevated text-elevated-content shadow-elevated z-50"
+        >
+          <h3 className="text-sm font-semibold mb-1">What is this?</h3>
+          <p className="text-xs text-muted-content">
+            This popover stays anchored to its trigger button even while you
+            scroll the page or resize the window.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["popover", "click-outside", "anchor", "scroll"]
+    },
+    {
+      title: "Tooltip on Hover",
+      description: "A tooltip that appears above a trigger element on mouse enter and disappears on mouse leave, with its position recalculated each time it opens.",
+      code: `'use client';
+
+import { useElementPosition } from 'vayu-ui';
+import { useRef, useState } from 'react';
+
+export default function HoverTooltip() {
+  const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLSpanElement>(null);
+  const { top, left, height } = useElementPosition(triggerRef, isOpen);
+
+  return (
+    <span
+      className="inline-block"
+    >
+      <span
+        ref={triggerRef}
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+        className="underline decoration-dashed cursor-help text-surface-content"
+      >
+        Hover me
+      </span>
+
+      {isOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            top: top - height - 8,
+            left,
+          }}
+          className="px-2 py-1 text-xs rounded-control bg-elevated text-elevated-content shadow-elevated z-50 pointer-events-none"
+        >
+          This is a tooltip!
+        </div>
+      )}
+    </span>
+  );
+}`,
+      tags: ["tooltip", "hover", "position-above", "pointer-events"]
+    },
+    {
+      title: "Autocomplete Suggestions",
+      description: "A text input that shows a filtered suggestion list positioned directly below it, resizing the list to match the input width.",
+      code: `'use client';
+
+import { useElementPosition } from 'vayu-ui';
+import { useRef, useState, useMemo } from 'react';
+
+const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape', 'Honeydew'];
+
+export default function AutocompleteInput() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { top, left, width } = useElementPosition(inputRef, isOpen);
+
+  const suggestions = useMemo(() => {
+    if (!query.trim()) return [];
+    const lower = query.toLowerCase();
+    return fruits.filter((f) => f.toLowerCase().includes(lower));
+  }, [query]);
+
+  return (
+    <div className="w-72">
+      <input
+        ref={inputRef}
+        value={query}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setIsOpen(true);
+        }}
+        onFocus={() => query && setIsOpen(true)}
+        onBlur={() => setTimeout(() => setIsOpen(false), 150)}
+        placeholder="Search fruits..."
+        className="w-full px-3 py-2 rounded-control border bg-surface text-surface-content"
+      />
+
+      {isOpen && suggestions.length > 0 && (
+        <ul
+          style={{ position: 'fixed', top, left, width }}
+          className="mt-1 rounded-surface border bg-elevated text-elevated-content shadow-elevated py-1 z-50 max-h-48 overflow-y-auto"
+        >
+          {suggestions.map((fruit) => (
+            <li key={fruit}>
+              <button
+                onMouseDown={() => {
+                  setQuery(fruit);
+                  setIsOpen(false);
+                }}
+                className="w-full text-left px-3 py-1.5 text-sm hover:bg-muted/50"
+              >
+                {fruit}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}`,
+      tags: ["autocomplete", "input", "suggestions", "filter"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using position: absolute instead of position: fixed for the overlay",
+      bad: `<ul style={{ position: 'absolute', top: position.top, left: position.left }}>`,
+      good: `<ul style={{ position: 'fixed', top: position.top, left: position.left }}>`,
+      reason: "useElementPosition returns viewport-relative coordinates from getBoundingClientRect. These values are correct for position: fixed. Using position: absolute would offset from the nearest positioned ancestor instead of the viewport, causing misalignment."
+    },
+    {
+      title: "Keeping isOpen always true",
+      bad: `const position = useElementPosition(triggerRef, true);`,
+      good: `const position = useElementPosition(triggerRef, isVisible);`,
+      reason: "When isOpen is true the hook maintains active scroll listeners, a resize listener, and a ResizeObserver. Leaving it always on wastes resources when no overlay is visible. Tie isOpen to the actual visibility state of the floating element so listeners are cleaned up when the overlay is hidden."
+    },
+    {
+      title: "Adding scroll offset manually",
+      bad: `const adjustedTop = position.top + window.scrollY;
+const adjustedLeft = position.left + window.scrollX;`,
+      good: `// Use position.top and position.left directly with position: fixed
+<div style={{ position: 'fixed', top: position.top, left: position.left }}>`,
+      reason: "getBoundingClientRect already returns viewport-relative coordinates, which are exactly what position: fixed expects. Adding scrollX/scrollY double-counts the offset and pushes the overlay out of view."
+    },
+    {
+      title: "Passing a state value instead of a ref for triggerRef",
+      bad: `const [el, setEl] = useState<HTMLElement | null>(null);
+const position = useElementPosition({ current: el }, isOpen);`,
+      good: `const triggerRef = useRef<HTMLButtonElement>(null);
+const position = useElementPosition(triggerRef, isOpen);
+// ... <button ref={triggerRef}>`,
+      reason: "The hook expects a stable RefObject whose .current property is mutated by React after the DOM node mounts. Creating a wrapper object around state on every render causes the hook to re-subscribe its observers on every state change, degrading performance and potentially missing updates."
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (showDropdown) {
+  const position = useElementPosition(ref, true);
+}`,
+      good: `const position = useElementPosition(ref, showDropdown);`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling useElementPosition inside a conditional violates the Rules of Hooks. Pass the visibility state as the isOpen parameter instead \u2014 the hook already handles subscribing and unsubscribing based on it."
+    }
+  ]
+};
+
+// src/hooks/use-hover.ts
+var useHoverEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-hover",
+  name: "useHover",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Reactive hook that tracks whether a DOM element is being hovered, returning a ref to attach and a boolean isHovered state.",
+  longDescription: "Wraps native mouseenter/mouseleave events into a React-friendly hook that returns a typed ref and an isHovered boolean. Attach the ref to any HTML element and the hook automatically subscribes to mouse events via useEffect, cleaning up on unmount. The generic parameter T extends HTMLElement lets you narrow the ref type (e.g. useHover<HTMLButtonElement>()), enabling type-safe access to element-specific properties. The hook is client-only (use client directive) and handles null refs gracefully \u2014 it is safe to call during SSR since the ref will be null on the server and no event listeners are attached until the client hydrates. No external dependencies beyond React are required.",
+  tags: [
+    "hover",
+    "mouse",
+    "mouseenter",
+    "mouseleave",
+    "dom",
+    "ref",
+    "interaction",
+    "ui-feedback",
+    "tooltip-trigger",
+    "pointer"
+  ],
+  category: "dom",
+  useCases: [
+    "Toggle a tooltip, popover, or dropdown when the user hovers over a trigger element without managing manual onMouseEnter/onMouseLeave handlers",
+    "Apply conditional styles or CSS classes to an element on hover using a boolean flag instead of CSS :hover, useful for animations or Tailwind dynamic classes",
+    "Show a preview card or additional information when the user hovers over a list item, card, or avatar",
+    "Build a custom hover-triggered menu or navigation submenu that appears on mouse-over and hides on mouse-leave",
+    "Create an image gallery where hovering over a thumbnail reveals a larger preview or overlay with details",
+    "Highlight table rows or grid items on hover for improved scanability in data-dense UIs",
+    "Detect hover state to lazily load or prefetch content (e.g. a dropdown menu items) only when the user shows intent by hovering"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useHover.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useHover<T extends HTMLElement>(): { ref: React.RefObject<T | null>; isHovered: boolean }",
+  typeParams: ["T extends HTMLElement"],
+  parameters: [],
+  returnType: "{ ref: React.RefObject<T | null>; isHovered: boolean }",
+  returnValues: [
+    {
+      name: "ref",
+      type: "React.RefObject<T | null>",
+      description: "A React ref object to attach to the target element via the ref prop. The generic T defaults to HTMLElement but can be narrowed (e.g. HTMLDivElement, HTMLButtonElement) for type-safe element access. Initially null until the component mounts."
+    },
+    {
+      name: "isHovered",
+      type: "boolean",
+      description: "Whether the element is currently being hovered by the pointer. Starts as false and updates to true on mouseenter, false on mouseleave. Safe to use in render logic for conditional styling or rendering."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Hover-Activated Tooltip",
+      description: "A simple component that shows a tooltip message when the user hovers over a button, using the useHover hook to control visibility.",
+      code: `import { useHover } from 'vayu-ui';
+
+export default function HoverTooltip() {
+  const { ref, isHovered } = useHover<HTMLButtonElement>();
+
+  return (
+    <div className="relative inline-block">
+      <button
+        ref={ref}
+        className="px-4 py-2 bg-brand text-brand-content rounded-control shadow-control"
+      >
+        Hover me
+      </button>
+      {isHovered && (
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 text-sm bg-elevated text-elevated-content rounded-surface shadow-elevated whitespace-nowrap">
+          This is a tooltip!
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["tooltip", "basic", "hover", "visibility"]
+    },
+    {
+      title: "Dynamic Card Highlight",
+      description: "A card component that changes its shadow and border when hovered, using isHovered to toggle Tailwind classes for a smooth transition effect.",
+      code: `import { useHover } from 'vayu-ui';
+
+export default function HoverableCard() {
+  const { ref, isHovered } = useHover<HTMLDivElement>();
+
+  return (
+    <div
+      ref={ref}
+      className={\`p-6 rounded-surface border bg-surface text-surface-content transition-all duration-200 \${
+        isHovered
+          ? 'shadow-elevated border-brand/50 scale-[1.02]'
+          : 'shadow-surface border-border'
+      }\`}
+    >
+      <h3 className="text-lg font-semibold">Feature Card</h3>
+      <p className="mt-2 text-sm text-muted">
+        This card responds to hover with a smooth shadow and scale transition
+        driven by the useHover hook.
+      </p>
+    </div>
+  );
+}`,
+      tags: ["card", "highlight", "animation", "tailwind", "transition"]
+    },
+    {
+      title: "Hover-Reveal Image Overlay",
+      description: "An image thumbnail that reveals a dark overlay with action buttons when hovered, common in gallery or media grid layouts.",
+      code: `import { useHover } from 'vayu-ui';
+
+export default function ImageCard({ src, alt }: { src: string; alt: string }) {
+  const { ref, isHovered } = useHover<HTMLDivElement>();
+
+  return (
+    <div ref={ref} className="relative rounded-surface overflow-hidden cursor-pointer group">
+      <img src={src} alt={alt} className="w-full h-48 object-cover" />
+      <div
+        className={\`absolute inset-0 bg-black/50 flex items-center justify-center gap-3 transition-opacity duration-200 \${
+          isHovered ? 'opacity-100' : 'opacity-0'
+        }\`}
+      >
+        <button className="px-3 py-1.5 text-sm bg-white text-black rounded-control">
+          View
+        </button>
+        <button className="px-3 py-1.5 text-sm bg-white text-black rounded-control">
+          Download
+        </button>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["image", "overlay", "gallery", "reveal", "media"]
+    },
+    {
+      title: "Lazy-Load Dropdown on Hover",
+      description: "A navigation item that prefetches and displays a dropdown menu only when hovered, reducing initial render cost for complex menus.",
+      code: `import { useHover } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function HoverNavDropdown({ label }: { label: string }) {
+  const { ref, isHovered } = useHover<HTMLDivElement>();
+  const [loaded, setLoaded] = useState(false);
+
+  // Simulate lazy loading dropdown content on first hover
+  if (isHovered && !loaded) {
+    setLoaded(true);
+  }
+
+  return (
+    <div ref={ref} className="relative">
+      <button className="px-3 py-2 text-sm font-medium hover:text-brand transition-colors">
+        {label}
+      </button>
+      {isHovered && loaded && (
+        <div className="absolute top-full left-0 mt-1 w-56 p-2 bg-elevated text-elevated-content rounded-surface shadow-elevated border z-50">
+          {['Dashboard', 'Settings', 'Profile', 'Logout'].map((item) => (
+            <button
+              key={item}
+              className="w-full text-left px-3 py-2 text-sm rounded-control hover:bg-surface transition-colors"
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["dropdown", "navigation", "lazy-load", "menu", "prefetch"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Detaching the ref from the element",
+      bad: `const { ref, isHovered } = useHover();
+return (
+  <div>
+    <button>I have no ref</button>
+    {isHovered && <Tooltip />}
+  </div>
+);`,
+      good: `const { ref, isHovered } = useHover();
+return (
+  <div>
+    <button ref={ref}>Hover me</button>
+    {isHovered && <Tooltip />}
+  </div>
+);`,
+      reason: "The hook tracks hover state via event listeners attached to the ref element. If you do not pass ref to a DOM element, the ref stays null, no listeners are registered, and isHovered will never become true."
+    },
+    {
+      title: "Using CSS :hover instead when dynamic JS logic is needed",
+      bad: `const [showDetails, setShowDetails] = useState(false);
+return (
+  <div
+    onMouseEnter={() => setShowDetails(true)}
+    onMouseLeave={() => setShowDetails(false)}
+    className="group"
+  >
+    <div className="hidden group-hover:block">{details}</div>
+  </div>
+);`,
+      good: `const { ref, isHovered } = useHover();
+return (
+  <div ref={ref}>
+    {isHovered && <div>{details}</div>}
+  </div>
+);`,
+      reason: "CSS :hover cannot trigger JavaScript logic like data fetching, analytics events, or state updates. When you need hover state in JS, use the hook instead of pairing onMouseEnter/onMouseLeave with CSS classes \u2014 it reduces boilerplate and avoids state sync issues."
+    },
+    {
+      title: "Manually adding onMouseEnter/onMouseLeave alongside the hook",
+      bad: `const { ref, isHovered } = useHover();
+return (
+  <div
+    ref={ref}
+    onMouseEnter={() => setCustomState(true)}
+    onMouseLeave={() => setCustomState(false)}
+  >
+    {isHovered && <Tooltip />}
+  </div>
+);`,
+      good: `const { ref, isHovered } = useHover();
+return (
+  <div ref={ref}>
+    {isHovered && <Tooltip />}
+  </div>
+);`,
+      reason: "The hook already manages mouseenter/mouseleave listeners. Adding duplicate handlers creates redundant state tracking and can cause subtle bugs if the timing of the two mechanisms diverges. Use the isHovered value directly instead."
+    },
+    {
+      title: "Conditionally rendering the element that holds the ref",
+      bad: `const { ref, isHovered } = useHover();
+return (
+  <div>
+    {someCondition && <div ref={ref}>Hover me</div>}
+    {isHovered && <Tooltip />}
+  </div>
+);`,
+      good: `const { ref, isHovered } = useHover();
+if (!someCondition) return null;
+return (
+  <div>
+    <div ref={ref}>Hover me</div>
+    {isHovered && <Tooltip />}
+  </div>
+);`,
+      reason: "If the element with the ref is conditionally removed from the DOM, the hook will try to attach listeners to a null ref on mount and may not re-attach when the element reappears (because useEffect only runs once with an empty dependency array). Ensure the ref element is always rendered when the hook is active."
+    },
+    {
+      title: "Sharing one hook instance across multiple elements",
+      bad: `const { ref: ref1, isHovered: h1 } = useHover();
+const { ref: ref2, isHovered: h2 } = useHover();
+// This is actually correct \u2014 the mistake is below:
+const { ref, isHovered } = useHover();
+return (
+  <div>
+    <div ref={ref}>Item 1</div>
+    <div ref={ref}>Item 2</div>
+  </div>
+);`,
+      good: `const { ref: ref1, isHovered: h1 } = useHover();
+const { ref: ref2, isHovered: h2 } = useHover();
+return (
+  <div>
+    <div ref={ref1}>Item 1 {h1 && '(hovered)'}</div>
+    <div ref={ref2}>Item 2 {h2 && '(hovered)'}</div>
+  </div>
+);`,
+      reason: "A single ref can only point to one DOM element at a time. Assigning the same ref to multiple elements means only the last one receives the event listeners. Call useHover separately for each element that needs independent hover tracking."
+    }
+  ]
+};
+
+// src/hooks/use-idle.ts
+var useIdleEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-idle",
+  name: "useIdle",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Tracks whether the user is idle by monitoring DOM activity events and returning true after a configurable period of inactivity.",
+  longDescription: "Monitors five browser activity events \u2014 mousemove, keydown, wheel, touchstart, and scroll \u2014 to detect user interaction. On mount, a setTimeout timer is started with the provided timeout duration. Any user activity clears the existing timer, immediately sets the idle state to false, and restarts the timer. When the timer expires without interruption, the idle state flips to true. The hook cleans up all listeners and timers on unmount via useEffect's cleanup function. Because it attaches listeners to window inside useEffect (which only runs client-side), it is SSR-safe \u2014 the initial render always returns false, and activity detection begins only after hydration. The effect re-runs when the timeout parameter changes, ensuring the timer duration stays in sync. Choose this hook when you need to react to user presence or absence \u2014 for screensavers, session management, power-saving, or conditional UI \u2014 without manually managing event listeners and timers.",
+  tags: [
+    "idle",
+    "inactivity",
+    "timeout",
+    "session",
+    "screensaver",
+    "activity",
+    "presence",
+    "auto-lock",
+    "power-saving",
+    "user-activity"
+  ],
+  category: "input",
+  useCases: [
+    "Show a screensaver or dim overlay when the user has been inactive for a set duration, hiding it as soon as they move the mouse or press a key",
+    "Warn users before auto-logging them out due to inactivity, or automatically end a session after prolonged idle time for security",
+    'Display a "Still watching?" prompt in streaming or video apps to prevent unattended playback from consuming bandwidth',
+    "Pause or throttle live data polling, WebSocket updates, or API refresh cycles while the user is away to reduce unnecessary network traffic",
+    "Trigger power-saving behaviors like hiding non-essential UI elements, reducing animation frame rates, or dimming the screen after inactivity",
+    "Pause background video playback or animations when the user steps away from the device, resuming automatically on activity"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useIdle.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useIdle(timeout: number): boolean",
+  typeParams: [],
+  returnType: "boolean",
+  parameters: [
+    {
+      name: "timeout",
+      type: "number",
+      required: true,
+      description: "The inactivity duration in milliseconds before the user is considered idle. The timer resets on every detected activity event (mousemove, keydown, wheel, touchstart, scroll). Typical values are 30000 (30 seconds) for UI dimming, 300000 (5 minutes) for session warnings, and 900000 (15 minutes) for auto-logout. Must be a positive integer."
+    }
+  ],
+  returnValues: [
+    {
+      name: "isIdle",
+      type: "boolean",
+      description: "True when no user activity has been detected for the specified timeout duration. Returns false on initial render and resets to false immediately upon any activity event (mouse movement, key press, scroll, wheel, or touch)."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Idle Screen Dimmer",
+      description: 'Dims the page and shows a "Move your mouse to continue" overlay after 60 seconds of inactivity, restoring the UI instantly on any user interaction.',
+      code: `import { useIdle } from 'vayu-ui';
+
+export default function IdleDimmer() {
+  const isIdle = useIdle(60_000);
+
+  return (
+    <div className="relative min-h-screen">
+      <main className="p-8">
+        <h1 className="text-2xl font-bold text-surface-content">Welcome back</h1>
+        <p className="mt-2 text-muted-content">This page dims after 60 seconds of inactivity.</p>
+      </main>
+
+      {isIdle && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
+          <p className="text-lg text-white animate-pulse">
+            Move your mouse or press any key to continue
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["screensaver", "dim", "overlay", "inactivity"]
+    },
+    {
+      title: "Session Timeout Warning",
+      description: 'Warns the user 30 seconds before auto-logout after 5 minutes of idle time, with a countdown and a "Stay logged in" button.',
+      code: `import { useIdle } from 'vayu-ui';
+import { useState, useEffect, useCallback } from 'react';
+
+export default function SessionGuard({ children }: { children: React.ReactNode }) {
+  const IDLE_LIMIT = 300_000; // 5 minutes
+  const WARN_AFTER = 270_000; // 4 min 30 sec
+  const isIdle = useIdle(WARN_AFTER);
+  const [secondsLeft, setSecondsLeft] = useState(30);
+  const [dismissed, setDismissed] = useState(false);
+
+  const stayActive = useCallback(() => {
+    setDismissed(true);
+    setSecondsLeft(30);
+    // Dispatch a synthetic event to reset the idle timer
+    window.dispatchEvent(new MouseEvent('mousemove'));
+  }, []);
+
+  useEffect(() => {
+    if (!isIdle) {
+      setDismissed(false);
+      setSecondsLeft(30);
+      return;
+    }
+    if (dismissed) return;
+
+    setSecondsLeft(30);
+    const interval = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) {
+          clearInterval(interval);
+          // Log the user out
+          window.location.href = '/logout';
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isIdle, dismissed]);
+
+  return (
+    <div>
+      {children}
+      {isIdle && !dismissed && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-elevated text-elevated-content rounded-overlay shadow-elevated p-6 max-w-sm text-center space-y-4">
+            <h2 className="text-lg font-semibold">Session expiring</h2>
+            <p className="text-sm text-muted-content">
+              You will be logged out in <span className="font-mono font-bold text-destructive">{secondsLeft}</span> seconds.
+            </p>
+            <button
+              onClick={stayActive}
+              className="px-4 py-2 bg-brand text-brand-content rounded-control hover:opacity-90"
+            >
+              Stay logged in
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["session", "auto-logout", "warning", "timeout"]
+    },
+    {
+      title: "Throttled Polling While Idle",
+      description: "Reduces live data polling frequency from every 5 seconds to every 60 seconds when the user goes idle, saving bandwidth and server load.",
+      code: `import { useIdle } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+interface Notification {
+  id: number;
+  message: string;
+}
+
+export default function LiveNotifications() {
+  const isIdle = useIdle(60_000);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    const pollInterval = isIdle ? 60_000 : 5_000;
+
+    const fetchNotifications = () => {
+      fetch('/api/notifications')
+        .then((res) => res.json())
+        .then((data) => setNotifications(data.items))
+        .catch(() => {});
+    };
+
+    fetchNotifications();
+    const id = setInterval(fetchNotifications, pollInterval);
+    return () => clearInterval(id);
+  }, [isIdle]);
+
+  return (
+    <div className="space-y-3 p-4 max-w-md">
+      <div className="flex items-center justify-between">
+        <h2 className="font-semibold text-surface-content">Notifications</h2>
+        {isIdle && (
+          <span className="text-xs text-muted-content bg-muted rounded-control px-2 py-0.5">
+            Reduced updates
+          </span>
+        )}
+      </div>
+      {notifications.length === 0 ? (
+        <p className="text-sm text-muted-content">No new notifications</p>
+      ) : (
+        <ul className="divide-y border rounded-surface">
+          {notifications.map((n) => (
+            <li key={n.id} className="px-3 py-2 text-sm text-surface-content">
+              {n.message}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}`,
+      tags: ["polling", "throttle", "bandwidth", "live-data"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Passing 0 or a negative timeout",
+      bad: `const isIdle = useIdle(0);`,
+      good: `const isIdle = useIdle(30_000);`,
+      reason: "A timeout of 0 causes the idle flag to flip to true on the next event loop tick after every activity \u2014 creating a rapid false\u2192true\u2192false flicker. Negative values behave unpredictably with setTimeout. Always pass a positive number of milliseconds."
+    },
+    {
+      title: 'Using outside a "use client" boundary',
+      bad: `// ServerComponent.tsx (no "use client")
+const isIdle = useIdle(60_000);`,
+      good: `"use client";
+// ClientComponent.tsx
+const isIdle = useIdle(60_000);`,
+      reason: 'useIdle attaches event listeners to window inside useEffect. In a Server Component, useEffect never runs, so the hook will always return false and never detect activity. Always use it in a Client Component with the "use client" directive.'
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (shouldTrack) {
+  const isIdle = useIdle(30_000);
+}`,
+      good: `const isIdle = useIdle(shouldTrack ? 30_000 : Number.MAX_SAFE_INTEGER);`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling useIdle inside a conditional, loop, or nested function violates the Rules of Hooks and will cause crashes or stale state. If you need to disable idle tracking, pass a very large timeout value instead."
+    },
+    {
+      title: "Assuming idle is a one-shot trigger",
+      bad: `// Expecting isIdle to stay true forever after first timeout
+useEffect(() => {
+  if (isIdle) logout();
+}, [isIdle]);`,
+      good: `// isIdle resets to false on activity \u2014 handle the transition
+const wasIdle = useRef(false);
+useEffect(() => {
+  if (isIdle && !wasIdle.current) {
+    logout();
+  }
+  wasIdle.current = isIdle;
+}, [isIdle]);`,
+      reason: "useIdle continuously monitors activity. When the user becomes active again, isIdle resets to false. If you need a one-shot action (like logout), guard against re-triggering \u2014 otherwise the effect re-runs every time the user alternates between idle and active."
+    }
+  ]
+};
+
+// src/hooks/use-indexed-db.ts
+var useIndexedDBEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-indexed-db",
+  name: "useIndexedDB",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Provides a typed, promise-based CRUD API over an IndexedDB object store, handling database opening, schema upgrades, indexing, and connection lifecycle automatically.",
+  longDescription: 'useIndexedDB wraps the browser IndexedDB API into a declarative React hook with full TypeScript generics. It opens (or creates) a database and object store on mount, creates optional indexes, and exposes promise-based CRUD methods (put, add, get, getAll, remove, clear, count, getByIndex) that internally manage IDBTransaction and IDBRequest lifecycle. The hook tracks readiness via an isReady boolean and surfaces any connection errors through an error state \u2014 so consumers can conditionally render loading states and gracefully handle failures. The database connection is held in a ref and automatically closed on unmount, preventing leaks. Schema upgrades are handled through the version parameter: incrementing it triggers the onupgradeneeded callback, which creates the store and indexes if they do not already exist. Because IndexedDB is a browser-only API, this hook is client-only \u2014 it must be used inside a "use client" component or guarded with a mount check in SSR contexts. Choose this hook over raw IndexedDB when you want a React-friendly, typed interface without manually managing IDBDatabase, transactions, and request callbacks. Choose it over localStorage when you need to store structured data larger than 5MB, perform indexed queries, or handle binary data.',
+  tags: [
+    "indexeddb",
+    "storage",
+    "database",
+    "offline",
+    "persist",
+    "crud",
+    "browser-storage",
+    "local-storage",
+    "structured-data",
+    "index"
+  ],
+  category: "async",
+  useCases: [
+    "Build offline-first applications that need to store and query structured data client-side without a server round-trip",
+    "Persist data beyond the 5MB localStorage limit, such as large JSON payloads, user-generated content, or cached API responses",
+    "Cache API responses client-side with IndexedDB so the app can serve stale-while-revalidate data when the network is unavailable",
+    "Implement auto-save for form drafts or work-in-progress documents that survive page reloads and tab closures",
+    "Create local-first apps like todo lists, note-taking tools, or Kanban boards where all data lives in the browser and syncs opportunistically",
+    "Query records by secondary indexes (e.g., find all users by role, all orders by status) without loading the entire dataset into memory"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useIndexedDB.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useIndexedDB<T = unknown>(options: UseIndexedDBOptions): UseIndexedDBReturn<T>",
+  typeParams: ["T"],
+  returnType: "UseIndexedDBReturn<T>",
+  parameters: [
+    {
+      name: "options",
+      type: "UseIndexedDBOptions",
+      required: true,
+      description: "Configuration object for the IndexedDB connection. Specifies the database name, object store name, schema version, primary key path, and optional indexes to create."
+    },
+    {
+      name: "options.dbName",
+      type: "string",
+      required: true,
+      description: "The name of the IndexedDB database to open or create. This should be unique per application to avoid collisions. Changing this value after mount will close the current connection and open a new database."
+    },
+    {
+      name: "options.storeName",
+      type: "string",
+      required: true,
+      description: "The name of the object store within the database. Analogous to a table name in SQL. All CRUD operations target this store. Multiple stores per database require separate hook instances."
+    },
+    {
+      name: "options.version",
+      type: "number",
+      required: false,
+      defaultValue: "1",
+      description: "Schema version number. Increment this when you need to change the store structure (e.g., adding indexes or changing the keyPath). Incrementing triggers the onupgradeneeded event, which creates or updates the store and indexes."
+    },
+    {
+      name: "options.keyPath",
+      type: "string",
+      required: false,
+      defaultValue: "'id'",
+      description: 'The property name on stored objects that serves as the primary key. Defaults to "id". The value at this path must be unique across all records in the store. Used by get, put, add, and remove to identify records.'
+    },
+    {
+      name: "options.indexes",
+      type: "{ name: string; keyPath: string; unique?: boolean }[]",
+      required: false,
+      description: "Array of secondary indexes to create on the object store. Each index has a name (used with getByIndex), a keyPath (the property to index), and an optional unique flag. Indexes are created during schema upgrades only \u2014 adding new indexes requires incrementing the version."
+    }
+  ],
+  returnValues: [
+    {
+      name: "put",
+      type: "(value: T) => Promise<IDBValidKey>",
+      description: "Inserts a record or updates an existing one (upsert). If a record with the same keyPath value already exists, it is overwritten entirely. Returns the key of the stored record."
+    },
+    {
+      name: "add",
+      type: "(value: T) => Promise<IDBValidKey>",
+      description: "Inserts a new record. Throws if a record with the same keyPath value already exists \u2014 use put instead when you want upsert semantics. Returns the key of the added record."
+    },
+    {
+      name: "get",
+      type: "(key: IDBValidKey) => Promise<T | undefined>",
+      description: "Retrieves a single record by its primary key value. Returns undefined if no record matches. The key type must match the keyPath property type (typically string or number)."
+    },
+    {
+      name: "getAll",
+      type: "() => Promise<T[]>",
+      description: "Returns all records in the object store as an array. Results are ordered by the primary key. Returns an empty array if the store has no records."
+    },
+    {
+      name: "remove",
+      type: "(key: IDBValidKey) => Promise<void>",
+      description: "Deletes a single record identified by its primary key value. Does nothing if no matching record exists. The promise resolves when the delete transaction completes."
+    },
+    {
+      name: "clear",
+      type: "() => Promise<void>",
+      description: "Deletes all records in the object store. The store itself and its indexes are preserved. Use this to reset state without recreating the database."
+    },
+    {
+      name: "count",
+      type: "() => Promise<number>",
+      description: "Returns the total number of records in the object store. Useful for displaying counts or deciding whether to paginate."
+    },
+    {
+      name: "getByIndex",
+      type: "(indexName: string, value: IDBValidKey) => Promise<T[]>",
+      description: "Queries records using a secondary index. The indexName must match a name from the indexes option. Returns all records whose indexed property matches the given value. Returns an empty array if no matches are found."
+    },
+    {
+      name: "isReady",
+      type: "boolean",
+      description: "true once the IndexedDB connection has been successfully opened and all CRUD methods are safe to call. false during initial mount or after a connection error. Always guard async operations with this flag."
+    },
+    {
+      name: "error",
+      type: "Error | null",
+      description: 'Holds any Error that occurred during database opening or CRUD operations. Reset to null on successful operations. Check this alongside isReady to distinguish between "still loading" and "failed to connect".'
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Todo List with Full CRUD",
+      description: "A complete todo manager that persists items in IndexedDB, with add, toggle, delete, and clear-all functionality. Shows proper isReady guarding and error handling.",
+      code: `import { useIndexedDB } from 'vayu-ui';
+import { useState } from 'react';
+
+interface Todo {
+  id: string;
+  text: string;
+  done: boolean;
+  createdAt: number;
+}
+
+export default function TodoApp() {
+  const { put, getAll, remove, clear, count, isReady, error } = useIndexedDB<Todo>({
+    dbName: 'my-app',
+    storeName: 'todos',
+    keyPath: 'id',
+  });
+
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [input, setInput] = useState('');
+
+  const refresh = async () => {
+    const all = await getAll();
+    setTodos(all.sort((a, b) => b.createdAt - a.createdAt));
+  };
+
+  const addTodo = async () => {
+    if (!input.trim()) return;
+    await put({ id: crypto.randomUUID(), text: input.trim(), done: false, createdAt: Date.now() });
+    setInput('');
+    await refresh();
+  };
+
+  const toggleTodo = async (todo: Todo) => {
+    await put({ ...todo, done: !todo.done });
+    await refresh();
+  };
+
+  const deleteTodo = async (id: string) => {
+    await remove(id);
+    await refresh();
+  };
+
+  // Load once DB is ready
+  if (isReady && todos.length === 0) {
+    refresh();
+  }
+
+  return (
+    <div className="p-6 max-w-md w-full rounded-surface border bg-surface text-surface-content shadow-surface">
+      <h3 className="text-sm font-semibold mb-3">Todos</h3>
+
+      {error && <p className="text-xs text-destructive mb-2">Error: {error.message}</p>}
+
+      {!isReady && <p className="text-xs text-muted-content">Connecting to database\u2026</p>}
+
+      <div className="flex gap-2 mb-3">
+        <input
+          className="flex-1 px-3 py-2 rounded-control border bg-transparent text-sm"
+          placeholder="Add a todo\u2026"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && addTodo()}
+          disabled={!isReady}
+        />
+        <button
+          onClick={addTodo}
+          disabled={!isReady || !input.trim()}
+          className="px-3 py-2 rounded-control bg-brand text-brand-content text-sm disabled:opacity-50"
+        >
+          Add
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-1 max-h-52 overflow-y-auto">
+        {todos.map((todo) => (
+          <div key={todo.id} className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-muted/50 text-sm group">
+            <button
+              onClick={() => toggleTodo(todo)}
+              className={\`shrink-0 w-4 h-4 rounded border \${todo.done ? 'bg-brand border-brand' : 'border-border'}\`}
+            />
+            <span className={\`flex-1 truncate \${todo.done ? 'line-through opacity-50' : ''}\`}>
+              {todo.text}
+            </span>
+            <button
+              onClick={() => deleteTodo(todo.id)}
+              className="opacity-0 group-hover:opacity-100 text-muted-content hover:text-destructive text-xs"
+            >
+              \u2715
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {todos.length > 0 && (
+        <button onClick={async () => { await clear(); await refresh(); }} className="text-xs text-muted-content hover:text-destructive mt-2">
+          Clear all
+        </button>
+      )}
+    </div>
+  );
+}`,
+      tags: ["todo", "crud", "persist", "basic"]
+    },
+    {
+      title: "Offline-First API Cache",
+      description: "Caches API responses in IndexedDB and serves them when the network is unavailable, implementing a stale-while-revalidate pattern with a configurable TTL.",
+      code: `import { useIndexedDB } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+interface CachedResponse<T> {
+  url: string;
+  data: T;
+  cachedAt: number;
+}
+
+export function useOfflineCache<T>(url: string, ttlMs = 5 * 60 * 1000) {
+  const { put, get, isReady } = useIndexedDB<CachedResponse<T>>({
+    dbName: 'api-cache',
+    storeName: 'responses',
+    keyPath: 'url',
+  });
+
+  const [data, setData] = useState<T | null>(null);
+  const [fromCache, setFromCache] = useState(false);
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    const fetchData = async () => {
+      try {
+        const cached = await get(url);
+        if (cached && Date.now() - cached.cachedAt < ttlMs) {
+          setData(cached.data);
+          setFromCache(true);
+          return;
+        }
+
+        const res = await fetch(url);
+        const json = (await res.json()) as T;
+        setData(json);
+        setFromCache(false);
+        await put({ url, data: json, cachedAt: Date.now() });
+      } catch {
+        // Network failed \u2014 try cache regardless of TTL
+        const cached = await get(url);
+        if (cached) {
+          setData(cached.data);
+          setFromCache(true);
+        }
+      }
+    };
+
+    fetchData();
+  }, [url, isReady, ttlMs]);
+
+  return { data, fromCache, isReady };
+}
+
+export default function UserList() {
+  const { data, fromCache, isReady } = useOfflineCache<{ id: number; name: string }[]>(
+    '/api/users',
+  );
+
+  if (!isReady) return <p className="text-sm text-muted-content">Loading cache\u2026</p>;
+  if (!data) return <p className="text-sm text-muted-content">Loading\u2026</p>;
+
+  return (
+    <div className="space-y-2">
+      {fromCache && (
+        <p className="text-xs text-warning">Showing cached data (offline or stale)</p>
+      )}
+      <ul className="divide-y border rounded-surface">
+        {data.map((user) => (
+          <li key={user.id} className="px-3 py-2 text-sm">
+            {user.name}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}`,
+      tags: ["cache", "offline", "api", "swr"]
+    },
+    {
+      title: "Indexed Query \u2014 User Directory",
+      description: "Demonstrates creating secondary indexes and using getByIndex to filter users by role without loading all records into memory.",
+      code: `import { useIndexedDB } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'editor' | 'viewer';
+}
+
+export default function UserDirectory() {
+  const { put, getByIndex, getAll, isReady, error } = useIndexedDB<User>({
+    dbName: 'my-app',
+    storeName: 'users',
+    keyPath: 'id',
+    indexes: [
+      { name: 'by-role', keyPath: 'role' },
+      { name: 'by-email', keyPath: 'email', unique: true },
+    ],
+  });
+
+  const [users, setUsers] = useState<User[]>([]);
+  const [roleFilter, setRoleFilter] = useState<string>('all');
+
+  useEffect(() => {
+    if (!isReady) return;
+    (roleFilter === 'all' ? getAll() : getByIndex('by-role', roleFilter)).then(setUsers);
+  }, [isReady, roleFilter]);
+
+  const seedUsers = async () => {
+    await put({ id: '1', name: 'Alice', email: 'alice@example.com', role: 'admin' });
+    await put({ id: '2', name: 'Bob', email: 'bob@example.com', role: 'editor' });
+    await put({ id: '3', name: 'Charlie', email: 'charlie@example.com', role: 'viewer' });
+    await put({ id: '4', name: 'Diana', email: 'diana@example.com', role: 'admin' });
+    const all = await getAll();
+    setUsers(all);
+  };
+
+  return (
+    <div className="p-4 max-w-md rounded-surface border bg-surface text-surface-content">
+      <h3 className="text-sm font-semibold mb-3">User Directory</h3>
+
+      {error && <p className="text-xs text-destructive">Error: {error.message}</p>}
+
+      <div className="flex gap-2 mb-3">
+        {['all', 'admin', 'editor', 'viewer'].map((role) => (
+          <button
+            key={role}
+            onClick={() => setRoleFilter(role)}
+            className={\`px-2 py-1 text-xs rounded-control \${roleFilter === role ? 'bg-brand text-brand-content' : 'border'}\`}
+          >
+            {role}
+          </button>
+        ))}
+      </div>
+
+      {isReady && users.length === 0 && (
+        <button onClick={seedUsers} className="text-xs text-brand mb-2">
+          Seed sample users
+        </button>
+      )}
+
+      <ul className="divide-y border rounded-surface">
+        {users.map((user) => (
+          <li key={user.id} className="flex justify-between px-3 py-2 text-sm">
+            <span>{user.name}</span>
+            <span className="text-xs text-muted-content">{user.role}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}`,
+      tags: ["index", "query", "filter", "user-directory"]
+    },
+    {
+      title: "Form Draft Auto-Save",
+      description: "Automatically saves form state to IndexedDB as the user types, and restores the draft on page reload so no work is lost.",
+      code: `import { useIndexedDB } from 'vayu-ui';
+import { useState, useEffect, useCallback } from 'react';
+
+interface FormDraft {
+  id: string;
+  title: string;
+  body: string;
+  savedAt: number;
+}
+
+export default function DraftEditor() {
+  const { put, get, isReady } = useIndexedDB<FormDraft>({
+    dbName: 'my-app',
+    storeName: 'drafts',
+    keyPath: 'id',
+  });
+
+  const DRAFT_KEY = 'current-draft';
+
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [lastSaved, setLastSaved] = useState<number | null>(null);
+
+  // Restore draft on mount
+  useEffect(() => {
+    if (!isReady) return;
+    get(DRAFT_KEY).then((draft) => {
+      if (draft) {
+        setTitle(draft.title);
+        setBody(draft.body);
+        setLastSaved(draft.savedAt);
+      }
+    });
+  }, [isReady]);
+
+  // Auto-save with debounce via interval
+  const saveDraft = useCallback(async () => {
+    if (!isReady) return;
+    await put({ id: DRAFT_KEY, title, body, savedAt: Date.now() });
+    setLastSaved(Date.now());
+  }, [isReady, title, body]);
+
+  useEffect(() => {
+    const interval = setInterval(saveDraft, 3000);
+    return () => clearInterval(interval);
+  }, [saveDraft]);
+
+  return (
+    <div className="p-4 max-w-md space-y-3 rounded-surface border bg-surface text-surface-content">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold">Draft Editor</h3>
+        {lastSaved && (
+          <span className="text-xs text-muted-content">
+            Last saved: {new Date(lastSaved).toLocaleTimeString()}
+          </span>
+        )}
+      </div>
+
+      <input
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Title"
+        className="w-full px-3 py-2 rounded-control border bg-transparent text-sm"
+      />
+
+      <textarea
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        placeholder="Write something\u2026"
+        rows={6}
+        className="w-full px-3 py-2 rounded-control border bg-transparent text-sm resize-y"
+      />
+
+      <p className="text-xs text-muted-content">
+        Drafts auto-save every 3 seconds and persist across page reloads.
+      </p>
+    </div>
+  );
+}`,
+      tags: ["form", "draft", "auto-save", "persist"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Calling CRUD methods before isReady is true",
+      bad: `const { put, isReady } = useIndexedDB({ dbName: 'app', storeName: 'items' });
+
+// Called immediately on render \u2014 DB not open yet
+await put({ id: '1', name: 'Item' });`,
+      good: `const { put, isReady } = useIndexedDB({ dbName: 'app', storeName: 'items' });
+
+// Guard all operations with isReady
+if (isReady) {
+  await put({ id: '1', name: 'Item' });
+}`,
+      reason: 'The database connection opens asynchronously in useEffect. Calling any CRUD method before isReady is true will throw "IndexedDB is not ready yet". Always check isReady before calling operations, or use it as a dependency in useEffect.'
+    },
+    {
+      title: "Changing dbName or storeName dynamically on re-renders",
+      bad: `const [name, setName] = useState('store-v1');
+const { getAll } = useIndexedDB({ dbName: 'app', storeName: name });`,
+      good: `// Keep dbName and storeName stable constants
+const { getAll } = useIndexedDB({ dbName: 'app', storeName: 'items' });`,
+      reason: "dbName, storeName, and version are in the useEffect dependency array. Changing them closes the current database connection and opens a new one, which can cause data loss or unexpected behavior. Treat these as static configuration defined outside the component or as constants."
+    },
+    {
+      title: "Using add when put is intended",
+      bad: `// This throws if a record with the same id already exists
+await add({ id: 'user-1', name: 'Alice' });`,
+      good: `// Use put for upsert \u2014 safely inserts or updates
+await put({ id: 'user-1', name: 'Alice' });`,
+      reason: "add() is an insert-only operation that throws a ConstraintError if a record with the same keyPath value already exists in the store. Use put() for idempotent upserts (insert-or-update), which is almost always the safer choice. Reserve add() for cases where duplicate keys must be explicitly rejected."
+    },
+    {
+      title: "Ignoring the error state",
+      bad: `const { getAll, isReady } = useIndexedDB({ dbName: 'app', storeName: 'items' });
+// No error handling anywhere`,
+      good: `const { getAll, isReady, error } = useIndexedDB({ dbName: 'app', storeName: 'items' });
+
+if (error) {
+  return <p className="text-destructive">Database error: {error.message}</p>;
+}`,
+      reason: "IndexedDB operations can fail for many reasons: quota exceeded, blocked by private browsing mode, corrupted database, or user clearing storage. The hook surfaces errors through the error state. Not checking it means failures are silently swallowed and the UI appears stuck or empty without explanation."
+    },
+    {
+      title: "Mutating objects in-place before passing to put",
+      bad: `const items = await getAll();
+items[0].name = 'Updated';
+await put(items[0]); // Works, but items state is now stale`,
+      good: `const items = await getAll();
+const updated = { ...items[0], name: 'Updated' };
+await put(updated);
+// Now call getAll() again to refresh state`,
+      reason: "Mutating objects retrieved from IndexedDB in-place and then calling put creates confusing state management. React state and the IndexedDB store become out of sync. Always spread into a new object when modifying, then call getAll() or refresh your local state afterward to keep the UI consistent."
+    }
+  ]
+};
+
+// src/hooks/use-interval-when.ts
+var useIntervalWhenEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-interval-when",
+  name: "useIntervalWhen",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Runs a callback on a fixed interval, but only when a boolean condition is true \u2014 with optional immediate execution on activation.",
+  longDescription: "A declarative wrapper around setInterval that manages the timer lifecycle entirely through React effects. The hook stores the latest callback in a ref so the interval never re-creates when the callback identity changes \u2014 only when the interval duration (ms), the condition (when), or startImmediately change. When `when` flips to false, the interval is cleaned up automatically; when it flips back to true, a fresh interval starts. This makes it ideal for polling, live updates, and timed side effects that should pause and resume based on component state. Because the hook does not produce a return value and relies solely on useEffect cleanup, it is fully SSR-safe \u2014 no timers fire during server rendering. Choose this over a manual setInterval + useEffect combo when you need conditional activation without littering your component with timer management boilerplate.",
+  tags: [
+    "interval",
+    "polling",
+    "timer",
+    "setinterval",
+    "periodic",
+    "conditional",
+    "live-update",
+    "refresh",
+    "countdown",
+    "repeat"
+  ],
+  category: "animation",
+  useCases: [
+    "Poll an API endpoint every N seconds to keep a dashboard or notification feed up-to-date, but only while the component is visible or a toggle is active",
+    "Build a live clock or elapsed-time counter that ticks every second while mounted, and pauses cleanly when the user navigates away",
+    "Auto-refresh session tokens or heartbeats at a regular interval only while the user is authenticated or the tab is focused",
+    "Implement a countdown timer that fires a tick callback every second while running, and stops automatically when the countdown reaches zero by setting `when` to false",
+    "Periodically sync local state with a remote resource while a collaboration session is active, stopping when the session ends",
+    "Create a rotating testimonial or carousel that auto-advances every few seconds, pausing when the user hovers or interacts"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useIntervalWhen.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useIntervalWhen(callback: () => void, ms: number, when: boolean, startImmediately?: boolean): void",
+  parameters: [
+    {
+      name: "callback",
+      type: "() => void",
+      required: true,
+      description: "The function to execute on each interval tick. The hook stores the latest reference internally via a ref, so you do not need to wrap it in useCallback \u2014 the interval will always call the most recent version."
+    },
+    {
+      name: "ms",
+      type: "number",
+      required: true,
+      description: "The interval duration in milliseconds. Changing this value while the interval is active will tear down and re-create the timer with the new duration. Typical values: 1000 for per-second ticks, 5000\u201330000 for API polling."
+    },
+    {
+      name: "when",
+      type: "boolean",
+      required: true,
+      description: "Controls whether the interval is active. When true, the interval runs. When false, any running interval is cleared and the callback will not fire. Use this to conditionally start/stop the timer based on component state such as visibility, authentication, or user toggles."
+    },
+    {
+      name: "startImmediately",
+      type: "boolean",
+      required: false,
+      defaultValue: "false",
+      description: "When true, the callback fires once immediately upon activation (when `when` becomes true) before the first interval tick. Useful for polling scenarios where you want an initial fetch before waiting for the first interval cycle."
+    }
+  ],
+  returnType: "void",
+  returnValues: [],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Conditional API Polling",
+      description: "Polls a notifications endpoint every 10 seconds while the panel is open, fetching immediately on open via startImmediately.",
+      code: `import { useIntervalWhen } from 'vayu-ui';
+import { useState, useCallback } from 'react';
+
+interface Notification {
+  id: string;
+  message: string;
+  read: boolean;
+}
+
+export default function NotificationPanel() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const res = await fetch('/api/notifications');
+      const data = await res.json();
+      setNotifications(data.items);
+    } catch {
+      // Silently ignore \u2014 next poll will retry
+    }
+  }, []);
+
+  useIntervalWhen(fetchNotifications, 10_000, isOpen, true);
+
+  return (
+    <div className="space-y-3">
+      <button
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="px-4 py-2 rounded-control bg-brand text-brand-content"
+      >
+        {isOpen ? 'Close' : 'Open'} Notifications
+      </button>
+
+      {isOpen && (
+        <ul className="border rounded-surface divide-y bg-surface text-surface-content">
+          {notifications.map((n) => (
+            <li key={n.id} className="px-3 py-2 text-sm flex items-center gap-2">
+              {!n.read && <span className="h-2 w-2 rounded-full bg-brand" />}
+              <span>{n.message}</span>
+            </li>
+          ))}
+          {notifications.length === 0 && (
+            <li className="px-3 py-4 text-sm text-muted-content text-center">
+              No notifications yet
+            </li>
+          )}
+        </ul>
+      )}
+    </div>
+  );
+}`,
+      tags: ["polling", "api", "notifications", "conditional"]
+    },
+    {
+      title: "Live Elapsed Timer",
+      description: "Displays a running elapsed-time counter that ticks every second while active, showing hours, minutes, and seconds.",
+      code: `import { useIntervalWhen } from 'vayu-ui';
+import { useState, useCallback } from 'react';
+
+function formatElapsed(seconds: number): string {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  return [h, m, s].map((v) => String(v).padStart(2, '0')).join(':');
+}
+
+export default function Stopwatch() {
+  const [running, setRunning] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+
+  const tick = useCallback(() => {
+    setElapsed((prev) => prev + 1);
+  }, []);
+
+  useIntervalWhen(tick, 1000, running);
+
+  return (
+    <div className="space-y-4 p-6 rounded-surface border bg-surface text-surface-content text-center">
+      <p className="text-4xl font-mono tracking-widest">{formatElapsed(elapsed)}</p>
+      <div className="flex justify-center gap-3">
+        <button
+          onClick={() => setRunning(true)}
+          disabled={running}
+          className="px-4 py-2 rounded-control bg-brand text-brand-content disabled:opacity-50"
+        >
+          Start
+        </button>
+        <button
+          onClick={() => setRunning(false)}
+          disabled={!running}
+          className="px-4 py-2 rounded-control border disabled:opacity-50"
+        >
+          Stop
+        </button>
+        <button
+          onClick={() => {
+            setRunning(false);
+            setElapsed(0);
+          }}
+          className="px-4 py-2 rounded-control border"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["timer", "stopwatch", "elapsed", "clock"]
+    },
+    {
+      title: "Auto-Advancing Carousel",
+      description: "A carousel that auto-advances every 4 seconds, pausing when the user hovers over it to prevent jarring transitions during interaction.",
+      code: `import { useIntervalWhen, useHover } from 'vayu-ui';
+import { useState, useRef, useCallback } from 'react';
+
+const slides = [
+  { id: 1, title: 'First Slide', color: 'bg-blue-500' },
+  { id: 2, title: 'Second Slide', color: 'bg-emerald-500' },
+  { id: 3, title: 'Third Slide', color: 'bg-amber-500' },
+];
+
+export default function AutoCarousel() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const isHovered = useHover(carouselRef);
+
+  const advance = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % slides.length);
+  }, []);
+
+  // Pause auto-advance while hovered
+  useIntervalWhen(advance, 4000, !isHovered);
+
+  return (
+    <div ref={carouselRef} className="relative rounded-surface overflow-hidden">
+      <div
+        className="flex transition-transform duration-500"
+        style={{ transform: \`translateX(-\${activeIndex * 100}%)\` }}
+      >
+        {slides.map((slide) => (
+          <div
+            key={slide.id}
+            className={\`\${slide.color} flex-shrink-0 w-full h-48 flex items-center justify-center text-white font-semibold text-lg\`}
+          >
+            {slide.title}
+          </div>
+        ))}
+      </div>
+
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setActiveIndex(i)}
+            className={\`h-2 w-2 rounded-full transition-colors \${
+              i === activeIndex ? 'bg-white' : 'bg-white/50'
+            }\`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}`,
+      tags: ["carousel", "auto-advance", "hover", "pause"]
+    },
+    {
+      title: "Countdown Timer with Auto-Stop",
+      description: "A countdown from 60 seconds that fires a tick every second, automatically stopping when it reaches zero by toggling the `when` parameter.",
+      code: `import { useIntervalWhen } from 'vayu-ui';
+import { useState, useCallback, useEffect } from 'react';
+
+export default function CountdownTimer() {
+  const [secondsLeft, setSecondsLeft] = useState(60);
+  const [running, setRunning] = useState(false);
+
+  const tick = useCallback(() => {
+    setSecondsLeft((prev) => {
+      const next = prev - 1;
+      if (next <= 0) {
+        setRunning(false);
+      }
+      return Math.max(next, 0);
+    });
+  }, []);
+
+  useIntervalWhen(tick, 1000, running && secondsLeft > 0);
+
+  const percent = ((60 - secondsLeft) / 60) * 100;
+
+  return (
+    <div className="space-y-4 p-6 rounded-surface border bg-surface text-surface-content text-center max-w-xs mx-auto">
+      <p className="text-5xl font-mono font-bold">{secondsLeft}s</p>
+
+      <div className="h-2 rounded-full bg-muted overflow-hidden">
+        <div
+          className="h-full rounded-full bg-brand transition-all duration-1000"
+          style={{ width: \`\${percent}%\` }}
+        />
+      </div>
+
+      <button
+        onClick={() => {
+          if (secondsLeft === 0) setSecondsLeft(60);
+          setRunning(true);
+        }}
+        disabled={running}
+        className="px-4 py-2 rounded-control bg-brand text-brand-content disabled:opacity-50"
+      >
+        {secondsLeft === 0 ? 'Restart' : 'Start'}
+      </button>
+    </div>
+  );
+}`,
+      tags: ["countdown", "timer", "progress", "auto-stop"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Forgetting to control `when` based on component lifecycle",
+      bad: `// Interval runs forever, even when the data is no longer needed
+useIntervalWhen(fetchData, 5000, true);`,
+      good: `// Only poll while the panel is open
+useIntervalWhen(fetchData, 5000, isPanelOpen);`,
+      reason: "Passing a hardcoded `true` for `when` means the interval runs from mount to unmount with no way to pause it. Always wire `when` to a meaningful boolean \u2014 component visibility, feature toggle, or authentication state \u2014 so the timer stops when its work is no longer needed."
+    },
+    {
+      title: "Wrapping the callback in useCallback thinking it matters",
+      bad: `const tick = useCallback(() => {
+  setCount((prev) => prev + 1);
+}, []);
+
+useIntervalWhen(tick, 1000, true);`,
+      good: `// useCallback is unnecessary \u2014 the hook uses a ref internally
+useIntervalWhen(() => {
+  setCount((prev) => prev + 1);
+}, 1000, true);`,
+      reason: "useIntervalWhen stores the callback in a ref and reads from that ref on each tick, so it always calls the latest version regardless of reference identity. Wrapping the callback in useCallback adds no value and clutters the code. The only reason to use useCallback is if the same function is passed to other memoized consumers."
+    },
+    {
+      title: "Using setInterval directly instead of the hook",
+      bad: `useEffect(() => {
+  const id = setInterval(() => {
+    setCount((prev) => prev + 1);
+  }, 1000);
+  return () => clearInterval(id);
+}, [count]); // re-creates interval every time count changes`,
+      good: `useIntervalWhen(() => {
+  setCount((prev) => prev + 1);
+}, 1000, isActive);`,
+      reason: "A manual setInterval inside useEffect often ends up in the dependency array accidentally, causing the interval to be torn down and re-created on every tick. useIntervalWhen isolates the callback via a ref so the interval only re-creates when ms, when, or startImmediately actually change."
+    },
+    {
+      title: "Passing a negative or zero interval duration",
+      bad: `useIntervalWhen(tick, 0, true);
+// or
+useIntervalWhen(tick, -1000, true);`,
+      good: `useIntervalWhen(tick, 1000, true);`,
+      reason: "Passing 0 to setInterval creates a zero-delay timer that fires as fast as the event loop allows, which can freeze the browser. Negative values are coerced to 0 by the browser. Always use a meaningful positive duration. If you need an immediate one-shot action, use startImmediately: true with a reasonable interval."
+    },
+    {
+      title: "Expecting a return value to read interval state",
+      bad: `const { isActive, count } = useIntervalWhen(callback, 1000, true);
+// Hook returns void \u2014 there is no isActive or count`,
+      good: `const [ticks, setTicks] = useState(0);
+useIntervalWhen(() => {
+  setTicks((prev) => prev + 1);
+}, 1000, true);
+// Track state yourself \u2014 the hook only manages the timer lifecycle`,
+      reason: "useIntervalWhen returns void. It is a fire-and-forget side-effect hook that manages timer lifecycle only. If you need to track how many times the callback has fired, whether the interval is active, or any other derived state, manage that state yourself in your component."
+    }
+  ]
+};
+
+// src/hooks/use-key-press.ts
+var useKeyPressEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-key-press",
+  name: "useKeyPress",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Reactive hook that listens for keyboard events on the window, supporting single keys, modifier combos (Ctrl/\u2318/Alt/Shift), and dynamic multi-binding arrays.",
+  longDescription: 'Attaches a global keydown listener to the window and matches incoming KeyboardEvents against a declarative key target. Supports two calling conventions: (1) a single key plus callback for simple shortcuts like Escape-to-close, and (2) an array of KeyBinding objects for dynamic, multi-shortcut configurations such as command palettes or game controls. Modifier combos are expressed as arrays \u2014 ["Ctrl", "S"] or ["\u2318", "K"] \u2014 where all modifiers must be active simultaneously with the final key. The hook stores bindings in a ref so the event listener never re-subscribes when callbacks change, preventing stale closure bugs and unnecessary DOM churn. The optional enabled flag allows conditional activation (e.g. disable shortcuts while a modal is open or an input is focused). Client-only (use client directive) \u2014 safe during SSR since no listeners are attached until hydration. No external dependencies beyond React.',
+  tags: [
+    "keyboard",
+    "keydown",
+    "shortcut",
+    "hotkey",
+    "key-binding",
+    "modifier",
+    "ctrl",
+    "meta",
+    "command",
+    "escape",
+    "command-palette"
+  ],
+  category: "input",
+  useCases: [
+    "Implement keyboard shortcuts or hotkeys in your app, such as Ctrl+S to save or \u2318+K to open a command palette, without manually managing window event listeners",
+    "Close modals, drawers, or popovers when the user presses the Escape key by attaching a single-key listener with a cleanup callback",
+    "Build a command palette or spotlight search triggered by a modifier combo like \u2318+K or Ctrl+P, matching patterns common in VS Code, Notion, and Raycast",
+    "Handle arrow-key navigation in custom list, tab, or carousel components for accessible keyboard-only interaction without roving tabindex boilerplate",
+    "Register multiple dynamic key bindings at once (e.g. a game UI where W/A/S/D move and Space jumps) using the KeyBinding array overload",
+    "Conditionally enable or disable keyboard shortcuts based on application state, such as pausing shortcuts when a text input is focused or a modal blocks interaction",
+    "Prevent browser-default behavior on captured shortcuts (e.g. prevent Ctrl+S from triggering the native Save dialog) by calling event.preventDefault() inside the callback"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useKeyPress.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useKeyPress(target: KeyTarget, callback: (event: KeyboardEvent) => void, options?: { enabled?: boolean }): void; function useKeyPress(bindings: KeyBinding[], options?: { enabled?: boolean }): void",
+  typeParams: [],
+  parameters: [
+    {
+      name: "target",
+      type: "KeyTarget",
+      required: true,
+      description: 'A single key string (e.g. "Escape", "Enter") or an array of keys representing a modifier combo (e.g. ["Ctrl", "S"] or ["\u2318", "K"]). When a string is passed, it matches event.key exactly. When an array is passed, all but the last element are treated as modifiers (Ctrl, Alt, Meta, Shift, or \u2318) and the last element is the action key. For the "\u2318" symbol, the hook maps it to event.metaKey. Used in overload 1.',
+      defaultValue: void 0
+    },
+    {
+      name: "callback",
+      type: "(event: KeyboardEvent) => void",
+      required: true,
+      description: "Function invoked when the pressed key(s) match the target. Receives the raw KeyboardEvent, so you can call event.preventDefault() to suppress browser defaults or read event.key / event.code for additional logic. Used in overload 1.",
+      defaultValue: void 0
+    },
+    {
+      name: "bindings",
+      type: "KeyBinding[]",
+      required: true,
+      description: "An array of { keys: KeyTarget; callback: (event: KeyboardEvent) => void } objects. Each binding declares its own key target and handler. The hook iterates bindings in order and fires the first match, then stops. Ideal for dynamic shortcut maps such as command palettes or game controls. Used in overload 2.",
+      defaultValue: void 0
+    },
+    {
+      name: "options.enabled",
+      type: "boolean",
+      required: false,
+      description: "Whether the key listener is active. When false, the hook removes the window listener and no callbacks fire. Defaults to true. Use this to conditionally disable shortcuts \u2014 for example, set enabled to false when a text input is focused to avoid intercepting typing, or when a modal is open to scope shortcuts.",
+      defaultValue: "true"
+    }
+  ],
+  returnType: "void",
+  returnValues: [],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Escape to Close a Modal",
+      description: "A modal overlay that closes when the user presses Escape, demonstrating the simplest single-key usage of useKeyPress.",
+      code: `import { useState } from 'react';
+import { useKeyPress } from 'vayu-ui';
+
+export default function EscapeModal() {
+  const [open, setOpen] = useState(false);
+
+  useKeyPress('Escape', () => setOpen(false));
+
+  return (
+    <>
+      <button
+        className="px-4 py-2 bg-brand text-brand-content rounded-control shadow-control"
+        onClick={() => setOpen(true)}
+      >
+        Open Modal
+      </button>
+
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md p-6 bg-elevated text-elevated-content rounded-overlay shadow-elevated">
+            <h2 className="text-lg font-semibold">Important Notice</h2>
+            <p className="mt-2 text-sm text-muted">
+              Press <kbd className="px-1.5 py-0.5 bg-surface rounded-control text-xs font-mono">Esc</kbd> to close this modal.
+            </p>
+            <button
+              className="mt-4 px-4 py-2 bg-brand text-brand-content rounded-control"
+              onClick={() => setOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}`,
+      tags: ["modal", "escape", "close", "overlay", "basic"]
+    },
+    {
+      title: "Command Palette with \u2318K",
+      description: "A spotlight-style command palette that opens on \u2318+K (Mac) or Ctrl+K (Windows/Linux), with arrow-key navigation and Escape to close.",
+      code: `import { useState, useRef, useEffect } from 'react';
+import { useKeyPress, KeyBinding } from 'vayu-ui';
+
+const COMMANDS = [
+  { label: 'Go to Dashboard', id: 'dashboard' },
+  { label: 'Open Settings', id: 'settings' },
+  { label: 'New Project', id: 'new-project' },
+  { label: 'Search Files', id: 'search' },
+];
+
+export default function CommandPalette() {
+  const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const bindings: KeyBinding[] = [
+    {
+      keys: ['\u2318', 'K'],
+      callback: (e) => {
+        e.preventDefault();
+        setOpen((prev) => !prev);
+      },
+    },
+    {
+      keys: ['Ctrl', 'K'],
+      callback: (e) => {
+        e.preventDefault();
+        setOpen((prev) => !prev);
+      },
+    },
+    {
+      keys: 'Escape',
+      callback: () => setOpen(false),
+    },
+    {
+      keys: 'ArrowDown',
+      callback: () =>
+        setActiveIndex((i) => (i + 1) % COMMANDS.length),
+    },
+    {
+      keys: 'ArrowUp',
+      callback: () =>
+        setActiveIndex((i) => (i - 1 + COMMANDS.length) % COMMANDS.length),
+    },
+    {
+      keys: 'Enter',
+      callback: () => {
+        alert(\`Executing: \${COMMANDS[activeIndex].label}\`);
+        setOpen(false);
+      },
+    },
+  ];
+
+  useKeyPress(bindings, { enabled: true });
+
+  useEffect(() => {
+    if (open) {
+      setActiveIndex(0);
+      inputRef.current?.focus();
+    }
+  }, [open]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh] bg-black/50">
+      <div className="w-full max-w-lg bg-elevated text-elevated-content rounded-overlay shadow-elevated overflow-hidden">
+        <input
+          ref={inputRef}
+          placeholder="Type a command..."
+          className="w-full px-4 py-3 bg-transparent border-b border-border text-sm outline-none placeholder:text-muted"
+        />
+        <ul className="max-h-64 overflow-y-auto p-2">
+          {COMMANDS.map((cmd, i) => (
+            <li
+              key={cmd.id}
+              className={\`px-3 py-2 text-sm rounded-control cursor-pointer transition-colors \${
+                i === activeIndex
+                  ? 'bg-brand text-brand-content'
+                  : 'hover:bg-surface'
+              }\`}
+              onClick={() => alert(\`Executing: \${cmd.label}\`)}
+            >
+              {cmd.label}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["command-palette", "spotlight", "cmd-k", "ctrl-k", "navigation", "advanced"]
+    },
+    {
+      title: "Conditional Shortcuts with Enabled Toggle",
+      description: "A form with a text input that disables global shortcuts while the input is focused, preventing shortcut interference with normal typing.",
+      code: `import { useState } from 'react';
+import { useKeyPress } from 'vayu-ui';
+
+export default function ConditionalShortcuts() {
+  const [inputFocused, setInputFocused] = useState(false);
+  const [message, setMessage] = useState('');
+
+  useKeyPress(
+    '?',
+    () => setMessage('Help panel toggled!'),
+    { enabled: !inputFocused },
+  );
+
+  useKeyPress(
+    's',
+    () => setMessage('Quick save triggered!'),
+    { enabled: !inputFocused },
+  );
+
+  return (
+    <div className="max-w-sm space-y-4">
+      <p className="text-sm text-muted">
+        Press <kbd className="px-1.5 py-0.5 bg-surface rounded-control text-xs font-mono">?</kbd> for help or{' '}
+        <kbd className="px-1.5 py-0.5 bg-surface rounded-control text-xs font-mono">S</kbd> to save (disabled while typing).
+      </p>
+
+      <input
+        className="w-full px-3 py-2 bg-surface text-surface-content border border-border rounded-control outline-none focus:border-focus"
+        placeholder="Type here \u2014 shortcuts are paused"
+        onFocus={() => setInputFocused(true)}
+        onBlur={() => setInputFocused(false)}
+      />
+
+      {message && (
+        <div className="px-3 py-2 text-sm bg-info/10 text-info rounded-surface">
+          {message}
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["conditional", "enabled", "input-focus", "form", "toggle"]
+    },
+    {
+      title: "Multi-Binding Game Controls",
+      description: "An interactive canvas-like area controlled by WASD keys for movement and Space for action, demonstrating the KeyBinding array overload for complex key maps.",
+      code: `import { useState } from 'react';
+import { useKeyPress, KeyBinding } from 'vayu-ui';
+
+interface Position {
+  x: number;
+  y: number;
+}
+
+export default function GameControls() {
+  const [pos, setPos] = useState<Position>({ x: 200, y: 200 });
+  const [action, setAction] = useState<string>('idle');
+  const STEP = 20;
+
+  const bindings: KeyBinding[] = [
+    {
+      keys: 'w',
+      callback: () => setPos((p) => ({ ...p, y: Math.max(0, p.y - STEP) })),
+    },
+    {
+      keys: 'a',
+      callback: () => setPos((p) => ({ ...p, x: Math.max(0, p.x - STEP) })),
+    },
+    {
+      keys: 's',
+      callback: () => setPos((p) => ({ ...p, y: Math.min(360, p.y + STEP) })),
+    },
+    {
+      keys: 'd',
+      callback: () => setPos((p) => ({ ...p, x: Math.min(360, p.x + STEP) })),
+    },
+    {
+      keys: 'ArrowUp',
+      callback: () => setPos((p) => ({ ...p, y: Math.max(0, p.y - STEP) })),
+    },
+    {
+      keys: 'ArrowLeft',
+      callback: () => setPos((p) => ({ ...p, x: Math.max(0, p.x - STEP) })),
+    },
+    {
+      keys: 'ArrowDown',
+      callback: () => setPos((p) => ({ ...p, y: Math.min(360, p.y + STEP) })),
+    },
+    {
+      keys: 'ArrowRight',
+      callback: () => setPos((p) => ({ ...p, x: Math.min(360, p.x + STEP) })),
+    },
+    {
+      keys: ' ',
+      callback: () => {
+        setAction('jump');
+        setTimeout(() => setAction('idle'), 300);
+      },
+    },
+  ];
+
+  useKeyPress(bindings);
+
+  return (
+    <div className="space-y-3">
+      <p className="text-sm text-muted">
+        Use <kbd className="px-1.5 py-0.5 bg-surface rounded-control text-xs font-mono">W A S D</kbd> or arrow keys to move,{' '}
+        <kbd className="px-1.5 py-0.5 bg-surface rounded-control text-xs font-mono">Space</kbd> to jump.
+      </p>
+
+      <div className="relative w-[400px] h-[400px] bg-surface rounded-surface border border-border overflow-hidden">
+        <div
+          className={\`absolute w-8 h-8 bg-brand rounded-control transition-all duration-100 \${
+            action === 'jump' ? 'scale-125' : 'scale-100'
+          }\`}
+          style={{ left: pos.x, top: pos.y }}
+        />
+      </div>
+
+      <p className="text-xs text-muted font-mono">
+        Position: ({pos.x}, {pos.y}) | Action: {action}
+      </p>
+    </div>
+  );
+}`,
+      tags: ["game", "wasd", "arrow-keys", "multi-binding", "interactive", "space"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Passing bindings array inline as a literal",
+      bad: `useKeyPress([
+  { keys: 'Escape', callback: () => setOpen(false) },
+  { keys: ['Ctrl', 's'], callback: handleSave },
+]);`,
+      good: `const bindings = useMemo(() => [
+  { keys: 'Escape' as const, callback: () => setOpen(false) },
+  { keys: ['Ctrl', 's'] as const, callback: handleSave },
+], [handleSave]);
+
+useKeyPress(bindings);`,
+      reason: "While the hook uses a ref internally to avoid re-subscribing, passing an inline array literal creates a new reference every render. This causes unnecessary ref updates and can mask real bugs if the ref pattern changes. Memoize the bindings array with useMemo, or define it as a stable constant outside the component."
+    },
+    {
+      title: "Using wrong modifier key names",
+      bad: `useKeyPress(['Command', 'k'], callback);
+useKeyPress(['Control', 'k'], callback);`,
+      good: `useKeyPress(['\u2318', 'k'], callback);   // Mac meta key
+useKeyPress(['Ctrl', 'k'], callback);  // Cross-platform control key`,
+      reason: 'The hook recognizes a fixed set of modifier names: "Ctrl"/"Control", "Alt", "Meta"/"\u2318", and "Shift". Using "Command" or "Cmd" will NOT be detected as a modifier \u2014 the hook falls through to matching only the first key in the array. Use "\u2318" for the Meta key and "Ctrl" for the Control key.'
+    },
+    {
+      title: "Not calling preventDefault on browser-reserved shortcuts",
+      bad: `useKeyPress(['Ctrl', 's'], () => {
+  saveDocument();
+});`,
+      good: `useKeyPress(['Ctrl', 's'], (event) => {
+  event.preventDefault(); // prevent browser Save dialog
+  saveDocument();
+});`,
+      reason: "Browser shortcuts like Ctrl+S (Save), Ctrl+P (Print), or Ctrl+F (Find) have default behavior. If you intercept them without calling event.preventDefault(), the browser action still fires alongside your callback, leading to unexpected Save dialogs or print prompts."
+    },
+    {
+      title: "Enabling shortcuts while a text input is focused",
+      bad: `// User is typing in a search input and presses "s"
+useKeyPress('s', () => scrollToSection());`,
+      good: `const [inputFocused, setInputFocused] = useState(false);
+
+useKeyPress('s', () => scrollToSection(), {
+  enabled: !inputFocused,
+});
+
+<input
+  onFocus={() => setInputFocused(true)}
+  onBlur={() => setInputFocused(false)}
+/>`,
+      reason: 'The hook listens on the window object globally \u2014 it fires regardless of which element has focus. If you register single-character shortcuts like "s" without the enabled guard, they will fire while the user is typing in text inputs, causing unintended side effects like navigation jumps or action triggers mid-sentence.'
+    },
+    {
+      title: "Relying on closure values inside callbacks without refs",
+      bad: `const [count, setCount] = useState(0);
+
+useKeyPress('ArrowRight', () => {
+  // "count" is captured from the first render
+  console.log(count);
+  setCount(count + 1);
+});`,
+      good: `const [count, setCount] = useState(0);
+
+useKeyPress('ArrowRight', () => {
+  // Use the functional updater to always get the latest value
+  setCount((prev) => prev + 1);
+});`,
+      reason: "The hook stores bindings in a ref that updates every render, so callbacks can access current closure values. However, React state updates are batched \u2014 reading a state variable directly inside the callback may yield a stale value if multiple events fire quickly. Always use functional updaters (setCount(prev => prev + 1)) or useRef for the latest value when the callback needs to read state."
+    }
+  ]
+};
+
+// src/hooks/use-list.ts
+var useListEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-list",
+  name: "useList",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Generic state hook for managing an array with built-in add, remove, update, and clear operations, eliminating boilerplate spread/filter/map patterns.",
+  longDescription: "Wraps React.useState<T[]> and exposes four immutable mutator functions \u2014 add(item), remove(index), update(index, newItem), and clear() \u2014 so you never need to write spread/filter/map boilerplate inside setState callbacks. Every mutator uses the functional updater form (prev => \u2026) so it is safe under concurrent React rendering and batched updates. The hook accepts an optional initial array (defaults to []) and is fully SSR-safe since it has no browser API dependencies. Choose this over raw useState when you find yourself repeatedly writing setList(prev => [\u2026prev, item]) or setList(prev => prev.filter(\u2026)) \u2014 useList packages those patterns into named, intent-revealing functions.",
+  tags: [
+    "array",
+    "list",
+    "state",
+    "collection",
+    "crud",
+    "immutable",
+    "generic",
+    "reactive",
+    "items",
+    "management"
+  ],
+  category: "state",
+  useCases: [
+    "When you need to manage a dynamic list of items (e.g. tags, todos, form fields) without repeatedly writing spread/filter/map boilerplate inside setState",
+    "To build a tag input where users can add and remove tags by index without manually managing immutable array updates",
+    "When creating a dynamic form with add/remove field rows and you want each row updatable by index",
+    "To maintain a selection list where items can be added, removed by position, or replaced in-place without leaking mutable state",
+    "When building a notification stack or toast queue that supports appending, dismissing by index, and clearing all at once",
+    "To manage an ordered collection in state where the position of each item matters for rendering or further processing"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useList.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useList<T>(initialList?: T[]): { list: T[]; add: (item: T) => void; remove: (index: number) => void; update: (index: number, newItem: T) => void; clear: () => void }",
+  typeParams: ["T"],
+  parameters: [
+    {
+      name: "initialList",
+      type: "T[]",
+      required: false,
+      defaultValue: "[]",
+      description: 'The starting array. Omit to begin with an empty list. The generic T is inferred from the elements you pass, so useList([{ name: "a" }]) infers T as { name: string }.'
+    }
+  ],
+  returnType: "{ list: T[]; add: (item: T) => void; remove: (index: number) => void; update: (index: number, newItem: T) => void; clear: () => void }",
+  returnValues: [
+    {
+      name: "list",
+      type: "T[]",
+      description: "The current array state. Read-only \u2014 never mutate this directly; use the mutator functions to trigger re-renders."
+    },
+    {
+      name: "add",
+      type: "(item: T) => void",
+      description: "Appends an item to the end of the list. Internally uses the functional updater form, so it is safe under batched state updates."
+    },
+    {
+      name: "remove",
+      type: "(index: number) => void",
+      description: "Removes the item at the given zero-based index. Does nothing if the index is out of bounds (filter naturally excludes it)."
+    },
+    {
+      name: "update",
+      type: "(index: number, newItem: T) => void",
+      description: "Replaces the item at the given zero-based index with newItem. If the index does not exist, the list is unchanged (map returns the original item)."
+    },
+    {
+      name: "clear",
+      type: "() => void",
+      description: 'Empties the list entirely, resetting it to []. Useful for "Clear All" actions or resetting form state.'
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic List Manager",
+      description: "A minimal component that lets users type an item name, add it to the list, remove any item, and clear all items.",
+      code: `import { useList } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function BasicListManager() {
+  const { list, add, remove, clear } = useList<string>();
+  const [input, setInput] = useState('');
+
+  const handleAdd = () => {
+    const trimmed = input.trim();
+    if (trimmed) {
+      add(trimmed);
+      setInput('');
+    }
+  };
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <div className="flex gap-2">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+          placeholder="Add an item..."
+          className="flex-1 px-3 py-1.5 rounded-control border bg-field text-sm"
+        />
+        <button
+          onClick={handleAdd}
+          className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-sm font-medium"
+        >
+          Add
+        </button>
+      </div>
+
+      {list.length > 0 && (
+        <ul className="space-y-1">
+          {list.map((item, i) => (
+            <li key={i} className="flex items-center justify-between px-2 py-1 rounded-control bg-muted/50 text-sm">
+              <span>{item}</span>
+              <button onClick={() => remove(i)} className="text-destructive text-xs hover:underline">
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {list.length > 0 && (
+        <button onClick={clear} className="text-xs text-muted-content hover:underline">
+          Clear all
+        </button>
+      )}
+    </div>
+  );
+}`,
+      tags: ["basic", "add", "remove", "clear", "input"]
+    },
+    {
+      title: "Todo List with Update",
+      description: "A todo list that uses add, remove, and update to toggle completion status on each item by replacing it in-place.",
+      code: `import { useList } from 'vayu-ui';
+import { useState } from 'react';
+
+interface Todo {
+  text: string;
+  done: boolean;
+}
+
+export default function TodoList() {
+  const { list, add, remove, update } = useList<Todo>();
+  const [input, setInput] = useState('');
+
+  const handleAdd = () => {
+    const trimmed = input.trim();
+    if (trimmed) {
+      add({ text: trimmed, done: false });
+      setInput('');
+    }
+  };
+
+  const toggle = (index: number) => {
+    const item = list[index];
+    update(index, { ...item, done: !item.done });
+  };
+
+  const remaining = list.filter((t) => !t.done).length;
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <h2 className="text-sm font-semibold">Todos ({remaining} remaining)</h2>
+
+      <div className="flex gap-2">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+          placeholder="What needs to be done?"
+          className="flex-1 px-3 py-1.5 rounded-control border bg-field text-sm"
+        />
+        <button
+          onClick={handleAdd}
+          className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-sm font-medium"
+        >
+          Add
+        </button>
+      </div>
+
+      <ul className="space-y-1">
+        {list.map((todo, i) => (
+          <li key={i} className="flex items-center gap-2 px-2 py-1 rounded-control bg-muted/50 text-sm">
+            <input
+              type="checkbox"
+              checked={todo.done}
+              onChange={() => toggle(i)}
+              className="rounded-control"
+            />
+            <span className={todo.done ? 'line-through text-muted-content' : ''}>{todo.text}</span>
+            <button
+              onClick={() => remove(i)}
+              className="ml-auto text-destructive text-xs hover:underline"
+            >
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}`,
+      tags: ["todo", "update", "toggle", "checkbox", "crud"]
+    },
+    {
+      title: "Dynamic Form Fields",
+      description: "A form that lets users add and remove participant rows. Each row has a name and email field, updatable by index.",
+      code: `import { useList } from 'vayu-ui';
+
+interface Participant {
+  name: string;
+  email: string;
+}
+
+export default function DynamicFormFields() {
+  const { list, add, remove, update } = useList<Participant>();
+
+  const handleChange = (index: number, field: keyof Participant, value: string) => {
+    update(index, { ...list[index], [field]: value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Participants:', list);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-md">
+      <h2 className="text-sm font-semibold">Participants</h2>
+
+      {list.map((p, i) => (
+        <div key={i} className="flex gap-2 items-start">
+          <input
+            value={p.name}
+            onChange={(e) => handleChange(i, 'name', e.target.value)}
+            placeholder="Name"
+            className="flex-1 px-3 py-1.5 rounded-control border bg-field text-sm"
+          />
+          <input
+            value={p.email}
+            onChange={(e) => handleChange(i, 'email', e.target.value)}
+            placeholder="Email"
+            className="flex-1 px-3 py-1.5 rounded-control border bg-field text-sm"
+          />
+          <button
+            type="button"
+            onClick={() => remove(i)}
+            className="px-2 py-1.5 text-destructive text-xs border rounded-control hover:bg-destructive/10"
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => add({ name: '', email: '' })}
+          className="px-3 py-1.5 rounded-control border text-sm"
+        >
+          + Add Row
+        </button>
+        {list.length > 0 && (
+          <button
+            type="submit"
+            className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-sm font-medium"
+          >
+            Submit
+          </button>
+        )}
+      </div>
+    </form>
+  );
+}`,
+      tags: ["form", "dynamic", "fields", "rows", "participant"]
+    },
+    {
+      title: "Tag Input",
+      description: "A tag input component that lets users type and press Enter to add tags, click to remove them, and clear all at once.",
+      code: `import { useList } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function TagInput() {
+  const { list: tags, add, remove, clear } = useList<string>();
+  const [input, setInput] = useState('');
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const trimmed = input.trim().toLowerCase();
+      if (trimmed && !tags.includes(trimmed)) {
+        add(trimmed);
+        setInput('');
+      }
+    } else if (e.key === 'Backspace' && input === '' && tags.length > 0) {
+      remove(tags.length - 1);
+    }
+  };
+
+  return (
+    <div className="space-y-2 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <label className="text-sm font-medium">Tags</label>
+
+      <div className="flex flex-wrap gap-1.5 p-2 rounded-control border bg-field min-h-[40px]">
+        {tags.map((tag, i) => (
+          <span
+            key={i}
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-control bg-brand/10 text-brand text-xs font-medium"
+          >
+            {tag}
+            <button
+              type="button"
+              onClick={() => remove(i)}
+              className="hover:text-destructive"
+              aria-label={\`Remove \${tag}\`}
+            >
+              &times;
+            </button>
+          </span>
+        ))}
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={tags.length === 0 ? 'Type and press Enter...' : ''}
+          className="flex-1 min-w-[100px] bg-transparent text-sm outline-none"
+        />
+      </div>
+
+      {tags.length > 0 && (
+        <button onClick={clear} className="text-xs text-muted-content hover:underline">
+          Clear all tags
+        </button>
+      )}
+    </div>
+  );
+}`,
+      tags: ["tag", "input", "chips", "clear", "keyboard"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Mutating the list array directly",
+      bad: `const { list, add } = useList<string>();
+list.push('new item'); // Direct mutation \u2014 no re-render`,
+      good: `const { list, add } = useList<string>();
+add('new item'); // Triggers a re-render with a new array`,
+      reason: "The list reference only changes when a mutator function is called. Directly pushing, splicing, or assigning to indices mutates the existing array in place without triggering a React re-render, leading to stale UI."
+    },
+    {
+      title: "Using list from the same render in an updater",
+      bad: `const { list, update } = useList<number>();
+const handleClick = (i: number) => {
+  update(i, list[i] + 1); // list may be stale if other updates batched
+};`,
+      good: `const { list, update } = useList<number>();
+const handleClick = (i: number) => {
+  // Read from list \u2014 safe because update uses the functional updater internally,
+  // but if you need the latest value, keep a local reference from the same render.
+  update(i, list[i] + 1);
+};`,
+      reason: "In concurrent mode, multiple state updates may batch together. If you read list[i] from a stale closure and another update has already changed that index, you will overwrite the newer value. For critical sequential updates, consider using a single event handler or useRef to track the latest state."
+    },
+    {
+      title: "Removing items while iterating with index",
+      bad: `list.forEach((_, i) => {
+  if (shouldRemove(i)) remove(i); // Indices shift after each removal
+});`,
+      good: `// Filter in a single pass, then rebuild:
+const { list, clear, add } = useList<string>();
+const kept = list.filter((_, i) => !shouldRemove(i));
+clear();
+kept.forEach((item) => add(item));
+
+// Or better: use raw setState for batch removals:
+const [, setList] = useState(list);
+setList(prev => prev.filter((_, i) => !shouldRemove(i)));`,
+      reason: "remove(i) uses filter internally, which shifts all subsequent indices down by one. Calling remove in a loop causes later indices to point to wrong elements, leading to incorrect deletions."
+    },
+    {
+      title: "Ignoring the returned mutator functions and using raw setState",
+      bad: `const [list, setList] = useState<string[]>([]);
+// Writing manual immutable updates everywhere
+setList((prev) => [...prev, 'item']);
+setList((prev) => prev.filter((_, i) => i !== 2));`,
+      good: `const { list, add, remove } = useList<string>();
+add('item');
+remove(2);`,
+      reason: "The entire purpose of useList is to encapsulate immutable array operations behind named functions. Bypassing the mutators defeats the hook and leads to inconsistent patterns across the codebase. If you need raw setState control, use useState directly instead."
+    }
+  ]
+};
+
+// src/hooks/use-lock-body-scroll.ts
+var useLockBodyScrollEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-lock-body-scroll",
+  name: "useLockBodyScroll",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "React hook that prevents background page scrolling by setting overflow:hidden on the document body, with automatic scrollbar-width compensation and cleanup on unmount.",
+  longDescription: 'Locks the page scroll position by setting document.body.style.overflow to "hidden" inside a useEffect. When a scrollbar is present, the hook measures its width (window.innerWidth minus document.documentElement.clientWidth) and adds an equivalent padding-right to the body. This prevents the visual "jump" or layout shift that occurs when the scrollbar disappears while overflow is hidden. The original overflow and padding-right values are captured before mutation and restored in the effect cleanup, so the page returns to its original state when the component unmounts or the hook is disabled. Pass enabled: false to conditionally skip the lock without unmounting the component. Because the hook accesses document and window, it is client-only \u2014 always use it inside components marked with "use client" and avoid calling it during server-side rendering. No external dependencies beyond React are required.',
+  tags: [
+    "scroll",
+    "scroll-lock",
+    "overflow",
+    "body-scroll",
+    "modal",
+    "drawer",
+    "overlay",
+    "layout-shift",
+    "scrollbar",
+    "side-effect"
+  ],
+  category: "side-effect",
+  useCases: [
+    "Prevent background page scrolling when a modal, dialog, or confirmation overlay is open so users cannot accidentally scroll past the overlay content",
+    "Lock body scroll when a mobile drawer, bottom sheet, or slide-out navigation panel is visible to avoid competing scroll contexts",
+    "Temporarily disable page scrolling during a full-screen image lightbox or media carousel overlay without manually touching document.body",
+    "Conditionally toggle scroll locking on and off based on component state (e.g., isMenuOpen, isSidebarExpanded) without unmounting the component",
+    "Prevent visual layout jumps caused by disappearing scrollbars when an overlay appears, by automatically compensating for the scrollbar width"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useLockBodyScroll.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useLockBodyScroll(enabled?: boolean): void",
+  returnType: "void",
+  parameters: [
+    {
+      name: "enabled",
+      type: "boolean",
+      required: false,
+      description: "Controls whether scroll locking is active. When true (the default), the hook sets overflow:hidden on the body and compensates for scrollbar width. When false, the hook performs no DOM mutations, making it safe to keep the hook mounted while conditionally toggling the lock.",
+      defaultValue: "true"
+    }
+  ],
+  returnValues: [],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Modal with Scroll Lock",
+      description: "A modal component that locks body scroll as soon as it mounts and restores it on unmount. No parameters are needed \u2014 the lock is active by default.",
+      code: `'use client';
+
+import { useLockBodyScroll } from 'vayu-ui';
+import { useState } from 'react';
+
+function Modal({ onClose }: { onClose: () => void }) {
+  useLockBodyScroll();
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="bg-surface text-surface-content rounded-surface shadow-elevated max-w-md w-full p-6">
+        <h2 className="text-lg font-semibold mb-2">Modal Title</h2>
+        <p className="text-sm text-muted-content mb-4">
+          Background scrolling is locked while this modal is open.
+        </p>
+        <button
+          onClick={onClose}
+          className="px-4 py-2 rounded-control bg-brand text-brand-content hover:opacity-90 transition-opacity"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default function BasicModalDemo() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <button
+        onClick={() => setOpen(true)}
+        className="px-4 py-2 rounded-control bg-brand text-brand-content"
+      >
+        Open Modal
+      </button>
+      {open && <Modal onClose={() => setOpen(false)} />}
+    </div>
+  );
+}`,
+      tags: ["modal", "dialog", "basic", "overlay"]
+    },
+    {
+      title: "Conditional Scroll Lock with Toggle",
+      description: "Demonstrates using the enabled parameter to toggle scroll locking on and off without unmounting the hook. Useful when a parent component controls the lock state.",
+      code: `'use client';
+
+import { useLockBodyScroll } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function ConditionalScrollLock() {
+  const [locked, setLocked] = useState(false);
+  useLockBodyScroll(locked);
+
+  return (
+    <div className="p-6 rounded-surface border bg-surface text-surface-content space-y-4 max-w-sm">
+      <h3 className="text-lg font-semibold">Scroll Lock Toggle</h3>
+      <p className="text-sm text-muted-content">
+        {locked
+          ? 'Page scroll is locked. You cannot scroll the background.'
+          : 'Page scroll is unlocked. Scroll freely.'}
+      </p>
+      <button
+        onClick={() => setLocked((prev) => !prev)}
+        className={\`px-4 py-2 rounded-control font-medium transition-colors \${
+          locked
+            ? 'bg-destructive text-destructive-content'
+            : 'bg-brand text-brand-content'
+        }\`}
+      >
+        {locked ? 'Unlock Scroll' : 'Lock Scroll'}
+      </button>
+    </div>
+  );
+}`,
+      tags: ["toggle", "conditional", "enabled", "control"]
+    },
+    {
+      title: "Drawer / Bottom Sheet",
+      description: "A slide-in drawer component that locks background scrolling when visible and unlocks it when the user closes the drawer. The enabled parameter is driven by the isOpen prop.",
+      code: `'use client';
+
+import { useLockBodyScroll } from 'vayu-ui';
+import { useState } from 'react';
+
+function Drawer({
+  isOpen,
+  onClose,
+  children,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  useLockBodyScroll(isOpen);
+
+  return (
+    <>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={onClose}
+          />
+          <aside className="relative w-80 h-full bg-surface text-surface-content shadow-elevated p-6 overflow-y-auto">
+            <button
+              onClick={onClose}
+              className="mb-4 text-sm text-muted-content hover:text-surface-content transition-colors"
+            >
+              Close &times;
+            </button>
+            {children}
+          </aside>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default function DrawerDemo() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <button
+        onClick={() => setOpen(true)}
+        className="px-4 py-2 rounded-control bg-brand text-brand-content"
+      >
+        Open Drawer
+      </button>
+      <Drawer isOpen={open} onClose={() => setOpen(false)}>
+        <h2 className="text-lg font-semibold mb-2">Drawer Content</h2>
+        <p className="text-sm text-muted-content">
+          Background scroll is locked while this drawer is open.
+        </p>
+      </Drawer>
+    </div>
+  );
+}`,
+      tags: ["drawer", "bottom-sheet", "sidebar", "slide-in"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using during server-side rendering",
+      bad: `// Inside a server component or during SSR
+useLockBodyScroll();
+// ReferenceError: document is not defined`,
+      good: `'use client';
+import { useLockBodyScroll } from 'vayu-ui';
+
+function ClientModal() {
+  useLockBodyScroll();
+  return <div>Modal content</div>;
+}`,
+      reason: 'The hook accesses document.body.style and window.innerWidth, which do not exist on the server. Always use it inside client components marked with "use client". During SSR the hook will throw because document and window are undefined.'
+    },
+    {
+      title: "Manually setting body overflow alongside the hook",
+      bad: `useLockBodyScroll();
+document.body.style.overflow = 'auto'; // Conflicts with the hook`,
+      good: `useLockBodyScroll();
+// Let the hook manage overflow \u2014 it restores the original value on cleanup`,
+      reason: 'The hook captures the original overflow value before modifying it and restores that value on cleanup. If you also set overflow externally, the hook saves your external value as "original" and will restore it on cleanup, potentially leaving the body in an unexpected state.'
+    },
+    {
+      title: "Nesting multiple scroll-locked overlays without coordination",
+      bad: `function OuterOverlay() {
+  useLockBodyScroll();
+  return <div><InnerOverlay /></div>;
+}
+function InnerOverlay() {
+  useLockBodyScroll(); // Second lock \u2014 cleanup order causes issues
+  return <div>Inner</div>;
+}`,
+      good: `function OuterOverlay() {
+  const [showInner, setShowInner] = useState(false);
+  useLockBodyScroll(!showInner); // Disable outer lock when inner takes over
+  return (
+    <div>
+      {showInner ? <InnerOverlay /> : <InnerContent onOpen={() => setShowInner(true)} />}
+    </div>
+  );
+}
+function InnerOverlay() {
+  useLockBodyScroll();
+  return <div>Inner</div>;
+}`,
+      reason: 'Each useLockBodyScroll instance independently saves and restores overflow. When multiple instances run simultaneously, the cleanup of the inner hook restores the "hidden" value set by the outer hook, and the outer cleanup then restores the original. This can cause brief scroll-enabled states during transitions. Coordinate by disabling parent locks when children take over.'
+    },
+    {
+      title: "Not unmounting the component that calls the hook",
+      bad: `function Modal() {
+  useLockBodyScroll();
+  return <div>Modal</div>;
+}
+// Usage: just hiding with CSS
+{showModal ? <Modal /> : null}
+// vs accidentally keeping it mounted but hidden
+<div style={{ display: showModal ? 'block' : 'none' }}>
+  <Modal />
+</div>`,
+      good: `{showModal && <Modal />}`,
+      reason: "The hook only restores body styles in its cleanup function, which runs when the component unmounts. If you hide the modal with CSS instead of unmounting it, the cleanup never runs and the body stays locked indefinitely. Always conditionally render (unmount) the component that calls the hook."
+    }
+  ]
+};
+
+// src/hooks/use-local-storage.ts
+var useLocalStorageEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-local-storage",
+  name: "useLocalStorage",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "A state hook that persists values to localStorage with automatic serialization, cross-tab synchronization via the StorageEvent, and SSR-safe initialization.",
+  longDescription: 'Wraps React.useState and keeps a localStorage key in sync with your component state. On mount, the hook reads the stored JSON value for the given key (falling back to initialValue if absent or corrupt). On every state change, it serializes and writes back to localStorage inside a useEffect. The hook also subscribes to the native "storage" event on window, so when another browser tab modifies the same key, the state updates in real time across all open tabs. Because localStorage.getItem is called inside a lazy useState initializer, it only runs once per mount \u2014 avoiding flicker from repeated reads. The hook is SSR-safe: the lazy initializer catches any errors (e.g., localStorage unavailable in Node.js) and gracefully falls back to initialValue. Errors during both read and write are caught and logged, so quota-exceeded or restricted-access scenarios do not crash your app. Choose this over raw useState when you need user preferences, form drafts, feature flags, or any client-side state that must survive page reloads and be shared across tabs.',
+  tags: [
+    "local-storage",
+    "persist",
+    "state",
+    "storage",
+    "hydration",
+    "ssr-safe",
+    "cross-tab",
+    "browser-storage",
+    "session",
+    "client-side"
+  ],
+  category: "state",
+  useCases: [
+    "When you need to persist user preferences (theme, language, sidebar collapsed state) across page reloads without hydration mismatches",
+    "To save form draft data so users do not lose progress on accidental navigation or browser crash",
+    "When building a settings panel where changes must be reflected in other open tabs in real time via the StorageEvent",
+    "To cache feature flags or A/B test assignments on the client so they survive refreshes without re-fetching",
+    "When you want a simple key-value store for small client-side data that does not justify IndexedDB or an external database",
+    "To remember the last-selected value of a dropdown, tab, or accordion so the UI restores its previous state on revisit"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useLocalStorage.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useLocalStorage<T>(key: string, initialValue: T): [T, Dispatch<SetStateAction<T>>]",
+  typeParams: ["T"],
+  parameters: [
+    {
+      name: "key",
+      type: "string",
+      required: true,
+      description: "The localStorage key to read from and write to. Must be unique across your app to avoid collisions. Changing the key between renders will read the new key from storage and persist future updates there."
+    },
+    {
+      name: "initialValue",
+      type: "T",
+      required: true,
+      description: 'The fallback value used when the key does not exist in localStorage yet or when JSON.parse fails. Also used during SSR when localStorage is unavailable. The generic T is inferred from this value, so useLocalStorage("count", 0) infers T as number.'
+    }
+  ],
+  returnType: "[T, Dispatch<SetStateAction<T>>]",
+  returnValues: [
+    {
+      name: "storedValue",
+      type: "T",
+      description: "The current persisted value. Initialized from localStorage on mount (or initialValue if absent/corrupt). Updates automatically when the setter is called or when another tab fires a StorageEvent for the same key."
+    },
+    {
+      name: "setStoredValue",
+      type: "Dispatch<SetStateAction<T>>",
+      description: "The standard React state setter. Accepts a new value or a functional updater (prev => next). Each call serializes the new value to localStorage via JSON.stringify and triggers a re-render."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Dark Mode Toggle",
+      description: "Persists the user theme preference so it survives page reloads and is shared across open tabs.",
+      code: `'use client';
+import { useLocalStorage } from 'vayu-ui';
+import { useEffect } from 'react';
+
+export default function DarkModeToggle() {
+  const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('theme', 'light');
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
+
+  return (
+    <button
+      onClick={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
+      className="px-4 py-2 rounded-control bg-surface text-surface-content shadow-control text-sm font-medium"
+    >
+      Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
+    </button>
+  );
+}`,
+      tags: ["theme", "dark-mode", "toggle", "preference"]
+    },
+    {
+      title: "Persistent Form Draft",
+      description: "Saves form input to localStorage on every keystroke so the user does not lose data on accidental navigation.",
+      code: `'use client';
+import { useLocalStorage } from 'vayu-ui';
+
+interface FeedbackDraft {
+  name: string;
+  message: string;
+}
+
+export default function FeedbackForm() {
+  const [draft, setDraft] = useLocalStorage<FeedbackDraft>('feedback-draft', {
+    name: '',
+    message: '',
+  });
+
+  const handleChange = (field: keyof FeedbackDraft, value: string) => {
+    setDraft((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Submitted:', draft);
+    setDraft({ name: '', message: '' });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <h2 className="text-sm font-semibold">Feedback</h2>
+
+      <input
+        value={draft.name}
+        onChange={(e) => handleChange('name', e.target.value)}
+        placeholder="Your name"
+        className="w-full px-3 py-1.5 rounded-control border bg-field text-sm"
+      />
+
+      <textarea
+        value={draft.message}
+        onChange={(e) => handleChange('message', e.target.value)}
+        placeholder="Your message..."
+        rows={3}
+        className="w-full px-3 py-1.5 rounded-control border bg-field text-sm resize-none"
+      />
+
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-sm font-medium"
+        >
+          Submit
+        </button>
+        <button
+          type="button"
+          onClick={() => setDraft({ name: '', message: '' })}
+          className="px-3 py-1.5 rounded-control border text-sm text-muted-content"
+        >
+          Clear draft
+        </button>
+      </div>
+    </form>
+  );
+}`,
+      tags: ["form", "draft", "auto-save", "persistence"]
+    },
+    {
+      title: "Last Selected Tab",
+      description: "Remembers which tab the user last selected so the same tab is active on revisit.",
+      code: `'use client';
+import { useLocalStorage } from 'vayu-ui';
+
+const TABS = ['Overview', 'Analytics', 'Settings'] as const;
+type Tab = (typeof TABS)[number];
+
+export default function PersistentTabs() {
+  const [activeTab, setActiveTab] = useLocalStorage<Tab>('active-tab', 'Overview');
+
+  return (
+    <div className="p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-md">
+      <div className="flex border-b">
+        {TABS.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={\`px-4 py-2 text-sm font-medium transition-colors \${
+              activeTab === tab
+                ? 'border-b-2 border-brand text-brand'
+                : 'text-muted-content hover:text-surface-content'
+            }\`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      <div className="pt-4 text-sm">
+        {activeTab === 'Overview' && <p>Welcome to the overview panel.</p>}
+        {activeTab === 'Analytics' && <p>Your analytics data appears here.</p>}
+        {activeTab === 'Settings' && <p>Configure your preferences below.</p>}
+      </div>
+    </div>
+  );
+}`,
+      tags: ["tab", "active", "preference", "persist"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Storing non-JSON-serializable values",
+      bad: `const [fn, setFn] = useLocalStorage('callback', () => {}); // Functions cannot be serialized`,
+      good: `// Store serializable data and derive functions from it
+const [items, setItems] = useLocalStorage<string[]>('items', []);
+const addItem = (item: string) => setItems((prev) => [...prev, item]);`,
+      reason: "localStorage stores strings via JSON.stringify/parse. Functions, Symbols, undefined, Dates, and Map/Set instances lose their identity during serialization. Store plain JSON-compatible data and reconstruct complex objects from it."
+    },
+    {
+      title: "Using localStorage key outside the lazy initializer",
+      bad: `function Component({ userId }: { userId: string }) {
+  const [value, setValue] = useLocalStorage('pref', null);
+  // Reading localStorage directly causes hydration mismatches:
+  useEffect(() => {
+    const raw = localStorage.getItem('something-else');
+    setValue(JSON.parse(raw)); // Unnecessary extra read + flicker
+  }, []);`,
+      good: `function Component({ userId }: { userId: string }) {
+  const [value, setValue] = useLocalStorage('pref', null);
+  // The hook already reads from localStorage on mount via the lazy initializer.
+  // Just use value directly \u2014 no extra reads needed.`,
+      reason: "The hook already handles reading from localStorage in its lazy useState initializer. Reading localStorage again in a useEffect causes an extra render cycle and can produce hydration mismatches in SSR frameworks like Next.js."
+    },
+    {
+      title: "Changing the key dynamically without memoizing initialValue",
+      bad: `const [val, setVal] = useLocalStorage(
+  dynamicKey,        // Key changes every render
+  computeExpensive(), // Recalculated every render
+);`,
+      good: `const key = useMemo(() => buildKey(userId, feature), [userId, feature]);
+const initialVal = useMemo(() => computeDefault(userId), [userId]);
+const [val, setVal] = useLocalStorage(key, initialVal);`,
+      reason: "Changing the key causes the hook to re-initialize from localStorage. If initialValue is expensive to compute, it will recalculate every render. Memoize both the key and initialValue if they depend on props or state."
+    },
+    {
+      title: "Storing large or sensitive data in localStorage",
+      bad: `const [data, setData] = useLocalStorage('api-response', massiveJson);
+const [token, setToken] = useLocalStorage('auth-token', '...');`,
+      good: `// Use IndexedDB (via useIndexedDB) for large datasets
+// Use httpOnly cookies or a secure auth provider for tokens
+const [prefs, setPrefs] = useLocalStorage('user-prefs', { theme: 'light' });`,
+      reason: "localStorage has a ~5 MB per-origin limit and is synchronous \u2014 storing large objects blocks the main thread during JSON.stringify/parse. Additionally, localStorage is readable by any JS on the page (XSS accessible) \u2014 never store tokens, secrets, or PII there."
+    },
+    {
+      title: "Assuming the setter synchronously updates localStorage",
+      bad: `setValue('new');
+console.log(localStorage.getItem('key')); // May still show old value`,
+      good: `setValue('new');
+// localStorage is updated in a useEffect (async). Read from the returned
+// state value instead of going back to localStorage directly:
+console.log(value); // "new" \u2014 reflects the current React state`,
+      reason: "The hook writes to localStorage inside a useEffect, which runs after the render commit. Immediately reading from localStorage after calling the setter will return the stale value. Always read from the returned state variable instead."
+    }
+  ]
+};
+
+// src/hooks/use-map.ts
+var useMapEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-map",
+  name: "useMap",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Generic state hook for managing a Map with built-in set, remove, clear, and has operations, eliminating manual immutable Map boilerplate inside setState callbacks.",
+  longDescription: "Wraps React.useState<Map<K, V>> and exposes four immutable mutator functions \u2014 set(key, value), remove(key), clear(), and has(key) \u2014 so you never need to write new Map(prev).set(\u2026) boilerplate inside setState callbacks. Every mutator uses the functional updater form (prev => \u2026), creating a new Map instance on each call so it is safe under concurrent React rendering and batched updates. The hook accepts optional initialEntries (an array of [K, V] tuples) to pre-populate the Map. It is fully SSR-safe since it has no browser API dependencies. Choose this over raw useState when you need key-value state with unique keys \u2014 unlike useList which manages ordered arrays, useMap guarantees key uniqueness and provides O(1) lookups via the native Map.has() method. The dual generics <K, V> allow any key type (not just strings), making it suitable for object-keyed caches, DOM element mappings, and enum-keyed feature flags.",
+  tags: [
+    "map",
+    "state",
+    "key-value",
+    "collection",
+    "crud",
+    "immutable",
+    "dictionary",
+    "lookup",
+    "reactive",
+    "generic"
+  ],
+  category: "state",
+  useCases: [
+    "When you need key-value state with unique keys and O(1) lookups, such as a dictionary or lookup table, without repeatedly writing new Map(prev).set(\u2026) inside setState",
+    "To manage user permissions or feature flags keyed by string or enum identifiers where each key maps to a boolean or config object",
+    "When building a multi-select UI where selected items are tracked by a unique ID, and you need fast existence checks without scanning an array",
+    "To cache API responses or computed values keyed by request parameters, ensuring duplicate keys overwrite rather than accumulate",
+    "When maintaining a mapping from DOM elements or IDs to metadata (e.g., hover states, ref associations) where object identity matters as a key",
+    "To track form field errors keyed by field name, allowing individual errors to be set, removed, and checked without reimplementing Map logic"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useMap.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useMap<K, V>(initialEntries?: [K, V][]): { map: Map<K, V>; set: (key: K, value: V) => void; remove: (key: K) => void; clear: () => void; has: (key: K) => boolean }",
+  typeParams: ["K", "V"],
+  parameters: [
+    {
+      name: "initialEntries",
+      type: "[K, V][]",
+      required: false,
+      defaultValue: "undefined",
+      description: 'Optional array of key-value tuples to pre-populate the Map. When omitted, the Map starts empty. The generics K and V are inferred from the tuples you pass, so useMap([["age", 25]]) infers K as string and V as number.'
+    }
+  ],
+  returnType: "{ map: Map<K, V>; set: (key: K, value: V) => void; remove: (key: K) => void; clear: () => void; has: (key: K) => boolean }",
+  returnValues: [
+    {
+      name: "map",
+      type: "Map<K, V>",
+      description: "The current Map instance. Read-only \u2014 never mutate this directly (no .set, .delete, or .clear on this reference). Use the returned mutator functions to trigger re-renders."
+    },
+    {
+      name: "set",
+      type: "(key: K, value: V) => void",
+      description: "Sets or overwrites a key-value pair. Internally creates a new Map via the functional updater form, so concurrent batched updates are safe. If the key already exists, its value is replaced without changing insertion order."
+    },
+    {
+      name: "remove",
+      type: "(key: K) => void",
+      description: "Deletes the entry for the given key. Does nothing if the key does not exist (Map.delete returns false for missing keys). Creates a new Map instance to trigger a re-render."
+    },
+    {
+      name: "clear",
+      type: "() => void",
+      description: 'Removes all entries from the Map, resetting it to an empty Map. Useful for "Clear All" or reset actions.'
+    },
+    {
+      name: "has",
+      type: "(key: K) => boolean",
+      description: "Returns true if the Map contains the given key. This reads from the current render's Map instance, so it reflects the state at the time of the last render \u2014 not pending mutator calls."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Map Manager",
+      description: "A minimal component that lets users add key-value entries, remove by key, check existence, and clear the Map.",
+      code: `'use client';
+import { useMap } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function BasicMapManager() {
+  const { map, set, remove, clear, has } = useMap<string, string>();
+  const [key, setKey] = useState('');
+  const [value, setValue] = useState('');
+
+  const handleAdd = () => {
+    const trimmedKey = key.trim();
+    const trimmedValue = value.trim();
+    if (trimmedKey && trimmedValue) {
+      set(trimmedKey, trimmedValue);
+      setKey('');
+      setValue('');
+    }
+  };
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <div className="flex gap-2">
+        <input
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          placeholder="Key"
+          className="flex-1 px-3 py-1.5 rounded-control border bg-field text-sm"
+        />
+        <input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Value"
+          className="flex-1 px-3 py-1.5 rounded-control border bg-field text-sm"
+        />
+        <button
+          onClick={handleAdd}
+          className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-sm font-medium"
+        >
+          Set
+        </button>
+      </div>
+
+      {map.size > 0 && (
+        <ul className="space-y-1">
+          {[...map.entries()].map(([k, v]) => (
+            <li key={k} className="flex items-center justify-between px-2 py-1 rounded-control bg-muted/50 text-sm">
+              <span>
+                <strong>{k}</strong>: {v}
+              </span>
+              <button
+                onClick={() => remove(k)}
+                className="text-destructive text-xs hover:underline"
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {map.size > 0 && (
+        <button onClick={clear} className="text-xs text-muted-content hover:underline">
+          Clear all
+        </button>
+      )}
+    </div>
+  );
+}`,
+      tags: ["basic", "set", "remove", "clear", "key-value"]
+    },
+    {
+      title: "User Permissions Lookup",
+      description: "Tracks user permissions as a boolean Map keyed by permission name, with toggle and check functionality.",
+      code: `'use client';
+import { useMap } from 'vayu-ui';
+
+const PERMISSIONS = ['read', 'write', 'delete', 'admin'] as const;
+
+export default function PermissionsPanel() {
+  const { map, set, remove, has, clear } = useMap<string, boolean>([
+    ['read', true],
+    ['write', false],
+  ]);
+
+  const toggle = (perm: string) => {
+    if (has(perm)) {
+      remove(perm);
+    } else {
+      set(perm, true);
+    }
+  };
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <h2 className="text-sm font-semibold">Permissions</h2>
+
+      <div className="space-y-1">
+        {PERMISSIONS.map((perm) => (
+          <label key={perm} className="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              checked={has(perm)}
+              onChange={() => toggle(perm)}
+              className="rounded-control"
+            />
+            <span className={has(perm) ? 'text-success font-medium' : 'text-muted-content'}>
+              {perm}
+            </span>
+          </label>
+        ))}
+      </div>
+
+      <div className="flex gap-2">
+        <button
+          onClick={() => PERMISSIONS.forEach((p) => set(p, true))}
+          className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-xs font-medium"
+        >
+          Grant all
+        </button>
+        <button
+          onClick={clear}
+          className="px-3 py-1.5 rounded-control border text-xs text-muted-content"
+        >
+          Revoke all
+        </button>
+      </div>
+
+      <p className="text-xs text-muted-content">
+        Active: {[...map.keys()].filter((k) => has(k)).join(', ') || 'none'}
+      </p>
+    </div>
+  );
+}`,
+      tags: ["permissions", "toggle", "lookup", "checkbox", "access-control"]
+    },
+    {
+      title: "Feature Flags",
+      description: "Manages feature flags as a Map keyed by flag name with typed config objects, demonstrating non-string value generics.",
+      code: `'use client';
+import { useMap } from 'vayu-ui';
+
+interface FlagConfig {
+  enabled: boolean;
+  description: string;
+}
+
+const INITIAL_FLAGS: [string, FlagConfig][] = [
+  ['dark-mode', { enabled: true, description: 'Dark theme support' }],
+  ['new-dashboard', { enabled: false, description: 'Redesigned dashboard layout' }],
+  ['beta-api', { enabled: false, description: 'Beta API endpoints' }],
+];
+
+export default function FeatureFlags() {
+  const { map, set, has } = useMap<string, FlagConfig>(INITIAL_FLAGS);
+
+  const toggle = (flag: string) => {
+    const config = map.get(flag);
+    if (config) {
+      set(flag, { ...config, enabled: !config.enabled });
+    }
+  };
+
+  return (
+    <div className="space-y-2 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-md">
+      <h2 className="text-sm font-semibold">Feature Flags</h2>
+
+      {[...map.entries()].map(([flag, config]) => (
+        <div
+          key={flag}
+          className="flex items-center justify-between px-3 py-2 rounded-control bg-muted/50 text-sm"
+        >
+          <div>
+            <p className="font-medium">{flag}</p>
+            <p className="text-xs text-muted-content">{config.description}</p>
+          </div>
+          <button
+            onClick={() => toggle(flag)}
+            className={\`px-2.5 py-1 rounded-control text-xs font-medium transition-colors \${
+              config.enabled
+                ? 'bg-success/15 text-success'
+                : 'bg-muted text-muted-content'
+            }\`}
+          >
+            {config.enabled ? 'Enabled' : 'Disabled'}
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}`,
+      tags: ["feature-flags", "config", "toggle", "object-value", "settings"]
+    },
+    {
+      title: "Multi-Select with Counts",
+      description: "Tracks selected items and their quantities using a Map, demonstrating numeric value generics for a shopping cart or quantity picker.",
+      code: `'use client';
+import { useMap } from 'vayu-ui';
+
+const PRODUCTS = [
+  { id: 'apple', name: 'Apple', price: 1.5 },
+  { id: 'banana', name: 'Banana', price: 0.75 },
+  { id: 'cherry', name: 'Cherry', price: 3.0 },
+  { id: 'date', name: 'Date', price: 2.25 },
+];
+
+export default function QuantityPicker() {
+  const { map, set, remove, has, clear } = useMap<string, number>();
+
+  const increment = (id: string) => {
+    set(id, (map.get(id) ?? 0) + 1);
+  };
+
+  const decrement = (id: string) => {
+    const current = map.get(id) ?? 0;
+    if (current <= 1) {
+      remove(id);
+    } else {
+      set(id, current - 1);
+    }
+  };
+
+  const total = [...map.entries()].reduce((sum, [id, qty]) => {
+    const product = PRODUCTS.find((p) => p.id === id);
+    return sum + (product?.price ?? 0) * qty;
+  }, 0);
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <h2 className="text-sm font-semibold">Select Items</h2>
+
+      <div className="space-y-1">
+        {PRODUCTS.map((product) => {
+          const qty = map.get(product.id) ?? 0;
+          return (
+            <div
+              key={product.id}
+              className="flex items-center justify-between px-3 py-2 rounded-control bg-muted/50 text-sm"
+            >
+              <div>
+                <span className="font-medium">{product.name}</span>
+                <span className="text-xs text-muted-content ml-2">
+                  \${product.price.toFixed(2)} each
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => decrement(product.id)}
+                  className="w-6 h-6 rounded-control border text-xs flex items-center justify-center"
+                >
+                  \u2212
+                </button>
+                <span className="w-6 text-center text-xs font-medium">{qty}</span>
+                <button
+                  onClick={() => increment(product.id)}
+                  className="w-6 h-6 rounded-control bg-brand text-brand-content text-xs flex items-center justify-center"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {map.size > 0 && (
+        <div className="flex items-center justify-between pt-2 border-t">
+          <span className="text-sm font-semibold">Total: \${total.toFixed(2)}</span>
+          <button onClick={clear} className="text-xs text-destructive hover:underline">
+            Clear cart
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["quantity", "multi-select", "cart", "counter", "shopping"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Mutating the Map instance directly",
+      bad: `const { map } = useMap<string, number>();
+map.set('key', 42); // Direct mutation \u2014 no re-render`,
+      good: `const { map, set } = useMap<string, number>();
+set('key', 42); // Creates a new Map, triggers re-render`,
+      reason: "The map reference only changes when a mutator function is called. Calling .set(), .delete(), or .clear() on the Map directly mutates it in place without creating a new reference, so React does not detect the change and the UI stays stale."
+    },
+    {
+      title: "Iterating the Map directly in JSX",
+      bad: `{map.forEach((value, key) => (
+  <div key={String(key)}>{value}</div>
+))}`,
+      good: `{[...map.entries()].map(([key, value]) => (
+  <div key={String(key)}>{value}</div>
+))}`,
+      reason: "Map.forEach does not return an array, so React cannot use it as a valid JSX expression. Always spread Map into an array ([...map.entries()], [...map.keys()], or [...map.values()]) before mapping over it in JSX."
+    },
+    {
+      title: "Using non-serializable values as keys unnecessarily",
+      bad: `const { set, has } = useMap<object, string>();
+// Each render creates a new object reference, so has() always returns false:
+set({ id: 1 }, 'value');
+has({ id: 1 }); // false \u2014 different reference`,
+      good: `const { set, has } = useMap<number, string>();
+// Use a primitive key that can be compared by value:
+set(1, 'value');
+has(1); // true`,
+      reason: "Map uses SameValueZero for key equality. While object keys are technically allowed, most UI state should use primitives (strings, numbers) as keys. Object references created inline during render are never equal to previously stored keys, causing duplicate entries and failed lookups."
+    },
+    {
+      title: "Reading stale state from has() inside event handlers",
+      bad: `const { map, set, has } = useMap<string, boolean>();
+
+const handleClick = () => {
+  set('flag', true);
+  if (has('flag')) {
+    // has() still reads the OLD Map \u2014 set() hasn't re-rendered yet
+    console.log('flag exists'); // May not print on first call
+  }
+};`,
+      good: `const { map, set, has } = useMap<string, boolean>();
+
+const handleClick = () => {
+  set('flag', true);
+  // has() reflects the current render's state, not the pending update.
+  // If you need the updated value immediately, track it locally:
+  console.log('Flag will be set');
+};
+
+// Or read after re-render:
+useEffect(() => {
+  if (has('flag')) {
+    console.log('flag exists after render');
+  }
+}, [map]);`,
+      reason: "has() reads from the Map captured during the current render. Calling set() schedules a state update but does not synchronously update the Map reference. Inside the same event handler, has() will return the pre-update value. Use useEffect or track the value locally if you need to react to the new state immediately."
+    }
+  ]
+};
+
+// src/hooks/use-measure.ts
+var useMeasureEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-measure",
+  name: "useMeasure",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Reactive hook that tracks the pixel width and height of a DOM element using a ResizeObserver, returning a ref to attach and live dimension values.",
+  longDescription: "Wraps the native ResizeObserver API into a React-friendly hook that returns a typed ref and reactive width/height numbers. Attach the ref to any HTML element and the hook automatically subscribes to size changes via ResizeObserver inside useLayoutEffect, cleaning up on unmount. The initial measurement happens synchronously during the layout phase (useLayoutEffect) so the first render already contains correct dimensions \u2014 no flash of zero values. The hook reports contentRect dimensions (content area only, excluding padding, border, and scrollbar), which matches the space available for child content. The ref is typed as HTMLElement, so it works with any HTML element without a generic parameter. It is client-only (use client directive) and handles null refs gracefully \u2014 safe during SSR since the ref is null on the server and no observer is created until the client hydrates. No external dependencies beyond React are required.",
+  tags: [
+    "measure",
+    "dimensions",
+    "resize",
+    "resize-observer",
+    "width",
+    "height",
+    "dom",
+    "ref",
+    "responsive",
+    "layout"
+  ],
+  category: "dom",
+  useCases: [
+    "Build a responsive layout that switches between grid and list views based on the container width rather than the viewport width, enabling component-level responsive behavior",
+    "Display the live pixel dimensions of a resizable panel or container for debugging or user-facing size indicators",
+    "Trigger repositioning or re-rendering of floating elements (tooltips, popovers) when their anchor container changes size due to content loading or collapsible sections",
+    "Implement a sidebar that automatically collapses into a narrow icon-only mode when its container shrinks below a threshold width",
+    "Maintain a fixed aspect ratio on a container by computing the height from the measured width and applying it as an inline style",
+    "Conditionally show or hide child elements based on available space \u2014 for example, truncating a breadcrumb trail or hiding secondary actions when the container is too narrow",
+    "Synchronize the width of an overlay or dropdown to match the width of its trigger element in real time as the trigger resizes"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useMeasure.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useMeasure(): { ref: React.RefObject<HTMLElement | null>; width: number; height: number }",
+  parameters: [],
+  returnType: "{ ref: React.RefObject<HTMLElement | null>; width: number; height: number }",
+  returnValues: [
+    {
+      name: "ref",
+      type: "React.RefObject<HTMLElement | null>",
+      description: "A React ref object to attach to the target element via the ref prop. The hook creates a ResizeObserver on this element to track size changes. Initially null until the component mounts. Works with any HTML element (div, span, button, section, etc.)."
+    },
+    {
+      name: "width",
+      type: "number",
+      description: "The current content width of the measured element in pixels. Reflects the contentRect.width from ResizeObserver, which excludes padding, border, and scrollbar. Starts at 0 and updates synchronously on the first layout pass, then reactively on every resize."
+    },
+    {
+      name: "height",
+      type: "number",
+      description: "The current content height of the measured element in pixels. Reflects the contentRect.height from ResizeObserver, which excludes padding, border, and scrollbar. Starts at 0 and updates synchronously on the first layout pass, then reactively on every resize."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Live Dimension Display",
+      description: "A resizable container that displays its current width and height in real time, useful for debugging layouts or showing size information to users.",
+      code: `'use client';
+
+import { useMeasure } from 'vayu-ui';
+
+export default function LiveDimensions() {
+  const { ref, width, height } = useMeasure();
+
+  return (
+    <div
+      ref={ref}
+      className="relative w-full h-64 p-6 rounded-surface border bg-surface text-surface-content resize overflow-auto"
+    >
+      <p className="text-sm font-mono">
+        {Math.round(width)} \xD7 {Math.round(height)} px
+      </p>
+      <p className="mt-2 text-xs text-muted">
+        Drag the bottom-right corner to resize this container.
+      </p>
+    </div>
+  );
+}`,
+      tags: ["basic", "dimensions", "resize", "debug"]
+    },
+    {
+      title: "Responsive Grid/List Switch",
+      description: "A container that automatically switches between a grid layout and a vertical list based on its measured width, enabling component-level responsive behavior independent of viewport breakpoints.",
+      code: `'use client';
+
+import { useMeasure } from 'vayu-ui';
+
+const items = ['Dashboard', 'Analytics', 'Reports', 'Settings', 'Users', 'Billing'];
+
+export default function ResponsiveList() {
+  const { ref, width } = useMeasure();
+
+  const isWide = width > 400;
+
+  return (
+    <div ref={ref} className="w-full rounded-surface border bg-surface text-surface-content p-4">
+      <p className="text-xs text-muted mb-3">
+        Layout: {isWide ? 'Grid' : 'List'} ({Math.round(width)}px)
+      </p>
+      <div
+        className={isWide ? 'grid grid-cols-3 gap-2' : 'flex flex-col gap-2'}
+      >
+        {items.map((item) => (
+          <div
+            key={item}
+            className="px-3 py-2 rounded-control border text-sm hover:bg-muted/50 transition-colors"
+          >
+            {item}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}`,
+      tags: ["responsive", "grid", "list", "layout", "breakpoint"]
+    },
+    {
+      title: "Auto-Collapsing Sidebar",
+      description: "A sidebar panel that collapses into a narrow icon-only mode when its container width drops below a threshold, preserving space without media queries.",
+      code: `'use client';
+
+import { useMeasure } from 'vayu-ui';
+import { useState } from 'react';
+
+const navItems = [
+  { icon: '\u{1F4CA}', label: 'Dashboard' },
+  { icon: '\u{1F4C8}', label: 'Analytics' },
+  { icon: '\u2699\uFE0F', label: 'Settings' },
+  { icon: '\u{1F464}', label: 'Profile' },
+];
+
+export default function CollapsibleSidebar() {
+  const { ref, width } = useMeasure();
+  const [active, setActive] = useState('Dashboard');
+  const collapsed = width < 160 && width > 0;
+
+  return (
+    <aside
+      ref={ref}
+      className="h-full min-w-[48px] bg-surface text-surface-content border-r flex flex-col"
+    >
+      <nav className="flex flex-col gap-1 p-2">
+        {navItems.map((item) => (
+          <button
+            key={item.label}
+            onClick={() => setActive(item.label)}
+            className={\`flex items-center gap-2 px-3 py-2 rounded-control text-sm transition-colors \${
+              active === item.label
+                ? 'bg-brand text-brand-content'
+                : 'hover:bg-muted/50'
+            }\`}
+            title={collapsed ? item.label : undefined}
+          >
+            <span className="text-base">{item.icon}</span>
+            {!collapsed && <span>{item.label}</span>}
+          </button>
+        ))}
+      </nav>
+    </aside>
+  );
+}`,
+      tags: ["sidebar", "collapse", "navigation", "responsive"]
+    },
+    {
+      title: "Aspect Ratio Container",
+      description: "A container that maintains a fixed aspect ratio by computing its height from the measured width, useful for video players or image placeholders.",
+      code: `'use client';
+
+import { useMeasure } from 'vayu-ui';
+
+export default function AspectRatioBox({ children }: { children: React.ReactNode }) {
+  const { ref, width } = useMeasure();
+  const aspectRatio = 16 / 9;
+  const computedHeight = width > 0 ? width / aspectRatio : 0;
+
+  return (
+    <div
+      ref={ref}
+      style={{ height: computedHeight || undefined }}
+      className="w-full rounded-surface border bg-surface text-surface-content overflow-hidden"
+    >
+      {width > 0 ? (
+        children
+      ) : (
+        <div className="flex items-center justify-center h-full text-sm text-muted">
+          Measuring...
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["aspect-ratio", "video", "placeholder", "container"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Not attaching the ref to a DOM element",
+      bad: `const { ref, width, height } = useMeasure();
+return (
+  <div>
+    <p>{width} x {height}</p>
+  </div>
+);`,
+      good: `const { ref, width, height } = useMeasure();
+return (
+  <div ref={ref}>
+    <p>{Math.round(width)} x {Math.round(height)}</p>
+  </div>
+);`,
+      reason: "The hook tracks dimensions via a ResizeObserver attached to the ref element. If you do not pass ref to a DOM element, the ref stays null, no observer is created, and width/height will remain at 0 forever."
+    },
+    {
+      title: "Using this hook to measure the window or viewport",
+      bad: `const { ref, width, height } = useMeasure();
+// Attaching ref to a full-viewport div to track window size
+return <div ref={ref} className="fixed inset-0">...</div>;`,
+      good: `// Use useWindowSize for viewport-level measurements
+import { useWindowSize } from 'vayu-ui';
+const { width, height } = useWindowSize();`,
+      reason: "useMeasure tracks a specific DOM element via ResizeObserver, not the viewport. For window-level dimensions, use useWindowSize which listens to the window resize event directly. Using useMeasure on a full-viewport div adds unnecessary overhead and may not report correct values during transitions."
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (isVisible) {
+  const { ref, width } = useMeasure();
+}`,
+      good: `const { ref, width } = useMeasure();
+return isVisible ? <div ref={ref}>{width}px</div> : null;`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling useMeasure inside a conditional violates the Rules of Hooks and will cause React to throw an error or produce inconsistent state. Always call the hook at the top level and conditionally render the measured element instead."
+    },
+    {
+      title: "Relying on dimensions before the first layout pass",
+      bad: `const { ref, width } = useMeasure();
+// Width is 0 on the very first render
+const columns = Math.floor(width / 200); // NaN or 0`,
+      good: `const { ref, width } = useMeasure();
+const columns = width > 0 ? Math.floor(width / 200) : 4; // sensible fallback`,
+      reason: "Width and height start at 0 until the element mounts and the initial ResizeObserver callback fires. Any computation that divides by these values or uses them to calculate layout will produce incorrect results on the first render. Always guard against the zero case with a fallback value."
+    },
+    {
+      title: "Sharing one ref across multiple elements",
+      bad: `const { ref, width } = useMeasure();
+return (
+  <div>
+    <div ref={ref}>Panel A</div>
+    <div ref={ref}>Panel B</div>
+  </div>
+);`,
+      good: `const { ref: refA, width: widthA } = useMeasure();
+const { ref: refB, width: widthB } = useMeasure();
+return (
+  <div>
+    <div ref={refA}>Panel A ({Math.round(widthA)}px)</div>
+    <div ref={refB}>Panel B ({Math.round(widthB)}px)</div>
+  </div>
+);`,
+      reason: "A single ref can only point to one DOM element at a time. Assigning the same ref to multiple elements means only the last rendered element will be observed. Call useMeasure separately for each element that needs independent dimension tracking."
+    }
+  ]
+};
+
+// src/hooks/use-media-query.ts
+var useMediaQueryEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-media-query",
+  name: "useMediaQuery",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Reactive hook that tracks whether a CSS media query matches, returning a boolean that updates in real time when the match state changes.",
+  longDescription: "Wraps the browser's `window.matchMedia` API in a React-friendly hook using `useState` and `useEffect`. On mount, it evaluates the provided media query string and sets the initial match state. It then subscribes to the `MediaQueryList` change event so the returned boolean updates automatically whenever the query result changes \u2014 for example when the user resizes the window, toggles dark mode, rotates a mobile device, or changes system accessibility preferences. The hook is SSR-safe: it initializes state to `false` and guards all browser API access with `typeof window === 'undefined'`, so server-rendered output is deterministic and no hydration mismatch occurs. When the `query` string changes between renders, the previous listener is cleaned up via the effect's return function and a fresh subscription is created for the new query. Use this hook instead of manual `matchMedia` calls or window resize listeners whenever you need declarative, reactive CSS media query matching in a React component.",
+  tags: [
+    "media-query",
+    "responsive",
+    "breakpoint",
+    "matchmedia",
+    "viewport",
+    "dark-mode",
+    "prefers-color-scheme",
+    "reduced-motion",
+    "print",
+    "screen-size"
+  ],
+  category: "sensor",
+  useCases: [
+    "Conditionally render desktop vs mobile layouts by querying min-width or max-width breakpoints without hardcoded resize listeners",
+    "Detect the user's dark mode preference using prefers-color-scheme to automatically theme the UI",
+    "Respect the prefers-reduced-motion accessibility setting to disable or simplify animations for users who need it",
+    "Apply print-specific layouts or hide interactive elements when the user opens print preview via the print media query",
+    "Implement orientation-aware layouts that adapt when a mobile device is rotated between portrait and landscape",
+    "Detect high-DPI or high-resolution displays using resolution-based queries to serve appropriate image assets or adjust layout density"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useMediaQuery.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useMediaQuery(query: string): boolean",
+  typeParams: [],
+  returnType: "boolean",
+  parameters: [
+    {
+      name: "query",
+      type: "string",
+      required: true,
+      description: 'A valid CSS media query string (e.g., "(min-width: 768px)", "(prefers-color-scheme: dark)", "print", "(orientation: landscape)"). The string is passed directly to `window.matchMedia`. Changing the query between renders unsubscribes from the old query and subscribes to the new one.'
+    }
+  ],
+  returnValues: [
+    {
+      name: "matches",
+      type: "boolean",
+      description: "Whether the media query currently matches the browser environment. Returns `false` during SSR and on the initial client render before the effect runs, then updates to the actual match state. Automatically re-renders the component whenever the match status changes (e.g., window resize, system theme change, orientation change)."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Responsive Breakpoint Switcher",
+      description: "Renders different layouts depending on the current viewport width using multiple useMediaQuery calls for mobile, tablet, and desktop breakpoints.",
+      code: `'use client';
+
+import { useMediaQuery } from 'vayu-ui';
+
+export default function ResponsiveLayout() {
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+  const isMobile = useMediaQuery('(max-width: 767px)');
+
+  return (
+    <div className="p-4 rounded-surface bg-surface text-surface-content">
+      {isDesktop && (
+        <div className="grid grid-cols-4 gap-4">
+          <div className="h-24 rounded-surface bg-muted/30 border" />
+          <div className="h-24 rounded-surface bg-muted/30 border" />
+          <div className="h-24 rounded-surface bg-muted/30 border" />
+          <div className="h-24 rounded-surface bg-muted/30 border" />
+        </div>
+      )}
+      {isTablet && (
+        <div className="grid grid-cols-2 gap-4">
+          <div className="h-24 rounded-surface bg-muted/30 border" />
+          <div className="h-24 rounded-surface bg-muted/30 border" />
+        </div>
+      )}
+      {isMobile && (
+        <div className="h-24 rounded-surface bg-muted/30 border" />
+      )}
+    </div>
+  );
+}`,
+      tags: ["responsive", "breakpoint", "layout", "viewport"]
+    },
+    {
+      title: "Dark Mode Detection",
+      description: "Detects the user's system-level color scheme preference and applies a data attribute or conditional styling accordingly.",
+      code: `'use client';
+
+import { useMediaQuery } from 'vayu-ui';
+
+export default function DarkModeDetector() {
+  const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
+
+  return (
+    <div
+      className={\`p-4 rounded-surface border \${
+        prefersDark
+          ? 'bg-gray-900 text-gray-100 border-gray-700'
+          : 'bg-white text-gray-900 border-gray-200'
+      }\`}
+    >
+      <p className="text-sm font-medium">
+        System theme: {prefersDark ? 'Dark' : 'Light'}
+      </p>
+      <p className="text-xs text-muted-content mt-1">
+        Toggle your OS dark mode setting to see this update automatically.
+      </p>
+    </div>
+  );
+}`,
+      tags: ["dark-mode", "theme", "prefers-color-scheme", "accessibility"]
+    },
+    {
+      title: "Reduced Motion Preference",
+      description: "Checks the prefers-reduced-motion media query and conditionally applies CSS transitions only when the user has not requested reduced motion.",
+      code: `'use client';
+
+import { useMediaQuery } from 'vayu-ui';
+
+export default function AnimatedCard() {
+  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+
+  return (
+    <div
+      className={\`p-6 rounded-surface border bg-surface text-surface-content shadow-surface \${
+        prefersReducedMotion ? '' : 'transition-all duration-300 hover:shadow-elevated hover:-translate-y-1'
+      }\`}
+    >
+      <h3 className="font-semibold">Animated Card</h3>
+      <p className="text-sm text-muted-content mt-2">
+        {prefersReducedMotion
+          ? 'Transitions are disabled because you prefer reduced motion.'
+          : 'Hover over this card to see a smooth animation.'}
+      </p>
+    </div>
+  );
+}`,
+      tags: ["accessibility", "reduced-motion", "animation", "a11y"]
+    },
+    {
+      title: "Print Layout Detection",
+      description: "Detects when the page is in print or print-preview mode to show a simplified, print-friendly layout.",
+      code: `'use client';
+
+import { useMediaQuery } from 'vayu-ui';
+
+export default function PrintAwarePage() {
+  const isPrinting = useMediaQuery('print');
+
+  return (
+    <div className="p-4 rounded-surface bg-surface text-surface-content">
+      <header className={\`flex items-center justify-between pb-4 border-b mb-4 \${
+        isPrinting ? 'hidden' : ''
+      }\`}>
+        <nav className="flex gap-4 text-sm">
+          <a href="/" className="text-brand hover:underline">Home</a>
+          <a href="/about" className="text-brand hover:underline">About</a>
+          <a href="/contact" className="text-brand hover:underline">Contact</a>
+        </nav>
+      </header>
+
+      <article className="prose">
+        <h1 className="text-xl font-bold">Article Title</h1>
+        <p className="text-sm text-muted-content mt-2">
+          This content renders in both screen and print views. Navigation and
+          interactive elements are hidden during print.
+        </p>
+      </article>
+
+      {isPrinting && (
+        <footer className="mt-8 pt-4 border-t text-xs text-muted-content">
+          Printed from example.com \u2014 {new Date().toLocaleDateString()}
+        </footer>
+      )}
+    </div>
+  );
+}`,
+      tags: ["print", "media", "layout", "conditional-rendering"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (isFeatureEnabled) {
+  const isMobile = useMediaQuery('(max-width: 767px)');
+}`,
+      good: `const isMobile = useMediaQuery('(max-width: 767px)');
+
+// Use the boolean in your conditional logic instead
+if (isFeatureEnabled && isMobile) { ... }`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling useMediaQuery inside an if-statement, loop, or callback violates the Rules of Hooks and causes crashes or stale state."
+    },
+    {
+      title: "Forgetting parentheses in compound media queries",
+      bad: `const isTablet = useMediaQuery('min-width: 768px and max-width: 1023px');`,
+      good: `const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');`,
+      reason: "CSS media queries require each feature to be wrapped in parentheses. Omitting them produces an invalid query that will never match, silently returning false without errors."
+    },
+    {
+      title: "Expecting synchronous truth on first render",
+      bad: `const isDesktop = useMediaQuery('(min-width: 1024px)');
+// Expecting isDesktop to be true on first render when the window is wide`,
+      good: `const isDesktop = useMediaQuery('(min-width: 1024px)');
+// On first render isDesktop is false (SSR-safe default).
+// It updates to the real value after the effect runs \u2014 handle the transition.`,
+      reason: "The hook initializes state to false for SSR safety, then updates in useEffect. If you need the correct value on the first paint without a flash, use CSS media queries directly or a layout effect pattern."
+    },
+    {
+      title: "Using dynamic string interpolation in the query every render",
+      bad: `const isWide = useMediaQuery(\`(min-width: \${containerWidth}px)\`);`,
+      good: `const isWide = useMediaQuery('(min-width: 1024px)');
+// Use fixed breakpoint constants. For dynamic measurements, use useMeasure instead.`,
+      reason: "While the hook does re-subscribe when the query string changes, constructing it from rapidly changing values (like container width) causes unnecessary cleanup and re-subscription on every render. Use useMeasure for element-based measurements instead."
+    }
+  ]
+};
+
+// src/hooks/use-mouse-track.ts
+var useMouseTrackEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-mouse-track",
+  name: "useMouseTrack",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Tracks the mouse cursor position relative to the viewport in real time, returning the current clientX and clientY coordinates.",
+  longDescription: `Subscribes to the native window "mousemove" event via a React useEffect and exposes the cursor's viewport coordinates as reactive state. Every time the pointer moves, the hook updates the returned { x, y } object \u2014 where x is clientX and y is clientY \u2014 causing a re-render of the consuming component. The event listener is registered once on mount (empty dependency array) and cleaned up on unmount, preventing memory leaks. Because the hook attaches to the window object, it captures mouse movement anywhere on the page regardless of which element is hovered. The initial value is { x: 0, y: 0 } until the first mousemove event fires. On the server, the useEffect does not run, so the hook returns { x: 0, y: 0 } safely without hydration mismatches. Choose this hook over manually wiring window.addEventListener when you need declarative, cleanup-free access to cursor position for visual effects, custom cursors, parallax, or interactive gradients. For element-relative coordinates, pair with a ref and getBoundingClientRect instead of using this hook directly.`,
+  tags: [
+    "mouse",
+    "position",
+    "cursor",
+    "coordinates",
+    "tracking",
+    "viewport",
+    "mousemove",
+    "pointer",
+    "parallax",
+    "interactive"
+  ],
+  category: "sensor",
+  useCases: [
+    "Build a custom cursor that follows the native pointer with additional visual effects like trailing glow, magnetic snap, or morphing shapes",
+    "Create parallax or tilt effects on cards and images that respond to mouse movement across the viewport",
+    "Implement a spotlight or radial gradient overlay that follows the cursor to reveal hidden content or add depth to the UI",
+    "Display real-time coordinate readouts for debugging layouts, building design tools, or creating educational geometry demos",
+    "Drive interactive data visualizations where the mouse position maps to chart crosshairs, tooltips, or highlighted data points",
+    "Build a magnetic button effect where UI elements subtly shift toward the cursor as it approaches, creating playful micro-interactions"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useMouseTrack.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useMouseTrack(): { x: number; y: number }",
+  typeParams: [],
+  parameters: [],
+  returnType: "{ x: number; y: number }",
+  returnValues: [
+    {
+      name: "x",
+      type: "number",
+      description: "The horizontal distance in CSS pixels from the left edge of the viewport to the cursor position (MouseEvent.clientX). Ranges from 0 to window.innerWidth. Starts at 0 until the first mousemove event fires."
+    },
+    {
+      name: "y",
+      type: "number",
+      description: "The vertical distance in CSS pixels from the top edge of the viewport to the cursor position (MouseEvent.clientY). Ranges from 0 to window.innerHeight. Starts at 0 until the first mousemove event fires."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Custom Cursor Follower",
+      description: "A glowing circle that follows the mouse cursor with a smooth CSS transition, creating a custom cursor effect overlaid on the page.",
+      code: `'use client';
+import { useMouseTrack } from 'vayu-ui';
+
+export default function CustomCursor() {
+  const { x, y } = useMouseTrack();
+
+  return (
+    <div className="relative w-full h-64 rounded-surface border bg-surface overflow-hidden">
+      <p className="absolute top-3 left-3 text-xs text-muted-content font-mono">
+        Move your mouse anywhere on this card
+      </p>
+      <div
+        className="pointer-events-none absolute w-8 h-8 rounded-full bg-brand/40 blur-sm transition-transform duration-75"
+        style={{ transform: \`translate(\${x - 16}px, \${y - 16}px)\` }}
+      />
+      <div
+        className="pointer-events-none absolute w-3 h-3 rounded-full bg-brand transition-transform duration-75"
+        style={{ transform: \`translate(\${x - 6}px, \${y - 6}px)\` }}
+      />
+    </div>
+  );
+}`,
+      tags: ["cursor", "follower", "visual-effect", "animation"]
+    },
+    {
+      title: "Spotlight Card Effect",
+      description: "A card that reveals a radial gradient spotlight effect wherever the mouse moves over it, simulating a flashlight illuminating the surface.",
+      code: `'use client';
+import { useMouseTrack } from 'vayu-ui';
+
+export default function SpotlightCard() {
+  const { x, y } = useMouseTrack();
+
+  return (
+    <div
+      className="relative w-full max-w-md rounded-surface border bg-surface p-6 overflow-hidden text-surface-content"
+      style={{
+        background: \`radial-gradient(600px circle at \${x}px \${y}px, rgba(59, 130, 246, 0.08), transparent 40%), var(--color-surface)\`,
+      }}
+    >
+      <h3 className="text-lg font-semibold">Spotlight Effect</h3>
+      <p className="mt-2 text-sm text-muted-content">
+        Move your cursor to see the spotlight follow your mouse across the page.
+        The gradient center tracks your pointer in real time.
+      </p>
+      <div className="mt-4 flex gap-2">
+        <span className="px-3 py-1 rounded-control bg-brand text-brand-content text-xs font-medium">
+          Interactive
+        </span>
+        <span className="px-3 py-1 rounded-control bg-muted text-muted-content text-xs">
+          Mouse-driven
+        </span>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["spotlight", "gradient", "card", "visual-effect"]
+    },
+    {
+      title: "Parallax Tilt Card",
+      description: "A card that tilts toward the mouse position using CSS perspective and rotate transforms, creating a 3D parallax depth illusion.",
+      code: `'use client';
+import { useMouseTrack } from 'vayu-ui';
+import { useMemo } from 'react';
+
+export default function ParallaxTiltCard() {
+  const { x, y } = useMouseTrack();
+
+  const tiltStyle = useMemo(() => {
+    const centerX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
+    const centerY = typeof window !== 'undefined' ? window.innerHeight / 2 : 0;
+    const rotateY = ((x - centerX) / centerX) * 12;
+    const rotateX = ((centerY - y) / centerY) * 12;
+
+    return {
+      transform: \`perspective(600px) rotateX(\${rotateX}deg) rotateY(\${rotateY}deg)\`,
+      transition: 'transform 0.15s ease-out',
+    };
+  }, [x, y]);
+
+  return (
+    <div className="flex items-center justify-center w-full h-72">
+      <div
+        className="w-64 h-40 rounded-surface border bg-elevated shadow-elevated p-5 flex flex-col justify-between"
+        style={tiltStyle}
+      >
+        <h4 className="text-sm font-semibold text-elevated-content">Parallax Card</h4>
+        <p className="text-xs text-muted-content">
+          Moves with your cursor to create a 3D tilt effect.
+        </p>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["parallax", "tilt", "3d", "transform", "card"]
+    },
+    {
+      title: "Live Coordinate Display",
+      description: "A debug-style panel that displays the current mouse coordinates in real time, useful for layout debugging or educational tools.",
+      code: `'use client';
+import { useMouseTrack } from 'vayu-ui';
+
+export default function CoordinateDisplay() {
+  const { x, y } = useMouseTrack();
+
+  return (
+    <div className="w-full max-w-sm rounded-surface border bg-surface p-4 space-y-3">
+      <p className="text-xs font-semibold text-muted-content uppercase tracking-wider">
+        Cursor Position
+      </p>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-control bg-muted/30 p-3 text-center">
+          <p className="text-xs text-muted-content mb-1">X</p>
+          <p className="text-lg font-mono font-semibold text-surface-content">
+            {x}px
+          </p>
+        </div>
+        <div className="rounded-control bg-muted/30 p-3 text-center">
+          <p className="text-xs text-muted-content mb-1">Y</p>
+          <p className="text-lg font-mono font-semibold text-surface-content">
+            {y}px
+          </p>
+        </div>
+      </div>
+      <div className="h-2 rounded-full bg-muted/30 overflow-hidden">
+        <div
+          className="h-full bg-brand rounded-full transition-all duration-100"
+          style={{ width: \`\${(x / (typeof window !== 'undefined' ? window.innerWidth : 1)) * 100}%\` }}
+        />
+      </div>
+    </div>
+  );
+}`,
+      tags: ["coordinates", "debug", "display", "real-time"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using viewport coordinates for element-relative positioning",
+      bad: `const { x, y } = useMouseTrack();
+// Assuming x, y are relative to a specific element
+<div style={{ transform: \`translate(\${x}px, \${y}px)\` }} />`,
+      good: `// For element-relative coordinates, use a ref + getBoundingClientRect
+const ref = useRef<HTMLDivElement>(null);
+const { x, y } = useMouseTrack();
+const [local, setLocal] = useState({ x: 0, y: 0 });
+
+useEffect(() => {
+  const rect = ref.current?.getBoundingClientRect();
+  if (rect) setLocal({ x: x - rect.left, y: y - rect.top });
+}, [x, y]);`,
+      reason: "useMouseTrack returns clientX/clientY, which are relative to the viewport top-left corner \u2014 not to any specific element. If you position a child element using these values directly, it will be offset by the element's own position on the page. Subtract getBoundingClientRect().left/top to convert to element-local coordinates."
+    },
+    {
+      title: "Ignoring performance with unthrottled re-renders",
+      bad: `// Re-renders on every single pixel of mouse movement
+const { x, y } = useMouseTrack();
+return <div style={{ transform: \`translate(\${x}px, \${y}px)\` }}>Heavy content</div>;`,
+      good: `// Throttle or debounce the position for expensive renders
+const { x, y } = useMouseTrack();
+const throttledX = useThrottle(x, 16); // ~60fps
+const throttledY = useThrottle(y, 16);
+return <div style={{ transform: \`translate(\${throttledX}px, \${throttledY}px)\` }}>Heavy content</div>;`,
+      reason: "The mousemove event fires at the display refresh rate (often 60-120+ times per second). Each event triggers a setState and a re-render. If your component has expensive rendering logic, this can cause frame drops. Pair with useThrottle or useDebounce for heavy components, or use requestAnimationFrame-based throttling."
+    },
+    {
+      title: "Expecting coordinates during server-side rendering",
+      bad: `const { x, y } = useMouseTrack();
+// Using x, y for initial layout calculations on the server
+const initialAngle = Math.atan2(y, x);`,
+      good: `const { x, y } = useMouseTrack();
+// x and y are 0 on the server \u2014 handle the default state
+const angle = x === 0 && y === 0 ? 0 : Math.atan2(y, x);`,
+      reason: "During SSR, useEffect does not run, so the hook returns { x: 0, y: 0 } \u2014 the default state. If you use the coordinates for layout calculations, math operations, or conditional rendering that differs from the client, you will get hydration mismatches. Always account for the zero-default state in your logic."
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (isActive) {
+  const { x, y } = useMouseTrack();
+}`,
+      good: `const { x, y } = useMouseTrack();
+// Use the values conditionally instead
+const effectiveX = isActive ? x : 0;`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling useMouseTrack inside a conditional, loop, or nested function violates the Rules of Hooks and will cause crashes or stale state. Always call the hook at the top level and use the returned values conditionally."
+    },
+    {
+      title: "Confusing clientX/clientY with pageX/pageY or screenX/screenY",
+      bad: `const { x, y } = useMouseTrack();
+// Expecting coordinates relative to the full document (including scroll)
+window.scrollTo(x, y);`,
+      good: `// useMouseTrack gives viewport coordinates (clientX/clientY)
+// For document-relative coords, add scroll offsets:
+const docX = x + window.scrollX;
+const docY = y + window.scrollY;`,
+      reason: "The hook returns clientX and clientY, which are relative to the viewport and ignore page scroll. If you need document-relative coordinates (equivalent to pageX/pageY), you must manually add window.scrollX and window.scrollY. If you need screen-relative coordinates, use screenX/screenY from a raw event listener instead."
+    }
+  ]
+};
+
+// src/hooks/use-network-status.ts
+var useNetworkStatusEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-network-status",
+  name: "useNetworkStatus",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Tracks the browser's online/offline connectivity status in real time and records a timestamp when the connection is lost.",
+  longDescription: `Subscribes to the browser's native "online" and "offline" events on the window object and exposes the current connectivity state through a reactive React value. On initial render the hook reads navigator.onLine \u2014 falling back to true when navigator is unavailable (e.g. during SSR or in certain test environments) \u2014 so server and client produce the same initial output with no hydration mismatch. When the browser detects a loss of connectivity, the hook sets isOnline to false and captures the current time in offlineAt, enabling UI that shows how long the user has been disconnected. When connectivity is restored, isOnline flips back to true and offlineAt is cleared. The event listeners are cleaned up on unmount. Use this hook instead of manually adding window event listeners when you need a declarative, React-friendly way to react to network changes \u2014 especially for showing offline banners, disabling network-dependent actions, or queueing operations for retry.`,
+  tags: [
+    "network",
+    "online",
+    "offline",
+    "connectivity",
+    "internet",
+    "status",
+    "sensor",
+    "browser-api",
+    "real-time",
+    "connection"
+  ],
+  category: "sensor",
+  useCases: [
+    "Display a persistent offline banner or toast when the user loses internet connectivity so they understand why data is not loading",
+    'Disable or visually gray out buttons that trigger network requests (e.g. "Save", "Submit") when the device is offline, preventing failed API calls',
+    "Track how long the user has been disconnected using the offlineAt timestamp to show elapsed time or trigger reconnection logic after a threshold",
+    "Queue mutations or write operations while offline and automatically flush them when connectivity is restored",
+    "Build a network-aware data fetching layer that skips requests when offline and retries them once the connection is back",
+    "Show contextual messaging in collaborative or real-time apps (e.g. document editors, chat) when a teammate's connection drops"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useNetworkStatus.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useNetworkStatus(): NetworkStatus",
+  typeParams: [],
+  returnType: "NetworkStatus",
+  parameters: [],
+  returnValues: [
+    {
+      name: "isOnline",
+      type: "boolean",
+      description: 'Whether the browser currently reports an active network connection. Initialized from navigator.onLine on mount, then updated reactively via "online" and "offline" window events. Defaults to true in SSR environments where navigator is unavailable.'
+    },
+    {
+      name: "offlineAt",
+      type: "Date | undefined",
+      description: "A JavaScript Date capturing the moment the connection was lost. Only present when isOnline is false. Automatically cleared (set back to undefined) when connectivity is restored. Use this to compute downtime duration with Date.now() - offlineAt.getTime()."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Offline Warning Banner",
+      description: "A dismissible banner that slides in from the top of the viewport when connectivity is lost and automatically disappears when the connection is restored.",
+      code: `'use client';
+
+import { useNetworkStatus } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function OfflineBanner() {
+  const { isOnline } = useNetworkStatus();
+  const [dismissed, setDismissed] = useState(false);
+
+  if (isOnline || dismissed) return null;
+
+  return (
+    <div className="fixed top-0 inset-x-0 z-50 bg-destructive text-destructive-content px-4 py-2 flex items-center justify-between text-sm">
+      <span>You are currently offline. Some features may be unavailable.</span>
+      <button
+        onClick={() => setDismissed(true)}
+        className="ml-4 underline hover:no-underline"
+      >
+        Dismiss
+      </button>
+    </div>
+  );
+}`,
+      tags: ["banner", "offline", "notification", "alert"]
+    },
+    {
+      title: "Network-Aware Submit Button",
+      description: "A form submit button that disables itself and shows an explanatory tooltip when the device is offline, preventing failed network requests.",
+      code: `'use client';
+
+import { useNetworkStatus } from 'vayu-ui';
+
+export default function NetworkAwareButton() {
+  const { isOnline } = useNetworkStatus();
+
+  return (
+    <div className="space-y-2 p-4 rounded-surface border bg-surface text-surface-content max-w-sm">
+      <label className="block text-sm font-medium">Email</label>
+      <input
+        type="email"
+        placeholder="you@example.com"
+        className="w-full px-3 py-2 rounded-control border bg-canvas text-canvas-content"
+      />
+      <button
+        disabled={!isOnline}
+        className="w-full px-4 py-2 rounded-control bg-brand text-brand-content disabled:opacity-50 disabled:cursor-not-allowed"
+        title={isOnline ? 'Submit' : 'You are offline \u2014 submit will be available when reconnected'}
+      >
+        {isOnline ? 'Submit' : 'Offline \u2014 Cannot Submit'}
+      </button>
+      {!isOnline && (
+        <p className="text-xs text-muted-content">
+          Your device is offline. This form will be submittable once connectivity is restored.
+        </p>
+      )}
+    </div>
+  );
+}`,
+      tags: ["form", "submit", "disabled", "network"]
+    },
+    {
+      title: "Offline Duration Indicator",
+      description: "A status indicator that displays how long the user has been disconnected by computing the elapsed time from the offlineAt timestamp.",
+      code: `'use client';
+
+import { useNetworkStatus } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+function formatElapsed(ms: number): string {
+  const seconds = Math.floor(ms / 1000);
+  if (seconds < 60) return \`\${seconds}s\`;
+  const minutes = Math.floor(seconds / 60);
+  const remaining = seconds % 60;
+  return \`\${minutes}m \${remaining}s\`;
+}
+
+export default function OfflineDuration() {
+  const { isOnline, offlineAt } = useNetworkStatus();
+  const [elapsed, setElapsed] = useState<string>('');
+
+  useEffect(() => {
+    if (isOnline || !offlineAt) {
+      setElapsed('');
+      return;
+    }
+
+    const update = () =>
+      setElapsed(formatElapsed(Date.now() - offlineAt.getTime()));
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, [isOnline, offlineAt]);
+
+  if (isOnline) {
+    return (
+      <div className="flex items-center gap-2 text-sm text-success">
+        <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
+        Connected
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2 text-sm text-destructive">
+      <span className="h-2 w-2 rounded-full bg-destructive animate-pulse" />
+      Offline for {elapsed}
+    </div>
+  );
+}`,
+      tags: ["duration", "timer", "offline", "status"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Assuming isOnline guarantees server reachability",
+      bad: `const { isOnline } = useNetworkStatus();
+if (isOnline) {
+  // Assuming the API is definitely reachable
+  await fetch('/api/data');
+}`,
+      good: `const { isOnline } = useNetworkStatus();
+if (!isOnline) {
+  // Show offline UI, skip the request
+  return;
+}
+try {
+  await fetch('/api/data');
+} catch (err) {
+  // Still handle network errors \u2014 isOnline only reflects
+  // the browser's connection to a network, not server health
+}`,
+      reason: "navigator.onLine only indicates whether the browser is connected to a network \u2014 it does not confirm that the destination server is reachable or responding. A user on a captive Wi-Fi portal may report isOnline as true while all requests fail. Always handle fetch errors regardless of the online status."
+    },
+    {
+      title: "Treating offlineAt as a persistent timestamp across re-renders",
+      bad: `const { offlineAt } = useNetworkStatus();
+// Storing offlineAt in state and expecting it to persist
+const [lostAt] = useState(offlineAt);`,
+      good: `const { offlineAt } = useNetworkStatus();
+// Use offlineAt directly \u2014 it is updated reactively
+// and clears automatically when connectivity is restored
+const duration = offlineAt
+  ? Date.now() - offlineAt.getTime()
+  : 0;`,
+      reason: "offlineAt is a reactive value managed by the hook. Copying it into a separate useState or useRef breaks reactivity \u2014 the copied value will not clear when connectivity is restored, and will not update if the browser fires multiple offline events. Always read it directly from the hook return value."
+    },
+    {
+      title: "Using this hook for server-side rendering decisions",
+      bad: `// In a server component or SSR context
+const { isOnline } = useNetworkStatus();
+if (!isOnline) {
+  return <StaticFallback />;
+}`,
+      good: `// In a client component
+'use client';
+import { useNetworkStatus } from 'vayu-ui';
+
+export default function NetworkGate() {
+  const { isOnline } = useNetworkStatus();
+  if (!isOnline) return <OfflineFallback />;
+  return <LiveContent />;
+}`,
+      reason: 'useNetworkStatus relies on window event listeners and navigator.onLine, neither of which exist on the server. During SSR the hook defaults isOnline to true, which may not reflect the actual client state. Always use it in a client component (with "use client" directive) so the browser events are subscribed after hydration.'
+    },
+    {
+      title: "Polling or re-checking navigator.onLine manually",
+      bad: `const { isOnline } = useNetworkStatus();
+
+// Unnecessary: polling navigator.onLine on an interval
+useEffect(() => {
+  const id = setInterval(() => {
+    if (navigator.onLine !== isOnline) {
+      // Manual sync attempt
+    }
+  }, 5000);
+  return () => clearInterval(id);
+}, [isOnline]);`,
+      good: `const { isOnline } = useNetworkStatus();
+// The hook already subscribes to "online"/"offline" events.
+// isOnline updates instantly when connectivity changes.
+// No polling needed.`,
+      reason: `The hook already listens to the browser's native "online" and "offline" events, which fire immediately when connectivity changes. Polling navigator.onLine on a timer is redundant, wastes resources, and introduces unnecessary delay compared to the event-driven approach.`
+    }
+  ]
+};
+
+// src/hooks/use-on-click-outside.ts
+var useOnClickOutsideEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-on-click-outside",
+  name: "useOnClickOutside",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Fires a callback when the user clicks, touches, or presses outside one or more referenced elements.",
+  longDescription: "Attaches document-level listeners for mousedown, touchstart, and pointerdown events and invokes the provided handler whenever the event target falls outside the boundary of every supplied ref. It accepts either a single RefObject or an array of RefObjects, making it equally suitable for simple dropdowns (one trigger ref) and composite patterns like popovers with an anchor plus a floating panel (multiple refs). The listener is registered inside useEffect with proper cleanup, so it is fully SSR-safe \u2014 no listeners are attached during server rendering, and on the client the cleanup function removes all three listeners on unmount or when deps change. Use this hook instead of manually wiring document.addEventListener when you need a declarative, React-lifecycle-aware way to close overlays, dismiss menus, or detect outside interactions without leaking event listeners.",
+  tags: [
+    "click-outside",
+    "outside-click",
+    "dismiss",
+    "close",
+    "dropdown",
+    "popover",
+    "modal",
+    "menu",
+    "touch",
+    "pointer",
+    "ref"
+  ],
+  category: "dom",
+  useCases: [
+    "Close a dropdown menu when the user clicks anywhere outside the trigger button and the dropdown panel",
+    "Dismiss a popover or tooltip on outside click without relying on a backdrop overlay",
+    'Implement "click away to close" behavior for custom context menus that must ignore clicks inside the menu itself',
+    "Close a date picker calendar popup when the user clicks elsewhere on the page",
+    "Detect when a user clicks outside a search bar to auto-collapse expanded search suggestions",
+    "Dismiss an inline editor or editable field when the user clicks outside the editing area",
+    "Handle outside interactions for composite floating UIs that have both a trigger element and a content panel"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useOnClickOutside.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useOnClickOutside<T extends HTMLElement = HTMLElement>(refs: RefObject<T> | RefObject<T>[], handler: (event: MouseEvent | TouchEvent | PointerEvent) => void): void",
+  typeParams: ["T extends HTMLElement = HTMLElement"],
+  returnType: "void",
+  parameters: [
+    {
+      name: "refs",
+      type: "RefObject<T> | RefObject<T>[]",
+      required: true,
+      description: 'A single React ref or an array of refs that define the "inside" boundary. When the user clicks inside any of the referenced elements the handler is NOT called. Pass an array when your UI has multiple distinct regions that should all count as "inside" \u2014 for example a button that opens a dropdown plus the dropdown panel itself.'
+    },
+    {
+      name: "handler",
+      type: "(event: MouseEvent | TouchEvent | PointerEvent) => void",
+      required: true,
+      description: "Callback invoked with the native DOM event whenever a mousedown, touchstart, or pointerdown event occurs outside all ref boundaries. Use this to set open state to false, blur the element, or trigger any dismiss logic. The event parameter lets you inspect which button was clicked or which touch initiated the gesture."
+    }
+  ],
+  returnValues: [],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Dropdown with Outside Click Dismiss",
+      description: "A simple dropdown that opens on button click and closes when the user clicks anywhere outside the button or dropdown panel.",
+      code: `import { useOnClickOutside } from 'vayu-ui';
+import { useRef, useState } from 'react';
+
+export default function BasicDropdown() {
+  const [isOpen, setIsOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside([buttonRef, panelRef], () => setIsOpen(false));
+
+  return (
+    <div className="relative inline-block">
+      <button
+        ref={buttonRef}
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="px-4 py-2 bg-brand text-brand-content rounded-control"
+      >
+        {isOpen ? 'Close' : 'Open Menu'}
+      </button>
+
+      {isOpen && (
+        <div
+          ref={panelRef}
+          className="absolute top-full left-0 mt-2 w-48 rounded-surface bg-surface border shadow-elevated z-50"
+        >
+          <ul className="py-1">
+            <li className="px-3 py-2 text-sm hover:bg-muted/50 cursor-pointer">Profile</li>
+            <li className="px-3 py-2 text-sm hover:bg-muted/50 cursor-pointer">Settings</li>
+            <li className="px-3 py-2 text-sm hover:bg-muted/50 cursor-pointer">Sign out</li>
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["dropdown", "basic", "dismiss"]
+    },
+    {
+      title: "Color Picker Popover",
+      description: "A color picker button that opens a palette popover. The popover stays open while the user picks colors and closes when they click outside both the button and the palette.",
+      code: `import { useOnClickOutside } from 'vayu-ui';
+import { useRef, useState } from 'react';
+
+const COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6'];
+
+export default function ColorPickerPopover() {
+  const [open, setOpen] = useState(false);
+  const [color, setColor] = useState(COLORS[0]);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside([triggerRef, popoverRef], () => setOpen(false));
+
+  return (
+    <div className="relative inline-block">
+      <button
+        ref={triggerRef}
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex items-center gap-2 px-4 py-2 rounded-control border bg-surface text-surface-content"
+      >
+        <span
+          className="inline-block w-4 h-4 rounded-full border"
+          style={{ backgroundColor: color }}
+        />
+        Pick Color
+      </button>
+
+      {open && (
+        <div
+          ref={popoverRef}
+          className="absolute top-full left-0 mt-2 p-3 rounded-surface bg-surface border shadow-elevated z-50"
+        >
+          <p className="text-xs text-muted-content mb-2">Choose a color</p>
+          <div className="grid grid-cols-3 gap-2">
+            {COLORS.map((c) => (
+              <button
+                key={c}
+                onClick={() => { setColor(c); setOpen(false); }}
+                className="w-8 h-8 rounded-control border-2 transition-transform hover:scale-110"
+                style={{
+                  backgroundColor: c,
+                  borderColor: c === color ? 'var(--color-foreground)' : 'transparent',
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["popover", "color-picker", "composite"]
+    },
+    {
+      title: "Inline Editable Text",
+      description: "A text label that switches to an input field on click. Pressing Enter or clicking outside the input saves the value and exits edit mode.",
+      code: `import { useOnClickOutside } from 'vayu-ui';
+import { useRef, useState, useEffect } from 'react';
+
+export default function InlineEdit({ defaultValue = '' }: { defaultValue?: string }) {
+  const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState(defaultValue);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useOnClickOutside(inputRef, () => {
+    if (editing) setEditing(false);
+  });
+
+  useEffect(() => {
+    if (editing) inputRef.current?.focus();
+  }, [editing]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') setEditing(false);
+    if (e.key === 'Escape') {
+      setValue(defaultValue);
+      setEditing(false);
+    }
+  };
+
+  return editing ? (
+    <input
+      ref={inputRef}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onKeyDown={handleKeyDown}
+      className="px-2 py-1 rounded-control border bg-surface text-surface-content w-48"
+    />
+  ) : (
+    <span
+      onClick={() => setEditing(true)}
+      className="px-2 py-1 rounded-control cursor-pointer hover:bg-muted/50 border border-transparent hover:border-border"
+    >
+      {value || 'Click to edit'}
+    </span>
+  );
+}`,
+      tags: ["inline-edit", "single-ref", "form"]
+    },
+    {
+      title: "Search Bar with Suggestions",
+      description: "A search input that shows suggestion results as the user types. The suggestions panel closes when the user clicks outside the input or the results panel.",
+      code: `import { useOnClickOutside } from 'vayu-ui';
+import { useRef, useState, useMemo } from 'react';
+
+const DATA = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
+
+export default function SearchWithSuggestions() {
+  const [query, setQuery] = useState('');
+  const [focused, setFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside([inputRef, panelRef], () => setFocused(false));
+
+  const suggestions = useMemo(() => {
+    if (!query.trim()) return [];
+    return DATA.filter((item) => item.toLowerCase().includes(query.toLowerCase()));
+  }, [query]);
+
+  return (
+    <div className="relative w-72">
+      <input
+        ref={inputRef}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onFocus={() => setFocused(true)}
+        placeholder="Search fruits..."
+        className="w-full px-3 py-2 rounded-control border bg-surface text-surface-content"
+      />
+
+      {focused && suggestions.length > 0 && (
+        <div
+          ref={panelRef}
+          className="absolute top-full left-0 mt-1 w-full rounded-surface bg-surface border shadow-elevated z-50"
+        >
+          <ul className="py-1">
+            {suggestions.map((item) => (
+              <li
+                key={item}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => { setQuery(item); setFocused(false); }}
+                className="px-3 py-2 text-sm hover:bg-muted/50 cursor-pointer"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["search", "autocomplete", "suggestions"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Forgetting to include the trigger ref in the array",
+      bad: `const panelRef = useRef<HTMLDivElement>(null);
+useOnClickOutside(panelRef, () => setOpen(false));
+// Clicking the trigger button also closes the dropdown!`,
+      good: `const triggerRef = useRef<HTMLButtonElement>(null);
+const panelRef = useRef<HTMLDivElement>(null);
+useOnClickOutside([triggerRef, panelRef], () => setOpen(false));`,
+      reason: "If the trigger element that opens the overlay is not included in the refs array, clicking it will fire the outside-click handler and immediately close the overlay \u2014 often before the toggle handler runs, making the overlay appear stuck closed."
+    },
+    {
+      title: "Using onClick instead of mousedown-aware handler for the trigger",
+      bad: `<button onClick={() => setOpen(true)}>Open</button>
+{/* useOnClickOutside listens for mousedown, which fires BEFORE onClick.
+    The outside click handler may close the overlay before the button's onClick fires. */}`,
+      good: `<button onMouseDown={(e) => { e.stopPropagation(); setOpen(true); }}>
+  Open
+</button>
+{/* Or, more commonly, include the trigger ref in the refs array so clicks on it are ignored. */}`,
+      reason: "useOnClickOutside attaches to mousedown, touchstart, and pointerdown \u2014 all of which fire before the click event. If you rely on onClick to open a menu while the hook listens for mousedown to close it, you can get a race condition where the close handler fires first."
+    },
+    {
+      title: "Passing a callback that changes identity every render without memoization",
+      bad: `useOnClickOutside(refs, () => setOpen(false));
+// The arrow function is recreated every render, causing the effect to re-run and
+// re-attach all three listeners on every render.`,
+      good: `const handleClose = useCallback(() => setOpen(false), []);
+useOnClickOutside(refs, handleClose);`,
+      reason: "The handler is included in the useEffect dependency array. If it is an inline arrow function, a new function instance is created each render, causing the effect to clean up and re-register all event listeners on every render \u2014 hurting performance and potentially causing flicker."
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (isOpen) {
+  useOnClickOutside(refs, handler);
+}`,
+      good: `useOnClickOutside(refs, (e) => {
+  if (isOpen) handler(e);
+});
+// Or always call the hook and guard inside the handler.`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling useOnClickOutside inside a conditional violates the Rules of Hooks and will cause React to throw an error or produce incorrect behavior across re-renders."
+    },
+    {
+      title: "Using a stale ref that has not been attached to a DOM element",
+      bad: `const ref = useRef<HTMLDivElement>(null);
+useOnClickOutside(ref, handler);
+// ref.current is null \u2014 clicks are always considered "outside"`,
+      good: `const ref = useRef<HTMLDivElement>(null);
+useOnClickOutside(ref, handler);
+return <div ref={ref}>Content</div>;
+// ref.current is set after mount, so the hook works correctly.`,
+      reason: "If the ref has not been attached to a DOM element via the ref prop, ref.current remains null. The hook treats null refs as having no boundary, so every click fires the handler \u2014 the hook becomes a global click listener instead of an outside-click detector."
+    }
+  ]
+};
+
+// src/hooks/use-page-leave.ts
+var usePageLeaveEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-page-leave",
+  name: "usePageLeave",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Fires a callback when the user\u2019s mouse cursor leaves the browser viewport \u2014 typically moving upward toward the tab bar or address bar \u2014 enabling exit-intent detection.",
+  longDescription: 'Attaches a document-level "mouseout" event listener and invokes the provided callback when two conditions are met simultaneously: the event has no relatedTarget (meaning the cursor is not entering another DOM element within the page) and clientY is less than or equal to 0 (meaning the cursor has crossed the top edge of the viewport). This combination reliably detects the classic "exit-intent" gesture where a desktop user moves their mouse toward the browser chrome \u2014 close tab, back button, or address bar. The hook is fully SSR-safe because it relies on useEffect, which is a no-op during server rendering; the listener is only attached after hydration on the client and is properly cleaned up on unmount or when the callback reference changes. Use this hook when you need a declarative, React-lifecycle-aware way to detect exit intent for lead capture popups, analytics events, unsaved-work warnings, or engagement tracking \u2014 without manually managing document event listeners or worrying about cleanup.',
+  tags: [
+    "exit-intent",
+    "mouse",
+    "viewport",
+    "page-leave",
+    "engagement",
+    "retention",
+    "analytics",
+    "popup",
+    "trigger",
+    "dom-event"
+  ],
+  category: "dom",
+  useCases: [
+    "Display an exit-intent popup or modal for lead capture, newsletter signup, or a discount offer when a user is about to leave the page",
+    "Fire an analytics event to track when users show exit intent, helping measure page engagement and identify drop-off points",
+    "Show a warning banner when the user has unsaved form changes and moves their cursor toward the browser chrome",
+    "Prevent e-commerce cart abandonment by presenting a last-minute incentive when the shopper\u2019s mouse heads toward the tab bar",
+    "Pause auto-playing video or media when the user\u2019s attention appears to be leaving the viewport, reducing unnecessary bandwidth usage",
+    "Activate a customer support chat widget when a user hesitates at the top of the page, indicating they may need help before leaving"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "usePageLeave.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function usePageLeave(callback: () => void): void",
+  returnType: "void",
+  parameters: [
+    {
+      name: "callback",
+      type: "() => void",
+      required: true,
+      description: "Function invoked when the mouse cursor leaves the viewport upward. This fires once per exit gesture \u2014 the hook does not debounce internally, so the callback may fire rapidly if the user moves the cursor in and out of the viewport top edge. Wrap expensive operations in a debounce or guard with a flag if you need to limit how often the handler runs. The callback is included in the useEffect dependency array, so changing its identity between renders will detach and re-attach the event listener."
+    }
+  ],
+  returnValues: [],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Exit-Intent Discount Modal",
+      description: "Displays a one-time discount offer modal when the user moves their cursor toward the browser tab bar, then prevents the modal from showing again during the session.",
+      code: `'use client';
+import { usePageLeave } from 'vayu-ui';
+import { useState, useCallback } from 'react';
+
+export default function ExitIntentModal() {
+  const [showOffer, setShowOffer] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+
+  const handleLeave = useCallback(() => {
+    if (!dismissed) setShowOffer(true);
+  }, [dismissed]);
+
+  usePageLeave(handleLeave);
+
+  const handleDismiss = () => {
+    setShowOffer(false);
+    setDismissed(true);
+  };
+
+  return (
+    <>
+      {showOffer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-surface bg-surface p-6 shadow-elevated">
+            <h2 className="text-xl font-bold text-surface-content">Wait! Don\u2019t miss out</h2>
+            <p className="mt-2 text-sm text-muted-content">
+              Use code <span className="font-mono font-semibold text-brand">STAY20</span> for 20%
+              off your first order.
+            </p>
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                onClick={handleDismiss}
+                className="px-4 py-2 text-sm rounded-control border text-surface-content"
+              >
+                No thanks
+              </button>
+              <button
+                onClick={handleDismiss}
+                className="px-4 py-2 text-sm rounded-control bg-brand text-brand-content"
+              >
+                Claim discount
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}`,
+      tags: ["modal", "discount", "e-commerce", "exit-intent"]
+    },
+    {
+      title: "Analytics Exit-Intent Tracker",
+      description: "Tracks exit-intent events in analytics and caps reporting to once per page session to avoid duplicate events.",
+      code: `'use client';
+import { usePageLeave } from 'vayu-ui';
+import { useCallback, useRef } from 'react';
+
+export default function AnalyticsTracker() {
+  const hasFired = useRef(false);
+
+  const handleLeave = useCallback(() => {
+    if (hasFired.current) return;
+    hasFired.current = true;
+
+    // Replace with your analytics SDK call
+    console.log('[analytics] exit-intent detected', {
+      url: window.location.href,
+      timestamp: Date.now(),
+    });
+  }, []);
+
+  usePageLeave(handleLeave);
+
+  return (
+    <p className="text-xs text-muted-content">
+      Move your cursor to the top of the browser to trigger the exit-intent event.
+    </p>
+  );
+}`,
+      tags: ["analytics", "tracking", "session", "single-fire"]
+    },
+    {
+      title: "Unsaved Changes Warning Banner",
+      description: "Shows a sticky warning banner at the top of the page when a user with unsaved form changes moves their cursor toward the tab bar.",
+      code: `'use client';
+import { usePageLeave } from 'vayu-ui';
+import { useState, useCallback } from 'react';
+
+export default function UnsavedChangesWarning() {
+  const [hasChanges, setHasChanges] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
+  const [draft, setDraft] = useState('');
+
+  const handleLeave = useCallback(() => {
+    if (hasChanges) setShowWarning(true);
+  }, [hasChanges]);
+
+  usePageLeave(handleLeave);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDraft(e.target.value);
+    setHasChanges(true);
+    setShowWarning(false);
+  };
+
+  const handleSave = () => {
+    // persist draft\u2026
+    setHasChanges(false);
+    setShowWarning(false);
+  };
+
+  return (
+    <div className="relative">
+      {showWarning && (
+        <div className="sticky top-0 z-40 bg-warning text-warning-content px-4 py-2 text-sm font-medium flex items-center justify-between">
+          <span>You have unsaved changes that may be lost if you leave.</span>
+          <button onClick={handleSave} className="underline font-semibold ml-4">
+            Save now
+          </button>
+        </div>
+      )}
+      <textarea
+        value={draft}
+        onChange={handleChange}
+        placeholder="Start typing your content\u2026"
+        className="w-full h-40 mt-4 p-3 rounded-surface border bg-surface text-surface-content"
+      />
+    </div>
+  );
+}`,
+      tags: ["unsaved-changes", "form", "warning", "banner"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Passing an unmemoized inline callback",
+      bad: `usePageLeave(() => {
+  setShowPopup(true);
+});
+// The arrow function is recreated every render, causing the effect
+// to detach and re-attach the mouseout listener on every render.`,
+      good: `const handleLeave = useCallback(() => {
+  setShowPopup(true);
+}, []);
+
+usePageLeave(handleLeave);`,
+      reason: "The callback is placed in the useEffect dependency array. An inline arrow function has a new identity each render, triggering cleanup and re-registration of the document event listener on every render \u2014 wasting cycles and potentially causing flicker."
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (isEnabled) {
+  usePageLeave(handler);
+}`,
+      good: `usePageLeave(isEnabled ? handler : () => {});
+// Or guard inside the callback:
+usePageLeave(() => {
+  if (!isEnabled) return;
+  handler();
+});`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Wrapping usePageLeave in a conditional, loop, or nested function violates the Rules of Hooks and will cause React to throw an error or produce incorrect behavior across re-renders."
+    },
+    {
+      title: "Using this hook to prevent navigation",
+      bad: `usePageLeave(() => {
+  window.onbeforeunload = () => 'Are you sure?';
+});
+// usePageLeave detects mouse movement, not actual navigation.
+// It does not fire on Alt+Left, closing the tab via keyboard, or typing a URL.`,
+      good: `// For navigation guards, use useConfirmExit instead:
+import { useConfirmExit } from 'vayu-ui';
+useConfirmExit(true, 'You have unsaved changes.');
+
+// Reserve usePageLeave for UX enhancements like popups and analytics.`,
+      reason: "usePageLeave only detects mouse-driven exit gestures (cursor leaving the viewport top). It cannot intercept keyboard navigation (Ctrl+W, Alt+Left), the browser close button, or address bar input. For actual navigation prevention, use useConfirmExit which hooks into the beforeunload event."
+    },
+    {
+      title: "Putting expensive synchronous work directly in the callback",
+      bad: `usePageLeave(() => {
+  // Expensive sync computation blocks the UI
+  const data = heavyComputation();
+  sendAnalytics(data);
+  setShowPopup(true);
+});`,
+      good: `usePageLeave(() => {
+  // Lightweight: set a flag, let React schedule the rest
+  setShowPopup(true);
+
+  // Or debounce the expensive work
+  requestIdleCallback(() => {
+    const data = heavyComputation();
+    sendAnalytics(data);
+  });
+});`,
+      reason: "The mouseout handler runs synchronously on the main thread. Expensive work inside it blocks the browser\u2019s event loop, causing jank precisely when the user is trying to leave. Keep the callback lightweight \u2014 set state or schedule deferred work with requestIdleCallback, setTimeout, or a debounce utility."
+    }
+  ]
+};
+
+// src/hooks/use-permission.ts
+var usePermissionEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-permission",
+  name: "usePermission",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Reactive hook that queries and monitors browser permission states (camera, microphone, geolocation, notifications, clipboard, and more) with a built-in request function to trigger the browser permission prompt.",
+  longDescription: 'Wraps the Permissions API (navigator.permissions.query) into a React-friendly hook that returns the current state of a given browser permission along with boolean convenience flags and a request() function. The hook subscribes to the PermissionStatus "change" event, so the component re-renders automatically when the user grants or denies a permission through the browser UI \u2014 even if it happens in another tab or via the browser address bar. The request() function is permission-aware: it invokes the appropriate browser API to trigger the actual permission prompt (getUserMedia for camera/microphone, getCurrentPosition for geolocation, Notification.requestPermission for notifications, navigator.clipboard for clipboard access). For permissions without a direct request mechanism (e.g. persistent-storage, push), request() is a no-op and the user must change the permission via browser settings. On unsupported browsers or during SSR, isSupported stays false and state defaults to "unsupported", preventing hydration mismatches and runtime errors. The hook accepts a union type of 10 well-known permission names, ensuring type safety and preventing typos. No external dependencies beyond React are required.',
+  tags: [
+    "permission",
+    "browser-api",
+    "privacy",
+    "camera",
+    "microphone",
+    "geolocation",
+    "notifications",
+    "clipboard",
+    "media",
+    "consent"
+  ],
+  category: "input",
+  useCases: [
+    "Build a permission settings page that displays the current state of camera, microphone, geolocation, and notification permissions with individual request buttons",
+    "Conditionally render a camera view or microphone recorder only after the user has granted the corresponding permission, showing a prompt screen otherwise",
+    "Detect when a user has previously denied a permission and show a message directing them to browser settings to re-enable it",
+    "Monitor permission state changes in real time so the UI reacts immediately when a user grants or revokes a permission via the browser chrome",
+    "Before initiating a WebRTC call, check if camera and microphone permissions are already granted to avoid unexpected browser prompts mid-flow",
+    "Build an onboarding flow that walks users through granting required permissions one at a time with contextual explanations before each request",
+    "Create a clipboard read/write feature that checks permission state first and degrades gracefully when clipboard access is denied or unsupported"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "usePermission.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function usePermission(permissionName: PermissionName): UsePermissionReturn",
+  parameters: [
+    {
+      name: "permissionName",
+      type: "'camera' | 'microphone' | 'geolocation' | 'notifications' | 'persistent-storage' | 'push' | 'screen-wake-lock' | 'midi' | 'clipboard-read' | 'clipboard-write'",
+      required: true,
+      description: "The browser permission to query. Must be one of the 10 supported PermissionName literals. Changing this value between renders will unsubscribe from the old permission status and subscribe to the new one. Each permission maps to a specific browser API \u2014 the request() function uses the appropriate API for each name (e.g. getUserMedia for camera, getCurrentPosition for geolocation)."
+    }
+  ],
+  returnType: "UsePermissionReturn",
+  returnValues: [
+    {
+      name: "state",
+      type: "'granted' | 'denied' | 'prompt' | 'unsupported' | 'loading'",
+      description: `The current permission state as reported by the Permissions API. "loading" is the initial value before the async query resolves. "unsupported" means the Permissions API is not available or the specific permission name is not recognized by the browser. "prompt" means the user has not yet been asked. "granted" and "denied" reflect the user's decision. This value updates reactively when the user changes the permission through the browser UI.`
+    },
+    {
+      name: "isGranted",
+      type: "boolean",
+      description: 'Shorthand for state === "granted". Use this for conditional rendering when you only care whether access is allowed, e.g. showing a camera preview only when permission is granted.'
+    },
+    {
+      name: "isDenied",
+      type: "boolean",
+      description: 'Shorthand for state === "denied". Use this to detect when a user has explicitly blocked a permission so you can show a message directing them to browser settings.'
+    },
+    {
+      name: "isPrompt",
+      type: "boolean",
+      description: 'Shorthand for state === "prompt". Use this to show a "Request Permission" button only when the user has not yet been asked, avoiding unnecessary repeated prompts.'
+    },
+    {
+      name: "isSupported",
+      type: "boolean",
+      description: "Whether the Permissions API (navigator.permissions) is available in the current environment. Returns false during SSR and on browsers that do not implement the Permissions API. Always check this before rendering permission-dependent UI to avoid showing misleading controls."
+    },
+    {
+      name: "request",
+      type: "() => Promise<void>",
+      description: "An async function that triggers the browser permission prompt for the queried permission. It uses the appropriate browser API for each permission type: getUserMedia for camera/microphone, getCurrentPosition for geolocation, Notification.requestPermission for notifications, and navigator.clipboard methods for clipboard access. The promise resolves when the prompt flow completes (or silently catches rejections). For permissions without a direct request mechanism (persistent-storage, push, screen-wake-lock, midi), this is a no-op. Call this from a user gesture handler (e.g. button onClick) \u2014 browsers may reject programmatic permission requests not triggered by user interaction."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Permission Status Dashboard",
+      description: "Displays the current state of multiple browser permissions with color-coded badges and individual request buttons.",
+      code: `'use client';
+import { usePermission, type PermissionName } from 'vayu-ui';
+
+const PERMISSIONS: { name: PermissionName; label: string }[] = [
+  { name: 'camera', label: 'Camera' },
+  { name: 'microphone', label: 'Microphone' },
+  { name: 'geolocation', label: 'Geolocation' },
+  { name: 'notifications', label: 'Notifications' },
+  { name: 'clipboard-read', label: 'Clipboard Read' },
+];
+
+const stateStyles: Record<string, string> = {
+  granted: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  denied: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  prompt: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+  unsupported: 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400',
+  loading: 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400',
+};
+
+function PermissionRow({ name, label }: { name: PermissionName; label: string }) {
+  const { state, isGranted, request } = usePermission(name);
+
+  return (
+    <div className="flex items-center justify-between py-2 px-3 rounded-md bg-muted/50 text-sm">
+      <span className="font-medium">{label}</span>
+      <div className="flex items-center gap-2">
+        <span className={\`text-xs font-medium px-2 py-0.5 rounded-full \${stateStyles[state]}\`}>
+          {state}
+        </span>
+        {!isGranted && state !== 'unsupported' && (
+          <button onClick={request} className="text-xs font-medium text-brand hover:underline">
+            Request
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function PermissionDashboard() {
+  return (
+    <div className="p-4 rounded-surface shadow-surface border bg-surface text-surface-content w-80 space-y-3">
+      <h3 className="text-sm font-semibold">Browser Permissions</h3>
+      <div className="flex flex-col gap-2">
+        {PERMISSIONS.map((p) => (
+          <PermissionRow key={p.name} name={p.name} label={p.label} />
+        ))}
+      </div>
+    </div>
+  );
+}`,
+      tags: ["dashboard", "status", "multi-permission", "settings"]
+    },
+    {
+      title: "Conditional Camera View",
+      description: "Shows a camera preview only after the user grants camera permission, with a styled prompt screen otherwise.",
+      code: `'use client';
+import { usePermission } from 'vayu-ui';
+import { useEffect, useRef } from 'react';
+
+export default function CameraView() {
+  const { isGranted, isDenied, isPrompt, isSupported, request } = usePermission('camera');
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (!isGranted) return;
+
+    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+      if (videoRef.current) videoRef.current.srcObject = stream;
+    });
+
+    return () => {
+      if (videoRef.current?.srcObject) {
+        (videoRef.current.srcObject as MediaStream).getTracks().forEach((t) => t.stop());
+      }
+    };
+  }, [isGranted]);
+
+  if (!isSupported) {
+    return (
+      <div className="p-4 rounded-surface shadow-surface border bg-surface text-surface-content">
+        <p className="text-sm text-muted">Camera API is not available in this browser.</p>
+      </div>
+    );
+  }
+
+  if (isDenied) {
+    return (
+      <div className="p-4 rounded-surface shadow-surface border bg-surface text-surface-content space-y-2">
+        <p className="text-sm text-destructive font-medium">Camera access denied</p>
+        <p className="text-xs text-muted">
+          Enable camera access in your browser settings to use this feature.
+        </p>
+      </div>
+    );
+  }
+
+  if (isPrompt) {
+    return (
+      <div className="p-6 rounded-surface shadow-surface border bg-surface text-surface-content text-center space-y-3">
+        <p className="text-sm font-medium">Camera access is required</p>
+        <button
+          onClick={request}
+          className="px-4 py-2 rounded-control bg-brand text-brand-content text-sm font-medium shadow-control"
+        >
+          Allow Camera
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <video
+      ref={videoRef}
+      autoPlay
+      playsInline
+      muted
+      className="w-full max-w-sm rounded-surface shadow-surface"
+    />
+  );
+}`,
+      tags: ["camera", "conditional-render", "webrtc", "media"]
+    },
+    {
+      title: "Location Permission Gate",
+      description: "Checks geolocation permission state before attempting to fetch the position, avoiding unexpected browser prompts.",
+      code: `'use client';
+import { usePermission } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function LocationGate() {
+  const { state, isGranted, isDenied, request } = usePermission('geolocation');
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchLocation = () => {
+    setLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setLoading(false);
+      },
+      () => setLoading(false),
+    );
+  };
+
+  return (
+    <div className="p-4 rounded-surface shadow-surface border bg-surface text-surface-content w-72 space-y-3">
+      <h3 className="text-sm font-semibold">Your Location</h3>
+      {isDenied && (
+        <p className="text-xs text-destructive">
+          Location access is blocked. Enable it in browser settings.
+        </p>
+      )}
+      {coords && (
+        <p className="text-xs font-mono text-muted">
+          {coords.lat.toFixed(4)}, {coords.lng.toFixed(4)}
+        </p>
+      )}
+      {loading && <p className="text-xs text-muted">Locating...</p>}
+      <div className="flex gap-2">
+        {!isGranted && (
+          <button
+            onClick={request}
+            className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-xs font-medium shadow-control"
+          >
+            Grant Access
+          </button>
+        )}
+        {isGranted && !coords && (
+          <button
+            onClick={fetchLocation}
+            className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-xs font-medium shadow-control"
+          >
+            Get Location
+          </button>
+        )}
+      </div>
+      <p className="text-xs text-muted">Permission state: {state}</p>
+    </div>
+  );
+}`,
+      tags: ["geolocation", "permission-gate", "location", "gps"]
+    },
+    {
+      title: "Notification Permission with Subscribe Flow",
+      description: "A notification subscription component that guides the user through granting notification permission and displays the current state.",
+      code: `'use client';
+import { usePermission } from 'vayu-ui';
+
+export default function NotificationSubscribe() {
+  const { isGranted, isDenied, isPrompt, state, request } = usePermission('notifications');
+
+  return (
+    <div className="p-4 rounded-surface shadow-surface border bg-surface text-surface-content w-72 space-y-3">
+      <h3 className="text-sm font-semibold">Push Notifications</h3>
+
+      {state === 'loading' && (
+        <p className="text-xs text-muted">Checking permission...</p>
+      )}
+
+      {isPrompt && (
+        <div className="space-y-2">
+          <p className="text-xs text-muted">
+            Stay updated with real-time notifications for important events.
+          </p>
+          <button
+            onClick={request}
+            className="w-full px-3 py-2 rounded-control bg-brand text-brand-content text-sm font-medium shadow-control"
+          >
+            Enable Notifications
+          </button>
+        </div>
+      )}
+
+      {isGranted && (
+        <div className="flex items-center gap-2 text-xs">
+          <span className="inline-block w-2 h-2 rounded-full bg-green-500" />
+          <span className="font-medium">Notifications enabled</span>
+        </div>
+      )}
+
+      {isDenied && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs">
+            <span className="inline-block w-2 h-2 rounded-full bg-red-500" />
+            <span className="font-medium text-destructive">Notifications blocked</span>
+          </div>
+          <p className="text-xs text-muted">
+            Open browser settings to re-enable notifications for this site.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}`,
+      tags: ["notifications", "push", "subscribe", "opt-in"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Calling request() on mount instead of from a user gesture",
+      bad: `useEffect(() => {
+  request(); // Triggers browser prompt immediately on page load
+}, []);`,
+      good: `// Only call request() from a user-triggered event handler
+<button onClick={() => request()}>Grant Permission</button>;`,
+      reason: "Most browsers require permission prompts to be triggered by a user gesture (click, tap). Calling request() in useEffect or during render will either be silently ignored or anger users with unexpected popups. Always bind it to a button click or equivalent interaction."
+    },
+    {
+      title: "Assuming all permissions support the request() method",
+      bad: `// persistent-storage has no direct user-facing prompt
+const { request } = usePermission('persistent-storage');
+// User clicks button, nothing visible happens
+<button onClick={() => request()}>Request</button>;`,
+      good: `const { state, isSupported } = usePermission('persistent-storage');
+// For permissions without a browser prompt, guide the user to settings
+if (!isSupported || state !== 'granted') {
+  return <p>Enable persistent storage in your browser settings.</p>;
+}`,
+      reason: "The request() function is a no-op for permissions that lack a direct browser API prompt mechanism (persistent-storage, push, screen-wake-lock, midi). For these, the user must change the permission through browser settings. Check the permission state and provide appropriate guidance instead of showing a non-functional request button."
+    },
+    {
+      title: "Ignoring the unsupported state during SSR",
+      bad: `const { isGranted } = usePermission('camera');
+// On server: isGranted is false, on client hydration: might be true
+return isGranted ? <CameraView /> : null;`,
+      good: `const { state, isSupported } = usePermission('camera');
+if (state === 'loading' || !isSupported) return <Skeleton />;
+if (isGranted) return <CameraView />;
+return <PromptScreen />;`,
+      reason: 'During SSR, navigator is undefined so the hook returns isSupported: false. If your component conditionally renders based solely on isGranted (which is false during SSR), you may still get hydration mismatches if the client immediately resolves to granted. Handle the "loading" and "unsupported" states explicitly to avoid flicker.'
+    },
+    {
+      title: 'Not handling the "denied" state separately from "prompt"',
+      bad: `const { isGranted, request } = usePermission('camera');
+return isGranted ? <Camera /> : <button onClick={request}>Allow</button>;`,
+      good: `const { isGranted, isDenied, isPrompt, request } = usePermission('camera');
+if (isGranted) return <Camera />;
+if (isDenied) return <p>Camera blocked. Enable it in browser settings.</p>;
+if (isPrompt) return <button onClick={request}>Allow Camera</button>;
+return null;`,
+      reason: 'When a permission is "denied", calling request() again typically does nothing \u2014 the browser will not re-show the prompt. The user must manually re-enable the permission via browser settings. Treating "denied" and "prompt" the same leads to a broken UX where clicking "Allow" does nothing. Always differentiate these states and guide denied users to their browser settings.'
+    },
+    {
+      title: "Querying unsupported permission names",
+      bad: `// Typo or unsupported name \u2014 TypeScript catches this, but not if you cast
+const { state } = usePermission('camer' as any);`,
+      good: `// Use the typed PermissionName union \u2014 the hook accepts only valid names
+const { state } = usePermission('camera');`,
+      reason: 'The PermissionName type restricts input to the 10 supported permission names. Casting to any or using a string variable bypasses this safety. If the Permissions API does not recognize the name, the hook catches the error and sets state to "unsupported", but the intent is likely wrong. Always use the typed literal to catch mistakes at compile time.'
+    }
+  ]
+};
+
+// src/hooks/use-previous-state.ts
+var usePreviousStateEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-previous-state",
+  name: "usePreviousState",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Returns the value from the previous render, or undefined on the first render, so you can compare current vs. previous state without extra bookkeeping.",
+  longDescription: 'Tracks the most recent value of any variable across React renders by storing it in a useRef that gets updated inside a useEffect. Because useEffect runs after the paint, the ref always holds the value from the *previous* render cycle on the next call \u2014 giving you a clean "before" snapshot without managing a second piece of state yourself. On the very first render the ref starts as undefined, which makes it trivial to distinguish "no previous value" from a legitimate falsy value like 0 or an empty string. The hook is fully SSR-safe: since it only uses useRef and useEffect with no browser-specific APIs, server and client produce the same initial output (undefined) with no hydration mismatch. Choose this hook over manually maintaining a prevState variable when you need a declarative, React-idiomatic way to detect value changes, compute diffs, or conditionally fire side effects only when a value actually changes.',
+  tags: [
+    "previous",
+    "state",
+    "render",
+    "diff",
+    "change",
+    "compare",
+    "history",
+    "dirty",
+    "undo",
+    "snapshot"
+  ],
+  category: "state",
+  useCases: [
+    "Detect whether a form has unsaved changes by comparing the current field values against their previous values, enabling a dirty-form indicator or a confirm-before-navigate prompt",
+    'Display an undo label or revert button that shows what the previous value was before the user changed it (e.g., "Previously: Alice")',
+    "Conditionally trigger a side effect only when a specific value actually changes between renders, such as re-fetching data when a selected ID shifts from one value to another",
+    "Highlight or animate a value in the UI when it changes by comparing the current and previous values and conditionally applying a CSS transition class",
+    "Track the previous page number or sort column in a paginated data table to determine whether to scroll to the top or preserve scroll position"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "usePreviousState.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function usePreviousState<T>(value: T): T | undefined",
+  typeParams: ["T"],
+  returnType: "T | undefined",
+  parameters: [
+    {
+      name: "value",
+      type: "T",
+      required: true,
+      description: "The value whose previous render state you want to track. Can be any type \u2014 string, number, boolean, object, or array. The hook stores a reference to the value passed on the previous render cycle and returns it. On the first render, returns undefined because no previous value exists yet."
+    }
+  ],
+  returnValues: [
+    {
+      name: "previousValue",
+      type: "T | undefined",
+      description: "The value that was passed to this hook on the previous render. On the very first render, this is undefined. On every subsequent render it equals the value argument from the prior render cycle, allowing you to compare current vs. previous state."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Counter with Previous Value Display",
+      description: "A simple counter that shows both the current count and the previous count, demonstrating the basic one-call usage of usePreviousState.",
+      code: `import { usePreviousState } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function PreviousCounter() {
+  const [count, setCount] = useState(0);
+  const prevCount = usePreviousState(count);
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface border bg-surface text-surface-content max-w-xs">
+      <h3 className="text-sm font-semibold">Counter</h3>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => setCount((c) => c - 1)}
+          className="inline-flex items-center justify-center rounded-control border border-input bg-canvas shadow-control hover:bg-muted h-8 w-8 text-sm"
+        >
+          \u2212
+        </button>
+        <span className="text-2xl font-bold tabular-nums w-12 text-center">{count}</span>
+        <button
+          onClick={() => setCount((c) => c + 1)}
+          className="inline-flex items-center justify-center rounded-control border border-input bg-canvas shadow-control hover:bg-muted h-8 w-8 text-sm"
+        >
+          +
+        </button>
+      </div>
+      <p className="text-xs text-muted-content">
+        Previous:{' '}
+        <code className="bg-muted px-1 py-0.5 rounded">{prevCount ?? 'undefined'}</code>
+      </p>
+    </div>
+  );
+}`,
+      tags: ["counter", "basic", "display"]
+    },
+    {
+      title: "Dirty Form Detection",
+      description: 'A form that tracks whether any field has been modified by comparing current values against their previous snapshots, showing a "Unsaved changes" indicator.',
+      code: `import { usePreviousState } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function DirtyForm() {
+  const [title, setTitle] = useState('My Post');
+  const [status, setStatus] = useState('draft');
+  const prevTitle = usePreviousState(title);
+  const prevStatus = usePreviousState(status);
+
+  const isDirty = title !== prevTitle || status !== prevStatus;
+
+  return (
+    <div className="space-y-4 p-4 rounded-surface border bg-surface text-surface-content max-w-sm">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold">Edit Post</h2>
+        {isDirty && (
+          <span className="text-xs px-2 py-0.5 rounded-full bg-warning/20 text-warning font-medium">
+            Unsaved changes
+          </span>
+        )}
+      </div>
+      <div className="space-y-2">
+        <label className="text-xs text-muted-content">Title</label>
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full px-3 py-2 rounded-control border bg-canvas text-canvas-content"
+        />
+      </div>
+      <div className="space-y-2">
+        <label className="text-xs text-muted-content">Status</label>
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className="w-full px-3 py-2 rounded-control border bg-canvas text-canvas-content"
+        >
+          <option value="draft">Draft</option>
+          <option value="published">Published</option>
+          <option value="archived">Archived</option>
+        </select>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["form", "dirty", "unsaved", "detect"]
+    },
+    {
+      title: "Conditional Side Effect on Value Change",
+      description: "Fetches user data only when the selected user ID actually changes between renders, avoiding redundant API calls when the component re-renders for unrelated reasons.",
+      code: `import { usePreviousState } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+const users = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+  { id: 3, name: 'Charlie' },
+];
+
+export default function UserDetail() {
+  const [selectedId, setSelectedId] = useState(1);
+  const [detail, setDetail] = useState<string>('');
+  const prevId = usePreviousState(selectedId);
+
+  useEffect(() => {
+    if (selectedId === prevId) return;
+
+    fetch(\`/api/users/\${selectedId}\`)
+      .then((res) => res.json())
+      .then((data) => setDetail(data.bio))
+      .catch(() => setDetail('Failed to load'));
+  }, [selectedId, prevId]);
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface border bg-surface text-surface-content max-w-sm">
+      <h3 className="text-sm font-semibold">User Detail</h3>
+      <div className="flex gap-1.5">
+        {users.map((u) => (
+          <button
+            key={u.id}
+            onClick={() => setSelectedId(u.id)}
+            className={\`px-2.5 py-1 rounded-control text-xs font-medium transition-colors \${
+              selectedId === u.id
+                ? 'bg-brand text-brand-content'
+                : 'bg-muted text-muted-content hover:bg-elevated'
+            }\`}
+          >
+            {u.name}
+          </button>
+        ))}
+      </div>
+      <p className="text-xs text-muted-content">
+        {prevId !== undefined ? \`Changed from user \${prevId} to \${selectedId}\` : 'Initial load'}
+      </p>
+      <p className="text-sm">{detail || 'Loading...'}</p>
+    </div>
+  );
+}`,
+      tags: ["fetch", "conditional", "effect", "api"]
+    },
+    {
+      title: "Value Change Animation",
+      description: "Applies a CSS transition class when a numeric value changes direction (increase vs. decrease), providing visual feedback for the direction of change.",
+      code: `import { usePreviousState } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function AnimatedScore() {
+  const [score, setScore] = useState(50);
+  const prevScore = usePreviousState(score);
+
+  const direction =
+    prevScore === undefined
+      ? 'neutral'
+      : score > prevScore
+        ? 'up'
+        : score < prevScore
+          ? 'down'
+          : 'neutral';
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface border bg-surface text-surface-content max-w-xs text-center">
+      <h3 className="text-sm font-semibold">Score</h3>
+      <span
+        className={\`text-4xl font-bold tabular-nums transition-colors duration-300 \${
+          direction === 'up'
+            ? 'text-success'
+            : direction === 'down'
+              ? 'text-destructive'
+              : 'text-surface-content'
+        }\`}
+      >
+        {score}
+      </span>
+      {prevScore !== undefined && direction !== 'neutral' && (
+        <p className="text-xs text-muted-content">
+          {direction === 'up' ? '\u2191' : '\u2193'} Changed by {Math.abs(score - prevScore)}
+        </p>
+      )}
+      <div className="flex justify-center gap-2">
+        <button
+          onClick={() => setScore((s) => Math.max(0, s - 10))}
+          className="px-3 py-1.5 rounded-control border text-sm hover:bg-muted"
+        >
+          \u221210
+        </button>
+        <button
+          onClick={() => setScore((s) => Math.min(100, s + 10))}
+          className="px-3 py-1.5 rounded-control border text-sm hover:bg-muted"
+        >
+          +10
+        </button>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["animation", "transition", "direction", "visual"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Expecting the previous value on the first render",
+      bad: `const prev = usePreviousState(count);
+// Expecting prev to be the initial value of count on first render
+console.log(prev); // undefined`,
+      good: `const prev = usePreviousState(count);
+// Always check for undefined on first render
+if (prev !== undefined) {
+  console.log('Changed from', prev, 'to', count);
+}`,
+      reason: 'On the very first render, the ref has not been populated by a useEffect yet, so the return value is undefined. This is by design \u2014 it lets you distinguish "no previous value" from a legitimate falsy previous value like 0, false, or "". Always guard against undefined.'
+    },
+    {
+      title: "Using for derived state that can be computed inline",
+      bad: `const [items, setItems] = useState([]);
+const prevLength = usePreviousState(items.length);
+const grew = prevLength !== undefined && items.length > prevLength;`,
+      good: `const [items, setItems] = useState([]);
+// If you just need the count, track it directly
+const [prevLength, setPrevLength] = useState(items.length);
+const grew = items.length > prevLength;
+// Or use usePreviousState only when you actually need to diff complex state`,
+      reason: 'If the "previous" value is simple derived data that can be tracked with a second useState or computed from a single source of truth, adding usePreviousState may be over-engineering. Reserve it for cases where you genuinely need to compare arbitrary values across renders without adding extra state management.'
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (shouldTrack) {
+  const prev = usePreviousState(value);
+}`,
+      good: `const prev = usePreviousState(shouldTrack ? value : value);
+// Or always call it and ignore the result when not needed
+const prev = usePreviousState(value);`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling usePreviousState inside a conditional, loop, or nested function violates the Rules of Hooks and will cause crashes or stale refs. Always call hooks at the top level."
+    },
+    {
+      title: "Expecting synchronous update within the same render",
+      bad: `const prev = usePreviousState(count);
+setCount(count + 1);
+// Expecting prev to reflect the new count immediately
+console.log(prev); // Still the value from the *previous* render`,
+      good: `const prev = usePreviousState(count);
+// prev reflects the value from the last completed render cycle.
+// It will NOT update until the next render.
+setCount(count + 1);
+// On the NEXT render, prev will equal the current count`,
+      reason: "usePreviousState stores the value via useEffect, which runs after paint. Within the current render, the returned value is always from the previous completed render cycle. It will never reflect state updates made during the same render \u2014 those only become visible on the next render."
+    }
+  ]
+};
+
+// src/hooks/use-queue.ts
+var useQueueEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-queue",
+  name: "useQueue",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Generic state hook for managing a FIFO queue with enqueue, dequeue, peek, and clear operations \u2014 eliminating manual array shift/splice boilerplate.",
+  longDescription: "Wraps React.useState<T[]> and exposes three immutable mutator functions \u2014 add(item) to enqueue to the back, remove() to dequeue from the front, and clear() to empty the queue \u2014 along with convenience accessors first, last, and size. Every mutator uses the functional updater form (prev => \u2026) so it is safe under concurrent React rendering and batched updates. The hook requires no arguments and is fully SSR-safe since it has no browser API dependencies. Choose this over raw useState when you need first-in-first-out semantics \u2014 for example, task queues, notification stacks, print job managers, or any scenario where items must be processed in arrival order. Unlike useList which gives index-based access, useQueue enforces FIFO discipline by only allowing removal from the front.",
+  tags: [
+    "queue",
+    "fifo",
+    "enqueue",
+    "dequeue",
+    "state",
+    "collection",
+    "task-queue",
+    "notification",
+    "immutable",
+    "generic"
+  ],
+  category: "state",
+  useCases: [
+    "When you need to manage a first-in-first-out task queue where items are added to the back and processed from the front",
+    "To build a notification or toast system where messages appear in order and are dismissed from the front of the queue",
+    "When implementing a print job or upload queue that processes items sequentially in arrival order",
+    "To manage a playlist or media queue where users add tracks to the end and the current track is consumed from the front",
+    "When building a batch API processor that enqueues requests and processes them one at a time in order"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useQueue.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useQueue<T>(): { queue: T[]; first: T | undefined; last: T | undefined; size: number; add: (item: T) => void; remove: () => void; clear: () => void }",
+  typeParams: ["T"],
+  parameters: [],
+  returnType: "{ queue: T[]; first: T | undefined; last: T | undefined; size: number; add: (item: T) => void; remove: () => void; clear: () => void }",
+  returnValues: [
+    {
+      name: "queue",
+      type: "T[]",
+      description: "The current queue array in FIFO order, with the oldest item at index 0. Read-only \u2014 never mutate this directly; use add, remove, or clear to trigger re-renders."
+    },
+    {
+      name: "first",
+      type: "T | undefined",
+      description: "The item at the front of the queue (oldest, next to be dequeued). Returns undefined when the queue is empty. Useful for peeking at the next item without removing it."
+    },
+    {
+      name: "last",
+      type: "T | undefined",
+      description: "The item at the back of the queue (most recently enqueued). Returns undefined when the queue is empty. Useful for confirming what was just added."
+    },
+    {
+      name: "size",
+      type: "number",
+      description: "The current number of items in the queue. Equivalent to queue.length but provided as a convenience accessor for conditional rendering and display."
+    },
+    {
+      name: "add",
+      type: "(item: T) => void",
+      description: "Enqueues an item to the back of the queue. Internally uses the functional updater form, so it is safe under batched state updates and concurrent rendering."
+    },
+    {
+      name: "remove",
+      type: "() => void",
+      description: "Dequeues the item from the front of the queue (FIFO). If the queue is empty, this is a no-op \u2014 it does not throw and simply leaves the queue unchanged."
+    },
+    {
+      name: "clear",
+      type: "() => void",
+      description: 'Empties the queue entirely, resetting it to []. Useful for "Clear All" actions, resetting state, or cancelling all pending items.'
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Task Queue Manager",
+      description: "A minimal task queue where users add tasks, view the next task to process, and dequeue tasks one by one.",
+      code: `import { useQueue } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function TaskQueueManager() {
+  const { queue, first, size, add, remove, clear } = useQueue<string>();
+  const [input, setInput] = useState('');
+
+  const handleAdd = () => {
+    const trimmed = input.trim();
+    if (trimmed) {
+      add(trimmed);
+      setInput('');
+    }
+  };
+
+  const handleProcess = () => {
+    if (size > 0) {
+      console.log('Processing:', first);
+      remove();
+    }
+  };
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <h2 className="text-sm font-semibold">Task Queue ({size} pending)</h2>
+
+      <div className="flex gap-2">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+          placeholder="Add a task..."
+          className="flex-1 px-3 py-1.5 rounded-control border bg-field text-sm"
+        />
+        <button
+          onClick={handleAdd}
+          className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-sm font-medium"
+        >
+          Enqueue
+        </button>
+      </div>
+
+      {first && (
+        <div className="px-3 py-2 rounded-control bg-muted/50 text-sm">
+          <span className="text-muted-content text-xs">Next up:</span>{' '}
+          <span className="font-medium">{first}</span>
+          <button
+            onClick={handleProcess}
+            className="ml-2 text-brand text-xs hover:underline"
+          >
+            Process
+          </button>
+        </div>
+      )}
+
+      {size > 0 && (
+        <ul className="space-y-1">
+          {queue.map((task, i) => (
+            <li
+              key={i}
+              className="flex items-center gap-2 px-2 py-1 rounded-control bg-muted/30 text-sm"
+            >
+              <span className="text-muted-content text-xs">{i + 1}.</span>
+              <span>{task}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {size > 0 && (
+        <button onClick={clear} className="text-xs text-muted-content hover:underline">
+          Clear all tasks
+        </button>
+      )}
+    </div>
+  );
+}`,
+      tags: ["task", "queue", "fifo", "process", "dequeue"]
+    },
+    {
+      title: "Notification Queue",
+      description: "A notification system that enqueues messages and auto-dismisses them from the front after a delay, with manual dismiss support.",
+      code: `import { useQueue } from 'vayu-ui';
+import { useState, useEffect, useCallback } from 'react';
+
+interface Notification {
+  id: number;
+  message: string;
+  type: 'info' | 'success' | 'error';
+}
+
+let nextId = 0;
+
+export default function NotificationQueue() {
+  const { queue, first, size, add, remove, clear } = useQueue<Notification>();
+  const [input, setInput] = useState('');
+  const [type, setType] = useState<Notification['type']>('info');
+
+  const handleAdd = () => {
+    const trimmed = input.trim();
+    if (trimmed) {
+      add({ id: nextId++, message: trimmed, type });
+      setInput('');
+    }
+  };
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <h2 className="text-sm font-semibold">Notifications ({size} queued)</h2>
+
+      <div className="flex gap-2">
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value as Notification['type'])}
+          className="px-2 py-1.5 rounded-control border bg-field text-sm"
+        >
+          <option value="info">Info</option>
+          <option value="success">Success</option>
+          <option value="error">Error</option>
+        </select>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+          placeholder="Notification text..."
+          className="flex-1 px-3 py-1.5 rounded-control border bg-field text-sm"
+        />
+        <button
+          onClick={handleAdd}
+          className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-sm font-medium"
+        >
+          Add
+        </button>
+      </div>
+
+      {first && (
+        <div
+          className="flex items-center justify-between px-3 py-2 rounded-control text-sm font-medium"
+          style={{
+            backgroundColor:
+              first.type === 'success'
+                ? 'var(--color-success)'
+                : first.type === 'error'
+                  ? 'var(--color-destructive)'
+                  : 'var(--color-info)',
+            color: 'white',
+          }}
+        >
+          <span>{first.message}</span>
+          <button
+            onClick={remove}
+            className="ml-2 text-white/80 hover:text-white text-xs"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
+      {size > 1 && (
+        <p className="text-xs text-muted-content">
+          {size - 1} more notification{size - 1 > 1 ? 's' : ''} waiting
+        </p>
+      )}
+
+      {size > 0 && (
+        <button onClick={clear} className="text-xs text-muted-content hover:underline">
+          Dismiss all
+        </button>
+      )}
+    </div>
+  );
+}`,
+      tags: ["notification", "toast", "queue", "dismiss", "auto"]
+    },
+    {
+      title: "Print Job Queue with Peeking",
+      description: "A print job manager that enqueues documents, shows the currently printing job, and lets users process or cancel jobs in FIFO order.",
+      code: `import { useQueue } from 'vayu-ui';
+import { useState } from 'react';
+
+interface PrintJob {
+  documentName: string;
+  pages: number;
+  submittedBy: string;
+}
+
+export default function PrintJobQueue() {
+  const { queue, first, last, size, add, remove, clear } = useQueue<PrintJob>();
+  const [docName, setDocName] = useState('');
+  const [pages, setPages] = useState('1');
+  const [user, setUser] = useState('');
+
+  const handleSubmit = () => {
+    const trimmedDoc = docName.trim();
+    const trimmedUser = user.trim();
+    const pageCount = parseInt(pages, 10);
+    if (trimmedDoc && trimmedUser && pageCount > 0) {
+      add({ documentName: trimmedDoc, pages: pageCount, submittedBy: trimmedUser });
+      setDocName('');
+      setPages('1');
+      setUser('');
+    }
+  };
+
+  const totalPages = queue.reduce((sum, job) => sum + job.pages, 0);
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-md">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold">Print Queue</h2>
+        <span className="text-xs text-muted-content">
+          {size} job{size !== 1 ? 's' : ''} \xB7 {totalPages} page{totalPages !== 1 ? 's' : ''}
+        </span>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
+        <input
+          value={docName}
+          onChange={(e) => setDocName(e.target.value)}
+          placeholder="Document"
+          className="px-3 py-1.5 rounded-control border bg-field text-sm"
+        />
+        <input
+          value={pages}
+          onChange={(e) => setPages(e.target.value)}
+          placeholder="Pages"
+          type="number"
+          min="1"
+          className="px-3 py-1.5 rounded-control border bg-field text-sm"
+        />
+        <input
+          value={user}
+          onChange={(e) => setUser(e.target.value)}
+          placeholder="User"
+          className="px-3 py-1.5 rounded-control border bg-field text-sm"
+        />
+      </div>
+
+      <button
+        onClick={handleSubmit}
+        className="w-full px-3 py-1.5 rounded-control bg-brand text-brand-content text-sm font-medium"
+      >
+        Submit Print Job
+      </button>
+
+      {first && (
+        <div className="px-3 py-2 rounded-control border-2 border-brand/30 bg-brand/5 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="font-medium">
+              Printing: {first.documentName} ({first.pages} pg)
+            </span>
+            <button
+              onClick={remove}
+              className="text-brand text-xs hover:underline"
+            >
+              Complete
+            </button>
+          </div>
+          <span className="text-xs text-muted-content">by {first.submittedBy}</span>
+        </div>
+      )}
+
+      {size > 1 && (
+        <ul className="space-y-1">
+          {queue.slice(1).map((job, i) => (
+            <li
+              key={i}
+              className="flex items-center justify-between px-2 py-1 rounded-control bg-muted/30 text-sm"
+            >
+              <span>
+                {job.documentName} ({job.pages} pg) \u2014 {job.submittedBy}
+              </span>
+              <span className="text-xs text-muted-content">#{i + 2}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {size > 0 && (
+        <button onClick={clear} className="text-xs text-destructive hover:underline">
+          Cancel all jobs
+        </button>
+      )}
+    </div>
+  );
+}`,
+      tags: ["print", "job", "queue", "fifo", "peek"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Mutating the queue array directly",
+      bad: `const { queue, add } = useQueue<string>();
+queue.push('task'); // Direct mutation \u2014 no re-render`,
+      good: `const { queue, add } = useQueue<string>();
+add('task'); // Triggers a re-render with a new array`,
+      reason: "The queue reference only changes when a mutator function is called. Directly pushing, shifting, or splicing the array mutates it in place without triggering a React re-render, leading to stale UI."
+    },
+    {
+      title: "Treating the queue as a stack (LIFO)",
+      bad: `const { queue, add, remove } = useQueue<string>();
+// Expecting remove() to pop the LAST item (stack behavior)
+add('first');
+add('second');
+remove(); // Removes 'first', not 'second'!`,
+      good: `// useQueue is FIFO \u2014 remove() always dequeues the front (oldest) item.
+// If you need LIFO/stack semantics, use a dedicated stack hook or useList.
+const { add, remove, first } = useQueue<string>();
+add('first');
+add('second');
+remove(); // Correctly removes 'first' (FIFO order)`,
+      reason: "useQueue enforces FIFO semantics: remove() always dequeues from the front (index 0), not the back. If you need last-in-first-out behavior, use useList or implement a custom stack instead."
+    },
+    {
+      title: "Using the queue for large datasets",
+      bad: `const { queue, add, remove } = useQueue<string>();
+// Enqueuing 100,000 items \u2014 each add creates a new array copy
+for (let i = 0; i < 100000; i++) {
+  add(\`item-\${i}\`); // O(n) per add = O(n\xB2) total
+}`,
+      good: `// For large datasets, use a linked-list-based queue library
+// or batch your initial state into a single setState call:
+const [queue, setQueue] = useState(() =>
+  Array.from({ length: 100000 }, (_, i) => \`item-\${i}\`)
+);
+// Then use useQueue for incremental operations only`,
+      reason: "useQueue uses an array internally, so add() is O(n) due to array spread and remove() is O(n) due to slice. For queues with thousands of items, this creates excessive GC pressure and slow renders. Use a proper linked-list queue data structure for large-scale scenarios."
+    },
+    {
+      title: "Not handling undefined first/last on empty queue",
+      bad: `const { first, remove } = useQueue<string>();
+// Assuming first is always a string \u2014 will crash at runtime when empty
+const uppercased = first.toUpperCase(); // TypeError: Cannot read properties of undefined`,
+      good: `const { first, size, remove } = useQueue<string>();
+if (size > 0 && first) {
+  const uppercased = first.toUpperCase(); // Safe \u2014 queue is non-empty
+}`,
+      reason: "first and last return T | undefined \u2014 they are undefined when the queue is empty. Always check size > 0 or use optional chaining before accessing properties on these values to avoid runtime TypeErrors."
+    }
+  ]
+};
+
+// src/hooks/use-render-count.ts
+var useRenderCountEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-render-count",
+  name: "useRenderCount",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Returns the number of times the component has rendered, starting at 1 on mount, using a persistent ref counter.",
+  longDescription: "Tracks how many times a React component has rendered by incrementing a useRef counter on every render cycle. Because useRef persists across renders without triggering re-renders itself, the counter increments exactly once per render call \u2014 including the initial mount. The returned value starts at 1 (the first render) and increases by one on every subsequent render, regardless of what caused it (state changes, prop updates, parent re-renders, context changes). The hook is fully SSR-safe: it uses only useRef with no browser-specific APIs, so server and client produce the same initial output (1) with no hydration mismatch. Choose this hook over manually adding a counter in useEffect when you need a zero-config, declarative way to measure render frequency for debugging, profiling, or verifying that memoization strategies are working correctly.",
+  tags: [
+    "render",
+    "count",
+    "debug",
+    "performance",
+    "profiling",
+    "re-render",
+    "mount",
+    "lifecycle",
+    "devtools",
+    "memoization"
+  ],
+  category: "lifecycle",
+  useCases: [
+    "Debug unnecessary re-renders by displaying the render count inline to quickly spot components that render far more often than expected",
+    "Verify that React.memo, useMemo, or useCallback are actually preventing re-renders by comparing the render count before and after applying memoization",
+    "Detect infinite re-render loops during development by watching the count climb continuously in a dev overlay instead of waiting for the UI to freeze",
+    "Log render frequency in a development dashboard or overlay to profile component performance and identify the most render-heavy parts of a component tree",
+    "Conditionally show a performance warning badge when a component exceeds a render count threshold, signaling that optimization may be needed"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useRenderCount.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useRenderCount(): number",
+  returnType: "number",
+  parameters: [],
+  returnValues: [
+    {
+      name: "renderCount",
+      type: "number",
+      description: "The total number of times the component has rendered. Starts at 1 on the initial mount and increments by one on every subsequent render. This value is synchronous and immediately reflects the current render cycle \u2014 no delay or async update."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Render Counter Display",
+      description: "A simple component that displays how many times it has rendered, useful as a quick debugging aid during development.",
+      code: `import { useRenderCount } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function RenderCounter() {
+  const renders = useRenderCount();
+  const [count, setCount] = useState(0);
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface border bg-surface text-surface-content max-w-xs">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold">Counter</h3>
+        <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-content font-mono">
+          Renders: {renders}
+        </span>
+      </div>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => setCount((c) => c - 1)}
+          className="inline-flex items-center justify-center rounded-control border border-input bg-canvas shadow-control hover:bg-muted h-8 w-8 text-sm"
+        >
+          \u2212
+        </button>
+        <span className="text-2xl font-bold tabular-nums w-12 text-center">{count}</span>
+        <button
+          onClick={() => setCount((c) => c + 1)}
+          className="inline-flex items-center justify-center rounded-control border border-input bg-canvas shadow-control hover:bg-muted h-8 w-8 text-sm"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["debug", "basic", "counter"]
+    },
+    {
+      title: "Memoization Effectiveness Check",
+      description: "Compares render counts between an un-memoized component and a memoized version to verify that React.memo is preventing unnecessary re-renders when the parent state changes.",
+      code: `import { useRenderCount } from 'vayu-ui';
+import { useState, memo } from 'react';
+
+function ChildItem({ name }: { name: string }) {
+  const renders = useRenderCount();
+  return (
+    <div className="flex items-center justify-between px-3 py-2 border-b last:border-b-0">
+      <span className="text-sm">{name}</span>
+      <span className="text-xs font-mono text-muted-content">Renders: {renders}</span>
+    </div>
+  );
+}
+
+const MemoizedChild = memo(ChildItem);
+
+export default function MemoizationCheck() {
+  const [search, setSearch] = useState('');
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const items = ['Alice', 'Bob', 'Charlie'];
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface border bg-surface text-surface-content max-w-sm">
+      <h3 className="text-sm font-semibold">Memoization Check</h3>
+      <p className="text-xs text-muted-content">
+        Type in the search box \u2014 MemoizedChild should NOT re-render.
+      </p>
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Filter (does not affect children)..."
+        className="w-full px-3 py-2 rounded-control border bg-canvas text-canvas-content"
+      />
+      <div className="border rounded-control">
+        {items.map((item) => (
+          <MemoizedChild
+            key={item}
+            name={item}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}`,
+      tags: ["memoization", "performance", "react-memo", "comparison"]
+    },
+    {
+      title: "Dev-Only Render Badge",
+      description: "A wrapper component that shows a small render count badge in the corner during development and strips itself entirely in production builds.",
+      code: `import { useRenderCount } from 'vayu-ui';
+import { useState, type ReactNode } from 'react';
+
+function RenderBadge({ children, label }: { children: ReactNode; label: string }) {
+  const renders = useRenderCount();
+
+  if (process.env.NODE_ENV === 'production') {
+    return <>{children}</>;
+  }
+
+  return (
+    <div className="relative">
+      {children}
+      <span className="absolute top-1 right-1 text-[10px] font-mono px-1.5 py-0.5 rounded bg-destructive/80 text-white leading-none pointer-events-none select-none z-50">
+        {label}: {renders}
+      </span>
+    </div>
+  );
+}
+
+export default function DevRenderBadge() {
+  const [value, setValue] = useState(0);
+
+  return (
+    <div className="space-y-4 max-w-md">
+      <RenderBadge label="Card">
+        <div className="p-4 rounded-surface border bg-surface text-surface-content">
+          <p className="text-sm">This card shows its render count in dev mode.</p>
+          <p className="text-xs text-muted-content mt-1">
+            Current value: {value}
+          </p>
+        </div>
+      </RenderBadge>
+      <button
+        onClick={() => setValue((v) => v + 1)}
+        className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-sm"
+      >
+        Trigger Re-render
+      </button>
+    </div>
+  );
+}`,
+      tags: ["devtools", "badge", "development", "production"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using render count in production business logic",
+      bad: `const renders = useRenderCount();
+if (renders > 3) {
+  setShowTooltip(false); // Driving UI from render count
+}`,
+      good: `const renders = useRenderCount();
+// Only use for debugging, profiling, or dev overlays
+console.debug('Component rendered', renders, 'times');
+// Use proper state management for production UI logic`,
+      reason: "Render count is a debugging and profiling tool, not a reliable state variable. The count depends on React's internal scheduling and can vary between React versions or modes (concurrent vs. legacy). Never drive production UI behavior from render counts."
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (process.env.NODE_ENV === 'development') {
+  const renders = useRenderCount();
+}`,
+      good: `const renders = useRenderCount();
+// Consume the value conditionally instead
+const renderLabel = process.env.NODE_ENV === 'development'
+  ? \`Renders: \${renders}\`
+  : '';`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling useRenderCount inside a conditional, loop, or nested function violates the Rules of Hooks and will cause crashes or stale values. Always call hooks at the top level and use the result conditionally."
+    },
+    {
+      title: "Trying to reset the render count",
+      bad: `const renders = useRenderCount();
+// Trying to "reset" by unmounting and remounting
+// or expecting renders to go back to 0`,
+      good: `const renders = useRenderCount();
+// The count always increments \u2014 design your code around that.
+// On mount it starts at 1 and only goes up.
+// If you need a resettable counter, use useState instead.`,
+      reason: "The hook uses a useRef internally that persists for the lifetime of the component instance. There is no reset mechanism \u2014 the count monotonically increases from 1. If you need a resettable counter, use useState or useReducer instead."
+    },
+    {
+      title: "Expecting the hook to distinguish mount from update",
+      bad: `const renders = useRenderCount();
+if (renders === 1) {
+  // Treating this as "on mount" lifecycle
+  fetchData();
+}`,
+      good: `import { useEffect } from 'react';
+// Use useEffect for mount-time side effects
+useEffect(() => {
+  fetchData();
+}, []); // Empty dependency array = mount only`,
+      reason: 'While renders === 1 does coincidentally correspond to the first render, using it as an "on mount" hook is fragile and semantically wrong. Use useEffect with an empty dependency array for mount-time side effects \u2014 it is the canonical React pattern and correctly handles cleanup, strict mode double-invocation, and concurrent mode.'
+    }
+  ]
+};
+
+// src/hooks/use-scroll-position.ts
+var useScrollPositionEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-scroll-position",
+  name: "useScrollPosition",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Tracks the scroll position, direction, and progress of the window or a specific scrollable element, with built-in throttling via requestAnimationFrame.",
+  longDescription: `Returns a reactive ScrollPosition object containing x/y offsets, vertical and horizontal scroll direction, whether the scrollable area is at its top or bottom boundary, and a 0-100 progress percentage. The hook supports two targets: when no element ref is provided it tracks window scroll (using scrollX/scrollY and document.documentElement.scrollHeight), and when a ref is supplied it tracks that element's scrollTop/scrollLeft instead. Throttling is handled by a dual mechanism \u2014 a time-based gate (configurable via the throttle option, defaulting to 50ms) skips updates that arrive too quickly, while a requestAnimationFrame fallback ensures at least one update per frame during sustained scroll activity. Scroll direction is computed by comparing the current offset against the previous offset stored in refs, yielding "up"/"down" for Y and "left"/"right" for X, or null when the position has not changed on that axis. The progress value is calculated as (scrollY / maxScroll) * 100, clamped to 0-100, and is 0 when the content does not overflow. All DOM reads and event listener registration happen inside useEffect, so the hook is SSR-safe \u2014 the initial render uses static defaults (x: 0, y: 0, isAtTop: true, isAtBottom: false, progress: 0, directions null). Choose this hook when you need reactive scroll data for sticky headers, reading-progress indicators, parallax effects, infinite-scroll triggers, or scroll-spy navigation without manually managing scroll event listeners and throttling logic.`,
+  tags: [
+    "scroll",
+    "position",
+    "direction",
+    "progress",
+    "parallax",
+    "throttle",
+    "sticky-header",
+    "scroll-spy",
+    "window",
+    "element"
+  ],
+  category: "sensor",
+  useCases: [
+    "Hide or reveal a sticky navigation header based on whether the user is scrolling down or up, creating a cleaner reading experience on mobile",
+    "Display a scroll-to-top floating action button only when the user has scrolled past a certain threshold and the page is no longer at the top",
+    "Build an article reading-progress bar that fills from 0% to 100% as the user scrolls through long-form content",
+    "Implement parallax or scroll-driven animations that respond to the vertical scroll offset or progress percentage",
+    "Track scroll position inside a specific scrollable container such as a modal body, virtualized list, or sidebar panel instead of the entire window",
+    "Trigger lazy-loading of content or infinite-scroll pagination when the user nears the bottom of the page (isAtBottom or progress > 90)"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useScrollPosition.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useScrollPosition(options?: UseScrollPositionOptions): ScrollPosition",
+  parameters: [
+    {
+      name: "options",
+      type: "UseScrollPositionOptions",
+      required: false,
+      description: "Configuration object. Omit entirely to track window scroll with default 50ms throttling. Pass { throttle } to adjust the update interval, { element } to track a specific scrollable container, or both.",
+      defaultValue: "{}"
+    },
+    {
+      name: "options.throttle",
+      type: "number",
+      required: false,
+      description: "Minimum interval in milliseconds between state updates during scrolling. Lower values give smoother feedback at the cost of more re-renders; higher values reduce CPU usage but make the position feel laggy. The hook also uses requestAnimationFrame as a fallback so at least one update fires per paint frame. Default is 50ms.",
+      defaultValue: "50"
+    },
+    {
+      name: "options.element",
+      type: "React.RefObject<HTMLElement | null>",
+      required: false,
+      description: "A React ref attached to the scrollable container element whose scroll position you want to track. When provided, the hook reads scrollTop/scrollLeft/scrollHeight/clientHeight from this element. When omitted (or when the ref is null), the hook tracks window scroll instead. Changing the ref between renders re-subscribes the scroll listener to the new target."
+    }
+  ],
+  returnType: "ScrollPosition",
+  returnValues: [
+    {
+      name: "x",
+      type: "number",
+      description: "Current horizontal scroll offset in pixels. For window scroll this is window.scrollX; for an element it is element.scrollLeft. Starts at 0."
+    },
+    {
+      name: "y",
+      type: "number",
+      description: "Current vertical scroll offset in pixels. For window scroll this is window.scrollY; for an element it is element.scrollTop. Starts at 0."
+    },
+    {
+      name: "directionY",
+      type: "'up' | 'down' | null",
+      description: 'The last detected vertical scroll direction. "down" when the user scrolls down (y increases), "up" when scrolling up (y decreases), or null if the y position has not changed since the last update. Useful for hide/show header logic.'
+    },
+    {
+      name: "directionX",
+      type: "'left' | 'right' | null",
+      description: 'The last detected horizontal scroll direction. "right" when scrolling right (x increases), "left" when scrolling left (x decreases), or null if x has not changed.'
+    },
+    {
+      name: "isAtTop",
+      type: "boolean",
+      description: "true when the vertical scroll position is at or above the top boundary (scrollY <= 0). Useful for conditionally showing scroll-to-top buttons or removing top box shadows."
+    },
+    {
+      name: "isAtBottom",
+      type: "boolean",
+      description: "true when the vertical scroll position is within 1 pixel of the maximum scroll offset (scrollY >= scrollHeight - clientHeight - 1). The 1px tolerance accounts for sub-pixel rounding. Use this to trigger infinite-scroll loading or show end-of-content messages."
+    },
+    {
+      name: "progress",
+      type: "number",
+      description: "Scroll progress as a percentage from 0 to 100, calculated as (scrollY / maxScroll) * 100 where maxScroll = scrollHeight - clientHeight. Clamped to a maximum of 100. Returns 0 when the content does not overflow (maxScroll <= 0). Ideal for progress bars and scroll-driven animations."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Reading Progress Bar",
+      description: "A thin progress bar fixed at the top of the page that fills as the user scrolls through the document, showing how far they have read.",
+      code: `'use client';
+import { useScrollPosition } from 'vayu-ui';
+
+export default function ReadingProgressBar() {
+  const { progress } = useScrollPosition();
+
+  return (
+    <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-muted">
+      <div
+        className="h-full bg-brand transition-[width] duration-100 ease-out"
+        style={{ width: \`\${progress}%\` }}
+      />
+    </div>
+  );
+}`,
+      tags: ["progress-bar", "reading", "scroll", "fixed"]
+    },
+    {
+      title: "Sticky Header with Direction",
+      description: "A navigation header that hides when the user scrolls down and reappears when scrolling back up, with a box shadow that appears once the user has scrolled past the top.",
+      code: `'use client';
+import { useScrollPosition } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function StickyHeader() {
+  const { directionY, isAtTop, y } = useScrollPosition({ throttle: 16 });
+  const [navOpen, setNavOpen] = useState(false);
+  const hidden = directionY === 'down' && y > 80;
+
+  return (
+    <header
+      className={\`
+        sticky top-0 z-40 transition-transform duration-300 ease-in-out
+        bg-surface/95 backdrop-blur-sm
+        \${hidden ? '-translate-y-full' : 'translate-y-0'}
+        \${!isAtTop ? 'shadow-surface' : ''}
+      \`}
+    >
+      <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+        <span className="text-lg font-semibold text-surface-content">MyApp</span>
+        <button
+          onClick={() => setNavOpen(!navOpen)}
+          className="px-3 py-1.5 rounded-control text-sm bg-brand text-brand-content"
+        >
+          Menu
+        </button>
+      </nav>
+    </header>
+  );
+}`,
+      tags: ["sticky-header", "navigation", "hide-on-scroll", "direction"]
+    },
+    {
+      title: "Element Scroll Tracker",
+      description: "Tracks scroll position inside a specific scrollable container element, displaying current offset and progress \u2014 useful for virtualized lists or scrollable panels.",
+      code: `'use client';
+import { useScrollPosition } from 'vayu-ui';
+import { useRef } from 'react';
+
+export default function ElementScrollTracker() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { y, progress, isAtBottom, directionY } = useScrollPosition({
+    element: containerRef,
+    throttle: 32,
+  });
+
+  return (
+    <div className="space-y-3">
+      <div className="flex gap-4 text-sm text-muted-content">
+        <span>Offset: {y}px</span>
+        <span>Progress: {progress.toFixed(1)}%</span>
+        <span>Direction: {directionY ?? 'none'}</span>
+        {isAtBottom && (
+          <span className="text-brand font-medium">Reached bottom!</span>
+        )}
+      </div>
+
+      <div
+        ref={containerRef}
+        className="h-64 overflow-y-auto rounded-surface border bg-surface p-4"
+      >
+        {Array.from({ length: 50 }, (_, i) => (
+          <div
+            key={i}
+            className="py-3 border-b border-border last:border-0 text-surface-content"
+          >
+            Item {i + 1}
+          </div>
+        ))}
+      </div>
+
+      <div className="h-2 rounded-full bg-muted overflow-hidden">
+        <div
+          className="h-full bg-brand rounded-full transition-[width] duration-100"
+          style={{ width: \`\${progress}%\` }}
+        />
+      </div>
+    </div>
+  );
+}`,
+      tags: ["element", "container", "list", "scrollable"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Setting throttle to 0 or 1ms",
+      bad: `const pos = useScrollPosition({ throttle: 0 });`,
+      good: `const pos = useScrollPosition({ throttle: 50 }); // or at minimum 16 for 60fps`,
+      reason: "A throttle of 0 bypasses the time-based gate and fires the state update on every single scroll event via the requestAnimationFrame fallback, which can cause excessive re-renders and jank. Use the default 50ms for most UIs, or 16ms if you need smooth per-frame updates for animations."
+    },
+    {
+      title: "Passing an element ref to a non-scrollable container",
+      bad: `const ref = useRef<HTMLDivElement>(null);
+// div has no overflow: auto/scroll \u2014 scrollTop is always 0
+const pos = useScrollPosition({ element: ref });`,
+      good: `const ref = useRef<HTMLDivElement>(null);
+// div has overflow-y: auto so it actually scrolls
+<div ref={ref} className="h-64 overflow-y-auto">...</div>
+const pos = useScrollPosition({ element: ref });`,
+      reason: "The hook reads scrollTop/scrollLeft from the element. If the element has no overflow, these values stay at 0 and direction will always be null, progress will always be 0. The element must have CSS overflow set to auto or scroll and enough content to overflow its fixed height."
+    },
+    {
+      title: "Destructuring and using values during SSR",
+      bad: `// During SSR, useEffect has not run yet
+const { y, isAtTop } = useScrollPosition();
+if (y > 100) { /* this branch never runs server-side */ }`,
+      good: `// Use the values safely \u2014 they have sensible defaults (y: 0, isAtTop: true)
+const { y, isAtTop } = useScrollPosition();
+// The first client-side render will update to real values via useEffect`,
+      reason: "On the server and during the initial hydration render, the hook returns its default state: x: 0, y: 0, isAtTop: true, isAtBottom: false, progress: 0, and all directions null. The real scroll position is read inside useEffect after mount. Any server-side branching on these values will use the defaults, which is safe but may differ from the client after hydration."
+    },
+    {
+      title: "Mutating the returned ScrollPosition object",
+      bad: `const pos = useScrollPosition();
+pos.progress = 50; // mutation has no effect on state`,
+      good: `const { progress } = useScrollPosition();
+const adjustedProgress = Math.min(progress, 50);`,
+      reason: "The returned ScrollPosition is a React state object. Mutating its properties directly does not trigger a re-render and the change will be overwritten on the next scroll event. Treat the return value as read-only and derive new values from it."
+    },
+    {
+      title: "Depending on isAtBottom being pixel-perfect",
+      bad: `const { isAtBottom } = useScrollPosition();
+if (isAtBottom) {
+  // assumes scrollY === scrollHeight - clientHeight exactly
+  loadMore();
+}`,
+      good: `const { isAtBottom, progress } = useScrollPosition();
+// isAtBottom has a 1px tolerance \u2014 or use progress > 95 for early loading
+if (isAtBottom || progress > 95) {
+  loadMore();
+}`,
+      reason: "The isAtBottom check uses a 1px tolerance (scrollY >= maxScroll - 1) to account for sub-pixel rounding and float precision issues across browsers. In some browsers the scroll position may never reach the exact maximum value. If you need to trigger loading before the absolute bottom, use progress > 90 or progress > 95 instead."
+    }
+  ]
+};
+
+// src/hooks/use-set.ts
+var useSetEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-set",
+  name: "useSet",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Generic state hook for managing a Set with built-in add, remove, clear, and has operations, guaranteeing uniqueness without manual duplicate-checking boilerplate.",
+  longDescription: "Wraps React.useState<Set<T>> and exposes four functions \u2014 add(value) to insert, remove(value) to delete, clear() to empty, and has(value) for O(1) membership checks \u2014 so you never need to write duplicate-filtering logic or new Set(prev) boilerplate inside setState callbacks. Every mutator uses the functional updater form (prev => \u2026), creating a new Set instance on each call so it is safe under concurrent React rendering and batched updates. The hook accepts optional initialValues (an array that is passed to the Set constructor) to pre-populate the Set. It is fully SSR-safe since it has no browser API dependencies. Choose this over raw useState when you need a collection that guarantees uniqueness \u2014 unlike useList which allows duplicates, useSet silently ignores duplicate additions via the native Set semantics. The generic <T> supports any value type, though primitive types (strings, numbers) are recommended since Set uses SameValueZero equality. For key-value pairs, use useMap instead.",
+  tags: [
+    "set",
+    "unique",
+    "state",
+    "collection",
+    "membership",
+    "deduplication",
+    "immutable",
+    "reactive",
+    "generic",
+    "lookup"
+  ],
+  category: "state",
+  useCases: [
+    "When you need a collection of unique values where duplicates must be silently ignored, such as selected IDs, active filters, or tagged items, without manually checking before every add",
+    "To build a tag input or chip selector where users can add tags but duplicates are automatically prevented without extra validation logic",
+    "When implementing a permission or feature guard that checks membership with O(1) lookups \u2014 e.g., checking if a user has a specific role or if a feature is enabled",
+    "To deduplicate a list of values \u2014 convert an array with duplicates into a Set, then spread back to an array for unique items",
+    "When tracking selected items in a multi-select UI where each item can only be selected once, and you need fast has() checks for conditional styling",
+    'To manage a transient "seen" or "visited" tracker \u2014 add items as they are encountered and use has() to skip already-processed entries'
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useSet.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useSet<T>(initialValues?: T[]): { set: Set<T>; add: (value: T) => void; remove: (value: T) => void; clear: () => void; has: (value: T) => boolean }",
+  typeParams: ["T"],
+  parameters: [
+    {
+      name: "initialValues",
+      type: "T[]",
+      required: false,
+      defaultValue: "undefined",
+      description: 'Optional array of initial values passed to the Set constructor. Duplicates in the array are automatically collapsed by Set semantics. When omitted, the Set starts empty. The generic T is inferred from the elements you pass, so useSet(["a", "b"]) infers T as string.'
+    }
+  ],
+  returnType: "{ set: Set<T>; add: (value: T) => void; remove: (value: T) => void; clear: () => void; has: (value: T) => boolean }",
+  returnValues: [
+    {
+      name: "set",
+      type: "Set<T>",
+      description: "The current Set instance. Read-only \u2014 never mutate this directly (no .add, .delete, or .clear on this reference). Use the returned mutator functions to trigger re-renders."
+    },
+    {
+      name: "add",
+      type: "(value: T) => void",
+      description: "Adds a value to the Set. If the value already exists, this is a no-op \u2014 Set silently ignores duplicates. Internally creates a new Set via the functional updater form, so concurrent batched updates are safe."
+    },
+    {
+      name: "remove",
+      type: "(value: T) => void",
+      description: "Deletes the given value from the Set. Does nothing if the value does not exist (Set.delete returns false for missing values). Creates a new Set instance to trigger a re-render."
+    },
+    {
+      name: "clear",
+      type: "() => void",
+      description: 'Removes all values from the Set, resetting it to an empty Set. Useful for "Clear All" or reset actions.'
+    },
+    {
+      name: "has",
+      type: "(value: T) => boolean",
+      description: "Returns true if the Set contains the given value. This reads from the current render's Set instance, so it reflects the state at the time of the last render \u2014 not pending mutator calls. Provides O(1) lookup performance."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Basic Set Manager",
+      description: "A minimal component that lets users add unique values to a Set, remove individual items, check membership, and clear all.",
+      code: `'use client';
+import { useSet } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function BasicSetManager() {
+  const { set, add, remove, clear, has } = useSet<string>();
+  const [input, setInput] = useState('');
+
+  const handleAdd = () => {
+    const trimmed = input.trim();
+    if (trimmed) {
+      add(trimmed);
+      setInput('');
+    }
+  };
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <h2 className="text-sm font-semibold">Unique Items ({set.size})</h2>
+
+      <div className="flex gap-2">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+          placeholder="Add unique item..."
+          className="flex-1 px-3 py-1.5 rounded-control border bg-field text-sm"
+        />
+        <button
+          onClick={handleAdd}
+          className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-sm font-medium"
+        >
+          Add
+        </button>
+      </div>
+
+      {set.size > 0 && (
+        <ul className="space-y-1">
+          {Array.from(set).map((item) => (
+            <li
+              key={item}
+              className="flex items-center justify-between px-2 py-1 rounded-control bg-muted/50 text-sm"
+            >
+              <span>{item}</span>
+              <button
+                onClick={() => remove(item)}
+                className="text-destructive text-xs hover:underline"
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {set.size > 0 && (
+        <button onClick={clear} className="text-xs text-muted-content hover:underline">
+          Clear all
+        </button>
+      )}
+    </div>
+  );
+}`,
+      tags: ["basic", "add", "remove", "clear", "unique"]
+    },
+    {
+      title: "Tag Input with Duplicate Prevention",
+      description: "A tag input where pressing Enter adds a tag, duplicates are silently ignored, and existing tags can be removed individually.",
+      code: `'use client';
+import { useSet } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function TagInput() {
+  const { set: tags, add, remove, clear, has } = useSet<string>(['react', 'typescript']);
+  const [input, setInput] = useState('');
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const trimmed = input.trim().toLowerCase();
+      if (trimmed) {
+        add(trimmed);
+        setInput('');
+      }
+    } else if (e.key === 'Backspace' && input === '' && tags.size > 0) {
+      const lastTag = Array.from(tags).pop();
+      if (lastTag) remove(lastTag);
+    }
+  };
+
+  return (
+    <div className="space-y-2 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <label className="text-sm font-medium">Tags</label>
+
+      <div className="flex flex-wrap gap-1.5 p-2 rounded-control border bg-field min-h-[40px]">
+        {Array.from(tags).map((tag) => (
+          <span
+            key={tag}
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-control bg-brand/10 text-brand text-xs font-medium"
+          >
+            {tag}
+            <button
+              type="button"
+              onClick={() => remove(tag)}
+              className="hover:text-destructive"
+              aria-label={\`Remove \${tag}\`}
+            >
+              &times;
+            </button>
+          </span>
+        ))}
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={tags.size === 0 ? 'Type and press Enter...' : ''}
+          className="flex-1 min-w-[100px] bg-transparent text-sm outline-none"
+        />
+      </div>
+
+      {input.trim() && (
+        <p className="text-xs text-muted-content">
+          {has(input.trim().toLowerCase())
+            ? \`"\${input.trim().toLowerCase()}" already exists \u2014 duplicate will be ignored\`
+            : 'Press Enter to add'}
+        </p>
+      )}
+
+      {tags.size > 0 && (
+        <button onClick={clear} className="text-xs text-muted-content hover:underline">
+          Clear all tags
+        </button>
+      )}
+    </div>
+  );
+}`,
+      tags: ["tag", "input", "chips", "duplicate", "keyboard"]
+    },
+    {
+      title: "Permission Guard with has() Checks",
+      description: "Tracks active user permissions as a Set of strings, using has() for O(1) membership checks to conditionally render UI elements.",
+      code: `'use client';
+import { useSet } from 'vayu-ui';
+
+const ALL_PERMISSIONS = ['dashboard.view', 'dashboard.edit', 'users.view', 'users.manage', 'settings.read', 'settings.write'] as const;
+
+export default function PermissionGuard() {
+  const { set: activePermissions, add, remove, has, clear } = useSet<string>([
+    'dashboard.view',
+    'users.view',
+  ]);
+
+  const toggle = (perm: string) => {
+    if (has(perm)) {
+      remove(perm);
+    } else {
+      add(perm);
+    }
+  };
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-md">
+      <h2 className="text-sm font-semibold">Permissions ({activePermissions.size} active)</h2>
+
+      <div className="space-y-1">
+        {ALL_PERMISSIONS.map((perm) => (
+          <label key={perm} className="flex items-center gap-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              checked={has(perm)}
+              onChange={() => toggle(perm)}
+              className="rounded-control"
+            />
+            <span className={has(perm) ? 'text-success font-medium' : 'text-muted-content'}>
+              {perm}
+            </span>
+          </label>
+        ))}
+      </div>
+
+      <div className="flex gap-2">
+        <button
+          onClick={() => ALL_PERMISSIONS.forEach((p) => add(p))}
+          className="px-3 py-1.5 rounded-control bg-brand text-brand-content text-xs font-medium"
+        >
+          Grant all
+        </button>
+        <button
+          onClick={clear}
+          className="px-3 py-1.5 rounded-control border text-xs text-muted-content"
+        >
+          Revoke all
+        </button>
+      </div>
+
+      <div className="px-3 py-2 rounded-control bg-muted/50 text-xs text-muted-content">
+        <strong>Access:</strong>{' '}
+        {has('dashboard.edit') ? 'Full dashboard' : has('dashboard.view') ? 'View-only dashboard' : 'No dashboard access'}
+        {' | '}
+        {has('users.manage') ? 'User admin' : has('users.view') ? 'User viewer' : 'No user access'}
+      </div>
+    </div>
+  );
+}`,
+      tags: ["permissions", "guard", "membership", "toggle", "access-control"]
+    },
+    {
+      title: "Multi-Select Filter with Set",
+      description: "A filter bar where users toggle category filters. Selected filters are stored in a Set for uniqueness and fast has() checks during rendering.",
+      code: `'use client';
+import { useSet } from 'vayu-ui';
+
+const CATEGORIES = ['Electronics', 'Clothing', 'Books', 'Home', 'Sports', 'Food'] as const;
+
+const PRODUCTS = [
+  { name: 'Laptop', category: 'Electronics' },
+  { name: 'T-Shirt', category: 'Clothing' },
+  { name: 'Novel', category: 'Books' },
+  { name: 'Headphones', category: 'Electronics' },
+  { name: 'Football', category: 'Sports' },
+  { name: 'Blender', category: 'Home' },
+  { name: 'JavaScript Guide', category: 'Books' },
+  { name: 'Running Shoes', category: 'Sports' },
+];
+
+export default function MultiSelectFilter() {
+  const { set: selected, add, remove, has, clear } = useSet<string>();
+
+  const toggle = (category: string) => {
+    if (has(category)) {
+      remove(category);
+    } else {
+      add(category);
+    }
+  };
+
+  const filteredProducts =
+    selected.size === 0
+      ? PRODUCTS
+      : PRODUCTS.filter((p) => has(p.category));
+
+  return (
+    <div className="space-y-3 p-4 rounded-surface shadow-surface border bg-surface text-surface-content max-w-md">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-semibold">Categories</h2>
+        {selected.size > 0 && (
+          <button onClick={clear} className="text-xs text-muted-content hover:underline">
+            Clear filters
+          </button>
+        )}
+      </div>
+
+      <div className="flex flex-wrap gap-1.5">
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => toggle(cat)}
+            className={\`px-2.5 py-1 rounded-control text-xs font-medium transition-colors \${
+              has(cat)
+                ? 'bg-brand text-brand-content'
+                : 'bg-muted text-muted-content hover:bg-muted/80'
+            }\`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div className="space-y-1">
+        <p className="text-xs text-muted-content">
+          Showing {filteredProducts.length} of {PRODUCTS.length} products
+          {selected.size > 0 && \` \xB7 Filtered by: \${Array.from(selected).join(', ')}\`}
+        </p>
+
+        <ul className="space-y-1">
+          {filteredProducts.map((product) => (
+            <li
+              key={product.name}
+              className="flex items-center justify-between px-3 py-1.5 rounded-control bg-muted/50 text-sm"
+            >
+              <span>{product.name}</span>
+              <span className="text-xs text-muted-content">{product.category}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["filter", "multi-select", "toggle", "category", "unique"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Mutating the Set instance directly",
+      bad: `const { set, add } = useSet<string>();
+set.add('value'); // Direct mutation \u2014 no re-render`,
+      good: `const { set, add } = useSet<string>();
+add('value'); // Creates a new Set, triggers re-render`,
+      reason: "The set reference only changes when a mutator function is called. Calling .add(), .delete(), or .clear() on the Set directly mutates it in place without creating a new reference, so React does not detect the change and the UI stays stale."
+    },
+    {
+      title: "Iterating the Set directly in JSX",
+      bad: `{set.forEach((value) => (
+  <div key={value}>{value}</div>
+))}`,
+      good: `{Array.from(set).map((value) => (
+  <div key={value}>{value}</div>
+))}`,
+      reason: "Set.forEach does not return an array, so React cannot use it as a valid JSX expression. Always convert the Set to an array using Array.from(set) or the spread operator [...set] before mapping over it in JSX."
+    },
+    {
+      title: "Using the Set for ordered data",
+      bad: `const { set, add } = useSet<string>();
+// Expecting items to maintain insertion order for rendering
+add('first');
+add('second');
+add('third');
+// JS Sets DO preserve insertion order, but this is an implementation detail
+// \u2014 if you need ordered indexed access, use useList instead`,
+      good: `// If order matters and you need index-based access, use useList:
+const { list, add } = useList<string>();
+add('first');
+add('second');
+
+// If you only need uniqueness and membership checks, useSet is correct:
+const { set, has, add } = useSet<string>();
+add('item');
+has('item'); // true`,
+      reason: "While JavaScript Sets technically preserve insertion order, useSet is designed for uniqueness and membership checks, not ordered access. If you need to sort, index, or reorder items, useList provides a more appropriate API with update() and index-based remove()."
+    },
+    {
+      title: "Using non-primitive values that break equality",
+      bad: `const { set, add, has } = useSet<object>();
+add({ id: 1 });
+has({ id: 1 }); // false \u2014 different object reference`,
+      good: `const { set, add, has } = useSet<number>();
+add(1);
+has(1); // true \u2014 primitive value equality`,
+      reason: "Set uses SameValueZero for equality. While object values are technically allowed, each inline object literal creates a new reference that will never match an existing entry. Use primitive types (strings, numbers) as Set values to ensure has() and duplicate prevention work correctly."
+    },
+    {
+      title: "Reading stale state from has() inside event handlers",
+      bad: `const { set, add, has } = useSet<string>();
+
+const handleClick = () => {
+  add('item');
+  if (has('item')) {
+    // has() still reads the OLD Set \u2014 add() hasn't re-rendered yet
+    console.log('item exists'); // May not print on first call
+  }
+};`,
+      good: `const { set, add, has } = useSet<string>();
+
+const handleClick = () => {
+  add('item');
+  // has() reflects the current render's state, not the pending update.
+  // Track locally if you need to react immediately:
+  console.log('Item will be added');
+};
+
+// Or read after re-render:
+useEffect(() => {
+  if (has('item')) {
+    console.log('item exists after render');
+  }
+}, [set]);`,
+      reason: "has() reads from the Set captured during the current render. Calling add() schedules a state update but does not synchronously update the Set reference. Inside the same event handler, has() will return the pre-update value. Use useEffect or track the value locally if you need to react to the new state immediately."
+    }
+  ]
+};
+
+// src/hooks/use-throttle.ts
+var useThrottleEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-throttle",
+  name: "useThrottle",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Returns a throttled version of a value that updates at most once per specified interval, guaranteeing periodic output during continuous changes.",
+  longDescription: "Wraps a value in a setTimeout-based throttle mechanism using React's useState, useRef, and useEffect. A ref tracks the timestamp of the last update. Each time the input value changes, the hook schedules a timeout with a dynamically-calculated delay \u2014 `interval - (Date.now() - lastExecuted.current)` \u2014 so the throttled value updates exactly when the interval window expires, not earlier. If the interval has already elapsed since the last update, the new value propagates immediately. This guarantees at least one update per interval during continuous changes, unlike debounce which only fires after changes stop. The hook is fully SSR-safe: useState initializes with the input value directly, so server and client produce identical initial output with no hydration mismatch. No browser APIs are accessed during rendering. Choose this hook over useDebounce when you need guaranteed periodic updates during sustained input \u2014 such as scroll tracking, mouse following, or live data streaming \u2014 rather than waiting for input to pause.",
+  tags: [
+    "throttle",
+    "rate-limit",
+    "performance",
+    "scroll",
+    "resize",
+    "mouse",
+    "interval",
+    "real-time",
+    "value",
+    "delay"
+  ],
+  category: "animation",
+  useCases: [
+    "Throttle scroll position tracking to avoid expensive layout recalculations or parallax updates on every single pixel scrolled",
+    "Rate-limit mouse move events for real-time cursor-following effects, drawing canvases, or tooltip positioning that must stay responsive without overwhelming the render cycle",
+    "Throttle a window resize handler to recalculate responsive grid columns or chart dimensions at a fixed cadence instead of on every intermediate frame",
+    'Prevent API spam in "search as you type" by guaranteeing a request fires every N milliseconds during continuous typing, rather than waiting for the user to pause',
+    "Limit how often a rapidly-updating data source \u2014 such as a websocket tick, sensor reading, or animation frame counter \u2014 triggers React re-renders",
+    "Throttle drag position updates to keep drag-and-drop overlays smooth without flooding the main thread with state changes"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useThrottle.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useThrottle<T>(value: T, interval: number): T",
+  typeParams: ["T"],
+  returnType: "T",
+  parameters: [
+    {
+      name: "value",
+      type: "T",
+      required: true,
+      description: "The value to throttle. Can be any type \u2014 string, number, boolean, object, or array. The hook detects changes via React's dependency comparison in useEffect, so both primitive and reference types are supported."
+    },
+    {
+      name: "interval",
+      type: "number",
+      required: true,
+      description: "The minimum time in milliseconds between updates to the throttled value. Typical values are 100\u2013300ms for UI interactions (scroll, mouse, resize), 16\u201332ms for smooth animation-frame-rate throttling, and 500\u20131000ms for API rate-limiting. Passing 0 effectively bypasses throttling since the timeout fires on the next event loop tick."
+    }
+  ],
+  returnValues: [
+    {
+      name: "throttledValue",
+      type: "T",
+      description: "The rate-limited version of the input value. On the initial render it equals the input value immediately (SSR-safe). On subsequent changes, it retains the previous value until the interval elapses, at which point it updates to the latest input value. During continuous rapid changes, it is guaranteed to update at least once per interval."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Throttled Scroll Position Tracker",
+      description: "Displays the current scroll percentage of the viewport, updating at most every 150ms to avoid expensive calculations on every pixel scrolled.",
+      code: `import { useThrottle } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+export default function ScrollTracker() {
+  const [scrollPercent, setScrollPercent] = useState(0);
+  const throttledPercent = useThrottle(scrollPercent, 150);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollPercent(docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div className="fixed top-4 right-4 px-3 py-1.5 rounded-control bg-elevated text-elevated-content shadow-elevated text-sm">
+      {throttledPercent}%
+    </div>
+  );
+}`,
+      tags: ["scroll", "position", "performance", "ui"]
+    },
+    {
+      title: "Throttled Mouse Move Follower",
+      description: "A dot that follows the cursor position, throttled to update at most every 50ms to prevent excessive re-renders during fast mouse movement.",
+      code: `import { useThrottle } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+export default function MouseFollower() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const throttledPos = useThrottle(position, 50);
+
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMove);
+    return () => window.removeEventListener('mousemove', handleMove);
+  }, []);
+
+  return (
+    <div className="relative w-full h-64 rounded-surface border bg-surface overflow-hidden">
+      <div
+        className="absolute w-4 h-4 rounded-full bg-brand pointer-events-none transition-transform"
+        style={{
+          transform: \`translate(\${throttledPos.x - 8}px, \${throttledPos.y - 8}px)\`,
+        }}
+      />
+      <p className="absolute bottom-2 right-2 text-xs text-muted-content">
+        x: {throttledPos.x}, y: {throttledPos.y}
+      </p>
+    </div>
+  );
+}`,
+      tags: ["mouse", "cursor", "animation", "real-time"]
+    },
+    {
+      title: "Throttled Live Search",
+      description: "A search input that fires an API request every 500ms while the user is actively typing, providing real-time results without waiting for the user to pause (unlike debounce).",
+      code: `import { useThrottle } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+export default function ThrottledSearch() {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<string[]>([]);
+  const throttledQuery = useThrottle(query, 500);
+
+  useEffect(() => {
+    if (!throttledQuery.trim()) {
+      setResults([]);
+      return;
+    }
+
+    const controller = new AbortController();
+    fetch(\`/api/search?q=\${encodeURIComponent(throttledQuery)}\`, {
+      signal: controller.signal,
+    })
+      .then((res) => res.json())
+      .then((data) => setResults(data.items))
+      .catch(() => {});
+
+    return () => controller.abort();
+  }, [throttledQuery]);
+
+  return (
+    <div className="space-y-3">
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Type to search..."
+        className="w-full px-3 py-2 rounded-control border bg-surface text-surface-content"
+      />
+      {results.length > 0 && (
+        <ul className="space-y-1">
+          {results.map((item) => (
+            <li key={item} className="px-2 py-1 text-sm rounded-md hover:bg-muted/50">
+              {item}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}`,
+      tags: ["search", "api", "input", "live"]
+    },
+    {
+      title: "Throttled Window Resize Layout",
+      description: "Updates a responsive grid layout at most every 200ms during window resizing, avoiding expensive grid recalculations on every intermediate frame.",
+      code: `import { useThrottle } from 'vayu-ui';
+import { useState, useEffect } from 'react';
+
+export default function ResponsiveGrid() {
+  const [width, setWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1024,
+  );
+  const throttledWidth = useThrottle(width, 200);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const columns = throttledWidth >= 1024 ? 4 : throttledWidth >= 768 ? 2 : 1;
+
+  return (
+    <div className="space-y-2">
+      <p className="text-sm text-muted-content">
+        Viewport: {throttledWidth}px &mdash; {columns} column{columns > 1 ? 's' : ''}
+      </p>
+      <div
+        className="grid gap-4"
+        style={{ gridTemplateColumns: \`repeat(\${columns}, minmax(0, 1fr))\` }}
+      >
+        {Array.from({ length: 8 }, (_, i) => (
+          <div key={i} className="h-24 rounded-surface bg-muted/30 border" />
+        ))}
+      </div>
+    </div>
+  );
+}`,
+      tags: ["resize", "responsive", "grid", "layout"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Setting interval to 0 or a negative number",
+      bad: `const throttled = useThrottle(value, 0);`,
+      good: `const throttled = useThrottle(value, 200);`,
+      reason: "An interval of 0 causes the setTimeout to fire on the next event loop tick without actually rate-limiting. A negative interval produces undefined behavior. Use a meaningful positive interval \u2014 typically 100\u2013300ms for UI interactions."
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `if (isEnabled) {
+  const throttled = useThrottle(value, 200);
+}`,
+      good: `const throttled = useThrottle(isEnabled ? value : placeholder, 200);`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling useThrottle inside a conditional, loop, or nested function violates the Rules of Hooks and will cause crashes, stale state, or inconsistent renders."
+    },
+    {
+      title: "Using throttle when debounce is the right tool",
+      bad: `// Expecting the search to only fire AFTER the user stops typing
+const throttled = useThrottle(query, 300);`,
+      good: `// Use useDebounce to wait for the user to stop changing the value
+const debounced = useDebounce(query, 300);`,
+      reason: 'Throttle guarantees at least one update per interval during continuous changes. Debounce resets the timer on every change and only fires once after changes stop. If you need "fire after silence" behavior (e.g., search autocomplete), use useDebounce. If you need "fire at a steady rate" behavior (e.g., scroll tracking), use useThrottle.'
+    },
+    {
+      title: "Throttling callback functions instead of values",
+      bad: `const throttledFn = useThrottle(() => handleScroll(event), 100);
+// This re-creates the function every render and throttles the reference, not the behavior`,
+      good: `const throttledY = useThrottle(scrollY, 100);
+useEffect(() => {
+  handleScroll(throttledY);
+}, [throttledY]);`,
+      reason: "useThrottle is designed for values, not functions. Throttling a callback reference compares function identity on each render, which changes every time, defeating the throttle. Instead, throttle the value and trigger the side effect with useEffect."
+    },
+    {
+      title: "Expecting every intermediate value to be captured",
+      bad: `const throttled = useThrottle(rapidlyChangingValue, 300);
+// Expecting throttled to reflect every change within the 300ms window`,
+      good: `const throttled = useThrottle(rapidlyChangingValue, 300);
+// throttled only updates once per 300ms \u2014 intermediate values are intentionally skipped`,
+      reason: "Throttling deliberately discards intermediate values that arrive within the interval window. The throttled value jumps to the latest input value only when the interval expires. If you need every change to be processed (just delayed), use a queue or debounce pattern instead."
+    }
+  ]
+};
+
+// src/hooks/use-timeout.ts
+var useTimeoutEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-timeout",
+  name: "useTimeout",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "A hook that schedules a callback to execute after a specified delay, with automatic cleanup on unmount and a manual cancel function.",
+  longDescription: "Wraps the native setTimeout API inside a React useEffect, ensuring the timeout is automatically set when the component mounts and cleared when it unmounts. The hook stores the timeout ID in a useRef to avoid unnecessary re-renders. When the callback or ms dependency changes, the previous timeout is cancelled via the effect cleanup and a new one is scheduled \u2014 making the hook fully reactive to prop changes. The returned clearTimeout function allows manual cancellation before the delay expires, which is useful for dismissing scheduled actions based on user interaction (e.g., cancelling a redirect because the user clicked somewhere). Because the timeout is registered inside useEffect, it is SSR-safe \u2014 no timer is created during server rendering, and on the client the cleanup function removes the timeout on unmount, preventing memory leaks and stale callbacks. Choose this over raw setTimeout when you need a declarative, lifecycle-aware one-shot timer that cleans up after itself and can be cancelled on demand.",
+  tags: [
+    "timeout",
+    "delay",
+    "timer",
+    "setTimeout",
+    "scheduling",
+    "cleanup",
+    "side-effect",
+    "one-shot"
+  ],
+  category: "side-effect",
+  useCases: [
+    "When you need to auto-dismiss a toast notification, alert, or banner after a few seconds without managing setTimeout cleanup manually",
+    "To implement a delayed redirect after a successful form submission or login before navigating the user to a new page",
+    'When building a "session expiring" warning that triggers a prompt after a fixed period of inactivity',
+    "To schedule one-time cleanup operations like resetting temporary UI state or clearing a flag after an animation completes",
+    "When you need a declarative alternative to raw setTimeout that automatically cancels on component unmount to prevent memory leaks and stale callbacks",
+    "To show a loading spinner only after a brief delay, preventing a flash-of-loading-state on fast network responses",
+    "To temporarily highlight or flash an element for a fixed duration before reverting it to its original state"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useTimeout.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useTimeout(callback: () => void, ms: number): { clearTimeout: () => void }",
+  parameters: [
+    {
+      name: "callback",
+      type: "() => void",
+      required: true,
+      description: "The function to execute when the timeout expires. Changing the callback identity between renders (e.g., via an inline arrow function) will cancel the pending timeout and schedule a new one. Wrap stable callbacks with useCallback to avoid unnecessary resets."
+    },
+    {
+      name: "ms",
+      type: "number",
+      required: true,
+      description: "The delay in milliseconds before the callback fires. Changing this value cancels the current timeout and reschedules with the new delay. Pass 0 to execute on the next event loop tick."
+    }
+  ],
+  returnType: "{ clearTimeout: () => void }",
+  returnValues: [
+    {
+      name: "clearTimeout",
+      type: "() => void",
+      description: 'Manually cancels the pending timeout before it fires. Call this when the user performs an action that makes the scheduled callback unnecessary \u2014 for example, clicking a "dismiss" button on a toast that would otherwise auto-hide. After calling clearTimeout, the callback will not execute unless the hook re-schedules due to a dependency change.'
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Auto-Dismiss Toast",
+      description: "Shows a success toast that automatically disappears after 3 seconds, with a manual dismiss button that cancels the timeout.",
+      code: `'use client';
+import { useTimeout } from 'vayu-ui';
+import { useState } from 'react';
+
+export default function AutoDismissToast() {
+  const [visible, setVisible] = useState(true);
+
+  const { clearTimeout } = useTimeout(() => {
+    setVisible(false);
+  }, 3000);
+
+  if (!visible) return null;
+
+  return (
+    <div className="flex items-center justify-between gap-4 px-4 py-3 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm">
+      <span className="text-sm">Changes saved successfully.</span>
+      <button
+        onClick={() => {
+          clearTimeout();
+          setVisible(false);
+        }}
+        className="text-xs text-muted-content hover:text-surface-content transition-colors"
+      >
+        Dismiss
+      </button>
+    </div>
+  );
+}`,
+      tags: ["toast", "notification", "auto-dismiss", "alert"]
+    },
+    {
+      title: "Delayed Redirect After Login",
+      description: "Displays a success message after login and redirects to the dashboard after a 2-second delay, with an option to navigate immediately.",
+      code: `'use client';
+import { useTimeout } from 'vayu-ui';
+import { useState, useCallback } from 'react';
+
+export default function LoginSuccess() {
+  const [redirecting, setRedirecting] = useState(true);
+
+  const handleRedirect = useCallback(() => {
+    window.location.href = '/dashboard';
+  }, []);
+
+  const { clearTimeout } = useTimeout(handleRedirect, 2000);
+
+  return (
+    <div className="flex flex-col items-center gap-4 p-6 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm mx-auto">
+      <div className="text-3xl">&#10003;</div>
+      <h2 className="text-lg font-semibold">Login Successful</h2>
+      <p className="text-sm text-muted-content">
+        {redirecting ? 'Redirecting to dashboard in 2 seconds...' : 'Redirecting now...'}
+      </p>
+      <button
+        onClick={() => {
+          clearTimeout();
+          window.location.href = '/dashboard';
+        }}
+        className="px-4 py-2 rounded-control bg-brand text-brand-content text-sm font-medium"
+      >
+        Go Now
+      </button>
+    </div>
+  );
+}`,
+      tags: ["redirect", "login", "navigation", "success"]
+    },
+    {
+      title: "Delayed Loading Spinner",
+      description: "Shows a loading spinner only after a 300ms delay to prevent flashing it on fast responses. Cancels the timeout when loading finishes early.",
+      code: `'use client';
+import { useTimeout } from 'vayu-ui';
+import { useState, useCallback, useEffect } from 'react';
+
+export default function DelayedSpinner() {
+  const [loading, setLoading] = useState(true);
+  const [showSpinner, setShowSpinner] = useState(false);
+
+  const handleShowSpinner = useCallback(() => {
+    setShowSpinner(true);
+  }, []);
+
+  const { clearTimeout } = useTimeout(handleShowSpinner, 300);
+
+  // Simulate a fast API call that resolves in 150ms (before spinner threshold)
+  useEffect(() => {
+    const id = setTimeout(() => setLoading(false), 150);
+    return () => clearTimeout(id);
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      clearTimeout();
+      setShowSpinner(false);
+    }
+  }, [loading, clearTimeout]);
+
+  return (
+    <div className="flex flex-col items-center gap-3 p-6 rounded-surface shadow-surface border bg-surface text-surface-content max-w-sm mx-auto">
+      {loading && showSpinner && (
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-muted border-t-brand" />
+      )}
+      <p className="text-sm">
+        {loading ? 'Loading data...' : 'Data loaded successfully!'}
+      </p>
+    </div>
+  );
+}`,
+      tags: ["loading", "spinner", "delay", "performance"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Passing an unstable callback without useCallback",
+      bad: `function Component() {
+  useTimeout(() => {
+    fetchData(searchTerm);
+  }, 500);
+  // Every render creates a new arrow function, cancelling and rescheduling the timeout.
+}`,
+      good: `function Component() {
+  const handleFetch = useCallback(() => {
+    fetchData(searchTerm);
+  }, [searchTerm]);
+
+  useTimeout(handleFetch, 500);
+}`,
+      reason: "The callback is a dependency of the internal useEffect. An inline arrow function changes identity on every render, causing the effect to clean up the previous timeout and schedule a new one each render \u2014 defeating the purpose of a delayed action and potentially causing unexpected behavior."
+    },
+    {
+      title: "Using useTimeout for recurring or repeating actions",
+      bad: `// Trying to poll an API every 5 seconds
+useTimeout(() => {
+  fetchNotifications();
+  // This will NOT re-schedule itself \u2014 the callback fires only once.
+}, 5000);`,
+      good: `// Use useIntervalWhen for repeating actions
+import { useIntervalWhen } from 'vayu-ui';
+
+useIntervalWhen(() => {
+  fetchNotifications();
+}, 5000, true);`,
+      reason: "useTimeout is a one-shot timer \u2014 the callback fires exactly once after the delay. For recurring actions at a fixed interval, use useIntervalWhen which automatically re-schedules after each execution."
+    },
+    {
+      title: "Not using clearTimeout when early cancellation is needed",
+      bad: `const [visible, setVisible] = useState(true);
+useTimeout(() => setVisible(false), 5000);
+
+// User clicks "close" but the timeout is still running and will
+// call setVisible(false) again later \u2014 harmless here, but in
+// complex components it can trigger unwanted side effects.
+<button onClick={() => setVisible(false)}>Close</button>`,
+      good: `const [visible, setVisible] = useState(true);
+const { clearTimeout } = useTimeout(() => setVisible(false), 5000);
+
+<button onClick={() => {
+  clearTimeout(); // Cancel the pending timeout
+  setVisible(false);
+}}>
+  Close
+</button>`,
+      reason: "If the user dismisses the element before the timeout fires, the stale callback still executes on schedule. Always call clearTimeout when the scheduled action is no longer needed to prevent unexpected state updates, duplicate API calls, or navigation on unmounted components."
+    },
+    {
+      title: "Calling the hook conditionally",
+      bad: `function Component({ autoClose }: { autoClose: boolean }) {
+  if (autoClose) {
+    useTimeout(() => setVisible(false), 3000);
+  }
+  // Violates Rules of Hooks \u2014 React will throw an error or produce
+  // incorrect behavior across re-renders.
+}`,
+      good: `function Component({ autoClose }: { autoClose: boolean }) {
+  const { clearTimeout } = useTimeout(
+    () => setVisible(false),
+    autoClose ? 3000 : Number.MAX_SAFE_INTEGER,
+  );
+  // Or guard the logic inside the callback:
+  // useTimeout(() => { if (autoClose) setVisible(false); }, 3000);
+}`,
+      reason: "React hooks must be called unconditionally at the top level of a component. Calling useTimeout inside a conditional, loop, or nested function violates the Rules of Hooks and causes React to throw an error or produce incorrect state across re-renders."
+    },
+    {
+      title: "Expecting the timeout to restart without changing dependencies",
+      bad: `function Timer() {
+  const { clearTimeout } = useTimeout(() => {
+    console.log('Fired!');
+  }, 2000);
+
+  // This does NOT restart the timeout \u2014 the hook only re-schedules
+  // when callback or ms changes.
+  return <button onClick={() => clearTimeout()}>Reset</button>;
+}`,
+      good: `function Timer() {
+  const [trigger, setTrigger] = useState(0);
+  const { clearTimeout } = useTimeout(() => {
+    console.log('Fired!');
+  }, 2000);
+
+  // Changing a dependency (via key on a wrapper or a changing prop)
+  // forces the hook to re-schedule.
+  return (
+    <button onClick={() => setTrigger((t) => t + 1)}>
+      Restart
+    </button>
+  );
+}
+// Or use a keyed wrapper: <TimerInner key={trigger} />`,
+      reason: "The hook schedules the timeout in a useEffect that depends on callback and ms. Calling clearTimeout only cancels the pending timeout \u2014 it does not re-schedule. To restart, you must change one of the dependencies (e.g., by using a counter in the callback closure or keying the component to force a remount)."
+    }
+  ]
+};
+
+// src/hooks/use-visibility-change.ts
+var useVisibilityChangeEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-visibility-change",
+  name: "useVisibilityChange",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Reactive hook that tracks whether the document is currently visible to the user by wrapping the browser Page Visibility API (document.hidden / visibilitychange event).",
+  longDescription: 'Subscribes to the document "visibilitychange" event and returns a reactive boolean indicating whether the page is currently visible. The value is derived from document.hidden \u2014 it is true when the tab is in the foreground and false when the user switches tabs, minimizes the browser window, or otherwise causes the page to enter a background state. On initial render the hook defaults to true (visible), and the actual value is synced inside useEffect after hydration, making it fully SSR-safe with no hydration mismatch. The event listener is cleaned up on unmount. Use this hook as a declarative, React-lifecycle-aware alternative to manually managing document event listeners when you need to pause animations, throttle API polling, stop video playback, or defer non-critical work while the tab is hidden.',
+  tags: [
+    "visibility",
+    "page-visibility",
+    "tab",
+    "background",
+    "foreground",
+    "document-hidden",
+    "browser-api",
+    "sensor",
+    "reactive",
+    "ssr-safe"
+  ],
+  category: "sensor",
+  useCases: [
+    "Pause expensive animations, canvas rendering, or video playback when the user switches away from the tab to reduce CPU and GPU usage",
+    "Throttle or stop API polling and WebSocket reconnection attempts while the page is hidden, then resume automatically when the user returns",
+    "Track active vs. idle time for analytics by logging visibility state transitions to measure true user engagement",
+    "Defer non-critical background tasks like report generation or pre-fetching until the tab is visible to avoid degrading performance on hidden pages",
+    'Show a "Welcome back" notification or refresh stale data when the user returns to a tab that has been in the background',
+    "Conditionally disable auto-play media or real-time updates when the page is not visible to conserve bandwidth and battery on mobile devices"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useVisibilityChange.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useVisibilityChange(): boolean",
+  typeParams: [],
+  returnType: "boolean",
+  parameters: [],
+  returnValues: [
+    {
+      name: "isVisible",
+      type: "boolean",
+      description: "Whether the document is currently visible to the user. Returns true when the tab is in the foreground and the page is actively displayed. Returns false when the user has switched tabs, minimized the browser, or the page is otherwise in a background state. Defaults to true during SSR and on the initial render before the first useEffect fires, ensuring no hydration mismatch."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Visibility Status Indicator",
+      description: "Displays a real-time indicator showing whether the current tab is visible or hidden, updating instantly when the user switches tabs or minimizes the browser.",
+      code: `'use client';
+
+import { useVisibilityChange } from 'vayu-ui';
+import { Eye, EyeOff } from 'lucide-react';
+
+export default function VisibilityIndicator() {
+  const isVisible = useVisibilityChange();
+
+  return (
+    <div className="p-6 rounded-surface shadow-surface border bg-surface text-surface-content w-full max-w-md mx-auto flex flex-col items-center gap-4">
+      <div
+        className={\`p-4 rounded-full transition-colors duration-300 \${
+          isVisible ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+        }\`}
+      >
+        {isVisible ? <Eye className="w-12 h-12" /> : <EyeOff className="w-12 h-12" />}
+      </div>
+      <div className="flex flex-col items-center gap-1 text-center">
+        <span className="text-2xl font-bold">{isVisible ? 'Visible' : 'Hidden'}</span>
+        <p className="text-sm text-muted-content">
+          Switch tabs or minimize the window to see the state change.
+        </p>
+      </div>
+      <div className="w-full p-3 bg-muted/40 rounded-md text-sm border space-y-1">
+        <p className="font-mono">
+          document.hidden:{' '}
+          <span className="font-bold text-brand">{(!isVisible).toString()}</span>
+        </p>
+        <p className="font-mono">
+          Document State:{' '}
+          <span className="font-bold text-brand">
+            {isVisible ? 'Active' : 'Background'}
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["basic", "indicator", "status", "icon"]
+    },
+    {
+      title: "Pause Polling When Hidden",
+      description: "A data-fetching component that pauses its polling interval while the tab is hidden and resumes automatically when the user returns, saving network bandwidth and server load.",
+      code: `'use client';
+
+import { useVisibilityChange } from 'vayu-ui';
+import { useState, useEffect, useCallback } from 'react';
+
+interface Post {
+  id: number;
+  title: string;
+}
+
+export default function SmartPolling() {
+  const isVisible = useVisibilityChange();
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [lastFetched, setLastFetched] = useState<string>('');
+
+  const fetchPosts = useCallback(async () => {
+    try {
+      const res = await fetch('https://api.example.com/posts');
+      const data = await res.json();
+      setPosts(data.slice(0, 5));
+      setLastFetched(new Date().toLocaleTimeString());
+    } catch {
+      // Handle error silently for demo
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPosts();
+
+    if (!isVisible) return;
+
+    const interval = setInterval(fetchPosts, 5000);
+    return () => clearInterval(interval);
+  }, [isVisible, fetchPosts]);
+
+  return (
+    <div className="p-4 rounded-surface shadow-surface border bg-surface text-surface-content w-full max-w-md space-y-3">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold">Live Posts</h3>
+        <span
+          className={\`text-xs px-2 py-1 rounded-full \${
+            isVisible
+              ? 'bg-green-100 text-green-700'
+              : 'bg-amber-100 text-amber-700'
+          }\`}
+        >
+          {isVisible ? 'Polling active' : 'Polling paused'}
+        </span>
+      </div>
+      <ul className="space-y-2">
+        {posts.map((post) => (
+          <li key={post.id} className="text-sm p-2 rounded-md bg-muted/40">
+            {post.title}
+          </li>
+        ))}
+        {posts.length === 0 && (
+          <li className="text-sm text-muted-content">Loading...</li>
+        )}
+      </ul>
+      {lastFetched && (
+        <p className="text-xs text-muted-content">Last updated: {lastFetched}</p>
+      )}
+    </div>
+  );
+}`,
+      tags: ["polling", "data-fetching", "performance", "conditional"]
+    },
+    {
+      title: "Welcome Back Banner",
+      description: 'Shows a dismissible "Welcome back" banner when the user returns to the tab after it has been in the background, useful for refreshing stale data or re-engaging the user.',
+      code: `'use client';
+
+import { useVisibilityChange } from 'vayu-ui';
+import { useEffect, useState, useRef, useCallback } from 'react';
+
+export default function WelcomeBackBanner() {
+  const isVisible = useVisibilityChange();
+  const [showBanner, setShowBanner] = useState(false);
+  const wasHidden = useRef(false);
+  const [hiddenDuration, setHiddenDuration] = useState(0);
+  const hiddenAt = useRef<number | null>(null);
+
+  const handleVisibilityChange = useCallback(() => {
+    if (!isVisible) {
+      wasHidden.current = true;
+      hiddenAt.current = Date.now();
+    } else if (wasHidden.current && hiddenAt.current) {
+      const duration = Math.round((Date.now() - hiddenAt.current) / 1000);
+      setHiddenDuration(duration);
+      setShowBanner(true);
+      wasHidden.current = false;
+      hiddenAt.current = null;
+    }
+  }, [isVisible]);
+
+  useEffect(() => {
+    handleVisibilityChange();
+  }, [handleVisibilityChange]);
+
+  if (!showBanner) return null;
+
+  const formatDuration = (seconds: number): string => {
+    if (seconds < 60) return \`\${seconds} second\${seconds !== 1 ? 's' : ''}\`;
+    const minutes = Math.floor(seconds / 60);
+    return \`\${minutes} minute\${minutes !== 1 ? 's' : ''}\`;
+  };
+
+  return (
+    <div
+      className="fixed top-4 right-4 z-50 w-80 rounded-surface shadow-elevated border bg-surface text-surface-content p-4 animate-in slide-in-from-top-2"
+      role="status"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold">Welcome back!</p>
+          <p className="text-xs text-muted-content mt-1">
+            You were away for {formatDuration(hiddenDuration)}.
+            {hiddenDuration > 60 && ' Data may be outdated \u2014 consider refreshing.'}
+          </p>
+        </div>
+        <button
+          onClick={() => setShowBanner(false)}
+          className="text-xs text-muted-content hover:text-surface-content shrink-0"
+        >
+          Dismiss
+        </button>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["welcome-back", "re-engagement", "banner", "notification", "duration"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using the hook to gate critical logic that must run even when hidden",
+      bad: `const isVisible = useVisibilityChange();
+
+// Only sync data when visible \u2014 data is lost if user switches tabs during save
+useEffect(() => {
+  if (!isVisible) return;
+  syncToServer(formData);
+}, [isVisible, formData]);`,
+      good: `const isVisible = useVisibilityChange();
+
+// Critical operations must always run regardless of visibility
+useEffect(() => {
+  syncToServer(formData);
+}, [formData]);
+
+// Use visibility only for non-critical optimizations like polling throttling
+useEffect(() => {
+  if (!isVisible) return;
+  const id = setInterval(fetchUpdates, 5000);
+  return () => clearInterval(id);
+}, [isVisible]);`,
+      reason: "The Page Visibility API indicates display state, not whether work should be skipped. Critical operations like saving form data, sending analytics, or persisting state must complete even when the tab is hidden. Only use the visibility signal to defer or throttle non-critical, resource-intensive tasks like polling, animations, or pre-fetching."
+    },
+    {
+      title: "Manually polling document.hidden instead of using the hook",
+      bad: `const [visible, setVisible] = useState(true);
+
+useEffect(() => {
+  const id = setInterval(() => {
+    setVisible(!document.hidden);
+  }, 1000);
+  return () => clearInterval(id);
+}, []);`,
+      good: `import { useVisibilityChange } from 'vayu-ui';
+
+const isVisible = useVisibilityChange();
+// The hook uses the event-driven visibilitychange event,
+// so updates are instant and zero-cost between state changes.`,
+      reason: "Polling document.hidden on an interval is wasteful \u2014 it burns CPU cycles checking a value that rarely changes. The visibilitychange event fires exactly when the state transitions, making it both more efficient and more responsive than any polling approach."
+    },
+    {
+      title: "Assuming the hook can detect individual tab focus within the same browser window",
+      bad: `const isVisible = useVisibilityChange();
+
+// Assuming this detects whether the tab has focus vs another tab in the same window
+if (!isVisible) {
+  console.log('User is looking at another tab');
+}`,
+      good: `const isVisible = useVisibilityChange();
+
+// isVisible only tells you if the tab content is painted on screen.
+// It does NOT distinguish between two visible tabs in the same window.
+// For focus detection, listen to the window "focus" and "blur" events instead.
+
+if (!isVisible) {
+  console.log('Page is in the background (minimized or different tab is active)');
+}`,
+      reason: 'The Page Visibility API reports whether the page content is being painted on screen. A tab that is visible but unfocused (e.g. the user clicked the address bar, or two tabs are side-by-side) still reports isVisible as true. To detect per-tab focus/blur, use the window "focus" and "blur" events instead.'
+    },
+    {
+      title: "Using the hook in a server component or SSR-critical path",
+      bad: `// In a server component (no 'use client' directive)
+import { useVisibilityChange } from 'vayu-ui';
+
+export default function Page() {
+  const isVisible = useVisibilityChange();
+  if (!isVisible) return <StaticSkeleton />;
+  return <LiveContent />;
+}`,
+      good: `'use client';
+
+import { useVisibilityChange } from 'vayu-ui';
+
+export default function VisibilityAwareContent() {
+  const isVisible = useVisibilityChange();
+  // Hook always returns true during SSR, so hide SSR-only logic elsewhere
+  if (!isVisible) return <PausedState />;
+  return <LiveContent />;
+}`,
+      reason: 'useVisibilityChange relies on document.hidden and the visibilitychange event, neither of which exist on the server. The hook defaults to true during SSR to avoid hydration mismatches, which means any conditional logic based on a false value will never execute server-side. Always use it in a client component with the "use client" directive.'
+    }
+  ]
+};
+
+// src/hooks/use-window-size.ts
+var useWindowSizeEntry = {
+  // ── Identity ──────────────────────────────────────────
+  slug: "use-window-size",
+  name: "useWindowSize",
+  type: "hook",
+  // ── Description ───────────────────────────────────────
+  description: "Reactive hook that tracks the browser viewport width and height, updating on every resize event with SSR-safe defaults.",
+  longDescription: "Wraps window.innerWidth and window.innerHeight into a React-friendly hook that returns a WindowSize object ({ width, height }). It subscribes to the native resize event inside a useEffect so the component re-renders automatically whenever the viewport changes. On the initial render (and during SSR), width and height are both 0, which avoids hydration mismatches because the real dimensions are only read client-side after mount. Cleanup is handled automatically \u2014 the resize listener is removed when the component unmounts. No external dependencies beyond React are required. Use this hook when you need the actual viewport dimensions for responsive logic, layout calculations, or conditional rendering \u2014 it is lighter and more targeted than useMeasure, which tracks a specific DOM element rather than the viewport.",
+  tags: [
+    "window",
+    "viewport",
+    "resize",
+    "dimensions",
+    "responsive",
+    "width",
+    "height",
+    "breakpoint",
+    "sensor",
+    "ssr-safe"
+  ],
+  category: "sensor",
+  useCases: [
+    "When you need to switch between mobile and desktop layouts based on the actual viewport width instead of CSS media queries",
+    "To dynamically adjust the number of columns in a grid or masonry layout as the user resizes the browser window",
+    "When building a dashboard that needs to calculate chart dimensions or canvas sizes from the available viewport space",
+    "To conditionally render a mobile navigation drawer vs. a desktop sidebar based on the current window width",
+    "When you need to detect orientation changes on tablets or mobile devices by comparing width against height",
+    "To implement a responsive data table that collapses columns when the viewport shrinks below a threshold"
+  ],
+  // ── File & CLI ────────────────────────────────────────
+  fileName: "useWindowSize.ts",
+  targetPath: "src/hooks",
+  // ── Signature ─────────────────────────────────────────
+  signature: "function useWindowSize(): WindowSize",
+  returnType: "WindowSize",
+  parameters: [],
+  returnValues: [
+    {
+      name: "width",
+      type: "number",
+      description: "Current viewport width in pixels (window.innerWidth). Value is 0 during SSR and on the initial server-rendered HTML before the client-side hydration sets the real value."
+    },
+    {
+      name: "height",
+      type: "number",
+      description: "Current viewport height in pixels (window.innerHeight). Value is 0 during SSR and on the initial server-rendered HTML before the client-side hydration sets the real value."
+    }
+  ],
+  // ── Dependencies ──────────────────────────────────────
+  npmDependencies: [],
+  registryDependencies: [],
+  // ── Examples ──────────────────────────────────────────
+  examples: [
+    {
+      title: "Responsive Layout Switch",
+      description: "Renders a mobile-friendly stacked layout when the viewport is narrow and a multi-column layout when it is wide, switching in real-time as the user resizes.",
+      code: `import { useWindowSize } from 'vayu-ui';
+
+export default function ResponsiveLayout() {
+  const { width } = useWindowSize();
+
+  if (width === 0) {
+    return <div className="animate-pulse h-96 bg-muted rounded-surface" />;
+  }
+
+  const isMobile = width < 768;
+
+  return (
+    <div className={isMobile ? 'flex flex-col gap-4' : 'grid grid-cols-3 gap-4'}>
+      <div className="p-4 rounded-surface bg-surface text-surface-content border">Sidebar</div>
+      <div className={isMobile ? '' : 'col-span-2'} >
+        <div className="p-4 rounded-surface bg-surface text-surface-content border">Main Content</div>
+      </div>
+    </div>
+  );
+}`,
+      tags: ["responsive", "layout", "mobile", "breakpoint"]
+    },
+    {
+      title: "Dynamic Grid Columns",
+      description: "Calculates the optimal number of columns for a card grid based on viewport width, with a minimum column width of 280px.",
+      code: `import { useWindowSize } from 'vayu-ui';
+import { useMemo } from 'react';
+
+export default function DynamicCardGrid() {
+  const { width } = useWindowSize();
+
+  const columns = useMemo(() => {
+    if (width === 0) return 1;
+    const colCount = Math.floor(width / 280);
+    return Math.max(1, Math.min(colCount, 5));
+  }, [width]);
+
+  return (
+    <div
+      className="grid gap-4"
+      style={{ gridTemplateColumns: \`repeat(\${columns}, minmax(0, 1fr))\` }}
+    >
+      {Array.from({ length: 12 }, (_, i) => (
+        <div key={i} className="p-4 rounded-surface bg-surface text-surface-content border">
+          Card {i + 1}
+        </div>
+      ))}
+    </div>
+  );
+}`,
+      tags: ["grid", "columns", "dynamic", "card"]
+    },
+    {
+      title: "Orientation Detection",
+      description: "Detects whether the device is in portrait or landscape orientation by comparing width and height, and displays a visual indicator.",
+      code: `import { useWindowSize } from 'vayu-ui';
+
+export default function OrientationIndicator() {
+  const { width, height } = useWindowSize();
+
+  if (width === 0 || height === 0) {
+    return null;
+  }
+
+  const isLandscape = width > height;
+  const orientation = isLandscape ? 'Landscape' : 'Portrait';
+
+  return (
+    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-control bg-surface text-surface-content border text-sm">
+      <span
+        className={\`inline-block w-4 h-4 border-2 border-current rounded-sm transition-transform \${
+          isLandscape ? 'rotate-90' : ''
+        }\`}
+      />
+      <span>{orientation}</span>
+      <span className="text-muted tabular-nums">
+        {width} &times; {height}
+      </span>
+    </div>
+  );
+}`,
+      tags: ["orientation", "portrait", "landscape", "display"]
+    },
+    {
+      title: "Viewport-Aware Canvas",
+      description: "Renders a canvas element that fills the available viewport and resizes automatically, useful for full-screen visualizations or games.",
+      code: `import { useWindowSize } from 'vayu-ui';
+import { useEffect, useRef } from 'react';
+
+export default function ViewportCanvas() {
+  const { width, height } = useWindowSize();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || width === 0 || height === 0) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.fillStyle = '#e94560';
+    ctx.font = \`\${Math.max(16, width * 0.03)}px sans-serif\`;
+    ctx.textAlign = 'center';
+    ctx.fillText(\`Viewport: \${width} \xD7 \${height}\`, width / 2, height / 2);
+  }, [width, height]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      width={width}
+      height={height}
+      className="block w-full h-full"
+    />
+  );
+}`,
+      tags: ["canvas", "full-screen", "visualization", "resize"]
+    }
+  ],
+  // ── Anti-patterns ─────────────────────────────────────
+  doNot: [
+    {
+      title: "Using width/height before the client has mounted",
+      bad: `const { width } = useWindowSize();
+const columns = Math.floor(width / 300);
+// On SSR, columns = Math.floor(0 / 300) = 0 \u2014 layout breaks`,
+      good: `const { width } = useWindowSize();
+if (width === 0) return <Skeleton />;
+const columns = Math.floor(width / 300);`,
+      reason: "During SSR and the initial client render before the useEffect fires, width and height are both 0. Any layout calculations, divisions, or responsive logic that uses these values will produce incorrect results (e.g., zero columns, divide-by-zero). Always guard against the zero state."
+    },
+    {
+      title: "Calling the hook conditionally or inside a loop",
+      bad: `if (isResponsive) {
+  const { width } = useWindowSize();
+}`,
+      good: `const { width } = useWindowSize();
+// Use the value conditionally instead
+const isMobile = width < 768 && isResponsive;`,
+      reason: "useWindowSize uses useState and useEffect internally, which means it must follow the Rules of Hooks \u2014 it cannot be called conditionally, inside loops, or after early returns. Always call the hook at the top level of your component."
+    },
+    {
+      title: "Using this to measure a specific DOM element",
+      bad: `const { width } = useWindowSize();
+// width is the viewport, not the element!
+const shouldWrap = myElementRef.current.offsetWidth > width;`,
+      good: `import { useMeasure } from 'vayu-ui';
+const [ref, { width }] = useMeasure();
+// width is now the actual element width
+<div ref={ref}>...</div>`,
+      reason: "useWindowSize returns the viewport (window) dimensions, not the dimensions of a specific DOM element. If you need to measure a particular element, use useMeasure instead, which uses a ResizeObserver on the attached ref."
+    },
+    {
+      title: "Expecting pixel-perfect values on every frame during rapid resizing",
+      bad: `const { width, height } = useWindowSize();
+// Using these for smooth animations or frame-by-frame rendering
+const scaleX = width / previousWidth;`,
+      good: `const { width, height } = useWindowSize();
+// Use for layout decisions, not animation keyframes
+const isWide = width >= 1280;`,
+      reason: "The hook relies on the native resize event, which is throttled by the browser and may not fire on every animation frame during rapid resizing. For smooth resize-driven animations, use CSS transitions or a ResizeObserver-based approach instead."
+    }
+  ]
+};
 export {
   accordionEntry,
   affixEntry,
@@ -25768,6 +35418,37 @@ export {
   toasterEntry,
   tooltipEntry,
   tourEntry,
-  typographyEntry
+  typographyEntry,
+  useBatteryStatusEntry,
+  useConfirmExitEntry,
+  useCopyToClipboardEntry,
+  useDebounceEntry,
+  useDeviceOSEntry,
+  useElementPositionEntry,
+  useHoverEntry,
+  useIdleEntry,
+  useIndexedDBEntry,
+  useIntervalWhenEntry,
+  useKeyPressEntry,
+  useListEntry,
+  useLocalStorageEntry,
+  useLockBodyScrollEntry,
+  useMapEntry,
+  useMeasureEntry,
+  useMediaQueryEntry,
+  useMouseTrackEntry,
+  useNetworkStatusEntry,
+  useOnClickOutsideEntry,
+  usePageLeaveEntry,
+  usePermissionEntry,
+  usePreviousStateEntry,
+  useQueueEntry,
+  useRenderCountEntry,
+  useScrollPositionEntry,
+  useSetEntry,
+  useThrottleEntry,
+  useTimeoutEntry,
+  useVisibilityChangeEntry,
+  useWindowSizeEntry
 };
 //# sourceMappingURL=index.js.map

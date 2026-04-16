@@ -1,11 +1,16 @@
 'use client';
 
 import { useIsMount } from 'vayu-ui';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RotateCcw } from 'lucide-react';
 
 const ChildComponent = () => {
   const isMount = useIsMount();
+  const [, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div

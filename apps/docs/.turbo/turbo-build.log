@@ -11,46 +11,46 @@
 
 ▲ Next.js 16.1.6 (Turbopack)
 
-[MDX] generated files in 16.73466600000006ms
+[MDX] generated files in 15.61870799999997ms
   Creating an optimized production build ...
+✓ Compiled successfully in 10.1s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/327) ...
+  Generating static pages using 7 workers (81/327) 
+  Generating static pages using 7 workers (163/327) 
+  Generating static pages using 7 workers (245/327) 
+Error reading localStorage key: demo-key ReferenceError: localStorage is not defined
+    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_4730dfc8._.js:1:41863)
+    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_4730dfc8._.js:1:41847)
+    at d (.next/server/chunks/ssr/Desktop_Workspace_VedUI_4730dfc8._.js:1:42314)
+✓ Generating static pages using 7 workers (327/327) in 3.7s
+  Finalizing page optimization ...
 
-> Build error occurred
-Error: Turbopack build failed with 1 errors:
-./Desktop/Workspace/VedUI/apps/docs/content/docs/components/audio-player.mdx.js:341:1
-Module not found: Can't resolve '@/components/demos/audio-player-demo'
-[0m [90m 339 |[39m   }]
- [90m 340 |[39m }[33m;[39m
-[31m[1m>[22m[39m[90m 341 |[39m [36mimport[39m [33mAudioPlayerDemo[39m [36mfrom[39m [32m'@/components/demos/audio-player-demo'[39m[33m;[39m
- [90m     |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
- [90m 342 |[39m [36mimport[39m {[33mTab[39m[33m,[39m [33mTabs[39m} [36mfrom[39m [32m'fumadocs-ui/components/tabs'[39m[33m;[39m
- [90m 343 |[39m [36mexport[39m [36mconst[39m toc [33m=[39m [{
- [90m 344 |[39m   depth[33m:[39m [35m2[39m[33m,[39m[0m
-
-Import map: aliased to relative './src/components/demos/audio-player-demo' inside of [project]/Desktop/Workspace/VedUI/apps/docs
-
-
-Import traces:
-  App Route:
-    ./Desktop/Workspace/VedUI/apps/docs/content/docs/components/audio-player.mdx.js
-    ./Desktop/Workspace/VedUI/apps/docs/.source/server.ts
-    ./Desktop/Workspace/VedUI/apps/docs/src/lib/source.ts
-    ./Desktop/Workspace/VedUI/apps/docs/src/app/api/search/route.ts
-
-  Server Component:
-    ./Desktop/Workspace/VedUI/apps/docs/content/docs/components/audio-player.mdx.js
-    ./Desktop/Workspace/VedUI/apps/docs/.source/server.ts
-    ./Desktop/Workspace/VedUI/apps/docs/src/lib/source.ts
-    ./Desktop/Workspace/VedUI/apps/docs/src/app/docs/[[...slug]]/page.tsx
-
-https://nextjs.org/docs/messages/module-not-found
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/search
+├ ● /docs/[[...slug]]
+│ ├ /docs/cli-support
+│ ├ /docs
+│ ├ /docs/maintainers
+│ └ [+104 more paths]
+├ ○ /llms-full.txt
+├ ● /llms.mdx/docs/[[...slug]]
+│ ├ /llms.mdx/docs/cli-support
+│ ├ /llms.mdx/docs
+│ ├ /llms.mdx/docs/maintainers
+│ └ [+104 more paths]
+├ ○ /llms.txt
+└ ● /og/docs/[...slug]
+  ├ /og/docs/cli-support/image.png
+  ├ /og/docs/image.png
+  ├ /og/docs/maintainers/image.png
+  └ [+104 more paths]
 
 
-    at <unknown> (./Desktop/Workspace/VedUI/apps/docs/content/docs/components/audio-player.mdx.js:341:1)
-    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
-npm error Lifecycle script `build` failed with error:
-npm error code 1
-npm error path /Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs
-npm error workspace vayu-ui-docs@0.0.0
-npm error location /Users/rugvedpatel/Desktop/Workspace/VedUI/apps/docs
-npm error command failed
-npm error command sh -c next build
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

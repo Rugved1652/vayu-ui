@@ -18,13 +18,14 @@ The `useCountdown` hook provides a simple way to implement a countdown timer in 
 Copy this code into `src/hooks/useCountdown.ts`:
 
 ```tsx
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
-interface UseCountdownOptions {
+export interface UseCountdownOptions {
   seconds: number;
   interval?: number;
   onTick?: (timeLeft: number) => void;
   onComplete?: () => void;
+  autoStart?: boolean;
 }
 
 export const useCountdown = ({
@@ -32,49 +33,64 @@ export const useCountdown = ({
   interval = 1000,
   onTick,
   onComplete,
+  autoStart = false,
 }: UseCountdownOptions) => {
   const [timeLeft, setTimeLeft] = useState(seconds);
-  const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(autoStart);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  const onTickRef = useRef(onTick);
+  const onCompleteRef = useRef(onComplete);
+
   useEffect(() => {
-    if (isRunning && timeLeft > 0) {
-      intervalRef.current = setInterval(() => {
-        setTimeLeft((prev) => {
-          const newTime = prev - 1;
-          if (onTick) onTick(newTime);
-          if (newTime <= 0) {
-            clearInterval(intervalRef.current!);
-            setIsRunning(false);
-            if (onComplete) onComplete();
-          }
-          return newTime > 0 ? newTime : 0;
-        });
-      }, interval);
-    }
+    onTickRef.current = onTick;
+  }, [onTick]);
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  useEffect(() => {
+    if (!isRunning) return;
+
+    intervalRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        const newTime = prev - 1;
+        onTickRef.current?.(newTime);
+        if (newTime <= 0) {
+          clearInterval(intervalRef.current!);
+          setIsRunning(false);
+          onCompleteRef.current?.();
+        }
+        return newTime > 0 ? newTime : 0;
+      });
+    }, interval);
+
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isRunning, timeLeft, interval, onTick, onComplete]);
+  }, [isRunning, interval]);
 
-  const start = () => {
+  useEffect(() => {
     if (!isRunning) {
-      setIsRunning(true);
+      setTimeLeft(seconds);
     }
-  };
+  }, [seconds, isRunning]);
 
-  const pause = () => {
-    if (isRunning) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      setIsRunning(false);
-    }
-  };
+  const start = useCallback(() => {
+    setIsRunning(true);
+  }, []);
 
-  const reset = () => {
+  const pause = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setIsRunning(false);
+  }, []);
+
+  const reset = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setTimeLeft(seconds);
     setIsRunning(false);
-  };
+  }, [seconds]);
 
   return { timeLeft, start, pause, reset, isRunning };
 };
@@ -110,12 +126,13 @@ const CountdownComponent = () => {
 
 ### Options
 
-| Property     | Type                         | Default      | Description                                        |
-| :----------- | :--------------------------- | :----------- | :------------------------------------------------- |
-| `seconds`    | `number`                     | **Required** | The initial time in seconds.                       |
-| `interval`   | `number`                     | `1000`       | The interval in milliseconds (default: 1 second).  |
-| `onTick`     | `(timeLeft: number) => void` | `undefined`  | Callback function called on every tick.            |
-| `onComplete` | `() => void`                 | `undefined`  | Callback function called when countdown reaches 0. |
+| Property     | Type                         | Default      | Description                                            |
+| :----------- | :--------------------------- | :----------- | :----------------------------------------------------- |
+| `seconds`    | `number`                     | **Required** | The initial time in seconds.                           |
+| `interval`   | `number`                     | `1000`       | The interval in milliseconds (default: 1 second).      |
+| `onTick`     | `(timeLeft: number) => void` | `undefined`  | Callback function called on every tick.                 |
+| `onComplete` | `() => void`                 | `undefined`  | Callback function called when countdown reaches 0.      |
+| `autoStart`  | `boolean`                    | `false`      | Whether to start the countdown immediately on mount.    |
 
 ### Return Value
 
