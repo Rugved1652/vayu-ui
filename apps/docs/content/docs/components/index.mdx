@@ -12,6 +12,7 @@ import {
   Ratio,
   Music,
   User,
+  Users,
   Badge as BadgeIcon,
   Calendar,
   ChevronRight,
@@ -19,7 +20,6 @@ import {
   Group,
   CreditCard,
   GalleryHorizontal,
-  Briefcase,
   CheckSquare,
   ChevronsUpDown,
   Palette,
@@ -30,12 +30,8 @@ import {
   GripVertical,
   PanelBottom,
   UploadCloud,
-  PanelTop,
+  Dock,
   IdCard,
-  Tag,
-  Link,
-  Image,
-  Map,
   MoveHorizontal,
   Menu,
   AppWindow,
@@ -47,20 +43,19 @@ import {
   CircleDot,
   Star,
   Move,
-  Shield,
   ChevronDown,
   Eye,
   Sidebar,
   Loader,
   SlidersHorizontal,
   Loader2,
+  ArrowRight,
   ToggleRight,
   Library,
   Table,
   Type,
   AlignLeft,
   Clock,
-  GitCommit,
   Bell,
   MessageCircle,
   MapPin,
@@ -130,7 +125,7 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   </Card>
   <Card
     icon={<Ratio />}
-    href="/docs/components/aspect-ratio"
+    href="/docs/components/aspectratio"
     title={<CardTitle type="server">Aspect Ratio</CardTitle>}
   >
     Displays content within a desired ratio.
@@ -142,12 +137,19 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   >
     A custom audio player component.
   </Card>
-  <Card
+<Card
     icon={<User />}
     href="/docs/components/avatar"
     title={<CardTitle type="client">Avatar</CardTitle>}
   >
     An image element with a fallback for representing the user.
+  </Card>
+  <Card
+    icon={<Users />}
+    href="/docs/components/avatargroup"
+    title={<CardTitle type="client">Avatar Group</CardTitle>}
+  >
+    A component for displaying multiple avatars grouped together.
   </Card>
   <Card
     icon={<BadgeIcon />}
@@ -158,7 +160,7 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   </Card>
   <Card
     icon={<Calendar />}
-    href="/docs/components/big-calendar"
+    href="/docs/components/bigcalendar"
     title={<CardTitle type="client">Big Calendar</CardTitle>}
   >
     A full-sized calendar component.
@@ -179,7 +181,7 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   </Card>
   <Card
     icon={<Group />}
-    href="/docs/components/button-group"
+    href="/docs/components/buttongroup"
     title={<CardTitle type="server">Button Group</CardTitle>}
   >
     Group a series of buttons together.
@@ -199,13 +201,6 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
     A slideshow component for cycling through elements.
   </Card>
   <Card
-    icon={<Briefcase />}
-    href="/docs/components/case"
-    title={<CardTitle type="server">Case</CardTitle>}
-  >
-    Conditional rendering component.
-  </Card>
-  <Card
     icon={<CheckSquare />}
     href="/docs/components/checkbox"
     title={<CardTitle type="client">Checkbox</CardTitle>}
@@ -221,28 +216,21 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   </Card>
   <Card
     icon={<Palette />}
-    href="/docs/components/color-picker"
+    href="/docs/components/colorpicker"
     title={<CardTitle type="client">Color Picker</CardTitle>}
   >
     A component for selecting colors.
   </Card>
-  <Card
-    icon={<ChevronsUpDown />}
-    href="/docs/components/combobox"
-    title={<CardTitle type="client">Combobox</CardTitle>}
-  >
-    Autocomplete input and command palette.
-  </Card>
-  <Card
+<Card
     icon={<Command />}
-    href="/docs/components/command-box"
+    href="/docs/components/commandbox"
     title={<CardTitle type="client">Command Box</CardTitle>}
   >
     Fast, composable, unstyled command menu.
   </Card>
   <Card
     icon={<MousePointer2 />}
-    href="/docs/components/context-menu"
+    href="/docs/components/contextmenu"
     title={<CardTitle type="client">Context Menu</CardTitle>}
   >
     Displays a menu to the user — such as a set of actions or functions — triggered by a button.
@@ -263,7 +251,7 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   </Card>
   <Card
     icon={<GripVertical />}
-    href="/docs/components/draggablelist"
+    href="/docs/components/draggable"
     title={<CardTitle type="client">Draggable List</CardTitle>}
   >
     A list that can be reordered via drag and drop.
@@ -277,10 +265,17 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   </Card>
   <Card
     icon={<UploadCloud />}
-    href="/docs/components/fileuploader"
+    href="/docs/components/fileupload"
     title={<CardTitle type="client">File Uploader</CardTitle>}
   >
     A component for uploading files.
+  </Card>
+  <Card
+    icon={<Dock />}
+    href="/docs/components/floatingdock"
+    title={<CardTitle type="client">Floating Dock</CardTitle>}
+  >
+    A macOS-style floating dock component.
   </Card>
   <Card
     icon={<PanelBottom />}
@@ -289,43 +284,12 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   >
     A footer component.
   </Card>
-  <Card
-    icon={<PanelTop />}
-    href="/docs/components/header"
-    title={<CardTitle type="server">Header</CardTitle>}
-  >
-    A header component.
-  </Card>
-  <Card
+<Card
     icon={<IdCard />}
     href="/docs/components/hovercard"
     title={<CardTitle type="client">Hover Card</CardTitle>}
   >
     For sighted users to preview content available behind a link.
-  </Card>
-  <Card
-    icon={<Tag />}
-    href="/docs/components/label"
-    title={<CardTitle type="server">Label</CardTitle>}
-  >
-    Renders an accessible label associated with controls.
-  </Card>
-  <Card
-    icon={<Link />}
-    href="/docs/components/link"
-    title={<CardTitle type="server">Link</CardTitle>}
-  >
-    A link component.
-  </Card>
-  <Card
-    icon={<Image />}
-    href="/docs/components/logo"
-    title={<CardTitle type="client">Logo</CardTitle>}
-  >
-    The brand logo component.
-  </Card>
-  <Card icon={<Map />} href="/docs/components/map" title={<CardTitle type="client">Map</CardTitle>}>
-    A map component.
   </Card>
   <Card
     icon={<MoveHorizontal />}
@@ -399,17 +363,10 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   </Card>
   <Card
     icon={<Move />}
-    href="/docs/components/resizable"
-    title={<CardTitle type="client">Resizable</CardTitle>}
+    href="/docs/components/resizablepane"
+    title={<CardTitle type="client">Resizable Pane</CardTitle>}
   >
     Accessible resizable panel groups and layouts.
-  </Card>
-  <Card
-    icon={<Shield />}
-    href="/docs/components/roleguard"
-    title={<CardTitle type="server">Role Guard</CardTitle>}
-  >
-    A component to guard content based on user roles.
   </Card>
   <Card
     icon={<ChevronDown />}
@@ -454,6 +411,13 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
     A loading spinner component.
   </Card>
   <Card
+    icon={<ArrowRight />}
+    href="/docs/components/stepper"
+    title={<CardTitle type="client">Stepper</CardTitle>}
+  >
+    A step-by-step progress indicator component.
+  </Card>
+  <Card
     icon={<ToggleRight />}
     href="/docs/components/switch"
     title={<CardTitle type="client">Switch</CardTitle>}
@@ -490,19 +454,12 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   </Card>
   <Card
     icon={<Clock />}
-    href="/docs/components/time-picker"
+    href="/docs/components/timepicker"
     title={<CardTitle type="client">Time Picker</CardTitle>}
   >
     A time picker component.
   </Card>
-  <Card
-    icon={<GitCommit />}
-    href="/docs/components/timeline"
-    title={<CardTitle type="server">Timeline</CardTitle>}
-  >
-    A timeline component.
-  </Card>
-  <Card
+<Card
     icon={<Bell />}
     href="/docs/components/toaster"
     title={<CardTitle type="client">Toaster</CardTitle>}
@@ -539,7 +496,7 @@ Vayu UI provides a set of accessible, performant, and customizable components bu
   </Card>
   <Card
     icon={<Video />}
-    href="/docs/components/videoplayer"
+    href="/docs/components/video-player"
     title={<CardTitle type="client">Video Player</CardTitle>}
   >
     A custom video player component.

@@ -5,8 +5,7 @@
 import { clsx } from 'clsx';
 import { forwardRef, useRef, useLayoutEffect, useState, useEffect } from 'react';
 
-import { CheckIcon } from '../../icons/check-icon';
-import { MinusIcon } from '../../icons/minus-icon';
+import { Check, Minus } from 'lucide-react';
 import { useCheckboxContext } from './hooks';
 import type { CheckboxIndicatorProps } from './types';
 
@@ -115,9 +114,9 @@ export const CheckboxIndicator = forwardRef<HTMLInputElement, CheckboxIndicatorP
           aria-hidden="true"
         >
           {indeterminate ? (
-            <MinusIcon size={14} className="text-brand-content pointer-events-none" />
+            <Minus size={14} className="text-brand-content pointer-events-none" />
           ) : (
-            <CheckIcon
+            <Check
               size={14}
               className={clsx(
                 'text-brand-content pointer-events-none transition-opacity duration-200',

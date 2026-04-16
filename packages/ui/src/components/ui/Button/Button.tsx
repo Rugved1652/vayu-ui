@@ -104,7 +104,7 @@ const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const buttonClasses = clsx(
-      'relative inline-flex items-center justify-center',
+      'relative cursor-pointer inline-flex items-center justify-center',
       'rounded-control',
       'font-medium',
       'transition-all duration-150 ease-in-out',
