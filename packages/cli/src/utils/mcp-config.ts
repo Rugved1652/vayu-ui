@@ -1,12 +1,13 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
-export type ToolId = 'claude' | 'cursor' | 'vscode' | 'windsurf';
+export type ToolId = 'claude' | 'cursor' | 'vscode' | 'windsurf' | 'antigravity';
 
 export interface ToolDefinition {
   id: ToolId;
   name: string;
   configFileName: string;
+  globalConfigFileName?: string;
   topLevelKey: string;
 }
 
@@ -20,7 +21,8 @@ export const TOOL_DEFINITIONS: Record<ToolId, ToolDefinition> = {
   claude: {
     id: 'claude',
     name: 'Claude Code',
-    configFileName: '.claude/settings.json',
+    configFileName: '.mcp.json',
+    globalConfigFileName: '.claude.json',
     topLevelKey: 'mcpServers',
   },
   cursor: {
@@ -41,9 +43,15 @@ export const TOOL_DEFINITIONS: Record<ToolId, ToolDefinition> = {
     configFileName: '.windsurf/mcp.json',
     topLevelKey: 'mcpServers',
   },
+  antigravity: {
+    id: 'antigravity',
+    name: 'Antigravity',
+    configFileName: 'antigravity.config.json',
+    topLevelKey: 'mcpServers',
+  },
 };
 
-export const ALL_TOOL_IDS: ToolId[] = ['claude', 'cursor', 'vscode', 'windsurf'];
+export const ALL_TOOL_IDS: ToolId[] = ['claude', 'cursor', 'vscode', 'windsurf', 'antigravity'];
 
 export function buildServerEntry(toolId: ToolId): Record<string, unknown> {
   const base = {
@@ -53,19 +61,25 @@ export function buildServerEntry(toolId: ToolId): Record<string, unknown> {
   if (toolId === 'vscode') {
     return { type: 'stdio', ...base };
   }
+  if (toolId === 'antigravity') {
+    return { ...base, transport: 'stdio' };
+  }
   return base;
 }
 
-export function getConfigPath(toolId: ToolId, targetDir: string): string {
-  return join(targetDir, TOOL_DEFINITIONS[toolId].configFileName);
+export function getConfigPath(toolId: ToolId, targetDir: string, isGlobal = false): string {
+  const def = TOOL_DEFINITIONS[toolId];
+  const fileName = isGlobal && def.globalConfigFileName ? def.globalConfigFileName : def.configFileName;
+  return join(targetDir, fileName);
 }
 
 export function writeMcpConfig(
   toolDef: ToolDefinition,
   targetDir: string,
-  options: { dryRun: boolean; force: boolean },
+  options: { dryRun: boolean; force: boolean; isGlobal?: boolean },
 ): WriteResult {
-  const configPath = join(targetDir, toolDef.configFileName);
+  const fileName = options.isGlobal && toolDef.globalConfigFileName ? toolDef.globalConfigFileName : toolDef.configFileName;
+  const configPath = join(targetDir, fileName);
   const serverEntry = buildServerEntry(toolDef.id);
 
   let json: Record<string, any> = {};

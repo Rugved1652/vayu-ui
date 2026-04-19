@@ -26,7 +26,7 @@ export default class InstallMcp extends Command {
 
   static flags = {
     tool: Flags.string({
-      description: 'Comma-separated AI tools: claude, cursor, vscode, windsurf',
+      description: 'Comma-separated AI tools: claude, cursor, vscode, windsurf, antigravity',
     }),
     global: Flags.boolean({
       description: 'Configure globally (home directory) instead of project-level',
@@ -87,12 +87,14 @@ export default class InstallMcp extends Command {
         const result = writeMcpConfig(toolDef, targetDir, {
           dryRun: true,
           force: flags.force,
+          isGlobal: flags.global,
         });
+        const displayFile = flags.global && toolDef.globalConfigFileName ? toolDef.globalConfigFileName : toolDef.configFileName;
         if (result.action === 'dry-run') {
-          this.log(`    ${ux.colorize('cyan', 'would write')} ${toolDef.configFileName}`);
+          this.log(`    ${ux.colorize('cyan', 'would write')} ${displayFile}`);
         } else if (result.action === 'skipped-exists') {
           this.log(
-            `    ${ux.colorize('yellow', 'already configured')} ${toolDef.configFileName}`,
+            `    ${ux.colorize('yellow', 'already configured')} ${displayFile}`,
           );
         }
       }
@@ -109,6 +111,7 @@ export default class InstallMcp extends Command {
       const result = writeMcpConfig(toolDef, targetDir, {
         dryRun: false,
         force: flags.force,
+        isGlobal: flags.global,
       });
       results.push(result);
     }
@@ -125,7 +128,8 @@ export default class InstallMcp extends Command {
 
     for (const result of results) {
       const toolDef = TOOL_DEFINITIONS[result.toolId];
-      const relPath = toolDef.configFileName;
+      const fileName = flags.global && toolDef.globalConfigFileName ? toolDef.globalConfigFileName : toolDef.configFileName;
+      const relPath = fileName;
       if (result.action === 'created') {
         this.log(`    ${ux.colorize('green', 'created')}  ${toolDef.name.padEnd(16)} ${relPath}`);
       } else if (result.action === 'updated') {
@@ -185,7 +189,7 @@ export default class InstallMcp extends Command {
     this.log('');
     for (const id of toolIds) {
       const def = TOOL_DEFINITIONS[id];
-      const configPath = getConfigPath(id, targetDir);
+      const configPath = getConfigPath(id, targetDir, isGlobal);
       this.log(`    ${def.name.padEnd(16)} ${configPath}`);
     }
   }

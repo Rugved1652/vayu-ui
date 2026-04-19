@@ -275,7 +275,7 @@ npx vayu-ui remove button --force
 
 Configures the Vayu UI MCP server (17 tools for component discovery, props, variants, scaffolding, etc.) for AI coding tools. The server runs via `npx` — no local installation needed.
 
-Supports **Claude Code**, **Cursor**, **VS Code Copilot**, and **Windsurf**.
+Supports **Claude Code**, **Cursor**, **VS Code Copilot**, **Windsurf**, and **Antigravity**.
 
 ```bash
 # Interactive — prompts which tools to configure
@@ -303,10 +303,11 @@ npx vayu-ui install-mcp --dry-run
 
 | Tool            | Project-level             | Global                    |
 | --------------- | ------------------------- | ------------------------- |
-| Claude Code     | `.claude/settings.json`   | `~/.claude/settings.json` |
+| Claude Code     | `.mcp.json`               | `~/.claude.json`          |
 | Cursor          | `.cursor/mcp.json`        | `~/.cursor/mcp.json`      |
 | VS Code Copilot | `.vscode/mcp.json`        | `~/.vscode/mcp.json`      |
 | Windsurf        | `.windsurf/mcp.json`      | `~/.windsurf/mcp.json`    |
+| Antigravity     | `antigravity.config.json` | —                         |
 
 **Entry added:**
 
@@ -325,7 +326,7 @@ npx vayu-ui install-mcp --dry-run
 
 | Flag        | Description                                              |
 | ----------- | -------------------------------------------------------- |
-| `--tool`    | Comma-separated AI tools: `claude`, `cursor`, `vscode`, `windsurf` |
+| `--tool`    | Comma-separated AI tools: `claude`, `cursor`, `vscode`, `windsurf`, `antigravity` |
 | `--global`  | Configure globally (home directory) instead of project-level |
 | `--dry-run` | Preview changes without writing files                    |
 | `--force`   | Skip prompts and overwrite existing entries              |
