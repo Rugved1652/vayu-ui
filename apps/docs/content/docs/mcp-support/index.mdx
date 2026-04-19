@@ -1,10 +1,238 @@
 ---
 title: MCP Support
-description: Model Context Protocol integration documentation.
+description: Connect the Vayu UI MCP server to your AI coding tools for intelligent component discovery, props lookup, scaffolding, and design token access.
 ---
 
-Documentation for MCP (Model Context Protocol) Support.
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 
-## Features
+The **Vayu UI MCP server** exposes 17 tools that let AI assistants understand your component library — search components, get props and variants, scaffold code, access design tokens, and more. It runs via stdio, so it works with any MCP-compatible tool.
 
-_Documentation coming soon..._
+## Quick Setup
+
+The fastest way is using the CLI:
+
+```bash
+# Interactive — prompts which tools to configure
+npx vayu-ui install-mcp
+
+# Configure specific tools
+npx vayu-ui install-mcp --tool claude
+npx vayu-ui install-mcp --tool claude,cursor,vscode
+```
+
+This writes the correct config to each tool's settings file. Restart your AI tool after running it.
+
+| Flag | Description |
+| :--- | :--- |
+| `--tool` | Comma-separated: `claude`, `cursor`, `vscode`, `windsurf` |
+| `--global` | Write to home directory instead of project root |
+| `--dry-run` | Preview changes without writing |
+| `--force` | Overwrite existing entries |
+
+## Manual Setup
+
+If you prefer to add the config manually, add the JSON below to the correct file for your tool.
+
+<Tabs items={['Claude Code', 'Cursor', 'VS Code', 'Windsurf']}>
+  <Tab value="Claude Code">
+
+**File:** `.claude/settings.json` (project) or `~/.claude/settings.json` (global)
+
+```json
+{
+  "mcpServers": {
+    "vayu-ui": {
+      "command": "npx",
+      "args": ["-y", "vayu-ui-mcp"]
+    }
+  }
+}
+```
+
+  </Tab>
+  <Tab value="Cursor">
+
+**File:** `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global)
+
+```json
+{
+  "mcpServers": {
+    "vayu-ui": {
+      "command": "npx",
+      "args": ["-y", "vayu-ui-mcp"]
+    }
+  }
+}
+```
+
+  </Tab>
+  <Tab value="VS Code">
+
+**File:** `.vscode/mcp.json` (project) or `~/.vscode/mcp.json` (global)
+
+```json
+{
+  "servers": {
+    "vayu-ui": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "vayu-ui-mcp"]
+    }
+  }
+}
+```
+
+  </Tab>
+  <Tab value="Windsurf">
+
+**File:** `.windsurf/mcp.json` (project) or `~/.windsurf/mcp.json` (global)
+
+```json
+{
+  "mcpServers": {
+    "vayu-ui": {
+      "command": "npx",
+      "args": ["-y", "vayu-ui-mcp"]
+    }
+  }
+}
+```
+
+  </Tab>
+</Tabs>
+
+If the file already exists, merge the `vayu-ui` entry into the existing `mcpServers` or `servers` object — don't overwrite other entries.
+
+## Available Tools
+
+Once connected, the following 17 tools are available to your AI assistant:
+
+| Tool | Description |
+| :--- | :--- |
+| `list_components` | List all components and hooks with optional filters |
+| `find_component` | Fuzzy search by natural language query |
+| `get_component_summary` | Lightweight identity card (name, category, tags) |
+| `get_component_props` | All props with types, defaults, and descriptions |
+| `get_component_variants` | Available visual variants and sizes |
+| `get_component_states` | Interactive states (loading, disabled, hover, etc.) |
+| `get_component_events` | Event handlers with TypeScript signatures |
+| `get_component_a11y` | ARIA roles, keyboard navigation, focus management |
+| `get_component_dependencies` | NPM deps, registry deps, install command |
+| `get_component_peer_components` | Frequently co-used components |
+| `get_component_composition` | Compound component structure and sub-components |
+| `get_component_example` | Ready-to-paste TSX code examples |
+| `get_component_do_not` | Anti-patterns and common mistakes |
+| `get_hook_details` | Full hook API (signature, params, return values) |
+| `scaffold_component_usage` | Generate working code with imports and state |
+| `get_install_guide` | CLI commands and import paths for installation |
+| `get_design_tokens` | CSS design tokens with Tailwind classes |
+
+## Usage Guide
+
+### Recommended Workflow
+
+1. **Discover** — `list_components` or `find_component` to find the right component
+2. **Learn** — `get_component_props` and `get_component_a11y` to understand the API
+3. **Scaffold** — `scaffold_component_usage` to generate copy-paste ready code
+4. **Validate** — `get_component_do_not` to avoid anti-patterns
+
+### Example: Finding and Using a Component
+
+<Tabs items={['1. Find', '2. Props', '3. Scaffold', '4. Validate']}>
+  <Tab value="1. Find">
+
+```json
+{
+  "name": "find_component",
+  "arguments": { "query": "modal dialog with overlay" }
+}
+```
+
+  </Tab>
+  <Tab value="2. Props">
+
+```json
+{
+  "name": "get_component_props",
+  "arguments": { "name": "Modal" }
+}
+```
+
+  </Tab>
+  <Tab value="3. Scaffold">
+
+```json
+{
+  "name": "scaffold_component_usage",
+  "arguments": { "name": "Modal", "withState": true }
+}
+```
+
+  </Tab>
+  <Tab value="4. Validate">
+
+```json
+{
+  "name": "get_component_do_not",
+  "arguments": { "name": "Modal", "category": "a11y" }
+}
+```
+
+  </Tab>
+</Tabs>
+
+### Common Tool Parameters
+
+| Parameter | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `name` | string | Yes | Component/hook name (case-insensitive) |
+| `slug` | string | No | CLI slug identifier |
+| `variant` | string | No | Example variant key |
+| `category` | enum | No | Filter: `inputs`, `overlay`, `state`, etc. |
+| `type` | enum | No | Filter: `component` or `hook` |
+| `withState` | boolean | No | Wrap scaffold in `useState` |
+
+## Design Tokens via MCP
+
+Use `get_design_tokens` to access the full design system:
+
+```json
+{
+  "name": "get_design_tokens",
+  "arguments": { "name": "Button" }
+}
+```
+
+### Token Categories
+
+| Category | What's Included |
+| :--- | :--- |
+| **Colors** | Semantic tokens: `brand`, `surface`, `elevated`, `success`, `warning`, `destructive`, `info`, `muted` (each with content variant) |
+| **Radius** | `rounded-control`, `rounded-surface`, `rounded-overlay` |
+| **Shadows** | `shadow-control`, `shadow-surface`, `shadow-elevated` |
+| **Structural** | `border`, `field`, `focus` tokens |
+
+Pass `overridableOnly: true` to get only tokens that are safe to override without breaking component behavior.
+
+## Component Categories
+
+| Category | Description | Examples |
+| :--- | :--- | :--- |
+| `inputs` | Form controls and data entry | Button, TextInput, Checkbox, Select |
+| `feedback` | Status and feedback | Alert, Spinner, Toast |
+| `overlay` | Modal and overlay UI | Modal, Tooltip, Popover |
+| `layout` | Structural components | Card, Container, Grid |
+| `data-display` | Content presentation | Avatar, Badge, Separator |
+| `navigation` | Navigation components | Navbar, Sidebar, Tabs |
+| `animation` | Animated components | AnimatedContainer, FadeIn |
+| `state` | State management hooks | useLocalStorage, useDebounce |
+| `sensor` | Browser sensor hooks | useMediaQuery, useResizeObserver |
+| `dom` | DOM interaction hooks | useClickOutside, useFocusTrap |
+
+## Best Practices
+
+- **Use `find_component` before assuming** — the AI should search for the right component rather than guessing
+- **Check anti-patterns** — always run `get_component_do_not` before generating code
+- **Include accessibility** — reference `get_component_a11y` for ARIA and keyboard requirements
+- **Use the scaffold tool** — `scaffold_component_usage` generates complete code with imports and state
+- **Cache component lists** — call `list_components` once per session, not per request
