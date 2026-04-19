@@ -54,7 +54,7 @@ export function detectProject(cwd: string): ProjectInfo {
   return { root, hasSrc, framework, cssFile, uiDir, packageManager, hasTailwind };
 }
 
-function findProjectRoot(cwd: string): string {
+export function findProjectRoot(cwd: string): string {
   let dir = cwd;
   while (dir !== '/') {
     if (existsSync(join(dir, 'package.json'))) return dir;

@@ -271,12 +271,69 @@ npx vayu-ui remove button --force
 
 ---
 
-### Coming Soon
+### `vayu-ui install-mcp`
 
-| Command                | Description                                      |
-| ---------------------- | ------------------------------------------------ |
-| `vayu-ui create`       | Scaffold a project from a template               |
-| `vayu-ui install-mcp`  | Install the Vayu UI MCP server for AI tools      |
+Configures the Vayu UI MCP server (17 tools for component discovery, props, variants, scaffolding, etc.) for AI coding tools. The server runs via `npx` — no local installation needed.
+
+Supports **Claude Code**, **Cursor**, **VS Code Copilot**, and **Windsurf**.
+
+```bash
+# Interactive — prompts which tools to configure
+npx vayu-ui install-mcp
+
+# Configure specific tools
+npx vayu-ui install-mcp --tool claude
+npx vayu-ui install-mcp --tool claude,cursor
+
+# Configure globally (home directory)
+npx vayu-ui install-mcp --global
+
+# Preview without writing
+npx vayu-ui install-mcp --dry-run
+```
+
+**What it does:**
+
+1. Detects or prompts for which AI tools to configure
+2. Writes the MCP server config to each tool's settings file
+3. Creates parent directories if needed
+4. Skips tools that already have the config (unless `--force`)
+
+**Config files written:**
+
+| Tool            | Project-level             | Global                    |
+| --------------- | ------------------------- | ------------------------- |
+| Claude Code     | `.claude/settings.json`   | `~/.claude/settings.json` |
+| Cursor          | `.cursor/mcp.json`        | `~/.cursor/mcp.json`      |
+| VS Code Copilot | `.vscode/mcp.json`        | `~/.vscode/mcp.json`      |
+| Windsurf        | `.windsurf/mcp.json`      | `~/.windsurf/mcp.json`    |
+
+**Entry added:**
+
+```json
+{
+  "mcpServers": {
+    "vayu-ui": {
+      "command": "npx",
+      "args": ["-y", "vayu-ui-mcp"]
+    }
+  }
+}
+```
+
+**Flags:**
+
+| Flag        | Description                                              |
+| ----------- | -------------------------------------------------------- |
+| `--tool`    | Comma-separated AI tools: `claude`, `cursor`, `vscode`, `windsurf` |
+| `--global`  | Configure globally (home directory) instead of project-level |
+| `--dry-run` | Preview changes without writing files                    |
+| `--force`   | Skip prompts and overwrite existing entries              |
+
+```bash
+# Overwrite existing config
+npx vayu-ui install-mcp --tool claude --force
+```
 
 ---
 
@@ -366,6 +423,7 @@ packages/cli/
 │   ├── commands/
 │   │   ├── add.ts        # vayu-ui add <slugs>
 │   │   ├── init.ts       # vayu-ui init
+│   │   ├── install-mcp.ts # vayu-ui install-mcp
 │   │   ├── list.ts       # vayu-ui list
 │   │   ├── remove.ts     # vayu-ui remove <slugs>
 │   │   └── update.ts     # vayu-ui update [slugs]
@@ -374,6 +432,7 @@ packages/cli/
 │   ├── utils/
 │   │   ├── config.ts     # Config read/write & install tracking
 │   │   ├── fetcher.ts    # GitHub raw file fetcher
+│   │   ├── mcp-config.ts # MCP server config for AI tools
 │   │   └── project.ts    # Framework & project detection
 │   └── index.ts
 ├── dist/                 # Build output (gitignored)
