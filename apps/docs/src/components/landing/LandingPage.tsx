@@ -1,6 +1,6 @@
 import { Hero } from './Hero';
 import { ComponentShowcase } from './ComponentShowcase';
-import { WhyVedUI } from './WhyVedUI';
+import { WhyVayuUI } from './WhyVayuUI';
 import { GetStarted } from './GetStarted';
 
 export function LandingPage() {
@@ -8,7 +8,7 @@ export function LandingPage() {
     <div className="bg-canvas text-canvas-content min-h-screen">
       <Hero />
       <ComponentShowcase />
-      <WhyVedUI />
+      <WhyVayuUI />
       <GetStarted />
     </div>
   );

@@ -48,13 +48,13 @@ const features = [
   },
 ];
 
-export function WhyVedUI() {
+export function WhyVayuUI() {
   return (
     <section className="bg-canvas px-6 py-24 sm:py-32 lg:px-8">
       <div className="mx-auto max-w-5xl">
         <div className="text-center mb-16">
           <h2 className="font-primary text-3xl sm:text-4xl font-bold text-canvas-content">
-            Why VedUI
+            Why Vayu UI
           </h2>
           <p className="mt-4 text-lg font-secondary text-surface-content">
             Structured for AI. Built for humans.

@@ -239,7 +239,7 @@ export default function CommandBoxDemo() {
                   <CommandBox.Item
                     id="installation"
                     icon={<Download className="w-4 h-4" />}
-                    description="Install and configure VedUI in your project"
+                    description="Install and configure Vayu UI in your project"
                   >
                     Installation Guide
                   </CommandBox.Item>

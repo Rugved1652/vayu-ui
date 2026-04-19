@@ -136,10 +136,10 @@ export function ComponentShowcase() {
       <div className="mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <h2 className="font-primary text-3xl sm:text-4xl font-bold text-canvas-content">
-            Built with VedUI
+            Built with Vayu UI
           </h2>
           <p className="mt-4 text-lg font-secondary text-surface-content max-w-2xl mx-auto">
-            Every component on this page is a real, interactive VedUI component. Not a screenshot, not a mockup.
+            Every component on this page is a real, interactive Vayu UI component. Not a screenshot, not a mockup.
           </p>
         </div>
 

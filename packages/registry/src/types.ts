@@ -1,5 +1,5 @@
 // ============================================================================
-// VedUI Registry Type Definitions
+// Vayu UI Registry Type Definitions
 // ============================================================================
 // Single source of truth for CLI (vayu-ui add <slug>) and MCP Server tools.
 // All data is JSON-serializable — no functions, React nodes, or Symbols.
@@ -552,8 +552,8 @@ export interface CliConfig {
 // Top-Level Registry Container
 // ============================================================================
 
-/** Complete VedUI registry — components, hooks, and design tokens. */
-export interface VedUIRegistry {
+/** Complete Vayu UI registry — components, hooks, and design tokens. */
+export interface VayuUIRegistry {
   /** All registered components */
   components: ComponentRegistryEntry[];
   /** All registered hooks */

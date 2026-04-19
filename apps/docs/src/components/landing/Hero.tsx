@@ -29,7 +29,7 @@ export function Hero() {
               <Link href="/docs" className="group inline-flex">
                 <Badge variant="brand" size="sm" className="gap-1.5 cursor-pointer transition-shadow hover:shadow-sm">
                   <Sparkles className="w-3 h-3" />
-                  Introducing VedUI — AI-Native Design System
+                  Introducing Vayu UI — AI-Native Design System
                   <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                 </Badge>
               </Link>
