@@ -1,24 +1,25 @@
 # OS
 **/.DS_Store
+Thumbs.db
 /.idea
 
 # Dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.js
 
 # Testing
-/coverage
+coverage/
 
 # Build outputs
-/dist
-/build
-/out
-/.next/
+dist/
+build/
+out/
+.next/
 *.tsbuildinfo
 
 # Turborepo
-/.turbo
+.turbo/
 
 # Logs
 *-debug.log
@@ -39,3 +40,11 @@ oclif.manifest.json
 
 # Generated content
 .source
+
+# IDE
+.claude/
+.vscode/
+
+# Temp test files
+test-qr-encoding.js
+test-qrcode.html
