@@ -38,7 +38,7 @@ export const buttonGroupEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for ButtonGroupProps and ButtonGroupRadius union' },
     { name: 'index.ts', description: 'Barrel export file re-exporting the component and all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'ButtonGroup',

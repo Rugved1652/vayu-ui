@@ -62,7 +62,7 @@ export const sliderEntry: ComponentRegistryEntry = {
       description: 'Barrel export file re-exporting Slider component and SliderProps type',
     },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Slider',

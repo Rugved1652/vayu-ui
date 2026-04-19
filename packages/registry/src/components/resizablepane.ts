@@ -40,7 +40,7 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for Direction, ResizablePaneProps, PanelProps, and HandleProps' },
     { name: 'index.ts', description: 'Barrel export re-exporting the compound component, types, and useResizablePane hook' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'ResizablePane',

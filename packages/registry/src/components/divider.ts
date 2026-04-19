@@ -42,7 +42,7 @@ export const dividerEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript interfaces for all props plus design token maps for spacing, variants, colors, and sizes' },
     { name: 'index.ts', description: 'Barrel export file re-exporting the Divider namespace and all type definitions' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Divider',

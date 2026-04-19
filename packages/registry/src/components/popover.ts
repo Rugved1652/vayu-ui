@@ -42,7 +42,7 @@ export const popoverEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for PopoverProps, PopoverTriggerProps, PopoverContentProps, PopoverContextType, and arrow position classes' },
     { name: 'index.ts', description: 'Barrel export file assembling the compound component via Object.assign and re-exporting all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Popover',

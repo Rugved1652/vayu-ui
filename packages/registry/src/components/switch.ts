@@ -44,7 +44,7 @@ export const switchEntry: ComponentRegistryEntry = {
     { name: 'index.ts', description: 'Barrel export file re-exporting the component and its types' },
     { name: 'README.md', description: 'Component documentation and usage guidelines', optional: true },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Switch',

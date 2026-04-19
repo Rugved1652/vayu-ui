@@ -41,7 +41,7 @@ export const accordionEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for all props and context' },
     { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Accordion',

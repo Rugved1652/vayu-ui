@@ -1,6 +1,229 @@
 ---
 title: CLI Support
-description: Fully Accessible, Typescript, TailwindCSS, Own the Code Library
+description: Use the vayu-ui CLI to initialize, add, update, and remove components and hooks in your React project.
 ---
 
-Welcome to **Vayu UI** — an AI-optimized React UI system built with TypeScript and Tailwind CSS.
+The **vayu-ui** CLI lets you scaffold Vayu UI into any React project with a copy-paste approach — you own the code, no runtime dependency required.
+
+## Quick Start
+
+```bash
+# 1. Initialize Vayu UI in your project
+npx vayu-ui init
+
+# 2. Browse what's available
+npx vayu-ui list
+
+# 3. Add a component or hook
+npx vayu-ui add button
+```
+
+No installation needed — `npx` runs the latest version directly.
+
+## `vayu-ui init`
+
+Sets up Vayu UI in your project. Creates the folder structure, injects design tokens as CSS, and optionally installs Tailwind CSS v4.
+
+```bash
+npx vayu-ui init
+```
+
+**What it does:**
+
+- Detects your framework (Next.js, Vite, CRA, or generic)
+- Creates `ui/components/`, `ui/hooks/`, `ui/utils/` (inside `src/` if it exists)
+- Creates `vayu-ui-tokens.css` with all design tokens next to your main CSS
+- Adds `@import` to your existing CSS file
+- Prompts to install Tailwind CSS v4 if not found
+- Creates `vayu-ui.config.json` to track paths and installed items
+
+**Flags:**
+
+| Flag                | Description                                                        |
+| :------------------ | :----------------------------------------------------------------- |
+| `--path <dir>`      | Custom path for the ui/ folder (default: auto-detect `src/ui` or `ui`) |
+| `--css-path <file>` | Custom path for the main CSS file                                  |
+| `--merge`           | Merge tokens into existing CSS instead of creating a separate file  |
+| `--skip-tailwind`   | Skip Tailwind CSS installation check                               |
+| `--force`           | Skip all prompts and use defaults                                  |
+
+```bash
+# Merge tokens into your existing globals.css
+npx vayu-ui init --merge
+
+# Custom UI folder path
+npx vayu-ui init --path src/lib/ui
+
+# Skip Tailwind check
+npx vayu-ui init --skip-tailwind
+```
+
+## `vayu-ui list`
+
+Displays all 50 components and 31 hooks available in the Vayu UI registry, grouped by type and category.
+
+```bash
+npx vayu-ui list
+```
+
+**Flags:**
+
+| Flag                        | Description                                     |
+| :-------------------------- | :---------------------------------------------- |
+| `--type <component\|hook>`  | Filter by item type                             |
+| `--category <name>`         | Filter by category (e.g. `inputs`, `state`)     |
+
+```bash
+# Only hooks
+npx vayu-ui list --type hook
+
+# Only overlay components
+npx vayu-ui list --type component --category overlay
+
+# Any category
+npx vayu-ui list --category sensor
+```
+
+## `vayu-ui add <slugs...>`
+
+Copies one or more components or hooks from GitHub into your project. Automatically resolves transitive dependencies and installs required npm packages.
+
+```bash
+npx vayu-ui add button
+npx vayu-ui add button modal tooltip
+npx vayu-ui add use-debounce use-local-storage
+```
+
+**What it does:**
+
+- Looks up each slug in the registry
+- Recursively resolves dependencies (e.g. `sidebar` → `tooltip`)
+- Fetches source files from GitHub
+- Writes them into `{uiPath}/components/{Name}/` or `{uiPath}/hooks/`
+- Auto-includes the `cn` utility (`utils/index.ts`) when adding any component
+- Installs npm packages (`clsx`, `tailwind-merge`, `lucide-react`, etc.)
+- Records installed items in `vayu-ui.config.json`
+
+**Flags:**
+
+| Flag             | Short | Description                                     |
+| :--------------- | :---- | :---------------------------------------------- |
+| `--overwrite`    | `-o`  | Overwrite existing files                        |
+| `--dry-run`      | —     | Preview what would be added without writing     |
+| `--skip-install` | —     | Skip npm dependency installation                |
+| `--yes`          | `-y`  | Skip confirmation prompts                       |
+
+```bash
+# Preview without writing
+npx vayu-ui add modal --dry-run
+
+# Force overwrite
+npx vayu-ui add button --overwrite
+
+# Skip npm install
+npx vayu-ui add sidebar --skip-install
+```
+
+**After installing**, import components from your ui folder:
+
+```tsx
+import { Button } from '@/ui/components/Button';
+import { useDebounce } from '@/ui/hooks/useDebounce';
+```
+
+## `vayu-ui update [slugs...]`
+
+Re-fetches installed components and hooks from GitHub. Compares file contents and only overwrites changed files.
+
+```bash
+# Update all installed items
+npx vayu-ui update
+
+# Update specific items
+npx vayu-ui update button modal
+```
+
+**Flags:**
+
+| Flag        | Short | Description                                           |
+| :---------- | :---- | :---------------------------------------------------- |
+| `--force`   | `-f`  | Overwrite all files even if content is unchanged      |
+| `--dry-run` | —     | Preview what would be updated without writing files   |
+| `--css`     | —     | Also update Vayu UI CSS design tokens                 |
+
+```bash
+# Preview changes
+npx vayu-ui update --dry-run
+
+# Force update everything
+npx vayu-ui update --force
+```
+
+## `vayu-ui remove <slugs...>`
+
+Removes one or more installed components or hooks. Warns if other installed items depend on what you are removing. Auto-cleans `utils/` when no components remain.
+
+```bash
+npx vayu-ui remove button
+npx vayu-ui remove button modal
+```
+
+**Flags:**
+
+| Flag      | Short | Description              |
+| :-------- | :---- | :----------------------- |
+| `--force` | `-f`  | Skip confirmation prompt |
+
+```bash
+npx vayu-ui remove use-debounce --force
+```
+
+## Configuration
+
+`vayu-ui init` creates a `vayu-ui.config.json` at your project root:
+
+```json
+{
+  "version": 1,
+  "uiPath": "src/ui",
+  "cssFile": "src/app/globals.css",
+  "tokensFile": "src/app/vayu-ui-tokens.css",
+  "installed": {
+    "button": {
+      "type": "component",
+      "installedAt": "2026-04-19T12:00:00.000Z"
+    }
+  }
+}
+```
+
+The CLI uses this file to:
+
+- Know where to write files when you run `add`
+- Track which items are installed for `update` and `remove`
+- Store your CSS file path for token injection
+
+## Folder Structure
+
+After running `vayu-ui init`, your project gets a `ui/` folder (or `src/ui/` if you use a `src/` directory):
+
+```
+src/ui/
+├── components/
+│   ├── Button/
+│   │   ├── Button.tsx
+│   │   ├── ButtonIcon.tsx
+│   │   ├── ButtonBadge.tsx
+│   │   ├── ButtonText.tsx
+│   │   ├── types.ts
+│   │   └── index.ts
+│   └── Modal/
+│       └── ...
+├── hooks/
+│   ├── useDebounce.ts
+│   └── useLocalStorage.ts
+└── utils/
+    └── index.ts          # cn() utility (clsx + tailwind-merge)
+```
+
+This structure mirrors the internal `packages/ui/src/` layout, so relative imports between files (like `../../utils`) work without any path aliases.

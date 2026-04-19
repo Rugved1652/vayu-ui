@@ -44,7 +44,7 @@ export const buttonEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for Button, Icon, Badge, and Text props, plus Status enum and variant/size unions' },
     { name: 'index.ts', description: 'Barrel export file assembling the compound component and re-exporting all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Button',

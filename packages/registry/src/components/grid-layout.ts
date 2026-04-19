@@ -49,7 +49,7 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript interfaces for all prop types, context values (GridLayoutContextValue, GridItemContextValue), layout item definition (GridLayoutItem), resize directions, responsive breakpoints, and React contexts' },
     { name: 'index.ts', description: 'Barrel export assembling the GridLayout compound component object (Container, Item, DragHandle, ResizeHandle, Placeholder) and re-exporting all type definitions' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'GridLayout',

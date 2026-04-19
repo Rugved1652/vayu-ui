@@ -100,7 +100,7 @@ export const menubarEntry: ComponentRegistryEntry = {
         'Barrel export assembling the compound Menubar component with all sub-components and type exports',
     },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Menubar',

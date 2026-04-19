@@ -34,7 +34,7 @@ export const sidebarEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for all sub-components' },
     { name: 'index.ts', description: 'Public API exports' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Sidebar',

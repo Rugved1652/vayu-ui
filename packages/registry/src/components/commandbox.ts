@@ -49,7 +49,7 @@ export const commandBoxEntry: ComponentRegistryEntry = {
     { name: 'hooks.ts', description: 'React context, group context, useCommandBox hook, and fuzzy search scoring utility' },
     { name: 'index.ts', description: 'Barrel export assembling the compound component and re-exporting all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'CommandBox',

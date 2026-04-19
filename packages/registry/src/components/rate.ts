@@ -86,7 +86,7 @@ export const rateEntry: ComponentRegistryEntry = {
         'Barrel export file assembling the compound component (Rate.Label, Rate.Stars, etc.) and re-exporting all types',
     },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Rate',

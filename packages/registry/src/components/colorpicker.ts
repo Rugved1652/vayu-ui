@@ -56,7 +56,7 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     { name: 'index.ts', description: 'Barrel export assembling the compound component and re-exporting all types, hooks, and utilities' },
     { name: 'README.md', description: 'Component documentation and usage guide', optional: true },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'ColorPicker',

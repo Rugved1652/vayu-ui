@@ -48,7 +48,7 @@ export const modalEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for ModalProps, ModalSize, ModalContextType, and all sub-component prop interfaces' },
     { name: 'index.ts', description: 'Barrel export file assembling the compound component via Object.assign and re-exporting all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Modal',

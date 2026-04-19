@@ -10,6 +10,7 @@
     "vayu-ui-mcp": "./bin/vayu-ui-mcp.js"
   },
   "scripts": {
+    "build": "tsup",
     "dev": "tsup --watch"
   },
   "dependencies": {

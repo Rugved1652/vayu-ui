@@ -48,7 +48,7 @@ export const toasterEntry: ComponentRegistryEntry = {
     { name: 'index.ts', description: 'Barrel export assembling the Toast compound component object (Title, Description, Close), plus ToastProvider, useToast, and all type exports' },
     { name: 'README.md', description: 'Internal anatomy and use-case documentation for the Toaster component directory', optional: true },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'ToastProvider',

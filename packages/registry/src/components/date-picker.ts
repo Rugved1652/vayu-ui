@@ -81,7 +81,7 @@ export const datePickerEntry: ComponentRegistryEntry = {
         'Barrel export file assembling the compound component (DatePicker.Trigger, DatePicker.Calendar, DatePicker.Calendar.Footer) and re-exporting all types',
     },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'DatePicker',

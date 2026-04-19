@@ -2,264 +2,285 @@
 
 > The official command-line tool for adding Vayu UI hooks and components to your React project.
 
-```bash
-npx vayu-ui-cli <command>
-```
-
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Requirements](#requirements)
-- [Quick Start](#quick-start)
-- [Commands](#commands)
-  - [`vayu-ui init`](#vayu-ui-init)
-  - [`vayu-ui add <name>`](#vayu-ui-add-name)
-  - [`vayu-ui list`](#vayu-ui-list)
-  - [`vayu-ui update`](#vayu-ui-update)
-  - [`vayu-ui create <template>`](#vayu-ui-create-template)
-- [Using Locally (Development)](#using-locally-development)
-- [Updating the CLI](#updating-the-cli)
-- [Removing the CLI](#removing-the-cli)
-- [Adding Components to the Registry (GitHub)](#adding-components-to-the-registry-github)
-- [Project Structure](#project-structure)
-
----
-
-## Overview
-
-`vayu-ui-cli` is a terminal tool that lets you:
-
-- **Initialize** Vayu UI design tokens + Tailwind CSS in any React project
-- **Add** individual hooks or components directly into your codebase (you own the code)
-- **List** everything available in the registry
-- **Update** installed items to the latest version from GitHub
-- **Scaffold** new projects from Vayu UI templates
-
 ---
 
 ## Requirements
 
-| Requirement             | Version  |
-| ----------------------- | -------- |
-| Node.js                 | ≥ 18.0.0 |
-| npm / pnpm / yarn / bun | any      |
+| Requirement | Version  |
+| ----------- | -------- |
+| Node.js     | ≥ 18.0.0 |
+| npm         | any      |
 
 ---
 
-## Quick Start
+## Quick Start (Production)
 
-No installation needed — just use `npx`:
+No installation needed — use `npx`:
 
 ```bash
-# 1. Set up Vayu UI in your existing project
-npx vayu-ui-cli init
+# List all available components and hooks
+npx vayu-ui list
 
-# 2. Browse what's available
-npx vayu-ui-cli list
+# Filter by type
+npx vayu-ui list --type component
+npx vayu-ui list --type hook
 
-# 3. Add a hook
-npx vayu-ui-cli add use-battery-status
+# Filter by category
+npx vayu-ui list --category inputs
+npx vayu-ui list --type component --category overlay
 ```
 
 ---
 
 ## Commands
 
-### `vayu-ui init`
+### `vayu-ui list`
 
-Sets up Vayu UI design tokens and Tailwind CSS v4 in your project. Automatically detects **Next.js**, **Vite**, and **CRA** project types.
+Displays all hooks and components available in the Vayu UI registry, grouped by type and category.
 
 ```bash
-npx vayu-ui-cli init
+vayu-ui list
+```
+
+**Output:**
+
+```
+  Components
+  ─────────────────────────────────────────────────────
+
+    inputs
+      button                        A versatile button component with variants, sizes, l...
+      checkbox                      An accessible checkbox control with support for chec...
+      text-input                    A compound text input component supporting multiple ...
+
+    feedback
+      alert                         A contextual feedback banner that communicates statu...
+      spinner                       A WCAG 2.2 AA compliant animated circular loading in...
+
+    overlay
+      modal                         An accessible dialog component with focus trapping, ...
+      tooltip                       A portal-based tooltip component that displays conte...
+
+    ...
+
+  Hooks
+  ─────────────────────────────────────────────────────
+
+    state
+      use-local-storage             A state hook that persists values to localStorage wi...
+      use-debounce                  Returns a debounced version of a value that only upd...
+
+    ...
+
+  50 components, 31 hooks
+```
+
+**Flags:**
+
+| Flag                       | Description                          |
+| -------------------------- | ------------------------------------ |
+| `--type <component\|hook>` | Filter by item type                  |
+| `--category <name>`        | Filter by category (e.g. inputs, state, overlay) |
+
+```bash
+# Only hooks
+npx vayu-ui list --type hook
+
+# Only components in the overlay category
+npx vayu-ui list --type component --category overlay
+
+# Filter by any category
+npx vayu-ui list --category sensor
+```
+
+---
+
+### `vayu-ui init`
+
+Sets up Vayu UI in your project — creates the folder structure, injects design tokens, and optionally installs Tailwind CSS v4.
+
+```bash
+npx vayu-ui init
 ```
 
 **What it does:**
 
-- Writes a `globals.css` (or `index.css`) with all Vayu UI CSS design tokens (colors, radii, shadows, fonts, transitions, keyframes)
-- Creates `postcss.config.mjs` if missing
-- Installs `tailwindcss`, `@tailwindcss/postcss`, and `postcss` if not already present
+1. Detects your project framework (Next.js, Vite, CRA, or generic)
+2. Creates `ui/components/`, `ui/hooks/`, `ui/utils/` (inside `src/` if it exists)
+3. Creates `vayu-ui-tokens.css` with all design tokens next to your main CSS
+4. Adds `@import './vayu-ui-tokens.css'` to your existing CSS file
+5. Prompts to install Tailwind CSS v4 if not found
+6. Creates `vayu-ui.config.json` to remember paths for future commands
 
-**Flags:**
-
-| Flag            | Short | Description                 |
-| --------------- | ----- | --------------------------- |
-| `--path <file>` | `-p`  | Custom CSS file path        |
-| `--overwrite`   | `-o`  | Overwrite existing CSS file |
-| `--force`       | `-f`  | Skip project type detection |
-
-```bash
-# Custom CSS path
-npx vayu-ui-cli init --path src/styles/vedui.css
-
-# Overwrite existing
-npx vayu-ui-cli init --overwrite
-```
-
----
-
-### `vayu-ui add <name>`
-
-Copies a hook or component from the Vayu UI registry into your project. Automatically installs all required peer dependencies.
-
-```bash
-npx vayu-ui-cli add <slug>
-```
-
-**Example:**
-
-```bash
-npx vayu-ui-cli add use-battery-status
-```
-
-**What happens:**
-
-1. Looks up `use-battery-status` in the registry
-2. Resolves all transitive dependencies (e.g., if `modal` needs `button`, both are installed)
-3. Copies files into your project at the correct target path
-4. Installs any npm packages required by the component
-
-**Flags:**
-
-| Flag           | Short | Description                                  |
-| -------------- | ----- | -------------------------------------------- |
-| `--overwrite`  | `-o`  | Overwrite existing file if it already exists |
-| `--path <dir>` | `-p`  | Custom directory to write the file into      |
-
-```bash
-# Overwrite if already installed
-npx vayu-ui-cli add use-battery-status --overwrite
-
-# Write to a custom path
-npx vayu-ui-cli add use-battery-status --path src/lib/hooks
-```
-
-**After installing**, import it like this:
-
-```ts
-import {useBatteryStatus} from '@/hooks/use-battery-status'
-```
-
----
-
-### `vayu-ui list`
-
-Displays all hooks and components available in the Vayu UI registry, grouped by type.
-
-```bash
-npx vayu-ui-cli list
-```
-
-**Output example:**
+**Output:**
 
 ```
-  Hooks
-  ─────────────────────────────────────────────
-  use-battery-status             Tracks the device battery level and status
-  use-clipboard                  Copy text to clipboard with ease
+  Vayu UI Init
+  ─────────────────────────────────────────────────────
 
-  Components
-  ─────────────────────────────────────────────
-  button                         Accessible button with variant support
-  modal                          Animated modal dialog
+  Framework:       next-app
+  Package manager: npm
+  Tailwind CSS:    installed
+  UI folder:       src/ui/
+  CSS file:        src/app/globals.css
+
+  Created src/ui/ with components/, hooks/, utils/
+  Created src/app/vayu-ui-tokens.css
+  Added @import to src/app/globals.css
+  Created vayu-ui.config.json
+
+  Done! Vayu UI is ready.
 ```
 
 **Flags:**
 
-| Flag                       | Short | Description    |
-| -------------------------- | ----- | -------------- |
-| `--type <hook\|component>` | `-t`  | Filter by type |
-| `--tag <tag>`              | —     | Filter by tag  |
+| Flag                | Description                                                      |
+| ------------------- | ---------------------------------------------------------------- |
+| `--path <dir>`      | Custom path for the ui/ folder (default: auto-detect `src/ui` or `ui`) |
+| `--css-path <file>` | Custom path for the main CSS file                                |
+| `--merge`           | Merge tokens into existing CSS instead of creating a separate file |
+| `--skip-tailwind`   | Skip Tailwind CSS installation check                             |
+| `--force`           | Skip all prompts and use defaults                                |
 
 ```bash
-# Only hooks
-npx vayu-ui-cli list --type hook
+# Merge tokens into your existing globals.css
+npx vayu-ui init --merge
 
-# Filter by tag
-npx vayu-ui-cli list --tag browser-api
+# Custom UI folder path
+npx vayu-ui init --path src/lib/ui
+
+# Skip Tailwind check
+npx vayu-ui init --skip-tailwind
 ```
 
 ---
 
-### `vayu-ui update`
+### `vayu-ui add <slugs...>`
 
-Scans your project for installed Vayu UI files, fetches the latest versions from GitHub, and updates only what has changed (using content hashing — no unnecessary writes).
+Copies one or more components or hooks from the Vayu UI GitHub repo into your project. Automatically resolves transitive dependencies and installs required npm packages.
 
 ```bash
-npx vayu-ui-cli update
+npx vayu-ui add button
+npx vayu-ui add button modal tooltip
+npx vayu-ui add use-debounce
 ```
 
-**Update a single item:**
+**What it does:**
+
+1. Looks up each slug in the registry
+2. Recursively resolves dependencies (e.g., sidebar → tooltip)
+3. Fetches source files from GitHub
+4. Copies them into `{uiPath}/components/{Name}/` or `{uiPath}/hooks/`
+5. Auto-includes the `cn` utility if adding any component
+6. Installs npm packages (clsx, tailwind-merge, lucide-react, etc.)
+
+**Output:**
+
+```
+  Adding:
+
+    Button  (6 files → src/ui/components/Button/)
+
+  npm packages: clsx, tailwind-merge
+
+    wrote utils/index.ts
+    wrote components/Button/Button.tsx
+    wrote components/Button/ButtonIcon.tsx
+    wrote components/Button/ButtonBadge.tsx
+    wrote components/Button/ButtonText.tsx
+    wrote components/Button/types.ts
+    wrote components/Button/index.ts
+
+  Added 1 item.
+
+  Import:
+    import { Button } from '@/src/ui/components/Button'
+```
+
+**Flags:**
+
+| Flag             | Short | Description                                     |
+| ---------------- | ----- | ----------------------------------------------- |
+| `--overwrite`    | `-o`  | Overwrite existing files                        |
+| `--dry-run`      | —     | Preview what would be added without writing     |
+| `--skip-install` | —     | Skip npm dependency installation                |
+| `--yes`          | `-y`  | Skip confirmation prompts                       |
 
 ```bash
-npx vayu-ui-cli update use-battery-status
+# Preview without writing
+npx vayu-ui add modal --dry-run
+
+# Force overwrite
+npx vayu-ui add button --overwrite
+
+# Skip npm install
+npx vayu-ui add sidebar --skip-install
+```
+
+---
+
+### `vayu-ui update [slugs...]`
+
+Re-fetches installed components and hooks from GitHub. Compares content and only overwrites changed files.
+
+```bash
+# Update all installed items
+npx vayu-ui update
+
+# Update specific items
+npx vayu-ui update button modal
 ```
 
 **Flags:**
 
 | Flag        | Short | Description                                           |
 | ----------- | ----- | ----------------------------------------------------- |
-| `--css`     | —     | Also update Vayu UI CSS design tokens (`globals.css`) |
-| `--dry-run` | —     | Preview what would be updated without making changes  |
-| `--force`   | `-f`  | Force update even if content hash matches             |
+| `--force`   | `-f`  | Overwrite all files even if content is unchanged      |
+| `--dry-run` | —     | Preview what would be updated without writing files   |
+| `--css`     | —     | Also update Vayu UI CSS design tokens                 |
 
 ```bash
-# Preview changes first
-npx vayu-ui-cli update --dry-run
+# Preview changes
+npx vayu-ui update --dry-run
 
-# Update everything including CSS
-npx vayu-ui-cli update --css
-
-# Force overwrite all
-npx vayu-ui-cli update --force
+# Force update everything
+npx vayu-ui update --force
 ```
 
 ---
 
-### `vayu-ui create <template>`
+### `vayu-ui remove <slugs...>`
 
-Scaffolds a full project from a GitHub template repository. Downloads, extracts, and installs dependencies.
+Removes one or more installed components or hooks. Warns if other installed items depend on what you are removing. Auto-cleans `utils/` when no components remain.
 
 ```bash
-npx vayu-ui-cli create <template>
+npx vayu-ui remove button
+npx vayu-ui remove button modal
 ```
-
-**Accepted formats:**
-
-| Format                   | Example                                                    |
-| ------------------------ | ---------------------------------------------------------- |
-| Registered template name | `vayu-ui create starter`                                   |
-| GitHub `owner/repo` slug | `vayu-ui create Rugved1652/my-template`                    |
-| Full GitHub URL          | `vayu-ui create https://github.com/Rugved1652/my-template` |
 
 **Flags:**
 
-| Flag                | Short | Description                              |
-| ------------------- | ----- | ---------------------------------------- |
-| `--dir <name>`      | `-d`  | Custom output directory name             |
-| `--branch <branch>` | `-b`  | Git branch to download (default: `main`) |
-| `--no-install`      | —     | Skip dependency installation             |
+| Flag      | Short | Description                |
+| --------- | ----- | -------------------------- |
+| `--force` | `-f`  | Skip confirmation prompt   |
 
 ```bash
-# Create from a registered template
-npx vayu-ui-cli create starter
-
-# Custom output directory
-npx vayu-ui-cli create dashboard --dir my-dashboard
-
-# Skip npm install
-npx vayu-ui-cli create starter --no-install
-
-# Use a specific branch
-npx vayu-ui-cli create starter --branch develop
+# Remove without prompt
+npx vayu-ui remove button --force
 ```
 
 ---
 
-## Using Locally (Development)
+### Coming Soon
 
-To work on the CLI locally and test changes without publishing:
+| Command                | Description                                      |
+| ---------------------- | ------------------------------------------------ |
+| `vayu-ui create`       | Scaffold a project from a template               |
+| `vayu-ui install-mcp`  | Install the Vayu UI MCP server for AI tools      |
+
+---
+
+## Running Locally (Development)
 
 ### 1. Clone the monorepo
 
@@ -271,171 +292,66 @@ cd vayu-ui-docs
 ### 2. Install dependencies
 
 ```bash
-pnpm install
+npm install
 ```
 
-### 3. Build the CLI package
+### 3. Build the registry (required — CLI depends on it)
+
+```bash
+cd packages/registry
+npm run build
+```
+
+### 4. Build the CLI
 
 ```bash
 cd packages/cli
-pnpm build
+npm run build
 ```
 
-### 4. Link the CLI globally with `npm link`
+### 5. Run commands via the bin
+
+```bash
+# Production build
+node bin/run.js list
+
+# With flags
+node bin/run.js list --type hook --category sensor
+
+# View help
+node bin/run.js help list
+```
+
+### 6. Development mode (TypeScript, no build step)
+
+```bash
+node bin/dev.js list
+```
+
+> Uses `ts-node` to run TypeScript source files directly. No build step needed, but slower than the compiled output.
+
+### 7. Watch mode (auto-rebuild on changes)
+
+```bash
+cd packages/cli
+npx tsup --watch
+```
+
+Then in another terminal, run commands with `node bin/run.js`.
+
+### 8. Link globally for testing
 
 ```bash
 # From packages/cli
 npm link
-```
 
-> **What is `npm link`?**
-> `npm link` creates a **global symlink** that points the `vayu-ui` binary on your machine to your local source code.
-> Instead of installing from the npm registry, any terminal running `vayu-ui` will execute your local build.
-> This lets you test changes in real projects instantly — no publish step needed.
-
-Now you can run `vayu-ui` globally and it will use your local build.
-
-### 5. Test a command
-
-```bash
+# Now available globally as vayu-ui
 vayu-ui list
-vayu-ui add use-battery-status
-```
+vayu-ui list --type component
 
-### 6. Re-build after changes
-
-Whenever you change source files, rebuild and the linked binary will pick up the changes:
-
-```bash
-pnpm build
-```
-
-> **Tip:** Use `tsup --watch` for auto-rebuild on save: `cd packages/cli && npx tsup --watch`
-
-### 7. Unlink when you're done with `npm unlink`
-
-```bash
-# From packages/cli
-npm unlink
-
-# Or remove the global symlink by name
+# Unlink when done
 npm unlink -g vayu-ui-cli
 ```
-
-> **What is `npm unlink`?**
-> `npm unlink` **removes the global symlink** created by `npm link`.
-> After unlinking, `vayu-ui` will no longer resolve to your local code.
-> If you had the published package installed globally before, reinstall it:
->
-> ```bash
-> npm install -g vayu-ui-cli
-> ```
-
----
-
-## Updating the CLI
-
-### If installed via `npx` (no local install)
-
-`npx` always fetches the latest version automatically. No action needed.
-
-### If installed globally
-
-```bash
-npm update -g vayu-ui-cli
-# or
-pnpm update -g vayu-ui-cli
-```
-
-### Update your installed components
-
-```bash
-# Dry-run to preview
-npx vayu-ui-cli update --dry-run
-
-# Apply all updates
-npx vayu-ui-cli update
-
-# Update a specific item
-npx vayu-ui-cli update use-battery-status
-
-# Update everything including CSS tokens
-npx vayu-ui-cli update --css
-```
-
----
-
-## Removing the CLI
-
-### If used via `npx`
-
-Nothing to remove — `npx` doesn't permanently install packages.
-
-### If installed globally
-
-```bash
-npm uninstall -g vayu-ui-cli
-# or
-pnpm remove -g vayu-ui-cli
-# or
-yarn global remove vayu-ui-cli
-```
-
-### Remove installed components from your project
-
-Since `vayu-ui add` copies files directly into your project, just delete them:
-
-```bash
-rm src/hooks/use-battery-status.ts
-```
-
----
-
-## Adding Components to the Registry (GitHub)
-
-Components are sourced from the **`vayu-ui-docs`** repository. Here's where things live:
-
-| Type             | Location in `vayu-ui-docs` repo                     |
-| ---------------- | --------------------------------------------------- |
-| Hooks            | `src/hooks/<slug>.ts`                               |
-| Components       | `src/components/ui/<slug>.tsx`                      |
-| Registry entries | `packages/registry/src/` (components.ts / hooks.ts) |
-
-### To add a new hook or component:
-
-**1. Create the source file**
-
-For a hook named `use-scroll-position`:
-
-```
-src/hooks/use-scroll-position.ts
-```
-
-**2. Add a registry entry**
-
-In `packages/registry/src/hooks.ts` (or `components.ts`):
-
-```ts
-{
-  slug: "use-scroll-position",
-  name: "useScrollPosition",
-  type: "hook",
-  fileName: "use-scroll-position.ts",
-  targetPath: "src/hooks",
-  description: "Track window scroll position in real time",
-  tags: ["browser-api", "scroll"],
-  dependencies: [],        // npm packages this file requires
-  registryDeps: [],        // other Vayu UI items this depends on
-}
-```
-
-**3. Open a Pull Request**
-
-- Fork the repo
-- Make your changes
-- Open a PR to `main` on `Rugved1652/vayu-ui-docs`
-
-The CLI fetches files directly from `raw.githubusercontent.com`, so once merged to `main`, your component is immediately available to all users via `vayu-ui add`.
 
 ---
 
@@ -443,22 +359,26 @@ The CLI fetches files directly from `raw.githubusercontent.com`, so once merged 
 
 ```
 packages/cli/
+├── bin/
+│   ├── run.js            # Production entry point
+│   └── dev.js            # Development entry point (ts-node)
 ├── src/
 │   ├── commands/
-│   │   ├── add.ts        # vayu-ui add <name>
-│   │   ├── list.ts       # vayu-ui list
-│   │   ├── update.ts     # vayu-ui update
+│   │   ├── add.ts        # vayu-ui add <slugs>
 │   │   ├── init.ts       # vayu-ui init
-│   │   └── create.ts     # vayu-ui create <template>
+│   │   ├── list.ts       # vayu-ui list
+│   │   ├── remove.ts     # vayu-ui remove <slugs>
+│   │   └── update.ts     # vayu-ui update [slugs]
+│   ├── templates/
+│   │   └── tokens.ts     # Design tokens CSS template
 │   ├── utils/
-│   │   └── installer.ts  # File copy, GitHub fetch, npm install helpers
-│   ├── registry/
-│   │   └── templates.ts  # Template registry for `create` command
-│   └── index.ts          # Re-exports from vayu-ui-registry
-├── bin/
-│   └── run.js            # CLI entry point
+│   │   ├── config.ts     # Config read/write & install tracking
+│   │   ├── fetcher.ts    # GitHub raw file fetcher
+│   │   └── project.ts    # Framework & project detection
+│   └── index.ts
+├── dist/                 # Build output (gitignored)
 ├── package.json
-└── tsup.config.ts        # Build config
+└── tsup.config.ts
 ```
 
 ---

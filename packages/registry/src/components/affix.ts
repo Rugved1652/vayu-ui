@@ -41,7 +41,7 @@ export const affixEntry: ComponentRegistryEntry = {
     { name: 'index.ts', description: 'Barrel export file re-exporting the component and types' },
     { name: 'README.md', description: 'Component anatomy and use-case reference', optional: true },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Affix',

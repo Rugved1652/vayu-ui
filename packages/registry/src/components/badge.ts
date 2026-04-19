@@ -43,7 +43,7 @@ export const badgeEntry: ComponentRegistryEntry = {
     { name: 'index.ts', description: 'Barrel export file re-exporting the Badge component and types' },
     { name: 'README.md', description: 'Component documentation and usage guidelines' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Badge',

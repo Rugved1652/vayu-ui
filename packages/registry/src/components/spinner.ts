@@ -42,7 +42,7 @@ export const spinnerEntry: ComponentRegistryEntry = {
     { name: 'Spinner.tsx', description: 'Spinner component with size configuration, ARIA attributes, and reduced-motion support' },
     { name: 'README.md', description: 'Component documentation, anatomy, and use cases' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Spinner',

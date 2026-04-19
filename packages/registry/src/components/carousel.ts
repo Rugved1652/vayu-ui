@@ -49,7 +49,7 @@ export const carouselEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for all props, context, and responsive breakpoint types' },
     { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Carousel',

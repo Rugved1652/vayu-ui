@@ -51,7 +51,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
     { name: 'SkeletonComposites.tsx', description: 'Pre-built composite components: Card, Avatar, List, Table, Grid, and Group' },
     { name: 'README.md', description: 'Component documentation and usage guidelines' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Skeleton',

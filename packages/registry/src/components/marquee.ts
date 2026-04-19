@@ -39,7 +39,7 @@ export const marqueeEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for MarqueeProps, MarqueeItemProps, and enum types' },
     { name: 'index.ts', description: 'Barrel export file re-exporting Marquee, MarqueeItem, and all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Marquee',

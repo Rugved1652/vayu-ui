@@ -49,7 +49,7 @@ export const draggableEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript interfaces for all prop types, context values (DraggableContextValue, DraggableItemContextValue), utility functions (arrayMove, getClosestIndex, getContainerAtPoint), and React contexts' },
     { name: 'index.ts', description: 'Barrel export assembling the Draggable compound component object (Container, Item, Handle, Preview, Placeholder, DropIndicator) and re-exporting all type definitions' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Draggable',

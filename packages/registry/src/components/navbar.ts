@@ -48,7 +48,7 @@ export const navbarEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript interfaces for all Navbar sub-component props, context value, and injected link props' },
     { name: 'index.ts', description: 'Barrel export file assembling the compound component and re-exporting all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Navbar',

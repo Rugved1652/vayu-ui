@@ -47,7 +47,7 @@ export const avatarEntry: ComponentRegistryEntry = {
     { name: 'index.ts', description: 'Barrel export file re-exporting the Avatar component and all type definitions' },
     { name: 'README.md', description: 'Component documentation, anatomy, and usage guidelines' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Avatar',

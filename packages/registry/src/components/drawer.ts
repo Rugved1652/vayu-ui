@@ -49,7 +49,7 @@ export const drawerEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for DrawerRootProps, DrawerSide, DrawerContextType, and all sub-component props' },
     { name: 'index.ts', description: 'Barrel export file assembling the compound component via Object.assign and re-exporting all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Drawer',

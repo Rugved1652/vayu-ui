@@ -62,7 +62,7 @@ export const radioGroupEntry: ComponentRegistryEntry = {
         'Barrel export file assembling the compound component (RadioGroup.Item) and re-exporting all types',
     },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'RadioGroup',

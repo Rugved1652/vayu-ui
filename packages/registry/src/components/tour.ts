@@ -44,7 +44,7 @@ export const tourEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for TourStep, TourContextValue, and TourProps' },
     { name: 'index.ts', description: 'Barrel export file re-exporting Tour, useTour, and all public types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Tour',

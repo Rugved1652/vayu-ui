@@ -82,3 +82,5 @@ export { useThrottleEntry } from './hooks/use-throttle.js';
 export { useTimeoutEntry } from './hooks/use-timeout.js';
 export { useVisibilityChangeEntry } from './hooks/use-visibility-change.js';
 export { useWindowSizeEntry } from './hooks/use-window-size.js';
+
+export { componentEntries, hookEntries, allEntries } from './entries.js';

@@ -47,7 +47,7 @@ export const typographyEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript interfaces for BaseTypographyProps and all sub-component prop types' },
     { name: 'index.ts', description: 'Barrel export file re-exporting the Typography namespace and all type definitions' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Typography',

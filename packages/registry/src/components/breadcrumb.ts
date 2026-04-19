@@ -43,7 +43,7 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for all breadcrumb props' },
     { name: 'index.ts', description: 'Barrel export file re-exporting all sub-components and types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Breadcrumb',

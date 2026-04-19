@@ -48,7 +48,7 @@ export const alertEntry: ComponentRegistryEntry = {
     { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and types' },
     { name: 'README.md', description: 'Component documentation and usage guidelines' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Alert',

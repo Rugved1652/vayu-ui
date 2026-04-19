@@ -1,33 +1,30 @@
 
+
 > vayu-ui-docs@0.0.0 build
 > next build
 
-⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+[1G[0K[33m[1m⚠[22m[39m Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /Users/rugvedpatel/package-lock.json as the root directory.
  To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
    See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
  Detected additional lockfiles: 
    * /Users/rugvedpatel/Desktop/Workspace/VedUI/package-lock.json
 
-▲ Next.js 16.1.6 (Turbopack)
+[1m[38;2;173;127;168m▲ Next.js 16.1.6[39m[22m (Turbopack)
 
-[MDX] generated files in 15.61870799999997ms
-  Creating an optimized production build ...
-✓ Compiled successfully in 10.1s
-  Running TypeScript ...
-  Collecting page data using 7 workers ...
-  Generating static pages using 7 workers (0/327) ...
-  Generating static pages using 7 workers (81/327) 
-  Generating static pages using 7 workers (163/327) 
-  Generating static pages using 7 workers (245/327) 
-Error reading localStorage key: demo-key ReferenceError: localStorage is not defined
-    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_4730dfc8._.js:1:41863)
-    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_4730dfc8._.js:1:41847)
-    at d (.next/server/chunks/ssr/Desktop_Workspace_VedUI_4730dfc8._.js:1:42314)
-✓ Generating static pages using 7 workers (327/327) in 3.7s
-  Finalizing page optimization ...
+[MDX] generated files in 14.536458999999923ms
+[37m[1m [22m[39m Creating an optimized production build ...
+[32m[1m✓[22m[39m Compiled successfully in 13.3s
+[?25l[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m..[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m...[39m[2K[1G[37m[1m [22m[39m Running TypeScript  [36m.[39m[2K[1G[?25h[?25l[37m[1m [22m[39m Finished TypeScript in 5.6s  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finished TypeScript in 5.6s    [32m[1m✓[22m[39m Finished TypeScript in 5.6s 
+[?25l[37m[1m [22m[39m Collecting page data using 7 workers  [36m.[39m[2K[1G[37m[1m [22m[39m Collecting page data using 7 workers  [36m..[39m[2K[1G[37m[1m [22m[39m Collecting page data using 7 workers  [36m...[39m[2K[1G[?25h[37m[1m [22m[39m Collecting page data using 7 workers in 553.0ms    [32m[1m✓[22m[39m Collecting page data using 7 workers in 553.0ms 
+[?25l[37m[1m [22m[39m Generating static pages using 7 workers (0/327)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (79/327)  [36m[=   ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (80/327)  [36m[==  ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (88/327)  [36m[=== ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (104/327)  [36m[ ===][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (158/327)  [36m[  ==][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (174/327)  [36m[   =][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (190/327)  [36m[    ][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (213/327)  [36m[   =][39m[2K[1G[37m[1m [22m[39m Generating static pages using 7 workers (237/327)  [36m[  ==][39m[2K[1G[?25hError reading localStorage key: demo-key ReferenceError: localStorage is not defined
+    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_bcb47e12._.js:1:41505)
+    at <unknown> (.next/server/chunks/ssr/Desktop_Workspace_VedUI_bcb47e12._.js:1:41489)
+    at d (.next/server/chunks/ssr/Desktop_Workspace_VedUI_bcb47e12._.js:1:41956)
+[?25h[32m[1m✓[22m[39m Generating static pages using 7 workers (327/327) in 3.6s
+[?25l[37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G[?25h[37m[1m [22m[39m Finalizing page optimization in 6.1ms    [32m[1m✓[22m[39m Finalizing page optimization in 6.1ms 
 
-Route (app)
+[4mRoute (app)[24m
 ┌ ○ /
 ├ ○ /_not-found
 ├ ƒ /api/search
@@ -51,6 +48,7 @@ Route (app)
 
 
 ○  (Static)   prerendered as static content
-●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+●  (SSG)      prerendered as static HTML (uses [36mgenerateStaticParams[39m)
 ƒ  (Dynamic)  server-rendered on demand
 
+[?25h[1G[0K⠙[1G[0K

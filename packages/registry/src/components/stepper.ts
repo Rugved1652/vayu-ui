@@ -30,7 +30,7 @@ export const stepperEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions' },
     { name: 'index.ts', description: 'Public API exports' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'StepperRoot',

@@ -43,7 +43,7 @@ export const floatingDockEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for DockBaseProps, DockItemProps, DockLogoProps, and InjectedDockProps' },
     { name: 'index.ts', description: 'Barrel export file assembling the compound component with Container, Item, Logo, and Divider sub-components' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'FloatingDock',

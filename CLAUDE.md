@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-VedUI (Vayu UI) is an AI-optimized React UI component library monorepo. It provides reusable components, hooks, a CLI for scaffolding, and an MCP server for AI tool integration.
+VVayu UI is an AI-optimized React UI component library monorepo. It provides reusable components, hooks, a CLI for scaffolding, and an MCP server for AI tool integration.
 
 ## Commands
 

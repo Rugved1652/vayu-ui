@@ -45,7 +45,7 @@ export const paginationEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript interfaces for all pagination props and PageRange type' },
     { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Pagination',

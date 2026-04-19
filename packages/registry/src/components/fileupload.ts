@@ -47,7 +47,7 @@ export const fileUploadEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript interfaces for FileWithMeta, FileUploadProps, and FileUploadContextValue' },
     { name: 'index.ts', description: 'Barrel export assembling the compound FileUpload namespace and re-exporting FileWithMeta type' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'FileUpload',

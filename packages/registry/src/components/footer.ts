@@ -44,7 +44,7 @@ export const footerEntry: ComponentRegistryEntry = {
     { name: 'types.ts', description: 'TypeScript type definitions for FooterVariant and all sub-component prop interfaces' },
     { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and all types' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Footer',

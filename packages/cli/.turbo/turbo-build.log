@@ -1,19 +1,54 @@
 
 
 > vayu-ui-cli@0.0.0 build
-> shx rm -rf dist && tsup
+> tsup
 
-[1G[0K[34mCLI[39m Building entry: src/index.ts
+[1G[0K[34mCLI[39m Building entry: src/index.ts, src/templates/tokens.ts, src/utils/config.ts, src/utils/fetcher.ts, src/utils/project.ts, src/commands/add.ts, src/commands/init.ts, src/commands/list.ts, src/commands/remove.ts, src/commands/update.ts
 [34mCLI[39m Using tsconfig: tsconfig.json
 [34mCLI[39m tsup v8.5.1
 [34mCLI[39m Using tsup config: /Users/rugvedpatel/Desktop/Workspace/VedUI/packages/cli/tsup.config.ts
 [34mCLI[39m Target: es2022
 [34mCLI[39m Cleaning output folder
 [34mESM[39m Build start
-[32mESM[39m [1mdist/index.js     [22m[32m33.00 B[39m
-[32mESM[39m [1mdist/index.js.map [22m[32m71.00 B[39m
-[32mESM[39m ⚡️ Build success in 7ms
+[32mESM[39m [1mdist/commands/remove.js      [22m[32m4.60 KB[39m
+[32mESM[39m [1mdist/index.js                [22m[32m33.00 B[39m
+[32mESM[39m [1mdist/commands/update.js      [22m[32m5.27 KB[39m
+[32mESM[39m [1mdist/utils/fetcher.js        [22m[32m327.00 B[39m
+[32mESM[39m [1mdist/templates/tokens.js     [22m[32m210.00 B[39m
+[32mESM[39m [1mdist/utils/config.js         [22m[32m305.00 B[39m
+[32mESM[39m [1mdist/chunk-XQRGDVUC.js       [22m[32m1.37 KB[39m
+[32mESM[39m [1mdist/commands/add.js         [22m[32m8.12 KB[39m
+[32mESM[39m [1mdist/utils/project.js        [22m[32m163.00 B[39m
+[32mESM[39m [1mdist/commands/init.js        [22m[32m7.74 KB[39m
+[32mESM[39m [1mdist/chunk-LH2HLA7L.js       [22m[32m1.45 KB[39m
+[32mESM[39m [1mdist/chunk-M4WKPHO6.js       [22m[32m12.32 KB[39m
+[32mESM[39m [1mdist/chunk-HC7F7BWJ.js       [22m[32m2.98 KB[39m
+[32mESM[39m [1mdist/commands/list.js        [22m[32m3.86 KB[39m
+[32mESM[39m [1mdist/index.js.map            [22m[32m71.00 B[39m
+[32mESM[39m [1mdist/utils/fetcher.js.map    [22m[32m71.00 B[39m
+[32mESM[39m [1mdist/commands/update.js.map  [22m[32m9.18 KB[39m
+[32mESM[39m [1mdist/commands/remove.js.map  [22m[32m8.26 KB[39m
+[32mESM[39m [1mdist/templates/tokens.js.map [22m[32m71.00 B[39m
+[32mESM[39m [1mdist/utils/config.js.map     [22m[32m71.00 B[39m
+[32mESM[39m [1mdist/chunk-XQRGDVUC.js.map   [22m[32m2.44 KB[39m
+[32mESM[39m [1mdist/utils/project.js.map    [22m[32m71.00 B[39m
+[32mESM[39m [1mdist/commands/add.js.map     [22m[32m15.39 KB[39m
+[32mESM[39m [1mdist/commands/init.js.map    [22m[32m13.28 KB[39m
+[32mESM[39m [1mdist/chunk-LH2HLA7L.js.map   [22m[32m3.00 KB[39m
+[32mESM[39m [1mdist/commands/list.js.map    [22m[32m6.41 KB[39m
+[32mESM[39m [1mdist/chunk-M4WKPHO6.js.map   [22m[32m14.49 KB[39m
+[32mESM[39m [1mdist/chunk-HC7F7BWJ.js.map   [22m[32m5.60 KB[39m
+[32mESM[39m ⚡️ Build success in 155ms
 DTS Build start
-DTS ⚡️ Build success in 858ms
-DTS dist/index.d.ts 13.00 B
+DTS ⚡️ Build success in 6601ms
+DTS dist/index.d.ts            13.00 B
+DTS dist/templates/tokens.d.ts 12.71 KB
+DTS dist/utils/config.d.ts     1.01 KB
+DTS dist/utils/fetcher.d.ts    675.00 B
+DTS dist/utils/project.d.ts    432.00 B
+DTS dist/commands/add.d.ts     952.00 B
+DTS dist/commands/init.d.ts    872.00 B
+DTS dist/commands/list.d.ts    627.00 B
+DTS dist/commands/remove.d.ts  540.00 B
+DTS dist/commands/update.d.ts  673.00 B
 [1G[0K⠙[1G[0K

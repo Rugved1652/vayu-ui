@@ -45,7 +45,7 @@ export const otpInputEntry: ComponentRegistryEntry = {
     { name: 'index.ts', description: 'Barrel export file assembling the compound component and re-exporting types' },
     { name: 'README.md', description: 'Component documentation and usage guidelines', optional: true },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'OTPInput',

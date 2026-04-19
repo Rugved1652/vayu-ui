@@ -56,7 +56,7 @@ export const animationEntry: ComponentRegistryEntry = {
     { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and all types' },
     { name: 'README.md', description: 'Component anatomy and use-case reference', optional: true },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Animation',

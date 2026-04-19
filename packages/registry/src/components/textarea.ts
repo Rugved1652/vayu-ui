@@ -82,7 +82,7 @@ export const textAreaEntry: ComponentRegistryEntry = {
       optional: true,
     },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'TextArea',

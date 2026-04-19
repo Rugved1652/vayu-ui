@@ -41,7 +41,7 @@ export const tooltipEntry: ComponentRegistryEntry = {
     { name: 'index.ts', description: 'Barrel export file re-exporting Tooltip and all type definitions' },
     { name: 'README.md', description: 'Component anatomy and use-case documentation' },
   ],
-  targetPath: 'src/components/ui',
+  targetPath: 'src/components',
 
   // ── Compound Component ────────────────────────────────
   rootComponent: 'Tooltip',
