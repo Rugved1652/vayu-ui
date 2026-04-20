@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add draggable
+npx vayu-ui-cli add draggable
 ```
 
 ```bash
-npx vayu-ui add -t draggable #with test case needs
+npx vayu-ui-cli add -t draggable #with test case needs
 ```
 
 ## Usage
@@ -170,36 +170,36 @@ Draggable/
 
 ### Draggable (Root)
 
-| Prop                  | Type                              | Default | Description                                              |
-| :-------------------- | :-------------------------------- | :------ | :------------------------------------------------------- |
-| `items`               | `string[]`                        | —       | Controlled array of item IDs for single-list mode.       |
-| `defaultItems`        | `string[]`                        | `[]`    | Initial item IDs for uncontrolled single-list mode.      |
-| `onReorder`           | `(items: string[]) => void`       | —       | Callback after single-list reorder.                      |
-| `containers`          | `ContainersMap`                   | —       | Controlled multi-container state for cross-list dragging. |
-| `defaultContainers`   | `ContainersMap`                   | `{}`    | Initial multi-container state for uncontrolled mode.     |
-| `onContainersChange`  | `(containers: ContainersMap) => void` | —   | Callback after multi-container reorder.                  |
-| `children`            | `ReactNode`                       | —       | `Draggable.Container` with items and optional overlays.  |
-| `className`           | `string`                          | —       | Additional CSS classes.                                  |
+| Prop                 | Type                                  | Default | Description                                               |
+| :------------------- | :------------------------------------ | :------ | :-------------------------------------------------------- |
+| `items`              | `string[]`                            | —       | Controlled array of item IDs for single-list mode.        |
+| `defaultItems`       | `string[]`                            | `[]`    | Initial item IDs for uncontrolled single-list mode.       |
+| `onReorder`          | `(items: string[]) => void`           | —       | Callback after single-list reorder.                       |
+| `containers`         | `ContainersMap`                       | —       | Controlled multi-container state for cross-list dragging. |
+| `defaultContainers`  | `ContainersMap`                       | `{}`    | Initial multi-container state for uncontrolled mode.      |
+| `onContainersChange` | `(containers: ContainersMap) => void` | —       | Callback after multi-container reorder.                   |
+| `children`           | `ReactNode`                           | —       | `Draggable.Container` with items and optional overlays.   |
+| `className`          | `string`                              | —       | Additional CSS classes.                                   |
 
 ### Draggable.Container
 
-| Prop         | Type              | Default          | Description                                |
-| :----------- | :---------------- | :--------------- | :----------------------------------------- |
-| `layout`     | `"list" \| "grid"` | `"list"`        | Layout mode for items.                     |
-| `columns`    | `number`          | `3`              | Number of grid columns (grid mode only).   |
-| `containerId` | `string`         | —                | Unique ID for multi-container mode.        |
-| `aria-label` | `string`          | `"Sortable list"` | Accessible label for the container.       |
-| `children`   | `ReactNode`       | —                | `Draggable.Item` elements.                 |
-| `className`  | `string`          | —                | Additional CSS classes.                    |
+| Prop          | Type               | Default           | Description                              |
+| :------------ | :----------------- | :---------------- | :--------------------------------------- |
+| `layout`      | `"list" \| "grid"` | `"list"`          | Layout mode for items.                   |
+| `columns`     | `number`           | `3`               | Number of grid columns (grid mode only). |
+| `containerId` | `string`           | —                 | Unique ID for multi-container mode.      |
+| `aria-label`  | `string`           | `"Sortable list"` | Accessible label for the container.      |
+| `children`    | `ReactNode`        | —                 | `Draggable.Item` elements.               |
+| `className`   | `string`           | —                 | Additional CSS classes.                  |
 
 ### Draggable.Item
 
-| Prop        | Type        | Default  | Description                                   |
-| :---------- | :---------- | :------- | :-------------------------------------------- |
-| `value`     | `string`    | —        | Unique identifier matching an entry in items. Required. |
-| `disabled`  | `boolean`   | `false`  | Disables drag interaction and reduces opacity. |
-| `children`  | `ReactNode` | —        | Item content.                                 |
-| `className` | `string`    | —        | Additional CSS classes.                       |
+| Prop        | Type        | Default | Description                                             |
+| :---------- | :---------- | :------ | :------------------------------------------------------ |
+| `value`     | `string`    | —       | Unique identifier matching an entry in items. Required. |
+| `disabled`  | `boolean`   | `false` | Disables drag interaction and reduces opacity.          |
+| `children`  | `ReactNode` | —       | Item content.                                           |
+| `className` | `string`    | —       | Additional CSS classes.                                 |
 
 ### Draggable.Handle
 
@@ -210,19 +210,19 @@ Draggable/
 
 ### Draggable.Preview
 
-| Prop        | Type        | Default | Description                                |
-| :---------- | :---------- | :------ | :----------------------------------------- |
+| Prop        | Type        | Default | Description                                       |
+| :---------- | :---------- | :------ | :------------------------------------------------ |
 | `children`  | `ReactNode` | —       | Not used. Content is cloned from the active item. |
-| `className` | `string`    | —       | Additional CSS classes applied to the preview. |
+| `className` | `string`    | —       | Additional CSS classes applied to the preview.    |
 
 ### Draggable.Placeholder
 
-| Prop        | Type     | Default | Description                            |
-| :---------- | :------- | :------ | :------------------------------------- |
-| `className` | `string` | —       | Additional CSS classes on the marker.  |
+| Prop        | Type     | Default | Description                           |
+| :---------- | :------- | :------ | :------------------------------------ |
+| `className` | `string` | —       | Additional CSS classes on the marker. |
 
 ### Draggable.DropIndicator
 
-| Prop        | Type     | Default | Description                             |
-| :---------- | :------- | :------ | :-------------------------------------- |
+| Prop        | Type     | Default | Description                              |
+| :---------- | :------- | :------ | :--------------------------------------- |
 | `className` | `string` | —       | Additional CSS classes on the indicator. |

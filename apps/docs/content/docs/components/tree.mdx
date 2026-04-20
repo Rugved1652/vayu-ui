@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add tree
+npx vayu-ui-cli add tree
 ```
 
 ```bash
-npx vayu-ui add -t tree #with test case needs
+npx vayu-ui-cli add -t tree #with test case needs
 ```
 
 ## Usage
@@ -133,78 +133,78 @@ Tree/
 
 ### Tree (Root)
 
-| Prop                  | Type                                            | Default      | Description                                |
-| :-------------------- | :---------------------------------------------- | :----------- | :----------------------------------------- |
-| `data`                | `TreeNode[]`                                    | —            | Tree data structure. Required.             |
-| `mode`                | `'normal' \| 'checkbox'`                        | `'normal'`   | Selection mode.                            |
-| `variant`             | `'default' \| 'filled' \| 'bordered' \| 'minimal'` | `'default'` | Visual style variant.                      |
-| `size`                | `'sm' \| 'md' \| 'lg'`                         | `'md'`       | Component size.                            |
-| `showLines`           | `boolean`                                       | `true`       | Show connecting lines between nodes.       |
-| `showIcons`           | `boolean`                                       | `true`       | Show file/folder icons on nodes.           |
-| `defaultExpandAll`    | `boolean`                                       | `false`      | Expand all nodes on mount.                 |
-| `defaultExpandedKeys` | `(string \| number)[]`                          | `[]`         | Initially expanded node keys.              |
-| `expandedKeys`        | `(string \| number)[]`                          | —            | Controlled expanded state.                 |
-| `onExpandedChange`    | `(keys: (string \| number)[]) => void`          | —            | Fired when expand state changes.           |
-| `selectedKey`         | `string \| number \| null`                      | —            | Controlled selected node (normal mode).    |
-| `defaultSelectedKey`  | `string \| number`                              | —            | Initially selected node.                   |
-| `onSelect`            | `(key, node) => void`                           | —            | Fired when a node is selected.             |
-| `checkedKeys`         | `(string \| number)[]`                          | —            | Controlled checked nodes (checkbox mode).  |
-| `defaultCheckedKeys`  | `(string \| number)[]`                          | `[]`         | Initially checked node keys.               |
-| `onCheck`             | `(keys, nodes) => void`                         | —            | Fired when checkboxes change.              |
-| `checkStrictly`       | `boolean`                                       | `false`      | Disable parent-child checkbox cascade.     |
-| `disabled`            | `boolean`                                       | `false`      | Disable the entire tree.                   |
-| `onNodeClick`         | `(node: TreeNode) => void`                      | —            | Fired on any node click.                   |
-| `renderActions`       | `(node: TreeNode) => ReactNode`                 | —            | Render action buttons per node.            |
-| `aria-label`          | `string`                                        | `'Tree'`     | Accessible label for the tree.             |
-| `aria-labelledby`     | `string`                                        | —            | ID of the element labeling the tree.       |
-| `className`           | `string`                                        | —            | Additional CSS classes.                    |
+| Prop                  | Type                                               | Default     | Description                               |
+| :-------------------- | :------------------------------------------------- | :---------- | :---------------------------------------- |
+| `data`                | `TreeNode[]`                                       | —           | Tree data structure. Required.            |
+| `mode`                | `'normal' \| 'checkbox'`                           | `'normal'`  | Selection mode.                           |
+| `variant`             | `'default' \| 'filled' \| 'bordered' \| 'minimal'` | `'default'` | Visual style variant.                     |
+| `size`                | `'sm' \| 'md' \| 'lg'`                             | `'md'`      | Component size.                           |
+| `showLines`           | `boolean`                                          | `true`      | Show connecting lines between nodes.      |
+| `showIcons`           | `boolean`                                          | `true`      | Show file/folder icons on nodes.          |
+| `defaultExpandAll`    | `boolean`                                          | `false`     | Expand all nodes on mount.                |
+| `defaultExpandedKeys` | `(string \| number)[]`                             | `[]`        | Initially expanded node keys.             |
+| `expandedKeys`        | `(string \| number)[]`                             | —           | Controlled expanded state.                |
+| `onExpandedChange`    | `(keys: (string \| number)[]) => void`             | —           | Fired when expand state changes.          |
+| `selectedKey`         | `string \| number \| null`                         | —           | Controlled selected node (normal mode).   |
+| `defaultSelectedKey`  | `string \| number`                                 | —           | Initially selected node.                  |
+| `onSelect`            | `(key, node) => void`                              | —           | Fired when a node is selected.            |
+| `checkedKeys`         | `(string \| number)[]`                             | —           | Controlled checked nodes (checkbox mode). |
+| `defaultCheckedKeys`  | `(string \| number)[]`                             | `[]`        | Initially checked node keys.              |
+| `onCheck`             | `(keys, nodes) => void`                            | —           | Fired when checkboxes change.             |
+| `checkStrictly`       | `boolean`                                          | `false`     | Disable parent-child checkbox cascade.    |
+| `disabled`            | `boolean`                                          | `false`     | Disable the entire tree.                  |
+| `onNodeClick`         | `(node: TreeNode) => void`                         | —           | Fired on any node click.                  |
+| `renderActions`       | `(node: TreeNode) => ReactNode`                    | —           | Render action buttons per node.           |
+| `aria-label`          | `string`                                           | `'Tree'`    | Accessible label for the tree.            |
+| `aria-labelledby`     | `string`                                           | —           | ID of the element labeling the tree.      |
+| `className`           | `string`                                           | —           | Additional CSS classes.                   |
 
 ### Tree.Search
 
-| Prop              | Type                       | Default           | Description                         |
-| :---------------- | :------------------------- | :---------------- | :---------------------------------- |
-| `searchQuery`     | `string`                   | —                 | Current search query. Required.     |
-| `onSearchChange`  | `(query: string) => void`  | —                 | Callback when query changes. Required. |
-| `placeholder`     | `string`                   | `'Search tree…'`  | Input placeholder text.             |
-| `className`       | `string`                   | —                 | Additional CSS classes.             |
+| Prop             | Type                      | Default          | Description                            |
+| :--------------- | :------------------------ | :--------------- | :------------------------------------- |
+| `searchQuery`    | `string`                  | —                | Current search query. Required.        |
+| `onSearchChange` | `(query: string) => void` | —                | Callback when query changes. Required. |
+| `placeholder`    | `string`                  | `'Search tree…'` | Input placeholder text.                |
+| `className`      | `string`                  | —                | Additional CSS classes.                |
 
 ### Tree.Actions
 
-| Prop             | Type         | Default | Description                           |
-| :--------------- | :----------- | :------ | :------------------------------------ |
-| `onExpandAll`    | `() => void` | —       | Expand all nodes callback. Required.  |
-| `onCollapseAll`  | `() => void` | —       | Collapse all nodes callback. Required. |
-| `className`      | `string`     | —       | Additional CSS classes.               |
+| Prop            | Type         | Default | Description                            |
+| :-------------- | :----------- | :------ | :------------------------------------- |
+| `onExpandAll`   | `() => void` | —       | Expand all nodes callback. Required.   |
+| `onCollapseAll` | `() => void` | —       | Collapse all nodes callback. Required. |
+| `className`     | `string`     | —       | Additional CSS classes.                |
 
 ### Tree.Container
 
-| Prop        | Type        | Default | Description                   |
-| :---------- | :---------- | :------ | :---------------------------- |
-| `children`  | `ReactNode` | —       | Tree content. Required.       |
-| `empty`     | `ReactNode` | —       | Custom empty state fallback.  |
-| `className` | `string`    | —       | Additional CSS classes.       |
+| Prop        | Type        | Default | Description                  |
+| :---------- | :---------- | :------ | :--------------------------- |
+| `children`  | `ReactNode` | —       | Tree content. Required.      |
+| `empty`     | `ReactNode` | —       | Custom empty state fallback. |
+| `className` | `string`    | —       | Additional CSS classes.      |
 
 ### Tree.Nodes
 
-| Prop       | Type         | Default | Description                        |
-| :--------- | :----------- | :------ | :--------------------------------- |
-| `nodes`    | `TreeNode[]` | —       | Array of tree nodes to render. Required. |
+| Prop    | Type         | Default | Description                              |
+| :------ | :----------- | :------ | :--------------------------------------- |
+| `nodes` | `TreeNode[]` | —       | Array of tree nodes to render. Required. |
 
 ### Tree.Node
 
-| Prop       | Type         | Default | Description                       |
-| :--------- | :----------- | :------ | :-------------------------------- |
-| `node`     | `TreeNode`   | —       | Single tree node object. Required. |
-| `level`    | `number`     | `0`     | Nesting depth (0-based).          |
+| Prop    | Type       | Default | Description                        |
+| :------ | :--------- | :------ | :--------------------------------- |
+| `node`  | `TreeNode` | —       | Single tree node object. Required. |
+| `level` | `number`   | `0`     | Nesting depth (0-based).           |
 
 ### TreeNode (Data Type)
 
-| Prop         | Type                       | Default | Description                  |
-| :----------- | :------------------------- | :------ | :--------------------------- |
-| `id`         | `string \| number`         | —       | Unique identifier. Required. |
-| `label`      | `string`                   | —       | Display text. Required.      |
-| `icon`       | `ReactNode`                | —       | Custom icon override.        |
-| `children`   | `TreeNode[]`               | —       | Nested child nodes.          |
-| `disabled`   | `boolean`                  | `false` | Disable this node.           |
-| `selectable` | `boolean`                  | `true`  | Allow selection on this node. |
-| `metadata`   | `Record<string, unknown>`  | —       | Arbitrary metadata.          |
+| Prop         | Type                      | Default | Description                   |
+| :----------- | :------------------------ | :------ | :---------------------------- |
+| `id`         | `string \| number`        | —       | Unique identifier. Required.  |
+| `label`      | `string`                  | —       | Display text. Required.       |
+| `icon`       | `ReactNode`               | —       | Custom icon override.         |
+| `children`   | `TreeNode[]`              | —       | Nested child nodes.           |
+| `disabled`   | `boolean`                 | `false` | Disable this node.            |
+| `selectable` | `boolean`                 | `true`  | Allow selection on this node. |
+| `metadata`   | `Record<string, unknown>` | —       | Arbitrary metadata.           |

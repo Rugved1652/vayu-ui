@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add commandbox
+npx vayu-ui-cli add commandbox
 ```
 
 ```bash
-npx vayu-ui add -t commandbox #with test case needs
+npx vayu-ui-cli add -t commandbox #with test case needs
 ```
 
 ## Usage
@@ -153,68 +153,68 @@ CommandBox/
 
 ### CommandBox (Root)
 
-| Prop            | Type       | Default | Description                                                |
-| :-------------- | :--------- | :------ | :--------------------------------------------------------- |
-| `open`          | `boolean`  | —       | Controlled open state.                                     |
-| `defaultOpen`   | `boolean`  | `false` | Initial open state for uncontrolled mode.                  |
-| `onOpenChange`  | `(open: boolean) => void` | — | Callback when open state changes.                   |
-| `onSelect`      | `(item: CommandBoxItemData) => void` | — | Callback when an item is selected.        |
-| `filter`        | `(item, search) => number` | —   | Custom filter scoring function.                            |
-| `showShortcuts` | `boolean`  | `true`  | Show keyboard shortcut badges on items.                    |
-| `loading`       | `boolean`  | `false` | Show loading state.                                        |
-| `children`      | `ReactNode`| —       | Component children.                                        |
-| `className`     | `string`   | —       | Additional CSS classes.                                    |
+| Prop            | Type                                 | Default | Description                               |
+| :-------------- | :----------------------------------- | :------ | :---------------------------------------- |
+| `open`          | `boolean`                            | —       | Controlled open state.                    |
+| `defaultOpen`   | `boolean`                            | `false` | Initial open state for uncontrolled mode. |
+| `onOpenChange`  | `(open: boolean) => void`            | —       | Callback when open state changes.         |
+| `onSelect`      | `(item: CommandBoxItemData) => void` | —       | Callback when an item is selected.        |
+| `filter`        | `(item, search) => number`           | —       | Custom filter scoring function.           |
+| `showShortcuts` | `boolean`                            | `true`  | Show keyboard shortcut badges on items.   |
+| `loading`       | `boolean`                            | `false` | Show loading state.                       |
+| `children`      | `ReactNode`                          | —       | Component children.                       |
+| `className`     | `string`                             | —       | Additional CSS classes.                   |
 
 ### CommandBox.Input
 
-| Prop          | Type        | Default                          | Description                      |
-| :------------ | :---------- | :------------------------------- | :------------------------------- |
-| `placeholder` | `string`    | `'Type a command or search...'`  | Input placeholder text.          |
-| `icon`        | `ReactNode` | `<Search />`                     | Custom search icon.              |
-| `className`   | `string`    | —                                | Additional CSS classes.          |
+| Prop          | Type        | Default                         | Description             |
+| :------------ | :---------- | :------------------------------ | :---------------------- |
+| `placeholder` | `string`    | `'Type a command or search...'` | Input placeholder text. |
+| `icon`        | `ReactNode` | `<Search />`                    | Custom search icon.     |
+| `className`   | `string`    | —                               | Additional CSS classes. |
 
 ### CommandBox.List
 
-| Prop        | Type        | Default | Description                         |
-| :---------- | :---------- | :------ | :---------------------------------- |
-| `maxHeight` | `string`    | `'320px'` | Maximum height before scrolling.  |
-| `className` | `string`    | —       | Additional CSS classes.             |
+| Prop        | Type     | Default   | Description                      |
+| :---------- | :------- | :-------- | :------------------------------- |
+| `maxHeight` | `string` | `'320px'` | Maximum height before scrolling. |
+| `className` | `string` | —         | Additional CSS classes.          |
 
 ### CommandBox.Item
 
-| Prop          | Type        | Default | Description                                      |
-| :------------ | :---------- | :------ | :----------------------------------------------- |
-| `id`          | `string`    | —       | Unique identifier. Required.                     |
-| `disabled`    | `boolean`   | `false` | Disable selection.                               |
-| `shortcut`    | `string[]`  | —       | Keyboard shortcut keys (e.g., `['⌘', 'N']`).    |
-| `icon`        | `ReactNode` | —       | Icon displayed before the label.                 |
-| `description` | `string`    | —       | Secondary description text.                      |
-| `title`       | `string`    | —       | Item title (falls back to children if string).   |
-| `className`   | `string`    | —       | Additional CSS classes.                          |
+| Prop          | Type        | Default | Description                                    |
+| :------------ | :---------- | :------ | :--------------------------------------------- |
+| `id`          | `string`    | —       | Unique identifier. Required.                   |
+| `disabled`    | `boolean`   | `false` | Disable selection.                             |
+| `shortcut`    | `string[]`  | —       | Keyboard shortcut keys (e.g., `['⌘', 'N']`).   |
+| `icon`        | `ReactNode` | —       | Icon displayed before the label.               |
+| `description` | `string`    | —       | Secondary description text.                    |
+| `title`       | `string`    | —       | Item title (falls back to children if string). |
+| `className`   | `string`    | —       | Additional CSS classes.                        |
 
 ### CommandBox.Group
 
-| Prop        | Type        | Default | Description                    |
-| :---------- | :---------- | :------ | :----------------------------- |
-| `label`     | `string`    | —       | Group heading label. Required. |
-| `className` | `string`    | —       | Additional CSS classes.        |
+| Prop        | Type     | Default | Description                    |
+| :---------- | :------- | :------ | :----------------------------- |
+| `label`     | `string` | —       | Group heading label. Required. |
+| `className` | `string` | —       | Additional CSS classes.        |
 
 ### CommandBox.Empty
 
-| Prop        | Type        | Default               | Description                   |
-| :---------- | :---------- | :-------------------- | :---------------------------- |
-| `children`  | `ReactNode` | `'No results found'`  | Custom empty state message.   |
-| `className` | `string`    | —                     | Additional CSS classes.       |
+| Prop        | Type        | Default              | Description                 |
+| :---------- | :---------- | :------------------- | :-------------------------- |
+| `children`  | `ReactNode` | `'No results found'` | Custom empty state message. |
+| `className` | `string`    | —                    | Additional CSS classes.     |
 
 ### CommandBox.Separator
 
-| Prop        | Type     | Default | Description              |
-| :---------- | :------- | :------ | :----------------------- |
-| `className` | `string` | —       | Additional CSS classes.  |
+| Prop        | Type     | Default | Description             |
+| :---------- | :------- | :------ | :---------------------- |
+| `className` | `string` | —       | Additional CSS classes. |
 
 ### CommandBox.Overlay
 
-| Prop        | Type        | Default | Description                  |
-| :---------- | :---------- | :------ | :--------------------------- |
-| `children`  | `ReactNode` | —       | Content to render inside.    |
-| `className` | `string`    | —       | Additional CSS classes.      |
+| Prop        | Type        | Default | Description               |
+| :---------- | :---------- | :------ | :------------------------ |
+| `children`  | `ReactNode` | —       | Content to render inside. |
+| `className` | `string`    | —       | Additional CSS classes.   |

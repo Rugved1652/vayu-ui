@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add timepicker
+npx vayu-ui-cli add timepicker
 ```
 
 ```bash
-npx vayu-ui add -t timepicker #with test case needs
+npx vayu-ui-cli add -t timepicker #with test case needs
 ```
 
 ## Usage
@@ -114,7 +114,9 @@ import { Timepicker } from 'vayu-ui';
   </Timepicker.Content>
 </Timepicker.Root>;
 
-{/* Custom column layout */}
+{
+  /* Custom column layout */
+}
 <Timepicker.Root format="24h">
   <Timepicker.Trigger />
   <Timepicker.Content>
@@ -181,74 +183,74 @@ TimePicker/
 
 ### Timepicker.Root
 
-| Prop              | Type                                       | Default         | Description                              |
-| :---------------- | :----------------------------------------- | :-------------- | :--------------------------------------- |
-| `children`        | `ReactNode`                                | —               | Timepicker subcomponents.                |
-| `value`           | `TimeValue \| TimeRange \| null`           | —               | Controlled value.                        |
-| `defaultValue`    | `TimeValue \| TimeRange \| null`           | —               | Uncontrolled initial value.              |
-| `onValueChange`   | `(value: TimeValue \| TimeRange \| null) => void` | —       | Callback when value changes.             |
-| `format`          | `'12h' \| '24h'`                           | `'12h'`         | Time display format.                     |
-| `mode`            | `'single' \| 'range'`                      | `'single'`      | Single time or time range selection.     |
-| `label`           | `string`                                   | —               | Accessible label for the timepicker.     |
-| `error`           | `string`                                   | —               | Error message to display.                |
-| `disabled`        | `boolean`                                  | `false`         | Disable the timepicker.                  |
-| `placeholder`     | `string`                                   | `'Select time'` | Placeholder text in the trigger.         |
-| `minuteStep`      | `number`                                   | `5`             | Minute increment step.                   |
-| `clearable`       | `boolean`                                  | `true`          | Show clear button in footer.             |
-| `showApplyButton` | `boolean`                                  | `false`         | Show Apply button in footer.             |
-| `minTime`         | `string`                                   | —               | Minimum selectable time in HH:MM format. |
-| `maxTime`         | `string`                                   | —               | Maximum selectable time in HH:MM format. |
-| `disabledTimes`   | `string[]`                                 | —               | Array of disabled times in HH:MM format. |
-| `disabledHours`   | `number[]`                                 | —               | Array of disabled hours (0-23).          |
-| `className`       | `string`                                   | —               | Additional CSS classes.                  |
+| Prop              | Type                                              | Default         | Description                              |
+| :---------------- | :------------------------------------------------ | :-------------- | :--------------------------------------- |
+| `children`        | `ReactNode`                                       | —               | Timepicker subcomponents.                |
+| `value`           | `TimeValue \| TimeRange \| null`                  | —               | Controlled value.                        |
+| `defaultValue`    | `TimeValue \| TimeRange \| null`                  | —               | Uncontrolled initial value.              |
+| `onValueChange`   | `(value: TimeValue \| TimeRange \| null) => void` | —               | Callback when value changes.             |
+| `format`          | `'12h' \| '24h'`                                  | `'12h'`         | Time display format.                     |
+| `mode`            | `'single' \| 'range'`                             | `'single'`      | Single time or time range selection.     |
+| `label`           | `string`                                          | —               | Accessible label for the timepicker.     |
+| `error`           | `string`                                          | —               | Error message to display.                |
+| `disabled`        | `boolean`                                         | `false`         | Disable the timepicker.                  |
+| `placeholder`     | `string`                                          | `'Select time'` | Placeholder text in the trigger.         |
+| `minuteStep`      | `number`                                          | `5`             | Minute increment step.                   |
+| `clearable`       | `boolean`                                         | `true`          | Show clear button in footer.             |
+| `showApplyButton` | `boolean`                                         | `false`         | Show Apply button in footer.             |
+| `minTime`         | `string`                                          | —               | Minimum selectable time in HH:MM format. |
+| `maxTime`         | `string`                                          | —               | Maximum selectable time in HH:MM format. |
+| `disabledTimes`   | `string[]`                                        | —               | Array of disabled times in HH:MM format. |
+| `disabledHours`   | `number[]`                                        | —               | Array of disabled hours (0-23).          |
+| `className`       | `string`                                          | —               | Additional CSS classes.                  |
 
 ### Timepicker.Trigger
 
-| Prop        | Type     | Default | Description              |
-| :---------- | :------- | :------ | :----------------------- |
-| `className` | `string` | —       | Additional CSS classes.  |
+| Prop        | Type     | Default | Description             |
+| :---------- | :------- | :------ | :---------------------- |
+| `className` | `string` | —       | Additional CSS classes. |
 
 ### Timepicker.Content
 
-| Prop        | Type        | Default | Description                        |
-| :---------- | :---------- | :------ | :--------------------------------- |
-| `children`  | `ReactNode` | —       | Dropdown content subcomponents.    |
-| `className` | `string`    | —       | Additional CSS classes.            |
+| Prop        | Type        | Default | Description                     |
+| :---------- | :---------- | :------ | :------------------------------ |
+| `children`  | `ReactNode` | —       | Dropdown content subcomponents. |
+| `className` | `string`    | —       | Additional CSS classes.         |
 
 ### Timepicker.TimeGrid
 
-| Prop        | Type     | Default | Description                                      |
-| :---------- | :------- | :------ | :----------------------------------------------- |
-| `className` | `string` | —       | Additional CSS classes.                          |
+| Prop        | Type     | Default | Description             |
+| :---------- | :------- | :------ | :---------------------- |
+| `className` | `string` | —       | Additional CSS classes. |
 
 ### Timepicker.HourColumn
 
-| Prop        | Type     | Default | Description              |
-| :---------- | :------- | :------ | :----------------------- |
-| `className` | `string` | —       | Additional CSS classes.  |
+| Prop        | Type     | Default | Description             |
+| :---------- | :------- | :------ | :---------------------- |
+| `className` | `string` | —       | Additional CSS classes. |
 
 ### Timepicker.MinuteColumn
 
-| Prop        | Type     | Default | Description              |
-| :---------- | :------- | :------ | :----------------------- |
-| `className` | `string` | —       | Additional CSS classes.  |
+| Prop        | Type     | Default | Description             |
+| :---------- | :------- | :------ | :---------------------- |
+| `className` | `string` | —       | Additional CSS classes. |
 
 ### Timepicker.PeriodColumn
 
-| Prop        | Type     | Default | Description                        |
-| :---------- | :------- | :------ | :--------------------------------- |
-| `className` | `string` | —       | Additional CSS classes.            |
+| Prop        | Type     | Default | Description             |
+| :---------- | :------- | :------ | :---------------------- |
+| `className` | `string` | —       | Additional CSS classes. |
 
 ### Timepicker.Footer
 
-| Prop        | Type        | Default | Description              |
-| :---------- | :---------- | :------ | :----------------------- |
-| `children`  | `ReactNode` | —       | Custom footer content.   |
-| `className` | `string`    | —       | Additional CSS classes.  |
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Custom footer content.  |
+| `className` | `string`    | —       | Additional CSS classes. |
 
 ### Timepicker.Error
 
-| Prop        | Type        | Default | Description              |
-| :---------- | :---------- | :------ | :----------------------- |
-| `children`  | `ReactNode` | —       | Custom error content.    |
-| `className` | `string`    | —       | Additional CSS classes.  |
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Custom error content.   |
+| `className` | `string`    | —       | Additional CSS classes. |

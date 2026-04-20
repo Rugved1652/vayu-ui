@@ -25,7 +25,7 @@ const features = [
     icon: Terminal,
     title: 'CLI + MCP Server',
     description:
-      'Scaffold with npx vayu-ui add. AI tools integrate via the MCP server for context-aware generation.',
+      'Scaffold with npx vayu-ui-cli add. AI tools integrate via the MCP server for context-aware generation.',
     badges: ['CLI', 'MCP'],
   },
   {

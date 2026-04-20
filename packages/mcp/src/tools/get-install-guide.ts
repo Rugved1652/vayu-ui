@@ -31,16 +31,16 @@ export function registerGetInstallGuide(server: Parameters<typeof registerTool>[
 
       // Init step
       commands.push('# If not already initialized:');
-      commands.push('npx vayu-ui init');
+      commands.push('npx vayu-ui-cli init');
       commands.push('');
 
       // Add command with all dependencies
       if (allSlugs.length > 1) {
         commands.push(`# Install ${entry.name} with dependencies:`);
-        commands.push(`npx vayu-ui add ${allSlugs.join(' ')}`);
+        commands.push(`npx vayu-ui-cli add ${allSlugs.join(' ')}`);
       } else {
         commands.push(`# Install ${entry.name}:`);
-        commands.push(`npx vayu-ui add ${slug}`);
+        commands.push(`npx vayu-ui-cli add ${slug}`);
       }
 
       // NPM deps

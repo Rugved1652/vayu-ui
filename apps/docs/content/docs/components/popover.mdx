@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add popover
+npx vayu-ui-cli add popover
 ```
 
 ```bash
-npx vayu-ui add -t popover #with test case needs
+npx vayu-ui-cli add -t popover #with test case needs
 ```
 
 ## Usage
@@ -116,14 +116,14 @@ Popover/
 
 ### Popover (Root)
 
-| Prop           | Type                          | Default  | Description                                |
-| :------------- | :---------------------------- | :------- | :----------------------------------------- |
-| `open`         | `boolean`                     | —        | Controlled open state.                     |
-| `onOpenChange` | `(open: boolean) => void`     | —        | Callback when open state changes.          |
-| `defaultOpen`  | `boolean`                     | `false`  | Default open state for uncontrolled usage. |
-| `modal`        | `boolean`                     | `false`  | Shows a backdrop overlay when enabled.     |
-| `children`     | `ReactNode`                   | —        | Popover subcomponents.                     |
-| `className`    | `string`                      | —        | Additional CSS classes.                    |
+| Prop           | Type                      | Default | Description                                |
+| :------------- | :------------------------ | :------ | :----------------------------------------- |
+| `open`         | `boolean`                 | —       | Controlled open state.                     |
+| `onOpenChange` | `(open: boolean) => void` | —       | Callback when open state changes.          |
+| `defaultOpen`  | `boolean`                 | `false` | Default open state for uncontrolled usage. |
+| `modal`        | `boolean`                 | `false` | Shows a backdrop overlay when enabled.     |
+| `children`     | `ReactNode`               | —       | Popover subcomponents.                     |
+| `className`    | `string`                  | —       | Additional CSS classes.                    |
 
 ### Popover.Trigger
 
@@ -135,13 +135,13 @@ Popover/
 
 ### Popover.Content
 
-| Prop              | Type                                        | Default  | Description                                        |
-| :---------------- | :------------------------------------------ | :------- | :------------------------------------------------- |
-| `side`            | `"top" \| "right" \| "bottom" \| "left"`   | `"bottom"` | Placement side of the popover.                   |
-| `align`           | `"start" \| "center" \| "end"`             | `"center"` | Alignment along the trigger axis.                |
-| `sideOffset`      | `number`                                    | `8`      | Distance from trigger in pixels.                   |
-| `alignOffset`     | `number`                                    | `0`      | Alignment offset in pixels.                        |
-| `showArrow`       | `boolean`                                   | `false`  | Show a directional arrow pointing to the trigger.  |
-| `avoidCollisions` | `boolean`                                   | `true`   | Flip side if there is not enough viewport space.    |
-| `children`        | `ReactNode`                                 | —        | Content to display inside the popover.             |
-| `className`       | `string`                                    | —        | Additional CSS classes.                            |
+| Prop              | Type                                     | Default    | Description                                       |
+| :---------------- | :--------------------------------------- | :--------- | :------------------------------------------------ |
+| `side`            | `"top" \| "right" \| "bottom" \| "left"` | `"bottom"` | Placement side of the popover.                    |
+| `align`           | `"start" \| "center" \| "end"`           | `"center"` | Alignment along the trigger axis.                 |
+| `sideOffset`      | `number`                                 | `8`        | Distance from trigger in pixels.                  |
+| `alignOffset`     | `number`                                 | `0`        | Alignment offset in pixels.                       |
+| `showArrow`       | `boolean`                                | `false`    | Show a directional arrow pointing to the trigger. |
+| `avoidCollisions` | `boolean`                                | `true`     | Flip side if there is not enough viewport space.  |
+| `children`        | `ReactNode`                              | —          | Content to display inside the popover.            |
+| `className`       | `string`                                 | —          | Additional CSS classes.                           |

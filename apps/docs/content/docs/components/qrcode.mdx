@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add qrcode
+npx vayu-ui-cli add qrcode
 ```
 
 ```bash
-npx vayu-ui add -t qrcode #with test case needs
+npx vayu-ui-cli add -t qrcode #with test case needs
 ```
 
 ## Usage
@@ -67,7 +67,7 @@ npx vayu-ui add -t qrcode #with test case needs
 ```tsx
 import { QRCode } from 'vayu-ui';
 
-<QRCode value="https://example.com" />
+<QRCode value="https://example.com" />;
 ```
 
 - **QRCode** — Single component that renders an SVG-based QR code. Handles encoding, module placement, masking, and optional center logo overlay internally.
@@ -100,25 +100,25 @@ QRcode/
 
 ### QRCode
 
-| Prop            | Type                        | Default                    | Description                                       |
-| :-------------- | :-------------------------- | :------------------------- | :------------------------------------------------ |
-| `value`         | `string`                    | —                          | Data to encode in the QR code. **Required.**      |
-| `size`          | `"sm" \| "md" \| "lg"`      | `"md"`                     | Size variant: `sm` (128px), `md` (200px), `lg` (300px). |
-| `qrSize`        | `number`                    | —                          | Custom width/height in pixels. Overrides `size`.  |
-| `level`         | `"L" \| "M" \| "Q" \| "H"` | `"M"`                      | Error correction level. Auto-upgrades to `H` when `imageSettings` is set. |
-| `bgColor`       | `string`                    | `var(--color-ground-50)`   | Background color of the QR code.                  |
-| `fgColor`       | `string`                    | `var(--color-ground-950)`  | Foreground (module) color of the QR code.         |
-| `includeMargin` | `boolean`                   | `true`                     | Add a 4-module quiet zone margin around the code. |
-| `imageSettings` | `QRCodeImageSettings`       | —                          | Configuration for a center logo overlay.          |
-| `className`     | `string`                    | —                          | Additional CSS classes applied to the root div.   |
-| `aria-label`    | `string`                    | `"QR code for: value"`     | Accessible label. Overrides the auto-generated default. |
+| Prop            | Type                       | Default                   | Description                                                               |
+| :-------------- | :------------------------- | :------------------------ | :------------------------------------------------------------------------ |
+| `value`         | `string`                   | —                         | Data to encode in the QR code. **Required.**                              |
+| `size`          | `"sm" \| "md" \| "lg"`     | `"md"`                    | Size variant: `sm` (128px), `md` (200px), `lg` (300px).                   |
+| `qrSize`        | `number`                   | —                         | Custom width/height in pixels. Overrides `size`.                          |
+| `level`         | `"L" \| "M" \| "Q" \| "H"` | `"M"`                     | Error correction level. Auto-upgrades to `H` when `imageSettings` is set. |
+| `bgColor`       | `string`                   | `var(--color-ground-50)`  | Background color of the QR code.                                          |
+| `fgColor`       | `string`                   | `var(--color-ground-950)` | Foreground (module) color of the QR code.                                 |
+| `includeMargin` | `boolean`                  | `true`                    | Add a 4-module quiet zone margin around the code.                         |
+| `imageSettings` | `QRCodeImageSettings`      | —                         | Configuration for a center logo overlay.                                  |
+| `className`     | `string`                   | —                         | Additional CSS classes applied to the root div.                           |
+| `aria-label`    | `string`                   | `"QR code for: value"`    | Accessible label. Overrides the auto-generated default.                   |
 
 ### QRCodeImageSettings
 
-| Prop              | Type      | Default | Description                                                            |
-| :---------------- | :-------- | :------ | :--------------------------------------------------------------------- |
-| `src`             | `string`  | —       | URL of the center logo image. **Required.**                            |
-| `width`           | `number`  | —       | Width of the logo in pixels. **Required.**                             |
-| `height`          | `number`  | —       | Height of the logo in pixels. **Required.**                            |
-| `excavate`        | `boolean` | `true`  | Clear QR modules behind the logo for scannability. Defaults to `true`. |
-| `excavateMargin`  | `number`  | `1`     | Extra cell buffer cleared around the excavated area.                   |
+| Prop             | Type      | Default | Description                                                            |
+| :--------------- | :-------- | :------ | :--------------------------------------------------------------------- |
+| `src`            | `string`  | —       | URL of the center logo image. **Required.**                            |
+| `width`          | `number`  | —       | Width of the logo in pixels. **Required.**                             |
+| `height`         | `number`  | —       | Height of the logo in pixels. **Required.**                            |
+| `excavate`       | `boolean` | `true`  | Clear QR modules behind the logo for scannability. Defaults to `true`. |
+| `excavateMargin` | `number`  | `1`     | Extra cell buffer cleared around the excavated area.                   |

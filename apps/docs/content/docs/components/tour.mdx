@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add tour
+npx vayu-ui-cli add tour
 ```
 
 ```bash
-npx vayu-ui add -t tour #with test case needs
+npx vayu-ui-cli add -t tour #with test case needs
 ```
 
 ## Usage
@@ -97,6 +97,7 @@ npx vayu-ui add -t tour #with test case needs
       );
     }
     ```
+
   </Tab>
 </Tabs>
 
@@ -152,38 +153,38 @@ Tour/
 
 ### Tour
 
-| Prop                    | Type                | Default    | Description                              |
-| :---------------------- | :------------------ | :--------- | :--------------------------------------- |
-| `steps`                 | `TourStep[]`        | —          | Array of tour step definitions           |
-| `isOpen`                | `boolean`           | `false`    | Controlled open state                    |
-| `onClose`               | `() => void`        | —          | Callback fired when the tour closes      |
-| `onComplete`            | `() => void`        | —          | Callback fired when the last step completes |
-| `onSkip`                | `() => void`        | —          | Callback fired when the user skips       |
-| `showProgress`          | `boolean`           | `true`     | Show progress bar                        |
-| `showStepNumbers`       | `boolean`           | `true`     | Show step counter badge                  |
-| `maskClickable`         | `boolean`           | `false`    | Allow pointer events through overlay     |
-| `closeOnEscape`         | `boolean`           | `true`     | Close on Escape key                      |
-| `closeOnMaskClick`      | `boolean`           | `false`    | Close when clicking the overlay          |
-| `scrollBehavior`        | `ScrollBehavior`    | `"smooth"` | Scroll-into-view behavior                |
-| `highlightedAreaClassName` | `string`       | —          | Class name for the spotlight border      |
-| `maskClassName`         | `string`            | —          | Class name for the overlay mask          |
+| Prop                       | Type             | Default    | Description                                 |
+| :------------------------- | :--------------- | :--------- | :------------------------------------------ |
+| `steps`                    | `TourStep[]`     | —          | Array of tour step definitions              |
+| `isOpen`                   | `boolean`        | `false`    | Controlled open state                       |
+| `onClose`                  | `() => void`     | —          | Callback fired when the tour closes         |
+| `onComplete`               | `() => void`     | —          | Callback fired when the last step completes |
+| `onSkip`                   | `() => void`     | —          | Callback fired when the user skips          |
+| `showProgress`             | `boolean`        | `true`     | Show progress bar                           |
+| `showStepNumbers`          | `boolean`        | `true`     | Show step counter badge                     |
+| `maskClickable`            | `boolean`        | `false`    | Allow pointer events through overlay        |
+| `closeOnEscape`            | `boolean`        | `true`     | Close on Escape key                         |
+| `closeOnMaskClick`         | `boolean`        | `false`    | Close when clicking the overlay             |
+| `scrollBehavior`           | `ScrollBehavior` | `"smooth"` | Scroll-into-view behavior                   |
+| `highlightedAreaClassName` | `string`         | —          | Class name for the spotlight border         |
+| `maskClassName`            | `string`         | —          | Class name for the overlay mask             |
 
 ### TourStep
 
-| Prop                 | Type                                       | Default      | Description                         |
-| :------------------- | :----------------------------------------- | :----------- | :---------------------------------- |
-| `target`             | `string`                                   | —            | CSS selector for the target element |
-| `title`              | `string`                                   | —            | Step heading                        |
-| `content`            | `string \| ReactNode`                      | —            | Step body                           |
-| `placement`          | `'top' \| 'bottom' \| 'left' \| 'right' \| 'center'` | `"bottom"` | Popover placement                   |
-| `spotlightPadding`   | `number`                                   | `8`          | Spotlight cutout padding            |
-| `disableInteraction` | `boolean`                                  | `false`      | Block pointer events on target      |
-| `showSkip`           | `boolean`                                  | `true`       | Show skip button for this step      |
-| `nextButtonText`     | `string`                                   | `"Next"`     | Override next button label          |
-| `prevButtonText`     | `string`                                   | `"Previous"` | Override previous button label      |
-| `onNext`             | `() => void \| Promise<void>`              | —            | Async hook before advancing         |
-| `onPrev`             | `() => void \| Promise<void>`              | —            | Async hook before going back        |
-| `customButtons`      | `ReactNode`                                | —            | Replace the default button row      |
+| Prop                 | Type                                                 | Default      | Description                         |
+| :------------------- | :--------------------------------------------------- | :----------- | :---------------------------------- |
+| `target`             | `string`                                             | —            | CSS selector for the target element |
+| `title`              | `string`                                             | —            | Step heading                        |
+| `content`            | `string \| ReactNode`                                | —            | Step body                           |
+| `placement`          | `'top' \| 'bottom' \| 'left' \| 'right' \| 'center'` | `"bottom"`   | Popover placement                   |
+| `spotlightPadding`   | `number`                                             | `8`          | Spotlight cutout padding            |
+| `disableInteraction` | `boolean`                                            | `false`      | Block pointer events on target      |
+| `showSkip`           | `boolean`                                            | `true`       | Show skip button for this step      |
+| `nextButtonText`     | `string`                                             | `"Next"`     | Override next button label          |
+| `prevButtonText`     | `string`                                             | `"Previous"` | Override previous button label      |
+| `onNext`             | `() => void \| Promise<void>`                        | —            | Async hook before advancing         |
+| `onPrev`             | `() => void \| Promise<void>`                        | —            | Async hook before going back        |
+| `customButtons`      | `ReactNode`                                          | —            | Replace the default button row      |
 
 ### useTour Hook
 

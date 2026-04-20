@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add video-player
+npx vayu-ui-cli add video-player
 ```
 
 ```bash
-npx vayu-ui add -t video-player #with test case needs
+npx vayu-ui-cli add -t video-player #with test case needs
 ```
 
 ## Usage
@@ -73,6 +73,7 @@ npx vayu-ui add -t video-player #with test case needs
       </VideoPlayer.Playlist>
     </VideoPlayer.Root>
     ```
+
   </Tab>
 </Tabs>
 
@@ -114,20 +115,20 @@ VideoPlayer.Root
 
 ### Keyboard shortcuts
 
-| Key | Action |
-|-----|--------|
-| `Space` / `k` | Toggle play/pause |
-| `m` | Toggle mute |
-| `f` | Toggle fullscreen |
-| `c` | Toggle captions |
-| `ArrowLeft` | Seek backward 5 seconds |
-| `ArrowRight` | Seek forward 5 seconds |
-| `ArrowUp` | Volume up |
-| `ArrowDown` | Volume down |
-| `n` | Next track |
-| `p` | Previous track |
-| `l` | Toggle loop |
-| `s` | Toggle shuffle |
+| Key           | Action                  |
+| ------------- | ----------------------- |
+| `Space` / `k` | Toggle play/pause       |
+| `m`           | Toggle mute             |
+| `f`           | Toggle fullscreen       |
+| `c`           | Toggle captions         |
+| `ArrowLeft`   | Seek backward 5 seconds |
+| `ArrowRight`  | Seek forward 5 seconds  |
+| `ArrowUp`     | Volume up               |
+| `ArrowDown`   | Volume down             |
+| `n`           | Next track              |
+| `p`           | Previous track          |
+| `l`           | Toggle loop             |
+| `s`           | Toggle shuffle          |
 
 ### Screen reader behavior
 
@@ -168,52 +169,52 @@ VideoPlayer/
 
 ### VideoPlayer.Root
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `track` | `VideoTrack` | — | Initial single track to play |
-| `playlist` | `VideoTrack[]` | — | Additional tracks (prepended after `track`) |
-| `defaultVolume` | `number` | `0.8` | Initial volume level (0-1) |
-| `defaultMuted` | `boolean` | `false` | Initial muted state |
-| `defaultPlaybackRate` | `number` | `1` | Initial playback speed |
-| `allowMultiple` | `boolean` | `false` | Allow multiple players to play simultaneously |
-| `autoPlay` | `boolean` | `false` | Automatically start playback on mount |
-| `onPlay` | `() => void` | — | Callback when video starts playing |
-| `onPause` | `() => void` | — | Callback when video is paused |
-| `onTrackChange` | `(track: VideoTrack \| null) => void` | — | Callback when active track changes |
-| `onTimeUpdate` | `(currentTime: number) => void` | — | Callback when playback time updates |
-| `onEnded` | `() => void` | — | Callback when video finishes |
-| `onError` | `(error: string) => void` | — | Callback when playback fails |
-| `onFullscreenChange` | `(isFullscreen: boolean) => void` | — | Callback when fullscreen state changes |
+| Prop                  | Type                                  | Default | Description                                   |
+| --------------------- | ------------------------------------- | ------- | --------------------------------------------- |
+| `track`               | `VideoTrack`                          | —       | Initial single track to play                  |
+| `playlist`            | `VideoTrack[]`                        | —       | Additional tracks (prepended after `track`)   |
+| `defaultVolume`       | `number`                              | `0.8`   | Initial volume level (0-1)                    |
+| `defaultMuted`        | `boolean`                             | `false` | Initial muted state                           |
+| `defaultPlaybackRate` | `number`                              | `1`     | Initial playback speed                        |
+| `allowMultiple`       | `boolean`                             | `false` | Allow multiple players to play simultaneously |
+| `autoPlay`            | `boolean`                             | `false` | Automatically start playback on mount         |
+| `onPlay`              | `() => void`                          | —       | Callback when video starts playing            |
+| `onPause`             | `() => void`                          | —       | Callback when video is paused                 |
+| `onTrackChange`       | `(track: VideoTrack \| null) => void` | —       | Callback when active track changes            |
+| `onTimeUpdate`        | `(currentTime: number) => void`       | —       | Callback when playback time updates           |
+| `onEnded`             | `() => void`                          | —       | Callback when video finishes                  |
+| `onError`             | `(error: string) => void`             | —       | Callback when playback fails                  |
+| `onFullscreenChange`  | `(isFullscreen: boolean) => void`     | —       | Callback when fullscreen state changes        |
 
 ### VideoPlayer.Source
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `src` | `string` | — | Video source URL (required) |
-| `title` | `string` | — | Track title |
-| `artist` | `string` | — | Track artist |
-| `poster` | `string` | — | Poster image URL |
-| `subtitleSrc` | `string` | — | Subtitle track URL (VTT format) |
+| Prop          | Type     | Default | Description                     |
+| ------------- | -------- | ------- | ------------------------------- |
+| `src`         | `string` | —       | Video source URL (required)     |
+| `title`       | `string` | —       | Track title                     |
+| `artist`      | `string` | —       | Track artist                    |
+| `poster`      | `string` | —       | Poster image URL                |
+| `subtitleSrc` | `string` | —       | Subtitle track URL (VTT format) |
 
 ### VideoPlayer.Video
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `poster` | `string` | — | Poster image URL |
-| `objectFit` | `"contain" \| "cover"` | — | Video object fit style |
+| Prop        | Type                   | Default | Description            |
+| ----------- | ---------------------- | ------- | ---------------------- |
+| `poster`    | `string`               | —       | Poster image URL       |
+| `objectFit` | `"contain" \| "cover"` | —       | Video object fit style |
 
 ### VideoPlayer.Controls
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `autoHide` | `boolean` | — | Auto-hide controls when playing |
-| `autoHideDelay` | `number` | `3000` | Delay in ms before hiding controls |
+| Prop            | Type      | Default | Description                        |
+| --------------- | --------- | ------- | ---------------------------------- |
+| `autoHide`      | `boolean` | —       | Auto-hide controls when playing    |
+| `autoHideDelay` | `number`  | `3000`  | Delay in ms before hiding controls |
 
 ### VideoPlayer.PlayPause
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode \| ((playing: boolean) => ReactNode)` | — | Custom content or render function |
+| Prop       | Type                                             | Default | Description                       |
+| ---------- | ------------------------------------------------ | ------- | --------------------------------- |
+| `children` | `ReactNode \| ((playing: boolean) => ReactNode)` | —       | Custom content or render function |
 
 ### VideoPlayer.Next / VideoPlayer.Previous
 
@@ -221,34 +222,34 @@ No custom props. Extends `ButtonHTMLAttributes<HTMLButtonElement>`.
 
 ### VideoPlayer.Seek / VideoPlayer.Progress
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `showBuffer` | `boolean` | — | Show buffer progress bar |
-| `showThumb` | `boolean` | — | Show seek thumb handle (Seek only) |
+| Prop         | Type      | Default | Description                        |
+| ------------ | --------- | ------- | ---------------------------------- |
+| `showBuffer` | `boolean` | —       | Show buffer progress bar           |
+| `showThumb`  | `boolean` | —       | Show seek thumb handle (Seek only) |
 
 ### VideoPlayer.Time
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `showRemaining` | `boolean` | — | Show remaining time instead of total duration |
+| Prop            | Type      | Default | Description                                   |
+| --------------- | --------- | ------- | --------------------------------------------- |
+| `showRemaining` | `boolean` | —       | Show remaining time instead of total duration |
 
 ### VideoPlayer.Volume
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `vertical` | `boolean` | — | Display volume slider vertically |
+| Prop       | Type      | Default | Description                      |
+| ---------- | --------- | ------- | -------------------------------- |
+| `vertical` | `boolean` | —       | Display volume slider vertically |
 
 ### VideoPlayer.Mute
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode \| ((muted: boolean) => ReactNode)` | — | Custom content or render function |
+| Prop       | Type                                           | Default | Description                       |
+| ---------- | ---------------------------------------------- | ------- | --------------------------------- |
+| `children` | `ReactNode \| ((muted: boolean) => ReactNode)` | —       | Custom content or render function |
 
 ### VideoPlayer.Fullscreen / VideoPlayer.PiP / VideoPlayer.Captions
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode \| ((state: boolean) => ReactNode)` | — | Custom content or render function |
+| Prop       | Type                                           | Default | Description                       |
+| ---------- | ---------------------------------------------- | ------- | --------------------------------- |
+| `children` | `ReactNode \| ((state: boolean) => ReactNode)` | —       | Custom content or render function |
 
 ### VideoPlayer.Quality
 
@@ -256,8 +257,8 @@ No custom props. Extends `HTMLAttributes<HTMLSelectElement>`. Only rendered when
 
 ### VideoPlayer.Speed
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
+| Prop    | Type       | Default                                    | Description                      |
+| ------- | ---------- | ------------------------------------------ | -------------------------------- |
 | `rates` | `number[]` | `[0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]` | Available playback speed options |
 
 ### VideoPlayer.Buffer
@@ -270,20 +271,20 @@ No custom props. Extends `HTMLAttributes<HTMLDivElement>`.
 
 ### VideoPlayer.Track
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `track` | `VideoTrack` | — | Track data object (required) |
-| `activeClassName` | `string` | — | Class name for active track |
-| `showIndex` | `boolean` | — | Show track index number |
+| Prop              | Type         | Default | Description                  |
+| ----------------- | ------------ | ------- | ---------------------------- |
+| `track`           | `VideoTrack` | —       | Track data object (required) |
+| `activeClassName` | `string`     | —       | Class name for active track  |
+| `showIndex`       | `boolean`    | —       | Show track index number      |
 
 ### VideoPlayer.TrackInfo
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `showPoster` | `boolean` | — | Display poster image |
+| Prop         | Type      | Default | Description          |
+| ------------ | --------- | ------- | -------------------- |
+| `showPoster` | `boolean` | —       | Display poster image |
 
 ### VideoPlayer.Loading / VideoPlayer.Error
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | — | Custom loading/error content |
+| Prop       | Type        | Default | Description                  |
+| ---------- | ----------- | ------- | ---------------------------- |
+| `children` | `ReactNode` | —       | Custom loading/error content |

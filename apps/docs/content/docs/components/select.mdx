@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add select
+npx vayu-ui-cli add select
 ```
 
 ```bash
-npx vayu-ui add -t select #with test case needs
+npx vayu-ui-cli add -t select #with test case needs
 ```
 
 ## Usage
@@ -117,7 +117,9 @@ npx vayu-ui add -t select #with test case needs
 ```tsx
 import { Select } from 'vayu-ui';
 
-{/* Basic Structure */}
+{
+  /* Basic Structure */
+}
 <Select.Root value={value} onValueChange={setValue} label="Label">
   <Select.Trigger placeholder="Choose..." />
   <Select.Content>
@@ -194,102 +196,102 @@ Select/
 
 ### Select.Root
 
-| Prop              | Type                                                  | Default         | Description                                        |
-| :---------------- | :---------------------------------------------------- | :-------------- | :------------------------------------------------- |
-| `children`        | `ReactNode`                                           | —               | Select subcomponents.                              |
-| `value`           | `SelectValue`                                         | —               | Controlled value.                                  |
-| `defaultValue`    | `SelectValue`                                         | —               | Uncontrolled initial value.                        |
-| `onValueChange`   | `(value: SelectValue) => void`                        | —               | Callback when value changes.                       |
-| `label`           | `string`                                              | —               | Accessible label for the select.                   |
-| `error`           | `string`                                              | —               | Error message displayed below the trigger.         |
-| `multiple`        | `boolean`                                             | `false`         | Enable multi-select mode.                          |
-| `className`       | `string`                                              | —               | Additional CSS classes.                            |
-| `onSearch`        | `(searchValue: string) => Promise<OptionData[]>`      | —               | Async search handler. Enables async mode.          |
-| `searchDebounce`  | `number`                                              | `300`           | Debounce delay in ms for async search.             |
-| `minSearchLength` | `number`                                              | `1`             | Minimum characters before triggering search.       |
-| `isLoading`       | `boolean`                                             | —               | External loading state override.                   |
-| `creatable`       | `boolean`                                             | `false`         | Enable option creation.                            |
-| `onCreateOption`  | `(inputValue: string) => Promise<OptionData \| null>` | —               | Handler to create a new option.                    |
-| `isCreating`      | `boolean`                                             | —               | External creating state override.                  |
-| `createText`      | `string`                                              | `"Create option"` | Text for the create button.                      |
-| `validateCreate`  | `(inputValue: string) => boolean \| string`           | —               | Validation function. Returns `true` or error text. |
+| Prop              | Type                                                  | Default           | Description                                        |
+| :---------------- | :---------------------------------------------------- | :---------------- | :------------------------------------------------- |
+| `children`        | `ReactNode`                                           | —                 | Select subcomponents.                              |
+| `value`           | `SelectValue`                                         | —                 | Controlled value.                                  |
+| `defaultValue`    | `SelectValue`                                         | —                 | Uncontrolled initial value.                        |
+| `onValueChange`   | `(value: SelectValue) => void`                        | —                 | Callback when value changes.                       |
+| `label`           | `string`                                              | —                 | Accessible label for the select.                   |
+| `error`           | `string`                                              | —                 | Error message displayed below the trigger.         |
+| `multiple`        | `boolean`                                             | `false`           | Enable multi-select mode.                          |
+| `className`       | `string`                                              | —                 | Additional CSS classes.                            |
+| `onSearch`        | `(searchValue: string) => Promise<OptionData[]>`      | —                 | Async search handler. Enables async mode.          |
+| `searchDebounce`  | `number`                                              | `300`             | Debounce delay in ms for async search.             |
+| `minSearchLength` | `number`                                              | `1`               | Minimum characters before triggering search.       |
+| `isLoading`       | `boolean`                                             | —                 | External loading state override.                   |
+| `creatable`       | `boolean`                                             | `false`           | Enable option creation.                            |
+| `onCreateOption`  | `(inputValue: string) => Promise<OptionData \| null>` | —                 | Handler to create a new option.                    |
+| `isCreating`      | `boolean`                                             | —                 | External creating state override.                  |
+| `createText`      | `string`                                              | `"Create option"` | Text for the create button.                        |
+| `validateCreate`  | `(inputValue: string) => boolean \| string`           | —                 | Validation function. Returns `true` or error text. |
 
 ### Select.Trigger
 
-| Prop            | Type      | Default | Description                          |
-| :-------------- | :-------- | :------ | :----------------------------------- |
-| `placeholder`   | `string`  | —       | Placeholder text for the input.      |
-| `showSearchIcon` | `boolean` | `false` | Show a search icon in the trigger.   |
-| `className`     | `string`  | —       | Additional CSS classes.              |
+| Prop             | Type      | Default | Description                        |
+| :--------------- | :-------- | :------ | :--------------------------------- |
+| `placeholder`    | `string`  | —       | Placeholder text for the input.    |
+| `showSearchIcon` | `boolean` | `false` | Show a search icon in the trigger. |
+| `className`      | `string`  | —       | Additional CSS classes.            |
 
 ### Select.Content
 
-| Prop        | Type        | Default | Description                        |
-| :---------- | :---------- | :------ | :--------------------------------- |
-| `children`  | `ReactNode` | —       | Dropdown content subcomponents.    |
-| `className` | `string`    | —       | Additional CSS classes.            |
+| Prop        | Type        | Default | Description                     |
+| :---------- | :---------- | :------ | :------------------------------ |
+| `children`  | `ReactNode` | —       | Dropdown content subcomponents. |
+| `className` | `string`    | —       | Additional CSS classes.         |
 
 ### Select.Item
 
-| Prop        | Type             | Default | Description                  |
-| :---------- | :--------------- | :------ | :--------------------------- |
-| `value`     | `string \| number` | —     | Unique value. Required.      |
-| `children`  | `ReactNode`      | —       | Option label content.        |
-| `disabled`  | `boolean`        | `false` | Disable selection.           |
-| `className` | `string`         | —       | Additional CSS classes.      |
+| Prop        | Type               | Default | Description             |
+| :---------- | :----------------- | :------ | :---------------------- |
+| `value`     | `string \| number` | —       | Unique value. Required. |
+| `children`  | `ReactNode`        | —       | Option label content.   |
+| `disabled`  | `boolean`          | `false` | Disable selection.      |
+| `className` | `string`           | —       | Additional CSS classes. |
 
 ### Select.List
 
-| Prop        | Type        | Default | Description                               |
-| :---------- | :---------- | :------ | :---------------------------------------- |
+| Prop        | Type        | Default | Description                                |
+| :---------- | :---------- | :------ | :----------------------------------------- |
 | `children`  | `ReactNode` | —       | `Select.Item` elements for static options. |
-| `className` | `string`    | —       | Additional CSS classes.                   |
+| `className` | `string`    | —       | Additional CSS classes.                    |
 
 ### Select.AsyncOptions
 
-| Prop        | Type     | Default | Description                  |
-| :---------- | :------- | :------ | :--------------------------- |
-| `className` | `string` | —       | Additional CSS classes.      |
+| Prop        | Type     | Default | Description             |
+| :---------- | :------- | :------ | :---------------------- |
+| `className` | `string` | —       | Additional CSS classes. |
 
 ### Select.CreateButton
 
-| Prop        | Type        | Default | Description                     |
-| :---------- | :---------- | :------ | :------------------------------ |
-| `children`  | `ReactNode` | —       | Custom button label.            |
-| `className` | `string`    | —       | Additional CSS classes.         |
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Custom button label.    |
+| `className` | `string`    | —       | Additional CSS classes. |
 
 ### Select.Loading
 
-| Prop        | Type        | Default         | Description              |
-| :---------- | :---------- | :-------------- | :----------------------- |
+| Prop        | Type        | Default          | Description             |
+| :---------- | :---------- | :--------------- | :---------------------- |
 | `children`  | `ReactNode` | `"Searching..."` | Custom loading text.    |
-| `className` | `string`    | —               | Additional CSS classes.  |
+| `className` | `string`    | —                | Additional CSS classes. |
 
 ### Select.NotFound
 
-| Prop        | Type        | Default              | Description              |
-| :---------- | :---------- | :------------------- | :----------------------- |
+| Prop        | Type        | Default              | Description             |
+| :---------- | :---------- | :------------------- | :---------------------- |
 | `children`  | `ReactNode` | `"No results found"` | Custom empty text.      |
-| `className` | `string`    | —                    | Additional CSS classes.  |
+| `className` | `string`    | —                    | Additional CSS classes. |
 
 ### Select.SearchHint
 
-| Prop        | Type        | Default | Description              |
-| :---------- | :---------- | :------ | :----------------------- |
-| `children`  | `ReactNode` | —       | Custom hint text.        |
-| `className` | `string`    | —       | Additional CSS classes.  |
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Custom hint text.       |
+| `className` | `string`    | —       | Additional CSS classes. |
 
 ### Select.Error
 
-| Prop        | Type                        | Default    | Description                          |
-| :---------- | :-------------------------- | :--------- | :----------------------------------- |
-| `type`      | `'search' \| 'create'`      | `'search'` | Which error state to display.        |
-| `children`  | `ReactNode`                 | —          | Custom error content.                |
-| `className` | `string`                    | —          | Additional CSS classes.              |
+| Prop        | Type                   | Default    | Description                   |
+| :---------- | :--------------------- | :--------- | :---------------------------- |
+| `type`      | `'search' \| 'create'` | `'search'` | Which error state to display. |
+| `children`  | `ReactNode`            | —          | Custom error content.         |
+| `className` | `string`               | —          | Additional CSS classes.       |
 
 ### Select.Footer
 
-| Prop        | Type        | Default | Description              |
-| :---------- | :---------- | :------ | :----------------------- |
-| `children`  | `ReactNode` | —       | Footer content.          |
-| `className` | `string`    | —       | Additional CSS classes.  |
+| Prop        | Type        | Default | Description             |
+| :---------- | :---------- | :------ | :---------------------- |
+| `children`  | `ReactNode` | —       | Footer content.         |
+| `className` | `string`    | —       | Additional CSS classes. |

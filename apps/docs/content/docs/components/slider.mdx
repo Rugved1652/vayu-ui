@@ -9,18 +9,19 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add slider
+npx vayu-ui-cli add slider
 ```
 
 ```bash
-npx vayu-ui add -t slider #with test case needs
+npx vayu-ui-cli add -t slider #with test case needs
 ```
 
 ## Usage
+
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
       <SliderDemo />
@@ -31,25 +32,30 @@ npx vayu-ui add -t slider #with test case needs
 
     <Slider defaultValue={[25, 75]} max={100} step={5} label="Price range" />
     ```
+
   </Tab>
 </Tabs>
 
 ## Anatomy
+
 ```tsx
 <Slider />
 ```
 
 ## Accessibility
+
 - Keyboard support (`ArrowKeys`, `PageUp`, `PageDown`, `Home`, `End`) to increment or decrement the value.
 - ARIA attributes (`role="slider"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-label`).
 - Focus behavior visually indicates the selected thumb via standard focus rings and sizing.
 
 ## Screen reader behavior
+
 - Announces as a "slider" indicating current value via `aria-valuetext`.
 - Announces range limits using `aria-valuemin` and `aria-valuemax`.
 - Multi-thumb sliders announce their index, such as "Value 1 of 2".
-    
+
 ## Component Folder Structure
+
 ```text
 Slider/
 ├── hooks.ts
@@ -63,15 +69,15 @@ Slider/
 
 ## Props
 
-| Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| `value` | `number[]` | - | The controlled value(s) of the slider. |
-| `defaultValue` | `number[]` | `[0]` | The initial value(s) when uncontrolled. |
-| `min` | `number` | `0` | The minimum allowed value. |
-| `max` | `number` | `100` | The maximum allowed value. |
-| `step` | `number` | `1` | The stepping increment for the slider. |
-| `disabled` | `boolean` | `false` | Whether the slider is disabled. |
-| `name` | `string` | - | Form field name for submissions. |
-| `label` | `string` | - | Accessible label used for screen readers. |
-| `onValueChange` | `(value: number[]) => void` | - | Event fired when the value updates during interaction. |
-| `onValueCommit` | `(value: number[]) => void` | - | Event fired when interaction has finished (drag/key end). |
+| Prop            | Type                        | Default | Description                                               |
+| --------------- | --------------------------- | ------- | --------------------------------------------------------- |
+| `value`         | `number[]`                  | -       | The controlled value(s) of the slider.                    |
+| `defaultValue`  | `number[]`                  | `[0]`   | The initial value(s) when uncontrolled.                   |
+| `min`           | `number`                    | `0`     | The minimum allowed value.                                |
+| `max`           | `number`                    | `100`   | The maximum allowed value.                                |
+| `step`          | `number`                    | `1`     | The stepping increment for the slider.                    |
+| `disabled`      | `boolean`                   | `false` | Whether the slider is disabled.                           |
+| `name`          | `string`                    | -       | Form field name for submissions.                          |
+| `label`         | `string`                    | -       | Accessible label used for screen readers.                 |
+| `onValueChange` | `(value: number[]) => void` | -       | Event fired when the value updates during interaction.    |
+| `onValueCommit` | `(value: number[]) => void` | -       | Event fired when interaction has finished (drag/key end). |

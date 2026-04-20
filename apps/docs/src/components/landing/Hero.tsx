@@ -78,7 +78,7 @@ export function Hero() {
                 <div className="flex items-center gap-3 px-4 py-3">
                   <Terminal className="w-4 h-4 text-muted-content shrink-0" />
                   <code className="font-tertiary text-sm text-surface-content">
-                    npx vayu-ui add button
+                    npx vayu-ui-cli add button
                   </code>
                 </div>
               </div>

@@ -9,18 +9,19 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add date-picker
+npx vayu-ui-cli add date-picker
 ```
 
 ```bash
-npx vayu-ui add -t date-picker #with test case needs
+npx vayu-ui-cli add -t date-picker #with test case needs
 ```
 
 ## Usage
+
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
       <DatePickerDemo />
@@ -41,10 +42,12 @@ npx vayu-ui add -t date-picker #with test case needs
       </DatePicker.Calendar>
     </DatePicker>
     ```
+
   </Tab>
 </Tabs>
 
 ## Anatomy
+
 ```tsx
 <DatePicker>
   <DatePicker.Trigger />
@@ -55,14 +58,17 @@ npx vayu-ui add -t date-picker #with test case needs
 ```
 
 ## Accessibility
+
 - Keyboard support: Arrow keys navigate between dates, months, and years. Space and Enter select the focused date. Escape closes the calendar.
 - ARIA attributes: Proper focus management, `aria-expanded` on the trigger, and standard calendar grid aria features are supported.
 - Focus behavior: Focus is trapped within the calendar popup when opened and returns to the trigger when closed.
 
 ## Screen reader behavior
+
 Screen readers announce the trigger state (`expanded` or `collapsed`) and the currently selected date. Once the calendar is open, the visible month and year are announced, and moving focus through dates accurately speaks each date, its selection status, and any disabled status.
 
 ## Component Folder Structure
+
 ```bash
 DatePicker/
 ├── DatePicker.tsx
@@ -79,28 +85,32 @@ DatePicker/
 ## Props
 
 ### DatePicker
-| Prop | Type | Description |
-| :--- | :--- | :--- |
-| `mode` | `'single' \| 'range'` | Controls the selection mode (defaults to `'single'`). |
-| `value` | `Date \| DateRange \| null` | The controlled value of the date picker. |
-| `defaultValue` | `Date \| DateRange \| null` | The initial value when uncontrolled. |
-| `onChange` | `(value: DatePickerValue) => void` | Callback triggered when the date or range changes. |
-| `disabled` | `boolean` | If true, disables the functionality. |
-| `disabledWeekdays` | `number[]` | Array of days to disable (0 for Sunday to 6 for Saturday). |
-| `disabledDates` | `Date[]` | Specific dates that are disabled from selection. |
-| `placeholder` | `string` | Fallback text used internally. |
+
+| Prop               | Type                               | Description                                                |
+| :----------------- | :--------------------------------- | :--------------------------------------------------------- |
+| `mode`             | `'single' \| 'range'`              | Controls the selection mode (defaults to `'single'`).      |
+| `value`            | `Date \| DateRange \| null`        | The controlled value of the date picker.                   |
+| `defaultValue`     | `Date \| DateRange \| null`        | The initial value when uncontrolled.                       |
+| `onChange`         | `(value: DatePickerValue) => void` | Callback triggered when the date or range changes.         |
+| `disabled`         | `boolean`                          | If true, disables the functionality.                       |
+| `disabledWeekdays` | `number[]`                         | Array of days to disable (0 for Sunday to 6 for Saturday). |
+| `disabledDates`    | `Date[]`                           | Specific dates that are disabled from selection.           |
+| `placeholder`      | `string`                           | Fallback text used internally.                             |
 
 ### DatePicker.Trigger
-| Prop | Type | Description |
-| :--- | :--- | :--- |
+
+| Prop          | Type     | Description                              |
+| :------------ | :------- | :--------------------------------------- |
 | `placeholder` | `string` | Displayed text when no date is selected. |
 
 ### DatePicker.Calendar
-| Prop | Type | Description |
-| :--- | :--- | :--- |
+
+| Prop     | Type                             | Description                                      |
+| :------- | :------------------------------- | :----------------------------------------------- |
 | inherits | `HTMLAttributes<HTMLDivElement>` | Standard HTML attributes for styling and events. |
 
 ### DatePicker.Calendar.Footer
-| Prop | Type | Description |
-| :--- | :--- | :--- |
+
+| Prop     | Type                             | Description                                      |
+| :------- | :------------------------------- | :----------------------------------------------- |
 | inherits | `HTMLAttributes<HTMLDivElement>` | Standard HTML attributes for styling and events. |

@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add bigcalendar
+npx vayu-ui-cli add bigcalendar
 ```
 
 ```bash
-npx vayu-ui add -t bigcalendar #with test case needs
+npx vayu-ui-cli add -t bigcalendar #with test case needs
 ```
 
 ## Usage
@@ -63,40 +63,40 @@ npx vayu-ui add -t bigcalendar #with test case needs
 
 ### Keyboard Support
 
-| Key             | View       | Action                                          |
-| :-------------- | :--------- | :---------------------------------------------- |
-| `ArrowLeft`     | Month      | Move focus to the previous day.                 |
-| `ArrowRight`    | Month      | Move focus to the next day.                     |
-| `ArrowUp`       | Month      | Move focus to the day one row above.            |
-| `ArrowDown`     | Month      | Move focus to the day one row below.            |
-| `ArrowLeft`     | Week       | Move focus to the previous column (day).        |
-| `ArrowRight`    | Week       | Move focus to the next column (day).            |
-| `ArrowUp`       | Week       | Move focus to the previous hour slot.           |
-| `ArrowDown`     | Week       | Move focus to the next hour slot.               |
-| `ArrowUp`       | Day        | Move focus to the previous hour slot.           |
-| `ArrowDown`     | Day        | Move focus to the next hour slot.               |
-| `Enter` / `Space` | All     | Select the focused cell (triggers `onDateClick` and switches to day view in Month). |
-| `Enter` / `Space` | Event   | Activate the focused event (triggers `onEventClick`). |
+| Key               | View  | Action                                                                              |
+| :---------------- | :---- | :---------------------------------------------------------------------------------- |
+| `ArrowLeft`       | Month | Move focus to the previous day.                                                     |
+| `ArrowRight`      | Month | Move focus to the next day.                                                         |
+| `ArrowUp`         | Month | Move focus to the day one row above.                                                |
+| `ArrowDown`       | Month | Move focus to the day one row below.                                                |
+| `ArrowLeft`       | Week  | Move focus to the previous column (day).                                            |
+| `ArrowRight`      | Week  | Move focus to the next column (day).                                                |
+| `ArrowUp`         | Week  | Move focus to the previous hour slot.                                               |
+| `ArrowDown`       | Week  | Move focus to the next hour slot.                                                   |
+| `ArrowUp`         | Day   | Move focus to the previous hour slot.                                               |
+| `ArrowDown`       | Day   | Move focus to the next hour slot.                                                   |
+| `Enter` / `Space` | All   | Select the focused cell (triggers `onDateClick` and switches to day view in Month). |
+| `Enter` / `Space` | Event | Activate the focused event (triggers `onEventClick`).                               |
 
 ### ARIA Attributes
 
-| Element              | Role           | ARIA Attributes                                                                   |
-| :------------------- | :------------- | :-------------------------------------------------------------------------------- |
-| Root                 | `application`  | `aria-label="Calendar"`                                                           |
-| Toolbar              | `toolbar`      | `aria-label="Calendar navigation"`                                                |
-| Navigation buttons   | `group`        | `aria-label="Previous period"` / `aria-label="Next period"`                       |
-| Title display        | —              | `aria-live="polite"`                                                              |
-| View switcher        | `radiogroup`   | `aria-label="Calendar view"`                                                      |
-| View button          | `radio`        | `aria-checked={active}`                                                           |
-| Month grid           | `grid`         | `aria-label="January 2026"`                                                       |
-| Day headers          | `columnheader` | `aria-label={fullDayName}`                                                        |
-| Day cells            | `gridcell`     | `aria-label="Monday, January 6, 2026"`, `aria-selected` for today                 |
-| Week grid            | `grid`         | `aria-label="Week of Monday, January 6, 2026"`                                    |
-| Time labels          | `rowheader`    | Hour label text                                                                   |
-| Week/Day cells       | `gridcell`     | `aria-label="Monday, January 6, 2026 at 9:00 AM"`                                |
-| Event                | `button`       | `aria-label="{title}, all day"`                                                   |
-| Remove button        | —              | `aria-label="Remove {title}"`                                                     |
-| Overflow indicator   | —              | `aria-label="3 more events"`                                                      |
+| Element            | Role           | ARIA Attributes                                                   |
+| :----------------- | :------------- | :---------------------------------------------------------------- |
+| Root               | `application`  | `aria-label="Calendar"`                                           |
+| Toolbar            | `toolbar`      | `aria-label="Calendar navigation"`                                |
+| Navigation buttons | `group`        | `aria-label="Previous period"` / `aria-label="Next period"`       |
+| Title display      | —              | `aria-live="polite"`                                              |
+| View switcher      | `radiogroup`   | `aria-label="Calendar view"`                                      |
+| View button        | `radio`        | `aria-checked={active}`                                           |
+| Month grid         | `grid`         | `aria-label="January 2026"`                                       |
+| Day headers        | `columnheader` | `aria-label={fullDayName}`                                        |
+| Day cells          | `gridcell`     | `aria-label="Monday, January 6, 2026"`, `aria-selected` for today |
+| Week grid          | `grid`         | `aria-label="Week of Monday, January 6, 2026"`                    |
+| Time labels        | `rowheader`    | Hour label text                                                   |
+| Week/Day cells     | `gridcell`     | `aria-label="Monday, January 6, 2026 at 9:00 AM"`                 |
+| Event              | `button`       | `aria-label="{title}, all day"`                                   |
+| Remove button      | —              | `aria-label="Remove {title}"`                                     |
+| Overflow indicator | —              | `aria-label="3 more events"`                                      |
 
 ### Focus Behavior
 
@@ -130,39 +130,39 @@ BigCalendar/
 
 ### BigCalendar
 
-| Prop             | Type                                   | Default      | Description                                    |
-| :--------------- | :------------------------------------- | :----------- | :--------------------------------------------- |
-| `events`         | `CalendarEvent[]`                      | `[]`         | Events to display.                             |
-| `defaultDate`    | `Date`                                 | `new Date()` | Initial date for uncontrolled usage.           |
-| `date`           | `Date`                                 | —            | Controlled current date.                       |
-| `defaultView`    | `'month' \| 'week' \| 'day'`           | `'month'`    | Initial view for uncontrolled usage.           |
-| `view`           | `'month' \| 'week' \| 'day'`           | —            | Controlled active view.                        |
-| `onDateChange`   | `(date: Date) => void`                 | —            | Called when the navigated date changes.        |
-| `onViewChange`   | `(view: CalendarView) => void`         | —            | Called when the active view changes.           |
-| `onEventClick`   | `(event: CalendarEvent) => void`       | —            | Called when an event is clicked.               |
-| `onDateClick`    | `(date: Date) => void`                 | —            | Called when a date cell or time slot is clicked. |
-| `onEventRemove`  | `(event: CalendarEvent) => void`       | —            | Called when an event remove button is clicked. |
-| `weekStartsOn`   | `0 \| 1`                               | `0`          | First day of the week. `0` = Sunday, `1` = Monday. |
-| `renderEvent`    | `(event: CalendarEvent) => ReactNode`  | —            | Custom render function for event cards.        |
-| `className`      | `string`                               | —            | Additional CSS classes for the root element.   |
+| Prop            | Type                                  | Default      | Description                                        |
+| :-------------- | :------------------------------------ | :----------- | :------------------------------------------------- |
+| `events`        | `CalendarEvent[]`                     | `[]`         | Events to display.                                 |
+| `defaultDate`   | `Date`                                | `new Date()` | Initial date for uncontrolled usage.               |
+| `date`          | `Date`                                | —            | Controlled current date.                           |
+| `defaultView`   | `'month' \| 'week' \| 'day'`          | `'month'`    | Initial view for uncontrolled usage.               |
+| `view`          | `'month' \| 'week' \| 'day'`          | —            | Controlled active view.                            |
+| `onDateChange`  | `(date: Date) => void`                | —            | Called when the navigated date changes.            |
+| `onViewChange`  | `(view: CalendarView) => void`        | —            | Called when the active view changes.               |
+| `onEventClick`  | `(event: CalendarEvent) => void`      | —            | Called when an event is clicked.                   |
+| `onDateClick`   | `(date: Date) => void`                | —            | Called when a date cell or time slot is clicked.   |
+| `onEventRemove` | `(event: CalendarEvent) => void`      | —            | Called when an event remove button is clicked.     |
+| `weekStartsOn`  | `0 \| 1`                              | `0`          | First day of the week. `0` = Sunday, `1` = Monday. |
+| `renderEvent`   | `(event: CalendarEvent) => ReactNode` | —            | Custom render function for event cards.            |
+| `className`     | `string`                              | —            | Additional CSS classes for the root element.       |
 
 ### BigCalendar.Event
 
-| Prop         | Type                            | Default    | Description                               |
-| :----------- | :------------------------------ | :--------- | :---------------------------------------- |
-| `event`      | `CalendarEvent`                 | —          | The event data to display.                |
-| `showRemove` | `boolean`                       | `false`    | Show a remove button on the event card.   |
-| `height`     | `number`                        | —          | Pixel height for timed events in week/day views. |
-| `variant`    | `'compact' \| 'default'`        | `'default'`| Display variant for the event card.       |
+| Prop         | Type                     | Default     | Description                                      |
+| :----------- | :----------------------- | :---------- | :----------------------------------------------- |
+| `event`      | `CalendarEvent`          | —           | The event data to display.                       |
+| `showRemove` | `boolean`                | `false`     | Show a remove button on the event card.          |
+| `height`     | `number`                 | —           | Pixel height for timed events in week/day views. |
+| `variant`    | `'compact' \| 'default'` | `'default'` | Display variant for the event card.              |
 
 ### CalendarEvent
 
-| Field         | Type               | Required | Description                                                   |
-| :------------ | :----------------- | :------- | :------------------------------------------------------------ |
-| `id`          | `string \| number` | Yes      | Unique identifier.                                            |
-| `title`       | `string`           | Yes      | Event title.                                                  |
-| `start`       | `Date`             | Yes      | Start date and time.                                          |
-| `end`         | `Date`             | Yes      | End date and time.                                            |
+| Field         | Type               | Required | Description                                                                |
+| :------------ | :----------------- | :------- | :------------------------------------------------------------------------- |
+| `id`          | `string \| number` | Yes      | Unique identifier.                                                         |
+| `title`       | `string`           | Yes      | Event title.                                                               |
+| `start`       | `Date`             | Yes      | Start date and time.                                                       |
+| `end`         | `Date`             | Yes      | End date and time.                                                         |
 | `color`       | `string`           | No       | Color theme: `blue`, `green`, `red`, `amber`, `purple`, `pink`, `primary`. |
-| `allDay`      | `boolean`          | No       | Marks the event as all-day.                                   |
-| `description` | `string`           | No       | Optional event description.                                   |
+| `allDay`      | `boolean`          | No       | Marks the event as all-day.                                                |
+| `description` | `string`           | No       | Optional event description.                                                |

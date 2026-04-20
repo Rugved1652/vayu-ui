@@ -19,15 +19,15 @@ No installation needed — use `npx`:
 
 ```bash
 # List all available components and hooks
-npx vayu-ui list
+npx vayu-ui-cli list
 
 # Filter by type
-npx vayu-ui list --type component
-npx vayu-ui list --type hook
+npx vayu-ui-cli list --type component
+npx vayu-ui-cli list --type hook
 
 # Filter by category
-npx vayu-ui list --category inputs
-npx vayu-ui list --type component --category overlay
+npx vayu-ui-cli list --category inputs
+npx vayu-ui-cli list --type component --category overlay
 ```
 
 ---
@@ -77,20 +77,20 @@ vayu-ui list
 
 **Flags:**
 
-| Flag                       | Description                          |
-| -------------------------- | ------------------------------------ |
-| `--type <component\|hook>` | Filter by item type                  |
+| Flag                       | Description                                      |
+| -------------------------- | ------------------------------------------------ |
+| `--type <component\|hook>` | Filter by item type                              |
 | `--category <name>`        | Filter by category (e.g. inputs, state, overlay) |
 
 ```bash
 # Only hooks
-npx vayu-ui list --type hook
+npx vayu-ui-cli list --type hook
 
 # Only components in the overlay category
-npx vayu-ui list --type component --category overlay
+npx vayu-ui-cli list --type component --category overlay
 
 # Filter by any category
-npx vayu-ui list --category sensor
+npx vayu-ui-cli list --category sensor
 ```
 
 ---
@@ -100,7 +100,7 @@ npx vayu-ui list --category sensor
 Sets up Vayu UI in your project — creates the folder structure, injects design tokens, and optionally installs Tailwind CSS v4.
 
 ```bash
-npx vayu-ui init
+npx vayu-ui-cli init
 ```
 
 **What it does:**
@@ -134,23 +134,23 @@ npx vayu-ui init
 
 **Flags:**
 
-| Flag                | Description                                                      |
-| ------------------- | ---------------------------------------------------------------- |
+| Flag                | Description                                                            |
+| ------------------- | ---------------------------------------------------------------------- |
 | `--path <dir>`      | Custom path for the ui/ folder (default: auto-detect `src/ui` or `ui`) |
-| `--css-path <file>` | Custom path for the main CSS file                                |
-| `--merge`           | Merge tokens into existing CSS instead of creating a separate file |
-| `--skip-tailwind`   | Skip Tailwind CSS installation check                             |
-| `--force`           | Skip all prompts and use defaults                                |
+| `--css-path <file>` | Custom path for the main CSS file                                      |
+| `--merge`           | Merge tokens into existing CSS instead of creating a separate file     |
+| `--skip-tailwind`   | Skip Tailwind CSS installation check                                   |
+| `--force`           | Skip all prompts and use defaults                                      |
 
 ```bash
 # Merge tokens into your existing globals.css
-npx vayu-ui init --merge
+npx vayu-ui-cli init --merge
 
 # Custom UI folder path
-npx vayu-ui init --path src/lib/ui
+npx vayu-ui-cli init --path src/lib/ui
 
 # Skip Tailwind check
-npx vayu-ui init --skip-tailwind
+npx vayu-ui-cli init --skip-tailwind
 ```
 
 ---
@@ -160,9 +160,9 @@ npx vayu-ui init --skip-tailwind
 Copies one or more components or hooks from the Vayu UI GitHub repo into your project. Automatically resolves transitive dependencies and installs required npm packages.
 
 ```bash
-npx vayu-ui add button
-npx vayu-ui add button modal tooltip
-npx vayu-ui add use-debounce
+npx vayu-ui-cli add button
+npx vayu-ui-cli add button modal tooltip
+npx vayu-ui-cli add use-debounce
 ```
 
 **What it does:**
@@ -199,22 +199,22 @@ npx vayu-ui add use-debounce
 
 **Flags:**
 
-| Flag             | Short | Description                                     |
-| ---------------- | ----- | ----------------------------------------------- |
-| `--overwrite`    | `-o`  | Overwrite existing files                        |
-| `--dry-run`      | —     | Preview what would be added without writing     |
-| `--skip-install` | —     | Skip npm dependency installation                |
-| `--yes`          | `-y`  | Skip confirmation prompts                       |
+| Flag             | Short | Description                                 |
+| ---------------- | ----- | ------------------------------------------- |
+| `--overwrite`    | `-o`  | Overwrite existing files                    |
+| `--dry-run`      | —     | Preview what would be added without writing |
+| `--skip-install` | —     | Skip npm dependency installation            |
+| `--yes`          | `-y`  | Skip confirmation prompts                   |
 
 ```bash
 # Preview without writing
-npx vayu-ui add modal --dry-run
+npx vayu-ui-cli add modal --dry-run
 
 # Force overwrite
-npx vayu-ui add button --overwrite
+npx vayu-ui-cli add button --overwrite
 
 # Skip npm install
-npx vayu-ui add sidebar --skip-install
+npx vayu-ui-cli add sidebar --skip-install
 ```
 
 ---
@@ -225,26 +225,26 @@ Re-fetches installed components and hooks from GitHub. Compares content and only
 
 ```bash
 # Update all installed items
-npx vayu-ui update
+npx vayu-ui-cli update
 
 # Update specific items
-npx vayu-ui update button modal
+npx vayu-ui-cli update button modal
 ```
 
 **Flags:**
 
-| Flag        | Short | Description                                           |
-| ----------- | ----- | ----------------------------------------------------- |
-| `--force`   | `-f`  | Overwrite all files even if content is unchanged      |
-| `--dry-run` | —     | Preview what would be updated without writing files   |
-| `--css`     | —     | Also update Vayu UI CSS design tokens                 |
+| Flag        | Short | Description                                         |
+| ----------- | ----- | --------------------------------------------------- |
+| `--force`   | `-f`  | Overwrite all files even if content is unchanged    |
+| `--dry-run` | —     | Preview what would be updated without writing files |
+| `--css`     | —     | Also update Vayu UI CSS design tokens               |
 
 ```bash
 # Preview changes
-npx vayu-ui update --dry-run
+npx vayu-ui-cli update --dry-run
 
 # Force update everything
-npx vayu-ui update --force
+npx vayu-ui-cli update --force
 ```
 
 ---
@@ -254,19 +254,19 @@ npx vayu-ui update --force
 Removes one or more installed components or hooks. Warns if other installed items depend on what you are removing. Auto-cleans `utils/` when no components remain.
 
 ```bash
-npx vayu-ui remove button
-npx vayu-ui remove button modal
+npx vayu-ui-cli remove button
+npx vayu-ui-cli remove button modal
 ```
 
 **Flags:**
 
-| Flag      | Short | Description                |
-| --------- | ----- | -------------------------- |
-| `--force` | `-f`  | Skip confirmation prompt   |
+| Flag      | Short | Description              |
+| --------- | ----- | ------------------------ |
+| `--force` | `-f`  | Skip confirmation prompt |
 
 ```bash
 # Remove without prompt
-npx vayu-ui remove button --force
+npx vayu-ui-cli remove button --force
 ```
 
 ---
@@ -279,17 +279,17 @@ Supports **Claude Code**, **Cursor**, **VS Code Copilot**, **Windsurf**, and **A
 
 ```bash
 # Interactive — prompts which tools to configure
-npx vayu-ui install-mcp
+npx vayu-ui-cli install-mcp
 
 # Configure specific tools
-npx vayu-ui install-mcp --tool claude
-npx vayu-ui install-mcp --tool claude,cursor
+npx vayu-ui-cli install-mcp --tool claude
+npx vayu-ui-cli install-mcp --tool claude,cursor
 
 # Configure globally (home directory)
-npx vayu-ui install-mcp --global
+npx vayu-ui-cli install-mcp --global
 
 # Preview without writing
-npx vayu-ui install-mcp --dry-run
+npx vayu-ui-cli install-mcp --dry-run
 ```
 
 **What it does:**
@@ -301,13 +301,13 @@ npx vayu-ui install-mcp --dry-run
 
 **Config files written:**
 
-| Tool            | Project-level             | Global                    |
-| --------------- | ------------------------- | ------------------------- |
-| Claude Code     | `.mcp.json`               | `~/.claude.json`          |
-| Cursor          | `.cursor/mcp.json`        | `~/.cursor/mcp.json`      |
-| VS Code Copilot | `.vscode/mcp.json`        | `~/.vscode/mcp.json`      |
-| Windsurf        | `.windsurf/mcp.json`      | `~/.windsurf/mcp.json`    |
-| Antigravity     | `antigravity.config.json` | —                         |
+| Tool            | Project-level             | Global                 |
+| --------------- | ------------------------- | ---------------------- |
+| Claude Code     | `.mcp.json`               | `~/.claude.json`       |
+| Cursor          | `.cursor/mcp.json`        | `~/.cursor/mcp.json`   |
+| VS Code Copilot | `.vscode/mcp.json`        | `~/.vscode/mcp.json`   |
+| Windsurf        | `.windsurf/mcp.json`      | `~/.windsurf/mcp.json` |
+| Antigravity     | `antigravity.config.json` | —                      |
 
 **Entry added:**
 
@@ -324,16 +324,16 @@ npx vayu-ui install-mcp --dry-run
 
 **Flags:**
 
-| Flag        | Description                                              |
-| ----------- | -------------------------------------------------------- |
+| Flag        | Description                                                                       |
+| ----------- | --------------------------------------------------------------------------------- |
 | `--tool`    | Comma-separated AI tools: `claude`, `cursor`, `vscode`, `windsurf`, `antigravity` |
-| `--global`  | Configure globally (home directory) instead of project-level |
-| `--dry-run` | Preview changes without writing files                    |
-| `--force`   | Skip prompts and overwrite existing entries              |
+| `--global`  | Configure globally (home directory) instead of project-level                      |
+| `--dry-run` | Preview changes without writing files                                             |
+| `--force`   | Skip prompts and overwrite existing entries                                       |
 
 ```bash
 # Overwrite existing config
-npx vayu-ui install-mcp --tool claude --force
+npx vayu-ui-cli install-mcp --tool claude --force
 ```
 
 ---

@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add contextmenu
+npx vayu-ui-cli add contextmenu
 ```
 
 ```bash
-npx vayu-ui add -t contextmenu #with test case needs
+npx vayu-ui-cli add -t contextmenu #with test case needs
 ```
 
 ## Usage
@@ -144,85 +144,85 @@ ContextMenu/
 
 ### ContextMenu
 
-| Prop          | Type                       | Description                                      |
-| :------------ | :------------------------- | :----------------------------------------------- |
+| Prop           | Type                      | Description                                      |
+| :------------- | :------------------------ | :----------------------------------------------- |
 | `onOpenChange` | `(open: boolean) => void` | Callback fired when the menu open state changes. |
-| `children`    | `React.ReactNode`          | The content of the context menu.                 |
+| `children`     | `React.ReactNode`         | The content of the context menu.                 |
 
 ### ContextMenu.Trigger
 
-| Prop       | Type              | Description                                                    |
-| :--------- | :---------------- | :------------------------------------------------------------- |
+| Prop       | Type              | Description                                                       |
+| :--------- | :---------------- | :---------------------------------------------------------------- |
 | `disabled` | `boolean`         | When true, prevents the context menu from opening on right-click. |
-| `children` | `React.ReactNode` | The element that serves as the right-click target area.        |
+| `children` | `React.ReactNode` | The element that serves as the right-click target area.           |
 
 ### ContextMenu.Content
 
-| Prop         | Type                                  | Default    | Description                                       |
-| :----------- | :------------------------------------ | :--------- | :------------------------------------------------ |
-| `align`      | `"start" \| "center" \| "end"`       | `"start"`  | Alignment of the menu relative to the cursor.      |
-| `sideOffset` | `number`                              | `0`        | Distance offset from the cursor position.          |
-| `children`   | `React.ReactNode`                     | —          | The menu items and groups to render.               |
+| Prop         | Type                           | Default   | Description                                   |
+| :----------- | :----------------------------- | :-------- | :-------------------------------------------- |
+| `align`      | `"start" \| "center" \| "end"` | `"start"` | Alignment of the menu relative to the cursor. |
+| `sideOffset` | `number`                       | `0`       | Distance offset from the cursor position.     |
+| `children`   | `React.ReactNode`              | —         | The menu items and groups to render.          |
 
 ### ContextMenu.Item
 
-| Prop         | Type              | Description                                                      |
-| :----------- | :---------------- | :--------------------------------------------------------------- |
-| `icon`       | `React.ReactNode` | An optional icon displayed before the item text.                 |
-| `shortcut`   | `string`          | A keyboard shortcut hint displayed at the end of the item.       |
-| `destructive`| `boolean`         | When true, styles the item with a danger appearance.             |
-| `disabled`   | `boolean`         | When true, prevents user interaction with the item.              |
-| `onSelect`   | `() => void`      | Event handler called when the user selects the item.             |
-| `children`   | `React.ReactNode` | The label content of the menu item.                              |
+| Prop          | Type              | Description                                                |
+| :------------ | :---------------- | :--------------------------------------------------------- |
+| `icon`        | `React.ReactNode` | An optional icon displayed before the item text.           |
+| `shortcut`    | `string`          | A keyboard shortcut hint displayed at the end of the item. |
+| `destructive` | `boolean`         | When true, styles the item with a danger appearance.       |
+| `disabled`    | `boolean`         | When true, prevents user interaction with the item.        |
+| `onSelect`    | `() => void`      | Event handler called when the user selects the item.       |
+| `children`    | `React.ReactNode` | The label content of the menu item.                        |
 
 ### ContextMenu.CheckboxItem
 
-| Prop              | Type                         | Description                                                  |
-| :---------------- | :--------------------------- | :----------------------------------------------------------- |
-| `checked`         | `boolean`                    | The controlled checked state of the item.                    |
-| `onCheckedChange` | `(checked: boolean) => void` | Event handler called when the checked state changes.         |
-| `icon`            | `React.ReactNode`            | An optional icon displayed before the item text.             |
-| `shortcut`        | `string`                     | A keyboard shortcut hint displayed at the end of the item.   |
-| `disabled`        | `boolean`                    | When true, prevents user interaction with the item.          |
-| `children`        | `React.ReactNode`            | The label content of the checkbox item.                      |
+| Prop              | Type                         | Description                                                |
+| :---------------- | :--------------------------- | :--------------------------------------------------------- |
+| `checked`         | `boolean`                    | The controlled checked state of the item.                  |
+| `onCheckedChange` | `(checked: boolean) => void` | Event handler called when the checked state changes.       |
+| `icon`            | `React.ReactNode`            | An optional icon displayed before the item text.           |
+| `shortcut`        | `string`                     | A keyboard shortcut hint displayed at the end of the item. |
+| `disabled`        | `boolean`                    | When true, prevents user interaction with the item.        |
+| `children`        | `React.ReactNode`            | The label content of the checkbox item.                    |
 
 ### ContextMenu.RadioGroup
 
-| Prop            | Type                      | Description                                      |
-| :-------------- | :------------------------ | :----------------------------------------------- |
-| `value`         | `string`                  | The value of the currently selected radio item.  |
-| `onValueChange` | `(value: string) => void` | Event handler called when the value changes.     |
-| `children`      | `React.ReactNode`         | The radio items to render inside the group.      |
+| Prop            | Type                      | Description                                     |
+| :-------------- | :------------------------ | :---------------------------------------------- |
+| `value`         | `string`                  | The value of the currently selected radio item. |
+| `onValueChange` | `(value: string) => void` | Event handler called when the value changes.    |
+| `children`      | `React.ReactNode`         | The radio items to render inside the group.     |
 
 ### ContextMenu.RadioItem
 
-| Prop       | Type              | Description                                                  |
-| :--------- | :---------------- | :----------------------------------------------------------- |
-| `value`    | `string`          | The unique value that identifies this radio item.            |
-| `icon`     | `React.ReactNode` | An optional icon displayed before the item text.             |
-| `shortcut` | `string`          | A keyboard shortcut hint displayed at the end of the item.   |
-| `disabled` | `boolean`         | When true, prevents user interaction with the item.          |
-| `children` | `React.ReactNode` | The label content of the radio item.                         |
+| Prop       | Type              | Description                                                |
+| :--------- | :---------------- | :--------------------------------------------------------- |
+| `value`    | `string`          | The unique value that identifies this radio item.          |
+| `icon`     | `React.ReactNode` | An optional icon displayed before the item text.           |
+| `shortcut` | `string`          | A keyboard shortcut hint displayed at the end of the item. |
+| `disabled` | `boolean`         | When true, prevents user interaction with the item.        |
+| `children` | `React.ReactNode` | The label content of the radio item.                       |
 
 ### ContextMenu.Sub
 
-| Prop      | Type              | Description                                      |
-| :-------- | :---------------- | :----------------------------------------------- |
-| `children`| `React.ReactNode` | Must contain a SubTrigger and SubContent.        |
+| Prop       | Type              | Description                               |
+| :--------- | :---------------- | :---------------------------------------- |
+| `children` | `React.ReactNode` | Must contain a SubTrigger and SubContent. |
 
 ### ContextMenu.SubTrigger
 
-| Prop       | Type              | Description                                                     |
-| :--------- | :---------------- | :-------------------------------------------------------------- |
-| `icon`     | `React.ReactNode` | An optional icon displayed before the trigger text.             |
-| `disabled` | `boolean`         | When true, prevents the submenu from opening.                   |
-| `children` | `React.ReactNode` | The label content of the submenu trigger.                       |
+| Prop       | Type              | Description                                         |
+| :--------- | :---------------- | :-------------------------------------------------- |
+| `icon`     | `React.ReactNode` | An optional icon displayed before the trigger text. |
+| `disabled` | `boolean`         | When true, prevents the submenu from opening.       |
+| `children` | `React.ReactNode` | The label content of the submenu trigger.           |
 
 ### ContextMenu.SubContent
 
-| Prop      | Type              | Description                                       |
-| :-------- | :---------------- | :------------------------------------------------ |
-| `children`| `React.ReactNode` | The menu items to render inside the submenu.      |
+| Prop       | Type              | Description                                  |
+| :--------- | :---------------- | :------------------------------------------- |
+| `children` | `React.ReactNode` | The menu items to render inside the submenu. |
 
 ### ContextMenu.Separator
 

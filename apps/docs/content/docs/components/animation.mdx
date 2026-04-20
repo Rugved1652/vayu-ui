@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add animation
+npx vayu-ui-cli add animation
 ```
 
 ```bash
-npx vayu-ui add -t animation #with test case needs
+npx vayu-ui-cli add -t animation #with test case needs
 ```
 
 ## Usage
@@ -178,14 +178,14 @@ Animation/
 
 ### Common Props (All Variants)
 
-| Prop              | Type                                     | Default   | Description                                       |
-| :---------------- | :--------------------------------------- | :-------- | :------------------------------------------------ |
-| `children`        | `ReactNode`                              | —         | Content to animate.                               |
-| `duration`        | `'slower' \| 'slow' \| 'normal' \| 'fast' \| 'faster'` | `'normal'` | Animation duration.                               |
-| `delay`           | `'none' \| 'short' \| 'medium' \| 'long'` | `'none'`  | Delay before animation starts.                    |
-| `iteration`       | `1 \| 2 \| 3 \| 'infinite'`              | `1`       | Number of times the animation repeats.            |
-| `fillMode`        | `'none' \| 'forwards' \| 'backwards' \| 'both'` | `'none'`  | How styles are applied before and after animation. |
-| `className`       | `string`                                 | —         | Additional CSS classes.                           |
+| Prop        | Type                                                   | Default    | Description                                        |
+| :---------- | :----------------------------------------------------- | :--------- | :------------------------------------------------- |
+| `children`  | `ReactNode`                                            | —          | Content to animate.                                |
+| `duration`  | `'slower' \| 'slow' \| 'normal' \| 'fast' \| 'faster'` | `'normal'` | Animation duration.                                |
+| `delay`     | `'none' \| 'short' \| 'medium' \| 'long'`              | `'none'`   | Delay before animation starts.                     |
+| `iteration` | `1 \| 2 \| 3 \| 'infinite'`                            | `1`        | Number of times the animation repeats.             |
+| `fillMode`  | `'none' \| 'forwards' \| 'backwards' \| 'both'`        | `'none'`   | How styles are applied before and after animation. |
+| `className` | `string`                                               | —          | Additional CSS classes.                            |
 
 ### Animation.Fade
 
@@ -193,48 +193,48 @@ Uses common props only. No additional props.
 
 ### Animation.Slide
 
-| Prop        | Type                                   | Default  | Description                        |
-| :---------- | :------------------------------------- | :------- | :--------------------------------- |
+| Prop        | Type                                  | Default  | Description                           |
+| :---------- | :------------------------------------ | :------- | :------------------------------------ |
 | `direction` | `'up' \| 'down' \| 'left' \| 'right'` | `'left'` | Direction the element slides in from. |
 
 Plus all [Common Props](#common-props-all-variants).
 
 ### Animation.Bounce
 
-| Prop    | Type                                 | Default    | Description                  |
-| :------ | :----------------------------------- | :--------- | :--------------------------- |
-| `scale` | `'small' \| 'medium' \| 'large'`     | `'medium'` | Intensity of the bounce effect. |
+| Prop    | Type                             | Default    | Description                     |
+| :------ | :------------------------------- | :--------- | :------------------------------ |
+| `scale` | `'small' \| 'medium' \| 'large'` | `'medium'` | Intensity of the bounce effect. |
 
 Plus all [Common Props](#common-props-all-variants).
 
 ### Animation.Flip
 
-| Prop        | Type                                   | Default  | Description                          |
-| :---------- | :------------------------------------- | :------- | :----------------------------------- |
-| `direction` | `'up' \| 'down' \| 'left' \| 'right'` | `'up'`   | Flip direction. `up`/`down` flip on X-axis, `left`/`right` flip on Y-axis. |
+| Prop        | Type                                  | Default | Description                                                                |
+| :---------- | :------------------------------------ | :------ | :------------------------------------------------------------------------- |
+| `direction` | `'up' \| 'down' \| 'left' \| 'right'` | `'up'`  | Flip direction. `up`/`down` flip on X-axis, `left`/`right` flip on Y-axis. |
 
 Plus all [Common Props](#common-props-all-variants).
 
 ### Animation.Rotate
 
-| Prop      | Type     | Default | Description                          |
-| :-------- | :------- | :------ | :----------------------------------- |
-| `degrees` | `number` | `-200`  | Starting rotation angle in degrees.  |
+| Prop      | Type     | Default | Description                         |
+| :-------- | :------- | :------ | :---------------------------------- |
+| `degrees` | `number` | `-200`  | Starting rotation angle in degrees. |
 
 Plus all [Common Props](#common-props-all-variants).
 
 ### Animation.Zoom
 
-| Prop    | Type                                 | Default    | Description                  |
-| :------ | :----------------------------------- | :--------- | :--------------------------- |
-| `scale` | `'small' \| 'medium' \| 'large'`     | `'medium'` | Starting scale intensity.    |
+| Prop    | Type                             | Default    | Description               |
+| :------ | :------------------------------- | :--------- | :------------------------ |
+| `scale` | `'small' \| 'medium' \| 'large'` | `'medium'` | Starting scale intensity. |
 
 Plus all [Common Props](#common-props-all-variants).
 
 ### Animation.Roll
 
-| Prop        | Type                                   | Default  | Description                       |
-| :---------- | :------------------------------------- | :------- | :-------------------------------- |
+| Prop        | Type                                  | Default  | Description                          |
+| :---------- | :------------------------------------ | :------- | :----------------------------------- |
 | `direction` | `'up' \| 'down' \| 'left' \| 'right'` | `'left'` | Direction the element rolls in from. |
 
 Plus all [Common Props](#common-props-all-variants).

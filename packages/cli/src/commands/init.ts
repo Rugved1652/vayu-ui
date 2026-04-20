@@ -90,8 +90,8 @@ export default class Init extends Command {
     this.log(ux.colorize('green', '  Done! Vayu UI is ready.'));
     this.log('');
     this.log(ux.colorize('dim', '  Next steps:'));
-    this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui list')}       Browse available components and hooks`));
-    this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui add button')}  Add your first component`));
+    this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli list')}       Browse available components and hooks`));
+    this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli add button')}  Add your first component`));
     this.log('');
   }
 
@@ -119,9 +119,8 @@ export default class Init extends Command {
       return;
     }
 
-    const cmd = `${project.packageManager} ${
-      project.packageManager === 'npm' ? 'install' : 'add'
-    }${project.packageManager === 'npm' || project.packageManager === 'pnpm' ? ' -D' : ''} tailwindcss @tailwindcss/postcss postcss`;
+    const cmd = `${project.packageManager} ${project.packageManager === 'npm' ? 'install' : 'add'
+      }${project.packageManager === 'npm' || project.packageManager === 'pnpm' ? ' -D' : ''} tailwindcss @tailwindcss/postcss postcss`;
 
     this.log(ux.colorize('dim', `  Running: ${cmd}`));
     try {

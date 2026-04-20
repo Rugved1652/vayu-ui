@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add toaster
+npx vayu-ui-cli add toaster
 ```
 
 ```bash
-npx vayu-ui add -t toaster #with test case needs
+npx vayu-ui-cli add -t toaster #with test case needs
 ```
 
 ## Usage
@@ -149,17 +149,17 @@ Toaster/
 
 ### useToast() Methods
 
-| Method              | Arguments                      | Returns            | Description                                         |
-| :------------------ | :----------------------------- | :----------------- | :-------------------------------------------------- |
-| `toast.success`     | `(message, options?)`          | `string`           | Shows a success toast. Returns toast ID.            |
-| `toast.error`       | `(message, options?)`          | `string`           | Shows an error toast. Returns toast ID.             |
-| `toast.warning`     | `(message, options?)`          | `string`           | Shows a warning toast. Returns toast ID.            |
-| `toast.info`        | `(message, options?)`          | `string`           | Shows an info toast. Returns toast ID.              |
-| `toast.loading`     | `(message, options?)`          | `string`           | Shows a loading toast (no auto-dismiss).            |
-| `toast.promise`     | `(promise, messages, options?)`| `Promise<T>`       | Handles loading/success/error states for a promise. |
-| `toast.custom`      | `(content, options?)`          | `string`           | Renders custom JSX content in a toast.              |
-| `toast.updateToast` | `(id, options)`                | `void`             | Updates an existing toast by ID.                    |
-| `toast.removeToast` | `(id)`                         | `void`             | Removes a toast by ID.                              |
+| Method              | Arguments                       | Returns      | Description                                         |
+| :------------------ | :------------------------------ | :----------- | :-------------------------------------------------- |
+| `toast.success`     | `(message, options?)`           | `string`     | Shows a success toast. Returns toast ID.            |
+| `toast.error`       | `(message, options?)`           | `string`     | Shows an error toast. Returns toast ID.             |
+| `toast.warning`     | `(message, options?)`           | `string`     | Shows a warning toast. Returns toast ID.            |
+| `toast.info`        | `(message, options?)`           | `string`     | Shows an info toast. Returns toast ID.              |
+| `toast.loading`     | `(message, options?)`           | `string`     | Shows a loading toast (no auto-dismiss).            |
+| `toast.promise`     | `(promise, messages, options?)` | `Promise<T>` | Handles loading/success/error states for a promise. |
+| `toast.custom`      | `(content, options?)`           | `string`     | Renders custom JSX content in a toast.              |
+| `toast.updateToast` | `(id, options)`                 | `void`       | Updates an existing toast by ID.                    |
+| `toast.removeToast` | `(id)`                          | `void`       | Removes a toast by ID.                              |
 
 ### ToastOptions
 

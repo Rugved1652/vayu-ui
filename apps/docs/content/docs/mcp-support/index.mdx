@@ -13,21 +13,21 @@ The fastest way is using the CLI:
 
 ```bash
 # Interactive — prompts which tools to configure
-npx vayu-ui install-mcp
+npx vayu-ui-cli install-mcp
 
 # Configure specific tools
-npx vayu-ui install-mcp --tool claude
-npx vayu-ui install-mcp --tool claude,cursor,vscode
+npx vayu-ui-cli install-mcp --tool claude
+npx vayu-ui-cli install-mcp --tool claude,cursor,vscode
 ```
 
 This writes the correct config to each tool's settings file. Restart your AI tool after running it.
 
-| Flag | Description |
-| :--- | :--- |
-| `--tool` | Comma-separated: `claude`, `cursor`, `vscode`, `windsurf` |
-| `--global` | Write to home directory instead of project root |
-| `--dry-run` | Preview changes without writing |
-| `--force` | Overwrite existing entries |
+| Flag        | Description                                               |
+| :---------- | :-------------------------------------------------------- |
+| `--tool`    | Comma-separated: `claude`, `cursor`, `vscode`, `windsurf` |
+| `--global`  | Write to home directory instead of project root           |
+| `--dry-run` | Preview changes without writing                           |
+| `--force`   | Overwrite existing entries                                |
 
 ## Manual Setup
 
@@ -107,25 +107,25 @@ If the file already exists, merge the `vayu-ui` entry into the existing `mcpServ
 
 Once connected, the following 17 tools are available to your AI assistant:
 
-| Tool | Description |
-| :--- | :--- |
-| `list_components` | List all components and hooks with optional filters |
-| `find_component` | Fuzzy search by natural language query |
-| `get_component_summary` | Lightweight identity card (name, category, tags) |
-| `get_component_props` | All props with types, defaults, and descriptions |
-| `get_component_variants` | Available visual variants and sizes |
-| `get_component_states` | Interactive states (loading, disabled, hover, etc.) |
-| `get_component_events` | Event handlers with TypeScript signatures |
-| `get_component_a11y` | ARIA roles, keyboard navigation, focus management |
-| `get_component_dependencies` | NPM deps, registry deps, install command |
-| `get_component_peer_components` | Frequently co-used components |
-| `get_component_composition` | Compound component structure and sub-components |
-| `get_component_example` | Ready-to-paste TSX code examples |
-| `get_component_do_not` | Anti-patterns and common mistakes |
-| `get_hook_details` | Full hook API (signature, params, return values) |
-| `scaffold_component_usage` | Generate working code with imports and state |
-| `get_install_guide` | CLI commands and import paths for installation |
-| `get_design_tokens` | CSS design tokens with Tailwind classes |
+| Tool                            | Description                                         |
+| :------------------------------ | :-------------------------------------------------- |
+| `list_components`               | List all components and hooks with optional filters |
+| `find_component`                | Fuzzy search by natural language query              |
+| `get_component_summary`         | Lightweight identity card (name, category, tags)    |
+| `get_component_props`           | All props with types, defaults, and descriptions    |
+| `get_component_variants`        | Available visual variants and sizes                 |
+| `get_component_states`          | Interactive states (loading, disabled, hover, etc.) |
+| `get_component_events`          | Event handlers with TypeScript signatures           |
+| `get_component_a11y`            | ARIA roles, keyboard navigation, focus management   |
+| `get_component_dependencies`    | NPM deps, registry deps, install command            |
+| `get_component_peer_components` | Frequently co-used components                       |
+| `get_component_composition`     | Compound component structure and sub-components     |
+| `get_component_example`         | Ready-to-paste TSX code examples                    |
+| `get_component_do_not`          | Anti-patterns and common mistakes                   |
+| `get_hook_details`              | Full hook API (signature, params, return values)    |
+| `scaffold_component_usage`      | Generate working code with imports and state        |
+| `get_install_guide`             | CLI commands and import paths for installation      |
+| `get_design_tokens`             | CSS design tokens with Tailwind classes             |
 
 ## Usage Guide
 
@@ -183,14 +183,14 @@ Once connected, the following 17 tools are available to your AI assistant:
 
 ### Common Tool Parameters
 
-| Parameter | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `name` | string | Yes | Component/hook name (case-insensitive) |
-| `slug` | string | No | CLI slug identifier |
-| `variant` | string | No | Example variant key |
-| `category` | enum | No | Filter: `inputs`, `overlay`, `state`, etc. |
-| `type` | enum | No | Filter: `component` or `hook` |
-| `withState` | boolean | No | Wrap scaffold in `useState` |
+| Parameter   | Type    | Required | Description                                |
+| :---------- | :------ | :------- | :----------------------------------------- |
+| `name`      | string  | Yes      | Component/hook name (case-insensitive)     |
+| `slug`      | string  | No       | CLI slug identifier                        |
+| `variant`   | string  | No       | Example variant key                        |
+| `category`  | enum    | No       | Filter: `inputs`, `overlay`, `state`, etc. |
+| `type`      | enum    | No       | Filter: `component` or `hook`              |
+| `withState` | boolean | No       | Wrap scaffold in `useState`                |
 
 ## Design Tokens via MCP
 
@@ -205,29 +205,29 @@ Use `get_design_tokens` to access the full design system:
 
 ### Token Categories
 
-| Category | What's Included |
-| :--- | :--- |
-| **Colors** | Semantic tokens: `brand`, `surface`, `elevated`, `success`, `warning`, `destructive`, `info`, `muted` (each with content variant) |
-| **Radius** | `rounded-control`, `rounded-surface`, `rounded-overlay` |
-| **Shadows** | `shadow-control`, `shadow-surface`, `shadow-elevated` |
-| **Structural** | `border`, `field`, `focus` tokens |
+| Category       | What's Included                                                                                                                   |
+| :------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| **Colors**     | Semantic tokens: `brand`, `surface`, `elevated`, `success`, `warning`, `destructive`, `info`, `muted` (each with content variant) |
+| **Radius**     | `rounded-control`, `rounded-surface`, `rounded-overlay`                                                                           |
+| **Shadows**    | `shadow-control`, `shadow-surface`, `shadow-elevated`                                                                             |
+| **Structural** | `border`, `field`, `focus` tokens                                                                                                 |
 
 Pass `overridableOnly: true` to get only tokens that are safe to override without breaking component behavior.
 
 ## Component Categories
 
-| Category | Description | Examples |
-| :--- | :--- | :--- |
-| `inputs` | Form controls and data entry | Button, TextInput, Checkbox, Select |
-| `feedback` | Status and feedback | Alert, Spinner, Toast |
-| `overlay` | Modal and overlay UI | Modal, Tooltip, Popover |
-| `layout` | Structural components | Card, Container, Grid |
-| `data-display` | Content presentation | Avatar, Badge, Separator |
-| `navigation` | Navigation components | Navbar, Sidebar, Tabs |
-| `animation` | Animated components | AnimatedContainer, FadeIn |
-| `state` | State management hooks | useLocalStorage, useDebounce |
-| `sensor` | Browser sensor hooks | useMediaQuery, useResizeObserver |
-| `dom` | DOM interaction hooks | useClickOutside, useFocusTrap |
+| Category       | Description                  | Examples                            |
+| :------------- | :--------------------------- | :---------------------------------- |
+| `inputs`       | Form controls and data entry | Button, TextInput, Checkbox, Select |
+| `feedback`     | Status and feedback          | Alert, Spinner, Toast               |
+| `overlay`      | Modal and overlay UI         | Modal, Tooltip, Popover             |
+| `layout`       | Structural components        | Card, Container, Grid               |
+| `data-display` | Content presentation         | Avatar, Badge, Separator            |
+| `navigation`   | Navigation components        | Navbar, Sidebar, Tabs               |
+| `animation`    | Animated components          | AnimatedContainer, FadeIn           |
+| `state`        | State management hooks       | useLocalStorage, useDebounce        |
+| `sensor`       | Browser sensor hooks         | useMediaQuery, useResizeObserver    |
+| `dom`          | DOM interaction hooks        | useClickOutside, useFocusTrap       |
 
 ## Best Practices
 

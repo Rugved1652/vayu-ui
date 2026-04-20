@@ -9,21 +9,22 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add navbar
+npx vayu-ui-cli add navbar
 ```
 
 ```bash
-npx vayu-ui add -t navbar #with test case needs
+npx vayu-ui-cli add -t navbar #with test case needs
 ```
 
 ## Usage
+
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
-      <NavbarDemo />
+    <NavbarDemo />
   </Tab>
   <Tab value="Code">
     ```tsx
@@ -31,7 +32,9 @@ npx vayu-ui add -t navbar #with test case needs
       <Navbar.Container>
         <Navbar.Brand>VAYU-UI</Navbar.Brand>
         <Navbar.Items>
-          <Navbar.Item href="/" active>Home</Navbar.Item>
+          <Navbar.Item href="/" active>
+            Home
+          </Navbar.Item>
           <Navbar.Item href="/docs">Docs</Navbar.Item>
           <Navbar.Item href="/components">Components</Navbar.Item>
         </Navbar.Items>
@@ -41,7 +44,9 @@ npx vayu-ui add -t navbar #with test case needs
         </Navbar.Actions>
       </Navbar.Container>
       <Navbar.MobileMenu>
-        <Navbar.MobileItem href="/" active>Home</Navbar.MobileItem>
+        <Navbar.MobileItem href="/" active>
+          Home
+        </Navbar.MobileItem>
         <Navbar.MobileItem href="/docs">Docs</Navbar.MobileItem>
         <Navbar.MobileItem href="/components">Components</Navbar.MobileItem>
       </Navbar.MobileMenu>
@@ -51,6 +56,7 @@ npx vayu-ui add -t navbar #with test case needs
 </Tabs>
 
 ## Anatomy
+
 ```tsx
 <Navbar>
   <Navbar.Container>
@@ -70,14 +76,17 @@ npx vayu-ui add -t navbar #with test case needs
 ```
 
 ## Accessibility
+
 - **Keyboard support**: Escape key closes the mobile menu; focus trapping is implemented in the mobile panel.
 - **ARIA attributes**: Uses semantic `nav` element with `aria-label`, `aria-expanded` on the toggle, and `role="dialog"` for the mobile menu.
 - **Focus behavior**: Focus is moved to the close button when the mobile menu opens and restored to the toggle when closed.
 
 ## Screen reader behavior
+
 The component is announced as "Main navigation". The mobile toggle announces its expanded state, and the mobile menu is identified as a modal dialog.
 
 ## Component Folder Structure
+
 ```text
 NavBar/
 ├── NavBar.tsx
@@ -95,34 +104,39 @@ NavBar/
 ## Props
 
 ### Navbar
-| Prop | Type | Description |
-| :--- | :--- | :--- |
+
+| Prop                  | Type     | Description                                                                  |
+| :-------------------- | :------- | :--------------------------------------------------------------------------- |
 | `mainContentSelector` | `string` | CSS selector for the main content to apply `inert` when mobile menu is open. |
-| `className` | `string` | Custom CSS classes for the root element. |
+| `className`           | `string` | Custom CSS classes for the root element.                                     |
 
 ### Navbar.Container
-| Prop | Type | Description |
-| :--- | :--- | :--- |
-| `maxWidth` | `'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | The maximum width of the navbar container. |
-| `className` | `string` | Custom CSS classes for the container. |
+
+| Prop        | Type                                              | Description                                |
+| :---------- | :------------------------------------------------ | :----------------------------------------- |
+| `maxWidth`  | `'sm' \| 'md' \| 'lg' \| 'xl' \| '2xl' \| 'full'` | The maximum width of the navbar container. |
+| `className` | `string`                                          | Custom CSS classes for the container.      |
 
 ### Navbar.Item
-| Prop | Type | Description |
-| :--- | :--- | :--- |
-| `href` | `string` | The URL the link points to. |
-| `active` | `boolean` | Whether the item is in an active state. |
-| `className` | `string` | Custom CSS classes for the item. |
+
+| Prop        | Type      | Description                             |
+| :---------- | :-------- | :-------------------------------------- |
+| `href`      | `string`  | The URL the link points to.             |
+| `active`    | `boolean` | Whether the item is in an active state. |
+| `className` | `string`  | Custom CSS classes for the item.        |
 
 ### Navbar.MobileItem
-| Prop | Type | Description |
-| :--- | :--- | :--- |
-| `href` | `string` | The URL the link points to. |
-| `active` | `boolean` | Whether the item is in an active state. |
-| `onClick` | `() => void` | Callback triggered when the item is clicked. |
-| `linkComponent` | `ElementType` | Custom link component (e.g., Next.js Link). |
-| `className` | `string` | Custom CSS classes for the mobile item. |
+
+| Prop            | Type          | Description                                  |
+| :-------------- | :------------ | :------------------------------------------- |
+| `href`          | `string`      | The URL the link points to.                  |
+| `active`        | `boolean`     | Whether the item is in an active state.      |
+| `onClick`       | `() => void`  | Callback triggered when the item is clicked. |
+| `linkComponent` | `ElementType` | Custom link component (e.g., Next.js Link).  |
+| `className`     | `string`      | Custom CSS classes for the mobile item.      |
 
 ### Navbar.Toggle
-| Prop | Type | Description |
-| :--- | :--- | :--- |
+
+| Prop        | Type     | Description                               |
+| :---------- | :------- | :---------------------------------------- |
 | `className` | `string` | Custom CSS classes for the toggle button. |

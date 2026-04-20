@@ -9,18 +9,19 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add skeleton
+npx vayu-ui-cli add skeleton
 ```
 
 ```bash
-npx vayu-ui add -t skeleton #with test case needs
+npx vayu-ui-cli add -t skeleton #with test case needs
 ```
 
 ## Usage
+
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
       <SkeletonDemo />
@@ -57,6 +58,7 @@ npx vayu-ui add -t skeleton #with test case needs
       </div>
     </Skeleton.Root>
     ```
+
   </Tab>
 </Tabs>
 
@@ -78,11 +80,13 @@ npx vayu-ui add -t skeleton #with test case needs
 ```
 
 ## Accessibility
+
 - **Keyboard support**: Skeletons are typically decorative and do not require keyboard focus unless they represent interactive elements loading.
 - **ARIA attributes**: Uses `aria-hidden="true"` for decorative skeletons to hide them from screen readers. Uses `aria-label` or `aria-labelledby` on the root container if the loading state itself is meaningful context.
-- **Focus behavior**: Non-focusable by default. Focus should remain on the surrounding structural elements or be handled by the layout container representing the loading state. 
+- **Focus behavior**: Non-focusable by default. Focus should remain on the surrounding structural elements or be handled by the layout container representing the loading state.
 
 ## Screen reader behavior
+
 By default, decorative skeletons (e.g., individual lines of text, shapes) are hidden from screen readers using `aria-hidden="true"` to prevent noise. A generic loading announcement can be achieved via `aria-live` or dedicated visibly-hidden loading text on the `Skeleton.Root` to inform users that content is being fetched.
 
 ## Component Folder Structure
@@ -101,94 +105,105 @@ Skeleton/
 ## Props
 
 ### Skeleton.Root
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `animation` | `SkeletonAnimation` | `'pulse'` | The animation style for all child skeletons ('pulse', 'wave', 'none'). |
-| `size` | `SkeletonSize` | `'md'` | The base size for the skeletons ('sm', 'md', 'lg', 'xl'). |
-| `aria-label` | `string` | - | Accessible label for the skeleton container. |
-| `aria-live` | `'polite' \| 'assertive' \| 'off'` | `'polite'` | Configuration for screen reader live announcements. |
+
+| Prop         | Type                               | Default    | Description                                                            |
+| :----------- | :--------------------------------- | :--------- | :--------------------------------------------------------------------- |
+| `animation`  | `SkeletonAnimation`                | `'pulse'`  | The animation style for all child skeletons ('pulse', 'wave', 'none'). |
+| `size`       | `SkeletonSize`                     | `'md'`     | The base size for the skeletons ('sm', 'md', 'lg', 'xl').              |
+| `aria-label` | `string`                           | -          | Accessible label for the skeleton container.                           |
+| `aria-live`  | `'polite' \| 'assertive' \| 'off'` | `'polite'` | Configuration for screen reader live announcements.                    |
 
 ### Skeleton.Item
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `variant` | `SkeletonVariant` | `'rectangular'` | Shape logic of the skeleton item. |
-| `animation` | `SkeletonAnimation` | - | Overrides animation style for the item. |
-| `width` | `string \| number` | - | Explicit width of the item. |
-| `height` | `string \| number` | - | Explicit height of the item. |
-| `size` | `SkeletonSize` | - | Size scale token. |
-| `count` | `number` | `1` | Number of duplicate skeleton items to render. |
+
+| Prop        | Type                | Default         | Description                                   |
+| :---------- | :------------------ | :-------------- | :-------------------------------------------- |
+| `variant`   | `SkeletonVariant`   | `'rectangular'` | Shape logic of the skeleton item.             |
+| `animation` | `SkeletonAnimation` | -               | Overrides animation style for the item.       |
+| `width`     | `string \| number`  | -               | Explicit width of the item.                   |
+| `height`    | `string \| number`  | -               | Explicit height of the item.                  |
+| `size`      | `SkeletonSize`      | -               | Size scale token.                             |
+| `count`     | `number`            | `1`             | Number of duplicate skeleton items to render. |
 
 ### Skeleton.Text
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `lines` | `number` | `3` | Number of text lines to simulate. |
-| `width` | `string \| number` | `'100%'` | Width of the standard text lines. |
-| `lastLineWidth` | `string \| number` | `'60%'` | Width of the final line. |
-| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
-| `size` | `SkeletonSize` | - | Controls the text height/spacing scale. |
+
+| Prop            | Type                | Default  | Description                             |
+| :-------------- | :------------------ | :------- | :-------------------------------------- |
+| `lines`         | `number`            | `3`      | Number of text lines to simulate.       |
+| `width`         | `string \| number`  | `'100%'` | Width of the standard text lines.       |
+| `lastLineWidth` | `string \| number`  | `'60%'`  | Width of the final line.                |
+| `animation`     | `SkeletonAnimation` | -        | Overrides animation style.              |
+| `size`          | `SkeletonSize`      | -        | Controls the text height/spacing scale. |
 
 ### Skeleton.Circle
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `size` | `SkeletonSize` | `'md'` | Defined size mapping for the circle. |
-| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
+
+| Prop        | Type                | Default | Description                          |
+| :---------- | :------------------ | :------ | :----------------------------------- |
+| `size`      | `SkeletonSize`      | `'md'`  | Defined size mapping for the circle. |
+| `animation` | `SkeletonAnimation` | -       | Overrides animation style.           |
 
 ### Skeleton.Rectangle
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `width` | `string \| number` | `'100%'` | Width of the rectangle. |
-| `height` | `string \| number` | `'100%'` | Height of the rectangle. |
-| `rounded` | `boolean` | `true` | Applies border-radius to the rectangle. |
-| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
-| `size` | `SkeletonSize` | - | Base size token. |
+
+| Prop        | Type                | Default  | Description                             |
+| :---------- | :------------------ | :------- | :-------------------------------------- |
+| `width`     | `string \| number`  | `'100%'` | Width of the rectangle.                 |
+| `height`    | `string \| number`  | `'100%'` | Height of the rectangle.                |
+| `rounded`   | `boolean`           | `true`   | Applies border-radius to the rectangle. |
+| `animation` | `SkeletonAnimation` | -        | Overrides animation style.              |
+| `size`      | `SkeletonSize`      | -        | Base size token.                        |
 
 ### Skeleton.Card
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `showImage` | `boolean` | `true` | Includes an image placeholder skeleton. |
-| `imageHeight` | `number` | - | Specific height for the image placeholder placeholder. |
-| `lines` | `number` | `2` | Number of text lines below the title. |
-| `titleWidth` | `string \| number` | `'60%'` | Width for the title skeleton block. |
-| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
-| `size` | `SkeletonSize` | - | Base size configuration. |
+
+| Prop          | Type                | Default | Description                                            |
+| :------------ | :------------------ | :------ | :----------------------------------------------------- |
+| `showImage`   | `boolean`           | `true`  | Includes an image placeholder skeleton.                |
+| `imageHeight` | `number`            | -       | Specific height for the image placeholder placeholder. |
+| `lines`       | `number`            | `2`     | Number of text lines below the title.                  |
+| `titleWidth`  | `string \| number`  | `'60%'` | Width for the title skeleton block.                    |
+| `animation`   | `SkeletonAnimation` | -       | Overrides animation style.                             |
+| `size`        | `SkeletonSize`      | -       | Base size configuration.                               |
 
 ### Skeleton.Avatar
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `showText` | `boolean` | `true` | Show adjacent text skeletons. |
-| `textLines` | `number` | `2` | Number of text lines if showing text. |
-| `titleWidth` | `string \| number` | `'100px'` | Width of the primary text line. |
-| `subtitleWidth` | `string \| number` | `'150px'` | Width of the secondary text line. |
-| `size` | `SkeletonSize` | `'md'` | Set the circle and text scaling sizes. |
-| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
+
+| Prop            | Type                | Default   | Description                            |
+| :-------------- | :------------------ | :-------- | :------------------------------------- |
+| `showText`      | `boolean`           | `true`    | Show adjacent text skeletons.          |
+| `textLines`     | `number`            | `2`       | Number of text lines if showing text.  |
+| `titleWidth`    | `string \| number`  | `'100px'` | Width of the primary text line.        |
+| `subtitleWidth` | `string \| number`  | `'150px'` | Width of the secondary text line.      |
+| `size`          | `SkeletonSize`      | `'md'`    | Set the circle and text scaling sizes. |
+| `animation`     | `SkeletonAnimation` | -         | Overrides animation style.             |
 
 ### Skeleton.List
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `items` | `number` | `3` | Number of list items to mock. |
-| `showAvatar` | `boolean` | `true` | Includes a circle skeleton inside each list item. |
-| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
-| `size` | `SkeletonSize` | - | Used for internal skeleton dimensions. |
+
+| Prop         | Type                | Default | Description                                       |
+| :----------- | :------------------ | :------ | :------------------------------------------------ |
+| `items`      | `number`            | `3`     | Number of list items to mock.                     |
+| `showAvatar` | `boolean`           | `true`  | Includes a circle skeleton inside each list item. |
+| `animation`  | `SkeletonAnimation` | -       | Overrides animation style.                        |
+| `size`       | `SkeletonSize`      | -       | Used for internal skeleton dimensions.            |
 
 ### Skeleton.Table
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `rows` | `number` | `5` | Number of data rows. |
-| `columns` | `number` | `4` | Number of table columns. |
-| `showHeader` | `boolean` | `true` | Renders a header skeleton row. |
-| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
-| `size` | `SkeletonSize` | - | Dictates row height sizing. |
+
+| Prop         | Type                | Default | Description                    |
+| :----------- | :------------------ | :------ | :----------------------------- |
+| `rows`       | `number`            | `5`     | Number of data rows.           |
+| `columns`    | `number`            | `4`     | Number of table columns.       |
+| `showHeader` | `boolean`           | `true`  | Renders a header skeleton row. |
+| `animation`  | `SkeletonAnimation` | -       | Overrides animation style.     |
+| `size`       | `SkeletonSize`      | -       | Dictates row height sizing.    |
 
 ### Skeleton.Grid
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `items` | `number` | `6` | Total skeleton blocks. |
-| `columns` | `number` | `3` | Columns per row. |
-| `itemHeight` | `number` | - | Internal rectangle height for each grid item. |
-| `animation` | `SkeletonAnimation` | - | Overrides animation style. |
-| `size` | `SkeletonSize` | - | Drives the spacing format. |
+
+| Prop         | Type                | Default | Description                                   |
+| :----------- | :------------------ | :------ | :-------------------------------------------- |
+| `items`      | `number`            | `6`     | Total skeleton blocks.                        |
+| `columns`    | `number`            | `3`     | Columns per row.                              |
+| `itemHeight` | `number`            | -       | Internal rectangle height for each grid item. |
+| `animation`  | `SkeletonAnimation` | -       | Overrides animation style.                    |
+| `size`       | `SkeletonSize`      | -       | Drives the spacing format.                    |
 
 ### Skeleton.Group
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `spacing` | `'sm' \| 'md' \| 'lg'` | `'md'` | Provides consistent gaps between skeleton blocks. |
+
+| Prop      | Type                   | Default | Description                                       |
+| :-------- | :--------------------- | :------ | :------------------------------------------------ |
+| `spacing` | `'sm' \| 'md' \| 'lg'` | `'md'`  | Provides consistent gaps between skeleton blocks. |

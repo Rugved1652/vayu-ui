@@ -9,15 +9,15 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui init #one time only
+npx vayu-ui-cli init #one time only
 ```
 
 ```bash
-npx vayu-ui add hovercard
+npx vayu-ui-cli add hovercard
 ```
 
 ```bash
-npx vayu-ui add -t hovercard #with test case needs
+npx vayu-ui-cli add -t hovercard #with test case needs
 ```
 
 ## Usage
@@ -74,6 +74,7 @@ npx vayu-ui add -t hovercard #with test case needs
       <button>Hover me slowly</button>
     </HoverCard>
     ```
+
   </Tab>
 </Tabs>
 
@@ -115,16 +116,16 @@ HoverCard/
 
 ### HoverCard
 
-| Prop               | Type                                 | Default    | Description                          |
-| :----------------- | :----------------------------------- | :--------- | :----------------------------------- |
-| `content`          | `ReactNode`                          | —          | Card content                         |
-| `side`             | `'top' \| 'right' \| 'bottom' \| 'left'` | `"bottom"` | Preferred side                       |
-| `align`            | `'start' \| 'center' \| 'end'`       | `"center"` | Alignment along the edge             |
-| `sideOffset`       | `number`                             | `8`        | Gap between trigger and card (px)    |
-| `alignOffset`      | `number`                             | `0`        | Alignment shift (px)                 |
-| `openDelay`        | `number`                             | `200`      | Delay before opening (ms)            |
-| `closeDelay`       | `number`                             | `300`      | Delay before closing (ms)            |
-| `contentClassName` | `string`                             | —          | Extra class on the card container    |
-| `disabled`         | `boolean`                            | `false`    | Disable the hover card entirely      |
-| `showArrow`        | `boolean`                            | `true`     | Show the directional arrow           |
-| `className`        | `string`                             | —          | Extra class on the trigger wrapper   |
+| Prop               | Type                                     | Default    | Description                        |
+| :----------------- | :--------------------------------------- | :--------- | :--------------------------------- |
+| `content`          | `ReactNode`                              | —          | Card content                       |
+| `side`             | `'top' \| 'right' \| 'bottom' \| 'left'` | `"bottom"` | Preferred side                     |
+| `align`            | `'start' \| 'center' \| 'end'`           | `"center"` | Alignment along the edge           |
+| `sideOffset`       | `number`                                 | `8`        | Gap between trigger and card (px)  |
+| `alignOffset`      | `number`                                 | `0`        | Alignment shift (px)               |
+| `openDelay`        | `number`                                 | `200`      | Delay before opening (ms)          |
+| `closeDelay`       | `number`                                 | `300`      | Delay before closing (ms)          |
+| `contentClassName` | `string`                                 | —          | Extra class on the card container  |
+| `disabled`         | `boolean`                                | `false`    | Disable the hover card entirely    |
+| `showArrow`        | `boolean`                                | `true`     | Show the directional arrow         |
+| `className`        | `string`                                 | —          | Extra class on the trigger wrapper |
