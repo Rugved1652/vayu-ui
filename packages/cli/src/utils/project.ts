@@ -66,7 +66,11 @@ export function findProjectRoot(cwd: string): string {
 function detectFramework(root: string): string {
   const nextConfigs = ['next.config.ts', 'next.config.mjs', 'next.config.js', 'next.config.cjs'];
   if (nextConfigs.some((f) => existsSync(join(root, f)))) {
-    return existsSync(join(root, 'src', 'app')) ? 'next-app' : 'next-pages';
+    if (existsSync(join(root, 'src', 'app')) || existsSync(join(root, 'app'))) {
+      return 'next-app';
+    }
+
+    return 'next-pages';
   }
 
   const viteConfigs = ['vite.config.ts', 'vite.config.mjs', 'vite.config.js'];

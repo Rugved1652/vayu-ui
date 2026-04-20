@@ -83,7 +83,7 @@ export default function HoverCardDemo() {
                 </p>
                 <p className="flex items-center gap-2">
                   <ExternalLink className="w-3 h-3 shrink-0" aria-hidden="true" />
-                  vayu-ui.dev
+                  vayu.design
                 </p>
               </div>
               <button className="w-full px-3 py-1.5 text-xs font-secondary bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors">

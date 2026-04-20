@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://vayu-ui.dev'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://vayu.design'),
 };
 
 export default function Layout({ children }: LayoutProps<'/'>) {

@@ -67,7 +67,7 @@ export default class Init extends Command {
 
     // Resolve paths
     const uiDir = flags.path ?? project.uiDir;
-    const cssFile = flags['css-path'] ?? project.cssFile;
+    const cssFile = this.resolveCssFile(project, flags['css-path']);
 
     this.printDetected(project, uiDir, cssFile);
     this.log('');
@@ -150,12 +150,30 @@ export default class Init extends Command {
     this.log(ux.colorize('green', `  Created ${uiDir}/ with components/, hooks/, utils/`));
   }
 
+  private resolveCssFile(project: ProjectInfo, cssPathFlag?: string): string | null {
+    if (cssPathFlag) return cssPathFlag;
+    if (project.cssFile) return project.cssFile;
+
+    switch (project.framework) {
+      case 'next-app':
+        return project.hasSrc ? 'src/app/globals.css' : 'app/globals.css';
+      case 'next-pages':
+        return project.hasSrc ? 'src/styles/globals.css' : 'styles/globals.css';
+      case 'vite':
+      case 'cra':
+      case 'unknown':
+      default:
+        return project.hasSrc ? 'src/index.css' : 'index.css';
+    }
+  }
+
   private handleCssTokens(root: string, cssFile: string | null, merge: boolean): string {
     const tokensContent = `${TOKENS_START_MARKER}\n${VAYU_TOKENS_CSS}\n${TOKENS_END_MARKER}`;
 
     if (merge && cssFile) {
       // Merge into existing CSS file
       const absPath = join(root, cssFile);
+      mkdirSync(dirname(absPath), { recursive: true });
       const existing = existsSync(absPath) ? readFileSync(absPath, 'utf-8') : '';
 
       if (existing.includes(TOKENS_START_MARKER)) {
@@ -175,7 +193,8 @@ export default class Init extends Command {
     }
 
     // Create separate tokens file
-    const cssDir = cssFile ? dirname(join(root, cssFile)) : join(root, 'src');
+    const cssDir = cssFile ? dirname(join(root, cssFile)) : root;
+    mkdirSync(cssDir, { recursive: true });
     const tokensPath = join(cssDir, TOKENS_FILE);
     const tokensRelPath = relative(root, tokensPath);
 
@@ -185,6 +204,12 @@ export default class Init extends Command {
     // Add @import to main CSS file
     if (cssFile && !merge) {
       const absPath = join(root, cssFile);
+      mkdirSync(dirname(absPath), { recursive: true });
+      if (!existsSync(absPath)) {
+        writeFileSync(absPath, '');
+        this.log(ux.colorize('green', `  Created ${cssFile}`));
+      }
+
       if (existsSync(absPath)) {
         const existing = readFileSync(absPath, 'utf-8');
         const importLine = `@import './${TOKENS_FILE}';`;
@@ -200,7 +225,7 @@ export default class Init extends Command {
 
   private writeConfig(root: string, paths: { uiDir: string; cssFile: string | null; tokensFile: string }): void {
     const config = {
-      $schema: 'https://vayu-ui.dev/schema/config.json',
+      $schema: 'https://vayu.design/schema/config.json',
       version: 1,
       uiPath: paths.uiDir,
       cssFile: paths.cssFile,
