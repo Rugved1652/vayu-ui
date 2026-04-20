@@ -1,6 +1,6 @@
 {
   "name": "vayu-ui-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP Server for Vayu UI — exposes the component/hook registry to AI assistants",
   "author": "Rugved Patel",
   "license": "MIT",
@@ -23,6 +23,11 @@
     "tsup": "^8.5.1",
     "typescript": "^5"
   },
+  "files": [
+    "./bin",
+    "./dist",
+    "README.md"
+  ],
   "engines": {
     "node": ">=18.0.0"
   }
