@@ -67,7 +67,6 @@ export async function GET() {
           <span
             style={{
               display: 'flex',
-              width: 'fit-content',
               borderRadius: '999px',
               border: '1px solid rgba(148, 163, 184, 0.28)',
               background: 'rgba(15, 23, 42, 0.68)',
