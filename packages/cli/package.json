@@ -15,7 +15,7 @@
   "bin": {
     "vayu-ui": "./bin/run.js"
   },
-  "bugs": "https://github.com/VayuUI/vayu-ui-cli/issues",
+  "bugs": "https://github.com/Rugved1652/vayu-ui/issues",
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
@@ -47,7 +47,7 @@
     "./dist",
     "./oclif.manifest.json"
   ],
-  "homepage": "https://github.com/VayuUI/vayu-ui-cli",
+  "homepage": "https://vayu.design/docs/cli-support",
   "license": "MIT",
   "main": "dist/index.js",
   "type": "module",
@@ -61,7 +61,7 @@
     ],
     "topicSeparator": " "
   },
-  "repository": "VayuUI/vayu-ui-cli",
+  "repository": "https://github.com/Rugved1652/vayu-ui/tree/main/packages/cli",
   "scripts": {
     "build": "tsup",
     "lint": "eslint",

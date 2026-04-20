@@ -4,6 +4,9 @@
   "description": "MCP Server for Vayu UI — exposes the component/hook registry to AI assistants",
   "author": "Rugved Patel",
   "license": "MIT",
+  "repository": "https://github.com/Rugved1652/vayu-ui/tree/main/packages/mcp",
+  "homepage": "https://vayu.design/docs/mcp-support",
+  "bugs": "https://github.com/Rugved1652/vayu-ui/issues",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
