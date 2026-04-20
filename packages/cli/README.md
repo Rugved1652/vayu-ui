@@ -9,7 +9,7 @@
 | Requirement | Version  |
 | ----------- | -------- |
 | Node.js     | ≥ 18.0.0 |
-| npm         | any      |
+| npm         | ≥ 10.0.0 |
 
 ---
 
