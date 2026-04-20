@@ -1,12 +1,16 @@
 {
   "name": "vayu-ui-registry",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Shared component registry for Vayu UI CLI and MCP Server",
   "author": "Rugved Patel",
   "license": "MIT",
   "repository": "https://github.com/Rugved1652/vayu-ui/tree/main/packages/registry",
   "homepage": "https://vayu.design",
   "bugs": "https://github.com/Rugved1652/vayu-ui/issues",
+  "files": [
+    "./dist",
+    "README.md"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",

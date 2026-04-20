@@ -10,7 +10,7 @@
     "library"
   ],
   "description": "CLI for adding Vayu UI components and hooks to your React project",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Rugved Patel",
   "bin": {
     "vayu-ui": "./bin/run.js"
