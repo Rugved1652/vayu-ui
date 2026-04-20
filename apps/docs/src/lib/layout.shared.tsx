@@ -12,6 +12,6 @@ export function baseOptions(): BaseLayoutProps {
       ),
       transparentMode: 'top',
     },
-    githubUrl: 'https://github.com',
+    githubUrl: 'https://github.com/Rugved1652/vayu-ui',
   };
 }

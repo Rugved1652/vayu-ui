@@ -47,6 +47,10 @@ export function GetStarted() {
                 <pre className="font-tertiary text-sm text-canvas-content space-y-1">
                   <code>npx vayu-ui-cli init</code>
                   <br />
+                  <code className="font-tertiary text-sm text-surface-content">
+                    npx vayu-ui-cli install-mcp
+                  </code>
+                  <br />
                   <code>npx vayu-ui-cli add button card input</code>
                 </pre>
               </div>
@@ -56,7 +60,7 @@ export function GetStarted() {
                     Read the Docs
                   </Button>
                 </Link>
-                <Link href="https://github.com" target="_blank">
+                <Link href="https://github.com/Rugved1652/vayu-ui" target="_blank">
                   <Button variant="outline" size="large" fullWidth>
                     <Github className="w-4 h-4" />
                     View on GitHub
@@ -91,7 +95,7 @@ export function GetStarted() {
             &copy; {new Date().getFullYear()} Vayu UI. Open source.
           </p>
           <a
-            href="https://github.com"
+            href="https://github.com/Rugved1652/vayu-ui"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-secondary text-muted-content hover:text-canvas-content transition-colors"

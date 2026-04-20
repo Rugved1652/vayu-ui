@@ -29,7 +29,7 @@ export function Hero() {
               <Link href="/docs" className="group inline-flex">
                 <Badge variant="brand" size="sm" className="gap-1.5 cursor-pointer transition-shadow hover:shadow-sm">
                   <Sparkles className="w-3 h-3" />
-                  Introducing Vayu UI — AI-Native Design System
+                  Beta Version
                   <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                 </Badge>
               </Link>
@@ -37,9 +37,9 @@ export function Hero() {
 
             {/* Main heading */}
             <h1 className="mt-10 font-primary text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] text-canvas-content">
-              Build beautiful UIs
+              AI Native
               <br />
-              <span className="text-brand">with AI in the loop.</span>
+              <span className="text-brand">UI Toolkit for NextJS</span>
             </h1>
 
             {/* Description */}
@@ -56,7 +56,7 @@ export function Hero() {
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Link href="https://github.com" target="_blank">
+              <Link href="https://github.com/Rugved1652/vayu-ui" target="_blank">
                 <Button variant="outline" size="large" className="min-w-[180px]">
                   <Github className="w-4 h-4" />
                   GitHub
@@ -73,13 +73,21 @@ export function Hero() {
                   <span className="w-2.5 h-2.5 rounded-full bg-warning/60" />
                   <span className="w-2.5 h-2.5 rounded-full bg-success/60" />
                   <span className="ml-2 font-tertiary text-xs text-muted-content">terminal</span>
+                  <Terminal className="w-4 h-4 text-muted-content shrink-0" />
+
                 </div>
                 {/* Command */}
-                <div className="flex items-center gap-3 px-4 py-3">
-                  <Terminal className="w-4 h-4 text-muted-content shrink-0" />
+                <div className="flex flex-col items-start gap-3 px-4 py-3">
                   <code className="font-tertiary text-sm text-surface-content">
-                    npx vayu-ui-cli add button
+                    npx vayu-ui-cli init
                   </code>
+                  <code className="font-tertiary text-sm text-surface-content">
+                    npx vayu-ui-cli install-mcp
+                  </code>
+                  <code className="font-tertiary text-sm text-surface-content">
+                    npx vayu-ui-cli add button card input
+                  </code>
+
                 </div>
               </div>
             </div>
