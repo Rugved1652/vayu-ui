@@ -1,6 +1,6 @@
 {
   "name": "vayu-ui-registry",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Shared component registry for Vayu UI CLI and MCP Server",
   "author": "Rugved Patel",
   "license": "MIT",
