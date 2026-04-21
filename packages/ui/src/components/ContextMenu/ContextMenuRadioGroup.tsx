@@ -37,8 +37,6 @@ const ContextMenuRadioItem = forwardRef<HTMLButtonElement, ContextMenuRadioItemP
 
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
-        if (disabled) return;
-
         const menuEl = itemRef.current?.closest('[role="menu"]');
         const items = getFocusableItems(menuEl);
 
@@ -75,6 +73,7 @@ const ContextMenuRadioItem = forwardRef<HTMLButtonElement, ContextMenuRadioItemP
             closeMenu();
             break;
           default:
+            if (disabled) return;
             handleActionKeyDown(e);
             break;
         }

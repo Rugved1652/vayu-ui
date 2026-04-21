@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { BigCalendar, CalendarEvent } from 'vayu-ui';
+import { BigCalendar, CalendarEvent, Typography } from 'vayu-ui';
 
 function sampleEvents(): CalendarEvent[] {
   const now = new Date();
@@ -75,6 +75,7 @@ export default function BigCalendarDemo() {
 
   return (
     <div className="flex flex-col not-prose gap-4 w-full">
+      <Typography.H5>Big Calendar</Typography.H5>
       <BigCalendar
         events={events}
         onEventClick={(e) => alert(`Clicked: ${e.title}`)}

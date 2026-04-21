@@ -5,7 +5,7 @@ export default function TypographyDemo() {
     <div className="flex flex-col gap-10 w-full max-w-3xl not-prose">
       {/* Headings Section */}
       <section>
-        <Typography.H2 className="mb-6">Headings</Typography.H2>
+        <Typography.H5 className="mb-6">Headings</Typography.H5>
         <div className="bg-surface space-y-2 rounded-surface p-6 border border-border shadow-surface">
           <Typography.H1>Heading 1 - Main Title</Typography.H1>
           <Typography.H2>Heading 2 - Section Title</Typography.H2>
@@ -18,7 +18,7 @@ export default function TypographyDemo() {
 
       {/* Paragraph Section */}
       <section>
-        <Typography.H2 className="mb-6">Paragraphs</Typography.H2>
+        <Typography.H5 className="mb-6">Paragraphs</Typography.H5>
         <div className="space-y-4">
           <div className="bg-surface rounded-surface p-5 border border-border shadow-surface">
             <Typography.P>
@@ -38,7 +38,7 @@ export default function TypographyDemo() {
 
       {/* Text Components Section */}
       <section>
-        <Typography.H2 className="mb-6">Text Components</Typography.H2>
+        <Typography.H5 className="mb-6">Text Components</Typography.H5>
         <div className="space-y-4">
           {/* Label */}
           <div className="flex items-center gap-3 bg-surface rounded-control p-4 border border-border">
@@ -89,7 +89,7 @@ export default function TypographyDemo() {
 
       {/* Variants Section */}
       <section>
-        <Typography.H2 className="mb-6">Color Variants</Typography.H2>
+        <Typography.H5 className="mb-6">Color Variants</Typography.H5>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="bg-surface rounded-control p-4 border border-destructive/30 shadow-surface">
             <Typography.P variant="error">Error text variant</Typography.P>
@@ -118,7 +118,7 @@ export default function TypographyDemo() {
 
       {/* Font Variants Section */}
       <section>
-        <Typography.H2 className="mb-6">Font Variants</Typography.H2>
+        <Typography.H5 className="mb-6">Font Variants</Typography.H5>
         <div className="space-y-3 bg-surface rounded-surface p-6 border border-border shadow-surface">
           <Typography.P font="primary">Primary font (Oswald) - for headings</Typography.P>
           <Typography.P font="secondary">Secondary font (Mulish) - for body text</Typography.P>

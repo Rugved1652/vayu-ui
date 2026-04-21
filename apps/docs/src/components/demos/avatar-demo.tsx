@@ -1,24 +1,18 @@
 'use client';
 import { useState } from 'react';
-import { Avatar } from 'vayu-ui';
-import { Typography } from 'vayu-ui';
-import { Divider } from 'vayu-ui';
-import { Button } from 'vayu-ui';
+import { Avatar, Typography, Divider, Button } from 'vayu-ui';
 
 export default function AvatarDemo() {
   const [clickedAvatar, setClickedAvatar] = useState<string | null>(null);
 
   return (
     <div className="w-full max-w-2xl not-prose space-y-8">
-      <Typography.H2 variant="primary">Avatar Examples</Typography.H2>
-      <Typography.P variant="secondary">
-        Avatars display user profile images, initials, or fallback placeholders with optional status
-        indicators.
-      </Typography.P>
+      <Typography.H5 variant="primary">Avatar Examples</Typography.H5>
+
 
       {/* 1. Sizes */}
       <div className="flex flex-col gap-4">
-        <Typography.H4 variant="primary">Sizes</Typography.H4>
+        <Typography.H5 variant="primary">Sizes</Typography.H5>
         <div className="flex items-end gap-6 flex-wrap">
           <div className="flex flex-col items-center gap-2">
             <Avatar size="small" username="Small User">
@@ -59,7 +53,7 @@ export default function AvatarDemo() {
 
       {/* 2. Variants (Image, Initials, Fallback) */}
       <div className="flex flex-col gap-4">
-        <Typography.H4 variant="primary">Variants</Typography.H4>
+        <Typography.H5 variant="primary">Variants</Typography.H5>
         <div className="flex flex-wrap gap-8">
           {/* Image Avatar */}
           <div className="flex flex-col items-center gap-2">
@@ -101,7 +95,7 @@ export default function AvatarDemo() {
 
       {/* 3. Status States */}
       <div className="flex flex-col gap-4">
-        <Typography.H4 variant="primary">Status States</Typography.H4>
+        <Typography.H5 variant="primary">Status States</Typography.H5>
         <div className="flex flex-wrap gap-8">
           <div className="flex flex-col items-center gap-2">
             <Avatar size="large" username="Online" status="online">
@@ -146,7 +140,7 @@ export default function AvatarDemo() {
 
       {/* 4. Interactive */}
       <div className="flex flex-col gap-4">
-        <Typography.H4 variant="primary">Interactive</Typography.H4>
+        <Typography.H5 variant="primary">Interactive</Typography.H5>
         <Typography.P variant="tertiary" className="text-xs!">
           Click or focus these avatars to see WCAG-compliant interactions.
         </Typography.P>
@@ -184,7 +178,7 @@ export default function AvatarDemo() {
 
       {/* 5. With Button Component */}
       <div className="flex flex-col gap-4">
-        <Typography.H4 variant="primary">With Button Component</Typography.H4>
+        <Typography.H5 variant="primary">With Button Component</Typography.H5>
         <Typography.P variant="tertiary" className="text-xs!">
           Avatars can be used inside buttons for profile actions.
         </Typography.P>

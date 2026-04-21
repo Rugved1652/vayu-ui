@@ -1,10 +1,11 @@
 'use client';
 
-import { AudioPlayer } from 'vayu-ui';
+import { AudioPlayer, Typography } from 'vayu-ui';
 
 export default function AudioPlayerDemo() {
   return (
     <div className="flex flex-col gap-10 w-full max-w-5xl mx-auto py-8">
+      <Typography.H5>Audio Player</Typography.H5>
       <div className="p-6 bg-surface rounded-surface shadow-surface border border-border/20">
         <h3 className="text-h3 font-primary mb-2 text-surface-content">
           Spotify-style Single Track

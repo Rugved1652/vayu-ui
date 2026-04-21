@@ -21,8 +21,6 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
 
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
-        if (disabled) return;
-
         const menuEl = itemRef.current?.closest('[role="menu"]');
         const items = getFocusableItems(menuEl);
 
@@ -59,6 +57,7 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
             closeMenu();
             break;
           default:
+            if (disabled) return;
             handleActionKeyDown(e);
             break;
         }

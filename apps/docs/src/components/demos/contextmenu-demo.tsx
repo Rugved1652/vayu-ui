@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ContextMenu } from 'vayu-ui';
+import { ContextMenu, Typography } from 'vayu-ui';
 import {
   Copy,
   Scissors,
@@ -24,21 +24,14 @@ export default function ContextMenuDemo() {
   const [person, setPerson] = useState('andy');
 
   return (
-    <div className="not-prose flex flex-col gap-8 w-full max-w-md">
+    <div className="not-prose flex flex-col gap-4 w-full max-w-md mx-auto">
       <div className="space-y-2">
-        <p className="text-sm font-secondary text-ground-500 dark:text-ground-400">
+        <Typography.P variant="secondary">
           Right-click the area below to open the context menu.
-        </p>
-        <div className="text-xs font-secondary text-ground-400 dark:text-ground-500 space-y-1">
-          <p className="font-medium">Keyboard shortcuts:</p>
-          <ul className="list-disc list-inside space-y-0.5 ml-2">
-            <li>↑/↓ arrows to navigate</li>
-            <li>→ to open submenu</li>
-            <li>← to close submenu</li>
-            <li>Type to search items</li>
-            <li>Home/End to jump</li>
-          </ul>
-        </div>
+        </Typography.P>
+        <Typography.P variant="secondary" className="text-xs">
+          <span className="font-medium">Keyboard shortcuts:</span> ↑/↓ navigate, → open submenu, ← close submenu, type to search, Home/End to jump
+        </Typography.P>
       </div>
 
       <ContextMenu>
@@ -190,24 +183,17 @@ export default function ContextMenuDemo() {
       </ContextMenu>
 
       {/* State Display */}
-      <div className="text-xs font-secondary text-ground-500 dark:text-ground-400 space-y-1 p-4 bg-ground-50 dark:bg-ground-900 rounded-lg border border-ground-200 dark:border-ground-800">
-        <p className="font-medium text-ground-700 dark:text-ground-300 mb-2">Current State:</p>
-        <p>
-          Show Bookmarks:{' '}
-          <span className="font-mono text-primary-600 dark:text-primary-400">
-            {showBookmarks ? 'true' : 'false'}
-          </span>
-        </p>
-        <p>
-          Show URLs:{' '}
-          <span className="font-mono text-primary-600 dark:text-primary-400">
-            {showUrls ? 'true' : 'false'}
-          </span>
-        </p>
-        <p>
-          Assignee:{' '}
-          <span className="font-mono text-primary-600 dark:text-primary-400">{person}</span>
-        </p>
+      <div className="p-4 bg-muted rounded-surface border border-border space-y-1">
+        <Typography.P className="font-medium mb-2">Current State:</Typography.P>
+        <Typography.P variant="secondary" className="text-xs">
+          Show Bookmarks: <Typography.Code>{showBookmarks ? 'true' : 'false'}</Typography.Code>
+        </Typography.P>
+        <Typography.P variant="secondary" className="text-xs">
+          Show URLs: <Typography.Code>{showUrls ? 'true' : 'false'}</Typography.Code>
+        </Typography.P>
+        <Typography.P variant="secondary" className="text-xs">
+          Assignee: <Typography.Code>{person}</Typography.Code>
+        </Typography.P>
       </div>
     </div>
   );

@@ -24,8 +24,6 @@ const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
     // ArrowUp/Down/Home/End navigation
     const handleNavKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
-        if (disabled) return;
-
         const menuEl = itemRef.current?.closest('[role="menu"]');
         const items = getFocusableItems(menuEl);
 
@@ -62,6 +60,7 @@ const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
             closeMenu();
             break;
           default:
+            if (disabled) return;
             handleKeyDown(e);
             break;
         }

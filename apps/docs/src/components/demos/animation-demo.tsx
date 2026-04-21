@@ -1,6 +1,6 @@
 'use client';
 
-import { Animation, Button } from 'vayu-ui';
+import { Animation, Button, Typography } from 'vayu-ui';
 import { RefreshCcw, Accessibility } from 'lucide-react';
 import { useState } from 'react';
 
@@ -20,6 +20,7 @@ export default function AnimationDemo() {
 
   return (
     <div className="w-full not-prose space-y-8">
+      <Typography.H5>Animation Example</Typography.H5>
       {/* Header & Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3">

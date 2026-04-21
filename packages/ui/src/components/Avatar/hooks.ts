@@ -1,7 +1,12 @@
 // hooks.ts
 // Logic: Initial generation and color assignment
 
-import { WCAG_COMPLIANT_COLORS } from './types';
+import { createContext, useContext } from 'react';
+import { WCAG_COMPLIANT_COLORS, type AvatarSize } from './types';
+
+export const AvatarSizeContext = createContext<AvatarSize>('medium');
+
+export const useAvatarSize = () => useContext(AvatarSizeContext);
 
 export const generateInitials = (username: string): string => {
   if (!username) return '';

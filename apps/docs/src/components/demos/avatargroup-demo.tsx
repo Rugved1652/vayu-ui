@@ -61,22 +61,19 @@ export default function AvatarGroupDemo() {
   };
 
   return (
-    <div className="flex flex-col not-prose gap-10 w-full max-w-2xl bg-surface p-6 rounded-surface border border-border shadow-surface">
+    <div className="flex flex-col not-prose gap-6 w-full max-w-2xl">
+      <Typography.H5>Avatar Group</Typography.H5>
       {/* ── Basic Stack ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.H6 variant="secondary" className="text-xs">
-          Basic Stack
-        </Typography.H6>
+      <div className="flex flex-col gap-2">
+        <Typography.H5>Basic Stack</Typography.H5>
         <AvatarGroup users={users} maxDisplay={4} />
       </div>
 
       <Divider spacing="lg" decorative />
 
       {/* ── Grid Layout ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.H6 variant="secondary" className="text-xs">
-          Grid Layout (All Visible)
-        </Typography.H6>
+      <div className="flex flex-col gap-2">
+        <Typography.H5>Grid Layout (All Visible)</Typography.H5>
         <div className="max-w-50">
           <AvatarGroup users={users} layout="grid" maxDisplay={10} />
         </div>
@@ -85,11 +82,9 @@ export default function AvatarGroupDemo() {
       <Divider spacing="lg" decorative />
 
       {/* ── Sizing ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.H6 variant="secondary" className="text-xs">
-          Sizes
-        </Typography.H6>
-        <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <Typography.H5>Sizes</Typography.H5>
+        <div className="flex flex-col gap-2">
           <AvatarGroup users={users.slice(0, 3)} size="small" spacing="tight" />
           <AvatarGroup users={users.slice(0, 3)} size="medium" />
           <AvatarGroup users={users.slice(0, 3)} size="large" spacing="loose" />
@@ -100,10 +95,8 @@ export default function AvatarGroupDemo() {
       <Divider spacing="lg" decorative />
 
       {/* ── Interactive Demo ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.H6 variant="secondary" className="text-xs">
-          Interactive (Click avatars to select)
-        </Typography.H6>
+      <div className="flex flex-col gap-2">
+        <Typography.H5>Interactive (Click avatars to select)</Typography.H5>
         <div>
           <AvatarGroup
             users={users}
@@ -132,10 +125,8 @@ export default function AvatarGroupDemo() {
       <Divider spacing="lg" decorative />
 
       {/* ── With Overflow ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.H6 variant="secondary" className="text-xs">
-          With Overflow
-        </Typography.H6>
+      <div className="flex flex-col gap-2">
+        <Typography.H5>With Overflow</Typography.H5>
         <AvatarGroup
           users={users}
           maxDisplay={3}
@@ -146,10 +137,8 @@ export default function AvatarGroupDemo() {
       <Divider spacing="lg" decorative />
 
       {/* ── Status Indicators ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.H6 variant="secondary" className="text-xs">
-          Status Indicators
-        </Typography.H6>
+      <div className="flex flex-col gap-2">
+        <Typography.H5>Status Indicators</Typography.H5>
         <AvatarGroup users={users.slice(0, 4)} maxDisplay={4} />
       </div>
     </div>

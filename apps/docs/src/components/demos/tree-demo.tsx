@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Tree, type TreeNode } from 'vayu-ui';
+import { Tree, RadioGroup, Typography, type TreeNode } from 'vayu-ui';
 import { Trash2, FilePlus } from 'lucide-react';
 
 const fileTree: TreeNode[] = [
@@ -54,7 +54,7 @@ export default function TreeDemo() {
   const [expandedKeys, setExpandedKeys] = useState<(string | number)[]>(['src', 'components']);
   const [selected, setSelected] = useState<string | number | null>(null);
   const [checked, setChecked] = useState<(string | number)[]>([]);
-  const [mode, setMode] = useState<'normal' | 'checkbox'>('normal');
+  const [mode, setMode] = useState<string>('normal');
 
   const handleExpandAll = useCallback(() => {
     const allIds: (string | number)[] = [];
@@ -89,33 +89,21 @@ export default function TreeDemo() {
 
   return (
     <div className="not-prose flex flex-col gap-4 w-full max-w-md">
+      <Typography.H5>Tree</Typography.H5>
+
       {/* Mode toggle */}
-      <div className="flex gap-2">
-        <button
-          onClick={() => setMode('normal')}
-          className={`px-3 py-1.5 text-xs font-secondary font-medium rounded-md transition-colors ${
-            mode === 'normal'
-              ? 'bg-primary-600 text-white'
-              : 'bg-ground-100 dark:bg-ground-800 text-ground-700 dark:text-ground-300'
-          }`}
-        >
-          Normal
-        </button>
-        <button
-          onClick={() => setMode('checkbox')}
-          className={`px-3 py-1.5 text-xs font-secondary font-medium rounded-md transition-colors ${
-            mode === 'checkbox'
-              ? 'bg-primary-600 text-white'
-              : 'bg-ground-100 dark:bg-ground-800 text-ground-700 dark:text-ground-300'
-          }`}
-        >
-          Checkbox
-        </button>
-      </div>
+      <RadioGroup
+        value={mode}
+        onChange={setMode}
+        orientation="horizontal"
+      >
+        <RadioGroup.Item value="normal" label="Normal" />
+        <RadioGroup.Item value="checkbox" label="Checkbox" />
+      </RadioGroup>
 
       <Tree
         data={filtered}
-        mode={mode}
+        mode={mode as 'normal' | 'checkbox'}
         expandedKeys={expandedKeys}
         onExpandedChange={setExpandedKeys}
         selectedKey={selected}
@@ -127,14 +115,14 @@ export default function TreeDemo() {
         renderActions={(node) =>
           !node.children ? (
             <button
-              className="p-1 text-neutral-400 hover:text-red-500 transition-colors"
+              className="p-1 text-muted-content hover:text-destructive transition-colors"
               aria-label={`Delete ${node.label}`}
             >
               <Trash2 className="w-3 h-3" aria-hidden="true" />
             </button>
           ) : (
             <button
-              className="p-1 text-neutral-400 hover:text-primary-500 transition-colors"
+              className="p-1 text-muted-content hover:text-brand transition-colors"
               aria-label={`Add file to ${node.label}`}
             >
               <FilePlus className="w-3 h-3" aria-hidden="true" />
@@ -155,14 +143,14 @@ export default function TreeDemo() {
       </Tree>
 
       {mode === 'normal' && selected && (
-        <p className="text-xs font-secondary text-ground-500">
-          Selected: <strong>{String(selected)}</strong>
-        </p>
+        <Typography.P variant="secondary" className="text-xs">
+          Selected: <Typography.Code>{String(selected)}</Typography.Code>
+        </Typography.P>
       )}
       {mode === 'checkbox' && checked.length > 0 && (
-        <p className="text-xs font-secondary text-ground-500">
-          Checked: <strong>{checked.join(', ')}</strong>
-        </p>
+        <Typography.P variant="secondary" className="text-xs">
+          Checked: <Typography.Code>{checked.join(', ')}</Typography.Code>
+        </Typography.P>
       )}
     </div>
   );

@@ -4,12 +4,13 @@ import { Button, ButtonGroup, Divider, Typography } from 'vayu-ui';
 
 export default function ButtonGroupDemo() {
   return (
-    <div className="flex flex-col gap-10 w-full max-w-lg">
+    <div className="w-full flex flex-col items-center gap-2 not-prose">
+      <Typography.H5>Button Group Example</Typography.H5>
       {/* ── Horizontal Outline ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.Label variant="secondary" font="secondary">
+      <div className="flex flex-col gap-2">
+        <Typography.H5>
           Horizontal (Outline)
-        </Typography.Label>
+        </Typography.H5>
         <ButtonGroup aria-label="Text alignment options">
           <Button variant="outline">
             <Button.Text>Left</Button.Text>
@@ -26,10 +27,10 @@ export default function ButtonGroupDemo() {
       <Divider />
 
       {/* ── Primary Variant ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.Label variant="secondary" font="secondary">
+      <div className="flex flex-col gap-2">
+        <Typography.H5>
           Primary
-        </Typography.Label>
+        </Typography.H5>
         <ButtonGroup aria-label="Save options">
           <Button variant="primary">
             <Button.Text>Save</Button.Text>
@@ -43,10 +44,10 @@ export default function ButtonGroupDemo() {
       <Divider />
 
       {/* ── Vertical ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.Label variant="secondary" font="secondary">
+      <div className="flex flex-col gap-2">
+        <Typography.H5>
           Vertical
-        </Typography.Label>
+        </Typography.H5>
         <ButtonGroup orientation="vertical" aria-label="Vertical actions" className="w-fit">
           <Button variant="outline">
             <Button.Text>Top</Button.Text>
@@ -63,10 +64,10 @@ export default function ButtonGroupDemo() {
       <Divider />
 
       {/* ── Full Width ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.Label variant="secondary" font="secondary">
+      <div className="flex flex-col gap-2">
+        <Typography.H5>
           Full Width
-        </Typography.Label>
+        </Typography.H5>
         <ButtonGroup fullWidth aria-label="Confirmation actions">
           <Button variant="secondary">
             <Button.Text>Cancel</Button.Text>
@@ -80,10 +81,10 @@ export default function ButtonGroupDemo() {
       <Divider />
 
       {/* ── Mixed Variants ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.Label variant="secondary" font="secondary">
+      <div className="flex flex-col gap-2">
+        <Typography.H5>
           Mixed Variants
-        </Typography.Label>
+        </Typography.H5>
         <ButtonGroup aria-label="Mixed action buttons">
           <Button variant="outline">
             <Button.Text>Back</Button.Text>
@@ -100,10 +101,10 @@ export default function ButtonGroupDemo() {
       <Divider />
 
       {/* ── With Icons ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.Label variant="secondary" font="secondary">
+      <div className="flex flex-col gap-2">
+        <Typography.H5>
           With Icons
-        </Typography.Label>
+        </Typography.H5>
         <ButtonGroup aria-label="Formatting options">
           <Button variant="outline">
             <Button.Icon>
@@ -167,11 +168,11 @@ export default function ButtonGroupDemo() {
       <Divider />
 
       {/* ── Radius Variants ── */}
-      <div className="flex flex-col gap-3">
-        <Typography.Label variant="secondary" font="secondary">
+      <div className="flex flex-col gap-2">
+        <Typography.H5>
           Radius Variants
-        </Typography.Label>
-        <div className="flex flex-col gap-4">
+        </Typography.H5>
+        <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
             <Typography.P variant="tertiary" className="text-xs w-20">
               Control

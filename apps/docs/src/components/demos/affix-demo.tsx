@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Affix } from 'vayu-ui';
-import { Typography } from 'vayu-ui';
+import { Affix, Typography } from 'vayu-ui';
 
 const ScrollPlaceHolder = ({ height = 400 }: { height?: number }) => (
   <div
@@ -30,8 +29,9 @@ export default function AffixDemo() {
   return (
     <div className="min-h-screen text-canvas-content pb-20">
       <main className="max-w-4xl mx-auto p-6 space-y-12">
+        <Typography.H5>Affix Example</Typography.H5>
         <section>
-          <Typography.H2>1. Top Affix (with Offset)</Typography.H2>
+          <Typography.H5>1. Top Affix (with Offset)</Typography.H5>
           <Typography.P variant="secondary" className="mb-4">
             This bar sticks to the top of the viewport with a{' '}
             <Typography.Code>20px</Typography.Code> offset. It uses{' '}
@@ -62,7 +62,7 @@ export default function AffixDemo() {
         {/* 2. Bottom Affix */}
         {/* ============================================================ */}
         <section>
-          <Typography.H2>2. Bottom Affix</Typography.H2>
+          <Typography.H5>2. Bottom Affix</Typography.H5>
           <Typography.P variant="secondary" className="mb-4">
             This bar sticks to the bottom of the viewport. Useful for cookie consents or action
             bars.
@@ -96,7 +96,7 @@ export default function AffixDemo() {
         {/* 3. CustomTarget Container */}
         {/* ============================================================ */}
         <section>
-          <Typography.H2>3. Custom Target Container</Typography.H2>
+          <Typography.H5>3. Custom Target Container</Typography.H5>
           <Typography.P variant="secondary" className="mb-4">
             The Affix can be scoped to a specific scrollable element, not just the window. Scroll
             inside the box below.
@@ -132,7 +132,7 @@ export default function AffixDemo() {
         {/* 4. Accessibility & Styles */}
         {/* ============================================================ */}
         <section>
-          <Typography.H2>4. Accessibility & Custom Styles</Typography.H2>
+          <Typography.H5>4. Accessibility & Custom Styles</Typography.H5>
           <Typography.P variant="secondary" className="mb-4">
             This example passes a custom <Typography.Code>className</Typography.Code> and{' '}
             <Typography.Code>style</Typography.Code>. It also uses standard{' '}

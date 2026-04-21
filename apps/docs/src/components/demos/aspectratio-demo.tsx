@@ -1,9 +1,6 @@
 'use client';
 
-import { AspectRatio } from 'vayu-ui';
-import { Button } from 'vayu-ui';
-import { Divider } from 'vayu-ui';
-import { Typography } from 'vayu-ui';
+import { AspectRatio, Button, Divider, Typography } from 'vayu-ui';
 import Image from 'next/image';
 
 // Helper to render a placeholder box using semantic design tokens
@@ -16,9 +13,10 @@ const Placeholder = ({ label }: { label: string }) => (
 export default function AspectRatioDemo() {
   return (
     <div className="w-full max-w-3xl not-prose space-y-12">
+      <Typography.H5>Aspect Ratio Example</Typography.H5>
       {/* 1. All Preset Variants */}
       <section>
-        <Typography.H3 className="mb-4">Preset Ratios</Typography.H3>
+        <Typography.H5 className="mb-4">Preset Ratios</Typography.H5>
         <Typography.P variant="secondary" className="mb-6">
           Built-in aspect ratio presets for common use cases.
         </Typography.P>
@@ -62,7 +60,7 @@ export default function AspectRatioDemo() {
 
       {/* 2. Device Specific Presets */}
       <section>
-        <Typography.H3 className="mb-4">Device Presets</Typography.H3>
+        <Typography.H5 className="mb-4">Device Presets</Typography.H5>
         <Typography.P variant="secondary" className="mb-6">
           Aspect ratios optimized for specific device screens.
         </Typography.P>
@@ -90,7 +88,7 @@ export default function AspectRatioDemo() {
 
       {/* 3. Custom Numeric Ratio */}
       <section>
-        <Typography.H3 className="mb-4">Custom Numeric Ratio</Typography.H3>
+        <Typography.H5 className="mb-4">Custom Numeric Ratio</Typography.H5>
         <Typography.P variant="secondary" className="mb-6">
           Pass any numeric value for custom aspect ratios.
         </Typography.P>
@@ -105,7 +103,7 @@ export default function AspectRatioDemo() {
 
       {/* 4. Object Fit Behavior */}
       <section>
-        <Typography.H3 className="mb-4">Object Fit Options</Typography.H3>
+        <Typography.H5 className="mb-4">Object Fit Options</Typography.H5>
         <Typography.P variant="secondary" className="mb-6">
           Control how images and videos fill the container.
         </Typography.P>
@@ -155,7 +153,7 @@ export default function AspectRatioDemo() {
 
       {/* 5. Design System Props */}
       <section>
-        <Typography.H3 className="mb-4">Design System Props</Typography.H3>
+        <Typography.H5 className="mb-4">Design System Props</Typography.H5>
         <Typography.P variant="secondary" className="mb-6">
           Built-in props for rounded corners, shadows, and borders using design tokens.
         </Typography.P>
@@ -191,7 +189,7 @@ export default function AspectRatioDemo() {
 
       {/* 6. Accessible Example with aria-label */}
       <section>
-        <Typography.H3 className="mb-4">Accessibility (Named Region)</Typography.H3>
+        <Typography.H5 className="mb-4">Accessibility (Named Region)</Typography.H5>
         <Typography.P variant="secondary" className="mb-4">
           Pass an <Typography.Code codeLang="tsx">aria-label</Typography.Code> to create a named
           landmark region for screen readers.
@@ -212,7 +210,7 @@ export default function AspectRatioDemo() {
 
       {/* 7. Interactive Example */}
       <section>
-        <Typography.H3 className="mb-4">Interactive Example</Typography.H3>
+        <Typography.H5 className="mb-4">Interactive Example</Typography.H5>
         <Typography.P variant="secondary" className="mb-6">
           Combine AspectRatio with other components for interactive layouts.
         </Typography.P>

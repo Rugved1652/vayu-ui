@@ -10,7 +10,7 @@ export default function ColorPickerDemo() {
   const [swatchColor, setSwatchColor] = useState('#ef4444');
 
   return (
-    <div className="not-prose flex flex-col gap-8 w-full max-w-md">
+    <div className="not-prose flex flex-col gap-4 w-full max-w-md">
       {/* Basic ColorPicker with all features */}
       <ColorPicker value={color} onChange={setColor}>
         <ColorPicker.Label>Brand Color</ColorPicker.Label>

@@ -26,7 +26,7 @@ export default function CheckboxDemo() {
     <div className="flex not-prose flex-col gap-6">
       {/* Basic Checkbox */}
       <div className="flex flex-col gap-3">
-        <Typography.H5 variant="secondary">Basic Checkbox</Typography.H5>
+        <Typography.H5>Basic Checkbox</Typography.H5>
         <Checkbox checked={checked} onChange={setChecked}>
           <div className="flex items-start gap-3">
             <Checkbox.Indicator />
@@ -41,7 +41,7 @@ export default function CheckboxDemo() {
 
       {/* With Description */}
       <div className="flex flex-col gap-3">
-        <Typography.H5 variant="secondary">With Description</Typography.H5>
+        <Typography.H5>With Description</Typography.H5>
         <Checkbox>
           <div className="flex items-start gap-3">
             <Checkbox.Indicator />
@@ -59,7 +59,7 @@ export default function CheckboxDemo() {
 
       {/* With Error */}
       <div className="flex flex-col gap-3">
-        <Typography.H5 variant="secondary">Error State</Typography.H5>
+        <Typography.H5>Error State</Typography.H5>
         <Checkbox error>
           <div className="flex items-start gap-3">
             <Checkbox.Indicator />
@@ -75,7 +75,7 @@ export default function CheckboxDemo() {
 
       {/* Select All with Indeterminate State */}
       <div className="flex flex-col gap-3">
-        <Typography.H5 variant="secondary">Indeterminate State</Typography.H5>
+        <Typography.H5>Indeterminate State</Typography.H5>
         <div className="flex flex-col gap-2">
           <Checkbox
             checked={isAllSelected}

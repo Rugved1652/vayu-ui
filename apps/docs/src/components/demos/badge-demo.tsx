@@ -29,26 +29,14 @@ export default function BadgeDemoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-canvas p-8 md:p-16 font-secondary">
-      <div className="max-w-4xl mx-auto space-y-12">
-        {/* Header */}
-        <div className="space-y-4">
-          <Typography.H1 variant="primary">Badge Component</Typography.H1>
-          <Typography.P variant="secondary" className="max-w-2xl">
-            A flexible, accessible Badge component. Supports variants, interactive modes (onClick),
-            and dismissible states. Compliant with WCAG 2.2 target sizes.
-          </Typography.P>
-        </div>
-
-        <Divider spacing="lg">
-          <Divider.Line color="default" />
-        </Divider>
-
+    <div className="w-full max-w-md not-prose">
+      <div className="space-y-8">
+        <Typography.H5>Badge</Typography.H5>
         {/* Section 1: Variants */}
-        <section className="space-y-4">
-          <Typography.H3 variant="primary" className="border-b border-border pb-2">
+        <section className="space-y-2">
+          <Typography.H5>
             Variants
-          </Typography.H3>
+          </Typography.H5>
           <div className="flex flex-wrap gap-4 items-center">
             <Badge variant="brand">Brand</Badge>
             <Badge variant="muted">Muted</Badge>
@@ -64,10 +52,10 @@ export default function BadgeDemoPage() {
         </Divider>
 
         {/* Section 2: Sizes */}
-        <section className="space-y-4">
-          <Typography.H3 variant="primary" className="border-b border-border pb-2">
+        <section className="space-y-2">
+          <Typography.H5>
             Sizes
-          </Typography.H3>
+          </Typography.H5>
           <div className="flex flex-wrap gap-4 items-center">
             <Badge size="sm" variant="brand">
               Small (24px)
@@ -86,10 +74,10 @@ export default function BadgeDemoPage() {
         </Divider>
 
         {/* Section 3: Interactive (Clickable) */}
-        <section className="space-y-4">
-          <Typography.H3 variant="primary" className="border-b border-border pb-2">
+        <section className="space-y-2">
+          <Typography.H5>
             Interactive
-          </Typography.H3>
+          </Typography.H5>
           <Typography.P variant="secondary" className="text-sm">
             Click to trigger an alert.
           </Typography.P>
@@ -109,10 +97,10 @@ export default function BadgeDemoPage() {
         </Divider>
 
         {/* Section 4: Dismissible (Stateful) */}
-        <section className="space-y-4">
-          <Typography.H3 variant="primary" className="border-b border-border pb-2">
+        <section className="space-y-2">
+          <Typography.H5>
             Dismissible
-          </Typography.H3>
+          </Typography.H5>
           <Typography.P variant="secondary" className="text-sm">
             Click the X to remove tags.
           </Typography.P>
@@ -144,10 +132,10 @@ export default function BadgeDemoPage() {
         </Divider>
 
         {/* Section 5: Interactive & Dismissible (Complex) */}
-        <section className="space-y-4">
-          <Typography.H3 variant="primary" className="border-b border-border pb-2">
+        <section className="space-y-2">
+          <Typography.H5>
             Interactive + Dismissible
-          </Typography.H3>
+          </Typography.H5>
           <Typography.P variant="secondary" className="text-sm">
             Click text to trigger filter, click X to remove.
           </Typography.P>
@@ -175,7 +163,7 @@ export default function BadgeDemoPage() {
         </section>
 
         {/* Reset Button */}
-        <div className="pt-8">
+        <div className="pt-4">
           <Button variant="secondary" onClick={resetDemo}>
             <Button.Text>Reset Demos</Button.Text>
           </Button>

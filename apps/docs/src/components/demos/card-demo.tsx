@@ -4,12 +4,12 @@ import { Card, Typography, Button, Divider } from 'vayu-ui';
 
 export default function CardDemo() {
   return (
-    <div className="not-prose flex flex-col gap-10 w-full max-w-lg">
+    <div className="not-prose w-full max-w-md space-y-4">
       {/* Default Card */}
       <div>
-        <Typography.H2 id="card-demo-label" variant="primary" className="mb-4">
+        <Typography.H5 id="card-demo-label">
           Card Example
-        </Typography.H2>
+        </Typography.H5>
         <Card>
           <Card.Media
             src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80"
@@ -37,9 +37,9 @@ export default function CardDemo() {
 
       {/* Interactive Card */}
       <div>
-        <Typography.H6 variant="secondary" className="mb-3">
+        <Typography.H5>
           Interactive
-        </Typography.H6>
+        </Typography.H5>
         <Card interactive onClick={() => alert('Clicked!')}>
           <Card.Header
             title="Click Me"
@@ -58,9 +58,9 @@ export default function CardDemo() {
 
       {/* Linked Card */}
       <div>
-        <Typography.H6 variant="secondary" className="mb-3">
+        <Typography.H5>
           Linked
-        </Typography.H6>
+        </Typography.H5>
         <Card href="https://github.com" target="_blank">
           <Card.Header
             title="GitHub"
@@ -73,9 +73,9 @@ export default function CardDemo() {
 
       {/* Disabled Card */}
       <div>
-        <Typography.H6 variant="secondary" className="mb-3">
+        <Typography.H5>
           Disabled
-        </Typography.H6>
+        </Typography.H5>
         <Card disabled interactive>
           <Card.Header
             title="Disabled Card"
@@ -91,9 +91,9 @@ export default function CardDemo() {
 
       {/* Card with Avatar */}
       <div>
-        <Typography.H6 variant="secondary" className="mb-3">
+        <Typography.H5>
           With Avatar &amp; Action
-        </Typography.H6>
+        </Typography.H5>
         <Card>
           <Card.Header
             avatar={

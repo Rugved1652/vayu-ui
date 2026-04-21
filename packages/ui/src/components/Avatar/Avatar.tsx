@@ -9,6 +9,7 @@ import { AvatarImage } from './AvatarImage';
 import { AvatarInitials } from './AvatarInitials';
 import { AvatarFallback } from './AvatarFallback';
 import { AvatarStatus as AvatarStatusComponent } from './AvatarStatus';
+import { AvatarSizeContext } from './hooks';
 
 const AvatarRoot = forwardRef<HTMLSpanElement, AvatarRootProps>(
   (
@@ -76,7 +77,9 @@ const AvatarRoot = forwardRef<HTMLSpanElement, AvatarRootProps>(
         }}
         {...props}
       >
-        {children}
+        <AvatarSizeContext.Provider value={typeof size === 'string' ? size : 'medium'}>
+          {children}
+        </AvatarSizeContext.Provider>
       </span>
     );
   },
