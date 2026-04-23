@@ -62,7 +62,7 @@ export default function AvatarGroupDemo() {
 
   return (
     <div className="flex flex-col not-prose gap-6 w-full max-w-2xl">
-      <Typography.H5>Avatar Group</Typography.H5>
+      <Typography.H5>Avatar Group Examples</Typography.H5>
       {/* ── Basic Stack ── */}
       <div className="flex flex-col gap-2">
         <Typography.H5>Basic Stack</Typography.H5>

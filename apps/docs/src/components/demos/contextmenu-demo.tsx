@@ -25,6 +25,10 @@ export default function ContextMenuDemo() {
 
   return (
     <div className="not-prose flex flex-col gap-4 w-full max-w-md mx-auto">
+      <section className='my-4'>
+        <Typography.H5>Context Menu Examples</Typography.H5>
+      </section>
+
       <div className="space-y-2">
         <Typography.P variant="secondary">
           Right-click the area below to open the context menu.

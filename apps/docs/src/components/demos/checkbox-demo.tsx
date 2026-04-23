@@ -24,6 +24,8 @@ export default function CheckboxDemo() {
 
   return (
     <div className="flex not-prose flex-col gap-6">
+      <Typography.H5>Checkbox Examples</Typography.H5>
+
       {/* Basic Checkbox */}
       <div className="flex flex-col gap-3">
         <Typography.H5>Basic Checkbox</Typography.H5>

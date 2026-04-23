@@ -10,6 +10,8 @@ export default function CollapsibleDemo() {
   return (
     <div className="w-full max-w-md space-y-8 not-prose">
       {/* Basic Usage */}
+      <Typography.H5>Collapsible Examples</Typography.H5>
+
       <div>
         <Typography.H5 className="mb-3">Basic Collapsible (3 lines)</Typography.H5>
         <Collapsible>

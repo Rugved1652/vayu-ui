@@ -31,7 +31,7 @@ export default function BadgeDemoPage() {
   return (
     <div className="w-full max-w-md not-prose">
       <div className="space-y-8">
-        <Typography.H5>Badge</Typography.H5>
+        <Typography.H5>Badge Examples</Typography.H5>
         {/* Section 1: Variants */}
         <section className="space-y-2">
           <Typography.H5>

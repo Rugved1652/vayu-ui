@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CommandBox, Button, Card, CardContent, CardHeader, Badge } from 'vayu-ui';
+import { CommandBox, Button, Card, CardContent, CardHeader, Badge, Typography } from 'vayu-ui';
 import { useKeyPress } from 'vayu-ui';
 import {
   Home,
@@ -56,6 +56,10 @@ export default function CommandBoxDemo() {
 
   return (
     <div className="space-y-8">
+      <section className='my-4'>
+        <Typography.H5>Command Box Examples</Typography.H5>
+      </section>
+
       {/* Command Palette — overlay mode */}
       <Card>
         <CardHeader

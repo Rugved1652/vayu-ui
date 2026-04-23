@@ -75,7 +75,7 @@ export default function BigCalendarDemo() {
 
   return (
     <div className="flex flex-col not-prose gap-4 w-full">
-      <Typography.H5>Big Calendar</Typography.H5>
+      <Typography.H5>Big Calendar Example</Typography.H5>
       <BigCalendar
         events={events}
         onEventClick={(e) => alert(`Clicked: ${e.title}`)}

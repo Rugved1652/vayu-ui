@@ -6,10 +6,12 @@ export default function CardDemo() {
   return (
     <div className="not-prose w-full max-w-md space-y-4">
       {/* Default Card */}
-      <div>
+      <section className='my-4'>
         <Typography.H5 id="card-demo-label">
           Card Example
         </Typography.H5>
+      </section>
+      <div>
         <Card>
           <Card.Media
             src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80"

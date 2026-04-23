@@ -5,9 +5,11 @@ import { Button, ButtonGroup, Divider, Typography } from 'vayu-ui';
 export default function ButtonGroupDemo() {
   return (
     <div className="w-full flex flex-col items-center gap-2 not-prose">
-      <Typography.H5>Button Group Example</Typography.H5>
+      <section className='my-4'>
+        <Typography.H5>Button Group Example</Typography.H5>
+      </section>
       {/* ── Horizontal Outline ── */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col space-y-2 gap-2">
         <Typography.H5>
           Horizontal (Outline)
         </Typography.H5>

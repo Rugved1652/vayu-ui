@@ -4,11 +4,11 @@ import { Divider, Typography, Button } from 'vayu-ui';
 export default function DividerDemo() {
   return (
     <div className="w-full max-w-md not-prose">
-      <Typography.H3 id="divider-demo-label" className="mb-4">
+      <Typography.H5 id="divider-demo-label" className="mb-4">
         Divider Example
-      </Typography.H3>
+      </Typography.H5>
 
-      <div className="flex flex-col gap-6 p-6 bg-surface border border-border rounded-surface shadow-surface">
+      <div className="flex flex-col gap-6">
         {/* Simple Divider */}
         <div className="space-y-2">
           <Typography.Label variant="secondary">Default</Typography.Label>
