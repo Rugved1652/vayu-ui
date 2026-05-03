@@ -1,18 +1,22 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { createInterface } from 'node:readline';
 import { join } from 'node:path';
+import { createInterface } from 'node:readline';
 
 export interface ProjectInfo {
-  root: string;
-  hasSrc: boolean;
+  cssFile: null | string;
   framework: string;
-  cssFile: string | null;
-  uiDir: string;
-  packageManager: string;
+  hasSrc: boolean;
   hasTailwind: boolean;
+  packageManager: string;
+  root: string;
+  uiDir: string;
 }
 
 const CSS_SEARCH_PATHS: Record<string, string[]> = {
+  cra: [
+    'src/index.css',
+    'src/App.css',
+  ],
   'next-app': [
     'src/app/globals.css',
     'src/app/global.css',
@@ -23,14 +27,6 @@ const CSS_SEARCH_PATHS: Record<string, string[]> = {
     'src/styles/globals.css',
     'styles/globals.css',
   ],
-  vite: [
-    'src/index.css',
-    'src/App.css',
-  ],
-  cra: [
-    'src/index.css',
-    'src/App.css',
-  ],
   unknown: [
     'src/index.css',
     'src/globals.css',
@@ -39,6 +35,10 @@ const CSS_SEARCH_PATHS: Record<string, string[]> = {
     'styles/globals.css',
     'globals.css',
     'index.css',
+  ],
+  vite: [
+    'src/index.css',
+    'src/App.css',
   ],
 };
 
@@ -51,7 +51,7 @@ export function detectProject(cwd: string): ProjectInfo {
   const hasTailwind = checkTailwind(root);
   const uiDir = hasSrc ? 'src/ui' : 'ui';
 
-  return { root, hasSrc, framework, cssFile, uiDir, packageManager, hasTailwind };
+  return { cssFile, framework, hasSrc, hasTailwind, packageManager, root, uiDir };
 }
 
 export function findProjectRoot(cwd: string): string {
@@ -60,6 +60,7 @@ export function findProjectRoot(cwd: string): string {
     if (existsSync(join(dir, 'package.json'))) return dir;
     dir = join(dir, '..');
   }
+
   return cwd;
 }
 
@@ -84,11 +85,12 @@ function detectFramework(root: string): string {
   return 'unknown';
 }
 
-function findCssFile(root: string, framework: string): string | null {
+function findCssFile(root: string, framework: string): null | string {
   const paths = CSS_SEARCH_PATHS[framework] ?? CSS_SEARCH_PATHS.unknown;
   for (const p of paths) {
     if (existsSync(join(root, p))) return p;
   }
+
   return null;
 }
 
@@ -119,6 +121,17 @@ export async function confirm(message: string): Promise<boolean> {
     rl.question(`${message} (y/N) `, (answer) => {
       rl.close();
       resolve(answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes');
+    });
+  });
+}
+
+export async function prompt(message: string, defaultValue?: string): Promise<string> {
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  return new Promise((resolve) => {
+    const suffix = defaultValue ? ` (${defaultValue})` : '';
+    rl.question(`${message}${suffix} `, (answer) => {
+      rl.close();
+      resolve(answer.trim() || defaultValue || '');
     });
   });
 }

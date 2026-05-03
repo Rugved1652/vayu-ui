@@ -1,0 +1,237 @@
+---
+name: vayu-ui-mcp-server
+description: >
+  Guides development, debugging, and extension of the Vayu UI MCP server (packages/mcp). This server
+  exposes 17 Model Context Protocol tools that let AI assistants discover, inspect, and scaffold
+  Vayu UI components and hooks. Apply this skill whenever you are adding new MCP tools, modifying
+  existing tools, updating the registry integration, changing search/scaffold logic, adding design
+  tokens, debugging tool behavior, or working on the MCP server's build/entry configuration.
+  Also trigger when the user mentions "MCP server", "MCP tool", "vayu-ui-mcp", "component registry
+  tool", "MCP integration", "tool registration", "scaffold template", "design token tool",
+  "find_component tool", "list_components tool", or asks about exposing components to AI assistants.
+  Do NOT trigger for general MCP protocol questions unrelated to Vayu UI, or for using the MCP tools
+  from a consumer perspective (this skill is for building/maintaining the server, not using it).
+---
+
+# Vayu UI MCP Server Development
+
+This skill covers the architecture, patterns, and conventions for building and maintaining the Vayu UI MCP server at `packages/mcp/`. The server gives AI coding assistants structured access to the component and hook registry — so they can suggest the right component, generate correct imports, and follow best practices automatically.
+
+## What This Server Does
+
+The MCP server exposes 17 tools across four categories:
+
+| Category | Tools | Purpose |
+|---|---|---|
+| Discovery | `list_components`, `find_component` | Browse and search the registry |
+| Component Detail | `get_component_summary`, `get_component_props`, `get_component_variants`, `get_component_states`, `get_component_events`, `get_component_a11y`, `get_component_do_not`, `get_component_dependencies`, `get_component_peer_components`, `get_component_composition`, `get_component_example` | Deep inspection of a specific component |
+| Code Generation | `scaffold_component_usage` | Generate working TSX snippets with imports |
+| Hooks & Tokens | `get_hook_details`, `get_design_tokens`, `get_install_guide` | Hook API details, design tokens, install commands |
+
+The server communicates over stdio using the MCP SDK (`@modelcontextprotocol/sdk`), and all tool responses are JSON strings inside `content: [{ type: 'text', text: JSON.stringify(...) }]`.
+
+## Project Structure
+
+```
+packages/mcp/
+├── bin/vayu-ui-mcp.js          # CLI entry: #!/usr/bin/env node → import '../dist/index.js'
+├── src/
+│   ├── index.ts                # Server init + tool registration
+│   ├── lib/
+│   │   ├── registry.ts         # Registry lookup helpers (findBySlug, findComponent, findHook)
+│   │   ├── search.ts           # Fuzzy search with relevance scoring
+│   │   ├── design-tokens.ts    # Design token category definitions
+│   │   ├── register-tool.ts    # Type-safe wrapper around McpServer.tool()
+│   │   └── scaffold-templates/
+│   │       └── index.ts        # Code generation templates (generic + specialized)
+│   └── tools/
+│       └── <tool-name>.ts      # One file per MCP tool
+├── package.json
+└── tsup.config.ts              # ESM build, sourcemaps
+```
+
+The registry data itself lives in `packages/registry/` — the MCP package imports it as `vayu-ui-registry`.
+
+## Architecture & Data Flow
+
+```
+packages/registry (source of truth)
+  ↓ exports: componentEntries, hookEntries, allEntries + types
+packages/mcp/src/lib/registry.ts
+  ↓ lookup helpers: findBySlug, findComponent, findHook, filterByType, filterByCategory
+packages/mcp/src/tools/<tool>.ts
+  ↓ each tool uses registerTool() + registry helpers
+packages/mcp/src/index.ts
+  ↓ McpServer + StdioServerTransport
+AI assistant (via stdio)
+```
+
+The registry is the single source of truth for all component/hook metadata. The MCP server never hardcodes component data — it reads from the registry and transforms it into tool responses.
+
+## Key Patterns
+
+### Tool Registration Pattern
+
+Every tool follows the same structure. Use the `registerTool` wrapper (not `server.tool` directly) to avoid TypeScript's recursive generic inference issues with the MCP SDK:
+
+```ts
+// src/tools/get-component-example.ts
+import { z } from 'zod';
+import { registerTool } from '../lib/register-tool.js';
+import { findBySlug } from '../lib/registry.js';
+
+export function registerGetComponentExample(server: Parameters<typeof registerTool>[0]) {
+  registerTool(
+    server,
+    'get_component_example',           // tool name (snake_case)
+    'Description of what the tool does', // used by AI assistants to decide whether to call it
+    {                                    // Zod schema for parameters
+      slug: z.string().describe('Component or hook slug'),
+      tag: z.string().optional().describe('Filter examples by tag'),
+    },
+    async (params) => {                  // Handler — params match the schema
+      const { slug, tag } = params as { slug: string; tag?: string };
+      const entry = findBySlug(slug);
+      if (!entry) {
+        return {
+          content: [{ type: 'text' as const, text: JSON.stringify({ error: `No entry found for slug "${slug}"` }) }],
+          isError: true,
+        };
+      }
+      // ... build response
+      return {
+        content: [{ type: 'text' as const, text: JSON.stringify({ /* data */ }, null, 2) }],
+      };
+    },
+  );
+}
+```
+
+Then register it in `src/index.ts`:
+
+```ts
+import { registerGetComponentExample } from './tools/get-component-example.js';
+// ...
+registerGetComponentExample(server);
+```
+
+### Why `registerTool` Exists
+
+The MCP SDK's `server.tool()` has recursive generic inference that triggers TS2589 ("Type instantiation is excessively deep") on schemas with `.enum()`, `.array()`, `.optional()` + `.describe()` chains. The `registerTool` wrapper in `src/lib/register-tool.ts` uses `any` on the handler boundary to bypass this while keeping full runtime correctness. Always use it — never call `server.tool()` directly.
+
+### Registry Lookup Helpers
+
+`src/lib/registry.ts` provides typed lookups against the registry:
+
+| Helper | Returns | Use When |
+|---|---|---|
+| `findBySlug(slug)` | `RegistryEntry \| undefined` | Tool works with both components and hooks |
+| `findComponent(slug)` | `ComponentRegistryEntry \| undefined` | Tool is component-specific |
+| `findHook(slug)` | `HookRegistryEntry \| undefined` | Tool is hook-specific |
+| `filterByType(type?)` | `{ components, hooks }` | Listing/filtering entries |
+| `filterByCategory(entries, category?)` | `RegistryEntry[]` | Narrowing results |
+
+### Search Engine
+
+`src/lib/search.ts` implements a weighted fuzzy search across name, slug, description, tags, use cases, and category. The scoring:
+
+| Signal | Weight | Reasoning |
+|---|---|---|
+| Name match | +10 | Exact name match is the strongest signal |
+| Name term match | +5 per term | Partial name match |
+| Slug match | +8 | URL-friendly match |
+| Tag match | +4 per term | Tags are curated keywords |
+| Description match | +3 per term | Loose relevance |
+| Use case match | +2 per term | Contextual relevance |
+| Category match | +3 | Broad grouping |
+
+Results are sorted by score, capped at `maxResults` (default 5), and include `reasons` strings explaining why each result matched.
+
+### Scaffold Templates
+
+`src/lib/scaffold-templates/index.ts` generates working TSX code. It has three tiers:
+
+1. **Specialized scaffolds** — per-component templates for complex components (button, modal, alert, tooltip). These know the component's specific composition pattern and generate idiomatic code.
+
+2. **Compound component scaffold** — for any component with sub-components. Builds JSX children from the sub-component list, matching feature flags to sub-component names.
+
+3. **Simple component scaffold** — flat components. Just renders the root element with variant/size props.
+
+When adding a new component that has a non-trivial composition pattern, add a specialized scaffold in the `switch` statement inside `getSpecializedScaffold`.
+
+### Design Tokens
+
+`src/lib/design-tokens.ts` defines token categories (Base Layers, Semantic Colors, Structural, Radius, Shadows) as static data. These are served through the `get_design_tokens` tool. The tokens mirror what's defined in `apps/docs/src/app/global.css` via Tailwind v4 `@theme`.
+
+When the design system adds or changes tokens, update both:
+1. `apps/docs/src/app/global.css` (the actual CSS custom properties)
+2. `packages/mcp/src/lib/design-tokens.ts` (what AI assistants see)
+
+## Adding a New Tool
+
+Follow this checklist when adding a new MCP tool:
+
+1. **Create the tool file** at `src/tools/<tool-name>.ts` following the registration pattern above
+2. **Register it** in `src/index.ts` — import and call the registration function
+3. **Use the right registry helper** — `findBySlug` for generic, `findComponent` or `findHook` for specific
+4. **Return JSON** — always `JSON.stringify(data, null, 2)` inside `content: [{ type: 'text', text: ... }]`
+5. **Handle missing entries** — return `isError: true` with a descriptive error when a slug isn't found
+6. **Add `.describe()` on every Zod field** — these descriptions help AI assistants understand what to pass
+
+## Adding a New Registry Entry
+
+When a new component or hook is added to `packages/registry/`:
+
+1. The MCP server picks it up automatically through `componentEntries`/`hookEntries`/`allEntries` — no MCP code changes needed for discovery tools
+2. If the component has a unique composition pattern, add a specialized scaffold in `src/lib/scaffold-templates/index.ts`
+3. If the component introduces new design tokens, add them to `src/lib/design-tokens.ts`
+
+## Build & Development
+
+```bash
+# Build the MCP server (requires registry to be built first)
+cd packages/mcp && npm run build
+
+# Watch mode for development
+npm run dev
+
+# Run the server locally
+node bin/vayu-ui-mcp.js
+```
+
+The server builds as ESM only (`tsup.config.ts` sets `format: ['esm']`). It requires Node.js >= 18.
+
+## Error Handling Convention
+
+All tools follow the same error pattern:
+
+```ts
+if (!entry) {
+  return {
+    content: [{ type: 'text' as const, text: JSON.stringify({ error: `No entry found for slug "${slug}"` }) }],
+    isError: true,
+  };
+}
+```
+
+Keep error messages specific — include the slug or parameter value that failed. This helps AI assistants self-correct when they pass a wrong value.
+
+## Anti-Patterns
+
+- **Don't hardcode component data in tool files.** All metadata comes from the registry. If something is missing, add it to the registry entry in `packages/registry/`, not to the MCP tool.
+- **Don't call `server.tool()` directly.** Use the `registerTool` wrapper to avoid the TS2589 type inference bug.
+- **Don't return non-JSON text.** All responses must be valid JSON inside `content: [{ type: 'text', text: JSON.stringify(...) }]`. AI assistants parse the JSON; raw text breaks the contract.
+- **Don't skip `.describe()` on Zod fields.** These descriptions are the primary documentation AI assistants see for tool parameters.
+- **Don't forget to register new tools in `index.ts`.** The tool won't be available until its registration function is called during server startup.
+
+## PR Checklist for MCP Changes
+
+- [ ] New tool file follows the registration pattern with `registerTool`
+- [ ] Tool registered in `src/index.ts`
+- [ ] Zod schema has `.describe()` on every field
+- [ ] Missing-entry error returns `isError: true` with specific message
+- [ ] Response is valid JSON in the `content` array format
+- [ ] Registry is the source of truth — no hardcoded component data
+- [ ] Design token changes synced between `global.css` and `design-tokens.ts`
+- [ ] Specialized scaffold added if component has unique composition
+- [ ] Build succeeds (`npm run build` in packages/mcp)
