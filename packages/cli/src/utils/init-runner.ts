@@ -117,7 +117,6 @@ function createFolderStructure(root: string, uiDir: string, log: (msg: string) =
     const dir = join(absUiDir, sub);
     if (!existsSync(dir)) {
       mkdirSync(dir, { recursive: true });
-      writeFileSync(join(dir, '.gitkeep'), '');
     }
   }
 

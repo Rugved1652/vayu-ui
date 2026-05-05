@@ -1,10 +1,15 @@
+import type { ComponentRegistryEntry, HookRegistryEntry, RegistryEntry } from 'vayu-ui-registry';
+
 import { Args, Command, Flags, ux } from '@oclif/core';
 import { execSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { allEntries } from 'vayu-ui-registry';
 
+import { markInstalled, readConfig } from '../utils/config.js';
+import { fetchComponentFiles, fetchHookFile, fetchUtils } from '../utils/fetcher.js';
 import { runInit } from '../utils/init-runner.js';
-import { confirm, prompt } from '../utils/project.js';
+import { confirm, detectProject , prompt } from '../utils/project.js';
 
 type Framework = 'next' | 'vite';
 
@@ -20,6 +25,14 @@ interface CreateOptions {
   typescript: boolean;
 }
 
+const STARTER_SLUGS = [
+  'button',
+  'typography',
+  'use-local-storage',
+  'use-debounce',
+  'use-on-click-outside',
+];
+
 export default class Create extends Command {
   static args = {
     name: Args.string({
@@ -28,7 +41,7 @@ export default class Create extends Command {
     }),
   };
 static description =
-    'Scaffolds a new React project (Next.js or Vite) and initializes Vayu UI.';
+    'Scaffolds a new React project (Next.js or Vite) and initializes Vayu UI with starter components and hooks.';
 static examples = [
     '<%= config.bin %> create my-app',
     '<%= config.bin %> create my-app --framework next',
@@ -125,9 +138,123 @@ static summary = 'Create a new project with Vayu UI';
 
       this.log('');
       this.log(ux.colorize('green', '  Vayu UI initialized.'));
+
+      await this.addStarterKit(projectPath, options);
     }
 
     this.printSuccess(projectName, options);
+  }
+
+  private async addStarterKit(projectPath: string, options: CreateOptions): Promise<void> {
+    this.log('');
+    this.log(ux.colorize('bold', '  Adding starter components and hooks...'));
+    this.log('');
+
+    const registry = new Map<string, RegistryEntry>();
+    for (const entry of allEntries) {
+      registry.set(entry.slug, entry);
+    }
+
+    // Resolve all entries including transitive deps
+    const visited = new Set<string>();
+    const resolved: RegistryEntry[] = [];
+
+    const resolve = (slug: string): void => {
+      if (visited.has(slug)) return;
+      visited.add(slug);
+      const entry = registry.get(slug);
+      if (!entry) return;
+      for (const dep of entry.registryDependencies) {
+        resolve(dep.slug);
+      }
+
+      resolved.push(entry);
+    };
+
+    for (const slug of STARTER_SLUGS) resolve(slug);
+
+    const components = resolved.filter((e): e is ComponentRegistryEntry => e.type === 'component');
+    const hooks = resolved.filter((e): e is HookRegistryEntry => e.type === 'hook');
+
+    const project = detectProject(projectPath);
+    const config = readConfig(projectPath);
+    const uiDir = config?.uiPath ?? project.uiDir;
+    const uiAbsDir = join(projectPath, uiDir);
+
+    // Write utils (cn + useMergeRefs)
+    const utilsDir = join(uiAbsDir, 'utils');
+    mkdirSync(utilsDir, { recursive: true });
+    const utilsResult = await fetchUtils();
+    writeFileSync(join(utilsDir, 'index.ts'), utilsResult.content);
+    this.log(ux.colorize('dim', '    wrote utils/index.ts'));
+
+    // Write component files
+    const compResults = await Promise.all(
+      components.map(async (comp) => {
+        const compDir = join(uiAbsDir, 'components', comp.directoryName);
+        mkdirSync(compDir, { recursive: true });
+        const fileNames = comp.files.map((f) => f.name);
+        return fetchComponentFiles(comp.directoryName, fileNames);
+      }),
+    );
+    for (const compFiles of compResults) {
+      for (const { content, path: relPath } of compFiles) {
+        writeFileSync(join(uiAbsDir, 'components', relPath), content);
+        this.log(ux.colorize('dim', `    wrote components/${relPath}`));
+      }
+    }
+
+    // Write hook files
+    const hooksDir = join(uiAbsDir, 'hooks');
+    mkdirSync(hooksDir, { recursive: true });
+    const hookResults = await Promise.all(
+      hooks.map((hook) => fetchHookFile(hook.fileName)),
+    );
+    for (const { content, path: fileName } of hookResults) {
+      writeFileSync(join(hooksDir, fileName), content);
+      this.log(ux.colorize('dim', `    wrote hooks/${fileName}`));
+    }
+
+    // Collect and install npm deps
+    const npmDeps = new Map<string, string>();
+    for (const entry of resolved) {
+      for (const dep of entry.npmDependencies) {
+        npmDeps.set(dep.name, dep.version ?? 'latest');
+      }
+    }
+
+    npmDeps.set('clsx', 'latest');
+    npmDeps.set('tailwind-merge', 'latest');
+
+    if (npmDeps.size > 0 && !options.skipInstall) {
+      const pkgs = [...npmDeps.entries()].map(([name, version]) =>
+        version === 'latest' ? name : `${name}@${version}`,
+      );
+
+      const pm = options.packageManager;
+      const addCmd = pm === 'npm'
+        ? `npm install ${pkgs.join(' ')}`
+        : pm === 'pnpm'
+          ? `pnpm add ${pkgs.join(' ')}`
+          : pm === 'yarn'
+            ? `yarn add ${pkgs.join(' ')}`
+            : `bun add ${pkgs.join(' ')}`;
+
+      this.log('');
+      this.log(ux.colorize('dim', `  Installing: ${[...npmDeps.keys()].join(', ')}`));
+      try {
+        execSync(addCmd, { cwd: projectPath, stdio: 'pipe' });
+        this.log(ux.colorize('green', '  Dependencies installed.'));
+      } catch {
+        this.warn('Failed to install dependencies. Run manually: cd ' + options.packageManager + ' && ' + addCmd);
+      }
+    }
+
+    // Track installed items in config
+    markInstalled(projectPath, config, resolved.map((e) => ({ slug: e.slug, type: e.type })));
+
+    this.log('');
+    this.log(ux.colorize('green', `  Added ${resolved.length} starter items.`));
   }
 
   private detectPackageManager(): string {
@@ -152,6 +279,7 @@ static summary = 'Create a new project with Vayu UI';
 
     this.log(`  ${dim('ESLint:')}           ${options.eslint ? ux.colorize('green', 'yes') : dim('no')}`);
     this.log(`  ${dim('src/ directory:')}   ${options.srcDir ? ux.colorize('green', 'yes') : dim('no')}`);
+    this.log(`  ${dim('Starter kit:')}      ${bold('Button, Typography, useLocalStorage, useDebounce, useOnClickOutside')}`);
     this.log(`  ${dim('Project path:')}     ${bold(projectName)}/`);
   }
 
@@ -164,9 +292,15 @@ static summary = 'Create a new project with Vayu UI';
     this.log(ux.colorize('dim', `    ${ux.colorize('bold', `${options.packageManager} run dev`)}`));
     if (!options.skipInit) {
       this.log('');
-      this.log(ux.colorize('dim', '  Add components:'));
+      this.log(ux.colorize('dim', '  Add more components:'));
       this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli list')}       Browse available components`));
-      this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli add button')}  Add your first component`));
+      this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli add modal')}   Add a modal component`));
+      this.log('');
+      this.log(ux.colorize('dim', '  Enable AI integration:'));
+      this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli mcp install')}      Set up the Vayu UI MCP server for your AI tools`));
+      this.log('');
+      this.log(ux.colorize('dim', '  Add Vayu UI skills (Vercel Skills platform):'));
+      this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx skills add Rugved1652/vayu-ui')}   Install Vayu UI skills for your AI coding agent`));
     }
 
     this.log('');
@@ -231,6 +365,7 @@ static summary = 'Create a new project with Vayu UI';
 
   private scaffoldNext(projectName: string, options: CreateOptions): void {
     const pm = options.packageManager;
+    const runner = pm === 'pnpm' ? 'pnpm dlx' : pm === 'bun' ? 'bunx' : 'npx';
     const args = [
       'create-next-app@latest',
       projectName,
@@ -247,7 +382,7 @@ static summary = 'Create a new project with Vayu UI';
       args.push('--skip-install');
     }
 
-    const cmd = `${pm} ${args.join(' ')}`;
+    const cmd = `${runner} ${args.join(' ')}`;
     this.log(ux.colorize('dim', `  Running: ${cmd}`));
     this.log('');
 
@@ -259,21 +394,113 @@ static summary = 'Create a new project with Vayu UI';
   }
 
   private scaffoldVite(projectName: string, options: CreateOptions): void {
-    const pm = options.packageManager;
-    const template = options.typescript ? 'react-ts' : 'react';
+    const projectDir = join(process.cwd(), projectName);
+    const srcDir = join(projectDir, 'src');
+    mkdirSync(srcDir, { recursive: true });
 
-    const cmd = `${pm} create vite@latest ${projectName} -- --template ${template}`;
-    this.log(ux.colorize('dim', `  Running: ${cmd}`));
-    this.log('');
+    const ts = options.typescript;
+    const ext = ts ? 'tsx' : 'jsx';
 
-    try {
-      execSync(cmd, { stdio: 'inherit' });
-    } catch {
-      this.error('Failed to scaffold Vite project.');
+    // package.json
+    writeFileSync(join(projectDir, 'package.json'), JSON.stringify({
+      dependencies: {
+        react: '^19.0.0',
+        'react-dom': '^19.0.0',
+      },
+      devDependencies: {
+        '@vitejs/plugin-react': '^4.0.0',
+        vite: '^6.0.0',
+        ...(ts ? { '@types/react': '^19.0.0', '@types/react-dom': '^19.0.0', typescript: '^5.0.0' } : {}),
+      },
+      name: projectName,
+      private: true,
+      scripts: {
+        build: `vite build${ts ? ' && tsc -b' : ''}`,
+        dev: 'vite',
+        preview: 'vite preview',
+      },
+      type: 'module',
+      version: '0.0.0',
+    }, null, 2) + '\n');
+
+    // vite.config.ts
+    writeFileSync(join(projectDir, `vite.config.${ts ? 'ts' : 'js'}`),
+      `import { defineConfig } from 'vite'\nimport react from '@vitejs/plugin-react'\n\nexport default defineConfig({\n  plugins: [react()],\n})\n`,
+    );
+
+    // index.html
+    writeFileSync(join(projectDir, 'index.html'),
+      `<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <title>${projectName}</title>\n  </head>\n  <body>\n    <div id="root"></div>\n    <script type="module" src="/src/main.${ext}"></script>\n  </body>\n</html>\n`,
+    );
+
+    // src/main.tsx
+    writeFileSync(join(srcDir, `main.${ext}`),
+      `import { StrictMode } from 'react'\nimport { createRoot } from 'react-dom/client'\nimport './index.css'\nimport App from './App.${ext}'\n\ncreateRoot(document.getElementById('root')!).render(\n  <StrictMode>\n    <App />\n  </StrictMode>,\n)\n`,
+    );
+
+    // src/App.tsx
+    writeFileSync(join(srcDir, `App.${ext}`),
+      `import './App.css'\n\nfunction App() {\n  return (\n    <div>\n      <h1>${projectName}</h1>\n      <p>Edit src/App.${ext} and save to test HMR</p>\n    </div>\n  )\n}\n\nexport default App\n`,
+    );
+
+    // src/App.css
+    writeFileSync(join(srcDir, 'App.css'),
+      `#root {\n  max-width: 1280px;\n  margin: 0 auto;\n  padding: 2rem;\n  text-align: center;\n}\n`,
+    );
+
+    // src/index.css (placeholder — Vayu UI tokens will be injected here)
+    writeFileSync(join(srcDir, 'index.css'), '');
+
+    // tsconfig files
+    if (ts) {
+      writeFileSync(join(projectDir, 'tsconfig.json'), JSON.stringify({
+        compilerOptions: {
+          allowImportingTsExtensions: true,
+          isolatedModules: true,
+          jsx: 'react-jsx',
+          lib: ['ES2020', 'DOM', 'DOM.Iterable'],
+          module: 'ESNext',
+          moduleDetection: 'force',
+          moduleResolution: 'bundler',
+          noEmit: true,
+          noFallthroughCasesInSwitch: true,
+          noUncheckedSideEffectImports: true,
+          noUnusedLocals: true,
+          noUnusedParameters: true,
+          skipLibCheck: true,
+          strict: true,
+          target: 'ES2020',
+          useDefineForClassFields: true,
+        },
+        include: ['src'],
+      }, null, 2) + '\n');
+
+      writeFileSync(join(projectDir, 'tsconfig.node.json'), JSON.stringify({
+        compilerOptions: {
+          allowImportingTsExtensions: true,
+          isolatedModules: true,
+          lib: ['ES2023'],
+          module: 'ESNext',
+          moduleDetection: 'force',
+          moduleResolution: 'bundler',
+          noEmit: true,
+          noFallthroughCasesInSwitch: true,
+          noUncheckedSideEffectImports: true,
+          noUnusedLocals: true,
+          noUnusedParameters: true,
+          skipLibCheck: true,
+          strict: true,
+          target: 'ES2022',
+        },
+        include: [`vite.config.ts`],
+      }, null, 2) + '\n');
     }
 
-    // Vite doesn't install deps automatically
+    this.log(ux.colorize('green', '  Vite project scaffolded.'));
+
+    // Install deps
     if (!options.skipInstall) {
+      const pm = options.packageManager;
       const installCmd = pm === 'npm'
         ? 'npm install'
         : pm === 'pnpm'
@@ -284,7 +511,7 @@ static summary = 'Create a new project with Vayu UI';
 
       this.log(ux.colorize('dim', `  Installing dependencies...`));
       try {
-        execSync(installCmd, { cwd: join(process.cwd(), projectName), stdio: 'pipe' });
+        execSync(installCmd, { cwd: projectDir, stdio: 'pipe' });
         this.log(ux.colorize('green', '  Dependencies installed.'));
       } catch {
         this.warn('Failed to install dependencies. Run manually: cd ' + projectName + ' && ' + installCmd);
