@@ -1,141 +1,275 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Github, Terminal, Sparkles } from 'lucide-react';
-import { Badge, Button, Animation } from 'vayu-ui';
+import {
+  ArrowRight,
+  BookOpen,
+  Check,
+  ChevronRight,
+  Code2,
+  Copy,
+  Github,
+  Layers3,
+  PackagePlus,
+  Sparkles,
+  Terminal,
+} from 'lucide-react';
+import { Badge, Button, Animation, useCopyToClipboard } from 'vayu-ui';
+
+const installCommand = 'npx vayu-ui-cli init';
+
+const highlights = [
+  { label: 'Components', value: '50+', tone: 'bg-brand' },
+  { label: 'Hooks', value: '35+', tone: 'bg-info' },
+  { label: 'WCAG 2.2 AA', value: 'A11y', tone: 'bg-success' },
+  { label: 'Tailwind v4', value: 'Tokens', tone: 'bg-warning' },
+];
+
+const componentLinks = [
+  'Accordion',
+  'Button',
+  'Card',
+  'Combobox',
+  'Data Table',
+  'Dialog',
+  'Input',
+  'Tabs',
+];
+
+const tokenRows = [
+  { name: '--brand', value: '#84cc16', className: 'bg-brand' },
+  { name: '--surface', value: 'surface', className: 'bg-surface border border-border' },
+  { name: '--focus', value: 'focus ring', className: 'bg-brand' },
+];
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-canvas px-6 pt-24 pb-32 sm:pt-36 sm:pb-40 lg:px-8">
-      {/* Background grid pattern */}
+    <section className="relative overflow-hidden bg-canvas px-6 pt-24 pb-20 sm:pt-32 sm:pb-24 lg:px-8">
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
             'linear-gradient(var(--canvas-content) 1px, transparent 1px), linear-gradient(90deg, var(--canvas-content) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
+          backgroundSize: '48px 48px',
         }}
       />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-border" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-border" />
 
-      {/* Radial glow */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[900px] rounded-full bg-brand/10 blur-[120px]" />
-      <div className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[400px] rounded-full bg-brand/5 blur-[80px]" />
-
-      <div className="relative mx-auto max-w-5xl">
+      <div className="relative mx-auto max-w-7xl">
         <Animation.Fade duration="slow">
-          <div className="flex flex-col items-center text-center">
-            {/* Announcement badge */}
+          <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
             <Animation.Slide direction="down" duration="slow">
               <Link href="/docs" className="group inline-flex">
-                <Badge variant="brand" size="sm" className="gap-1.5 cursor-pointer transition-shadow hover:shadow-sm">
-                  <Sparkles className="w-3 h-3" />
+                <Badge
+                  variant="brand"
+                  size="sm"
+                  className="gap-1.5 cursor-pointer shadow-control transition-transform group-hover:-translate-y-0.5"
+                >
+                  <Sparkles className="h-3 w-3" />
                   Beta Version
-                  <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                 </Badge>
               </Link>
             </Animation.Slide>
 
-            {/* Main heading */}
-            <h1 className="mt-10 font-primary text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] text-canvas-content">
-              AI Native
-              <br />
-              <span className="text-brand">UI Toolkit for NextJS</span>
+            <h1 className="mt-7 max-w-4xl font-primary text-5xl font-bold leading-[1.04] tracking-normal text-canvas-content sm:text-6xl lg:text-7xl">
+              Vayu UI documentation for <span className="text-brand">AI-native React apps</span>
             </h1>
 
-            {/* Description */}
-            <p className="mt-6 text-lg sm:text-xl font-secondary text-muted-content max-w-2xl leading-relaxed">
-              50+ accessible React components, a CLI scaffold, and an MCP server.
-              Designed so AI agents generate consistent, production-ready code.
+            <p className="mt-6 max-w-2xl font-secondary text-lg leading-8 text-muted-content sm:text-xl">
+              Copy accessible components into your Next.js codebase with design tokens, CLI
+              workflows, and MCP-ready docs that agents can follow.
             </p>
 
-            {/* CTA buttons */}
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/docs">
-                <Button variant="primary" size="large" className="min-w-[180px]">
-                  Get Started
-                  <ArrowRight className="w-4 h-4" />
+            <div className="mt-9 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
+              <Link href="/docs" className="w-full sm:w-auto">
+                <Button variant="primary" size="large" className="w-full min-w-[170px] sm:w-auto">
+                  Browse Docs
+                  <BookOpen className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="https://github.com/Rugved1652/vayu-ui" target="_blank">
-                <Button variant="outline" size="large" className="min-w-[180px]">
-                  <Github className="w-4 h-4" />
+              <Link
+                href="https://github.com/Rugved1652/vayu-ui"
+                target="_blank"
+                className="w-full sm:w-auto"
+              >
+                <Button variant="outline" size="large" className="w-full min-w-[170px] sm:w-auto">
+                  <Github className="h-4 w-4" />
                   GitHub
                 </Button>
               </Link>
             </div>
 
-            {/* Terminal install command */}
-            <div className="mt-14 w-full max-w-lg">
-              <div className="relative rounded-surface border border-border bg-surface overflow-hidden">
-                {/* Terminal header bar */}
-                <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border bg-surface">
-                  <span className="w-2.5 h-2.5 rounded-full bg-destructive/60" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-warning/60" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-success/60" />
-                  <span className="ml-2 font-tertiary text-xs text-muted-content">terminal</span>
-                  <Terminal className="w-4 h-4 text-muted-content shrink-0" />
+            <InstallCommand />
 
+            <div className="mt-8 grid w-full max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+              {highlights.map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-surface border border-border bg-surface px-4 py-3 text-left shadow-surface"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className={`h-2 w-2 rounded-full ${item.tone}`} />
+                    <span className="font-tertiary text-xs text-muted-content">{item.label}</span>
+                  </div>
+                  <p className="mt-2 font-primary text-2xl font-bold leading-none text-surface-content">
+                    {item.value}
+                  </p>
                 </div>
-                {/* Command */}
-                <div className="flex flex-col items-start gap-3 px-4 py-3">
-                  <code className="font-tertiary text-sm text-surface-content">
-                    npx vayu-ui-cli init
-                  </code>
-                  <code className="font-tertiary text-sm text-surface-content">
-                    npx vayu-ui-cli install-mcp
-                  </code>
-                  <code className="font-tertiary text-sm text-surface-content">
-                    npx vayu-ui-cli add button card input
-                  </code>
-
-                </div>
-              </div>
-            </div>
-
-            {/* Stats bar */}
-            <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm font-secondary">
-              <div className="flex items-center gap-2 text-muted-content">
-                <span className="inline-block w-2 h-2 rounded-full bg-brand" />
-                <strong className="text-surface-content font-semibold">50+</strong> Components
-              </div>
-              <Separator />
-              <div className="flex items-center gap-2 text-muted-content">
-                <span className="inline-block w-2 h-2 rounded-full bg-info" />
-                <strong className="text-surface-content font-semibold">35+</strong> Hooks
-              </div>
-              <Separator />
-              <div className="flex items-center gap-2 text-muted-content">
-                <span className="inline-block w-2 h-2 rounded-full bg-success" />
-                WCAG <strong className="text-surface-content font-semibold">2.2 AA</strong>
-              </div>
-              <Separator />
-              <div className="flex items-center gap-2 text-muted-content">
-                <span className="inline-block w-2 h-2 rounded-full bg-warning" />
-                Tailwind <strong className="text-surface-content font-semibold">v4</strong>
-              </div>
-            </div>
-
-            {/* Floating component pills preview */}
-            <div className="mt-14 flex flex-wrap items-center justify-center gap-2">
-              {['Button', 'Badge', 'Card', 'Modal', 'Tabs', 'Tooltip', 'Avatar', 'Input'].map(
-                (name, i) => (
-                  <span
-                    key={name}
-                    className="font-tertiary text-xs px-3 py-1.5 rounded-full border border-border bg-surface text-surface-content animate-float"
-                    style={{ animationDelay: `${i * 0.4}s` }}
-                  >
-                    {name}
-                  </span>
-                )
-              )}
+              ))}
             </div>
           </div>
+
+          <DocsPreview />
         </Animation.Fade>
       </div>
     </section>
   );
 }
 
-function Separator() {
-  return <div className="w-px h-4 bg-border hidden sm:block" />;
+function InstallCommand() {
+  const { copy, copied } = useCopyToClipboard();
+
+  return (
+    <div className="mt-8 flex w-full max-w-xl items-center gap-2 rounded-surface border border-border bg-surface p-2 text-left shadow-elevated">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-control bg-canvas text-muted-content">
+        <Terminal className="h-4 w-4" />
+      </div>
+      <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap px-1 font-tertiary text-sm text-surface-content">
+        {installCommand}
+      </code>
+      <button
+        type="button"
+        onClick={() => copy(installCommand)}
+        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-control text-muted-content transition-colors hover:bg-canvas hover:text-surface-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+        aria-label="Copy install command"
+      >
+        {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
+      </button>
+    </div>
+  );
+}
+
+function DocsPreview() {
+  return (
+    <div className="mx-auto mt-16 max-w-6xl rounded-surface border border-border bg-surface shadow-elevated">
+      <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-3 sm:px-5">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-control bg-brand text-brand-content">
+            <Layers3 className="h-4 w-4" />
+          </div>
+          <div className="min-w-0 text-left">
+            <p className="font-primary text-sm font-semibold text-surface-content">
+              Component Docs
+            </p>
+            <p className="truncate font-secondary text-xs text-muted-content">
+              Installation, usage, tokens, and accessible patterns
+            </p>
+          </div>
+        </div>
+        <Badge variant="muted" size="sm" className="hidden shrink-0 sm:inline-flex">
+          Next.js
+        </Badge>
+      </div>
+
+      <div className="grid min-h-[360px] grid-cols-1 lg:grid-cols-[220px_1fr_300px]">
+        <aside className="hidden border-r border-border bg-canvas/40 p-4 lg:block">
+          <div className="mb-4 flex items-center gap-2 font-tertiary text-xs text-muted-content">
+            <PackagePlus className="h-3.5 w-3.5" />
+            Components
+          </div>
+          <nav className="space-y-1">
+            {componentLinks.map((name) => (
+              <Link
+                key={name}
+                href="/docs"
+                className={`flex items-center justify-between rounded-control px-3 py-2 font-secondary text-sm transition-colors ${
+                  name === 'Button'
+                    ? 'bg-brand text-brand-content'
+                    : 'text-muted-content hover:bg-surface hover:text-surface-content'
+                }`}
+              >
+                {name}
+                {name === 'Button' && <ChevronRight className="h-4 w-4" />}
+              </Link>
+            ))}
+          </nav>
+        </aside>
+
+        <div className="p-4 sm:p-6">
+          <div className="mb-5 flex flex-wrap items-center gap-2">
+            <Badge variant="brand" size="sm">
+              Button
+            </Badge>
+            <Badge variant="muted" size="sm">
+              Accessible
+            </Badge>
+            <Badge variant="muted" size="sm">
+              Copy source
+            </Badge>
+          </div>
+
+          <div className="rounded-surface border border-border bg-canvas p-4 sm:p-5">
+            <div className="flex flex-wrap items-center gap-3">
+              <Button variant="primary" size="medium">
+                Get Started
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+              <Button variant="secondary" size="medium">
+                Secondary
+              </Button>
+              <Button variant="outline" size="medium">
+                Outline
+              </Button>
+            </div>
+
+            <div className="mt-5 rounded-surface border border-border bg-surface p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <Code2 className="h-4 w-4 text-brand" />
+                <p className="font-tertiary text-xs text-muted-content">app/page.tsx</p>
+              </div>
+              <pre className="overflow-x-auto font-tertiary text-xs leading-6 text-surface-content">
+                <code>{`import { Button } from 'vayu-ui';
+
+export default function Page() {
+  return <Button>Ship UI</Button>;
+}`}</code>
+              </pre>
+            </div>
+          </div>
+        </div>
+
+        <aside className="border-t border-border bg-canvas/40 p-4 sm:p-6 lg:border-l lg:border-t-0">
+          <div className="flex items-center justify-between">
+            <p className="font-primary text-sm font-semibold text-canvas-content">Design Tokens</p>
+            <Badge variant="success" size="sm">
+              Synced
+            </Badge>
+          </div>
+
+          <div className="mt-4 space-y-3">
+            {tokenRows.map((token) => (
+              <div
+                key={token.name}
+                className="flex items-center gap-3 rounded-surface border border-border bg-surface p-3"
+              >
+                <span className={`h-8 w-8 shrink-0 rounded-control ${token.className}`} />
+                <div className="min-w-0">
+                  <p className="font-tertiary text-xs text-surface-content">{token.name}</p>
+                  <p className="font-secondary text-xs text-muted-content">{token.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 rounded-surface border border-border bg-surface p-3">
+            <p className="font-tertiary text-xs leading-5 text-muted-content">
+              MCP docs keep component APIs, examples, and token names available to AI agents.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
 }

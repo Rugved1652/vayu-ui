@@ -17,14 +17,14 @@ npx vayu-ui-cli install-mcp
 
 # Configure specific tools
 npx vayu-ui-cli install-mcp --tool claude
-npx vayu-ui-cli install-mcp --tool claude,cursor,vscode
+npx vayu-ui-cli install-mcp --tool claude,cursor,opencode
 ```
 
 This writes the correct config to each tool's settings file. Restart your AI tool after running it.
 
 | Flag        | Description                                               |
 | :---------- | :-------------------------------------------------------- |
-| `--tool`    | Comma-separated: `claude`, `cursor`, `vscode`, `windsurf` |
+| `--tool`    | Comma-separated: `claude`, `cursor`, `opencode`  |
 | `--global`  | Write to home directory instead of project root           |
 | `--dry-run` | Preview changes without writing                           |
 | `--force`   | Overwrite existing entries                                |
@@ -33,7 +33,7 @@ This writes the correct config to each tool's settings file. Restart your AI too
 
 If you prefer to add the config manually, add the JSON below to the correct file for your tool.
 
-<Tabs items={['Claude Code', 'Cursor', 'VS Code', 'Windsurf']}>
+<Tabs items={['Claude Code', 'Cursor', 'OpenCode']}>
   <Tab value="Claude Code">
 
 **File:** `.claude/settings.json` (project) or `~/.claude/settings.json` (global)
@@ -66,26 +66,9 @@ If you prefer to add the config manually, add the JSON below to the correct file
 ```
 
   </Tab>
-  <Tab value="VS Code">
+  <Tab value="OpenCode">
 
-**File:** `.vscode/mcp.json` (project) or `~/.vscode/mcp.json` (global)
-
-```json
-{
-  "servers": {
-    "vayu-ui": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "vayu-ui-mcp"]
-    }
-  }
-}
-```
-
-  </Tab>
-  <Tab value="Windsurf">
-
-**File:** `.windsurf/mcp.json` (project) or `~/.windsurf/mcp.json` (global)
+**File:** `opencode.json`
 
 ```json
 {

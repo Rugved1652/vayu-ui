@@ -26,7 +26,7 @@ export default class InstallMcp extends Command {
 
   static flags = {
     tool: Flags.string({
-      description: 'Comma-separated AI tools: claude, cursor, vscode, windsurf, antigravity',
+      description: 'Comma-separated AI tools: claude, cursor, opencode',
     }),
     global: Flags.boolean({
       description: 'Configure globally (home directory) instead of project-level',

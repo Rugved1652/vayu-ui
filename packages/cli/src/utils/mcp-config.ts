@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
-export type ToolId = 'claude' | 'cursor' | 'vscode' | 'windsurf' | 'antigravity';
+export type ToolId = 'claude' | 'cursor' | 'opencode';
 
 export interface ToolDefinition {
   id: ToolId;
@@ -31,40 +31,21 @@ export const TOOL_DEFINITIONS: Record<ToolId, ToolDefinition> = {
     configFileName: '.cursor/mcp.json',
     topLevelKey: 'mcpServers',
   },
-  vscode: {
-    id: 'vscode',
-    name: 'VS Code Copilot',
-    configFileName: '.vscode/mcp.json',
-    topLevelKey: 'servers',
-  },
-  windsurf: {
-    id: 'windsurf',
-    name: 'Windsurf',
-    configFileName: '.windsurf/mcp.json',
-    topLevelKey: 'mcpServers',
-  },
-  antigravity: {
-    id: 'antigravity',
-    name: 'Antigravity',
-    configFileName: 'antigravity.config.json',
+  opencode: {
+    id: 'opencode',
+    name: 'OpenCode',
+    configFileName: 'opencode.json',
     topLevelKey: 'mcpServers',
   },
 };
 
-export const ALL_TOOL_IDS: ToolId[] = ['claude', 'cursor', 'vscode', 'windsurf', 'antigravity'];
+export const ALL_TOOL_IDS: ToolId[] = ['claude', 'cursor', 'opencode'];
 
-export function buildServerEntry(toolId: ToolId): Record<string, unknown> {
-  const base = {
+export function buildServerEntry(_toolId: ToolId): Record<string, unknown> {
+  return {
     command: 'npx',
     args: ['-y', 'vayu-ui-mcp'],
   };
-  if (toolId === 'vscode') {
-    return { type: 'stdio', ...base };
-  }
-  if (toolId === 'antigravity') {
-    return { ...base, transport: 'stdio' };
-  }
-  return base;
 }
 
 export function getConfigPath(toolId: ToolId, targetDir: string, isGlobal = false): string {

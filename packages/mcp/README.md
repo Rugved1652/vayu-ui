@@ -14,7 +14,7 @@
 
 ## What It Does
 
-This is a [Model Context Protocol](https://modelcontextprotocol.io/) server that gives AI coding assistants (Claude Code, Cursor, VS Code Copilot, Windsurf, Antigravity) access to the Vayu UI component and hook registry. It exposes **17 tools** for discovering, inspecting, and scaffolding components and hooks — so your AI assistant can suggest the right component, generate correct imports, and follow best practices automatically.
+This is a [Model Context Protocol](https://modelcontextprotocol.io/) server that gives AI coding assistants (Claude Code, Cursor, OpenCode) access to the Vayu UI component and hook registry. It exposes **17 tools** for discovering, inspecting, and scaffolding components and hooks — so your AI assistant can suggest the right component, generate correct imports, and follow best practices automatically.
 
 ---
 
@@ -49,13 +49,11 @@ Add the following to your AI tool's MCP config file:
 
 ## Supported AI Tools
 
-| Tool            | Project-level config     | Global config          |
-| --------------- | ------------------------ | ---------------------- |
-| Claude Code     | `.mcp.json`              | `~/.claude.json`       |
-| Cursor          | `.cursor/mcp.json`       | `~/.cursor/mcp.json`   |
-| VS Code Copilot | `.vscode/mcp.json`       | `~/.vscode/mcp.json`   |
-| Windsurf        | `.windsurf/mcp.json`     | `~/.windsurf/mcp.json` |
-| Antigravity     | `antigravity.config.json` | —                      |
+| Tool        | Project-level config | Global config        |
+| ----------- | -------------------- | -------------------- |
+| Claude Code | `.mcp.json`          | `~/.claude.json`     |
+| Cursor      | `.cursor/mcp.json`   | `~/.cursor/mcp.json` |
+| OpenCode    | `opencode.json`      | —                    |
 
 ---
 
