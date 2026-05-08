@@ -95,10 +95,10 @@ export const baseItemStyles = (disabled: boolean, variant?: "destructive") =>
     "text-sm duration-(--transition-fast) cursor-pointer",
     "focus:outline-none",
     "focus-visible:bg-muted/80 focus-visible:text-brand",
-    "dark:focus-visible:bg-white/10 dark:focus-visible:text-brand",
+    "dark:focus-visible:bg-white/10",
     disabled
       ? "opacity-50 cursor-not-allowed"
       : variant === "destructive"
-        ? "text-destructive dark:text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/10"
-        : "text-surface-content dark:text-surface-content hover:bg-muted/80 dark:hover:bg-white/10"
+        ? "text-destructive hover:bg-destructive/10"
+        : "text-surface-content hover:bg-muted/80 dark:hover:bg-white/10"
   );

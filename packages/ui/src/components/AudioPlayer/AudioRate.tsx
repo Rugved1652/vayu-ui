@@ -5,6 +5,7 @@ import {
   forwardRef,
   HTMLAttributes,
   ButtonHTMLAttributes,
+  useState,
 } from 'react';
 import { Popover } from '../Popover';
 import { useAudioPlayer } from './Audio';
@@ -16,9 +17,10 @@ export const AudioPlayerRate = forwardRef<
   HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
   const { playbackRate, setPlaybackRate } = useAudioPlayer();
+  const [open, setOpen] = useState(false);
 
   return (
-    <Popover ref={ref} className={clsx('inline-block', className)} {...props}>
+    <Popover ref={ref} className={clsx('inline-block', className)} open={open} onOpenChange={setOpen} {...props}>
       <Popover.Trigger
         className={clsx(
           '!rounded-full !p-2 !min-h-0 !w-auto !px-2',
@@ -41,6 +43,7 @@ export const AudioPlayerRate = forwardRef<
               key={rate}
               onClick={() => {
                 setPlaybackRate(rate);
+                setOpen(false);
               }}
               className={clsx(
                 'px-3 py-1.5 text-xs font-mono font-medium rounded-control text-left',

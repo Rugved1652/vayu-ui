@@ -224,6 +224,25 @@ export default function AnimationDemo() {
         </AnimationCard>
 
         {/* ============================================== */}
+        {/* InView (Viewport-Triggered) */}
+        {/* ============================================== */}
+        <AnimationCard label="InView (Fade)">
+          <Animation.InView variant="fade">
+            <div className="w-14 h-14 bg-indigo-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-[8px] text-center leading-tight">
+              In View
+            </div>
+          </Animation.InView>
+        </AnimationCard>
+
+        <AnimationCard label="InView (Slide Up)">
+          <Animation.InView variant="slide" direction="up">
+            <div className="w-14 h-14 bg-blue-500 rounded-md shadow-lg flex items-center justify-center text-white font-bold text-[8px] text-center leading-tight">
+              In View
+            </div>
+          </Animation.InView>
+        </AnimationCard>
+
+        {/* ============================================== */}
         {/* Iteration Example */}
         {/* ============================================== */}
         <AnimationCard label="Infinite Loop">

@@ -4,7 +4,7 @@ import { AudioPlayer, Typography } from 'vayu-ui';
 
 export default function AudioPlayerDemo() {
   return (
-    <div className="flex flex-col gap-10 w-full max-w-5xl mx-auto py-8">
+    <div className="flex not-prose flex-col gap-10 w-full max-w-5xl mx-auto py-8">
       <Typography.H5>Audio Player</Typography.H5>
       <div className="p-6 bg-surface rounded-surface shadow-surface border border-border/20">
         <h3 className="text-h3 font-primary mb-2 text-surface-content">
@@ -28,8 +28,11 @@ export default function AudioPlayerDemo() {
             <AudioPlayer.TrackInfo className="pt-4 px-4" />
 
             <AudioPlayer.Controls className="flex-col gap-2 w-full">
-              <div className="flex flex-row items-center justify-between w-full">
-                <AudioPlayer.Time />
+              <div className="w-full space-y-2 mt-4">
+                <AudioPlayer.Seek />
+                <div className="flex justify-between w-full">
+                  <AudioPlayer.Time />
+                </div>
               </div>
               <div className="flex flex-row items-center justify-between w-full mt-2">
                 <div className="flex items-center gap-1">
@@ -38,7 +41,7 @@ export default function AudioPlayerDemo() {
                 </div>
                 <div className="flex items-center gap-4">
                   <AudioPlayer.Previous />
-                  <AudioPlayer.PlayPause className="!w-12 !h-12 shadow-md [&>span]:w-6 [&>span]:h-6 [&_svg]:w-6 [&_svg]:h-6" />
+                  <AudioPlayer.PlayPause className="w-12 h-12 shadow-md [&>span]:w-6 [&>span]:h-6 [&_svg]:w-6 [&_svg]:h-6" />
                   <AudioPlayer.Next />
                 </div>
                 <div className="flex items-center gap-1">
@@ -73,7 +76,7 @@ export default function AudioPlayerDemo() {
               {/* Animated ring when playing */}
               <div className="relative group">
                 <div className="absolute inset-0 bg-brand/20 rounded-full blur-xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                <AudioPlayer.PlayPause className="!w-20 !h-20 shadow-elevated relative z-10 [&>span]:w-10 [&>span]:h-10 [&_svg]:w-10 [&_svg]:h-10" />
+                <AudioPlayer.PlayPause className="w-20 h-20 shadow-elevated relative z-10 [&>span]:w-10 [&>span]:h-10 [&_svg]:w-10 [&_svg]:h-10" />
               </div>
 
               <div className="w-full space-y-2 mt-4">

@@ -32,3 +32,4 @@ export * from './useOnClickOutside';
 export * from './usePermission';
 export * from './useConfirmExit';
 export * from './useKeyPress';
+export * from './useInView';

@@ -13,4 +13,7 @@ export type {
   DirectionalAnimationProps,
   ScaleAnimationProps,
   RotateAnimationProps,
+  AnimationVariant,
+  UseInViewOptions,
+  AnimateInViewProps,
 } from './types';

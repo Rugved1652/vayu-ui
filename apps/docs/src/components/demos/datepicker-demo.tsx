@@ -54,13 +54,13 @@ export default function DatePickerDemo() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 py-12 px-4">
+    <div className="min-h-screen py-12 px-4">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+          <h1 className="text-3xl font-bold text-canvas-content">
             DatePicker Component
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-muted-content">
             WCAG 2.2 AA Compliant • Keyboard Navigation • Range Selection • Disabled Dates
           </p>
         </div>
@@ -86,7 +86,7 @@ export default function DatePickerDemo() {
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
                 Selected:{' '}
-                <code className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
+                <code className="bg-muted px-2 py-0.5 rounded">
                   {formatDate(selectedDate)}
                 </code>
               </p>
@@ -114,7 +114,7 @@ export default function DatePickerDemo() {
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
                 Range:{' '}
-                <code className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
+                <code className="bg-muted px-2 py-0.5 rounded">
                   {formatRange(dateRange)}
                 </code>
               </p>
@@ -144,7 +144,7 @@ export default function DatePickerDemo() {
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
                 Selected:{' '}
-                <code className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
+                <code className="bg-muted px-2 py-0.5 rounded">
                   {formatDate(weekdayDate)}
                 </code>
               </p>
@@ -175,7 +175,7 @@ export default function DatePickerDemo() {
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
                 Selected:{' '}
-                <code className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
+                <code className="bg-muted px-2 py-0.5 rounded">
                   {formatDate(holidayDate)}
                 </code>
               </p>

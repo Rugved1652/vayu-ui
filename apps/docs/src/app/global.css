@@ -259,6 +259,79 @@
   }
 }
 
+.hero-collage {
+  position: relative;
+}
+
+.hero-collage::before {
+  content: '';
+  position: absolute;
+  inset: 6% 4% auto;
+  height: 72%;
+  border: 1px dashed color-mix(in srgb, var(--border) 72%, transparent);
+  border-radius: calc(var(--radius-lg) * 1.5);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.hero-collage-panel {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius-lg) * 1.25);
+  background: color-mix(in srgb, var(--surface) 94%, var(--canvas) 6%);
+  padding: 1rem;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.05),
+    0 18px 40px rgb(0 0 0 / 0.05);
+}
+
+.hero-collage-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6);
+}
+
+.hero-collage-panel-main {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.96), rgb(255 255 255 / 0.9)),
+    linear-gradient(135deg, rgb(132 204 22 / 0.06), transparent 42%);
+}
+
+.hero-collage-panel-soft {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.96), rgb(255 255 255 / 0.92)),
+    linear-gradient(135deg, rgb(14 165 233 / 0.08), transparent 45%);
+}
+
+@media (min-width: 1280px) {
+  .hero-collage-panel-tilt-left {
+    transform: rotate(-2.25deg) translateY(18px);
+  }
+
+  .hero-collage-panel-tilt-right {
+    transform: rotate(2deg) translateY(-8px);
+  }
+}
+
+:root.dark .hero-collage::before {
+  border-color: color-mix(in srgb, var(--border) 56%, transparent);
+}
+
+:root.dark .hero-collage-panel,
+:root.dark .hero-collage-panel-main,
+:root.dark .hero-collage-panel-soft {
+  background:
+    linear-gradient(180deg, rgb(18 18 18 / 0.96), rgb(10 10 10 / 0.92)),
+    linear-gradient(135deg, rgb(255 255 255 / 0.02), transparent 45%);
+}
+
+:root.dark .hero-collage-panel::after {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.03);
+}
+
 [role="group"][class*="flex-row"]>button:not(:first-child):not(:last-child) {
   border-radius: 0;
   border-left-width: 0;

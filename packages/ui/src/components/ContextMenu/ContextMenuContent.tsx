@@ -101,8 +101,8 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
         style={{ top: position.top, left: position.left }}
         className={cn(
           "fixed min-w-[220px] z-50",
-          "bg-elevated dark:bg-elevated",
-          "border border-border dark:border-border",
+          "bg-elevated",
+          "border border-border",
           "rounded-surface shadow-elevated",
           "py-1",
           "animate-fade-in",

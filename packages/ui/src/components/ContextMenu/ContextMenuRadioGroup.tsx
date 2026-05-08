@@ -95,7 +95,7 @@ const ContextMenuRadioItem = forwardRef<HTMLButtonElement, ContextMenuRadioItemP
       >
         <span className="shrink-0 w-4 h-4 flex items-center justify-center" aria-hidden="true">
           {isSelected ? (
-            <svg className="w-4 h-4 text-brand dark:text-brand" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-brand" fill="currentColor" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="4" />
             </svg>
           ) : (
@@ -109,7 +109,7 @@ const ContextMenuRadioItem = forwardRef<HTMLButtonElement, ContextMenuRadioItemP
         )}
         <span className="truncate">{children}</span>
         {shortcut && (
-          <span className="text-xs text-muted-content dark:text-muted-content shrink-0 ml-auto">
+          <span className="text-xs text-muted-content shrink-0 ml-auto">
             {shortcut}
           </span>
         )}

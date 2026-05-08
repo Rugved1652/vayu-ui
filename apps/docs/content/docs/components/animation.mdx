@@ -9,15 +9,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui-cli init #one time only
-```
-
-```bash
 npx vayu-ui-cli add animation
-```
-
-```bash
-npx vayu-ui-cli add -t animation #with test case needs
 ```
 
 ## Usage
@@ -69,6 +61,14 @@ npx vayu-ui-cli add -t animation #with test case needs
     <Animation.Bounce iteration="infinite">
       <div className="bg-cyan-500 rounded-full p-4 text-white">Infinite loop</div>
     </Animation.Bounce>
+
+    <Animation.InView variant="fade" duration="slow">
+      <div className="bg-indigo-500 rounded-md p-4 text-white">Fades in when scrolled into view</div>
+    </Animation.InView>
+
+    <Animation.InView variant="slide" direction="up">
+      <div className="bg-blue-500 rounded-md p-4 text-white">Slides up when scrolled into view</div>
+    </Animation.InView>
     ```
 
   </Tab>
@@ -123,6 +123,15 @@ import { Animation } from 'vayu-ui';
 <Animation.Hinge duration="slower">
   {children}
 </Animation.Hinge>
+
+// InView — viewport-triggered animation (client component)
+<Animation.InView variant="fade" duration="slow">
+  {children}
+</Animation.InView>
+
+<Animation.InView variant="slide" direction="up" triggerOnce={false}>
+  {children}
+</Animation.InView>
 ```
 
 - **Animation.Fade** — Smooth opacity transition from invisible to visible.
@@ -134,6 +143,7 @@ import { Animation } from 'vayu-ui';
 - **Animation.Roll** — Rolls the element in from a specified direction.
 - **Animation.JackInTheBox** — Playful spring-loaded entrance animation.
 - **Animation.Hinge** — Element swings and falls off the page.
+- **Animation.InView** — Viewport-triggered animation that plays when the element scrolls into view. A client component that wraps children with an IntersectionObserver. Supports all animation variants via the `variant` prop.
 
 ## Accessibility
 
@@ -159,6 +169,7 @@ Animation components are decorative CSS wrappers. Screen readers announce the co
 ```
 Animation/
 ├── Animation.tsx              # Root component with compound composition
+├── AnimateInView.tsx          # InView variant (client component, viewport-triggered)
 ├── FadeAnimation.tsx          # Fade variant
 ├── SlideAnimation.tsx         # Slide variant (directional)
 ├── BounceAnimation.tsx        # Bounce variant (scale-based)
@@ -246,3 +257,19 @@ Uses common props only. No additional props.
 ### Animation.Hinge
 
 Uses common props only, but defaults `fillMode` to `'forwards'` instead of `'none'` so the element remains visible after the animation completes.
+
+### Animation.InView
+
+| Prop         | Type                                                                                                | Default    | Description                                                        |
+| :----------- | :-------------------------------------------------------------------------------------------------- | :--------- | :----------------------------------------------------------------- |
+| `variant`    | `'fade' \| 'slide' \| 'bounce' \| 'flip' \| 'rotate' \| 'zoom' \| 'roll' \| 'jackInTheBox' \| 'hinge'` | —          | Animation type to play when the element enters the viewport.       |
+| `direction`  | `'up' \| 'down' \| 'left' \| 'right'`                                                              | `'left'`   | Direction for `slide`, `flip`, and `roll` variants.                |
+| `scale`      | `'small' \| 'medium' \| 'large'`                                                                    | `'medium'` | Scale intensity for `bounce` and `zoom` variants.                  |
+| `degrees`    | `number`                                                                                            | `-200`     | Starting rotation angle for `rotate` variant.                      |
+| `triggerOnce`| `boolean`                                                                                           | `true`     | Whether to animate only the first time the element enters view.    |
+| `threshold`  | `number`                                                                                            | `0.1`      | Intersection ratio (0–1) needed to trigger the animation.          |
+| `rootMargin` | `string`                                                                                            | `'0px'`    | Margin around the root element for IntersectionObserver.           |
+
+Plus all [Common Props](#common-props-all-variants).
+
+**Note:** `Animation.InView` is a client component (uses `IntersectionObserver`). Children passed to it can still be server-rendered.

@@ -68,9 +68,7 @@ export interface CarouselPlayPauseProps extends ButtonHTMLAttributes<HTMLButtonE
   showLabel?: boolean;
 }
 
-export interface CarouselSpeedControlProps extends HTMLAttributes<HTMLDivElement> {
-  showLabel?: boolean;
-}
+export interface CarouselSpeedControlProps extends HTMLAttributes<HTMLDivElement> {}
 
 export interface CarouselGalleryProps extends HTMLAttributes<HTMLDivElement> {
   items: GalleryItem[];

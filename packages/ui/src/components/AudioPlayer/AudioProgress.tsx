@@ -37,7 +37,9 @@ export const AudioPlayerSeek = forwardRef<
         Math.min(1, (clientX - rect.left) / rect.width),
       );
       setDragPosition(percent * 100);
-      seek(percent * duration);
+      if (duration > 0 && isFinite(duration)) {
+        seek(percent * duration);
+      }
     },
     [seek, duration],
   );

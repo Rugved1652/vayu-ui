@@ -10,7 +10,7 @@ const ContextMenuSeparator = forwardRef<HTMLDivElement, ContextMenuSeparatorProp
       ref={ref}
       role="separator"
       aria-orientation="horizontal"
-      className={cn("my-1 h-px bg-border dark:bg-border", className)}
+      className={cn("my-1 h-px bg-border", className)}
       {...props}
     />
   )

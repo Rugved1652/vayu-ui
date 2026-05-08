@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Draggable, type ContainersMap } from 'vayu-ui';
+import { Draggable, Typography, type ContainersMap } from 'vayu-ui';
 import { Mail, Image, FileText, Music, Video, Archive, Star, Heart, Zap } from 'lucide-react';
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -49,10 +49,8 @@ function DraggableListDemo() {
   };
 
   return (
-    <div className="max-w-md">
-      <p className="text-xs font-secondary text-muted-content mb-3">
-        List — Drag or keyboard (Space → Arrow ↑↓ → Space)
-      </p>
+    <div className="w-full">
+      <Typography.H5 className="py-4">List — Drag or keyboard (Space → Arrow ↑↓ → Space)</Typography.H5>
 
       <Draggable items={items.map((i) => i.id)} onReorder={handleReorder}>
         <Draggable.Container layout="list">
@@ -99,9 +97,9 @@ function DraggableGridDemo() {
 
   return (
     <div>
-      <p className="text-xs font-secondary text-muted-content mb-3">
+      <Typography.H5 className="py-4">
         Grid — Drag or keyboard (Space → Arrow ←→↑↓ → Space)
-      </p>
+      </Typography.H5>
 
       <Draggable items={items.map((i) => i.id)} onReorder={handleReorder}>
         <Draggable.Container layout="grid" columns={3}>
@@ -155,9 +153,7 @@ function DraggableCrossListDemo() {
 
   return (
     <div className="max-w-2xl">
-      <p className="text-xs font-secondary text-muted-content mb-3">
-        Cross-list — Drag items between columns
-      </p>
+      <Typography.H5 className="py-4">Cross-list — Drag items between columns</Typography.H5>
 
       <Draggable containers={containers} onContainersChange={setContainers}>
         <div className="grid grid-cols-2 gap-6">

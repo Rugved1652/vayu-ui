@@ -123,3 +123,30 @@ export const zoomScaleMap: Record<AnimationScale, string> = {
   medium: 'animate-zoom-in',
   large: 'animate-zoom-in-large',
 };
+
+export type AnimationVariant =
+  | 'fade'
+  | 'slide'
+  | 'bounce'
+  | 'flip'
+  | 'rotate'
+  | 'zoom'
+  | 'roll'
+  | 'jackInTheBox'
+  | 'hinge';
+
+export interface UseInViewOptions {
+  threshold?: number;
+  triggerOnce?: boolean;
+  rootMargin?: string;
+}
+
+export interface AnimateInViewProps extends BaseAnimationProps {
+  variant: AnimationVariant;
+  direction?: AnimationDirection;
+  scale?: AnimationScale;
+  degrees?: number;
+  triggerOnce?: boolean;
+  threshold?: number;
+  rootMargin?: string;
+}

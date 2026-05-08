@@ -3,7 +3,7 @@
 'use client';
 
 import { clsx } from 'clsx';
-import { forwardRef, useRef } from 'react';
+import { forwardRef, useId, useRef } from 'react';
 
 import { useSliderDrag } from './hooks';
 import SliderTrack from './SliderTrack';
@@ -66,8 +66,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
     const trackRef = useRef<HTMLDivElement>(null);
 
-    // Generate unique ID for ARIA
-    const sliderId = props.id || `slider-${Math.random().toString(36).slice(2, 9)}`;
+    const reactId = useId();
+    const sliderId = props.id || `slider-${reactId}`;
 
     return (
       <div

@@ -1,47 +1,59 @@
-// speed-control.tsx
-// UI: Playback speed selector
+'use client';
 
-import React, { forwardRef } from 'react';
-import { cn } from '../../utils';
+import { clsx } from 'clsx';
+import { forwardRef, HTMLAttributes, useState } from 'react';
+import { Popover } from '../Popover';
 import { useCarouselContext } from './hooks';
 
 const SPEED_OPTIONS: import('./types').SpeedMultiplier[] = [0.5, 1, 1.5, 2];
 
 const CarouselSpeedControl = forwardRef<
   HTMLDivElement,
-  import('./types').CarouselSpeedControlProps
->(({ className, showLabel = true, ...props }, ref) => {
+  HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   const { speed, setSpeed } = useCarouselContext();
+  const [open, setOpen] = useState(false);
 
   return (
-    <div ref={ref} className={cn('flex items-center gap-2', className)} {...props}>
-      {showLabel && (
-        <label htmlFor="carousel-speed" className="text-sm text-muted-content">
-          Speed:
-        </label>
-      )}
-      <select
-        id="carousel-speed"
-        value={speed}
-        onChange={(e) => setSpeed(Number(e.target.value) as import('./types').SpeedMultiplier)}
-        aria-label="Playback speed"
-        className={cn(
-          'px-2 py-1.5 rounded-control text-sm',
-          'bg-surface text-surface-content',
-          'border border-border',
-          'hover:bg-muted/50 hover:border-field',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2',
-          'transition-all duration-150',
-          'cursor-pointer',
+    <Popover ref={ref} className={clsx('inline-block', className)} open={open} onOpenChange={setOpen} {...props}>
+      <Popover.Trigger
+        className={clsx(
+          '!rounded-full !p-2 !min-h-0 !w-auto !px-2',
+          '!text-xs !font-bold !font-mono !tracking-tighter',
+          '!gap-0',
+          'text-surface-content',
         )}
       >
-        {SPEED_OPTIONS.map((option) => (
-          <option key={option} value={option}>
-            {option}x
-          </option>
-        ))}
-      </select>
-    </div>
+        {speed}x
+      </Popover.Trigger>
+      <Popover.Content
+        align="center"
+        side="top"
+        sideOffset={8}
+        className="!p-1 min-w-[80px]"
+      >
+        <div className="flex flex-col gap-0.5">
+          {SPEED_OPTIONS.map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                setSpeed(option);
+                setOpen(false);
+              }}
+              className={clsx(
+                'px-3 py-1.5 text-xs font-mono font-medium rounded-control text-left',
+                'transition-colors duration-100',
+                option === speed
+                  ? 'bg-brand text-brand-content'
+                  : 'text-elevated-content hover:bg-muted/50',
+              )}
+            >
+              {option === 1 ? '1x (Normal)' : `${option}x`}
+            </button>
+          ))}
+        </div>
+      </Popover.Content>
+    </Popover>
   );
 });
 

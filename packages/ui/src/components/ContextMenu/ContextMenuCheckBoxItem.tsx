@@ -79,7 +79,7 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
       >
         <span className="shrink-0 w-4 h-4 flex items-center justify-center" aria-hidden="true">
           {checked && (
-            <svg className="w-4 h-4 text-brand dark:text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           )}
@@ -91,7 +91,7 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
         )}
         <span className="truncate">{children}</span>
         {shortcut && (
-          <span className="text-xs text-muted-content dark:text-muted-content shrink-0 ml-auto">
+          <span className="text-xs text-muted-content shrink-0 ml-auto">
             {shortcut}
           </span>
         )}

@@ -1,4 +1,4 @@
-import { Hero } from './Hero';
+import { Hero } from './hero';
 import { ComponentShowcase } from './ComponentShowcase';
 import { WhyVayuUI } from './WhyVayuUI';
 import { GetStarted } from './GetStarted';

@@ -5,12 +5,12 @@ import { Twitter, Github, Instagram, Linkedin } from 'lucide-react';
 
 export default function FooterDemo() {
   return (
-    <div className="w-full space-y-12 p-6 border border-border rounded-surface bg-canvas overflow-hidden">
+    <div className="w-full space-y-12 p-6 overflow-hidden">
       {/* Default Footer */}
       <div className="space-y-4">
-        <Typography.Label variant="secondary" className="uppercase tracking-wider">
+        <Typography.H5 className="uppercase tracking-wider">
           Default Variant
-        </Typography.Label>
+        </Typography.H5>
         <div className="border border-border rounded-surface overflow-hidden bg-surface">
           <Footer>
             <Footer.Container>
@@ -21,7 +21,7 @@ export default function FooterDemo() {
                       Vayu UI
                     </Typography.H5>
                   </Footer.Logo>
-                  <Typography.P variant="secondary" className="mt-2">
+                  <Typography.P className="mt-2">
                     Building beautiful user interfaces with modern web technologies.
                   </Typography.P>
                   <Footer.Social className="mt-4">
@@ -77,9 +77,9 @@ export default function FooterDemo() {
 
       {/* Centered Footer */}
       <div className="space-y-4">
-        <Typography.Label variant="secondary" className="uppercase tracking-wider">
+        <Typography.H5 className="uppercase tracking-wider">
           Centered Variant
-        </Typography.Label>
+        </Typography.H5>
         <div className="border border-border rounded-surface overflow-hidden bg-surface">
           <Footer variant="centered">
             <Footer.Container>
@@ -124,15 +124,15 @@ export default function FooterDemo() {
 
       {/* Minimal Footer */}
       <div className="space-y-4">
-        <Typography.Label variant="secondary" className="uppercase tracking-wider">
+        <Typography.H5 className="uppercase tracking-wider">
           Minimal Variant
-        </Typography.Label>
+        </Typography.H5>
         <div className="border border-border rounded-surface overflow-hidden bg-surface">
           <Footer variant="minimal">
             <Footer.Container>
               <Footer.Bottom>
                 <Footer.Logo href="#">
-                  <Typography.Label className="font-bold">Vayu UI</Typography.Label>
+                  <Typography.H5 className="font-bold">Vayu UI</Typography.H5>
                 </Footer.Logo>
                 <Footer.Copyright>© {new Date().getFullYear()} Vayu UI. Inc.</Footer.Copyright>
                 <Footer.Social>
@@ -151,9 +151,9 @@ export default function FooterDemo() {
 
       {/* Footer with CTA Button */}
       <div className="space-y-4">
-        <Typography.Label variant="secondary" className="uppercase tracking-wider">
+        <Typography.H5 className="uppercase tracking-wider">
           With CTA Button
-        </Typography.Label>
+        </Typography.H5>
         <div className="border border-border rounded-surface overflow-hidden bg-surface">
           <Footer>
             <Footer.Container>
@@ -162,7 +162,7 @@ export default function FooterDemo() {
                   <Typography.H5 variant="gradient" className="font-bold">
                     Ready to get started?
                   </Typography.H5>
-                  <Typography.P variant="secondary">
+                  <Typography.P >
                     Join thousands of developers building with Vayu UI.
                   </Typography.P>
                 </div>

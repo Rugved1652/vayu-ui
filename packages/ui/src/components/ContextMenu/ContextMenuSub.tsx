@@ -168,12 +168,12 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
           "text-sm duration-(--transition-fast) cursor-pointer",
           "focus:outline-none",
           "focus-visible:bg-muted/80 focus-visible:text-brand",
-          "dark:focus-visible:bg-white/10 dark:focus-visible:text-brand",
+          "dark:focus-visible:bg-white/10",
           disabled
             ? "opacity-50 cursor-not-allowed"
             : isOpen
-              ? "bg-muted/80 text-surface-content dark:bg-white/10 dark:text-surface-content"
-              : "text-surface-content dark:text-surface-content hover:bg-muted/80 dark:hover:bg-white/10",
+              ? "bg-muted/80 text-surface-content dark:bg-white/10"
+              : "text-surface-content hover:bg-muted/80 dark:hover:bg-white/10",
           className
         )}
         {...props}
@@ -187,7 +187,7 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
           <span className="truncate">{children}</span>
         </div>
         <svg
-          className="w-4 h-4 shrink-0 text-muted-content dark:text-muted-content"
+          className="w-4 h-4 shrink-0 text-muted-content"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -293,8 +293,8 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
         }}
         className={cn(
           "min-w-[200px]",
-          "bg-elevated dark:bg-elevated",
-          "border border-border dark:border-border",
+          "bg-elevated",
+          "border border-border",
           "rounded-surface shadow-elevated",
           "py-1 animate-fade-in",
           "overflow-y-auto",

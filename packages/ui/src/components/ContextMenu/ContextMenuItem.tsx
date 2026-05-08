@@ -92,7 +92,7 @@ const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
           <span className="truncate">{children}</span>
         </div>
         {shortcut && (
-          <span className="text-xs text-muted-content dark:text-muted-content shrink-0">
+          <span className="text-xs text-muted-content shrink-0">
             {shortcut}
           </span>
         )}

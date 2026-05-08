@@ -11,7 +11,7 @@ const ContextMenuLabel = forwardRef<HTMLDivElement, ContextMenuLabelProps>(
       role="presentation"
       className={cn(
         "px-3 py-2 text-xs font-semibold uppercase tracking-wide",
-        "text-muted-content dark:text-muted-content",
+        "text-muted-content",
         className
       )}
       {...props}

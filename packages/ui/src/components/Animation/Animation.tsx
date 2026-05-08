@@ -12,6 +12,7 @@ import { AnimationZoom } from './ZoomAnimation';
 import { AnimationRoll } from './RollAnimation';
 import { AnimationJackInTheBox } from './JackInTheBoxAnimation';
 import { AnimationHinge } from './HingeAnimation';
+import { AnimationInView } from './AnimateInView';
 
 interface AnimationRootProps extends HTMLAttributes<HTMLDivElement> {
   ref?: Ref<HTMLDivElement>;
@@ -39,6 +40,7 @@ const Animation = Object.assign(AnimationRoot, {
   Roll: AnimationRoll,
   JackInTheBox: AnimationJackInTheBox,
   Hinge: AnimationHinge,
+  InView: AnimationInView,
 });
 
 export { Animation };

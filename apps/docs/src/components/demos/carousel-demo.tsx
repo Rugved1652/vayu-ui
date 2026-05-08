@@ -1,5 +1,5 @@
 'use client';
-import { Carousel, type GalleryItem } from 'vayu-ui';
+import { Carousel, Typography, type GalleryItem } from 'vayu-ui';
 
 // Sample data - replace with your actual data source
 const galleryItems: GalleryItem[] = [
@@ -30,8 +30,8 @@ export default function CarouselDemo() {
         <section>
           <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
             <div>
-              <h1 className="text-2xl font-bold text-brand">Featured Gallery</h1>
-              <p className="text-muted-content text-sm">WCAG Compliant Interactive Media</p>
+              <Typography.H5>Featured Gallery</Typography.H5>
+              <Typography.P variant="secondary" className="text-sm">WCAG Compliant Interactive Media</Typography.P>
             </div>
           </header>
 
@@ -60,7 +60,7 @@ export default function CarouselDemo() {
             <Carousel.Bullets />
 
             <div className="mt-6 pt-4 border-t border-border">
-              <h2 className="text-sm font-semibold mb-2 text-canvas-content">Jump to item:</h2>
+              <Typography.H5>Jump to item:</Typography.H5>
               <Carousel.Gallery items={galleryItems} />
             </div>
           </Carousel>
@@ -70,10 +70,10 @@ export default function CarouselDemo() {
         <section>
           <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
             <div>
-              <h2 className="text-2xl font-bold text-brand">Product Showcase</h2>
-              <p className="text-muted-content text-sm">
+              <Typography.H5>Product Showcase</Typography.H5>
+              <Typography.P variant="secondary" className="text-sm">
                 Responsive — 1 on mobile, 2 on sm, 3 on lg
-              </p>
+              </Typography.P>
             </div>
           </header>
 

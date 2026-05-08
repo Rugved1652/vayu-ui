@@ -4,7 +4,7 @@ import { FileUpload, Divider, Typography } from 'vayu-ui';
 
 export default function FileUploadDemo() {
   return (
-    <div className="not-prose w-full max-w-xl flex flex-col gap-8">
+    <div className="not-prose w-full max-w-xl m-auto flex flex-col gap-8">
       {/* Basic Upload */}
       <div className="flex flex-col gap-4">
         <Typography.H6 variant="primary">Basic File Upload</Typography.H6>

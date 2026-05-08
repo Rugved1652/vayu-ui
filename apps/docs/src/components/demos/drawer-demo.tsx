@@ -5,9 +5,9 @@ import { Drawer, Button, Typography, Divider, TextInput } from 'vayu-ui';
 export default function DrawerDemo() {
   return (
     <div className="w-full not-prose">
-      <Typography.H2 id="drawer-demo-label" variant="primary" className="mb-4">
+      <Typography.H5 id="drawer-demo-label" variant="primary" className="mb-4">
         Drawer Example
-      </Typography.H2>
+      </Typography.H5>
 
       <div className="flex flex-wrap gap-4">
         {/* Right Drawer (Default) */}

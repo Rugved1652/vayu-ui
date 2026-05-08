@@ -9,9 +9,9 @@ export const animationEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A collection of pure CSS entrance animations with WCAG 2.2 accessibility support, including fade, slide, bounce, flip, rotate, zoom, roll, jack-in-the-box, and hinge effects.',
+    'A collection of pure CSS entrance animations with WCAG 2.2 accessibility support, including fade, slide, bounce, flip, rotate, zoom, roll, jack-in-the-box, hinge effects, and viewport-triggered animations via Animation.InView.',
   longDescription:
-    'The Animation component uses the compound component pattern (Animation.Fade, Animation.Slide, Animation.Bounce, Animation.Flip, Animation.Rotate, Animation.Zoom, Animation.Roll, Animation.JackInTheBox, Animation.Hinge) to provide 9 entrance animation variants. All animations are CSS-only (no JavaScript runtime), making them fully server-side compatible. Each variant supports configurable duration, delay, iteration count, and fill mode. Accessibility is handled via Tailwind motion-reduce: variant and a global CSS @media rule for prefers-reduced-motion, ensuring content remains visible when animations are suppressed.',
+    'The Animation component uses the compound component pattern (Animation.Fade, Animation.Slide, Animation.Bounce, Animation.Flip, Animation.Rotate, Animation.Zoom, Animation.Roll, Animation.JackInTheBox, Animation.Hinge, Animation.InView) to provide 9 entrance animation variants plus a viewport-triggered variant. All base animations are CSS-only (no JavaScript runtime), making them fully server-side compatible. Animation.InView is a client component that uses IntersectionObserver to trigger animations when elements scroll into view. Each variant supports configurable duration, delay, iteration count, and fill mode. Accessibility is handled via Tailwind motion-reduce: variant and a global CSS @media rule for prefers-reduced-motion, ensuring content remains visible when animations are suppressed.',
   tags: [
     'animation',
     'entrance',
@@ -23,6 +23,10 @@ export const animationEntry: ComponentRegistryEntry = {
     'zoom',
     'roll',
     'hinge',
+    'inview',
+    'viewport',
+    'scroll',
+    'intersection-observer',
     'motion',
     'transition',
     'css-animation',
@@ -36,12 +40,14 @@ export const animationEntry: ComponentRegistryEntry = {
     'Building loading state reveals where skeleton placeholders transition into real content',
     'Adding playful micro-interactions for onboarding flows or empty states',
     'Creating attention-drawing effects for notifications, badges, or call-to-action elements',
+    'Triggering scroll-based reveal animations when sections enter the viewport using Animation.InView',
   ],
 
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Animation',
   files: [
     { name: 'Animation.tsx', description: 'Root component with compound composition wrapping all animation variants' },
+    { name: 'AnimateInView.tsx', description: 'Viewport-triggered animation variant using IntersectionObserver (client component)' },
     { name: 'FadeAnimation.tsx', description: 'Fade-in opacity transition variant' },
     { name: 'SlideAnimation.tsx', description: 'Directional slide-in variant (up, down, left, right)' },
     { name: 'BounceAnimation.tsx', description: 'Scale-based bounce entrance variant (small, medium, large)' },
@@ -167,6 +173,64 @@ export const animationEntry: ComponentRegistryEntry = {
       fileName: 'HingeAnimation.tsx',
       description: 'Element swings from the top and falls off the page; defaults fillMode to forwards so the element stays in final position',
       props: [],
+    },
+    {
+      name: 'InView',
+      fileName: 'AnimateInView.tsx',
+      description: 'Viewport-triggered animation that plays when the element scrolls into view using IntersectionObserver. Supports all animation variants via the variant prop. Client component — children can still be server-rendered.',
+      props: [
+        {
+          name: 'variant',
+          type: "AnimationVariant",
+          required: true,
+          description: 'Animation type to play when the element enters the viewport',
+          options: ['fade', 'slide', 'bounce', 'flip', 'rotate', 'zoom', 'roll', 'jackInTheBox', 'hinge'],
+        },
+        {
+          name: 'direction',
+          type: "AnimationDirection",
+          required: false,
+          defaultValue: "'left'",
+          description: 'Direction for slide, flip, and roll variants',
+          options: ['up', 'down', 'left', 'right'],
+        },
+        {
+          name: 'scale',
+          type: "AnimationScale",
+          required: false,
+          defaultValue: "'medium'",
+          description: 'Scale intensity for bounce and zoom variants',
+          options: ['small', 'medium', 'large'],
+        },
+        {
+          name: 'degrees',
+          type: 'number',
+          required: false,
+          defaultValue: '-200',
+          description: 'Starting rotation angle in degrees for the rotate variant',
+        },
+        {
+          name: 'triggerOnce',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'true',
+          description: 'Whether to animate only the first time the element enters the viewport',
+        },
+        {
+          name: 'threshold',
+          type: 'number',
+          required: false,
+          defaultValue: '0.1',
+          description: 'Intersection ratio (0–1) needed to trigger the animation',
+        },
+        {
+          name: 'rootMargin',
+          type: 'string',
+          required: false,
+          defaultValue: "'0px'",
+          description: 'Margin around the root element for IntersectionObserver',
+        },
+      ],
     },
   ],
 
@@ -462,6 +526,34 @@ export default function StaggeredDemo() {
 }`,
       tags: ['staggered', 'delay', 'cards', 'reveal', 'entrance'],
     },
+    {
+      title: 'Viewport-Triggered Scroll Animations',
+      description: 'Animation.InView triggers animations when elements scroll into the viewport, using IntersectionObserver.',
+      code: `import { Animation } from 'vayu-ui';
+
+export default function InViewDemo() {
+  return (
+    <div className="flex flex-col gap-8">
+      <Animation.InView variant="fade" duration="slow">
+        <div className="bg-indigo-500 rounded-md p-4 text-white">Fades in when scrolled into view</div>
+      </Animation.InView>
+
+      <Animation.InView variant="slide" direction="up">
+        <div className="bg-blue-500 rounded-md p-4 text-white">Slides up when scrolled into view</div>
+      </Animation.InView>
+
+      <Animation.InView variant="bounce" scale="large" triggerOnce={false}>
+        <div className="bg-yellow-500 rounded-md p-4 text-black">Re-triggers every time it enters the viewport</div>
+      </Animation.InView>
+
+      <Animation.InView variant="zoom" scale="medium" threshold={0.3}>
+        <div className="bg-green-500 rounded-full p-4 text-white">Zooms in when 30% visible</div>
+      </Animation.InView>
+    </div>
+  );
+}`,
+      tags: ['inview', 'viewport', 'scroll', 'intersection-observer', 'trigger'],
+    },
   ],
 
   // ── Anti-patterns ─────────────────────────────────────
@@ -495,6 +587,18 @@ export default function StaggeredDemo() {
       bad: '<Animation.Fade className="!opacity-0">...</Animation.Fade>',
       good: '<Animation.Fade className="mt-4">...</Animation.Fade>',
       reason: 'Overriding opacity or animation properties via className breaks the reduced-motion fallback. The motion-reduce:opacity-100 class ensures content stays visible for users who prefer reduced motion. Avoid overriding animation-related CSS properties.',
+    },
+    {
+      title: 'Using Animation.InView for above-the-fold content',
+      bad: '<Animation.InView variant="fade"><h1>Welcome to our site</h1></Animation.InView>',
+      good: '<Animation.Fade><h1>Welcome to our site</h1></Animation.Fade>',
+      reason: 'Animation.InView starts with opacity: 0 and relies on IntersectionObserver to trigger. For above-the-fold content that is already visible on page load, use the standard Animation variants instead to avoid a flash of invisible content.',
+    },
+    {
+      title: 'Nesting Animation.InView inside another Animation component',
+      bad: '<Animation.Fade><Animation.InView variant="slide" direction="up">...</Animation.InView></Animation.Fade>',
+      good: '<Animation.InView variant="slide" direction="up">...</Animation.InView>',
+      reason: 'Animation.InView already handles the animation — nesting it inside another Animation component creates conflicting opacity and transform transitions. Use Animation.InView alone with the desired variant prop.',
     },
   ],
 };

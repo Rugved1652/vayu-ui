@@ -111,6 +111,7 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
   ) => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const hlsRef = useRef<any>(null);
+    const seekTargetRef = useRef<number | null>(null);
     const playerId = useId();
 
     const [playlist, setPlaylistState] = useState<Track[]>([]);
@@ -163,12 +164,15 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
     }, [isPlaying, play, pause]);
 
     const seek = useCallback((time: number) => {
-      if (audioRef.current) {
-        audioRef.current.currentTime = Math.max(
-          0,
-          Math.min(time, audioRef.current.duration || 0),
-        );
-      }
+      const audio = audioRef.current;
+      if (!audio) return;
+      const d = audio.duration;
+      const clampedTime = isFinite(d)
+        ? Math.max(0, Math.min(time, d))
+        : Math.max(0, time);
+      seekTargetRef.current = clampedTime;
+      setCurrentTime(clampedTime);
+      audio.currentTime = clampedTime;
     }, []);
 
     const setVolume = useCallback(
@@ -245,7 +249,18 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
       let rafId: number;
       const tick = () => {
         if (audioRef.current) {
-          setCurrentTime(audioRef.current.currentTime);
+          const target = seekTargetRef.current;
+          if (target !== null) {
+            const actual = audioRef.current.currentTime;
+            if (Math.abs(actual - target) < 0.5) {
+              seekTargetRef.current = null;
+              setCurrentTime(actual);
+            } else {
+              setCurrentTime(target);
+            }
+          } else {
+            setCurrentTime(audioRef.current.currentTime);
+          }
           if (audioRef.current.buffered.length > 0) {
             setBuffered(
               audioRef.current.buffered.end(
@@ -280,8 +295,20 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
         setIsPlaying(false);
         onPause?.();
       };
-      const handleTime = () => setCurrentTime(audio.currentTime);
-      const handleDuration = () => setDuration(audio.duration || 0);
+      const handleTime = () => {
+        const target = seekTargetRef.current;
+        if (target !== null) {
+          if (Math.abs(audio.currentTime - target) < 0.5) {
+            seekTargetRef.current = null;
+          }
+          return;
+        }
+        setCurrentTime(audio.currentTime);
+      };
+      const handleDuration = () => {
+        const d = audio.duration;
+        setDuration(isFinite(d) ? d : 0);
+      };
       const handleProgress = () => {
         if (audio.buffered.length > 0) {
           setBuffered(audio.buffered.end(audio.buffered.length - 1));
@@ -346,6 +373,11 @@ export const AudioPlayer = forwardRef<HTMLDivElement, RootProps>(
               hlsRef.current = hls;
               hls.loadSource(src);
               hls.attachMedia(audio);
+              hls.on(HlsModule.Events.MANIFEST_PARSED, () => {
+                const d = audio.duration;
+                setDuration(isFinite(d) ? d : 0);
+                setIsLoading(false);
+              });
               hls.on(HlsModule.Events.ERROR, (_evt, data) => {
                 if (data.fatal) {
                   switch (data.type) {
