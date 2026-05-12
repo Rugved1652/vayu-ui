@@ -39,7 +39,7 @@ export function Hero() {
             </Animation.Slide>
 
             <h1 className="mt-7 max-w-4xl font-primary text-5xl font-bold leading-[1.04] tracking-normal text-canvas-content sm:text-6xl lg:text-7xl">
-              Vayu UI documentation for <span className="text-brand">AI-native React apps</span>
+              AI Native UI Toolkit <span className="text-brand">for React Apps</span>
             </h1>
 
             <p className="mt-6 max-w-2xl font-secondary text-lg leading-8 text-muted-content sm:text-xl">

@@ -132,55 +132,6 @@ function FormDemo() {
 
 export function ComponentShowcase() {
   return (
-    <section className="bg-surface px-6 py-24 sm:py-32 lg:px-8">
-      <div className="mx-auto max-w-6xl">
-        <div className="text-center mb-16">
-          <h2 className="font-primary text-3xl sm:text-4xl font-bold text-canvas-content">
-            Built with Vayu UI
-          </h2>
-          <p className="mt-4 text-lg font-secondary text-surface-content max-w-2xl mx-auto">
-            Every component on this page is a real, interactive Vayu UI component. Not a screenshot, not a mockup.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Animation.Fade delay="none">
-            <Card>
-              <CardHeader title="Buttons" subtitle="Five variants, loading states, three sizes" />
-              <CardContent>
-                <ButtonsDemo />
-              </CardContent>
-            </Card>
-          </Animation.Fade>
-
-          <Animation.Fade delay="short">
-            <Card>
-              <CardHeader title="Badges & Switch" subtitle="Status indicators and toggles" />
-              <CardContent>
-                <BadgesAndSwitchDemo />
-              </CardContent>
-            </Card>
-          </Animation.Fade>
-
-          <Animation.Fade delay="medium">
-            <Card>
-              <CardHeader title="Tabs" subtitle="Accessible tabbed interfaces" />
-              <CardContent>
-                <TabsDemo />
-              </CardContent>
-            </Card>
-          </Animation.Fade>
-
-          <Animation.Fade delay="long">
-            <Card>
-              <CardHeader title="Form Elements" subtitle="Inputs, tooltips, and validation" />
-              <CardContent>
-                <FormDemo />
-              </CardContent>
-            </Card>
-          </Animation.Fade>
-        </div>
-      </div>
-    </section>
+    <></>
   );
 }

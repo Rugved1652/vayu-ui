@@ -81,12 +81,9 @@ function applyTheme(themeKey: string | null) {
   if (themeKey && themes.some((t) => t.key === themeKey)) {
     root.setAttribute('data-theme', themeKey);
     localStorage.setItem(STORAGE_KEY, themeKey);
-    console.log('Theme applied:', themeKey, 'Attribute:', root.getAttribute('data-theme'));
-    console.log('Brand color:', getComputedStyle(root).getPropertyValue('--brand'));
   } else {
     root.removeAttribute('data-theme');
     localStorage.removeItem(STORAGE_KEY);
-    console.log('Theme reset');
   }
 }
 
@@ -95,7 +92,11 @@ function detectDarkMode(): boolean {
   return document.documentElement.classList.contains('dark');
 }
 
-export function ColorThemePanel() {
+interface ColorThemePanelProps {
+  variant?: 'navbar' | 'sidebar';
+}
+
+export function ColorThemePanel({ variant = 'navbar' }: ColorThemePanelProps) {
   const [activeTheme, setActiveTheme] = useState<string | null>(getSavedTheme);
   const [isDark, setIsDark] = useState(false);
   const [open, setOpen] = useState(false);
@@ -127,14 +128,33 @@ export function ColorThemePanel() {
     applyTheme(null);
   }, []);
 
+  const activeThemeName = activeTheme
+    ? themes.find((t) => t.key === activeTheme)?.name ?? 'Default'
+    : 'Default';
+
+  const isNavbar = variant === 'navbar';
+
   return (
     <Modal open={open} onOpenChange={setOpen} size="sm">
       <Modal.Trigger
         asChild
-        className="inline-flex items-center justify-center rounded-control w-9 h-9 p-0 bg-transparent hover:bg-muted transition-colors"
+        className={
+          isNavbar
+            ? 'inline-flex items-center justify-center rounded-control w-8 h-8 p-0 bg-transparent hover:bg-muted transition-colors'
+            : 'inline-flex items-center gap-2 rounded-control px-3 py-2 border border-border bg-transparent hover:bg-muted transition-colors w-full'
+        }
       >
-        <button type="button" aria-label="Open theme settings">
-          <Palette className="h-4 w-4 text-surface-content" />
+        <button
+          type="button"
+          aria-label={`Open theme settings (current: ${activeThemeName})`}
+          title={`Theme: ${activeThemeName}`}
+        >
+          <Palette className="h-4 w-4 text-surface-content flex-shrink-0" />
+          {!isNavbar && (
+            <span className="text-sm text-surface-content font-medium truncate">
+              {activeThemeName}
+            </span>
+          )}
         </button>
       </Modal.Trigger>
 

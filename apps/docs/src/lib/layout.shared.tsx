@@ -12,7 +12,11 @@ export function baseOptions(): BaseLayoutProps {
         </>
       ),
       transparentMode: 'top',
-      children: <ColorThemePanel />,
+    },
+    searchToggle: {
+      components: {
+        lg: <ColorThemePanel variant="navbar" />,
+      },
     },
     githubUrl: 'https://github.com/Rugved1652/vayu-ui',
   };
