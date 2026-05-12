@@ -7,10 +7,18 @@ import React, { forwardRef } from 'react';
 import { cn } from '../../utils';
 import { useColorPicker } from './hooks';
 import type { ColorPickerTriggerProps } from './types';
+import {
+  inputBorderStyles,
+  inputHoverBorder,
+  inputDisabledStyles,
+  inputLoadingSpinnerStyles,
+  inputLoadingAria,
+} from '../../utils/input-styles';
+import { Loader2 } from 'lucide-react';
 
 export const ColorPickerTrigger = forwardRef<HTMLButtonElement, ColorPickerTriggerProps>(
   ({ size = 'md', className, ...props }, ref) => {
-    const { color, open, disabled, setOpen, triggerRef, dropdownId, labelId } = useColorPicker();
+    const { color, open, disabled, loading, validationState, setOpen, triggerRef, dropdownId, labelId } = useColorPicker();
 
     const sizeClasses = {
       sm: 'w-8 h-8',
@@ -54,20 +62,29 @@ export const ColorPickerTrigger = forwardRef<HTMLButtonElement, ColorPickerTrigg
         aria-controls={dropdownId}
         aria-labelledby={labelId}
         aria-haspopup="dialog"
+        aria-busy={loading}
         className={cn(
           sizeClasses[size],
-          'rounded-control border-2 transition-all duration-200',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
+          'rounded-control border-2 transition-all duration-200 flex items-center justify-center',
+          'focus-visible:outline-none',
+          validationState !== 'default'
+            ? inputBorderStyles[validationState]
+            : open
+              ? 'border-brand'
+              : cn(inputBorderStyles['default'], inputHoverBorder),
           'shadow-control hover:shadow-elevated',
-          disabled
-            ? 'opacity-50 cursor-not-allowed border-border'
-            : 'border-field hover:border-focus cursor-pointer',
+          disabled && inputDisabledStyles,
+          !disabled && 'cursor-pointer',
           className,
         )}
         style={{ backgroundColor: color }}
         {...props}
       >
-        <span className="sr-only">Select color. Current color: {color}</span>
+        {loading ? (
+          <Loader2 className={inputLoadingSpinnerStyles} {...inputLoadingAria} />
+        ) : (
+          <span className="sr-only">Select color. Current color: {color}</span>
+        )}
       </button>
     );
   },

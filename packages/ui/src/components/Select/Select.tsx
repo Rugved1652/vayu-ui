@@ -18,6 +18,12 @@ import { clsx } from 'clsx';
 import { useLockBodyScroll } from '../../hooks/useLockBodyScroll';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { useKeyPress } from '../../hooks/useKeyPress';
+import {
+  inputLabelStyles,
+  inputMessageBase,
+  inputErrorMessageStyles,
+  normalizeValidationState,
+} from '../../utils/input-styles';
 import type {
   SelectContextValue,
   SelectRootProps,
@@ -52,6 +58,8 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
   onValueChange,
   label,
   error,
+  validationState: validationStateProp,
+  size = 'md',
   className,
   multiple = false,
   onSearch,
@@ -64,6 +72,9 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
   createText = 'Create option',
   validateCreate,
 }) => {
+  const validationState = normalizeValidationState(
+    validationStateProp ?? (error ? 'error' : 'default'),
+  );
   const getDefault = () => {
     if (multiple) return defaultValue ?? [];
     return defaultValue;
@@ -322,6 +333,8 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
         setOpen,
         label,
         error,
+        validationState,
+        size,
         triggerRef,
         contentRef,
         inputRef,
@@ -364,13 +377,13 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
     >
       <div ref={containerRef} className={clsx('relative space-y-1.5', className)}>
         {label && (
-          <label htmlFor={id} className="block text-xs font-medium text-muted-content">
+          <label htmlFor={id} className={inputLabelStyles}>
             {label}
           </label>
         )}
         {children}
-        {error && (
-          <p className="mt-1.5 text-sm text-destructive flex items-center gap-1.5">
+        {(validationState === 'error' && error) && (
+          <p className={clsx(inputMessageBase, inputErrorMessageStyles)}>
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </p>

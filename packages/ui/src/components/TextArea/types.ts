@@ -2,9 +2,10 @@
 // Types
 
 import { TextareaHTMLAttributes } from 'react';
+import type { InputSize, ValidationState } from '../../utils/input-styles';
 
 export type TextAreaResize = 'none' | 'vertical' | 'horizontal' | 'both';
-export type TextAreaSize = 'sm' | 'md' | 'lg';
+export type { InputSize as TextAreaSize };
 
 export interface TextAreaContextValue {
   isFocused: boolean;
@@ -12,9 +13,10 @@ export interface TextAreaContextValue {
   charCount: number;
   setCharCount: (count: number) => void;
   maxLength?: number;
-  error?: boolean;
-  size: TextAreaSize;
+  validationState: ValidationState;
+  size: InputSize;
   disabled?: boolean;
+  loading?: boolean;
   inputId: string;
   supportTextId: string;
   errorTextId: string;
@@ -26,10 +28,13 @@ export interface TextAreaContextValue {
 
 export interface TextAreaRootProps {
   children: React.ReactNode;
-  size?: TextAreaSize;
+  size?: InputSize;
+  /** @deprecated Use `validationState` instead. */
   error?: boolean;
+  validationState?: ValidationState;
   maxLength?: number;
   disabled?: boolean;
+  loading?: boolean;
   className?: string;
 }
 

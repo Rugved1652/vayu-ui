@@ -14,6 +14,12 @@ import React, {
 } from 'react';
 import { clsx } from 'clsx';
 import { AlertCircle } from 'lucide-react';
+import {
+  inputLabelStyles,
+  inputMessageBase,
+  inputErrorMessageStyles,
+  normalizeValidationState,
+} from '../../utils/input-styles';
 import type {
   TimeValue,
   TimeRange,
@@ -56,7 +62,10 @@ const TimepickerRoot: React.FC<TimepickerRootProps> = ({
   mode = 'single',
   label,
   error,
+  validationState: validationStateProp,
+  size = 'md',
   disabled = false,
+  loading = false,
   className,
   minuteStep = 5,
   placeholder,
@@ -67,6 +76,7 @@ const TimepickerRoot: React.FC<TimepickerRootProps> = ({
   minTime,
   maxTime,
 }) => {
+  const validationState = normalizeValidationState(validationStateProp ?? (error ? 'error' : 'default'));
   const [internalValue, setInternalValue] = useState<TimeValue | TimeRange | null>(
     defaultValue ?? null,
   );
@@ -153,7 +163,10 @@ const TimepickerRoot: React.FC<TimepickerRootProps> = ({
         setRangePhase,
         label,
         error,
+        validationState,
+        size,
         disabled,
+        loading,
         triggerRef,
         contentRef,
         id,
@@ -173,13 +186,13 @@ const TimepickerRoot: React.FC<TimepickerRootProps> = ({
     >
       <div ref={containerRef} className={clsx('relative space-y-1.5', className)}>
         {label && (
-          <label htmlFor={id} className="block text-xs font-medium text-muted-content">
+          <label htmlFor={id} className={inputLabelStyles}>
             {label}
           </label>
         )}
         {children}
-        {error && (
-          <p className="mt-1.5 text-sm text-destructive flex items-center gap-1.5">
+        {(validationState === 'error' && error) && (
+          <p className={clsx(inputMessageBase, inputErrorMessageStyles)}>
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </p>

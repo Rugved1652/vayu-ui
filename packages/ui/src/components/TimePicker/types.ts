@@ -2,6 +2,9 @@
 // Types
 
 import type { ReactNode, RefObject } from 'react';
+import type { InputSize, ValidationState } from '../../utils/input-styles';
+
+export type { InputSize, ValidationState };
 
 export interface TimeValue {
   hour: number;
@@ -33,8 +36,12 @@ export interface TimepickerContextValue extends DisabledTimeConfig {
   rangePhase: 'start' | 'end';
   setRangePhase: (phase: 'start' | 'end') => void;
   label?: string;
+  /** @deprecated Use `validationState` instead. */
   error?: string;
+  validationState: ValidationState;
+  size: InputSize;
   disabled: boolean;
+  loading: boolean;
   triggerRef: RefObject<HTMLDivElement | null>;
   contentRef: RefObject<HTMLDivElement | null>;
   id: string;
@@ -56,8 +63,12 @@ export interface TimepickerRootProps extends DisabledTimeConfig {
   format?: TimeFormat;
   mode?: TimepickerMode;
   label?: string;
+  /** @deprecated Use `validationState` instead. */
   error?: string;
+  validationState?: ValidationState;
+  size?: InputSize;
   disabled?: boolean;
+  loading?: boolean;
   className?: string;
   minuteStep?: number;
   placeholder?: string;
@@ -67,6 +78,7 @@ export interface TimepickerRootProps extends DisabledTimeConfig {
 
 export interface TimepickerTriggerProps {
   className?: string;
+  size?: InputSize;
 }
 
 export interface TimepickerContentProps {

@@ -4,10 +4,20 @@
 'use client';
 
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
-import { Clock, X, ChevronDown } from 'lucide-react';
+import { Clock, X, ChevronDown, Loader2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useTimepicker } from './TimePicker';
 import type { TimeValue, TimeRange } from './types';
+import {
+  inputBaseStyles,
+  inputGapStyles,
+  inputSizeStyles,
+  inputBorderStyles,
+  inputHoverBorder,
+  inputDisabledStyles,
+  inputLoadingSpinnerStyles,
+  inputLoadingAria,
+} from '../../utils/input-styles';
 import {
   clampTimeSegment,
   convertTo12Hour,
@@ -16,14 +26,17 @@ import {
   formatTimeValue,
 } from './utils';
 
-const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string }>(
-  ({ className }, ref) => {
+const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string; size?: import('./types').InputSize }>(
+  ({ className, size: sizeProp }, ref) => {
     const {
       open,
       setOpen,
       value,
       onValueChange,
       error,
+      validationState,
+      size: ctxSize,
+      loading,
       disabled,
       triggerRef,
       id,
@@ -39,6 +52,8 @@ const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string }>(
       minTime,
       maxTime,
     } = useTimepicker();
+
+    const size = sizeProp ?? ctxSize;
 
     const localTriggerRef = useRef<HTMLDivElement | null>(null);
     const hourInputRef = useRef<HTMLInputElement | null>(null);
@@ -399,14 +414,16 @@ const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string }>(
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         className={clsx(
-          'w-full flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-control bg-surface border transition-all outline-none cursor-pointer',
-          error
-            ? 'border-destructive focus-within:ring-2 focus-within:ring-destructive'
-            : 'border-field focus-within:border-focus focus-within:ring-2 focus-within:ring-focus',
-          open && !error && 'border-focus ring-2 ring-focus',
-          'text-surface-content placeholder:text-muted-content',
-          'focus-within:ring-offset-2 focus-within:ring-offset-canvas',
-          disabled && 'opacity-50 cursor-not-allowed',
+          inputBaseStyles,
+          inputGapStyles,
+          inputSizeStyles[size],
+          'justify-between cursor-pointer outline-none',
+          validationState !== 'default'
+            ? inputBorderStyles[validationState]
+            : open || hasValue
+              ? 'border-brand'
+              : clsx(inputBorderStyles['default'], inputHoverBorder),
+          inputDisabledStyles,
           className,
         )}
       >
@@ -527,12 +544,16 @@ const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string }>(
             <X className="w-4 h-4 text-muted-content" />
           </button>
         )}
-        <ChevronDown
-          className={clsx(
-            'w-4 h-4 text-muted-content transition-transform shrink-0',
-            open && 'rotate-180',
-          )}
-        />
+        {loading ? (
+          <Loader2 className={clsx(inputLoadingSpinnerStyles)} {...inputLoadingAria} />
+        ) : (
+          <ChevronDown
+            className={clsx(
+              'w-4 h-4 text-muted-content transition-transform shrink-0',
+              open && 'rotate-180',
+            )}
+          />
+        )}
       </div>
     );
   },

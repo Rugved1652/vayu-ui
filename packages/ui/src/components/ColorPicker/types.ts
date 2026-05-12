@@ -5,7 +5,8 @@ import { HTMLAttributes, ReactNode } from 'react';
 
 // Core types
 export type ColorFormat = 'hex' | 'rgb' | 'hsl';
-export type ValidationState = 'default' | 'error' | 'warning' | 'success';
+export type ValidationState = import('../../utils/input-styles').ValidationState;
+export type InputSize = import('../../utils/input-styles').InputSize;
 
 export interface RGB {
   r: number;
@@ -24,6 +25,7 @@ export interface ColorPickerContextValue {
   format: ColorFormat;
   open: boolean;
   disabled: boolean;
+  loading: boolean;
   validationState: ValidationState;
   presets: string[];
   inputId: string;
@@ -48,6 +50,7 @@ export interface ColorPickerRootProps extends Omit<HTMLAttributes<HTMLDivElement
   format?: ColorFormat;
   presets?: string[];
   disabled?: boolean;
+  loading?: boolean;
   validationState?: ValidationState;
   defaultOpen?: boolean;
   open?: boolean;

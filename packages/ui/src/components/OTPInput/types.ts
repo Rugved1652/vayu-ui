@@ -2,17 +2,20 @@
 // Types
 
 import type { HTMLAttributes, InputHTMLAttributes } from 'react';
+import type { InputSize, ValidationState } from '../../utils/input-styles';
 
 export interface OTPInputContextValue {
   value: string;
   isFocused: boolean;
   maxLength: number;
   disabled: boolean;
+  loading: boolean;
   id: string;
-  hasError: boolean;
+  validationState: ValidationState;
+  size: InputSize;
 }
 
-export interface OTPInputRootProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+export interface OTPInputRootProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
   value?: string;
   onChange?: (value: string) => void;
   maxLength?: number;
@@ -23,8 +26,11 @@ export interface OTPInputRootProps extends Omit<InputHTMLAttributes<HTMLInputEle
   label?: string;
   /** Render prop for slots and separators */
   children?: React.ReactNode;
-  /** Whether the input has an error */
+  /** @deprecated Use `validationState` instead. */
   hasError?: boolean;
+  validationState?: ValidationState;
+  size?: InputSize;
+  loading?: boolean;
   /** ID of the element that describes the error message */
   errorMessageId?: string;
 }

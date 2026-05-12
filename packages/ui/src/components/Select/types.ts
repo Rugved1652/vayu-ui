@@ -2,6 +2,7 @@
 // Types
 
 import type { ReactNode, MutableRefObject } from 'react';
+import type { InputSize, ValidationState } from '../../utils/input-styles';
 
 // ============================================================================
 // Value Types
@@ -51,7 +52,10 @@ export interface SelectContextValue extends AsyncSearchProps, CreateableProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   label?: string;
+  /** @deprecated Use `validationState` instead. */
   error?: string;
+  validationState: ValidationState;
+  size: InputSize;
   triggerRef: React.RefObject<HTMLDivElement | null>;
   contentRef: React.RefObject<HTMLDivElement | null>;
   inputRef: React.RefObject<HTMLInputElement | null>;
@@ -63,7 +67,7 @@ export interface SelectContextValue extends AsyncSearchProps, CreateableProps {
   setSearch: (search: string) => void;
   registerOption: (option: OptionData) => void;
   unregisterOption: (value: SingleValue) => void;
-  optionsMap: React.MutableRefObject<Map<SingleValue, OptionData>>;
+  optionsMap: React.RefObject<Map<SingleValue, OptionData>>;
   removeValue: (value: SingleValue) => void;
   asyncOptions: OptionData[];
   setAsyncOptions: (options: OptionData[]) => void;
@@ -93,7 +97,10 @@ export interface SelectRootProps extends AsyncSearchProps, CreateableProps {
   defaultValue?: SelectValue;
   onValueChange?: (value: SelectValue) => void;
   label?: string;
+  /** @deprecated Use `validationState` instead. */
   error?: string;
+  validationState?: ValidationState;
+  size?: InputSize;
   className?: string;
   multiple?: boolean;
 }
@@ -102,6 +109,7 @@ export interface SelectTriggerProps {
   placeholder?: string;
   className?: string;
   showSearchIcon?: boolean;
+  size?: InputSize;
 }
 
 export interface SelectContentProps {

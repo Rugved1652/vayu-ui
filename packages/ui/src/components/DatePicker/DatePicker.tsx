@@ -15,6 +15,7 @@ import React, {
 import moment from 'moment';
 import { cn } from '../../utils';
 import { isSameDay } from './utils';
+import { normalizeValidationState } from '../../utils/input-styles';
 import type {
   DatePickerMode,
   DatePickerValue,
@@ -69,12 +70,16 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
       disabledWeekdays = [],
       disabledDates = [],
       placeholder = 'Select date',
+      validationState: validationStateProp,
+      size = 'md',
+      loading = false,
       className,
       ...props
     },
     ref,
   ) => {
     const isControlled = value !== undefined;
+    const validationState = normalizeValidationState(validationStateProp);
 
     const parseDefaultValue = (): {
       date: Date | null;
@@ -255,6 +260,9 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
       triggerRef,
       calendarRef,
       handleClear,
+      validationState,
+      size,
+      loading,
     };
 
     return (

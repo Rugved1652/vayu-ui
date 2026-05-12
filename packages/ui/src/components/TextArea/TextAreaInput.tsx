@@ -7,21 +7,13 @@ import React, { forwardRef } from 'react';
 import { cn } from '../../utils';
 import { useTextAreaContext } from './TextArea';
 import type { TextAreaInputProps } from './types';
-
-const sizeConfig = {
-  sm: {
-    wrapper: 'px-2.5 py-1.5',
-    text: 'text-sm',
-  },
-  md: {
-    wrapper: 'px-3 py-2.5',
-    text: 'text-base',
-  },
-  lg: {
-    wrapper: 'px-4 py-3',
-    text: 'text-lg',
-  },
-};
+import {
+  inputBaseStyles,
+  inputSizeStyles,
+  inputTextStyles,
+  inputBorderStyles,
+  inputDisabledMutedStyles,
+} from '../../utils/input-styles';
 
 const getResizeClass = (resize: TextAreaInputProps['resize']) => {
   switch (resize) {
@@ -56,7 +48,7 @@ export const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>
       setIsFocused,
       setCharCount,
       maxLength,
-      error,
+      validationState,
       size,
       disabled,
       inputId,
@@ -72,26 +64,30 @@ export const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>
       }
     };
 
-    const config = sizeConfig[size];
+    const isFilled = value !== undefined && value !== '';
+    const showBrand = isFocused || isFilled;
 
     const combinedClasses = cn(
-      'w-full bg-surface border transition-all duration-200 outline-none',
-      'font-secondary text-surface-content placeholder:text-muted-content',
-      config.wrapper,
-      config.text,
+      inputBaseStyles,
+      inputSizeStyles[size],
+      inputTextStyles,
       getResizeClass(resize),
       'rounded-control',
-      error
-        ? 'border-destructive ring-2 ring-destructive/20'
-        : isFocused
-          ? 'border-focus ring-2 ring-focus/20'
-          : 'border-field',
-      disabled && 'opacity-60 cursor-not-allowed bg-muted',
+      'outline-none',
+      validationState === 'default'
+        ? [
+            showBrand
+              ? 'border-brand'
+              : 'border-field hover:border-brand',
+          ]
+        : inputBorderStyles[validationState],
+      disabled && inputDisabledMutedStyles,
       className,
     );
 
+    const hasError = validationState === 'error';
     const describedBy =
-      [hasSupportText && supportTextId, error && errorTextId, ariaDescribedBy]
+      [hasSupportText && supportTextId, hasError && errorTextId, ariaDescribedBy]
         .filter(Boolean)
         .join(' ') || undefined;
 
@@ -115,9 +111,9 @@ export const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>
         }}
         maxLength={maxLength}
         disabled={disabled}
-        aria-invalid={error}
+        aria-invalid={hasError}
         aria-describedby={describedBy}
-        aria-errormessage={error ? errorTextId : undefined}
+        aria-errormessage={hasError ? errorTextId : undefined}
         aria-required={isRequired}
         aria-disabled={disabled}
         {...restProps}

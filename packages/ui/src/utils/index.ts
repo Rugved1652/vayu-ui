@@ -7,8 +7,10 @@ import { twMerge } from 'tailwind-merge';
  * Handles conditional classes and removes conflicting Tailwind utilities
  */
 export function cn(...inputs: ClassValue[]): string {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(...inputs));
 }
+
+export * from './input-styles';
 
 export function useMergeRefs<T = any>(
   ...refs: Array<React.MutableRefObject<T> | React.LegacyRef<T> | undefined>

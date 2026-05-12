@@ -2,6 +2,7 @@
 // Types
 
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, RefObject } from 'react';
+import type { InputSize, ValidationState } from '../../utils/input-styles';
 
 export type DatePickerMode = 'single' | 'range';
 
@@ -44,6 +45,9 @@ interface DatePickerContextValue {
   triggerRef: RefObject<HTMLButtonElement | null>;
   calendarRef: RefObject<HTMLDivElement | null>;
   handleClear: () => void;
+  validationState: ValidationState;
+  size: InputSize;
+  loading: boolean;
 }
 
 // Props
@@ -61,10 +65,14 @@ export interface DatePickerRootProps extends Omit<
   disabledWeekdays?: number[];
   disabledDates?: Date[];
   placeholder?: string;
+  validationState?: ValidationState;
+  size?: InputSize;
+  loading?: boolean;
 }
 
 export interface DatePickerTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   placeholder?: string;
+  size?: InputSize;
 }
 
 export interface DatePickerCalendarProps extends HTMLAttributes<HTMLDivElement> {}

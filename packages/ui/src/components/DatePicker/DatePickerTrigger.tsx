@@ -9,9 +9,20 @@ import { useDatePicker, useMergeRefs } from './DatePicker';
 import { formatDate } from './utils';
 import { CalendarIcon } from './DatePickerIcons';
 import type { DatePickerTriggerProps } from './types';
+import {
+  inputBaseStyles,
+  inputGapStyles,
+  inputSizeStyles,
+  inputBorderStyles,
+  inputHoverBorder,
+  inputDisabledStyles,
+  inputLoadingSpinnerStyles,
+  inputLoadingAria,
+} from '../../utils/input-styles';
+import { Loader2 } from 'lucide-react';
 
 export const DatePickerTrigger = forwardRef<HTMLButtonElement, DatePickerTriggerProps>(
-  ({ placeholder = 'Select date', className, disabled, ...props }, ref) => {
+  ({ placeholder = 'Select date', className, disabled, size: sizeProp, ...props }, ref) => {
     const {
       selectedDate,
       selectedRange,
@@ -19,9 +30,13 @@ export const DatePickerTrigger = forwardRef<HTMLButtonElement, DatePickerTrigger
       open,
       setOpen,
       disabled: contextDisabled,
+      validationState,
+      size: ctxSize,
+      loading,
       triggerRef,
     } = useDatePicker();
 
+    const size = sizeProp ?? ctxSize;
     const isDisabled = disabled ?? contextDisabled;
 
     const getDisplayValue = (): string => {
@@ -59,17 +74,24 @@ export const DatePickerTrigger = forwardRef<HTMLButtonElement, DatePickerTrigger
         onClick={() => setOpen(!open)}
         onKeyDown={handleKeyDown}
         className={cn(
-          'w-full min-w-50 flex items-center justify-between gap-2',
-          'px-3 py-2.5 text-left font-secondary',
-          'bg-surface border rounded-control',
-          'transition-colors duration-150',
-          open ? 'border-focus ring-2 ring-focus/20' : 'border-field hover:border-muted-content',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-focus',
-          'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-field',
+          inputBaseStyles,
+          inputGapStyles,
+          inputSizeStyles[size],
+          'justify-between text-left',
+          validationState !== 'default'
+            ? inputBorderStyles[validationState]
+            : open || selectedDate || selectedRange?.startDate
+              ? 'border-brand'
+              : cn(inputBorderStyles['default'], inputHoverBorder),
+          inputHoverBorder,
+          inputDisabledStyles,
+          'focus-visible:outline-none',
           className,
         )}
         aria-haspopup="dialog"
         aria-expanded={open}
+        aria-invalid={validationState === 'error'}
+        aria-busy={loading}
         {...props}
       >
         <span
@@ -82,7 +104,11 @@ export const DatePickerTrigger = forwardRef<HTMLButtonElement, DatePickerTrigger
         >
           {getDisplayValue()}
         </span>
-        <CalendarIcon className="w-4 h-4 text-muted-content shrink-0" />
+        {loading ? (
+          <Loader2 className={inputLoadingSpinnerStyles} {...inputLoadingAria} />
+        ) : (
+          <CalendarIcon className="w-4 h-4 text-muted-content shrink-0" />
+        )}
       </button>
     );
   },

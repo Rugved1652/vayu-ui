@@ -5,13 +5,18 @@ import { forwardRef } from 'react';
 import { clsx } from 'clsx';
 import { useOTPInput } from './OTPInput';
 import type { OTPInputSlotProps } from './types';
+import {
+  inputSlotSizeStyles,
+  inputBorderStyles,
+} from '../../utils/input-styles';
 
 const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
   ({ index, className, ...props }, ref) => {
-    const { value, isFocused, maxLength, disabled, hasError } = useOTPInput();
+    const { value, isFocused, maxLength, disabled, validationState, size } = useOTPInput();
     const char = value[index];
     const isActive = isFocused && index === Math.min(value.length, maxLength - 1);
     const hasValue = char !== undefined && char !== '';
+    const showBrand = isActive || hasValue;
 
     return (
       <div
@@ -19,25 +24,24 @@ const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
         role="presentation"
         aria-hidden="true"
         className={clsx(
-          'relative flex size-10 items-center justify-center',
-          'border-y border-r rounded-control',
-          'text-sm transition-all duration-150',
-          // Border
-          hasError ? 'border-destructive' : 'border-field',
+          inputSlotSizeStyles[size],
+          'relative flex items-center justify-center',
+          'border-2',
+          'transition-all duration-150',
+          // Overlap with previous slot to avoid double 4px seams
+          '[&:not(:first-child)]:-ml-[2px]',
+          // Border color — brand for active/filled, otherwise state color
+          showBrand
+            ? 'border-brand z-10'
+            : inputBorderStyles[validationState],
           // Text
-          hasError ? 'text-destructive' : 'text-surface-content',
-          // Corners
-          'first:rounded-l first:border-l',
+          validationState === 'error' ? 'text-destructive' : 'text-surface-content',
+          // Corners — only first and last slot in their container get rounding
+          'first:rounded-l',
           'last:rounded-r',
-          // Active focus ring
-          isActive && [
-            'z-10',
-            hasError ? 'ring-2 ring-destructive' : 'ring-2 ring-focus',
-            'ring-offset-canvas',
-          ],
-          // Filled state
-          hasValue && !hasError && 'bg-muted',
-          hasValue && hasError && 'bg-destructive/10',
+          // Filled state background
+          hasValue && validationState !== 'error' && 'bg-muted',
+          hasValue && validationState === 'error' && 'bg-destructive/10',
           // Disabled
           disabled && 'opacity-50',
           className,

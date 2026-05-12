@@ -13,6 +13,8 @@ import React, {
   useState,
 } from 'react';
 import { clsx } from 'clsx';
+import { Loader2 } from 'lucide-react';
+import { normalizeValidationState, inputLoadingSpinnerStyles, inputLoadingAria } from '../../utils/input-styles';
 import type { OTPInputContextValue, OTPInputRootProps } from './types';
 
 // Context
@@ -40,13 +42,18 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
       autoFocus,
       disabled,
       id: providedId,
-      hasError = false,
+      hasError,
+      validationState: validationStateProp,
+      size = 'md',
+      loading = false,
       errorMessageId,
       'aria-describedby': ariaDescribedBy,
       ...props
     },
     ref,
   ) => {
+    const validationState = normalizeValidationState(validationStateProp ?? hasError);
+
     const [internalValue, setInternalValue] = useState('');
     const [isFocused, setIsFocused] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -92,22 +99,39 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
           isFocused,
           maxLength,
           disabled: disabled ?? false,
+          loading,
           id,
-          hasError,
+          validationState,
+          size,
         }}
       >
         <div
           role="group"
           aria-label={label}
           aria-disabled={disabled}
+          aria-busy={loading}
           className={clsx(
             'relative flex items-center justify-center cursor-text select-none',
             disabled && 'opacity-50 cursor-not-allowed',
+            loading && 'opacity-70',
           )}
-          onClick={() => !disabled && inputRef.current?.focus()}
+          onClick={() => !disabled && !loading && inputRef.current?.focus()}
         >
           {/* Visual Container */}
-          <div className={clsx('flex items-center gap-2', className)}>{children}</div>
+          <div className={clsx('flex items-center gap-2', className)}>
+            {loading ? (
+              <div className="flex items-center gap-2">
+                {Array.from({ length: maxLength }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="relative flex size-10 items-center justify-center border-y border-r rounded-control border-field bg-muted"
+                  />
+                ))}
+              </div>
+            ) : (
+              children
+            )}
+          </div>
 
           {/* Hidden Input */}
           <input
@@ -119,9 +143,9 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
             onFocus={handleFocus}
             onBlur={handleBlur}
             maxLength={maxLength}
-            disabled={disabled}
+            disabled={disabled || loading}
             aria-label={label}
-            aria-invalid={hasError}
+            aria-invalid={validationState === 'error'}
             aria-errormessage={errorMessageId}
             aria-describedby={describedBy}
             autoComplete="one-time-code"

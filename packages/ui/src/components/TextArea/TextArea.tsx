@@ -5,7 +5,9 @@
 
 import React, { createContext, useContext, useState, useId } from 'react';
 import { cn } from '../../utils';
-import type { TextAreaContextValue, TextAreaRootProps, TextAreaSize } from './types';
+import { inputRootLayout } from '../../utils/input-styles';
+import type { TextAreaContextValue, TextAreaRootProps } from './types';
+import { normalizeValidationState } from '../../utils/input-styles';
 
 // Context
 export const TextAreaContext = createContext<TextAreaContextValue | undefined>(undefined);
@@ -22,11 +24,15 @@ export const useTextAreaContext = () => {
 const TextAreaRoot = ({
   children,
   size = 'md',
-  error = false,
+  error,
+  validationState: validationStateProp,
   maxLength,
   disabled = false,
+  loading = false,
   className,
 }: TextAreaRootProps) => {
+  const validationState = normalizeValidationState(validationStateProp ?? error);
+
   const [isFocused, setIsFocused] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const [hasSupportText, setHasSupportText] = useState(false);
@@ -45,9 +51,10 @@ const TextAreaRoot = ({
         charCount,
         setCharCount,
         maxLength,
-        error,
+        validationState,
         size,
         disabled,
+        loading,
         inputId,
         supportTextId,
         errorTextId,
@@ -58,7 +65,7 @@ const TextAreaRoot = ({
       }}
     >
       <div
-        className={cn('w-full flex flex-col gap-1', className)}
+        className={cn(inputRootLayout, className)}
         role="group"
         aria-labelledby={labelId}
       >

@@ -5,9 +5,8 @@ import type { InputHTMLAttributes, ReactNode } from 'react';
 
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
 
-export type InputSize = 'sm' | 'md' | 'lg';
-
-export type ValidationState = 'default' | 'error' | 'warning' | 'success';
+export type InputSize = import('../../utils/input-styles').InputSize;
+export type ValidationState = import('../../utils/input-styles').ValidationState;
 
 export type NumberType = 'integer' | 'decimal' | 'positive' | 'natural';
 

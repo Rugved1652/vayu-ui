@@ -69,10 +69,10 @@ export const ColorPickerInput = forwardRef<HTMLInputElement, ColorPickerInputPro
     };
 
     const stateClasses = {
-      default: 'border-field focus:border-focus focus:ring-2 focus:ring-focus/20',
-      error: 'border-destructive ring-2 ring-destructive/20',
-      warning: 'border-warning ring-2 ring-warning/20',
-      success: 'border-success ring-2 ring-success/20',
+      default: 'border-field focus:border-brand',
+      error: 'border-destructive',
+      warning: 'border-warning',
+      success: 'border-success',
     };
 
     return (

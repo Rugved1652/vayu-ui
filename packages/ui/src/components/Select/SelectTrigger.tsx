@@ -8,13 +8,25 @@ import { ChevronDown, X, Loader2, Search } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useSelect } from './Select';
 import type { SelectTriggerProps, SingleValue, MultiValue } from './types';
+import {
+  inputBaseStyles,
+  inputGapStyles,
+  inputSizeStyles,
+  inputBorderStyles,
+  inputHoverBorder,
+  inputDisabledStyles,
+  inputLoadingSpinnerStyles,
+  inputLoadingAria,
+} from '../../utils/input-styles';
 
 export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
-  ({ placeholder, className, showSearchIcon = false }, ref) => {
+  ({ placeholder, className, showSearchIcon = false, size: sizeProp }, ref) => {
     const {
       open,
       setOpen,
       error,
+      validationState,
+      size: ctxSize,
       triggerRef,
       id,
       multiple,
@@ -30,6 +42,8 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
       isSearchLoading,
       isCreating,
     } = useSelect();
+
+    const size = sizeProp ?? ctxSize;
 
     const isLoading = isSearchLoading || isCreating;
     const localTriggerRef = useRef<HTMLDivElement | null>(null);
@@ -95,15 +109,20 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
         ref={localTriggerRef}
         onClick={() => inputRef.current?.focus()}
         className={clsx(
-          'w-full flex flex-wrap items-center gap-1.5 px-3 py-2 text-sm rounded-control bg-surface border transition-all outline-none cursor-text',
-          error
-            ? 'border-destructive focus-within:ring-2 focus-within:ring-destructive'
-            : 'border-field focus-within:border-focus focus-within:ring-2 focus-within:ring-focus',
-          open && !error && 'border-focus ring-2 ring-focus',
-          'text-surface-content placeholder:text-muted-content',
-          'focus-within:ring-offset-2 focus-within:ring-offset-canvas',
+          inputBaseStyles,
+          inputGapStyles,
+          inputSizeStyles[size],
+          validationState !== 'default'
+            ? inputBorderStyles[validationState]
+            : open || selectedLabel || selectedArray.length > 0
+              ? 'border-brand'
+              : clsx(inputBorderStyles['default'], inputHoverBorder),
+          inputDisabledStyles,
+          'flex-wrap cursor-text outline-none',
           className,
         )}
+        aria-invalid={validationState === 'error'}
+        aria-busy={isLoading}
       >
         {showSelectedLabel && (
           <span className="truncate">{selectedLabel}</span>
@@ -149,7 +168,7 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
           )}
         />
         {isLoading ? (
-          <Loader2 className="w-4 h-4 text-muted-content animate-spin ml-auto shrink-0" />
+          <Loader2 className={clsx(inputLoadingSpinnerStyles, 'ml-auto')} {...inputLoadingAria} />
         ) : onSearch && showSearchIcon ? (
           <Search className="w-4 h-4 text-muted-content ml-auto shrink-0" />
         ) : (
