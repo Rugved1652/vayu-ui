@@ -2,22 +2,66 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { Palette, RotateCcw } from 'lucide-react';
-import { Modal, Button, Divider } from 'vayu-ui';
+import { Modal, Button } from 'vayu-ui';
 
-interface Preset {
+interface Theme {
   key: string;
-  label: string;
-  lightColor: string;
-  darkColor: string;
+  name: string;
+  lightBg: string;
+  lightPrimary: string;
+  darkBg: string;
+  darkPrimary: string;
 }
 
-const presets: Preset[] = [
-  { key: 'lime', label: 'Lime', lightColor: '#84cc16', darkColor: '#bef264' },
-  { key: 'blue', label: 'Blue', lightColor: '#3b82f6', darkColor: '#60a5fa' },
-  { key: 'rose', label: 'Rose', lightColor: '#f43f5e', darkColor: '#fb7185' },
-  { key: 'violet', label: 'Violet', lightColor: '#8b5cf6', darkColor: '#a78bfa' },
-  { key: 'amber', label: 'Amber', lightColor: '#f59e0b', darkColor: '#fbbf24' },
-  { key: 'emerald', label: 'Emerald', lightColor: '#10b981', darkColor: '#34d399' },
+const themes: Theme[] = [
+  {
+    key: 'lime',
+    name: 'Lime',
+    lightBg: '#f4f4f5',
+    lightPrimary: '#84cc16',
+    darkBg: '#000000',
+    darkPrimary: '#bef264',
+  },
+  {
+    key: 'ocean',
+    name: 'Ocean',
+    lightBg: '#f0f7ff',
+    lightPrimary: '#0ea5e9',
+    darkBg: '#0c1624',
+    darkPrimary: '#38bdf8',
+  },
+  {
+    key: 'berry',
+    name: 'Berry',
+    lightBg: '#fff1f2',
+    lightPrimary: '#e11d48',
+    darkBg: '#2a0a12',
+    darkPrimary: '#fb7185',
+  },
+  {
+    key: 'grape',
+    name: 'Grape',
+    lightBg: '#faf5ff',
+    lightPrimary: '#8b5cf6',
+    darkBg: '#1a0e2e',
+    darkPrimary: '#a78bfa',
+  },
+  {
+    key: 'sunset',
+    name: 'Sunset',
+    lightBg: '#fffbeb',
+    lightPrimary: '#f59e0b',
+    darkBg: '#2a1805',
+    darkPrimary: '#fbbf24',
+  },
+  {
+    key: 'forest',
+    name: 'Forest',
+    lightBg: '#f0fdf4',
+    lightPrimary: '#10b981',
+    darkBg: '#052e16',
+    darkPrimary: '#34d399',
+  },
 ];
 
 const STORAGE_KEY = 'vayu-theme';
@@ -34,12 +78,15 @@ function getSavedTheme(): string | null {
 function applyTheme(themeKey: string | null) {
   if (typeof window === 'undefined') return;
   const root = document.documentElement;
-  if (themeKey && presets.some((p) => p.key === themeKey)) {
+  if (themeKey && themes.some((t) => t.key === themeKey)) {
     root.setAttribute('data-theme', themeKey);
     localStorage.setItem(STORAGE_KEY, themeKey);
+    console.log('Theme applied:', themeKey, 'Attribute:', root.getAttribute('data-theme'));
+    console.log('Brand color:', getComputedStyle(root).getPropertyValue('--brand'));
   } else {
     root.removeAttribute('data-theme');
     localStorage.removeItem(STORAGE_KEY);
+    console.log('Theme reset');
   }
 }
 
@@ -99,30 +146,49 @@ export function ColorThemePanel() {
           </Modal.Description>
         </Modal.Header>
 
-        <Modal.Body>
-          <div className="grid grid-cols-3 gap-3">
-            {presets.map((preset) => {
-              const isActive = activeTheme === preset.key;
-              const color = isDark ? preset.darkColor : preset.lightColor;
+        <Modal.Body style={{ backgroundColor: 'var(--canvas)' }}>
+          <div className="grid grid-cols-2 gap-3">
+            {themes.map((theme) => {
+              const isActive = activeTheme === theme.key;
+              const bgColor = isDark ? theme.darkBg : theme.lightBg;
+              const primaryColor = isDark ? theme.darkPrimary : theme.lightPrimary;
 
               return (
                 <button
-                  key={preset.key}
+                  key={theme.key}
                   type="button"
-                  onClick={() => handlePresetClick(preset.key)}
+                  onClick={() => handlePresetClick(theme.key)}
                   className={`
-                    flex flex-col items-center gap-2 rounded-surface border p-3 transition-all
+                    relative flex flex-col items-center gap-2 rounded-surface border p-3 transition-all
                     hover:shadow-surface hover:scale-[1.02]
                     ${isActive ? 'border-brand ring-2 ring-focus' : 'border-border'}
                   `}
-                  title={`Apply ${preset.label} theme`}
+                  title={`Apply ${theme.name} theme`}
                 >
-                  <span
-                    className="w-10 h-10 rounded-full border-2 border-border shadow-sm"
-                    style={{ backgroundColor: color }}
-                  />
-                  <span className="text-xs font-medium text-surface-content">
-                    {preset.label}
+                  {/* Preview card */}
+                  <div
+                    className="w-full h-16 rounded-control border border-border/50 overflow-hidden relative"
+                    style={{ backgroundColor: bgColor }}
+                  >
+                    {/* Primary color accent bar */}
+                    <div
+                      className="absolute bottom-0 left-0 right-0 h-2"
+                      style={{ backgroundColor: primaryColor }}
+                    />
+                    {/* Primary color dot */}
+                    <div
+                      className="absolute top-2 right-2 w-6 h-6 rounded-full border-2 border-white/80 shadow-sm"
+                      style={{ backgroundColor: primaryColor }}
+                    />
+                    {/* Sample text */}
+                    <div className="absolute top-2 left-2 flex flex-col gap-1">
+                      <div className="w-12 h-1.5 rounded-full bg-current opacity-20" />
+                      <div className="w-8 h-1.5 rounded-full bg-current opacity-15" />
+                    </div>
+                  </div>
+
+                  <span className="text-sm font-medium text-surface-content">
+                    {theme.name}
                   </span>
                 </button>
               );
