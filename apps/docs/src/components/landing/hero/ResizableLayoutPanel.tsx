@@ -16,7 +16,7 @@ export function ResizableLayoutPanel() {
         </Badge>
       </div>
 
-      <div className="overflow-hidden rounded-surface border border-border bg-canvas min-h-[160px]">
+      <div className="overflow-hidden rounded-surface border border-border bg-canvas min-h-[360px]">
         <ResizablePane direction="horizontal">
           <ResizablePane.Panel defaultSize={34} minSize={20}>
             <div className="h-full bg-surface p-4">

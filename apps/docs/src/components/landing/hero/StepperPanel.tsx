@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Package, SlidersHorizontal, Sparkles, Zap } from 'lucide-react';
+import { Package, SlidersHorizontal, Sparkles, Zap, Rocket, Activity } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Badge, Button, Stepper } from 'vayu-ui';
 
@@ -11,6 +11,8 @@ export function StepperPanel() {
     { icon: SlidersHorizontal, title: 'Configure', description: 'Set up controls' },
     { icon: Sparkles, title: 'Preview', description: 'See live output' },
     { icon: Package, title: 'Ship', description: 'Export assets' },
+    // { icon: Rocket, title: 'Deploy', description: 'Go live' },
+    // { icon: Activity, title: 'Monitor', description: 'Track performance' },
   ];
 
   return (

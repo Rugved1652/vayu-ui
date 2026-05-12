@@ -52,7 +52,7 @@ export const AccordionHeader: React.FC<AccordionHeaderProps> = ({
     if (nextIndex !== null) {
       const nextId = itemIds[nextIndex];
       const nextButton = document.getElementById(`accordion-header-${nextId}`);
-      nextButton?.focus();
+      nextButton?.focus({ preventScroll: true });
     }
   };
 

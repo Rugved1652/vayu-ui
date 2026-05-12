@@ -74,14 +74,14 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
         const firstItem = contentRef.current?.querySelector(
           '[role="option"]:not([data-disabled="true"])',
         ) as HTMLElement;
-        firstItem?.focus();
+        firstItem?.focus({ preventScroll: true });
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         if (!open) setOpen(true);
         const items = contentRef.current?.querySelectorAll(
           '[role="option"]:not([data-disabled="true"])',
         );
-        if (items && items.length > 0) (items[items.length - 1] as HTMLElement).focus();
+        if (items && items.length > 0) (items[items.length - 1] as HTMLElement).focus({ preventScroll: true });
       } else if (e.key === 'Enter') {
         setOpen(true);
       } else if (e.key === 'Backspace' && multiple && search === '') {
@@ -93,8 +93,8 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
           '[role="option"]:not([data-disabled="true"])',
         );
         if (items && items.length > 0) {
-          if (e.shiftKey) (items[items.length - 1] as HTMLElement).focus();
-          else (items[0] as HTMLElement).focus();
+          if (e.shiftKey) (items[items.length - 1] as HTMLElement).focus({ preventScroll: true });
+          else (items[0] as HTMLElement).focus({ preventScroll: true });
         }
       }
     };
@@ -107,7 +107,7 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
     return (
       <div
         ref={localTriggerRef}
-        onClick={() => inputRef.current?.focus()}
+        onClick={() => inputRef.current?.focus({ preventScroll: true })}
         className={clsx(
           inputBaseStyles,
           inputGapStyles,
@@ -180,7 +180,7 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
             onClick={(e) => {
               e.stopPropagation();
               setOpen(!open);
-              inputRef.current?.focus();
+              inputRef.current?.focus({ preventScroll: true });
             }}
           />
         )}

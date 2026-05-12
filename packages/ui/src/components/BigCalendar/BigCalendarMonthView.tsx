@@ -79,7 +79,7 @@ export const MonthView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElemen
 
         if (nextIndex >= 0 && nextIndex < days.length) {
           e.preventDefault();
-          cellRefs.current[nextIndex]?.focus();
+          cellRefs.current[nextIndex]?.focus({ preventScroll: true });
         }
       },
       [days, handleDayClick],

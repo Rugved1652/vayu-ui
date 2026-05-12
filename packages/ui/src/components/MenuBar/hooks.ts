@@ -51,7 +51,7 @@ export const useTypeahead = (menuRef: React.RefObject<HTMLDivElement | null>) =>
       const match = Array.from(items).find((item) =>
         item.textContent?.toLowerCase().startsWith(typeaheadRef.current.buffer),
       );
-      match?.focus();
+      match?.focus({ preventScroll: true });
 
       typeaheadRef.current.timeout = setTimeout(() => {
         typeaheadRef.current.buffer = '';
@@ -69,7 +69,7 @@ export const useFocusItems = (menuRef: React.RefObject<HTMLDivElement | null>) =
   const focusFirstItem = useCallback(() => {
     requestAnimationFrame(() => {
       const firstItem = menuRef.current?.querySelector<HTMLElement>(MENU_ITEM_SELECTOR);
-      firstItem?.focus();
+      firstItem?.focus({ preventScroll: true });
     });
   }, [menuRef]);
 
@@ -77,7 +77,7 @@ export const useFocusItems = (menuRef: React.RefObject<HTMLDivElement | null>) =
     requestAnimationFrame(() => {
       const items = menuRef.current?.querySelectorAll<HTMLElement>(MENU_ITEM_SELECTOR);
       const lastItem = items?.[items.length - 1];
-      lastItem?.focus();
+      lastItem?.focus({ preventScroll: true });
     });
   }, [menuRef]);
 
@@ -140,7 +140,7 @@ export const useMenuNavigation = (
           if (items && items.length > 0) {
             const currentIndex = Array.from(items).indexOf(itemRef.current!);
             const nextIndex = (currentIndex + 1) % items.length;
-            items[nextIndex]?.focus();
+            items[nextIndex]?.focus({ preventScroll: true });
           }
           break;
         case 'ArrowUp':
@@ -149,21 +149,21 @@ export const useMenuNavigation = (
           if (items && items.length > 0) {
             const currentIndex = Array.from(items).indexOf(itemRef.current!);
             const prevIndex = currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
-            items[prevIndex]?.focus();
+            items[prevIndex]?.focus({ preventScroll: true });
           }
           break;
         case 'Home':
           e.preventDefault();
           e.stopPropagation();
           if (items && items.length > 0) {
-            items[0]?.focus();
+            items[0]?.focus({ preventScroll: true });
           }
           break;
         case 'End':
           e.preventDefault();
           e.stopPropagation();
           if (items && items.length > 0) {
-            items[items.length - 1]?.focus();
+            items[items.length - 1]?.focus({ preventScroll: true });
           }
           break;
         case 'ArrowRight':
@@ -181,7 +181,7 @@ export const useMenuNavigation = (
           } else if (level > 0) {
             e.preventDefault();
             e.stopPropagation();
-            menuContext.triggerRef.current?.focus();
+            menuContext.triggerRef.current?.focus({ preventScroll: true });
           }
           break;
         case 'Escape':
@@ -191,7 +191,7 @@ export const useMenuNavigation = (
           const topLevelTrigger = menuEl
             ?.closest('[data-menu-id]')
             ?.querySelector<HTMLButtonElement>('[aria-haspopup="true"]');
-          topLevelTrigger?.focus();
+          topLevelTrigger?.focus({ preventScroll: true });
           break;
       }
     },

@@ -60,7 +60,7 @@ const TabsList = React.forwardRef<HTMLDivElement, TabsListProps>(
         }
 
         triggers[nextIndex]?.click();
-        triggers[nextIndex]?.focus();
+        triggers[nextIndex]?.focus({ preventScroll: true });
       };
 
       const listElement = listRef.current;

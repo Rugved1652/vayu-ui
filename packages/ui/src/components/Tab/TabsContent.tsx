@@ -17,7 +17,7 @@ const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
     useEffect(() => {
       if (isActive && autoFocus && panelRef.current) {
         const timer = setTimeout(() => {
-          panelRef.current?.focus();
+          panelRef.current?.focus({ preventScroll: true });
         }, 0);
         return () => clearTimeout(timer);
       }

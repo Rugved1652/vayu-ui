@@ -89,7 +89,7 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
         const first = subMenuRef.current?.querySelector<HTMLElement>(
           '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
         );
-        first?.focus();
+        first?.focus({ preventScroll: true });
       });
     }, [subMenuRef]);
 
@@ -113,14 +113,14 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
             e.preventDefault();
             e.stopPropagation();
             setIsOpen(false);
-            triggerRef.current?.focus();
+            triggerRef.current?.focus({ preventScroll: true });
             break;
           case "ArrowDown":
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) {
               const idx = items.indexOf(triggerRef.current!);
-              items[(idx + 1) % items.length]?.focus();
+              items[(idx + 1) % items.length]?.focus({ preventScroll: true });
             }
             break;
           case "ArrowUp":
@@ -128,18 +128,18 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
             e.stopPropagation();
             if (items.length > 0) {
               const idx = items.indexOf(triggerRef.current!);
-              items[idx <= 0 ? items.length - 1 : idx - 1]?.focus();
+              items[idx <= 0 ? items.length - 1 : idx - 1]?.focus({ preventScroll: true });
             }
             break;
           case "Home":
             e.preventDefault();
             e.stopPropagation();
-            items[0]?.focus();
+            items[0]?.focus({ preventScroll: true });
             break;
           case "End":
             e.preventDefault();
             e.stopPropagation();
-            if (items.length > 0) items[items.length - 1]?.focus();
+            if (items.length > 0) items[items.length - 1]?.focus({ preventScroll: true });
             break;
           case "Escape":
             e.preventDefault();
@@ -247,7 +247,7 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
           const first = subMenuRef.current?.querySelector<HTMLElement>(
             '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
           );
-          first?.focus();
+          first?.focus({ preventScroll: true });
         });
       }
     }, [isOpen, subMenuRef]);
@@ -259,14 +259,14 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
           e.preventDefault();
           e.stopPropagation();
           closeSub();
-          triggerRef.current?.focus();
+          triggerRef.current?.focus({ preventScroll: true });
           return;
         }
         if (e.key === "ArrowLeft") {
           e.preventDefault();
           e.stopPropagation();
           closeSub();
-          triggerRef.current?.focus();
+          triggerRef.current?.focus({ preventScroll: true });
           return;
         }
         if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {

@@ -62,7 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   // Focus trap for mobile menu
   useEffect(() => {
     if (mobile && mobileOpen && sidebarRef.current) {
-      sidebarRef.current.focus();
+      sidebarRef.current.focus({ preventScroll: true });
 
       const focusableElements = sidebarRef.current.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
@@ -74,10 +74,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
         if (e.key === 'Tab') {
           if (e.shiftKey && document.activeElement === firstElement) {
             e.preventDefault();
-            lastElement?.focus();
+            lastElement?.focus({ preventScroll: true });
           } else if (!e.shiftKey && document.activeElement === lastElement) {
             e.preventDefault();
-            firstElement?.focus();
+            firstElement?.focus({ preventScroll: true });
           }
         }
       };

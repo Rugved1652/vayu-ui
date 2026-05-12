@@ -1,6 +1,6 @@
 import type { TreeNode } from 'vayu-ui';
 
-export const installCommand = 'npx vayu-ui-cli init';
+export const installCommand = 'npx vayu-ui-cli create my-app';
 
 export const highlights = [
   { label: 'Components', value: '50+', tone: 'bg-brand' },

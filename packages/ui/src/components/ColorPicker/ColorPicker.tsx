@@ -87,7 +87,7 @@ const ColorPickerRoot = forwardRef<HTMLDivElement, ColorPickerRootProps>(
     useKeyPress('Escape', () => {
       if (!open) return;
       setOpen(false);
-      triggerRef.current?.focus();
+      triggerRef.current?.focus({ preventScroll: true });
     });
 
     const contextValue = useMemo<ColorPickerContextValue>(

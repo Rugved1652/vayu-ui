@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar, Info } from 'lucide-react';
+import { ArrowRight, Calendar, Info } from 'lucide-react';
 import {
   Alert,
   Badge,
+  Button,
   DatePicker,
   Divider,
   Switch,
@@ -55,6 +56,10 @@ export function SchedulePanel() {
             checked={allDay}
             onCheckedChange={setAllDay}
           />
+          <Button variant="primary" size="medium">
+            Generate
+            <ArrowRight className="h-4 w-4" />
+          </Button>
         </div>
 
         <Alert variant="info">

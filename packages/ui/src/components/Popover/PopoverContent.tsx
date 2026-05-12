@@ -41,7 +41,7 @@ const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
       if (open && contentRef.current) {
         const rafId = requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            contentRef.current?.focus();
+            contentRef.current?.focus({ preventScroll: true });
           });
         });
         return () => cancelAnimationFrame(rafId);

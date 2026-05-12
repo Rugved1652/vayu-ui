@@ -117,7 +117,7 @@ const CommandBoxRoot = forwardRef<HTMLDivElement, CommandBoxRootProps>(
     useEffect(() => {
       if (open) {
         requestAnimationFrame(() => {
-          inputRef.current?.focus();
+          inputRef.current?.focus({ preventScroll: true });
         });
       } else {
         setSearchQuery('');

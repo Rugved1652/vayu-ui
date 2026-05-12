@@ -34,7 +34,7 @@ function NavbarRoot({ className, children, mainContentSelector = 'main', ...prop
 
   const closeMenu = useCallback(() => {
     setMobileOpen(false);
-    document.getElementById(triggerId)?.focus();
+    document.getElementById(triggerId)?.focus({ preventScroll: true });
   }, [triggerId]);
 
   // Close on Escape

@@ -34,7 +34,7 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         const focusable = contentRef.current?.querySelector<HTMLElement>(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
         );
-        setTimeout(() => focusable?.focus(), 50);
+        setTimeout(() => focusable?.focus({ preventScroll: true }), 50);
       }
     }, [open, trapFocus]);
 
@@ -59,12 +59,12 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         if (e.shiftKey) {
           if (document.activeElement === firstElement) {
             e.preventDefault();
-            lastElement.focus();
+            lastElement.focus({ preventScroll: true });
           }
         } else {
           if (document.activeElement === lastElement) {
             e.preventDefault();
-            firstElement.focus();
+            firstElement.focus({ preventScroll: true });
           }
         }
       }

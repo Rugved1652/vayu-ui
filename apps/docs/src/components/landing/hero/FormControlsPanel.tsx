@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight, Check, SlidersHorizontal } from 'lucide-react';
+import { ArrowRight, Check, SlidersHorizontal, AlertCircle, Info, TriangleAlert } from 'lucide-react';
 import {
   Alert,
   Badge,
@@ -102,17 +102,7 @@ export function FormControlsPanel() {
         </Divider>
 
         <div className="flex flex-col gap-4">
-          <Checkbox checked={accessible} onChange={setAccessible}>
-            <div className="flex items-center gap-3">
-              <Checkbox.Indicator />
-              <div className="flex flex-col">
-                <Checkbox.Label>Keep accessibility-first defaults enabled</Checkbox.Label>
-                <Checkbox.Description>
-                  Preserve keyboard support and clean contrast.
-                </Checkbox.Description>
-              </div>
-            </div>
-          </Checkbox>
+
 
           <Switch
             label="Auto-save drafts"
@@ -139,13 +129,6 @@ export function FormControlsPanel() {
           />
         </div>
 
-        <div className="flex justify-end">
-          <Button variant="primary" size="medium">
-            Generate
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
-
         <Alert variant="success">
           <Alert.Icon variant="success">
             <Check className="w-4 h-4" />
@@ -153,6 +136,36 @@ export function FormControlsPanel() {
           <Alert.Content>
             <Alert.Title>Ready to generate</Alert.Title>
             <Alert.Description>All form controls are live and interactive. Try changing values above.</Alert.Description>
+          </Alert.Content>
+        </Alert>
+
+        <Alert variant="error">
+          <Alert.Icon variant="error">
+            <AlertCircle className="w-4 h-4" />
+          </Alert.Icon>
+          <Alert.Content>
+            <Alert.Title>Action Required</Alert.Title>
+            <Alert.Description>Please resolve the missing inputs before generating the layout.</Alert.Description>
+          </Alert.Content>
+        </Alert>
+
+        <Alert variant="warning">
+          <Alert.Icon variant="warning">
+            <TriangleAlert className="w-4 h-4" />
+          </Alert.Icon>
+          <Alert.Content>
+            <Alert.Title>Approaching limits</Alert.Title>
+            <Alert.Description>You are close to exceeding the maximum component density.</Alert.Description>
+          </Alert.Content>
+        </Alert>
+
+        <Alert variant="info">
+          <Alert.Icon variant="info">
+            <Info className="w-4 h-4" />
+          </Alert.Icon>
+          <Alert.Content>
+            <Alert.Title>New update available</Alert.Title>
+            <Alert.Description>A new version of the design system is ready to be installed.</Alert.Description>
           </Alert.Content>
         </Alert>
       </div>

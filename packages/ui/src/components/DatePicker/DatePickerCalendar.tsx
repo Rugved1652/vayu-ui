@@ -120,7 +120,7 @@ export const DatePickerCalendar = forwardRef<HTMLDivElement, DatePickerCalendarP
       if (mode === 'single') {
         setSelectedDate(date);
         setOpen(false);
-        triggerRef.current?.focus();
+        triggerRef.current?.focus({ preventScroll: true });
       } else {
         if (!selectedRange?.startDate || selectedRange.endDate) {
           setSelectedRange({ startDate: date, endDate: null });
@@ -133,7 +133,7 @@ export const DatePickerCalendar = forwardRef<HTMLDivElement, DatePickerCalendarP
             setSelectedRange({ startDate: start, endDate: date });
           }
           setOpen(false);
-          triggerRef.current?.focus();
+          triggerRef.current?.focus({ preventScroll: true });
         }
       }
     };
@@ -189,7 +189,7 @@ export const DatePickerCalendar = forwardRef<HTMLDivElement, DatePickerCalendarP
         case 'Escape':
           e.preventDefault();
           setOpen(false);
-          triggerRef.current?.focus();
+          triggerRef.current?.focus({ preventScroll: true });
           return;
       }
 
@@ -220,7 +220,7 @@ export const DatePickerCalendar = forwardRef<HTMLDivElement, DatePickerCalendarP
 
       const targetIndex = days.findIndex((day) => isSameDay(day, focusedDate));
       if (targetIndex >= 0 && dateButtonRefs.current[targetIndex]) {
-        dateButtonRefs.current[targetIndex]?.focus();
+        dateButtonRefs.current[targetIndex]?.focus({ preventScroll: true });
       }
     }, [focusedDate, open, days, monthDropdownOpen, yearDropdownOpen]);
 

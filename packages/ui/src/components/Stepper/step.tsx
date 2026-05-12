@@ -46,34 +46,34 @@ export const Step = forwardRef<HTMLDivElement, StepProps>(
           case 'ArrowLeft':
             if (orientation === 'horizontal' && currentIndex > 0) {
               e.preventDefault();
-              (clickableSteps[currentIndex - 1] as HTMLElement)?.focus();
+              (clickableSteps[currentIndex - 1] as HTMLElement)?.focus({ preventScroll: true });
             }
             break;
           case 'ArrowRight':
             if (orientation === 'horizontal' && currentIndex < clickableSteps.length - 1) {
               e.preventDefault();
-              (clickableSteps[currentIndex + 1] as HTMLElement)?.focus();
+              (clickableSteps[currentIndex + 1] as HTMLElement)?.focus({ preventScroll: true });
             }
             break;
           case 'ArrowUp':
             if (orientation === 'vertical' && currentIndex > 0) {
               e.preventDefault();
-              (clickableSteps[currentIndex - 1] as HTMLElement)?.focus();
+              (clickableSteps[currentIndex - 1] as HTMLElement)?.focus({ preventScroll: true });
             }
             break;
           case 'ArrowDown':
             if (orientation === 'vertical' && currentIndex < clickableSteps.length - 1) {
               e.preventDefault();
-              (clickableSteps[currentIndex + 1] as HTMLElement)?.focus();
+              (clickableSteps[currentIndex + 1] as HTMLElement)?.focus({ preventScroll: true });
             }
             break;
           case 'Home':
             e.preventDefault();
-            (clickableSteps[0] as HTMLElement)?.focus();
+            (clickableSteps[0] as HTMLElement)?.focus({ preventScroll: true });
             break;
           case 'End':
             e.preventDefault();
-            (clickableSteps[clickableSteps.length - 1] as HTMLElement)?.focus();
+            (clickableSteps[clickableSteps.length - 1] as HTMLElement)?.focus({ preventScroll: true });
             break;
         }
         onKeyDown?.(e);

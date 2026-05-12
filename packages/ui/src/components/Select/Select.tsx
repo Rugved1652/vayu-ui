@@ -107,7 +107,7 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
 
   const focusInput = useCallback(() => {
     isProgrammaticFocus.current = true;
-    inputRef.current?.focus();
+    inputRef.current?.focus({ preventScroll: true });
     requestAnimationFrame(() => {
       isProgrammaticFocus.current = false;
     });

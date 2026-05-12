@@ -76,7 +76,7 @@ const TimepickerContent: React.FC<TimepickerContentProps> = ({ children, classNa
     const timer = setTimeout(() => {
       const firstFocusable = contentRef.current?.querySelector(focusableSelectors) as HTMLElement;
       if (firstFocusable) {
-        firstFocusable.focus();
+        firstFocusable.focus({ preventScroll: true });
       }
     }, 10);
 
@@ -89,7 +89,7 @@ const TimepickerContent: React.FC<TimepickerContentProps> = ({ children, classNa
       if (e.key === 'Escape') {
         e.preventDefault();
         setOpen(false);
-        triggerRef.current?.focus();
+        triggerRef.current?.focus({ preventScroll: true });
         return;
       }
 
@@ -108,10 +108,10 @@ const TimepickerContent: React.FC<TimepickerContentProps> = ({ children, classNa
 
         if (e.shiftKey && document.activeElement === firstFocusable) {
           e.preventDefault();
-          lastFocusable.focus();
+          lastFocusable.focus({ preventScroll: true });
         } else if (!e.shiftKey && document.activeElement === lastFocusable) {
           e.preventDefault();
-          firstFocusable.focus();
+          firstFocusable.focus({ preventScroll: true });
         }
       }
     },

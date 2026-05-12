@@ -60,7 +60,7 @@ export const SubMenu = ({
         e.preventDefault();
         e.stopPropagation();
         setIsOpen(false);
-        triggerRef.current?.focus();
+        triggerRef.current?.focus({ preventScroll: true });
         break;
       case 'ArrowDown':
         e.preventDefault();
@@ -73,7 +73,7 @@ export const SubMenu = ({
         if (items && items.length > 0) {
           const currentIndex = Array.from(items).indexOf(triggerRef.current!);
           const nextIndex = (currentIndex + 1) % items.length;
-          items[nextIndex]?.focus();
+          items[nextIndex]?.focus({ preventScroll: true });
         }
         break;
       case 'ArrowUp':
@@ -87,14 +87,14 @@ export const SubMenu = ({
         if (itemsUp && itemsUp.length > 0) {
           const currentIndex = Array.from(itemsUp).indexOf(triggerRef.current!);
           const prevIndex = currentIndex <= 0 ? itemsUp.length - 1 : currentIndex - 1;
-          itemsUp[prevIndex]?.focus();
+          itemsUp[prevIndex]?.focus({ preventScroll: true });
         }
         break;
       case 'Escape':
         e.preventDefault();
         e.stopPropagation();
         setIsOpen(false);
-        triggerRef.current?.focus();
+        triggerRef.current?.focus({ preventScroll: true });
         break;
       case 'Home':
         e.preventDefault();
@@ -103,7 +103,7 @@ export const SubMenu = ({
         const itemsHome = parentMenuHome?.querySelectorAll<HTMLElement>(
           '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])',
         );
-        itemsHome?.[0]?.focus();
+        itemsHome?.[0]?.focus({ preventScroll: true });
         break;
       case 'End':
         e.preventDefault();
@@ -113,7 +113,7 @@ export const SubMenu = ({
           '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])',
         );
         if (itemsEnd && itemsEnd.length > 0) {
-          itemsEnd[itemsEnd.length - 1]?.focus();
+          itemsEnd[itemsEnd.length - 1]?.focus({ preventScroll: true });
         }
         break;
     }

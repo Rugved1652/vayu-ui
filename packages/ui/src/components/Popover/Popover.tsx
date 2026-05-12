@@ -43,7 +43,7 @@ const PopoverRoot = forwardRef<HTMLDivElement, PopoverProps>(
     useKeyPress('Escape', () => {
       if (!open) return;
       setOpen(false);
-      triggerRef.current?.focus();
+      triggerRef.current?.focus({ preventScroll: true });
     });
 
     return (

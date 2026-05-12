@@ -63,6 +63,22 @@ export function DraggableTasksPanel() {
               </p>
             </Accordion.Body>
           </Accordion.Item>
+          <Accordion.Item itemId="customization">
+            <Accordion.Header itemId="customization">Can I customize the tasks?</Accordion.Header>
+            <Accordion.Body itemId="customization">
+              <p className="text-xs text-muted-content">
+                Yes, you can completely customize the visual style and behavior of the tasks using our design tokens.
+              </p>
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item itemId="data-source">
+            <Accordion.Header itemId="data-source">Where is the data stored?</Accordion.Header>
+            <Accordion.Body itemId="data-source">
+              <p className="text-xs text-muted-content">
+                Currently, it's stored in local state. You can easily connect the Draggable component to your own backend.
+              </p>
+            </Accordion.Body>
+          </Accordion.Item>
         </Accordion>
       </div>
     </div>

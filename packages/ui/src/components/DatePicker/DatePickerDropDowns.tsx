@@ -33,7 +33,7 @@ export const MonthDropdownList: React.FC<MonthDropdownListProps> = ({
         hasFocusedRef.current = true;
         queueMicrotask(() => {
           el.scrollIntoView({ block: 'nearest' });
-          el.focus();
+          el.focus({ preventScroll: true });
         });
       }
     },
@@ -51,7 +51,7 @@ export const MonthDropdownList: React.FC<MonthDropdownListProps> = ({
     const button = buttonRefs.current[focusedIndex];
     if (button) {
       button.scrollIntoView({ block: 'nearest' });
-      button.focus();
+      button.focus({ preventScroll: true });
     }
   }, [focusedIndex]);
 
@@ -162,7 +162,7 @@ export const YearDropdownList: React.FC<YearDropdownListProps> = ({
         hasFocusedRef.current = true;
         queueMicrotask(() => {
           el.scrollIntoView({ block: 'nearest' });
-          el.focus();
+          el.focus({ preventScroll: true });
         });
       }
     },
@@ -180,7 +180,7 @@ export const YearDropdownList: React.FC<YearDropdownListProps> = ({
     const button = buttonRefs.current[focusedIndex];
     if (button) {
       button.scrollIntoView({ block: 'nearest' });
-      button.focus();
+      button.focus({ preventScroll: true });
     }
   }, [focusedIndex]);
 

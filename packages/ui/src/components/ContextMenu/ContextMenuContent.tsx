@@ -73,7 +73,7 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
           const first = menuRef.current?.querySelector<HTMLElement>(
             '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
           );
-          first?.focus();
+          first?.focus({ preventScroll: true });
         });
       }
     }, [isOpen]);

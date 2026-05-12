@@ -86,7 +86,7 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
 
     useEffect(() => {
       if (autoFocus) {
-        inputRef.current?.focus();
+        inputRef.current?.focus({ preventScroll: true });
       }
     }, [autoFocus]);
 
@@ -115,7 +115,7 @@ const OTPInputRoot = forwardRef<HTMLInputElement, OTPInputRootProps>(
             disabled && 'opacity-50 cursor-not-allowed',
             loading && 'opacity-70',
           )}
-          onClick={() => !disabled && !loading && inputRef.current?.focus()}
+          onClick={() => !disabled && !loading && inputRef.current?.focus({ preventScroll: true })}
         >
           {/* Visual Container */}
           <div className={clsx('flex items-center gap-2', className)}>

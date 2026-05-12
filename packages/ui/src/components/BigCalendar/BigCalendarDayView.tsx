@@ -35,7 +35,7 @@ export const DayView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>
 
         if (next >= 0 && next < 24) {
           e.preventDefault();
-          cellRefs.current[next]?.focus();
+          cellRefs.current[next]?.focus({ preventScroll: true });
         }
       },
       [currentDate, onDateClick],

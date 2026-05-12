@@ -118,14 +118,14 @@ export function GridItem({
           const nextId = allIds[Math.min(allIds.length - 1, idx + 1)];
           if (nextId) {
             ctx.setFocusedId(nextId);
-            document.getElementById(`grid-item-${nextId}`)?.focus();
+            document.getElementById(`grid-item-${nextId}`)?.focus({ preventScroll: true });
           }
         } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
           e.preventDefault();
           const prevId = allIds[Math.max(0, idx - 1)];
           if (prevId) {
             ctx.setFocusedId(prevId);
-            document.getElementById(`grid-item-${prevId}`)?.focus();
+            document.getElementById(`grid-item-${prevId}`)?.focus({ preventScroll: true });
           }
         }
       }

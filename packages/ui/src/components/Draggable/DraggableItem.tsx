@@ -61,11 +61,11 @@ export function DraggableItem({
         if (e.key === "ArrowDown" || e.key === "ArrowRight") {
           e.preventDefault();
           const nextId = effectiveItems[Math.min(effectiveItems.length - 1, idx + 1)];
-          if (nextId) { ctx.setFocusedId(nextId); document.getElementById(`draggable-item-${nextId}`)?.focus(); }
+          if (nextId) { ctx.setFocusedId(nextId); document.getElementById(`draggable-item-${nextId}`)?.focus({ preventScroll: true }); }
         } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
           e.preventDefault();
           const prevId = effectiveItems[Math.max(0, idx - 1)];
-          if (prevId) { ctx.setFocusedId(prevId); document.getElementById(`draggable-item-${prevId}`)?.focus(); }
+          if (prevId) { ctx.setFocusedId(prevId); document.getElementById(`draggable-item-${prevId}`)?.focus({ preventScroll: true }); }
         }
       }
     },

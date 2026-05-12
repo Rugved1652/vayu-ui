@@ -30,7 +30,7 @@ const Accordion: React.FC<AccordionProps> & {
             if (panelRef.current.contains(activeElement) && activeElement instanceof HTMLElement) {
               const headerId = `accordion-header-${id}`;
               const headerButton = document.getElementById(headerId);
-              setTimeout(() => headerButton?.focus(), 0);
+              setTimeout(() => headerButton?.focus({ preventScroll: true }), 0);
             }
           }
           next.delete(id);
@@ -70,7 +70,7 @@ const Accordion: React.FC<AccordionProps> & {
       );
       const firstFocusable = focusableElements[0] as HTMLElement;
       if (firstFocusable) {
-        firstFocusable.focus();
+        firstFocusable.focus({ preventScroll: true });
       }
     }
   }, []);

@@ -36,7 +36,7 @@ function focusAdjacentColumn(currentListbox: HTMLElement, direction: 'next' | 'p
     )) as HTMLElement | null;
 
   if (targetItem) {
-    targetItem.focus();
+    targetItem.focus({ preventScroll: true });
     targetItem.scrollIntoView({ block: 'nearest' });
     return true;
   }
@@ -65,12 +65,12 @@ const TimeColumn: React.FC<TimeColumnProps> = ({ label, children, className }) =
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
-      items[nextIndex]?.focus();
+      items[nextIndex]?.focus({ preventScroll: true });
       items[nextIndex]?.scrollIntoView({ block: 'nearest' });
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
-      items[prevIndex]?.focus();
+      items[prevIndex]?.focus({ preventScroll: true });
       items[prevIndex]?.scrollIntoView({ block: 'nearest' });
     } else if (e.key === 'ArrowRight') {
       e.preventDefault();
@@ -80,11 +80,11 @@ const TimeColumn: React.FC<TimeColumnProps> = ({ label, children, className }) =
       focusAdjacentColumn(listbox, 'prev');
     } else if (e.key === 'Home') {
       e.preventDefault();
-      items[0]?.focus();
+      items[0]?.focus({ preventScroll: true });
       items[0]?.scrollIntoView({ block: 'nearest' });
     } else if (e.key === 'End') {
       e.preventDefault();
-      items[items.length - 1]?.focus();
+      items[items.length - 1]?.focus({ preventScroll: true });
       items[items.length - 1]?.scrollIntoView({ block: 'nearest' });
     }
   }, []);

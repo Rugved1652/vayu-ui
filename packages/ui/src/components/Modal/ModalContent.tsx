@@ -37,16 +37,16 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
         const timer = setTimeout(() => {
           const focusable = contentRef.current?.querySelector<HTMLElement>(FOCUSABLE);
           if (focusable) {
-            focusable.focus();
+            focusable.focus({ preventScroll: true });
           } else {
-            contentRef.current?.focus();
+            contentRef.current?.focus({ preventScroll: true });
           }
         }, 50);
 
         return () => clearTimeout(timer);
       } else {
         const returnTarget = triggerRef.current ?? previouslyFocusedRef.current;
-        returnTarget?.focus();
+        returnTarget?.focus({ preventScroll: true });
       }
     }, [open, triggerRef]);
 
@@ -74,12 +74,12 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
         if (e.shiftKey) {
           if (document.activeElement === firstElement) {
             e.preventDefault();
-            lastElement.focus();
+            lastElement.focus({ preventScroll: true });
           }
         } else {
           if (document.activeElement === lastElement) {
             e.preventDefault();
-            firstElement.focus();
+            firstElement.focus({ preventScroll: true });
           }
         }
       }

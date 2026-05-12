@@ -32,7 +32,7 @@ export function useKeyboardNavigation() {
       } else if (event.key === 'ArrowLeft') {
         newIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
       }
-      (focusableElements[newIndex] as HTMLElement).focus();
+      (focusableElements[newIndex] as HTMLElement).focus({ preventScroll: true });
     }
   }, []);
 }

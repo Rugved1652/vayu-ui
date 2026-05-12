@@ -14,7 +14,7 @@ const List: React.FC = () => {
   // WCAG Focus Management: Move focus back to DropZone if list becomes empty
   useEffect(() => {
     if (prevFilesLength.current > 0 && files.length === 0) {
-      dropZoneRef.current?.focus();
+      dropZoneRef.current?.focus({ preventScroll: true });
     }
     prevFilesLength.current = files.length;
   }, [files.length, dropZoneRef]);

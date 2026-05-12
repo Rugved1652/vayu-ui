@@ -214,7 +214,7 @@ export const DatePickerRoot = forwardRef<HTMLDivElement, DatePickerRootProps>(
             return;
           }
           setOpen(false);
-          triggerRef.current?.focus();
+          triggerRef.current?.focus({ preventScroll: true });
         }
       };
 

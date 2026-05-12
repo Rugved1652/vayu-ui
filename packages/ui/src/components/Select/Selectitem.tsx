@@ -55,8 +55,8 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(
           list.querySelectorAll('[role="option"]:not([data-disabled="true"])'),
         ) as HTMLElement[];
         const currentIndex = items.indexOf(e.currentTarget as HTMLElement);
-        if (e.key === 'ArrowDown') (items[currentIndex + 1] || items[0])?.focus();
-        else (items[currentIndex - 1] || items[items.length - 1])?.focus();
+        if (e.key === 'ArrowDown') (items[currentIndex + 1] || items[0])?.focus({ preventScroll: true });
+        else (items[currentIndex - 1] || items[items.length - 1])?.focus({ preventScroll: true });
       } else if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         handleSelect();
@@ -72,8 +72,8 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(
           list.querySelectorAll('[role="option"]:not([data-disabled="true"])'),
         ) as HTMLElement[];
         const currentIndex = items.indexOf(e.currentTarget as HTMLElement);
-        if (e.shiftKey) currentIndex === 0 ? focusInput() : items[currentIndex - 1]?.focus();
-        else currentIndex === items.length - 1 ? focusInput() : items[currentIndex + 1]?.focus();
+        if (e.shiftKey) currentIndex === 0 ? focusInput() : items[currentIndex - 1]?.focus({ preventScroll: true });
+        else currentIndex === items.length - 1 ? focusInput() : items[currentIndex + 1]?.focus({ preventScroll: true });
       }
     };
 

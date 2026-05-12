@@ -69,7 +69,7 @@ export const ColorPickerContent = forwardRef<HTMLDivElement, ColorPickerContentP
       const rafId = requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           updatePosition();
-          contentRef.current?.focus();
+          contentRef.current?.focus({ preventScroll: true });
         });
       });
 

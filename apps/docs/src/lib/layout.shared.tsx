@@ -1,5 +1,6 @@
 import { type BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import Logo from '@/components/Logo';
+import { ColorThemePanel } from '@/components/landing/hero/ColorThemePanel';
 
 export function baseOptions(): BaseLayoutProps {
   return {
@@ -11,6 +12,7 @@ export function baseOptions(): BaseLayoutProps {
         </>
       ),
       transparentMode: 'top',
+      children: <ColorThemePanel />,
     },
     githubUrl: 'https://github.com/Rugved1652/vayu-ui',
   };

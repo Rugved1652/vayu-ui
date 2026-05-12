@@ -30,7 +30,7 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
             e.stopPropagation();
             if (items.length > 0) {
               const idx = items.indexOf(itemRef.current!);
-              items[(idx + 1) % items.length]?.focus();
+              items[(idx + 1) % items.length]?.focus({ preventScroll: true });
             }
             break;
           case "ArrowUp":
@@ -38,18 +38,18 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
             e.stopPropagation();
             if (items.length > 0) {
               const idx = items.indexOf(itemRef.current!);
-              items[idx <= 0 ? items.length - 1 : idx - 1]?.focus();
+              items[idx <= 0 ? items.length - 1 : idx - 1]?.focus({ preventScroll: true });
             }
             break;
           case "Home":
             e.preventDefault();
             e.stopPropagation();
-            items[0]?.focus();
+            items[0]?.focus({ preventScroll: true });
             break;
           case "End":
             e.preventDefault();
             e.stopPropagation();
-            if (items.length > 0) items[items.length - 1]?.focus();
+            if (items.length > 0) items[items.length - 1]?.focus({ preventScroll: true });
             break;
           case "Escape":
             e.preventDefault();

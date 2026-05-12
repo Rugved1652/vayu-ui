@@ -19,7 +19,7 @@ export function NavbarMobileMenu({ className, children, ...props }: NavbarMobile
     if (!mobileOpen) return;
 
     const timer = setTimeout(() => {
-      closeBtnRef.current?.focus();
+      closeBtnRef.current?.focus({ preventScroll: true });
     }, 50);
 
     const menu = menuRef.current;
@@ -44,12 +44,12 @@ export function NavbarMobileMenu({ className, children, ...props }: NavbarMobile
       if (e.shiftKey) {
         if (document.activeElement === firstFocusable || document.activeElement === menu) {
           e.preventDefault();
-          lastFocusable?.focus();
+          lastFocusable?.focus({ preventScroll: true });
         }
       } else {
         if (document.activeElement === lastFocusable) {
           e.preventDefault();
-          firstFocusable?.focus();
+          firstFocusable?.focus({ preventScroll: true });
         }
       }
     };

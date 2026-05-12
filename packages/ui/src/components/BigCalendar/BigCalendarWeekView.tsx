@@ -55,7 +55,7 @@ export const WeekView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement
 
         if (dNext >= 0 && dNext < 7 && hNext >= 0 && hNext < 24) {
           e.preventDefault();
-          cellRefs.current[cellIndex(hNext, dNext)]?.focus();
+          cellRefs.current[cellIndex(hNext, dNext)]?.focus({ preventScroll: true });
         }
       },
       [onDateClick, cellIndex],

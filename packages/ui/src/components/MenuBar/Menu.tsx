@@ -83,7 +83,7 @@ export const Menu = ({
 
       const targetTrigger = triggers[targetIndex];
       if (targetTrigger && targetTrigger.ref.current) {
-        targetTrigger.ref.current.focus();
+        targetTrigger.ref.current.focus({ preventScroll: true });
         if (isOpen) {
           setActiveMenu(targetTrigger.id);
         }
@@ -114,7 +114,7 @@ export const Menu = ({
       case 'Escape':
         e.preventDefault();
         setActiveMenu(null);
-        triggerRef.current?.focus();
+        triggerRef.current?.focus({ preventScroll: true });
         break;
       case 'ArrowRight':
         if (orientation === 'horizontal') {
@@ -132,14 +132,14 @@ export const Menu = ({
         if (orientation === 'horizontal') {
           e.preventDefault();
           const triggers = getAllTriggers();
-          triggers[0]?.ref.current?.focus();
+          triggers[0]?.ref.current?.focus({ preventScroll: true });
         }
         break;
       case 'End':
         if (orientation === 'horizontal') {
           e.preventDefault();
           const triggers = getAllTriggers();
-          triggers[triggers.length - 1]?.ref.current?.focus();
+          triggers[triggers.length - 1]?.ref.current?.focus({ preventScroll: true });
         }
         break;
     }

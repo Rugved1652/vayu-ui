@@ -272,7 +272,7 @@ const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string; size?
       if (e.key === 'Enter') {
         e.preventDefault();
         commitHour(hourText);
-        minuteInputRef.current?.focus();
+        minuteInputRef.current?.focus({ preventScroll: true });
         minuteInputRef.current?.select();
       }
       if (e.key === 'ArrowRight') {
@@ -283,7 +283,7 @@ const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string; size?
         if (isAtRightEdge || isFullySelected) {
           e.preventDefault();
           commitHour(hourText);
-          minuteInputRef.current?.focus();
+          minuteInputRef.current?.focus({ preventScroll: true });
           minuteInputRef.current?.select();
         }
       }
@@ -325,7 +325,7 @@ const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string; size?
         if (isAtLeftEdge || isFullySelected) {
           e.preventDefault();
           commitMinute(minuteText);
-          hourInputRef.current?.focus();
+          hourInputRef.current?.focus({ preventScroll: true });
           hourInputRef.current?.select();
         }
       }
@@ -338,7 +338,7 @@ const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string; size?
           if (format === '12h' && periodInputRef.current) {
             e.preventDefault();
             commitMinute(minuteText);
-            periodInputRef.current.focus();
+            periodInputRef.current.focus({ preventScroll: true });
             periodInputRef.current.select();
           }
         }
@@ -373,7 +373,7 @@ const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string; size?
           target.selectionStart === 0 && target.selectionEnd === target.value.length;
         if (isAtLeftEdge || isFullySelected) {
           e.preventDefault();
-          minuteInputRef.current?.focus();
+          minuteInputRef.current?.focus({ preventScroll: true });
           minuteInputRef.current?.select();
         }
       }
@@ -449,7 +449,7 @@ const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string; size?
                   if (v.length === 2) {
                     commitHour(v);
                     setTimeout(() => {
-                      minuteInputRef.current?.focus();
+                      minuteInputRef.current?.focus({ preventScroll: true });
                       minuteInputRef.current?.select();
                     }, 0);
                   }
@@ -478,7 +478,7 @@ const TimepickerTrigger = forwardRef<HTMLDivElement, { className?: string; size?
                     commitMinute(v);
                     setTimeout(() => {
                       if (format === '12h' && periodInputRef.current) {
-                        periodInputRef.current.focus();
+                        periodInputRef.current.focus({ preventScroll: true });
                         periodInputRef.current.select();
                       } else {
                         minuteInputRef.current?.blur();

@@ -49,7 +49,7 @@ export const useTypeahead = (menuRef: React.RefObject<HTMLElement | null>) => {
       const match = Array.from(items).find((item) =>
         item.textContent?.toLowerCase().startsWith(bufferRef.current.buffer)
       );
-      match?.focus();
+      match?.focus({ preventScroll: true });
 
       bufferRef.current.timeout = setTimeout(() => {
         bufferRef.current.buffer = "";

@@ -77,6 +77,70 @@
   --shadow: #fff;                       
 }
 
+/* ═════════════════════════════════════════════════════════════════════════════════════════════
+   THEME PRESETS - Override brand/focus colors without breaking dark mode
+   ═════════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* Blue */
+:root[data-theme="blue"] {
+  --brand: #3b82f6;
+  --brand-content: #fff;
+  --focus: #3b82f6;
+}
+:root[data-theme="blue"].dark {
+  --brand: #60a5fa;
+  --brand-content: #000;
+  --focus: #60a5fa;
+}
+
+/* Rose */
+:root[data-theme="rose"] {
+  --brand: #f43f5e;
+  --brand-content: #fff;
+  --focus: #f43f5e;
+}
+:root[data-theme="rose"].dark {
+  --brand: #fb7185;
+  --brand-content: #000;
+  --focus: #fb7185;
+}
+
+/* Violet */
+:root[data-theme="violet"] {
+  --brand: #8b5cf6;
+  --brand-content: #fff;
+  --focus: #8b5cf6;
+}
+:root[data-theme="violet"].dark {
+  --brand: #a78bfa;
+  --brand-content: #000;
+  --focus: #a78bfa;
+}
+
+/* Amber */
+:root[data-theme="amber"] {
+  --brand: #f59e0b;
+  --brand-content: #fff;
+  --focus: #f59e0b;
+}
+:root[data-theme="amber"].dark {
+  --brand: #fbbf24;
+  --brand-content: #000;
+  --focus: #fbbf24;
+}
+
+/* Emerald */
+:root[data-theme="emerald"] {
+  --brand: #10b981;
+  --brand-content: #fff;
+  --focus: #10b981;
+}
+:root[data-theme="emerald"].dark {
+  --brand: #34d399;
+  --brand-content: #000;
+  --focus: #34d399;
+}
+
 @theme {
   /* ── Fumadocs Colors ── */
   --color-fd-background: var(--canvas);

@@ -1,9 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { Layers } from 'lucide-react';
-import { Badge, Collapsible, Divider, Tabs } from 'vayu-ui';
+import { Badge, Checkbox, Collapsible, Divider, Tabs } from 'vayu-ui';
 
 export function TabsPanel() {
+  const [accessible, setAccessible] = useState(true);
+
   return (
     <div className="hero-collage-panel hero-collage-panel-soft h-full flex flex-col">
       <div className="mb-3 flex items-center justify-between">
@@ -62,6 +65,18 @@ export function TabsPanel() {
           </Collapsible.Content>
           <Collapsible.Trigger showText="Read more" hideText="Show less" />
         </Collapsible>
+
+        <Checkbox checked={accessible} onChange={setAccessible}>
+          <div className="flex items-center gap-3">
+            <Checkbox.Indicator />
+            <div className="flex flex-col">
+              <Checkbox.Label>Keep accessibility-first defaults enabled</Checkbox.Label>
+              <Checkbox.Description>
+                Preserve keyboard support and clean contrast.
+              </Checkbox.Description>
+            </div>
+          </div>
+        </Checkbox>
       </div>
     </div>
   );
