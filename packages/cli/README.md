@@ -19,15 +19,15 @@ No installation needed — use `npx`:
 
 ```bash
 # List all available components and hooks
-npx vayu-ui-cli list
+npx vayu-ui-cli@latest list
 
 # Filter by type
-npx vayu-ui-cli list --type component
-npx vayu-ui-cli list --type hook
+npx vayu-ui-cli@latest list --type component
+npx vayu-ui-cli@latest list --type hook
 
 # Filter by category
-npx vayu-ui-cli list --category inputs
-npx vayu-ui-cli list --type component --category overlay
+npx vayu-ui-cli@latest list --category inputs
+npx vayu-ui-cli@latest list --type component --category overlay
 ```
 
 ---
@@ -84,13 +84,13 @@ vayu-ui list
 
 ```bash
 # Only hooks
-npx vayu-ui-cli list --type hook
+npx vayu-ui-cli@latest list --type hook
 
 # Only components in the overlay category
-npx vayu-ui-cli list --type component --category overlay
+npx vayu-ui-cli@latest list --type component --category overlay
 
 # Filter by any category
-npx vayu-ui-cli list --category sensor
+npx vayu-ui-cli@latest list --category sensor
 ```
 
 ---
@@ -100,7 +100,7 @@ npx vayu-ui-cli list --category sensor
 Sets up Vayu UI in your project — creates the folder structure, injects design tokens, and optionally installs Tailwind CSS v4.
 
 ```bash
-npx vayu-ui-cli init
+npx vayu-ui-cli@latest init
 ```
 
 **What it does:**
@@ -144,13 +144,13 @@ npx vayu-ui-cli init
 
 ```bash
 # Merge tokens into your existing globals.css
-npx vayu-ui-cli init --merge
+npx vayu-ui-cli@latest init --merge
 
 # Custom UI folder path
-npx vayu-ui-cli init --path src/lib/ui
+npx vayu-ui-cli@latest init --path src/lib/ui
 
 # Skip Tailwind check
-npx vayu-ui-cli init --skip-tailwind
+npx vayu-ui-cli@latest init --skip-tailwind
 ```
 
 ---
@@ -160,9 +160,9 @@ npx vayu-ui-cli init --skip-tailwind
 Copies one or more components or hooks from the Vayu UI GitHub repo into your project. Automatically resolves transitive dependencies and installs required npm packages.
 
 ```bash
-npx vayu-ui-cli add button
-npx vayu-ui-cli add button modal tooltip
-npx vayu-ui-cli add use-debounce
+npx vayu-ui-cli@latest add button
+npx vayu-ui-cli@latest add button modal tooltip
+npx vayu-ui-cli@latest add use-debounce
 ```
 
 **What it does:**
@@ -208,13 +208,13 @@ npx vayu-ui-cli add use-debounce
 
 ```bash
 # Preview without writing
-npx vayu-ui-cli add modal --dry-run
+npx vayu-ui-cli@latest add modal --dry-run
 
 # Force overwrite
-npx vayu-ui-cli add button --overwrite
+npx vayu-ui-cli@latest add button --overwrite
 
 # Skip npm install
-npx vayu-ui-cli add sidebar --skip-install
+npx vayu-ui-cli@latest add sidebar --skip-install
 ```
 
 ---
@@ -225,10 +225,10 @@ Re-fetches installed components and hooks from GitHub. Compares content and only
 
 ```bash
 # Update all installed items
-npx vayu-ui-cli update
+npx vayu-ui-cli@latest update
 
 # Update specific items
-npx vayu-ui-cli update button modal
+npx vayu-ui-cli@latest update button modal
 ```
 
 **Flags:**
@@ -241,10 +241,10 @@ npx vayu-ui-cli update button modal
 
 ```bash
 # Preview changes
-npx vayu-ui-cli update --dry-run
+npx vayu-ui-cli@latest update --dry-run
 
 # Force update everything
-npx vayu-ui-cli update --force
+npx vayu-ui-cli@latest update --force
 ```
 
 ---
@@ -254,8 +254,8 @@ npx vayu-ui-cli update --force
 Removes one or more installed components or hooks. Warns if other installed items depend on what you are removing. Auto-cleans `utils/` when no components remain.
 
 ```bash
-npx vayu-ui-cli remove button
-npx vayu-ui-cli remove button modal
+npx vayu-ui-cli@latest remove button
+npx vayu-ui-cli@latest remove button modal
 ```
 
 **Flags:**
@@ -266,7 +266,7 @@ npx vayu-ui-cli remove button modal
 
 ```bash
 # Remove without prompt
-npx vayu-ui-cli remove button --force
+npx vayu-ui-cli@latest remove button --force
 ```
 
 ---
@@ -279,17 +279,17 @@ Supports **Claude Code**, **Cursor**, **VS Code Copilot**, **Windsurf**, and **A
 
 ```bash
 # Interactive — prompts which tools to configure
-npx vayu-ui-cli install-mcp
+npx vayu-ui-cli@latest install-mcp
 
 # Configure specific tools
-npx vayu-ui-cli install-mcp --tool claude
-npx vayu-ui-cli install-mcp --tool claude,cursor
+npx vayu-ui-cli@latest install-mcp --tool claude
+npx vayu-ui-cli@latest install-mcp --tool claude,cursor
 
 # Configure globally (home directory)
-npx vayu-ui-cli install-mcp --global
+npx vayu-ui-cli@latest install-mcp --global
 
 # Preview without writing
-npx vayu-ui-cli install-mcp --dry-run
+npx vayu-ui-cli@latest install-mcp --dry-run
 ```
 
 **What it does:**
@@ -333,7 +333,7 @@ npx vayu-ui-cli install-mcp --dry-run
 
 ```bash
 # Overwrite existing config
-npx vayu-ui-cli install-mcp --tool claude --force
+npx vayu-ui-cli@latest install-mcp --tool claude --force
 ```
 
 ---

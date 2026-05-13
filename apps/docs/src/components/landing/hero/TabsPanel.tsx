@@ -28,7 +28,9 @@ export function TabsPanel() {
           </Tabs.List>
           <Tabs.Content value="code">
             <div className="rounded-surface border border-border bg-canvas p-3">
-              <p className="font-tertiary text-xs text-muted-content">npx vayu-ui-cli add button</p>
+              <p className="font-tertiary text-xs text-muted-content">
+                npx vayu-ui-cli@latest add button
+              </p>
             </div>
           </Tabs.Content>
           <Tabs.Content value="design">

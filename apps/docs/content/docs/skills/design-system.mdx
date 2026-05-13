@@ -1,13 +1,6 @@
 ---
-name: design-system
-description: >
-  Enforces the use of Vayu UI's design tokens and component composition patterns for visual
-  consistency. Apply this skill whenever you are styling components, choosing colors, applying
-  shadows, setting border radius, or composing compound components.
-  Also trigger when the user mentions "design tokens", "color tokens", "tailwind", "styling",
-  "theme", "shadow", "radius", "composition", "compound component", or asks about visual
-  design patterns in Vayu UI.
-  Do NOT trigger for general CSS questions unrelated to Vayu UI's token system.
+title: Design System
+description: Token usage, component composition, and visual consistency patterns.
 ---
 
 # Design System
@@ -70,9 +63,9 @@ export const Button = Object.assign(ButtonRoot, { Icon, Badge, Text });
 
 // Usage
 <Button>
-  <Button.Icon>...</Button.Icon>
-  <Button.Text>Click me</Button.Text>
-</Button>;
+  <Button.Icon>...<Button.Icon>
+  <Button.Text>Click me<Button.Text>
+<Button>
 ```
 
 ## Anti-Patterns

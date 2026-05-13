@@ -7,25 +7,83 @@ The **vayu-ui** CLI lets you scaffold Vayu UI into any React project with a copy
 
 ## Quick Start
 
+**1. Create a new project with Vayu UI (Next.js or Vite)**
+
 ```bash
-# 1. Initialize Vayu UI in your project
-npx vayu-ui-cli init
+npx vayu-ui-cli@latest create my-app
+```
 
-# 2. Browse what's available
-npx vayu-ui-cli list
+**2. Initialize Vayu UI in an existing project**
 
-# 3. Add a component or hook
-npx vayu-ui-cli add button
+```bash
+npx vayu-ui-cli@latest init
+```
+
+**3. Browse what's available**
+
+```bash
+npx vayu-ui-cli@latest list
+```
+
+**4. Add a component or hook**
+
+```bash
+npx vayu-ui-cli@latest add button
 ```
 
 No installation needed — `npx` runs the latest version directly.
+
+## `vayu-ui create <name>`
+
+Scaffolds a brand new React project with Vayu UI pre-configured. Supports Next.js and Vite.
+
+```bash
+npx vayu-ui-cli@latest create my-app
+```
+
+```bash
+npx vayu-ui-cli@latest create my-app --framework next --force
+```
+
+```bash
+npx vayu-ui-cli@latest create my-app --framework vite --skip-init
+```
+
+**What it does:**
+
+- Scaffolds a fresh Next.js or Vite project using the official templates
+- Initializes Vayu UI automatically (unless `--skip-init`)
+- Adds starter components: `Button`, `Typography`, `useLocalStorage`, `useDebounce`, `useOnClickOutside`
+- Installs all npm dependencies automatically
+
+**Flags:**
+
+| Flag                                       | Description                                   |
+| :----------------------------------------- | :-------------------------------------------- |
+| `--framework <next\|vite>`                 | Framework to scaffold (default: prompts)      |
+| `--package-manager <npm\|pnpm\|yarn\|bun>` | Package manager (default: auto-detect)        |
+| `--app-router`                             | Use App Router (Next.js only, default: true)  |
+| `--no-app-router`                          | Use Pages Router (Next.js only)               |
+| `--typescript`                             | Use TypeScript (default: true)                |
+| `--no-typescript`                          | Use JavaScript                                |
+| `--tailwind`                               | Include Tailwind CSS (default: true)          |
+| `--no-tailwind`                            | Skip Tailwind CSS                             |
+| `--eslint`                                 | Include ESLint (default: true)                |
+| `--no-eslint`                              | Skip ESLint                                   |
+| `--src-dir`                                | Use `src/` directory (default: true)          |
+| `--no-src-dir`                             | Don't use `src/` directory                    |
+| `--skip-init`                              | Skip Vayu UI initialization after scaffolding |
+| `--skip-install`                           | Skip npm install during scaffolding           |
+| `--force`                                  | Skip all prompts, use defaults                |
+
+---
 
 ## `vayu-ui init`
 
 Sets up Vayu UI in your project. Creates the folder structure, injects design tokens as CSS, and optionally installs Tailwind CSS v4.
 
 ```bash
-npx vayu-ui-cli init
+npx vayu-ui-cli@latest init
 ```
 
 **What it does:**
@@ -48,14 +106,15 @@ npx vayu-ui-cli init
 | `--force`           | Skip all prompts and use defaults                                      |
 
 ```bash
-# Merge tokens into your existing globals.css
-npx vayu-ui-cli init --merge
+npx vayu-ui-cli@latest init --merge
+```
 
-# Custom UI folder path
-npx vayu-ui-cli init --path src/lib/ui
+```bash
+npx vayu-ui-cli@latest init --path src/lib/ui
+```
 
-# Skip Tailwind check
-npx vayu-ui-cli init --skip-tailwind
+```bash
+npx vayu-ui-cli@latest init --skip-tailwind
 ```
 
 ## `vayu-ui list`
@@ -63,7 +122,7 @@ npx vayu-ui-cli init --skip-tailwind
 Displays all 50 components and 31 hooks available in the Vayu UI registry, grouped by type and category.
 
 ```bash
-npx vayu-ui-cli list
+npx vayu-ui-cli@latest list
 ```
 
 **Flags:**
@@ -74,14 +133,15 @@ npx vayu-ui-cli list
 | `--category <name>`        | Filter by category (e.g. `inputs`, `state`) |
 
 ```bash
-# Only hooks
-npx vayu-ui-cli list --type hook
+npx vayu-ui-cli@latest list --type hook
+```
 
-# Only overlay components
-npx vayu-ui-cli list --type component --category overlay
+```bash
+npx vayu-ui-cli@latest list --type component --category overlay
+```
 
-# Any category
-npx vayu-ui-cli list --category sensor
+```bash
+npx vayu-ui-cli@latest list --category sensor
 ```
 
 ## `vayu-ui add <slugs...>`
@@ -89,9 +149,15 @@ npx vayu-ui-cli list --category sensor
 Copies one or more components or hooks from GitHub into your project. Automatically resolves transitive dependencies and installs required npm packages.
 
 ```bash
-npx vayu-ui-cli add button
-npx vayu-ui-cli add button modal tooltip
-npx vayu-ui-cli add use-debounce use-local-storage
+npx vayu-ui-cli@latest add button
+```
+
+```bash
+npx vayu-ui-cli@latest add button modal tooltip
+```
+
+```bash
+npx vayu-ui-cli@latest add use-debounce use-local-storage
 ```
 
 **What it does:**
@@ -114,14 +180,15 @@ npx vayu-ui-cli add use-debounce use-local-storage
 | `--yes`          | `-y`  | Skip confirmation prompts                   |
 
 ```bash
-# Preview without writing
-npx vayu-ui-cli add modal --dry-run
+npx vayu-ui-cli@latest add modal --dry-run
+```
 
-# Force overwrite
-npx vayu-ui-cli add button --overwrite
+```bash
+npx vayu-ui-cli@latest add button --overwrite
+```
 
-# Skip npm install
-npx vayu-ui-cli add sidebar --skip-install
+```bash
+npx vayu-ui-cli@latest add sidebar --skip-install
 ```
 
 **After installing**, import components from your ui folder:
@@ -136,11 +203,11 @@ import { useDebounce } from '@/ui/hooks/useDebounce';
 Re-fetches installed components and hooks from GitHub. Compares file contents and only overwrites changed files.
 
 ```bash
-# Update all installed items
-npx vayu-ui-cli update
+npx vayu-ui-cli@latest update
+```
 
-# Update specific items
-npx vayu-ui-cli update button modal
+```bash
+npx vayu-ui-cli@latest update button modal
 ```
 
 **Flags:**
@@ -152,11 +219,11 @@ npx vayu-ui-cli update button modal
 | `--css`     | —     | Also update Vayu UI CSS design tokens               |
 
 ```bash
-# Preview changes
-npx vayu-ui-cli update --dry-run
+npx vayu-ui-cli@latest update --dry-run
+```
 
-# Force update everything
-npx vayu-ui-cli update --force
+```bash
+npx vayu-ui-cli@latest update --force
 ```
 
 ## `vayu-ui remove <slugs...>`
@@ -164,8 +231,11 @@ npx vayu-ui-cli update --force
 Removes one or more installed components or hooks. Warns if other installed items depend on what you are removing. Auto-cleans `utils/` when no components remain.
 
 ```bash
-npx vayu-ui-cli remove button
-npx vayu-ui-cli remove button modal
+npx vayu-ui-cli@latest remove button
+```
+
+```bash
+npx vayu-ui-cli@latest remove button modal
 ```
 
 **Flags:**
@@ -175,7 +245,7 @@ npx vayu-ui-cli remove button modal
 | `--force` | `-f`  | Skip confirmation prompt |
 
 ```bash
-npx vayu-ui-cli remove use-debounce --force
+npx vayu-ui-cli@latest remove use-debounce --force
 ```
 
 ## `vayu-ui install-mcp`
@@ -185,12 +255,15 @@ Configures the Vayu UI MCP server for AI coding tools. The server exposes 17 too
 No local installation needed — the server runs via `npx vayu-ui-mcp` using stdio transport.
 
 ```bash
-# Interactive — prompts which tools to configure
-npx vayu-ui-cli install-mcp
+npx vayu-ui-cli@latest install-mcp
+```
 
-# Configure specific tools
-npx vayu-ui-cli install-mcp --tool claude
-npx vayu-ui-cli install-mcp --tool claude,cursor,vscode
+```bash
+npx vayu-ui-cli@latest install-mcp --tool claude
+```
+
+```bash
+npx vayu-ui-cli@latest install-mcp --tool claude,cursor,vscode
 ```
 
 **Supported tools:**
@@ -219,17 +292,32 @@ npx vayu-ui-cli install-mcp --tool claude,cursor,vscode
 | `--force`   | Skip prompts and overwrite existing entries               |
 
 ```bash
-# Configure globally
-npx vayu-ui-cli install-mcp --global
+npx vayu-ui-cli@latest install-mcp --global
+```
 
-# Preview without writing
-npx vayu-ui-cli install-mcp --dry-run
+```bash
+npx vayu-ui-cli@latest install-mcp --dry-run
+```
 
-# Overwrite existing config
-npx vayu-ui-cli install-mcp --tool claude --force
+```bash
+npx vayu-ui-cli@latest install-mcp --tool claude --force
 ```
 
 After running, restart your AI tool. The MCP server provides 17 tools including `list_components`, `get_component_props`, `scaffold_component_usage`, `get_design_tokens`, and more.
+
+---
+
+## `vayu-ui version`
+
+Shows the current CLI version, platform, and Node.js version.
+
+```bash
+npx vayu-ui-cli@latest version
+```
+
+```bash
+npx vayu-ui-cli@latest v
+```
 
 ## Configuration
 

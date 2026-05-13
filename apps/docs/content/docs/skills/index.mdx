@@ -4,19 +4,32 @@ description: Plug-and-play AI skill templates and prompt patterns for Vayu UI wo
 ---
 
 import { Cards, Card } from 'fumadocs-ui/components/card';
-import { Bot, Code, Workflow, BookOpen, Terminal, Cpu } from 'lucide-react';
+import {
+  Bot,
+  Code,
+  Workflow,
+  BookOpen,
+  Terminal,
+  Cpu,
+  ShieldCheck,
+  Palette,
+  FileText,
+  FolderTree,
+} from 'lucide-react';
 
-<div className="flex flex-col items-center text-center py-12 gap-4 not-prose">
-  <div className="flex items-center justify-center w-20 h-20 rounded-full bg-warning/10 text-warning">
-    <Bot className="w-10 h-10" />
-  </div>
-  <h1 className="text-3xl font-bold text-canvas-content tracking-tight">Skills</h1>
-  <p className="max-w-xl text-muted-content text-lg leading-relaxed">
-    Pre-built AI skill templates and prompt patterns designed to accelerate common Vayu UI
-    workflows. From scaffolding components to generating test suites — let AI handle the repetitive
-    work.
-  </p>
-</div>
+# Skills
+
+Pre-built prompt templates and patterns that help AI assistants produce consistent, maintainable code across common Vayu UI workflows.
+
+## Install
+
+Add all Vayu UI skills to your project in one command using the [Skills.sh](https://skills.sh) platform:
+
+```bash
+npx skills add Rugved1652/vayu-ui
+```
+
+This installs the full Vayu UI skill set into your project's `.agent/skills/` directory, making them available to AI coding assistants like Cursor, Windsurf, and Antigravity.
 
 ## Available Skills
 
@@ -33,5 +46,17 @@ import { Bot, Code, Workflow, BookOpen, Terminal, Cpu } from 'lucide-react';
   </Card>
   <Card href="/docs/skills/react-hook-form" title="React Hook Form + Zod" icon={<Code />}>
     Patterns for building validated forms with React Hook Form, Zod schemas, and mutations.
+  </Card>
+  <Card href="/docs/skills/code-quality" title="Code Quality" icon={<ShieldCheck />}>
+    Linting, formatting, and code review conventions for consistent, maintainable code.
+  </Card>
+  <Card href="/docs/skills/design-system" title="Design System" icon={<Palette />}>
+    Token usage, component composition, and visual consistency patterns.
+  </Card>
+  <Card href="/docs/skills/document-code" title="Documentation" icon={<FileText />}>
+    Code documentation, README standards, and inline comment conventions.
+  </Card>
+  <Card href="/docs/skills/folder-structure" title="Folder Structure" icon={<FolderTree />}>
+    Project organization, file naming conventions, and directory architecture.
   </Card>
 </Cards>

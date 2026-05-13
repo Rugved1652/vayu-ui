@@ -1,89 +1,246 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { Palette, RotateCcw } from 'lucide-react';
-import { Modal, Button } from 'vayu-ui';
+import { Palette, SwatchBook } from 'lucide-react';
 
-interface Theme {
+interface BaseTheme {
   key: string;
   name: string;
-  lightBg: string;
-  lightPrimary: string;
-  darkBg: string;
-  darkPrimary: string;
+  light: Record<string, string>;
+  dark: Record<string, string>;
 }
 
-const themes: Theme[] = [
+interface AccentPreset {
+  key: string;
+  name: string;
+  light: { brand: string; 'brand-content': string; focus: string };
+  dark: { brand: string; 'brand-content': string; focus: string };
+}
+
+const baseThemes: BaseTheme[] = [
+  {
+    key: 'default',
+    name: 'Default',
+    light: {
+      '--canvas': '#f4f4f5',
+      '--canvas-content': '#09090b',
+      '--surface': '#ffffff',
+      '--surface-content': '#09090b',
+      '--sidebar': '#fafafa',
+      '--sidebar-content': '#18181b',
+      '--elevated': '#ffffff',
+      '--elevated-content': '#09090b',
+      '--border': '#d4d4d8',
+      '--field': '#a1a1aa',
+      '--muted': '#e4e4e7',
+      '--muted-content': '#71717a',
+    },
+    dark: {
+      '--canvas': '#000000',
+      '--canvas-content': '#fafafa',
+      '--surface': '#0a0a0a',
+      '--surface-content': '#ffffff',
+      '--sidebar': '#121212',
+      '--sidebar-content': '#e4e4e7',
+      '--elevated': '#1a1a1a',
+      '--elevated-content': '#ffffff',
+      '--border': '#27272a',
+      '--field': '#3f3f46',
+      '--muted': '#27272a',
+      '--muted-content': '#a1a1aa',
+    },
+  },
+  {
+    key: 'white',
+    name: 'White',
+    light: {
+      '--canvas': '#ffffff',
+      '--canvas-content': '#09090b',
+      '--surface': '#ffffff',
+      '--surface-content': '#09090b',
+      '--sidebar': '#fafafa',
+      '--sidebar-content': '#18181b',
+      '--elevated': '#ffffff',
+      '--elevated-content': '#09090b',
+      '--border': '#e4e4e7',
+      '--field': '#a1a1aa',
+      '--muted': '#f4f4f5',
+      '--muted-content': '#71717a',
+    },
+    dark: {
+      '--canvas': '#000000',
+      '--canvas-content': '#fafafa',
+      '--surface': '#0a0a0a',
+      '--surface-content': '#ffffff',
+      '--sidebar': '#111111',
+      '--sidebar-content': '#e4e4e7',
+      '--elevated': '#141414',
+      '--elevated-content': '#ffffff',
+      '--border': '#27272a',
+      '--field': '#3f3f46',
+      '--muted': '#1a1a1a',
+      '--muted-content': '#a1a1aa',
+    },
+  },
+  {
+    key: 'warm',
+    name: 'Warm',
+    light: {
+      '--canvas': '#fafaf9',
+      '--canvas-content': '#1c1917',
+      '--surface': '#ffffff',
+      '--surface-content': '#1c1917',
+      '--sidebar': '#f5f5f4',
+      '--sidebar-content': '#292524',
+      '--elevated': '#ffffff',
+      '--elevated-content': '#1c1917',
+      '--border': '#e7e5e4',
+      '--field': '#a8a29e',
+      '--muted': '#f5f5f4',
+      '--muted-content': '#78716c',
+    },
+    dark: {
+      '--canvas': '#0c0a09',
+      '--canvas-content': '#fafaf9',
+      '--surface': '#1c1917',
+      '--surface-content': '#fafaf9',
+      '--sidebar': '#1c1917',
+      '--sidebar-content': '#e7e5e4',
+      '--elevated': '#292524',
+      '--elevated-content': '#fafaf9',
+      '--border': '#44403c',
+      '--field': '#57534e',
+      '--muted': '#292524',
+      '--muted-content': '#a8a29e',
+    },
+  },
+  {
+    key: 'cool',
+    name: 'Cool',
+    light: {
+      '--canvas': '#f8fafc',
+      '--canvas-content': '#0f172a',
+      '--surface': '#ffffff',
+      '--surface-content': '#0f172a',
+      '--sidebar': '#f1f5f9',
+      '--sidebar-content': '#1e293b',
+      '--elevated': '#ffffff',
+      '--elevated-content': '#0f172a',
+      '--border': '#e2e8f0',
+      '--field': '#94a3b8',
+      '--muted': '#f1f5f9',
+      '--muted-content': '#64748b',
+    },
+    dark: {
+      '--canvas': '#020617',
+      '--canvas-content': '#f8fafc',
+      '--surface': '#0f172a',
+      '--surface-content': '#f8fafc',
+      '--sidebar': '#0f172a',
+      '--sidebar-content': '#e2e8f0',
+      '--elevated': '#1e293b',
+      '--elevated-content': '#f8fafc',
+      '--border': '#334155',
+      '--field': '#475569',
+      '--muted': '#1e293b',
+      '--muted-content': '#94a3b8',
+    },
+  },
+];
+
+const accentPresets: AccentPreset[] = [
   {
     key: 'lime',
     name: 'Lime',
-    lightBg: '#f4f4f5',
-    lightPrimary: '#84cc16',
-    darkBg: '#000000',
-    darkPrimary: '#bef264',
+    light: { brand: '#84cc16', 'brand-content': '#052e16', focus: '#84cc16' },
+    dark: { brand: '#bef264', 'brand-content': '#000', focus: '#bef264' },
   },
   {
     key: 'ocean',
     name: 'Ocean',
-    lightBg: '#f0f7ff',
-    lightPrimary: '#0ea5e9',
-    darkBg: '#0c1624',
-    darkPrimary: '#38bdf8',
+    light: { brand: '#0ea5e9', 'brand-content': '#fff', focus: '#0ea5e9' },
+    dark: { brand: '#38bdf8', 'brand-content': '#000', focus: '#38bdf8' },
   },
   {
     key: 'berry',
     name: 'Berry',
-    lightBg: '#fff1f2',
-    lightPrimary: '#e11d48',
-    darkBg: '#2a0a12',
-    darkPrimary: '#fb7185',
+    light: { brand: '#e11d48', 'brand-content': '#fff', focus: '#e11d48' },
+    dark: { brand: '#fb7185', 'brand-content': '#000', focus: '#fb7185' },
   },
   {
     key: 'grape',
     name: 'Grape',
-    lightBg: '#faf5ff',
-    lightPrimary: '#8b5cf6',
-    darkBg: '#1a0e2e',
-    darkPrimary: '#a78bfa',
+    light: { brand: '#8b5cf6', 'brand-content': '#fff', focus: '#8b5cf6' },
+    dark: { brand: '#a78bfa', 'brand-content': '#000', focus: '#a78bfa' },
   },
   {
     key: 'sunset',
     name: 'Sunset',
-    lightBg: '#fffbeb',
-    lightPrimary: '#f59e0b',
-    darkBg: '#2a1805',
-    darkPrimary: '#fbbf24',
+    light: { brand: '#f59e0b', 'brand-content': '#fff', focus: '#f59e0b' },
+    dark: { brand: '#fbbf24', 'brand-content': '#000', focus: '#fbbf24' },
   },
   {
     key: 'forest',
     name: 'Forest',
-    lightBg: '#f0fdf4',
-    lightPrimary: '#10b981',
-    darkBg: '#052e16',
-    darkPrimary: '#34d399',
+    light: { brand: '#10b981', 'brand-content': '#fff', focus: '#10b981' },
+    dark: { brand: '#34d399', 'brand-content': '#000', focus: '#34d399' },
+  },
+  {
+    key: 'coral',
+    name: 'Coral',
+    light: { brand: '#f97316', 'brand-content': '#fff', focus: '#f97316' },
+    dark: { brand: '#fdba74', 'brand-content': '#000', focus: '#fdba74' },
+  },
+  {
+    key: 'indigo',
+    name: 'Indigo',
+    light: { brand: '#6366f1', 'brand-content': '#fff', focus: '#6366f1' },
+    dark: { brand: '#a5b4fc', 'brand-content': '#000', focus: '#a5b4fc' },
+  },
+  {
+    key: 'teal',
+    name: 'Teal',
+    light: { brand: '#14b8a6', 'brand-content': '#fff', focus: '#14b8a6' },
+    dark: { brand: '#5eead4', 'brand-content': '#000', focus: '#5eead4' },
+  },
+  {
+    key: 'rose',
+    name: 'Rose',
+    light: { brand: '#f43f5e', 'brand-content': '#fff', focus: '#f43f5e' },
+    dark: { brand: '#fda4af', 'brand-content': '#000', focus: '#fda4af' },
+  },
+  {
+    key: 'amber',
+    name: 'Amber',
+    light: { brand: '#d97706', 'brand-content': '#fff', focus: '#d97706' },
+    dark: { brand: '#fcd34d', 'brand-content': '#000', focus: '#fcd34d' },
+  },
+  {
+    key: 'slate',
+    name: 'Slate',
+    light: { brand: '#475569', 'brand-content': '#fff', focus: '#475569' },
+    dark: { brand: '#94a3b8', 'brand-content': '#000', focus: '#94a3b8' },
   },
 ];
 
-const STORAGE_KEY = 'vayu-theme';
+const STORAGE_KEY_BASE = 'vayu-theme-base';
+const STORAGE_KEY_ACCENT = 'vayu-theme-accent';
 
-function getSavedTheme(): string | null {
+function getSavedBaseTheme(): string | null {
   if (typeof window === 'undefined') return null;
   try {
-    return localStorage.getItem(STORAGE_KEY);
+    return localStorage.getItem(STORAGE_KEY_BASE);
   } catch {
     return null;
   }
 }
 
-function applyTheme(themeKey: string | null) {
-  if (typeof window === 'undefined') return;
-  const root = document.documentElement;
-  if (themeKey && themes.some((t) => t.key === themeKey)) {
-    root.setAttribute('data-theme', themeKey);
-    localStorage.setItem(STORAGE_KEY, themeKey);
-  } else {
-    root.removeAttribute('data-theme');
-    localStorage.removeItem(STORAGE_KEY);
+function getSavedAccentTheme(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return localStorage.getItem(STORAGE_KEY_ACCENT);
+  } catch {
+    return null;
   }
 }
 
@@ -92,140 +249,225 @@ function detectDarkMode(): boolean {
   return document.documentElement.classList.contains('dark');
 }
 
-interface ColorThemePanelProps {
-  variant?: 'navbar' | 'sidebar';
+function applyBaseTheme(themeKey: string | null) {
+  if (typeof window === 'undefined') return;
+  const root = document.documentElement;
+  const isDark = detectDarkMode();
+
+  if (themeKey && themeKey !== 'default') {
+    const theme = baseThemes.find((t) => t.key === themeKey);
+    if (theme) {
+      const colors = isDark ? theme.dark : theme.light;
+      Object.entries(colors).forEach(([key, value]) => {
+        root.style.setProperty(key, value);
+      });
+      localStorage.setItem(STORAGE_KEY_BASE, themeKey);
+      return;
+    }
+  }
+
+  // Reset base colors (remove inline overrides so CSS file defaults apply)
+  const defaultTheme = baseThemes[0];
+  Object.keys(defaultTheme.light).forEach((key) => {
+    root.style.removeProperty(key);
+  });
+  if (themeKey === 'default') {
+    localStorage.setItem(STORAGE_KEY_BASE, 'default');
+  } else {
+    localStorage.removeItem(STORAGE_KEY_BASE);
+  }
 }
 
-export function ColorThemePanel({ variant = 'navbar' }: ColorThemePanelProps) {
-  const [activeTheme, setActiveTheme] = useState<string | null>(getSavedTheme);
+function applyAccentColor(themeKey: string | null) {
+  if (typeof window === 'undefined') return;
+  const root = document.documentElement;
+  const isDark = detectDarkMode();
+
+  if (themeKey) {
+    const preset = accentPresets.find((p) => p.key === themeKey);
+    if (preset) {
+      const colors = isDark ? preset.dark : preset.light;
+      root.style.setProperty('--brand', colors.brand);
+      root.style.setProperty('--brand-content', colors['brand-content']);
+      root.style.setProperty('--focus', colors.focus);
+      localStorage.setItem(STORAGE_KEY_ACCENT, themeKey);
+      return;
+    }
+  }
+
+  // Reset to default (CSS file values)
+  root.style.removeProperty('--brand');
+  root.style.removeProperty('--brand-content');
+  root.style.removeProperty('--focus');
+  localStorage.removeItem(STORAGE_KEY_ACCENT);
+}
+
+export function ColorThemePanel() {
+  const [activeBase, setActiveBase] = useState<string | null>(getSavedBaseTheme);
+  const [activeAccent, setActiveAccent] = useState<string | null>(getSavedAccentTheme);
   const [isDark, setIsDark] = useState(false);
-  const [open, setOpen] = useState(false);
 
   // Detect dark mode
   useEffect(() => {
-    const check = () => setIsDark(detectDarkMode());
+    const check = () => {
+      const dark = detectDarkMode();
+      setIsDark(dark);
+      // Re-apply themes when dark mode changes
+      const savedBase = getSavedBaseTheme();
+      const savedAccent = getSavedAccentTheme();
+      applyBaseTheme(savedBase);
+      applyAccentColor(savedAccent);
+    };
     check();
     const observer = new MutationObserver(check);
     observer.observe(document.documentElement, { attributes: true });
     return () => observer.disconnect();
   }, []);
 
-  // Apply saved theme on mount
+  // Apply saved themes on mount
   useEffect(() => {
-    const saved = getSavedTheme();
-    if (saved) {
-      applyTheme(saved);
-    }
+    const savedBase = getSavedBaseTheme();
+    const savedAccent = getSavedAccentTheme();
+    if (savedBase) applyBaseTheme(savedBase);
+    if (savedAccent) applyAccentColor(savedAccent);
   }, []);
 
-  const handlePresetClick = useCallback((key: string) => {
-    setActiveTheme(key);
-    applyTheme(key);
-  }, []);
+  const handleBaseClick = useCallback(
+    (key: string) => {
+      if (activeBase === key) {
+        setActiveBase(null);
+        applyBaseTheme(null);
+      } else {
+        setActiveBase(key);
+        applyBaseTheme(key);
+      }
+    },
+    [activeBase],
+  );
 
-  const handleReset = useCallback(() => {
-    setActiveTheme(null);
-    applyTheme(null);
-  }, []);
-
-  const activeThemeName = activeTheme
-    ? (themes.find((t) => t.key === activeTheme)?.name ?? 'Default')
-    : 'Default';
-
-  const isNavbar = variant === 'navbar';
+  const handleAccentClick = useCallback(
+    (key: string) => {
+      if (activeAccent === key) {
+        setActiveAccent(null);
+        applyAccentColor(null);
+      } else {
+        setActiveAccent(key);
+        applyAccentColor(key);
+      }
+    },
+    [activeAccent],
+  );
 
   return (
-    <Modal open={open} onOpenChange={setOpen} closeOnEscape closeOnOverlayClick size="sm">
-      <Modal.Trigger
-        asChild
-        className={
-          isNavbar
-            ? 'inline-flex items-center justify-center rounded-control w-8 h-8 p-0 bg-transparent hover:bg-muted transition-colors'
-            : 'inline-flex items-center gap-2 rounded-control px-3 py-2 border border-border bg-transparent hover:bg-muted transition-colors w-full'
-        }
-      >
-        <button
-          type="button"
-          className="flex justify-center items-center gap-2"
-          aria-label={`Open theme settings (current: ${activeThemeName})`}
-          title={`Theme: ${activeThemeName}`}
-        >
-          <Palette className="h-4 w-4 text-surface-content shrink-0" />
-          {!isNavbar && (
-            <span className="text-sm text-surface-content font-medium truncate">
-              {activeThemeName}
-            </span>
-          )}
-        </button>
-      </Modal.Trigger>
+    <div className="flex flex-col items-center gap-5 mb-6">
+      {/* Base Theme */}
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex items-center gap-2 text-muted-content">
+          <SwatchBook className="h-4 w-4" />
+          <span className="font-tertiary text-xs uppercase tracking-wider">Base Theme</span>
+        </div>
+        <div className="flex items-center gap-2">
+          {baseThemes.map((theme) => {
+            const isActive = activeBase === theme.key || (theme.key === 'default' && !activeBase);
+            const isDefault = theme.key === 'default';
 
-      <Modal.Overlay />
-      <Modal.Content>
-        <Modal.Header className="py-2">
-          <Modal.Title>Choose Theme</Modal.Title>
-          <Modal.Description>Select a color preset for your documentation.</Modal.Description>
-        </Modal.Header>
+            // Color swatch for base theme
+            let swatchColor: string;
+            if (isDark) {
+              swatchColor = theme.dark['--canvas'] || '#000';
+            } else {
+              swatchColor = theme.light['--canvas'] || '#fff';
+            }
 
-        <Modal.Body style={{ backgroundColor: 'var(--canvas)' }}>
-          <div className="grid grid-cols-2 gap-3">
-            {themes.map((theme) => {
-              const isActive = activeTheme === theme.key;
-              const bgColor = isDark ? theme.darkBg : theme.lightBg;
-              const primaryColor = isDark ? theme.darkPrimary : theme.lightPrimary;
-
-              return (
-                <button
-                  key={theme.key}
-                  type="button"
-                  onClick={() => handlePresetClick(theme.key)}
-                  className={`
-                    relative flex flex-col items-center gap-2 rounded-surface border p-3 transition-all
-                    hover:shadow-surface hover:scale-[1.02]
-                    ${isActive ? 'border-brand ring-2 ring-focus' : 'border-border'}
-                  `}
-                  title={`Apply ${theme.name} theme`}
-                >
-                  {/* Preview card */}
-                  <div
-                    className="w-full h-16 rounded-control border border-border/50 overflow-hidden relative"
-                    style={{ backgroundColor: bgColor }}
+            return (
+              <button
+                key={theme.key}
+                type="button"
+                onClick={() => handleBaseClick(theme.key)}
+                className={`
+                  relative flex items-center justify-center rounded-full transition-all duration-200
+                  hover:scale-110 hover:shadow-elevated
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2
+                  ${isActive ? 'ring-2 ring-focus ring-offset-2' : ''}
+                `}
+                style={{
+                  width: '2rem',
+                  height: '2rem',
+                  backgroundColor: swatchColor,
+                  border: isDefault ? '2px solid var(--border)' : '1px solid var(--border)',
+                }}
+                title={`${theme.name} ${isActive ? '(active)' : ''}`}
+                aria-label={`Apply ${theme.name} base theme`}
+                aria-pressed={isActive}
+              >
+                {isActive && (
+                  <svg
+                    className="w-3 h-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                    style={{
+                      color: isDark ? '#fff' : '#000',
+                      filter: isDark ? 'none' : 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))',
+                    }}
                   >
-                    {/* Primary color accent bar */}
-                    <div
-                      className="absolute bottom-0 left-0 right-0 h-2"
-                      style={{ backgroundColor: primaryColor }}
-                    />
-                    {/* Primary color dot */}
-                    <div
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full border-2 border-white/80 shadow-sm"
-                      style={{ backgroundColor: primaryColor }}
-                    />
-                    {/* Sample text */}
-                    <div className="absolute top-2 left-2 flex flex-col gap-1">
-                      <div className="w-12 h-1.5 rounded-full bg-current opacity-20" />
-                      <div className="w-8 h-1.5 rounded-full bg-current opacity-15" />
-                    </div>
-                  </div>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-                  <span className="text-sm font-medium text-surface-content">{theme.name}</span>
-                </button>
-              );
-            })}
-          </div>
-        </Modal.Body>
+      {/* Accent Color */}
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex items-center gap-2 text-muted-content">
+          <Palette className="h-4 w-4" />
+          <span className="font-tertiary text-xs uppercase tracking-wider">Accent Color</span>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap justify-center max-w-[280px]">
+          {accentPresets.map((preset) => {
+            const isActive = activeAccent === preset.key;
+            const color = isDark ? preset.dark.brand : preset.light.brand;
 
-        <Modal.Footer className="flex py-2 justify-between items-center">
-          <Button variant="outline" size="small" onClick={handleReset} className="gap-1.5">
-            <RotateCcw className="h-3.5 w-3.5" />
-            Reset
-          </Button>
-          <Modal.Close asChild>
-            <Button variant="primary" size="small">
-              Done
-            </Button>
-          </Modal.Close>
-        </Modal.Footer>
-      </Modal.Content>
-    </Modal>
+            return (
+              <button
+                key={preset.key}
+                type="button"
+                onClick={() => handleAccentClick(preset.key)}
+                className={`
+                  relative flex items-center justify-center rounded-full transition-all duration-200
+                  hover:scale-110 hover:shadow-elevated
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2
+                  ${isActive ? 'ring-2 ring-focus ring-offset-2' : ''}
+                `}
+                style={{
+                  width: '2rem',
+                  height: '2rem',
+                  backgroundColor: color,
+                }}
+                title={`${preset.name} ${isActive ? '(active)' : ''}`}
+                aria-label={`Apply ${preset.name} accent color`}
+                aria-pressed={isActive}
+              >
+                {isActive && (
+                  <svg
+                    className="w-3 h-3 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={3}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }

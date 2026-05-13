@@ -11,17 +11,17 @@ description: Accessible, TypeScript-first, Tailwind CSS v4 component library —
 
 ```bash
 # scaffold tokens + config into your project
-npx vayu-ui-cli init
+npx vayu-ui-cli@latest init
 
 # add MCP server
-npx vayu-ui-cli install-mcp
+npx vayu-ui-cli@latest install-mcp
 
 # add components and hooks
-npx vayu-ui-cli add button use-debounce
+npx vayu-ui-cli@latest add button use-debounce
 ```
 
 ```tsx
-import { Button } from 'vayu-ui';
+import { Button } from '@ui/component/Button';
 
 export default () => <Button>Click me</Button>;
 ```
@@ -31,9 +31,9 @@ export default () => <Button>Click me</Button>;
 Use `vayu-ui-cli` to copy typed source files directly into your project:
 
 ```bash
-npx vayu-ui-cli list          # browse available items
-npx vayu-ui-cli add button    # copy a component
-npx vayu-ui-cli add use-debounce  # copy a hook
+npx vayu-ui-cli@latest list          # browse available items
+npx vayu-ui-cli@latest add button    # copy a component
+npx vayu-ui-cli@latest add use-debounce  # copy a hook
 ```
 
 ## Explore

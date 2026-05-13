@@ -58,10 +58,12 @@ export default class Init extends Command {
     this.log(
       ux.colorize(
         'dim',
-        `    ${ux.colorize('bold', 'npx vayu-ui-cli list')}       Browse available components and hooks`,
+        `    ${ux.colorize('bold', 'npx vayu-ui-cli@latest list')}       Browse available components and hooks`,
       ),
     )
-    this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli add button')}  Add your first component`))
+    this.log(
+      ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli@latest add button')}  Add your first component`),
+    )
     this.log('')
   }
 }

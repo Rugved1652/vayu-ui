@@ -45,13 +45,13 @@ export function GetStarted() {
               <div className="rounded-surface bg-canvas border border-border p-6 text-left">
                 <p className="text-sm font-secondary text-muted-content mb-3">Install</p>
                 <pre className="font-tertiary text-sm text-canvas-content space-y-1">
-                  <code>npx vayu-ui-cli init</code>
+                  <code>npx vayu-ui-cli@latest init</code>
                   <br />
                   <code className="font-tertiary text-sm text-surface-content">
-                    npx vayu-ui-cli install-mcp
+                    npx vayu-ui-cli@latest install-mcp
                   </code>
                   <br />
-                  <code>npx vayu-ui-cli add button card input</code>
+                  <code>npx vayu-ui-cli@latest add button card input</code>
                 </pre>
               </div>
               <div className="flex flex-col gap-4 justify-center">

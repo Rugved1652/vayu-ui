@@ -12,10 +12,12 @@ import { SkeletonPanel } from './SkeletonPanel';
 import { StepperPanel } from './StepperPanel';
 import { TablePanel } from './TablePanel';
 import { TabsPanel } from './TabsPanel';
+import { ColorThemePanel } from './ColorThemePanel';
 
 export function DocsPreview() {
   return (
     <div className="mx-auto mt-18 max-w-6xl relative">
+      <ColorThemePanel />
       <div className="hero-collage relative">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-brand/20 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-info/20 blur-[120px] rounded-full pointer-events-none" />

@@ -291,15 +291,20 @@ export default class Create extends Command {
       this.log('')
       this.log(ux.colorize('dim', '  Add more components:'))
       this.log(
-        ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli list')}       Browse available components`),
+        ux.colorize(
+          'dim',
+          `    ${ux.colorize('bold', 'npx vayu-ui-cli@latest list')}       Browse available components`,
+        ),
       )
-      this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli add modal')}   Add a modal component`))
+      this.log(
+        ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli@latest add modal')}   Add a modal component`),
+      )
       this.log('')
       this.log(ux.colorize('dim', '  Enable AI integration:'))
       this.log(
         ux.colorize(
           'dim',
-          `    ${ux.colorize('bold', 'npx vayu-ui-cli mcp install')}      Set up the Vayu UI MCP server for your AI tools`,
+          `    ${ux.colorize('bold', 'npx vayu-ui-cli@latest mcp install')}      Set up the Vayu UI MCP server for your AI tools`,
         ),
       )
       this.log('')
