@@ -37,16 +37,57 @@ export const toasterEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Toaster',
   files: [
-    { name: 'ToastProvider.tsx', description: 'Composition root: React context, ToastProvider component wrapping children with ToastContainer, and useToast hook exposing all toast methods' },
-    { name: 'ToastContainer.tsx', description: 'Portal-rendered container that groups toasts by position and renders a ToastStack for each active position' },
-    { name: 'ToastStack.tsx', description: 'Sonner-style stack with expand/collapse on hover/focus, visual depth scaling, ghost exit animations, and overflow indicator' },
-    { name: 'ToastItem.tsx', description: 'Individual toast with countdown timer, progress bar, swipe-to-dismiss via pointer events, pause/resume, and type-based styling' },
-    { name: 'ToastUtilities.tsx', description: 'Compound sub-components: ToastTitle, ToastDescription, and ToastClose with forwarded refs and design token styling' },
-    { name: 'ToastIcons.tsx', description: 'Inline SVG icons for each toast type (success, error, warning, info, loading) and the close button' },
-    { name: 'constants.ts', description: 'Type style maps (border, icon, progress, role, aria-live), layout constants (VISIBLE_TOASTS, GAP, SCALE_STEP), and position class/animation mappings' },
-    { name: 'types.ts', description: 'TypeScript interfaces for Toast, ToastOptions, ToastContextType, ToastContainerProps, ToastStackProps, ToastItemProps, and ToastProviderProps' },
-    { name: 'index.ts', description: 'Barrel export assembling the Toast compound component object (Title, Description, Close), plus ToastProvider, useToast, and all type exports' },
-    { name: 'README.md', description: 'Internal anatomy and use-case documentation for the Toaster component directory', optional: true },
+    {
+      name: 'ToastProvider.tsx',
+      description:
+        'Composition root: React context, ToastProvider component wrapping children with ToastContainer, and useToast hook exposing all toast methods',
+    },
+    {
+      name: 'ToastContainer.tsx',
+      description:
+        'Portal-rendered container that groups toasts by position and renders a ToastStack for each active position',
+    },
+    {
+      name: 'ToastStack.tsx',
+      description:
+        'Sonner-style stack with expand/collapse on hover/focus, visual depth scaling, ghost exit animations, and overflow indicator',
+    },
+    {
+      name: 'ToastItem.tsx',
+      description:
+        'Individual toast with countdown timer, progress bar, swipe-to-dismiss via pointer events, pause/resume, and type-based styling',
+    },
+    {
+      name: 'ToastUtilities.tsx',
+      description:
+        'Compound sub-components: ToastTitle, ToastDescription, and ToastClose with forwarded refs and design token styling',
+    },
+    {
+      name: 'ToastIcons.tsx',
+      description:
+        'Inline SVG icons for each toast type (success, error, warning, info, loading) and the close button',
+    },
+    {
+      name: 'constants.ts',
+      description:
+        'Type style maps (border, icon, progress, role, aria-live), layout constants (VISIBLE_TOASTS, GAP, SCALE_STEP), and position class/animation mappings',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript interfaces for Toast, ToastOptions, ToastContextType, ToastContainerProps, ToastStackProps, ToastItemProps, and ToastProviderProps',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export assembling the Toast compound component object (Title, Description, Close), plus ToastProvider, useToast, and all type exports',
+    },
+    {
+      name: 'README.md',
+      description:
+        'Internal anatomy and use-case documentation for the Toaster component directory',
+      optional: true,
+    },
   ],
   targetPath: 'src/components',
 
@@ -56,13 +97,15 @@ export const toasterEntry: ComponentRegistryEntry = {
     {
       name: 'Title',
       fileName: 'ToastUtilities.tsx',
-      description: 'Renders a bold heading for custom toast content. Forwards ref and accepts all div HTML attributes.',
+      description:
+        'Renders a bold heading for custom toast content. Forwards ref and accepts all div HTML attributes.',
       props: [
         {
           name: 'className',
           type: 'string',
           required: false,
-          description: 'Additional CSS classes to merge with the default title styling (font-semibold, text-sm)',
+          description:
+            'Additional CSS classes to merge with the default title styling (font-semibold, text-sm)',
         },
         {
           name: 'children',
@@ -75,13 +118,15 @@ export const toasterEntry: ComponentRegistryEntry = {
     {
       name: 'Description',
       fileName: 'ToastUtilities.tsx',
-      description: 'Renders muted descriptive text for custom toast content. Forwards ref and accepts all div HTML attributes.',
+      description:
+        'Renders muted descriptive text for custom toast content. Forwards ref and accepts all div HTML attributes.',
       props: [
         {
           name: 'className',
           type: 'string',
           required: false,
-          description: 'Additional CSS classes to merge with the default description styling (text-sm, text-muted-content)',
+          description:
+            'Additional CSS classes to merge with the default description styling (text-sm, text-muted-content)',
         },
         {
           name: 'children',
@@ -94,7 +139,8 @@ export const toasterEntry: ComponentRegistryEntry = {
     {
       name: 'Close',
       fileName: 'ToastUtilities.tsx',
-      description: 'Renders a close/dismiss button for custom toast content. Forwards ref and accepts all button HTML attributes.',
+      description:
+        'Renders a close/dismiss button for custom toast content. Forwards ref and accepts all button HTML attributes.',
       props: [
         {
           name: 'className',
@@ -112,7 +158,8 @@ export const toasterEntry: ComponentRegistryEntry = {
           name: 'aria-label',
           type: 'string',
           required: false,
-          description: 'Accessible label for the close button; defaults to a visually hidden label if not provided',
+          description:
+            'Accessible label for the close button; defaults to a visually hidden label if not provided',
         },
       ],
     },
@@ -125,22 +172,32 @@ export const toasterEntry: ComponentRegistryEntry = {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description: 'Application content wrapped by the ToastProvider. ToastContainer is automatically appended alongside children.',
+      description:
+        'Application content wrapped by the ToastProvider. ToastContainer is automatically appended alongside children.',
     },
     {
       name: 'defaultPosition',
-      type: "ToastPosition",
+      type: 'ToastPosition',
       required: false,
       defaultValue: "'bottom-right'",
-      description: 'Default position for toasts that do not specify a position. Applies to all convenience methods (success, error, etc.).',
-      options: ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'],
+      description:
+        'Default position for toasts that do not specify a position. Applies to all convenience methods (success, error, etc.).',
+      options: [
+        'top-left',
+        'top-center',
+        'top-right',
+        'bottom-left',
+        'bottom-center',
+        'bottom-right',
+      ],
     },
     {
       name: 'defaultDuration',
       type: 'number',
       required: false,
       defaultValue: '5000',
-      description: 'Default auto-dismiss duration in milliseconds. Set to 0 to make toasts persistent by default. Individual toasts can override this.',
+      description:
+        'Default auto-dismiss duration in milliseconds. Set to 0 to make toasts persistent by default. Individual toasts can override this.',
     },
   ],
   rendersAs: 'div',
@@ -160,7 +217,8 @@ export const toasterEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['success', 'error', 'warning', 'info', 'loading'],
       defaultValue: "'info'",
-      description: 'Visual and semantic variant of the toast. Determines icon, border color, progress bar color, ARIA role, and aria-live politeness.',
+      description:
+        'Visual and semantic variant of the toast. Determines icon, border color, progress bar color, ARIA role, and aria-live politeness.',
     },
     {
       name: 'loading',
@@ -168,35 +226,40 @@ export const toasterEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['loading'],
       defaultValue: 'undefined',
-      description: 'Loading toasts have no auto-dismiss timer, no close button, and show a spinning icon. Use toast.loading() or toast.promise() to trigger.',
+      description:
+        'Loading toasts have no auto-dismiss timer, no close button, and show a spinning icon. Use toast.loading() or toast.promise() to trigger.',
     },
     {
       name: 'paused',
       prop: 'isAllPaused',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Timers pause when the user hovers over the stack or focuses a toast. Progress bar animation also pauses. Resumes on mouse leave or blur.',
+      description:
+        'Timers pause when the user hovers over the stack or focuses a toast. Progress bar animation also pauses. Resumes on mouse leave or blur.',
     },
     {
       name: 'dismissible',
       prop: 'dismissible',
       isBoolean: true,
       defaultValue: 'true',
-      description: 'When true, shows a close button and allows swipe-to-dismiss. Loading toasts override this to false by default.',
+      description:
+        'When true, shows a close button and allows swipe-to-dismiss. Loading toasts override this to false by default.',
     },
     {
       name: 'exiting',
       prop: 'isExiting',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Ghost toast state during exit animation. The toast is removed from state but rendered as a ghost element for 300ms with exit animation classes.',
+      description:
+        'Ghost toast state during exit animation. The toast is removed from state but rendered as a ghost element for 300ms with exit animation classes.',
     },
     {
       name: 'expanded',
       prop: 'isExpanded',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Stack expands to show all visible toasts at full size on hover/focus. Collapsed state shows Sonner-style stacked depth with scale reduction.',
+      description:
+        'Stack expands to show all visible toasts at full size on hover/focus. Collapsed state shows Sonner-style stacked depth with scale reduction.',
     },
   ],
 
@@ -205,27 +268,32 @@ export const toasterEntry: ComponentRegistryEntry = {
     {
       name: 'onClose',
       signature: '() => void',
-      description: 'Callback fired when a toast is closed, regardless of dismissal method (close button, swipe, timer, or Escape key). Set per-toast via ToastOptions.',
+      description:
+        'Callback fired when a toast is closed, regardless of dismissal method (close button, swipe, timer, or Escape key). Set per-toast via ToastOptions.',
     },
     {
       name: 'action.onClick',
       signature: '() => void',
-      description: 'Callback fired when the toast action button is clicked. The toast is automatically dismissed after the action handler executes.',
+      description:
+        'Callback fired when the toast action button is clicked. The toast is automatically dismissed after the action handler executes.',
     },
     {
       name: 'onPointerDown (ToastItem)',
       signature: '(event: React.PointerEvent<HTMLDivElement>) => void',
-      description: 'Captures pointer for swipe-to-dismiss drag gesture. Sets pointer capture and pauses the toast timer.',
+      description:
+        'Captures pointer for swipe-to-dismiss drag gesture. Sets pointer capture and pauses the toast timer.',
     },
     {
       name: 'onPointerMove (ToastItem)',
       signature: '(event: React.PointerEvent<HTMLDivElement>) => void',
-      description: 'Tracks horizontal drag offset during swipe gesture. Updates visual translateX and opacity.',
+      description:
+        'Tracks horizontal drag offset during swipe gesture. Updates visual translateX and opacity.',
     },
     {
       name: 'onPointerUp (ToastItem)',
       signature: '(event: React.PointerEvent<HTMLDivElement>) => void',
-      description: 'Completes swipe gesture. Dismisses the toast if drag offset exceeds 100px, otherwise snaps back to original position.',
+      description:
+        'Completes swipe gesture. Dismisses the toast if drag offset exceeds 100px, otherwise snaps back to original position.',
     },
     {
       name: 'onKeyDown (ToastStack)',
@@ -239,43 +307,51 @@ export const toasterEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'role',
-        description: 'Set to "status" for success/info/loading toasts and "alert" for error/warning toasts. Matches the urgency of each notification type.',
+        description:
+          'Set to "status" for success/info/loading toasts and "alert" for error/warning toasts. Matches the urgency of each notification type.',
         managedByComponent: true,
       },
       {
         name: 'aria-live',
-        description: 'Set to "polite" for success/info/loading toasts and "assertive" for error/warning toasts. Controls how screen readers announce new toasts.',
+        description:
+          'Set to "polite" for success/info/loading toasts and "assertive" for error/warning toasts. Controls how screen readers announce new toasts.',
         managedByComponent: true,
       },
       {
         name: 'aria-atomic',
-        description: 'Set to "true" on each toast item so screen readers announce the full toast content as a single unit.',
+        description:
+          'Set to "true" on each toast item so screen readers announce the full toast content as a single unit.',
         managedByComponent: true,
       },
       {
         name: 'aria-label',
-        description: 'Set on each toast with format "{type} notification" (e.g. "Success notification", "Error notification"). Also set on the close button as "Dismiss {type} notification".',
+        description:
+          'Set on each toast with format "{type} notification" (e.g. "Success notification", "Error notification"). Also set on the close button as "Dismiss {type} notification".',
         managedByComponent: true,
       },
       {
         name: 'aria-relevant',
-        description: 'Set to "additions removals" on the stack section to announce new toasts and removed toasts to screen readers.',
+        description:
+          'Set to "additions removals" on the stack section to announce new toasts and removed toasts to screen readers.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Set to "true" on toast items beyond the visible limit (index >= 5) to prevent hidden stacked toasts from being announced.',
+        description:
+          'Set to "true" on toast items beyond the visible limit (index >= 5) to prevent hidden stacked toasts from being announced.',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Escape',
-        behavior: 'Dismisses the first dismissible toast in the stack. Non-dismissible toasts are skipped.',
+        behavior:
+          'Dismisses the first dismissible toast in the stack. Non-dismissible toasts are skipped.',
       },
       {
         key: 'Enter',
-        behavior: 'Activates the overflow indicator button (when more than 5 toasts exist) to expand the stack and reveal hidden toasts.',
+        behavior:
+          'Activates the overflow indicator button (when more than 5 toasts exist) to expand the stack and reveal hidden toasts.',
       },
       {
         key: ' ',
@@ -283,7 +359,8 @@ export const toasterEntry: ComponentRegistryEntry = {
       },
       {
         key: 'Tab',
-        behavior: 'Moves focus between the close button and action button within a toast, and between toasts in the stack.',
+        behavior:
+          'Moves focus between the close button and action button within a toast, and between toasts in the stack.',
       },
     ],
     focusManagement:
@@ -294,9 +371,7 @@ export const toasterEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -304,11 +379,13 @@ export const toasterEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'button',
-      reason: 'Used as the trigger element to fire toast notifications from user interactions (form submit, delete, save)',
+      reason:
+        'Used as the trigger element to fire toast notifications from user interactions (form submit, delete, save)',
     },
     {
       slug: 'typography',
-      reason: 'Used in documentation and demo layouts alongside toasts for headings and descriptive text',
+      reason:
+        'Used in documentation and demo layouts alongside toasts for headings and descriptive text',
     },
     {
       slug: 'divider',
@@ -316,11 +393,13 @@ export const toasterEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'spinner',
-      reason: 'Alternative loading indicator for page-level loading states where toasts may not be appropriate',
+      reason:
+        'Alternative loading indicator for page-level loading states where toasts may not be appropriate',
     },
     {
       slug: 'modal',
-      reason: 'Used together in confirmation flows — modal for blocking confirmations, toast for post-action feedback',
+      reason:
+        'Used together in confirmation flows — modal for blocking confirmations, toast for post-action feedback',
     },
   ],
 
@@ -328,7 +407,8 @@ export const toasterEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic Setup and Standard Variants',
-      description: 'Wrap your app with ToastProvider, then use the useToast hook to trigger success, error, warning, and info toasts.',
+      description:
+        'Wrap your app with ToastProvider, then use the useToast hook to trigger success, error, warning, and info toasts.',
       code: `import { ToastProvider, useToast, Button } from 'vayu-ui';
 
 function AppContent() {
@@ -379,7 +459,8 @@ export default function App() {
     },
     {
       title: 'Toast with Actions',
-      description: 'Add an action button to toasts for inline responses like Undo or View without interrupting the user workflow.',
+      description:
+        'Add an action button to toasts for inline responses like Undo or View without interrupting the user workflow.',
       code: `import { useToast, Button } from 'vayu-ui';
 
 function ActionToastDemo() {
@@ -422,7 +503,8 @@ function ActionToastDemo() {
     },
     {
       title: 'Promise and Loading States',
-      description: 'Use toast.promise() for automatic loading-to-success/error transitions, or manually control loading toasts with updateToast.',
+      description:
+        'Use toast.promise() for automatic loading-to-success/error transitions, or manually control loading toasts with updateToast.',
       code: `import { useToast, Button } from 'vayu-ui';
 
 function PromiseToastDemo() {
@@ -472,7 +554,8 @@ function PromiseToastDemo() {
     },
     {
       title: 'Duration Control',
-      description: 'Control auto-dismiss timing with the duration option. Set to 0 for persistent toasts that require manual dismissal.',
+      description:
+        'Control auto-dismiss timing with the duration option. Set to 0 for persistent toasts that require manual dismissal.',
       code: `import { useToast, Button } from 'vayu-ui';
 
 function DurationToastDemo() {
@@ -505,7 +588,8 @@ function DurationToastDemo() {
     },
     {
       title: 'Position Options',
-      description: 'Position toasts at any of the six supported screen edges. Set a default position on ToastProvider or override per-toast.',
+      description:
+        'Position toasts at any of the six supported screen edges. Set a default position on ToastProvider or override per-toast.',
       code: `import { useToast, Button } from 'vayu-ui';
 
 function PositionToastDemo() {
@@ -544,7 +628,8 @@ function PositionToastDemo() {
     },
     {
       title: 'Custom Toast with Compound Components',
-      description: 'Build fully custom toast content using toast.custom() with Toast.Title, Toast.Description, and Toast.Close sub-components.',
+      description:
+        'Build fully custom toast content using toast.custom() with Toast.Title, Toast.Description, and Toast.Close sub-components.',
       code: `import { useState } from 'react';
 import { useToast, Toast, ToastProvider, Button } from 'vayu-ui';
 
@@ -586,7 +671,8 @@ function CustomToastDemo() {
     },
     {
       title: 'Non-Dismissible and Custom Icon',
-      description: 'Create toasts that cannot be manually dismissed (only expire via duration) and override the default icon with custom SVG.',
+      description:
+        'Create toasts that cannot be manually dismissed (only expire via duration) and override the default icon with custom SVG.',
       code: `import { useToast, Button } from 'vayu-ui';
 
 function SpecialToastDemo() {
@@ -639,33 +725,38 @@ function SpecialToastDemo() {
   doNot: [
     {
       title: 'Using useToast outside ToastProvider',
-      bad: "function App() { const toast = useToast(); return <div>...</div>; }",
-      good: "function App() { return <ToastProvider><AppContent /></ToastProvider>; } function AppContent() { const toast = useToast(); return <div>...</div>; }",
-      reason: 'useToast reads from ToastContext which is undefined outside ToastProvider. It throws an error: "useToast must be used within ToastProvider". Always call useToast in a component rendered as a child of ToastProvider.',
+      bad: 'function App() { const toast = useToast(); return <div>...</div>; }',
+      good: 'function App() { return <ToastProvider><AppContent /></ToastProvider>; } function AppContent() { const toast = useToast(); return <div>...</div>; }',
+      reason:
+        'useToast reads from ToastContext which is undefined outside ToastProvider. It throws an error: "useToast must be used within ToastProvider". Always call useToast in a component rendered as a child of ToastProvider.',
     },
     {
       title: 'Setting duration on loading toasts',
       bad: "toast.loading('Saving...', { duration: 3000 });",
       good: "toast.loading('Saving...'); // duration is automatically set to 0\n// Then update when done:\nsetTimeout(() => toast.updateToast(id, { type: 'success' }), 3000);",
-      reason: 'The loading method always overrides duration to 0 and dismissible to false because loading toasts should persist until the operation completes. Use updateToast to transition to success/error when the async operation finishes.',
+      reason:
+        'The loading method always overrides duration to 0 and dismissible to false because loading toasts should persist until the operation completes. Use updateToast to transition to success/error when the async operation finishes.',
     },
     {
       title: 'Using toast.custom without compound sub-components',
       bad: "toast.custom(<div>Something happened</div>, { type: 'error' });",
-      good: "toast.custom(\n  <div className=\"rounded-surface bg-surface p-4 shadow-elevated border border-border\">\n    <Toast.Title>Error</Toast.Title>\n    <Toast.Description>Something went wrong.</Toast.Description>\n  </div>,\n);",
-      reason: 'While plain HTML works, using Toast.Title and Toast.Description ensures consistent typography, color tokens, and spacing. Custom content bypasses all default toast styling (border, icon, progress bar), so you must provide your own accessible structure.',
+      good: 'toast.custom(\n  <div className="rounded-surface bg-surface p-4 shadow-elevated border border-border">\n    <Toast.Title>Error</Toast.Title>\n    <Toast.Description>Something went wrong.</Toast.Description>\n  </div>,\n);',
+      reason:
+        'While plain HTML works, using Toast.Title and Toast.Description ensures consistent typography, color tokens, and spacing. Custom content bypasses all default toast styling (border, icon, progress bar), so you must provide your own accessible structure.',
     },
     {
       title: 'Ignoring promise rejections from toast.promise',
       bad: "toast.promise(someAsyncFn(), { loading: 'Loading...', success: 'Done!', error: 'Failed!' });",
       good: "toast.promise(someAsyncFn(), { loading: 'Loading...', success: 'Done!', error: 'Failed!' }).catch(() => {});",
-      reason: 'toast.promise re-throws the original error after updating the toast to show the error state. Without a .catch() handler, this results in an unhandled promise rejection warning in the console. Always handle the rejection, even if the toast already displays the error.',
+      reason:
+        'toast.promise re-throws the original error after updating the toast to show the error state. Without a .catch() handler, this results in an unhandled promise rejection warning in the console. Always handle the rejection, even if the toast already displays the error.',
     },
     {
       title: 'Rendering toasts inline instead of via ToastProvider',
       bad: '<div><ToastItem toast={myToast} onRemove={() => {}} /></div>',
       good: '<ToastProvider defaultPosition="bottom-right"><App /></ToastProvider>',
-      reason: 'ToastItem, ToastStack, and ToastContainer are internal components managed by ToastProvider. They depend on shared state (heights, pause state, ghost toasts) that is only available within the stack context. Always trigger toasts via the useToast hook methods.',
+      reason:
+        'ToastItem, ToastStack, and ToastContainer are internal components managed by ToastProvider. They depend on shared state (heights, pause state, ghost toasts) that is only available within the stack context. Always trigger toasts via the useToast hook methods.',
     },
   ],
 };

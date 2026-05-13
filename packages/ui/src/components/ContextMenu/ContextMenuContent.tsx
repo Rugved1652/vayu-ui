@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   forwardRef,
@@ -7,16 +7,15 @@ import React, {
   useLayoutEffect,
   useRef,
   useState,
-} from "react";
-import { createPortal } from "react-dom";
-import { cn } from "../../utils";
-import { useContextMenuCtx, getFocusableItems } from "./hooks";
-import type { ContextMenuContentProps } from "./types";
+} from 'react';
+import { createPortal } from 'react-dom';
+import { cn } from '../../utils';
+import { useContextMenuCtx, getFocusableItems } from './hooks';
+import type { ContextMenuContentProps } from './types';
 
 const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
-  ({ children, align = "start", sideOffset = 4, className, ...props }, ref) => {
-    const { isOpen, cursorPositionRef, menuRef, handleTypeahead, closeMenu } =
-      useContextMenuCtx();
+  ({ children, align = 'start', sideOffset = 4, className, ...props }, ref) => {
+    const { isOpen, cursorPositionRef, menuRef, handleTypeahead, closeMenu } = useContextMenuCtx();
     const [mounted, setMounted] = useState(false);
     const [position, setPosition] = useState({ top: 0, left: 0 });
 
@@ -39,8 +38,8 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
       let top = cursor.y + sideOffset;
       let left = cursor.x;
 
-      if (align === "center") left = cursor.x - width / 2;
-      else if (align === "end") left = cursor.x - width;
+      if (align === 'center') left = cursor.x - width / 2;
+      else if (align === 'end') left = cursor.x - width;
 
       if (left < pad) left = pad;
       if (left + width > vpW - pad) left = vpW - width - pad;
@@ -58,11 +57,11 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
     useEffect(() => {
       if (!isOpen) return;
       const handle = () => requestAnimationFrame(updatePosition);
-      window.addEventListener("scroll", handle, true);
-      window.addEventListener("resize", handle);
+      window.addEventListener('scroll', handle, true);
+      window.addEventListener('resize', handle);
       return () => {
-        window.removeEventListener("scroll", handle, true);
-        window.removeEventListener("resize", handle);
+        window.removeEventListener('scroll', handle, true);
+        window.removeEventListener('resize', handle);
       };
     }, [isOpen, updatePosition]);
 
@@ -71,7 +70,7 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
       if (isOpen && menuRef.current) {
         requestAnimationFrame(() => {
           const first = menuRef.current?.querySelector<HTMLElement>(
-            '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+            '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])',
           );
           first?.focus({ preventScroll: true });
         });
@@ -86,7 +85,7 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
           handleTypeahead(e.key);
         }
       },
-      [handleTypeahead]
+      [handleTypeahead],
     );
 
     if (!isOpen || !mounted) return null;
@@ -100,24 +99,24 @@ const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
         tabIndex={-1}
         style={{ top: position.top, left: position.left }}
         className={cn(
-          "fixed min-w-[220px] z-50",
-          "bg-elevated",
-          "border border-border",
-          "rounded-surface shadow-elevated",
-          "py-1",
-          "animate-fade-in",
-          className
+          'fixed min-w-[220px] z-50',
+          'bg-elevated',
+          'border border-border',
+          'rounded-surface shadow-elevated',
+          'py-1',
+          'animate-fade-in',
+          className,
         )}
         onKeyDown={handleMenuKeyDown}
         {...props}
       >
         {children}
       </div>,
-      document.body
+      document.body,
     );
-  }
+  },
 );
 
-ContextMenuContent.displayName = "ContextMenu.Content";
+ContextMenuContent.displayName = 'ContextMenu.Content';
 
 export { ContextMenuContent };

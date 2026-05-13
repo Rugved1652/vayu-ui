@@ -38,8 +38,15 @@ export const spinnerEntry: ComponentRegistryEntry = {
   directoryName: 'Spinner',
   files: [
     { name: 'index.ts', description: 'Barrel export for Spinner component and types' },
-    { name: 'types.ts', description: 'TypeScript type definitions for SpinnerProps and SpinnerSize' },
-    { name: 'Spinner.tsx', description: 'Spinner component with size configuration, ARIA attributes, and reduced-motion support' },
+    {
+      name: 'types.ts',
+      description: 'TypeScript type definitions for SpinnerProps and SpinnerSize',
+    },
+    {
+      name: 'Spinner.tsx',
+      description:
+        'Spinner component with size configuration, ARIA attributes, and reduced-motion support',
+    },
     { name: 'README.md', description: 'Component documentation, anatomy, and use cases' },
   ],
   targetPath: 'src/components',
@@ -53,7 +60,7 @@ export const spinnerEntry: ComponentRegistryEntry = {
   rootProps: [
     {
       name: 'size',
-      type: "SpinnerSize",
+      type: 'SpinnerSize',
       required: false,
       defaultValue: "'md'",
       description: 'Size of the spinner: sm (w-4 h-4), md (w-6 h-6), lg (w-8 h-8).',
@@ -100,7 +107,8 @@ export const spinnerEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'role="status"',
-        description: 'Creates an ARIA live region that announces the loading state to screen readers.',
+        description:
+          'Creates an ARIA live region that announces the loading state to screen readers.',
         managedByComponent: true,
       },
       {
@@ -111,7 +119,8 @@ export const spinnerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-busy="true"',
-        description: 'Indicates the element is currently being updated and content is not yet available.',
+        description:
+          'Indicates the element is currently being updated and content is not yet available.',
         managedByComponent: true,
       },
       {
@@ -138,19 +147,23 @@ export const spinnerEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'button',
-      reason: 'Spinner is commonly used inside buttons to indicate loading/processing state during async actions',
+      reason:
+        'Spinner is commonly used inside buttons to indicate loading/processing state during async actions',
     },
     {
       slug: 'skeleton',
-      reason: 'Both are loading feedback components — Spinner for inline indicators, Skeleton for content placeholders',
+      reason:
+        'Both are loading feedback components — Spinner for inline indicators, Skeleton for content placeholders',
     },
     {
       slug: 'text-input',
-      reason: 'Spinner can indicate async validation or search-in-progress state within text input fields',
+      reason:
+        'Spinner can indicate async validation or search-in-progress state within text input fields',
     },
     {
       slug: 'card',
-      reason: 'Spinner can serve as a loading indicator inside cards while card content is being fetched',
+      reason:
+        'Spinner can serve as a loading indicator inside cards while card content is being fetched',
     },
   ],
 
@@ -276,7 +289,7 @@ export default function AccessibleSpinner() {
       bad: '<Spinner style={{ display: isLoading ? "inline-block" : "none" }} />',
       good: '{isLoading && <Spinner aria-label="Loading data" />}',
       reason:
-        'Using display:none keeps the spinner\'s ARIA live region in the DOM, which may cause screen readers to announce a loading state that is not visible. Conditional rendering cleanly adds and removes the element.',
+        "Using display:none keeps the spinner's ARIA live region in the DOM, which may cause screen readers to announce a loading state that is not visible. Conditional rendering cleanly adds and removes the element.",
     },
     {
       title: 'Overriding the animation with custom CSS keyframes',

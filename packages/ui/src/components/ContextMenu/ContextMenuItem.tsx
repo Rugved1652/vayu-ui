@@ -1,16 +1,32 @@
-"use client";
+'use client';
 
-import React, { forwardRef, useCallback, useRef } from "react";
-import { cn } from "../../utils";
-import { useContextMenuCtx, useSubCtx, getFocusableItems, useItemKeyDown, baseItemStyles } from "./hooks";
-import type { ContextMenuItemProps } from "./types";
+import React, { forwardRef, useCallback, useRef } from 'react';
+import { cn } from '../../utils';
+import {
+  useContextMenuCtx,
+  useSubCtx,
+  getFocusableItems,
+  useItemKeyDown,
+  baseItemStyles,
+} from './hooks';
+import type { ContextMenuItemProps } from './types';
 
 const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
-  ({ children, onSelect, disabled = false, destructive = false, icon, shortcut, className, ...props }, ref) => {
+  (
+    {
+      children,
+      onSelect,
+      disabled = false,
+      destructive = false,
+      icon,
+      shortcut,
+      className,
+      ...props
+    },
+    ref,
+  ) => {
     const { closeMenu } = useContextMenuCtx();
-    const subCtx = React.useContext(
-      React.createContext<ReturnType<typeof useSubCtx> | null>(null)
-    );
+    const subCtx = React.useContext(React.createContext<ReturnType<typeof useSubCtx> | null>(null));
     const itemRef = useRef<HTMLButtonElement>(null);
 
     const handleClick = useCallback(() => {
@@ -28,7 +44,7 @@ const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
         const items = getFocusableItems(menuEl);
 
         switch (e.key) {
-          case "ArrowDown":
+          case 'ArrowDown':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) {
@@ -36,7 +52,7 @@ const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
               items[(idx + 1) % items.length]?.focus({ preventScroll: true });
             }
             break;
-          case "ArrowUp":
+          case 'ArrowUp':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) {
@@ -44,17 +60,17 @@ const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
               items[idx <= 0 ? items.length - 1 : idx - 1]?.focus({ preventScroll: true });
             }
             break;
-          case "Home":
+          case 'Home':
             e.preventDefault();
             e.stopPropagation();
             items[0]?.focus({ preventScroll: true });
             break;
-          case "End":
+          case 'End':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) items[items.length - 1]?.focus({ preventScroll: true });
             break;
-          case "Escape":
+          case 'Escape':
             e.preventDefault();
             e.stopPropagation();
             closeMenu();
@@ -65,7 +81,7 @@ const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
             break;
         }
       },
-      [disabled, handleKeyDown, closeMenu]
+      [disabled, handleKeyDown, closeMenu],
     );
 
     return (
@@ -77,9 +93,9 @@ const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
         onClick={handleClick}
         onKeyDown={handleNavKeyDown}
         className={cn(
-          baseItemStyles(disabled, destructive ? "destructive" : undefined),
-          "justify-between w-full",
-          className
+          baseItemStyles(disabled, destructive ? 'destructive' : undefined),
+          'justify-between w-full',
+          className,
         )}
         {...props}
       >
@@ -91,16 +107,12 @@ const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(
           )}
           <span className="truncate">{children}</span>
         </div>
-        {shortcut && (
-          <span className="text-xs text-muted-content shrink-0">
-            {shortcut}
-          </span>
-        )}
+        {shortcut && <span className="text-xs text-muted-content shrink-0">{shortcut}</span>}
       </button>
     );
-  }
+  },
 );
 
-ContextMenuItem.displayName = "ContextMenu.Item";
+ContextMenuItem.displayName = 'ContextMenu.Item';
 
 export { ContextMenuItem };

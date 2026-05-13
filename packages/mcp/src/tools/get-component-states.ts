@@ -3,7 +3,8 @@ import { registerTool } from '../lib/register-tool.js';
 import { findComponent } from '../lib/registry.js';
 
 export function registerGetComponentStates(server: Parameters<typeof registerTool>[0]) {
-  registerTool(server,
+  registerTool(
+    server,
     'get_component_states',
     'Get interactive and visual states for a component (loading, disabled, open, etc.) with their controlling props and default values.',
     {
@@ -14,7 +15,12 @@ export function registerGetComponentStates(server: Parameters<typeof registerToo
       const entry = findComponent(slug);
       if (!entry) {
         return {
-          content: [{ type: 'text' as const, text: JSON.stringify({ error: `No component found for slug "${slug}"` }) }],
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: `No component found for slug "${slug}"` }),
+            },
+          ],
           isError: true,
         };
       }

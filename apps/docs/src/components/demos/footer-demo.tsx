@@ -8,9 +8,7 @@ export default function FooterDemo() {
     <div className="w-full space-y-12 p-6 overflow-hidden">
       {/* Default Footer */}
       <div className="space-y-4">
-        <Typography.H5 className="uppercase tracking-wider">
-          Default Variant
-        </Typography.H5>
+        <Typography.H5 className="uppercase tracking-wider">Default Variant</Typography.H5>
         <div className="border border-border rounded-surface overflow-hidden bg-surface">
           <Footer>
             <Footer.Container>
@@ -77,9 +75,7 @@ export default function FooterDemo() {
 
       {/* Centered Footer */}
       <div className="space-y-4">
-        <Typography.H5 className="uppercase tracking-wider">
-          Centered Variant
-        </Typography.H5>
+        <Typography.H5 className="uppercase tracking-wider">Centered Variant</Typography.H5>
         <div className="border border-border rounded-surface overflow-hidden bg-surface">
           <Footer variant="centered">
             <Footer.Container>
@@ -124,9 +120,7 @@ export default function FooterDemo() {
 
       {/* Minimal Footer */}
       <div className="space-y-4">
-        <Typography.H5 className="uppercase tracking-wider">
-          Minimal Variant
-        </Typography.H5>
+        <Typography.H5 className="uppercase tracking-wider">Minimal Variant</Typography.H5>
         <div className="border border-border rounded-surface overflow-hidden bg-surface">
           <Footer variant="minimal">
             <Footer.Container>
@@ -151,9 +145,7 @@ export default function FooterDemo() {
 
       {/* Footer with CTA Button */}
       <div className="space-y-4">
-        <Typography.H5 className="uppercase tracking-wider">
-          With CTA Button
-        </Typography.H5>
+        <Typography.H5 className="uppercase tracking-wider">With CTA Button</Typography.H5>
         <div className="border border-border rounded-surface overflow-hidden bg-surface">
           <Footer>
             <Footer.Container>
@@ -162,9 +154,7 @@ export default function FooterDemo() {
                   <Typography.H5 variant="gradient" className="font-bold">
                     Ready to get started?
                   </Typography.H5>
-                  <Typography.P >
-                    Join thousands of developers building with Vayu UI.
-                  </Typography.P>
+                  <Typography.P>Join thousands of developers building with Vayu UI.</Typography.P>
                 </div>
                 <div className="flex gap-3">
                   <Button variant="primary" size="medium">

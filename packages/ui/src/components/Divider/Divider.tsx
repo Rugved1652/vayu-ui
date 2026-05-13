@@ -36,9 +36,9 @@ const DividerRoot = ({
     : hasChildren
       ? {}
       : {
-        role: 'separator',
-        'aria-orientation': orientation,
-      };
+          role: 'separator',
+          'aria-orientation': orientation,
+        };
 
   if (!children) {
     return (

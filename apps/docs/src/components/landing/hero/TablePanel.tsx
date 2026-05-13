@@ -29,42 +29,54 @@ export function TablePanel() {
             <Table.Body>
               <Table.Row>
                 <Table.Cell>
-                  <Badge variant="success" size="sm">Active</Badge>
+                  <Badge variant="success" size="sm">
+                    Active
+                  </Badge>
                 </Table.Cell>
                 <Table.Cell className="font-medium text-surface-content">Vayu UI</Table.Cell>
                 <Table.Cell className="text-right text-muted-content">1.2k</Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>
-                  <Badge variant="warning" size="sm">Beta</Badge>
+                  <Badge variant="warning" size="sm">
+                    Beta
+                  </Badge>
                 </Table.Cell>
                 <Table.Cell className="font-medium text-surface-content">Docs</Table.Cell>
                 <Table.Cell className="text-right text-muted-content">340</Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>
-                  <Badge variant="muted" size="sm">Archived</Badge>
+                  <Badge variant="muted" size="sm">
+                    Archived
+                  </Badge>
                 </Table.Cell>
                 <Table.Cell className="font-medium text-surface-content">V1</Table.Cell>
                 <Table.Cell className="text-right text-muted-content">89</Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>
-                  <Badge variant="success" size="sm">Active</Badge>
+                  <Badge variant="success" size="sm">
+                    Active
+                  </Badge>
                 </Table.Cell>
                 <Table.Cell className="font-medium text-surface-content">Studio</Table.Cell>
                 <Table.Cell className="text-right text-muted-content">4.5k</Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>
-                  <Badge variant="destructive" size="sm">Error</Badge>
+                  <Badge variant="destructive" size="sm">
+                    Error
+                  </Badge>
                 </Table.Cell>
                 <Table.Cell className="font-medium text-surface-content">API Gateway</Table.Cell>
                 <Table.Cell className="text-right text-muted-content">12</Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>
-                  <Badge variant="success" size="sm">Active</Badge>
+                  <Badge variant="success" size="sm">
+                    Active
+                  </Badge>
                 </Table.Cell>
                 <Table.Cell className="font-medium text-surface-content">Analytics</Table.Cell>
                 <Table.Cell className="text-right text-muted-content">850</Table.Cell>

@@ -84,7 +84,8 @@ export function OverlayPanel() {
               </Modal.Header>
               <Modal.Body>
                 <p className="text-sm text-muted-content">
-                  Modals trap focus and support Escape to close. Click outside or press X to dismiss.
+                  Modals trap focus and support Escape to close. Click outside or press X to
+                  dismiss.
                 </p>
               </Modal.Body>
               <Modal.Footer>
@@ -132,7 +133,8 @@ export function OverlayPanel() {
                   </div>
                 </div>
                 <p className="text-xs text-muted-content">
-                  A modern React component library with WCAG 2.2 AA compliance and compound patterns.
+                  A modern React component library with WCAG 2.2 AA compliance and compound
+                  patterns.
                 </p>
               </div>
             }

@@ -36,12 +36,34 @@ export const floatingDockEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'FloatingDock',
   files: [
-    { name: 'FloatingDock.tsx', description: 'Root nav wrapper component, fixed-positioned at the top of the viewport' },
-    { name: 'FloatingDockContainer.tsx', description: 'Glassmorphism flex container that injects linkComponent into children via cloneElement' },
-    { name: 'FloatingDockItem.tsx', description: 'Interactive navigation item with icon, tooltip, hover scale animation, and link or button rendering' },
-    { name: 'FloatingDockLogo.tsx', description: 'Brand logo element with optional href link and hover color transition' },
-    { name: 'types.ts', description: 'TypeScript type definitions for DockBaseProps, DockItemProps, DockLogoProps, and InjectedDockProps' },
-    { name: 'index.ts', description: 'Barrel export file assembling the compound component with Container, Item, Logo, and Divider sub-components' },
+    {
+      name: 'FloatingDock.tsx',
+      description: 'Root nav wrapper component, fixed-positioned at the top of the viewport',
+    },
+    {
+      name: 'FloatingDockContainer.tsx',
+      description:
+        'Glassmorphism flex container that injects linkComponent into children via cloneElement',
+    },
+    {
+      name: 'FloatingDockItem.tsx',
+      description:
+        'Interactive navigation item with icon, tooltip, hover scale animation, and link or button rendering',
+    },
+    {
+      name: 'FloatingDockLogo.tsx',
+      description: 'Brand logo element with optional href link and hover color transition',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for DockBaseProps, DockItemProps, DockLogoProps, and InjectedDockProps',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export file assembling the compound component with Container, Item, Logo, and Divider sub-components',
+    },
   ],
   targetPath: 'src/components',
 
@@ -51,13 +73,15 @@ export const floatingDockEntry: ComponentRegistryEntry = {
     {
       name: 'Container',
       fileName: 'FloatingDockContainer.tsx',
-      description: 'Glassmorphism flex container that wraps dock items and injects a shared linkComponent prop into children via React.cloneElement',
+      description:
+        'Glassmorphism flex container that wraps dock items and injects a shared linkComponent prop into children via React.cloneElement',
       props: [
         {
           name: 'linkComponent',
           type: 'React.ElementType',
           required: false,
-          description: 'Custom link component to inject into child DockItem and DockLogo elements (defaults to Next.js Link)',
+          description:
+            'Custom link component to inject into child DockItem and DockLogo elements (defaults to Next.js Link)',
         },
         {
           name: 'children',
@@ -76,13 +100,15 @@ export const floatingDockEntry: ComponentRegistryEntry = {
     {
       name: 'Item',
       fileName: 'FloatingDockItem.tsx',
-      description: 'Interactive navigation item with icon, tooltip, hover animation, and conditional link or button rendering based on href prop',
+      description:
+        'Interactive navigation item with icon, tooltip, hover animation, and conditional link or button rendering based on href prop',
       props: [
         {
           name: 'icon',
-          type: "React.ComponentType<{ className?: string; strokeWidth?: number }>",
+          type: 'React.ComponentType<{ className?: string; strokeWidth?: number }>',
           required: false,
-          description: 'Icon component to render (e.g. a Lucide icon). Receives className and strokeWidth props.',
+          description:
+            'Icon component to render (e.g. a Lucide icon). Receives className and strokeWidth props.',
         },
         {
           name: 'label',
@@ -113,7 +139,8 @@ export const floatingDockEntry: ComponentRegistryEntry = {
     {
       name: 'Logo',
       fileName: 'FloatingDockLogo.tsx',
-      description: 'Brand logo element that renders as a link when href is provided, or a static div otherwise, with hover color transition',
+      description:
+        'Brand logo element that renders as a link when href is provided, or a static div otherwise, with hover color transition',
       props: [
         {
           name: 'children',
@@ -138,7 +165,8 @@ export const floatingDockEntry: ComponentRegistryEntry = {
     {
       name: 'Divider',
       fileName: 'Divider.tsx',
-      description: 'Visual separator between dock items, re-exported from the shared Divider component. Supports vertical orientation for use in horizontal dock layouts.',
+      description:
+        'Visual separator between dock items, re-exported from the shared Divider component. Supports vertical orientation for use in horizontal dock layouts.',
       props: [
         {
           name: 'orientation',
@@ -161,7 +189,8 @@ export const floatingDockEntry: ComponentRegistryEntry = {
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, marks the divider as decorative (aria-hidden) rather than a semantic separator',
+          description:
+            'When true, marks the divider as decorative (aria-hidden) rather than a semantic separator',
         },
       ],
     },
@@ -173,7 +202,8 @@ export const floatingDockEntry: ComponentRegistryEntry = {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description: 'Dock content, typically a FloatingDock.Container wrapping items, logos, and dividers',
+      description:
+        'Dock content, typically a FloatingDock.Container wrapping items, logos, and dividers',
     },
     {
       name: 'aria-label',
@@ -200,13 +230,15 @@ export const floatingDockEntry: ComponentRegistryEntry = {
       name: 'hovered',
       prop: 'motion-safe:hover',
       isBoolean: true,
-      description: 'Dock items scale up 110% and translate upward 2px on hover with a smooth transition and muted background appears',
+      description:
+        'Dock items scale up 110% and translate upward 2px on hover with a smooth transition and muted background appears',
     },
     {
       name: 'focused',
       prop: 'focus-visible',
       isBoolean: true,
-      description: 'Focus-visible ring appears on keyboard focus with ring-focus color and 2px offset from surface background',
+      description:
+        'Focus-visible ring appears on keyboard focus with ring-focus color and 2px offset from surface background',
     },
   ],
 
@@ -225,22 +257,26 @@ export const floatingDockEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-label',
-        description: 'Applied to the root nav element to identify the navigation landmark. Defaults to "Floating dock" but should be overridden with a descriptive label.',
+        description:
+          'Applied to the root nav element to identify the navigation landmark. Defaults to "Floating dock" but should be overridden with a descriptive label.',
         managedByComponent: false,
       },
       {
         name: 'aria-label (Item)',
-        description: 'Each DockItem receives an aria-label matching its label prop for screen reader identification.',
+        description:
+          'Each DockItem receives an aria-label matching its label prop for screen reader identification.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden (Icon)',
-        description: 'Icons inside DockItem are marked aria-hidden="true" since the label prop provides the accessible text.',
+        description:
+          'Icons inside DockItem are marked aria-hidden="true" since the label prop provides the accessible text.',
         managedByComponent: true,
       },
       {
         name: 'aria-label (Logo)',
-        description: 'When Logo renders as a link, it receives aria-label="Home" for screen reader context.',
+        description:
+          'When Logo renders as a link, it receives aria-label="Home" for screen reader context.',
         managedByComponent: true,
       },
     ],
@@ -270,17 +306,17 @@ export const floatingDockEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [
     {
       slug: 'divider',
-      reason: 'FloatingDock.Divider is re-exported from the shared Divider component for visual grouping between dock items',
+      reason:
+        'FloatingDock.Divider is re-exported from the shared Divider component for visual grouping between dock items',
     },
     {
       slug: 'tooltip',
-      reason: 'FloatingDock.Item uses the Tooltip component internally to display item labels on hover',
+      reason:
+        'FloatingDock.Item uses the Tooltip component internally to display item labels on hover',
     },
   ],
   reactPeerDependency: '>=18.0.0',
@@ -289,23 +325,28 @@ export const floatingDockEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'tooltip',
-      reason: 'Used internally by DockItem to show labels on hover; can also wrap additional dock elements for custom tooltips',
+      reason:
+        'Used internally by DockItem to show labels on hover; can also wrap additional dock elements for custom tooltips',
     },
     {
       slug: 'avatar',
-      reason: 'Commonly used alongside FloatingDock for a user profile avatar as the last dock item',
+      reason:
+        'Commonly used alongside FloatingDock for a user profile avatar as the last dock item',
     },
     {
       slug: 'button',
-      reason: 'Dock items without href render as buttons; Button may be used for additional dock-adjacent actions',
+      reason:
+        'Dock items without href render as buttons; Button may be used for additional dock-adjacent actions',
     },
     {
       slug: 'badge',
-      reason: 'Notification badges are frequently paired with dock items (e.g. notification bell with count)',
+      reason:
+        'Notification badges are frequently paired with dock items (e.g. notification bell with count)',
     },
     {
       slug: 'divider',
-      reason: 'FloatingDock.Divider separates logical groups of items (e.g. navigation vs. actions)',
+      reason:
+        'FloatingDock.Divider separates logical groups of items (e.g. navigation vs. actions)',
     },
   ],
 
@@ -313,7 +354,8 @@ export const floatingDockEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'FloatingDock with Navigation Items',
-      description: 'A complete dock with logo, dividers, and icon-based navigation items with click handlers.',
+      description:
+        'A complete dock with logo, dividers, and icon-based navigation items with click handlers.',
       code: `import { FloatingDock } from 'vayu-ui';
 import { Home, Search, Bell, Settings, User, Mail, Heart } from 'lucide-react';
 
@@ -362,7 +404,8 @@ export default function LinkDockDemo() {
     },
     {
       title: 'FloatingDock with Custom Link Component',
-      description: 'Pass a custom linkComponent to Container to use React Router, custom Link, or any routing library instead of Next.js Link.',
+      description:
+        'Pass a custom linkComponent to Container to use React Router, custom Link, or any routing library instead of Next.js Link.',
       code: `import { FloatingDock } from 'vayu-ui';
 import { Link } from 'react-router-dom';
 import { Home, Search, Settings } from 'lucide-react';
@@ -382,7 +425,8 @@ export default function CustomLinkDock() {
     },
     {
       title: 'FloatingDock Logo Only',
-      description: 'A minimal dock with only a logo, demonstrating that the Logo renders as a static div when no href is provided.',
+      description:
+        'A minimal dock with only a logo, demonstrating that the Logo renders as a static div when no href is provided.',
       code: `import { FloatingDock } from 'vayu-ui';
 
 export default function LogoOnlyDock() {
@@ -404,31 +448,36 @@ export default function LogoOnlyDock() {
       title: 'Omitting aria-label on the dock',
       bad: '<FloatingDock><FloatingDock.Container>...</FloatingDock.Container></FloatingDock>',
       good: '<FloatingDock aria-label="Main navigation"><FloatingDock.Container>...</FloatingDock.Container></FloatingDock>',
-      reason: 'The root <nav> element requires an aria-label to distinguish it from other navigation landmarks on the page. While the component defaults to "Floating dock", you should provide a descriptive label specific to your use case.',
+      reason:
+        'The root <nav> element requires an aria-label to distinguish it from other navigation landmarks on the page. While the component defaults to "Floating dock", you should provide a descriptive label specific to your use case.',
     },
     {
       title: 'Placing DockItem outside Container',
       bad: '<FloatingDock><FloatingDock.Item icon={Home} label="Home" /></FloatingDock>',
       good: '<FloatingDock><FloatingDock.Container><FloatingDock.Item icon={Home} label="Home" /></FloatingDock.Container></FloatingDock>',
-      reason: 'DockItem expects to receive the injected linkComponent prop from Container via cloneElement. Items placed outside Container will not receive this prop and will fall back to Next.js Link, which may fail in non-Next.js projects.',
+      reason:
+        'DockItem expects to receive the injected linkComponent prop from Container via cloneElement. Items placed outside Container will not receive this prop and will fall back to Next.js Link, which may fail in non-Next.js projects.',
     },
     {
       title: 'Using label as visible text instead of accessible name',
       bad: '<FloatingDock.Item icon={Search}>Search</FloatingDock.Item>',
       good: '<FloatingDock.Item icon={Search} label="Search" />',
-      reason: 'DockItem does not render children as visible text — the label prop is used for both the tooltip content and the aria-label. Passing children instead of the label prop will result in no accessible name and no tooltip.',
+      reason:
+        'DockItem does not render children as visible text — the label prop is used for both the tooltip content and the aria-label. Passing children instead of the label prop will result in no accessible name and no tooltip.',
     },
     {
       title: 'Mixing next/link in non-Next.js projects without linkComponent',
       bad: '<FloatingDock.Container><FloatingDock.Item icon={Home} label="Home" href="/" /></FloatingDock.Container>',
       good: '<FloatingDock.Container linkComponent={CustomLink}><FloatingDock.Item icon={Home} label="Home" href="/" /></FloatingDock.Container>',
-      reason: 'Without a custom linkComponent, DockItem and DockLogo default to Next.js Link. In non-Next.js projects (React Router, Remix, etc.), this will cause import errors. Always pass your router\'s Link component via Container\'s linkComponent prop.',
+      reason:
+        "Without a custom linkComponent, DockItem and DockLogo default to Next.js Link. In non-Next.js projects (React Router, Remix, etc.), this will cause import errors. Always pass your router's Link component via Container's linkComponent prop.",
     },
     {
       title: 'Overriding the fixed positioning',
       bad: '<FloatingDock className="relative bottom-4">...</FloatingDock>',
       good: '<FloatingDock>...</FloatingDock>',
-      reason: 'The FloatingDock is designed as a fixed-position element pinned to the top of the viewport. Overriding its positioning with relative, absolute, or bottom classes breaks the intended floating behavior and may cause layout issues.',
+      reason:
+        'The FloatingDock is designed as a fixed-position element pinned to the top of the viewport. Overriding its positioning with relative, absolute, or bottom classes breaks the intended floating behavior and may cause layout issues.',
     },
   ],
 };

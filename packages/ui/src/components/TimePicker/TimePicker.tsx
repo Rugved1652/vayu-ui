@@ -76,7 +76,9 @@ const TimepickerRoot: React.FC<TimepickerRootProps> = ({
   minTime,
   maxTime,
 }) => {
-  const validationState = normalizeValidationState(validationStateProp ?? (error ? 'error' : 'default'));
+  const validationState = normalizeValidationState(
+    validationStateProp ?? (error ? 'error' : 'default'),
+  );
   const [internalValue, setInternalValue] = useState<TimeValue | TimeRange | null>(
     defaultValue ?? null,
   );
@@ -191,7 +193,7 @@ const TimepickerRoot: React.FC<TimepickerRootProps> = ({
           </label>
         )}
         {children}
-        {(validationState === 'error' && error) && (
+        {validationState === 'error' && error && (
           <p className={clsx(inputMessageBase, inputErrorMessageStyles)}>
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>

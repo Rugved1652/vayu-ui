@@ -134,10 +134,14 @@ const CommandBoxRoot = forwardRef<HTMLDivElement, CommandBoxRootProps>(
     );
 
     // Escape to close
-    useKeyPress('Escape', (e) => {
-      e.preventDefault();
-      setOpen(false);
-    }, { enabled: open });
+    useKeyPress(
+      'Escape',
+      (e) => {
+        e.preventDefault();
+        setOpen(false);
+      },
+      { enabled: open },
+    );
 
     // Keyboard shortcuts for items
     const shortcutBindings: KeyBinding[] = useMemo(

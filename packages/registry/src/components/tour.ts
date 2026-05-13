@@ -35,14 +35,44 @@ export const tourEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Tour',
   files: [
-    { name: 'Tour.tsx', description: 'Root component providing TourContext, controlled state management, keyboard navigation, body scroll lock, and portal rendering' },
-    { name: 'TourPopover.tsx', description: 'Popover dialog with directional arrow, header (title, step badge, close button), body content, progress bar, and footer navigation buttons' },
-    { name: 'TourOverlay.tsx', description: 'SVG mask overlay with spotlight cutout around the target element and a branded highlight border' },
-    { name: 'use-position.ts', description: 'Hook that calculates popover position relative to the target element with viewport clamping' },
-    { name: 'use-target.ts', description: 'Hook that resolves the target element via CSS selector, observes DOM mutations, handles scroll-into-view, and tracks resize/scroll repositioning' },
-    { name: 'hooks.ts', description: 'Export of the useTour hook for imperative access to tour state and navigation actions' },
-    { name: 'types.ts', description: 'TypeScript type definitions for TourStep, TourContextValue, and TourProps' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting Tour, useTour, and all public types' },
+    {
+      name: 'Tour.tsx',
+      description:
+        'Root component providing TourContext, controlled state management, keyboard navigation, body scroll lock, and portal rendering',
+    },
+    {
+      name: 'TourPopover.tsx',
+      description:
+        'Popover dialog with directional arrow, header (title, step badge, close button), body content, progress bar, and footer navigation buttons',
+    },
+    {
+      name: 'TourOverlay.tsx',
+      description:
+        'SVG mask overlay with spotlight cutout around the target element and a branded highlight border',
+    },
+    {
+      name: 'use-position.ts',
+      description:
+        'Hook that calculates popover position relative to the target element with viewport clamping',
+    },
+    {
+      name: 'use-target.ts',
+      description:
+        'Hook that resolves the target element via CSS selector, observes DOM mutations, handles scroll-into-view, and tracks resize/scroll repositioning',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'Export of the useTour hook for imperative access to tour state and navigation actions',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript type definitions for TourStep, TourContextValue, and TourProps',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting Tour, useTour, and all public types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -57,25 +87,29 @@ export const tourEntry: ComponentRegistryEntry = {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description: 'The page content containing the elements targeted by tour steps (identified by CSS selectors)',
+      description:
+        'The page content containing the elements targeted by tour steps (identified by CSS selectors)',
     },
     {
       name: 'steps',
       type: 'TourStep[]',
       required: true,
-      description: 'Array of tour step definitions, each with a target selector, title, content, and optional placement/behavior overrides',
+      description:
+        'Array of tour step definitions, each with a target selector, title, content, and optional placement/behavior overrides',
     },
     {
       name: 'isOpen',
       type: 'boolean',
       required: false,
-      description: 'Controlled open state. When provided, the tour relies on the parent to manage visibility.',
+      description:
+        'Controlled open state. When provided, the tour relies on the parent to manage visibility.',
     },
     {
       name: 'onClose',
       type: '() => void',
       required: false,
-      description: 'Callback fired when the tour is closed via the close button, Escape key, or mask click',
+      description:
+        'Callback fired when the tour is closed via the close button, Escape key, or mask click',
     },
     {
       name: 'onComplete',
@@ -94,7 +128,8 @@ export const tourEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'true',
-      description: 'Show a progress bar between the body and footer indicating tour completion percentage',
+      description:
+        'Show a progress bar between the body and footer indicating tour completion percentage',
     },
     {
       name: 'showStepNumbers',
@@ -108,7 +143,8 @@ export const tourEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Allow pointer events to pass through the overlay mask so users can interact with the page behind the tour',
+      description:
+        'Allow pointer events to pass through the overlay mask so users can interact with the page behind the tour',
     },
     {
       name: 'closeOnEscape',
@@ -129,14 +165,16 @@ export const tourEntry: ComponentRegistryEntry = {
       type: 'ScrollBehavior',
       required: false,
       defaultValue: "'smooth'",
-      description: 'Scroll behavior when scrolling the target element into view (smooth, auto, or instant)',
+      description:
+        'Scroll behavior when scrolling the target element into view (smooth, auto, or instant)',
       options: ['smooth', 'auto', 'instant'],
     },
     {
       name: 'highlightedAreaClassName',
       type: 'string',
       required: false,
-      description: 'Additional CSS class name applied to the spotlight border element around the highlighted target',
+      description:
+        'Additional CSS class name applied to the spotlight border element around the highlighted target',
     },
     {
       name: 'maskClassName',
@@ -157,21 +195,24 @@ export const tourEntry: ComponentRegistryEntry = {
       prop: 'isOpen',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Whether the tour is currently visible. In controlled mode, set via isOpen; otherwise toggled programmatically.',
+      description:
+        'Whether the tour is currently visible. In controlled mode, set via isOpen; otherwise toggled programmatically.',
     },
     {
       name: 'isTransitioning',
       prop: 'isTransitioning',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Brief opacity transition state (300ms) applied when navigating between steps for a smooth fade effect.',
+      description:
+        'Brief opacity transition state (300ms) applied when navigating between steps for a smooth fade effect.',
     },
     {
       name: 'closeOnEscape',
       prop: 'closeOnEscape',
       isBoolean: true,
       defaultValue: 'true',
-      description: 'Whether pressing Escape dismisses the tour. Disable for mandatory walkthroughs.',
+      description:
+        'Whether pressing Escape dismisses the tour. Disable for mandatory walkthroughs.',
     },
     {
       name: 'closeOnMaskClick',
@@ -185,7 +226,8 @@ export const tourEntry: ComponentRegistryEntry = {
       prop: 'maskClickable',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Whether pointer events pass through the mask to allow interaction with the page behind the tour.',
+      description:
+        'Whether pointer events pass through the mask to allow interaction with the page behind the tour.',
     },
     {
       name: 'scrollBehavior',
@@ -202,7 +244,8 @@ export const tourEntry: ComponentRegistryEntry = {
     {
       name: 'onClose',
       signature: '() => void',
-      description: 'Fired when the tour is closed by any method (close button, Escape key, or mask click)',
+      description:
+        'Fired when the tour is closed by any method (close button, Escape key, or mask click)',
     },
     {
       name: 'onComplete',
@@ -217,7 +260,8 @@ export const tourEntry: ComponentRegistryEntry = {
     {
       name: 'TourStep.onNext',
       signature: '() => void | Promise<void>',
-      description: 'Per-step async hook called before advancing to the next step. Await it to gate progression.',
+      description:
+        'Per-step async hook called before advancing to the next step. Await it to gate progression.',
     },
     {
       name: 'TourStep.onPrev',
@@ -232,37 +276,44 @@ export const tourEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-modal',
-        description: 'Set to "true" on the popover dialog, informing screen readers that content outside the tour is inert',
+        description:
+          'Set to "true" on the popover dialog, informing screen readers that content outside the tour is inert',
         managedByComponent: true,
       },
       {
         name: 'aria-labelledby',
-        description: 'Set on the popover dialog with an auto-generated id linked to the step title heading, providing an accessible name',
+        description:
+          'Set on the popover dialog with an auto-generated id linked to the step title heading, providing an accessible name',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Set to "true" on the overlay mask, arrow element, and decorative icons to exclude them from the accessibility tree',
+        description:
+          'Set to "true" on the overlay mask, arrow element, and decorative icons to exclude them from the accessibility tree',
         managedByComponent: true,
       },
       {
         name: 'aria-label',
-        description: 'Applied to navigation buttons (Close, Skip Tour, Previous, Next/Finish) with descriptive labels for screen readers',
+        description:
+          'Applied to navigation buttons (Close, Skip Tour, Previous, Next/Finish) with descriptive labels for screen readers',
         managedByComponent: true,
       },
       {
         name: 'aria-live',
-        description: 'A "polite" live region announces the current step number and title when navigating between steps',
+        description:
+          'A "polite" live region announces the current step number and title when navigating between steps',
         managedByComponent: true,
       },
       {
         name: 'aria-atomic',
-        description: 'Set to "true" on the live region to ensure the entire step announcement is read as a whole',
+        description:
+          'Set to "true" on the live region to ensure the entire step announcement is read as a whole',
         managedByComponent: true,
       },
       {
         name: 'role="progressbar"',
-        description: 'Applied to the progress bar container with aria-valuenow, aria-valuemin, and aria-valuemax for step progress tracking',
+        description:
+          'Applied to the progress bar container with aria-valuenow, aria-valuemin, and aria-valuemax for step progress tracking',
         managedByComponent: true,
       },
     ],
@@ -288,10 +339,7 @@ export const tourEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'lucide-react' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'lucide-react' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -299,19 +347,23 @@ export const tourEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'button',
-      reason: 'Used as the trigger to start the tour and commonly placed inside tour step content for custom call-to-action elements',
+      reason:
+        'Used as the trigger to start the tour and commonly placed inside tour step content for custom call-to-action elements',
     },
     {
       slug: 'typography',
-      reason: 'Used for page headings and body text that serve as tour targets and for content within tour steps',
+      reason:
+        'Used for page headings and body text that serve as tour targets and for content within tour steps',
     },
     {
       slug: 'modal',
-      reason: 'Tours often guide users to open and interact with modal dialogs; the two overlay patterns complement each other',
+      reason:
+        'Tours often guide users to open and interact with modal dialogs; the two overlay patterns complement each other',
     },
     {
       slug: 'tooltip',
-      reason: 'Can be used alongside tours — tooltips for quick hover hints, tours for structured multi-step onboarding',
+      reason:
+        'Can be used alongside tours — tooltips for quick hover hints, tours for structured multi-step onboarding',
     },
     {
       slug: 'divider',
@@ -323,7 +375,8 @@ export const tourEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic Tour',
-      description: 'Controlled tour with four steps targeting different page elements using various placements.',
+      description:
+        'Controlled tour with four steps targeting different page elements using various placements.',
       code: `import { useState } from 'react';
 import { Tour, type TourStep, Typography, Button, Divider } from 'vayu-ui';
 
@@ -402,7 +455,8 @@ export default function TourDemo() {
     },
     {
       title: 'Tour with Custom Buttons',
-      description: 'Override the default navigation buttons for a step using the customButtons prop.',
+      description:
+        'Override the default navigation buttons for a step using the customButtons prop.',
       code: `import { useState } from 'react';
 import { Tour, type TourStep, Button, Typography } from 'vayu-ui';
 
@@ -450,7 +504,8 @@ export default function CustomButtonsTour() {
     },
     {
       title: 'Tour with Async Step Hooks',
-      description: 'Use onNext and onPrev async hooks on steps to gate progression, such as waiting for data or user confirmation.',
+      description:
+        'Use onNext and onPrev async hooks on steps to gate progression, such as waiting for data or user confirmation.',
       code: `import { useState } from 'react';
 import { Tour, type TourStep, Button, Typography } from 'vayu-ui';
 
@@ -498,7 +553,8 @@ export default function AsyncTourDemo() {
     },
     {
       title: 'Imperative Control with useTour',
-      description: 'Use the useTour hook to control the tour programmatically from anywhere in the Tour subtree.',
+      description:
+        'Use the useTour hook to control the tour programmatically from anywhere in the Tour subtree.',
       code: `import { Tour, useTour, type TourStep, Button, Typography } from 'vayu-ui';
 
 const steps: TourStep[] = [
@@ -556,31 +612,36 @@ export default function ImperativeTourDemo() {
       title: 'Using a target selector that does not exist in the DOM',
       bad: '{ target: "#nonexistent-element", title: "Missing", content: "..." }',
       good: '{ target: "#real-element", title: "Found", content: "..." }',
-      reason: 'The tour uses document.querySelector to resolve targets. If the selector matches nothing, the spotlight and popover will not render correctly. Ensure target elements exist in the DOM before the tour step activates.',
+      reason:
+        'The tour uses document.querySelector to resolve targets. If the selector matches nothing, the spotlight and popover will not render correctly. Ensure target elements exist in the DOM before the tour step activates.',
     },
     {
       title: 'Using useTour outside of a Tour provider',
       bad: 'function MyComponent() { const { nextStep } = useTour(); return <button onClick={nextStep}>Next</button>; }',
       good: 'Place MyComponent as a child of <Tour> so useTour can access the TourContext.',
-      reason: 'useTour relies on TourContext which is only available within the <Tour> component subtree. Calling it outside throws an error.',
+      reason:
+        'useTour relies on TourContext which is only available within the <Tour> component subtree. Calling it outside throws an error.',
     },
     {
       title: 'Setting maskClickable and closeOnMaskClick both to true',
       bad: '<Tour maskClickable={true} closeOnMaskClick={true}>',
       good: '<Tour maskClickable={false} closeOnMaskClick={true}>',
-      reason: 'When maskClickable is true, pointer events pass through the mask and the overlay click handler never fires, making closeOnMaskClick ineffective. Use closeOnMaskClick only when the mask captures clicks.',
+      reason:
+        'When maskClickable is true, pointer events pass through the mask and the overlay click handler never fires, making closeOnMaskClick ineffective. Use closeOnMaskClick only when the mask captures clicks.',
     },
     {
       title: 'Hardcoding CSS colors instead of design tokens for custom buttons',
       bad: '<button style={{ background: "#3b82f6", color: "white" }}>Next</button>',
       good: '<Button variant="primary"><Button.Text>Next</Button.Text></Button>',
-      reason: 'The tour uses design tokens (bg-elevated, border-border, bg-brand) for consistent theming. Custom buttons should use the same token system to match the popover styling across light and dark modes.',
+      reason:
+        'The tour uses design tokens (bg-elevated, border-border, bg-brand) for consistent theming. Custom buttons should use the same token system to match the popover styling across light and dark modes.',
     },
     {
       title: 'Targeting elements inside other portals or iframes',
       bad: '{ target: ".modal-inside-portal", title: "Portal Target", content: "..." }',
       good: 'Ensure target elements are in the main document DOM, or delay the tour until portal content is mounted.',
-      reason: 'The tour uses document.querySelector and getBoundingClientRect to find and measure targets. Elements inside nested portals or iframes may not be resolvable by the top-level query selector, causing positioning failures.',
+      reason:
+        'The tour uses document.querySelector and getBoundingClientRect to find and measure targets. Elements inside nested portals or iframes may not be resolvable by the top-level query selector, causing positioning failures.',
     },
   ],
 };

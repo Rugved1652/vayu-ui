@@ -10,7 +10,7 @@ export const useDebounceEntry: HookRegistryEntry = {
   description:
     'Returns a debounced version of a value that only updates after the specified delay has elapsed without any new changes.',
   longDescription:
-    'Wraps a value in a setTimeout-based debounce mechanism using React\'s useState and useEffect. Each time the input value changes, the previous timeout is cleared and a new one is scheduled. The returned debounced value only updates when the delay period expires without the value changing again — ideal for rate-limiting operations triggered by rapid user input. Because it relies solely on synchronous React state and useEffect cleanup, it is fully SSR-safe with no hydration mismatches: the initial render always returns the original value immediately, and debouncing only begins after mount. Choose this hook over a manual setTimeout when you need a declarative, React-friendly way to delay state propagation without managing timer lifecycle yourself.',
+    "Wraps a value in a setTimeout-based debounce mechanism using React's useState and useEffect. Each time the input value changes, the previous timeout is cleared and a new one is scheduled. The returned debounced value only updates when the delay period expires without the value changing again — ideal for rate-limiting operations triggered by rapid user input. Because it relies solely on synchronous React state and useEffect cleanup, it is fully SSR-safe with no hydration mismatches: the initial render always returns the original value immediately, and debouncing only begins after mount. Choose this hook over a manual setTimeout when you need a declarative, React-friendly way to delay state propagation without managing timer lifecycle yourself.",
   tags: [
     'debounce',
     'delay',
@@ -47,7 +47,7 @@ export const useDebounceEntry: HookRegistryEntry = {
       type: 'T',
       required: true,
       description:
-        'The value to debounce. Can be any type — string, number, boolean, object, or array. The hook tracks changes via React\'s dependency comparison, so primitive and reference types are both supported.',
+        "The value to debounce. Can be any type — string, number, boolean, object, or array. The hook tracks changes via React's dependency comparison, so primitive and reference types are both supported.",
     },
     {
       name: 'delay',

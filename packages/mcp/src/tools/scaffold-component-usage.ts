@@ -30,7 +30,12 @@ export function registerScaffoldComponentUsage(server: Parameters<typeof registe
       const entry = findBySlug(slug);
       if (!entry) {
         return {
-          content: [{ type: 'text' as const, text: JSON.stringify({ error: `No entry found for slug "${slug}"` }) }],
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: `No entry found for slug "${slug}"` }),
+            },
+          ],
           isError: true,
         };
       }

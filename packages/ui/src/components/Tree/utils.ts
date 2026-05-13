@@ -15,17 +15,10 @@ export function getAllNodeIds(nodes: TreeNode[]): (string | number)[] {
 }
 
 /** Return the chain of ancestor ids for a given node (root → immediate parent). */
-export function getParentIds(
-  nodeId: string | number,
-  nodes: TreeNode[],
-): (string | number)[] {
+export function getParentIds(nodeId: string | number, nodes: TreeNode[]): (string | number)[] {
   const parents: (string | number)[] = [];
 
-  const find = (
-    target: string | number,
-    list: TreeNode[],
-    parentId?: string | number,
-  ): boolean => {
+  const find = (target: string | number, list: TreeNode[], parentId?: string | number): boolean => {
     for (const node of list) {
       if (node.id === target) {
         if (parentId !== undefined) parents.push(parentId);
@@ -51,10 +44,7 @@ export function getChildIds(node: TreeNode): (string | number)[] {
 }
 
 /** Find a node by id anywhere in the tree. */
-export function findNodeInTree(
-  nodeId: string | number,
-  nodes: TreeNode[],
-): TreeNode | null {
+export function findNodeInTree(nodeId: string | number, nodes: TreeNode[]): TreeNode | null {
   for (const node of nodes) {
     if (node.id === nodeId) return node;
     if (node.children) {

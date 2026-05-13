@@ -51,8 +51,7 @@ export const menubarEntry: ComponentRegistryEntry = {
     },
     {
       name: 'MenubarItem.tsx',
-      description:
-        'Menu item with icon, shortcut display, danger variant, and onSelect callback',
+      description: 'Menu item with icon, shortcut display, danger variant, and onSelect callback',
     },
     {
       name: 'MenubarCheckBoxItem.tsx',
@@ -71,18 +70,15 @@ export const menubarEntry: ComponentRegistryEntry = {
     },
     {
       name: 'MenubarLabel.tsx',
-      description:
-        'Non-interactive label for grouping menu items with role="presentation"',
+      description: 'Non-interactive label for grouping menu items with role="presentation"',
     },
     {
       name: 'MenubarSeparator.tsx',
-      description:
-        'Visual divider between menu item groups with role="separator"',
+      description: 'Visual divider between menu item groups with role="separator"',
     },
     {
       name: 'MenubarPortal.tsx',
-      description:
-        'Portal wrapper that renders children into document.body to avoid clipping',
+      description: 'Portal wrapper that renders children into document.body to avoid clipping',
     },
     {
       name: 'types.ts',
@@ -108,8 +104,7 @@ export const menubarEntry: ComponentRegistryEntry = {
     {
       name: 'Menu',
       fileName: 'Menu.tsx',
-      description:
-        'Top-level dropdown menu with a trigger button and a portal-rendered panel',
+      description: 'Top-level dropdown menu with a trigger button and a portal-rendered panel',
       props: [
         {
           name: 'children',
@@ -122,16 +117,14 @@ export const menubarEntry: ComponentRegistryEntry = {
           name: 'trigger',
           type: 'React.ReactNode',
           required: true,
-          description:
-            'Content displayed on the menubar that toggles the dropdown when clicked',
+          description: 'Content displayed on the menubar that toggles the dropdown when clicked',
         },
         {
           name: 'disabled',
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description:
-            'Disables the trigger button, preventing the menu from opening',
+          description: 'Disables the trigger button, preventing the menu from opening',
         },
       ],
       supportsAsChild: false,
@@ -146,23 +139,20 @@ export const menubarEntry: ComponentRegistryEntry = {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
-          description:
-            'Items and separators rendered inside the nested submenu',
+          description: 'Items and separators rendered inside the nested submenu',
         },
         {
           name: 'trigger',
           type: 'React.ReactNode',
           required: true,
-          description:
-            'Content displayed as the submenu trigger label with a chevron indicator',
+          description: 'Content displayed as the submenu trigger label with a chevron indicator',
         },
         {
           name: 'disabled',
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description:
-            'Disables the submenu trigger, preventing it from opening',
+          description: 'Disables the submenu trigger, preventing it from opening',
         },
       ],
       supportsAsChild: false,
@@ -170,8 +160,7 @@ export const menubarEntry: ComponentRegistryEntry = {
     {
       name: 'Item',
       fileName: 'MenubarItem.tsx',
-      description:
-        'Clickable menu item with optional icon, keyboard shortcut, and danger styling',
+      description: 'Clickable menu item with optional icon, keyboard shortcut, and danger styling',
       props: [
         {
           name: 'children',
@@ -183,15 +172,13 @@ export const menubarEntry: ComponentRegistryEntry = {
           name: 'icon',
           type: 'React.ReactNode',
           required: false,
-          description:
-            'Icon element rendered to the left of the label (aria-hidden)',
+          description: 'Icon element rendered to the left of the label (aria-hidden)',
         },
         {
           name: 'shortcut',
           type: 'string',
           required: false,
-          description:
-            'Keyboard shortcut displayed to the right of the item (e.g. "⌘S")',
+          description: 'Keyboard shortcut displayed to the right of the item (e.g. "⌘S")',
         },
         {
           name: 'disabled',
@@ -205,15 +192,13 @@ export const menubarEntry: ComponentRegistryEntry = {
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description:
-            'Applies destructive styling (red text and hover) for dangerous actions',
+          description: 'Applies destructive styling (red text and hover) for dangerous actions',
         },
         {
           name: 'onSelect',
           type: '() => void',
           required: false,
-          description:
-            'Callback fired when the item is activated; closes all menus afterward',
+          description: 'Callback fired when the item is activated; closes all menus afterward',
         },
       ],
       supportsAsChild: false,
@@ -221,8 +206,7 @@ export const menubarEntry: ComponentRegistryEntry = {
     {
       name: 'CheckboxItem',
       fileName: 'MenubarCheckBoxItem.tsx',
-      description:
-        'Toggle menu item with a checkmark indicator and controlled checked state',
+      description: 'Toggle menu item with a checkmark indicator and controlled checked state',
       props: [
         {
           name: 'children',
@@ -235,8 +219,7 @@ export const menubarEntry: ComponentRegistryEntry = {
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description:
-            'Controlled checked state; when true, displays a checkmark indicator',
+          description: 'Controlled checked state; when true, displays a checkmark indicator',
         },
         {
           name: 'onCheckedChange',
@@ -249,15 +232,13 @@ export const menubarEntry: ComponentRegistryEntry = {
           name: 'icon',
           type: 'React.ReactNode',
           required: false,
-          description:
-            'Icon element rendered to the left of the label (aria-hidden)',
+          description: 'Icon element rendered to the left of the label (aria-hidden)',
         },
         {
           name: 'shortcut',
           type: 'string',
           required: false,
-          description:
-            'Keyboard shortcut displayed to the right of the item',
+          description: 'Keyboard shortcut displayed to the right of the item',
         },
         {
           name: 'disabled',
@@ -272,29 +253,25 @@ export const menubarEntry: ComponentRegistryEntry = {
     {
       name: 'RadioGroup',
       fileName: 'MenubarRadioGroup.tsx',
-      description:
-        'Container for radio items enforcing single selection with shared value state',
+      description: 'Container for radio items enforcing single selection with shared value state',
       props: [
         {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
-          description:
-            'MenuRadioItem components to render as radio options',
+          description: 'MenuRadioItem components to render as radio options',
         },
         {
           name: 'value',
           type: 'string',
           required: false,
-          description:
-            'Currently selected value matching a child RadioItem value prop',
+          description: 'Currently selected value matching a child RadioItem value prop',
         },
         {
           name: 'onValueChange',
           type: '(value: string) => void',
           required: false,
-          description:
-            'Callback fired when a radio item is selected, receives the item value',
+          description: 'Callback fired when a radio item is selected, receives the item value',
         },
       ],
       supportsAsChild: false,
@@ -315,22 +292,19 @@ export const menubarEntry: ComponentRegistryEntry = {
           name: 'value',
           type: 'string',
           required: true,
-          description:
-            'Unique value identifying this radio option within its RadioGroup',
+          description: 'Unique value identifying this radio option within its RadioGroup',
         },
         {
           name: 'icon',
           type: 'React.ReactNode',
           required: false,
-          description:
-            'Icon element rendered to the left of the label (aria-hidden)',
+          description: 'Icon element rendered to the left of the label (aria-hidden)',
         },
         {
           name: 'shortcut',
           type: 'string',
           required: false,
-          description:
-            'Keyboard shortcut displayed to the right of the item',
+          description: 'Keyboard shortcut displayed to the right of the item',
         },
         {
           name: 'disabled',
@@ -345,8 +319,7 @@ export const menubarEntry: ComponentRegistryEntry = {
     {
       name: 'Label',
       fileName: 'MenubarLabel.tsx',
-      description:
-        'Non-interactive section label for grouping related menu items',
+      description: 'Non-interactive section label for grouping related menu items',
       props: [
         {
           name: 'children',
@@ -360,8 +333,7 @@ export const menubarEntry: ComponentRegistryEntry = {
     {
       name: 'Separator',
       fileName: 'MenubarSeparator.tsx',
-      description:
-        'Visual horizontal divider between menu item groups',
+      description: 'Visual horizontal divider between menu item groups',
       props: [],
       supportsAsChild: false,
     },
@@ -380,8 +352,7 @@ export const menubarEntry: ComponentRegistryEntry = {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description:
-        'Menu components (Menubar.Menu) to display as top-level menu entries in the bar',
+      description: 'Menu components (Menubar.Menu) to display as top-level menu entries in the bar',
     },
     {
       name: 'orientation',
@@ -449,8 +420,7 @@ export const menubarEntry: ComponentRegistryEntry = {
     {
       name: 'onCheckedChange',
       signature: '(checked: boolean) => void',
-      description:
-        'Fired when a CheckboxItem is toggled; receives the new boolean checked state',
+      description: 'Fired when a CheckboxItem is toggled; receives the new boolean checked state',
     },
     {
       name: 'onValueChange',
@@ -490,8 +460,7 @@ export const menubarEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-labelledby',
-        description:
-          'Set on each dropdown panel (role="menu") referencing its trigger button ID',
+        description: 'Set on each dropdown panel (role="menu") referencing its trigger button ID',
         managedByComponent: true,
       },
       {
@@ -535,13 +504,11 @@ export const menubarEntry: ComponentRegistryEntry = {
       },
       {
         key: 'Home',
-        behavior:
-          'Moves focus to the first menu item or first menubar trigger',
+        behavior: 'Moves focus to the first menu item or first menubar trigger',
       },
       {
         key: 'End',
-        behavior:
-          'Moves focus to the last menu item or last menubar trigger',
+        behavior: 'Moves focus to the last menu item or last menubar trigger',
       },
       {
         key: 'Escape',
@@ -570,28 +537,23 @@ export const menubarEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'button',
-      reason:
-        'Toolbar action buttons commonly placed alongside a menubar in application chrome',
+      reason: 'Toolbar action buttons commonly placed alongside a menubar in application chrome',
     },
     {
       slug: 'tooltip',
-      reason:
-        'Provides supplemental context for menu items or toolbar buttons near the menubar',
+      reason: 'Provides supplemental context for menu items or toolbar buttons near the menubar',
     },
     {
       slug: 'popover',
-      reason:
-        'Similar overlay pattern for contextual panels triggered from toolbar areas',
+      reason: 'Similar overlay pattern for contextual panels triggered from toolbar areas',
     },
     {
       slug: 'typography',
-      reason:
-        'Used in demo layouts to label menubar sections and display state readouts',
+      reason: 'Used in demo layouts to label menubar sections and display state readouts',
     },
     {
       slug: 'divider',
-      reason:
-        'Visual separation between the menubar and content areas in application layouts',
+      reason: 'Visual separation between the menubar and content areas in application layouts',
     },
   ],
 

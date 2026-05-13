@@ -10,7 +10,7 @@ export const useThrottleEntry: HookRegistryEntry = {
   description:
     'Returns a throttled version of a value that updates at most once per specified interval, guaranteeing periodic output during continuous changes.',
   longDescription:
-    'Wraps a value in a setTimeout-based throttle mechanism using React\'s useState, useRef, and useEffect. A ref tracks the timestamp of the last update. Each time the input value changes, the hook schedules a timeout with a dynamically-calculated delay — `interval - (Date.now() - lastExecuted.current)` — so the throttled value updates exactly when the interval window expires, not earlier. If the interval has already elapsed since the last update, the new value propagates immediately. This guarantees at least one update per interval during continuous changes, unlike debounce which only fires after changes stop. The hook is fully SSR-safe: useState initializes with the input value directly, so server and client produce identical initial output with no hydration mismatch. No browser APIs are accessed during rendering. Choose this hook over useDebounce when you need guaranteed periodic updates during sustained input — such as scroll tracking, mouse following, or live data streaming — rather than waiting for input to pause.',
+    "Wraps a value in a setTimeout-based throttle mechanism using React's useState, useRef, and useEffect. A ref tracks the timestamp of the last update. Each time the input value changes, the hook schedules a timeout with a dynamically-calculated delay — `interval - (Date.now() - lastExecuted.current)` — so the throttled value updates exactly when the interval window expires, not earlier. If the interval has already elapsed since the last update, the new value propagates immediately. This guarantees at least one update per interval during continuous changes, unlike debounce which only fires after changes stop. The hook is fully SSR-safe: useState initializes with the input value directly, so server and client produce identical initial output with no hydration mismatch. No browser APIs are accessed during rendering. Choose this hook over useDebounce when you need guaranteed periodic updates during sustained input — such as scroll tracking, mouse following, or live data streaming — rather than waiting for input to pause.",
   tags: [
     'throttle',
     'rate-limit',
@@ -47,7 +47,7 @@ export const useThrottleEntry: HookRegistryEntry = {
       type: 'T',
       required: true,
       description:
-        'The value to throttle. Can be any type — string, number, boolean, object, or array. The hook detects changes via React\'s dependency comparison in useEffect, so both primitive and reference types are supported.',
+        "The value to throttle. Can be any type — string, number, boolean, object, or array. The hook detects changes via React's dependency comparison in useEffect, so both primitive and reference types are supported.",
     },
     {
       name: 'interval',

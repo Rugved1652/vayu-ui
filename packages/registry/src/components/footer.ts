@@ -35,14 +35,44 @@ export const footerEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Footer',
   files: [
-    { name: 'Footer.tsx', description: 'Composition file assembling the compound component with all sub-components' },
-    { name: 'FooterRoot.tsx', description: 'Root footer element with variant prop, role="contentinfo", and canvas-level theming' },
-    { name: 'FooterLayout.tsx', description: 'Layout primitives: Container (max-width wrapper), Grid (variant-responsive columns), Bottom (flex row)' },
-    { name: 'FooterContent.tsx', description: 'Content elements: Section (nav grouping with title), Link (with external indicator), Logo (with optional href)' },
-    { name: 'FooterSocial.tsx', description: 'Social elements: Social container (role="list") and SocialLink (always opens in new tab)' },
-    { name: 'FooterUtilities.tsx', description: 'Utility elements: Copyright text wrapper and Divider separator with ARIA attributes' },
-    { name: 'types.ts', description: 'TypeScript type definitions for FooterVariant and all sub-component prop interfaces' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and all types' },
+    {
+      name: 'Footer.tsx',
+      description: 'Composition file assembling the compound component with all sub-components',
+    },
+    {
+      name: 'FooterRoot.tsx',
+      description:
+        'Root footer element with variant prop, role="contentinfo", and canvas-level theming',
+    },
+    {
+      name: 'FooterLayout.tsx',
+      description:
+        'Layout primitives: Container (max-width wrapper), Grid (variant-responsive columns), Bottom (flex row)',
+    },
+    {
+      name: 'FooterContent.tsx',
+      description:
+        'Content elements: Section (nav grouping with title), Link (with external indicator), Logo (with optional href)',
+    },
+    {
+      name: 'FooterSocial.tsx',
+      description:
+        'Social elements: Social container (role="list") and SocialLink (always opens in new tab)',
+    },
+    {
+      name: 'FooterUtilities.tsx',
+      description:
+        'Utility elements: Copyright text wrapper and Divider separator with ARIA attributes',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for FooterVariant and all sub-component prop interfaces',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the compound component and all types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -52,7 +82,8 @@ export const footerEntry: ComponentRegistryEntry = {
     {
       name: 'Container',
       fileName: 'FooterLayout.tsx',
-      description: 'Max-width centered wrapper with responsive horizontal padding and vertical spacing',
+      description:
+        'Max-width centered wrapper with responsive horizontal padding and vertical spacing',
       props: [
         {
           name: 'children',
@@ -92,7 +123,8 @@ export const footerEntry: ComponentRegistryEntry = {
     {
       name: 'Section',
       fileName: 'FooterContent.tsx',
-      description: 'Grouping element with an optional title heading and an accessible nav landmark for links',
+      description:
+        'Grouping element with an optional title heading and an accessible nav landmark for links',
       props: [
         {
           name: 'children',
@@ -104,7 +136,8 @@ export const footerEntry: ComponentRegistryEntry = {
           name: 'title',
           type: 'string',
           required: false,
-          description: 'Section heading displayed as an uppercase h3; also used to generate the nav aria-label',
+          description:
+            'Section heading displayed as an uppercase h3; also used to generate the nav aria-label',
         },
         {
           name: 'className',
@@ -118,7 +151,8 @@ export const footerEntry: ComponentRegistryEntry = {
     {
       name: 'Link',
       fileName: 'FooterContent.tsx',
-      description: 'Footer navigation link with hover styles, focus ring, and optional external link indicator with automatic ARIA label',
+      description:
+        'Footer navigation link with hover styles, focus ring, and optional external link indicator with automatic ARIA label',
       props: [
         {
           name: 'children',
@@ -137,7 +171,8 @@ export const footerEntry: ComponentRegistryEntry = {
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, opens link in new tab with external indicator icon and computed aria-label',
+          description:
+            'When true, opens link in new tab with external indicator icon and computed aria-label',
         },
         {
           name: 'className',
@@ -151,7 +186,8 @@ export const footerEntry: ComponentRegistryEntry = {
     {
       name: 'Logo',
       fileName: 'FooterContent.tsx',
-      description: 'Logo wrapper with optional clickable link, used to display brand identity in the footer',
+      description:
+        'Logo wrapper with optional clickable link, used to display brand identity in the footer',
       props: [
         {
           name: 'children',
@@ -164,7 +200,8 @@ export const footerEntry: ComponentRegistryEntry = {
           type: 'string',
           required: false,
           defaultValue: "'/'",
-          description: 'URL for the logo link; renders a plain wrapper when omitted or empty string',
+          description:
+            'URL for the logo link; renders a plain wrapper when omitted or empty string',
         },
         {
           name: 'className',
@@ -178,7 +215,8 @@ export const footerEntry: ComponentRegistryEntry = {
     {
       name: 'Social',
       fileName: 'FooterSocial.tsx',
-      description: 'Horizontal container for social media links with role="list" and accessible label',
+      description:
+        'Horizontal container for social media links with role="list" and accessible label',
       props: [
         {
           name: 'children',
@@ -198,7 +236,8 @@ export const footerEntry: ComponentRegistryEntry = {
     {
       name: 'SocialLink',
       fileName: 'FooterSocial.tsx',
-      description: 'Individual social media link rendered as a circular icon button that always opens in a new tab',
+      description:
+        'Individual social media link rendered as a circular icon button that always opens in a new tab',
       props: [
         {
           name: 'children',
@@ -264,7 +303,8 @@ export const footerEntry: ComponentRegistryEntry = {
     {
       name: 'Bottom',
       fileName: 'FooterLayout.tsx',
-      description: 'Flex row for the bottom bar (copyright, legal links), alignment adapts to the Footer variant',
+      description:
+        'Flex row for the bottom bar (copyright, legal links), alignment adapts to the Footer variant',
       props: [
         {
           name: 'children',
@@ -287,7 +327,7 @@ export const footerEntry: ComponentRegistryEntry = {
   rootProps: [
     {
       name: 'variant',
-      type: "FooterVariant",
+      type: 'FooterVariant',
       required: false,
       defaultValue: "'default'",
       description: 'Controls the responsive grid layout and alignment of footer content',
@@ -326,7 +366,8 @@ export const footerEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'role="contentinfo"',
-        description: 'Applied to the root <footer> element to identify it as a landmark region for page-level footer content',
+        description:
+          'Applied to the root <footer> element to identify it as a landmark region for page-level footer content',
         managedByComponent: true,
       },
       {
@@ -349,7 +390,8 @@ export const footerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-label (Social)',
-        description: 'The Footer.Social container has aria-label="Social media links" to identify the group.',
+        description:
+          'The Footer.Social container has aria-label="Social media links" to identify the group.',
         managedByComponent: true,
       },
       {
@@ -366,14 +408,16 @@ export const footerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'role="separator" (Divider)',
-        description: 'Footer.Divider renders an <hr> with role="separator" and aria-orientation="horizontal".',
+        description:
+          'Footer.Divider renders an <hr> with role="separator" and aria-orientation="horizontal".',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Tab',
-        behavior: 'Moves focus through Footer.Link and Footer.SocialLink elements in document order',
+        behavior:
+          'Moves focus through Footer.Link and Footer.SocialLink elements in document order',
       },
       {
         key: 'Shift+Tab',
@@ -392,9 +436,7 @@ export const footerEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -422,7 +464,8 @@ export const footerEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Default Footer',
-      description: 'Multi-column footer with logo, social links, navigation sections, divider, and bottom bar with copyright.',
+      description:
+        'Multi-column footer with logo, social links, navigation sections, divider, and bottom bar with copyright.',
       code: `import { Footer, Typography, Divider } from 'vayu-ui';
 import { Twitter, Github, Instagram } from 'lucide-react';
 
@@ -494,7 +537,8 @@ export default function DefaultFooter() {
     },
     {
       title: 'Centered Footer',
-      description: 'Centered footer variant with logo, inline navigation links, social icons, and copyright.',
+      description:
+        'Centered footer variant with logo, inline navigation links, social icons, and copyright.',
       code: `import { Footer, Typography, Divider } from 'vayu-ui';
 import { Twitter, Github, Linkedin } from 'lucide-react';
 
@@ -544,7 +588,8 @@ export default function CenteredFooter() {
     },
     {
       title: 'Minimal Footer',
-      description: 'Minimal footer variant with logo, copyright, and social links in a compact bottom bar.',
+      description:
+        'Minimal footer variant with logo, copyright, and social links in a compact bottom bar.',
       code: `import { Footer, Typography } from 'vayu-ui';
 import { Github, Twitter } from 'lucide-react';
 
@@ -574,7 +619,8 @@ export default function MinimalFooter() {
     },
     {
       title: 'Footer with CTA Button',
-      description: 'Default footer with a call-to-action section featuring heading, description, and action buttons above the standard bottom bar.',
+      description:
+        'Default footer with a call-to-action section featuring heading, description, and action buttons above the standard bottom bar.',
       code: `import { Footer, Typography, Divider, Button } from 'vayu-ui';
 
 export default function CTAFooter() {
@@ -631,7 +677,7 @@ export default function CTAFooter() {
       bad: '<Footer.Link href="/about" onClick={(e) => { e.preventDefault(); navigate("/about"); }}>About</Footer.Link>',
       good: 'Use a router Link component or handle navigation via onClick without overriding native anchor behavior',
       reason:
-        'Footer.Link renders a native <a> element. Intercepting clicks with preventDefault and manual navigation breaks middle-click, Ctrl+click, and accessibility expectations. Use your framework\'s Link component for client-side routing instead.',
+        "Footer.Link renders a native <a> element. Intercepting clicks with preventDefault and manual navigation breaks middle-click, Ctrl+click, and accessibility expectations. Use your framework's Link component for client-side routing instead.",
     },
     {
       title: 'Omitting Footer.Container',

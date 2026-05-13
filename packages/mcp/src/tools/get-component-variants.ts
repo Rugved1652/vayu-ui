@@ -3,7 +3,8 @@ import { registerTool } from '../lib/register-tool.js';
 import { findComponent } from '../lib/registry.js';
 
 export function registerGetComponentVariants(server: Parameters<typeof registerTool>[0]) {
-  registerTool(server,
+  registerTool(
+    server,
     'get_component_variants',
     'Get available visual variants and sizes for a component with their default values.',
     {
@@ -14,7 +15,12 @@ export function registerGetComponentVariants(server: Parameters<typeof registerT
       const entry = findComponent(slug);
       if (!entry) {
         return {
-          content: [{ type: 'text' as const, text: JSON.stringify({ error: `No component found for slug "${slug}"` }) }],
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: `No component found for slug "${slug}"` }),
+            },
+          ],
           isError: true,
         };
       }

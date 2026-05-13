@@ -1,4 +1,4 @@
-import type { GridLayoutItem, ResizeDirection } from "./types";
+import type { GridLayoutItem, ResizeDirection } from './types';
 
 /* ================================================================== */
 /*  Grid Snapping                                                      */
@@ -8,11 +8,7 @@ import type { GridLayoutItem, ResizeDirection } from "./types";
  * Compute the pixel width of a single column.
  * Formula: (containerWidth - gap*(cols-1)) / cols
  */
-export function computeColWidth(
-  containerWidth: number,
-  cols: number,
-  gap: number
-): number {
+export function computeColWidth(containerWidth: number, cols: number, gap: number): number {
   return (containerWidth - gap * (cols - 1)) / cols;
 }
 
@@ -26,7 +22,7 @@ export function pixelToGrid(
   rowHeight: number,
   gap: number,
   cols: number,
-  itemW: number
+  itemW: number,
 ): { x: number; y: number } {
   const x = Math.round(px / (colWidth + gap));
   const y = Math.round(py / (rowHeight + gap));
@@ -43,7 +39,7 @@ export function gridToPixel(
   item: { x: number; y: number; w: number; h: number },
   colWidth: number,
   rowHeight: number,
-  gap: number
+  gap: number,
 ): { left: number; top: number; width: number; height: number } {
   return {
     left: item.x * (colWidth + gap),
@@ -62,14 +58,9 @@ export function gridToPixel(
  */
 export function itemsOverlap(
   a: { x: number; y: number; w: number; h: number },
-  b: { x: number; y: number; w: number; h: number }
+  b: { x: number; y: number; w: number; h: number },
 ): boolean {
-  return !(
-    a.x + a.w <= b.x ||
-    b.x + b.w <= a.x ||
-    a.y + a.h <= b.y ||
-    b.y + b.h <= a.y
-  );
+  return !(a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y);
 }
 
 /**
@@ -78,11 +69,9 @@ export function itemsOverlap(
 export function getCollisions(
   item: { x: number; y: number; w: number; h: number },
   layout: GridLayoutItem[],
-  excludeId?: string
+  excludeId?: string,
 ): GridLayoutItem[] {
-  return layout.filter(
-    (other) => other.i !== excludeId && itemsOverlap(item, other)
-  );
+  return layout.filter((other) => other.i !== excludeId && itemsOverlap(item, other));
 }
 
 /* ================================================================== */
@@ -106,13 +95,11 @@ export function resolveCollisions(
   newY: number,
   newW: number,
   newH: number,
-  cols: number
+  cols: number,
 ): GridLayoutItem[] {
   // Working copy — update active item first
   const working: GridLayoutItem[] = layout.map((item) =>
-    item.i === activeId
-      ? { ...item, x: newX, y: newY, w: newW, h: newH }
-      : { ...item }
+    item.i === activeId ? { ...item, x: newX, y: newY, w: newW, h: newH } : { ...item },
   );
 
   // Clamp active item to grid bounds
@@ -177,11 +164,9 @@ export function resolveCollisions(
 export function compactLayout(
   layout: GridLayoutItem[],
   cols: number,
-  activeId?: string | null
+  activeId?: string | null,
 ): GridLayoutItem[] {
-  const sorted = [...layout]
-    .map((item) => ({ ...item }))
-    .sort((a, b) => a.y - b.y);
+  const sorted = [...layout].map((item) => ({ ...item })).sort((a, b) => a.y - b.y);
 
   const placed: GridLayoutItem[] = [];
 
@@ -222,11 +207,7 @@ export function compactLayout(
 /**
  * Clamp item position and size to grid bounds.
  */
-export function clampItem(
-  item: GridLayoutItem,
-  cols: number,
-  maxRows: number
-): GridLayoutItem {
+export function clampItem(item: GridLayoutItem, cols: number, maxRows: number): GridLayoutItem {
   const minW = item.minW ?? 1;
   const maxW = item.maxW ?? cols;
   const minH = item.minH ?? 1;
@@ -250,7 +231,7 @@ export function computeResize(
   deltaCols: number,
   deltaRows: number,
   cols: number,
-  maxRows: number
+  maxRows: number,
 ): GridLayoutItem {
   let { x, y, w, h } = item;
   const minW = item.minW ?? 1;
@@ -259,20 +240,20 @@ export function computeResize(
   const maxH = item.maxH ?? (maxRows > 0 ? maxRows : Infinity);
 
   // Horizontal resize
-  if (direction.includes("e")) {
+  if (direction.includes('e')) {
     w = Math.max(minW, Math.min(maxW, w + deltaCols));
   }
-  if (direction.includes("w")) {
+  if (direction.includes('w')) {
     const newW = Math.max(minW, Math.min(maxW, w - deltaCols));
     x = x + (w - newW);
     w = newW;
   }
 
   // Vertical resize
-  if (direction.includes("s")) {
+  if (direction.includes('s')) {
     h = Math.max(minH, Math.min(maxH, h + deltaRows));
   }
-  if (direction.includes("n")) {
+  if (direction.includes('n')) {
     const newH = Math.max(minH, Math.min(maxH, h - deltaRows));
     y = y + (h - newH);
     h = newH;
@@ -292,17 +273,12 @@ export function computeResize(
 /**
  * Match a container width to the appropriate breakpoint.
  */
-export function matchBreakpoint(
-  width: number,
-  breakpointWidths: Record<string, number>
-): string {
-  const entries = Object.entries(breakpointWidths).sort(
-    (a, b) => b[1] - a[1]
-  );
+export function matchBreakpoint(width: number, breakpointWidths: Record<string, number>): string {
+  const entries = Object.entries(breakpointWidths).sort((a, b) => b[1] - a[1]);
   for (const [bp, bw] of entries) {
     if (width >= bw) return bp;
   }
-  return entries[entries.length - 1]?.[0] ?? "lg";
+  return entries[entries.length - 1]?.[0] ?? 'lg';
 }
 
 /**
@@ -313,7 +289,7 @@ export function adjustLayoutForCols(
   layout: GridLayoutItem[],
   prevCols: number,
   nextCols: number,
-  compact: boolean
+  compact: boolean,
 ): GridLayoutItem[] {
   if (prevCols === nextCols) return layout;
 
@@ -344,10 +320,7 @@ export function adjustLayoutForCols(
 /**
  * Find a layout item by ID.
  */
-export function findItem(
-  layout: GridLayoutItem[],
-  id: string
-): GridLayoutItem | undefined {
+export function findItem(layout: GridLayoutItem[], id: string): GridLayoutItem | undefined {
   return layout.find((item) => item.i === id);
 }
 
@@ -360,11 +333,17 @@ export function moveItem(
   newX: number,
   newY: number,
   newW?: number,
-  newH?: number
+  newH?: number,
 ): GridLayoutItem[] {
   return layout.map((item) =>
     item.i === id
-      ? { ...item, x: newX, y: newY, ...(newW !== undefined ? { w: newW } : {}), ...(newH !== undefined ? { h: newH } : {}) }
-      : item
+      ? {
+          ...item,
+          x: newX,
+          y: newY,
+          ...(newW !== undefined ? { w: newW } : {}),
+          ...(newH !== undefined ? { h: newH } : {}),
+        }
+      : item,
   );
 }

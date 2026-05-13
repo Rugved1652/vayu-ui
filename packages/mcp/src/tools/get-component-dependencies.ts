@@ -3,7 +3,8 @@ import { registerTool } from '../lib/register-tool.js';
 import { findBySlug } from '../lib/registry.js';
 
 export function registerGetComponentDependencies(server: Parameters<typeof registerTool>[0]) {
-  registerTool(server,
+  registerTool(
+    server,
     'get_component_dependencies',
     'Get NPM dependencies, registry dependencies, and React peer dependency for a component or hook. Use this before scaffolding to know what packages to install.',
     {
@@ -14,7 +15,12 @@ export function registerGetComponentDependencies(server: Parameters<typeof regis
       const entry = findBySlug(slug);
       if (!entry) {
         return {
-          content: [{ type: 'text' as const, text: JSON.stringify({ error: `No entry found for slug "${slug}"` }) }],
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: `No entry found for slug "${slug}"` }),
+            },
+          ],
           isError: true,
         };
       }

@@ -162,7 +162,8 @@ export const datePickerEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Disables the entire date picker — trigger becomes non-interactive and visually muted',
+      description:
+        'Disables the entire date picker — trigger becomes non-interactive and visually muted',
     },
     {
       name: 'disabledWeekdays',
@@ -237,7 +238,7 @@ export const datePickerEntry: ComponentRegistryEntry = {
       name: 'onChange',
       signature: '(value: DatePickerValue) => void',
       description:
-        "Fired when the user selects a date. In single mode, receives the selected Date or null when cleared. In range mode, receives a DateRange { startDate, endDate } or null.",
+        'Fired when the user selects a date. In single mode, receives the selected Date or null when cleared. In range mode, receives a DateRange { startDate, endDate } or null.',
     },
   ],
 
@@ -265,8 +266,7 @@ export const datePickerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-haspopup="dialog" (Trigger)',
-        description:
-          'The trigger button has aria-haspopup="dialog" indicating it opens a dialog.',
+        description: 'The trigger button has aria-haspopup="dialog" indicating it opens a dialog.',
         managedByComponent: true,
       },
       {
@@ -283,8 +283,7 @@ export const datePickerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-selected (Date buttons)',
-        description:
-          'Applied to date gridcells when the date is part of the current selection.',
+        description: 'Applied to date gridcells when the date is part of the current selection.',
         managedByComponent: true,
       },
       {
@@ -307,8 +306,7 @@ export const datePickerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-haspopup="listbox" (Dropdown buttons)',
-        description:
-          'Month and year dropdown toggle buttons have aria-haspopup="listbox".',
+        description: 'Month and year dropdown toggle buttons have aria-haspopup="listbox".',
         managedByComponent: true,
       },
       {
@@ -344,7 +342,10 @@ export const datePickerEntry: ComponentRegistryEntry = {
         behavior:
           'On a date cell: select the focused date. On the trigger: toggle the calendar open/closed.',
       },
-      { key: 'Escape', behavior: 'Close the calendar popup and return focus to the trigger button' },
+      {
+        key: 'Escape',
+        behavior: 'Close the calendar popup and return focus to the trigger button',
+      },
       {
         key: 'PageUp/PageDown (Year dropdown)',
         behavior: 'Jump 10 years backward/forward in the year list',
@@ -472,8 +473,7 @@ export default function WeekdayDatePicker() {
     },
     {
       title: 'Disabled Specific Dates',
-      description:
-        'Block specific dates such as holidays or blackout days from selection.',
+      description: 'Block specific dates such as holidays or blackout days from selection.',
       code: `import { DatePicker } from 'vayu-ui';
 import React, { useState } from 'react';
 
@@ -503,8 +503,7 @@ export default function HolidayDatePicker() {
     },
     {
       title: 'Disabled State',
-      description:
-        'A fully disabled date picker that prevents all interaction.',
+      description: 'A fully disabled date picker that prevents all interaction.',
       code: `import { DatePicker } from 'vayu-ui';
 
 export default function DisabledDatePicker() {

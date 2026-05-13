@@ -38,16 +38,56 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'GridLayout',
   files: [
-    { name: 'GridLayout.tsx', description: 'Root component: manages layout state (controlled/uncontrolled), FLIP animation recording/playback, drag and resize lifecycle, responsive breakpoints, and live region for screen reader announcements' },
-    { name: 'GridLayoutContainer.tsx', description: 'Positioning context container that measures its own width via ResizeObserver, triggers responsive breakpoint matching, and sets ARIA role="grid"' },
-    { name: 'GridItem.tsx', description: 'Absolutely-positioned grid item that computes its pixel position from grid coordinates, handles pointer drag and keyboard move/resize events, and provides ARIA attributes' },
-    { name: 'GridDragHandle.tsx', description: 'Dedicated drag handle button that intercepts pointer events, renders a default grip-dot SVG icon, and restricts drag initiation to the handle only' },
-    { name: 'GridResizeHandle.tsx', description: 'Resize handle sub-component that renders directional handles at corners/edges (default: south-east), supporting 8 directions (n, s, e, w, ne, nw, se, sw)' },
-    { name: 'GridPlaceholder.tsx', description: 'Portal-rendered dashed-border overlay showing where the dragged/resized item will land in the grid' },
-    { name: 'algorithms.ts', description: 'Pure functions for grid math: computeColWidth, pixelToGrid, gridToPixel, itemsOverlap, resolveCollisions, compactLayout, computeResize, matchBreakpoint, adjustLayoutForCols — zero React dependencies, fully unit-testable' },
-    { name: 'hooks.ts', description: 'Internal hooks: useGridLayoutContext reads the GridLayoutContext, useGridItemContext reads the item-level GridItemContext — both throw descriptive errors when used outside their providers' },
-    { name: 'types.ts', description: 'TypeScript interfaces for all prop types, context values (GridLayoutContextValue, GridItemContextValue), layout item definition (GridLayoutItem), resize directions, responsive breakpoints, and React contexts' },
-    { name: 'index.ts', description: 'Barrel export assembling the GridLayout compound component object (Container, Item, DragHandle, ResizeHandle, Placeholder) and re-exporting all type definitions' },
+    {
+      name: 'GridLayout.tsx',
+      description:
+        'Root component: manages layout state (controlled/uncontrolled), FLIP animation recording/playback, drag and resize lifecycle, responsive breakpoints, and live region for screen reader announcements',
+    },
+    {
+      name: 'GridLayoutContainer.tsx',
+      description:
+        'Positioning context container that measures its own width via ResizeObserver, triggers responsive breakpoint matching, and sets ARIA role="grid"',
+    },
+    {
+      name: 'GridItem.tsx',
+      description:
+        'Absolutely-positioned grid item that computes its pixel position from grid coordinates, handles pointer drag and keyboard move/resize events, and provides ARIA attributes',
+    },
+    {
+      name: 'GridDragHandle.tsx',
+      description:
+        'Dedicated drag handle button that intercepts pointer events, renders a default grip-dot SVG icon, and restricts drag initiation to the handle only',
+    },
+    {
+      name: 'GridResizeHandle.tsx',
+      description:
+        'Resize handle sub-component that renders directional handles at corners/edges (default: south-east), supporting 8 directions (n, s, e, w, ne, nw, se, sw)',
+    },
+    {
+      name: 'GridPlaceholder.tsx',
+      description:
+        'Portal-rendered dashed-border overlay showing where the dragged/resized item will land in the grid',
+    },
+    {
+      name: 'algorithms.ts',
+      description:
+        'Pure functions for grid math: computeColWidth, pixelToGrid, gridToPixel, itemsOverlap, resolveCollisions, compactLayout, computeResize, matchBreakpoint, adjustLayoutForCols — zero React dependencies, fully unit-testable',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'Internal hooks: useGridLayoutContext reads the GridLayoutContext, useGridItemContext reads the item-level GridItemContext — both throw descriptive errors when used outside their providers',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript interfaces for all prop types, context values (GridLayoutContextValue, GridItemContextValue), layout item definition (GridLayoutItem), resize directions, responsive breakpoints, and React contexts',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export assembling the GridLayout compound component object (Container, Item, DragHandle, ResizeHandle, Placeholder) and re-exporting all type definitions',
+    },
   ],
   targetPath: 'src/components',
 
@@ -57,7 +97,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
     {
       name: 'Container',
       fileName: 'GridLayoutContainer.tsx',
-      description: 'Positioning context wrapper for grid items. Uses position: relative and measures its own width via ResizeObserver to trigger responsive breakpoint matching. Sets ARIA role="grid".',
+      description:
+        'Positioning context wrapper for grid items. Uses position: relative and measures its own width via ResizeObserver to trigger responsive breakpoint matching. Sets ARIA role="grid".',
       props: [
         {
           name: 'children',
@@ -70,7 +111,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
           type: 'string',
           required: false,
           defaultValue: "'Grid layout'",
-          description: 'Accessible label for the container. Defaults to "Grid layout" if not provided.',
+          description:
+            'Accessible label for the container. Defaults to "Grid layout" if not provided.',
         },
         {
           name: 'className',
@@ -83,7 +125,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
     {
       name: 'Item',
       fileName: 'GridItem.tsx',
-      description: 'An absolutely-positioned grid item that computes its pixel position from grid coordinates (x, y, w, h). Supports pointer drag and keyboard move/resize with ARIA semantics.',
+      description:
+        'An absolutely-positioned grid item that computes its pixel position from grid coordinates (x, y, w, h). Supports pointer drag and keyboard move/resize with ARIA semantics.',
       props: [
         {
           name: 'children',
@@ -102,7 +145,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, the item cannot be dragged or resized and appears visually dimmed',
+          description:
+            'When true, the item cannot be dragged or resized and appears visually dimmed',
         },
         {
           name: 'className',
@@ -115,7 +159,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
     {
       name: 'DragHandle',
       fileName: 'GridDragHandle.tsx',
-      description: 'A dedicated drag handle button that renders a default grip-dot SVG icon. When present inside an Item, pointer drag is restricted to the handle only.',
+      description:
+        'A dedicated drag handle button that renders a default grip-dot SVG icon. When present inside an Item, pointer drag is restricted to the handle only.',
       props: [
         {
           name: 'children',
@@ -134,20 +179,23 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
     {
       name: 'ResizeHandle',
       fileName: 'GridResizeHandle.tsx',
-      description: 'Resize handle sub-component that renders directional handles at specified corners/edges. Default renders at the south-east corner. Supports all 8 directions.',
+      description:
+        'Resize handle sub-component that renders directional handles at specified corners/edges. Default renders at the south-east corner. Supports all 8 directions.',
       props: [
         {
           name: 'children',
           type: 'React.ReactNode',
           required: false,
-          description: 'Custom resize handle content; defaults to a small resize indicator icon at the SE corner',
+          description:
+            'Custom resize handle content; defaults to a small resize indicator icon at the SE corner',
         },
         {
           name: 'directions',
           type: 'ResizeDirection[]',
           required: false,
           defaultValue: '["se"]',
-          description: 'Which edges/corners to render handles for. Options: "n", "s", "e", "w", "ne", "nw", "se", "sw".',
+          description:
+            'Which edges/corners to render handles for. Options: "n", "s", "e", "w", "ne", "nw", "se", "sw".',
         },
         {
           name: 'className',
@@ -160,7 +208,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
     {
       name: 'Placeholder',
       fileName: 'GridPlaceholder.tsx',
-      description: 'Portal-rendered dashed-border overlay that shows where the dragged/resized item will land in the grid. Uses brand color at low opacity.',
+      description:
+        'Portal-rendered dashed-border overlay that shows where the dragged/resized item will land in the grid. Uses brand color at low opacity.',
       props: [
         {
           name: 'className',
@@ -179,32 +228,37 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description: 'Must include a GridLayout.Container with GridLayout.Item children. Optionally include GridLayout.Placeholder for visual feedback.',
+      description:
+        'Must include a GridLayout.Container with GridLayout.Item children. Optionally include GridLayout.Placeholder for visual feedback.',
     },
     {
       name: 'layout',
       type: 'GridLayoutItem[]',
       required: true,
-      description: 'Controlled array of layout items, each with {i, x, y, w, h, minW?, maxW?, minH?, maxH?, static?}. Use with onLayoutChange for externally managed state.',
+      description:
+        'Controlled array of layout items, each with {i, x, y, w, h, minW?, maxW?, minH?, maxH?, static?}. Use with onLayoutChange for externally managed state.',
     },
     {
       name: 'defaultLayout',
       type: 'GridLayoutItem[]',
       required: false,
-      description: 'Initial layout for uncontrolled mode. The component manages layout internally and calls onLayoutChange on each change.',
+      description:
+        'Initial layout for uncontrolled mode. The component manages layout internally and calls onLayoutChange on each change.',
     },
     {
       name: 'onLayoutChange',
       type: '(layout: GridLayoutItem[]) => void',
       required: false,
-      description: 'Callback fired with the updated layout array after a successful drag, resize, or breakpoint change.',
+      description:
+        'Callback fired with the updated layout array after a successful drag, resize, or breakpoint change.',
     },
     {
       name: 'cols',
       type: 'number',
       required: false,
       defaultValue: '12',
-      description: 'Number of columns in the grid. Override when using breakpoints to set the default/large-screen column count.',
+      description:
+        'Number of columns in the grid. Override when using breakpoints to set the default/large-screen column count.',
     },
     {
       name: 'rowHeight',
@@ -238,20 +292,23 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
       name: 'breakpoints',
       type: 'Breakpoints',
       required: false,
-      description: 'Responsive breakpoint configuration mapping breakpoint names to {columns, rowHeight}. Defaults to lg=12, md=10, sm=6, xs=4, xxs=2.',
+      description:
+        'Responsive breakpoint configuration mapping breakpoint names to {columns, rowHeight}. Defaults to lg=12, md=10, sm=6, xs=4, xxs=2.',
     },
     {
       name: 'breakpointWidths',
       type: 'Record<string, number>',
       required: false,
-      description: 'Width thresholds for each breakpoint. Defaults to lg=1200, md=996, sm=768, xs=480, xxs=0.',
+      description:
+        'Width thresholds for each breakpoint. Defaults to lg=1200, md=996, sm=768, xs=480, xxs=0.',
     },
     {
       name: 'preventCollision',
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'If true, items cannot overlap during drag (clamp to empty spaces instead of pushing).',
+      description:
+        'If true, items cannot overlap during drag (clamp to empty spaces instead of pushing).',
     },
     {
       name: 'className',
@@ -269,7 +326,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
       prop: 'activeId',
       isBoolean: false,
       defaultValue: 'null',
-      description: 'An item is actively being dragged. The active item gets reduced opacity and a brand ring. Set to the dragged item\'s id, or null when idle.',
+      description:
+        "An item is actively being dragged. The active item gets reduced opacity and a brand ring. Set to the dragged item's id, or null when idle.",
     },
     {
       name: 'resizing',
@@ -277,14 +335,16 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['drag', 'resize'],
       defaultValue: 'null',
-      description: 'Current interaction type. "drag" when repositioning, "resize" when resizing, null when idle.',
+      description:
+        'Current interaction type. "drag" when repositioning, "resize" when resizing, null when idle.',
     },
     {
       name: 'placeholder',
       prop: 'placeholder',
       isBoolean: false,
       defaultValue: 'null',
-      description: 'The target grid position (x, y, w, h) where the active item will land if dropped now. Shown as a dashed-border overlay.',
+      description:
+        'The target grid position (x, y, w, h) where the active item will land if dropped now. Shown as a dashed-border overlay.',
     },
   ],
 
@@ -293,7 +353,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
     {
       name: 'onLayoutChange',
       signature: '(layout: GridLayoutItem[]) => void',
-      description: 'Fired after a successful drag, resize, or responsive breakpoint change with the new layout array. Each item has updated x, y, w, h values.',
+      description:
+        'Fired after a successful drag, resize, or responsive breakpoint change with the new layout array. Each item has updated x, y, w, h values.',
     },
   ],
 
@@ -302,17 +363,20 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'role (Container)',
-        description: 'Set to "grid" on the container div. Provides semantic structure for assistive technologies.',
+        description:
+          'Set to "grid" on the container div. Provides semantic structure for assistive technologies.',
         managedByComponent: true,
       },
       {
         name: 'role (Item)',
-        description: 'Set to "gridcell" on each grid item. Paired with the container "grid" role for correct semantic hierarchy.',
+        description:
+          'Set to "gridcell" on each grid item. Paired with the container "grid" role for correct semantic hierarchy.',
         managedByComponent: true,
       },
       {
         name: 'aria-grabbed',
-        description: 'Set to true on the actively dragged item. Undefined when the item is not being dragged.',
+        description:
+          'Set to true on the actively dragged item. Undefined when the item is not being dragged.',
         managedByComponent: true,
       },
       {
@@ -327,7 +391,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-describedby',
-        description: 'Set to "grid-item-instructions" on each item, pointing to a visually hidden span with keyboard instructions.',
+        description:
+          'Set to "grid-item-instructions" on each item, pointing to a visually hidden span with keyboard instructions.',
         managedByComponent: true,
       },
       {
@@ -339,7 +404,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
     keyboardInteractions: [
       {
         key: 'Space',
-        behavior: 'Grabs the focused item (starts keyboard drag) if no item is active. Drops the item at the current position if an item is being dragged.',
+        behavior:
+          'Grabs the focused item (starts keyboard drag) if no item is active. Drops the item at the current position if an item is being dragged.',
       },
       {
         key: 'Enter',
@@ -347,23 +413,28 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
       },
       {
         key: 'ArrowUp',
-        behavior: 'When dragging: moves the item one row up. When Shift is held: resizes the item one row shorter. When not dragging: moves focus to the previous item.',
+        behavior:
+          'When dragging: moves the item one row up. When Shift is held: resizes the item one row shorter. When not dragging: moves focus to the previous item.',
       },
       {
         key: 'ArrowDown',
-        behavior: 'When dragging: moves the item one row down. When Shift is held: resizes the item one row taller. When not dragging: moves focus to the next item.',
+        behavior:
+          'When dragging: moves the item one row down. When Shift is held: resizes the item one row taller. When not dragging: moves focus to the next item.',
       },
       {
         key: 'ArrowLeft',
-        behavior: 'When dragging: moves the item one column left. When Shift is held: resizes the item one column narrower. When not dragging: moves focus to the previous item.',
+        behavior:
+          'When dragging: moves the item one column left. When Shift is held: resizes the item one column narrower. When not dragging: moves focus to the previous item.',
       },
       {
         key: 'ArrowRight',
-        behavior: 'When dragging: moves the item one column right. When Shift is held: resizes the item one column wider. When not dragging: moves focus to the next item.',
+        behavior:
+          'When dragging: moves the item one column right. When Shift is held: resizes the item one column wider. When not dragging: moves focus to the next item.',
       },
       {
         key: 'Escape',
-        behavior: 'Cancels the active drag or resize operation and returns the item to its original position.',
+        behavior:
+          'Cancels the active drag or resize operation and returns the item to its original position.',
       },
     ],
     focusManagement:
@@ -374,9 +445,7 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -384,11 +453,13 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'card',
-      reason: 'Cards are commonly used as the visual content inside GridLayout.Item for dashboard widgets',
+      reason:
+        'Cards are commonly used as the visual content inside GridLayout.Item for dashboard widgets',
     },
     {
       slug: 'draggable',
-      reason: 'Draggable provides list/grid reordering, while GridLayout provides coordinate-based positioning — they serve complementary use cases',
+      reason:
+        'Draggable provides list/grid reordering, while GridLayout provides coordinate-based positioning — they serve complementary use cases',
     },
   ],
 
@@ -396,7 +467,8 @@ export const gridLayoutEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic Dashboard Grid',
-      description: 'A 12-column dashboard with 6 widgets of varying sizes. Items can be dragged to reposition with collision resolution and vertical compaction.',
+      description:
+        'A 12-column dashboard with 6 widgets of varying sizes. Items can be dragged to reposition with collision resolution and vertical compaction.',
       code: `import { useState } from 'react';
 import { GridLayout, type GridLayoutItem } from 'vayu-ui';
 
@@ -434,7 +506,8 @@ function DashboardDemo() {
     },
     {
       title: 'Resizable Dashboard Widgets',
-      description: 'A dashboard with widgets that can be both dragged and resized via the south-east corner handle.',
+      description:
+        'A dashboard with widgets that can be both dragged and resized via the south-east corner handle.',
       code: `import { useState } from 'react';
 import { GridLayout, type GridLayoutItem } from 'vayu-ui';
 
@@ -482,25 +555,29 @@ function ResizableDashboard() {
       title: 'Using sub-components outside GridLayout root',
       bad: '<GridLayout.Container><GridLayout.Item id="a">Item</GridLayout.Item></GridLayout.Container>',
       good: '<GridLayout layout={layout} onLayoutChange={setLayout}>\n  <GridLayout.Container>\n    <GridLayout.Item id="a">Item</GridLayout.Item>\n  </GridLayout.Container>\n</GridLayout>',
-      reason: 'GridLayout sub-components read from GridLayoutContext via useGridLayoutContext(), which throws when used outside a <GridLayout> root.',
+      reason:
+        'GridLayout sub-components read from GridLayoutContext via useGridLayoutContext(), which throws when used outside a <GridLayout> root.',
     },
     {
       title: 'Using DragHandle or ResizeHandle outside an Item',
       bad: '<GridLayout.Container>\n  <GridLayout.DragHandle />\n  <GridLayout.Item id="a">Item</GridLayout.Item>\n</GridLayout.Container>',
       good: '<GridLayout.Item id="a">\n  <GridLayout.DragHandle />\n  <span>Item content</span>\n</GridLayout.Item>',
-      reason: 'GridDragHandle and GridResizeHandle read from GridItemContext via useGridItemContext(), which throws when used outside a GridLayout.Item.',
+      reason:
+        'GridDragHandle and GridResizeHandle read from GridItemContext via useGridItemContext(), which throws when used outside a GridLayout.Item.',
     },
     {
       title: 'Not providing a layout prop',
       bad: '<GridLayout><GridLayout.Container>...</GridLayout.Container></GridLayout>',
       good: 'const layout = [{ i: "a", x: 0, y: 0, w: 4, h: 2 }];\n<GridLayout layout={layout} onLayoutChange={setLayout}>\n  <GridLayout.Container>\n    <GridLayout.Item id="a">Widget</GridLayout.Item>\n  </GridLayout.Container>\n</GridLayout>',
-      reason: 'The layout prop is required and defines the position and size of each item. Without it, the component has no items to render.',
+      reason:
+        'The layout prop is required and defines the position and size of each item. Without it, the component has no items to render.',
     },
     {
       title: 'Mismatching item IDs between layout and JSX',
       bad: 'const layout = [{ i: "a", x: 0, y: 0, w: 4, h: 2 }];\n<GridLayout.Item id="b">Widget</GridLayout.Item>',
       good: 'const layout = [{ i: "a", x: 0, y: 0, w: 4, h: 2 }];\n<GridLayout.Item id="a">Widget</GridLayout.Item>',
-      reason: 'Each GridLayout.Item must have an id that matches the "i" field of an entry in the layout array. Mismatched IDs cause the item to not render.',
+      reason:
+        'Each GridLayout.Item must have an id that matches the "i" field of an entry in the layout array. Mismatched IDs cause the item to not render.',
     },
   ],
 };

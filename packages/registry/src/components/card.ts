@@ -36,14 +36,43 @@ export const cardEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Card',
   files: [
-    { name: 'Card.tsx', description: 'Root card component with interactive/link rendering, disabled state, and design token styling' },
-    { name: 'CardHeader.tsx', description: 'Header sub-component with title, subtitle, avatar, and trailing action slot' },
-    { name: 'CardMedia.tsx', description: 'Media sub-component with lazy-loaded image, aspect ratio, object-fit, and gradient overlay support' },
-    { name: 'CardContent.tsx', description: 'Content wrapper sub-component with relaxed text styling' },
-    { name: 'CardFooter.tsx', description: 'Footer sub-component with top border and right-aligned action layout' },
-    { name: 'types.ts', description: 'TypeScript interfaces for Card, CardHeader, CardMedia, CardContent, and CardFooter props' },
-    { name: 'hooks.ts', description: 'useCardKeyboardInteraction hook providing Enter and Space key activation for interactive cards' },
-    { name: 'index.ts', description: 'Barrel export file assembling the compound component and re-exporting all types' },
+    {
+      name: 'Card.tsx',
+      description:
+        'Root card component with interactive/link rendering, disabled state, and design token styling',
+    },
+    {
+      name: 'CardHeader.tsx',
+      description: 'Header sub-component with title, subtitle, avatar, and trailing action slot',
+    },
+    {
+      name: 'CardMedia.tsx',
+      description:
+        'Media sub-component with lazy-loaded image, aspect ratio, object-fit, and gradient overlay support',
+    },
+    {
+      name: 'CardContent.tsx',
+      description: 'Content wrapper sub-component with relaxed text styling',
+    },
+    {
+      name: 'CardFooter.tsx',
+      description: 'Footer sub-component with top border and right-aligned action layout',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript interfaces for Card, CardHeader, CardMedia, CardContent, and CardFooter props',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'useCardKeyboardInteraction hook providing Enter and Space key activation for interactive cards',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export file assembling the compound component and re-exporting all types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -53,7 +82,8 @@ export const cardEntry: ComponentRegistryEntry = {
     {
       name: 'Header',
       fileName: 'CardHeader.tsx',
-      description: 'Renders a card header row with an optional leading avatar, a title/subtitle block, and a trailing action slot',
+      description:
+        'Renders a card header row with an optional leading avatar, a title/subtitle block, and a trailing action slot',
       props: [
         {
           name: 'title',
@@ -71,20 +101,23 @@ export const cardEntry: ComponentRegistryEntry = {
           name: 'action',
           type: 'ReactNode',
           required: false,
-          description: 'Trailing element, typically an icon button or menu trigger, positioned with ml-auto',
+          description:
+            'Trailing element, typically an icon button or menu trigger, positioned with ml-auto',
         },
         {
           name: 'avatar',
           type: 'ReactNode',
           required: false,
-          description: 'Leading element, typically an avatar or icon, rendered in a shrink-0 container with aria-hidden',
+          description:
+            'Leading element, typically an avatar or icon, rendered in a shrink-0 container with aria-hidden',
         },
       ],
     },
     {
       name: 'Media',
       fileName: 'CardMedia.tsx',
-      description: 'Renders a responsive image with configurable aspect ratio, object-fit, and an optional gradient overlay layer',
+      description:
+        'Renders a responsive image with configurable aspect ratio, object-fit, and an optional gradient overlay layer',
       props: [
         {
           name: 'src',
@@ -117,7 +150,8 @@ export const cardEntry: ComponentRegistryEntry = {
           name: 'overlay',
           type: 'ReactNode',
           required: false,
-          description: 'Content rendered on top of the image inside a bottom-aligned gradient overlay',
+          description:
+            'Content rendered on top of the image inside a bottom-aligned gradient overlay',
         },
       ],
     },
@@ -130,7 +164,8 @@ export const cardEntry: ComponentRegistryEntry = {
     {
       name: 'Footer',
       fileName: 'CardFooter.tsx',
-      description: 'Action footer with a top border and right-aligned flex layout for buttons or links',
+      description:
+        'Action footer with a top border and right-aligned flex layout for buttons or links',
       props: [],
     },
   ],
@@ -143,7 +178,8 @@ export const cardEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Makes the entire card a clickable surface with role="button", tabIndex=0, and keyboard activation',
+      description:
+        'Makes the entire card a clickable surface with role="button", tabIndex=0, and keyboard activation',
     },
     {
       name: 'href',
@@ -161,14 +197,16 @@ export const cardEntry: ComponentRegistryEntry = {
       name: 'rel',
       type: "AnchorHTMLAttributes<HTMLAnchorElement>['rel']",
       required: false,
-      description: 'Anchor rel attribute. Automatically set to "noopener noreferrer" when target is "_blank"',
+      description:
+        'Anchor rel attribute. Automatically set to "noopener noreferrer" when target is "_blank"',
     },
     {
       name: 'disabled',
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Disables all interactions: reduces opacity, blocks pointer events, and sets aria-disabled',
+      description:
+        'Disables all interactions: reduces opacity, blocks pointer events, and sets aria-disabled',
     },
   ],
   rendersAs: 'div',
@@ -180,20 +218,23 @@ export const cardEntry: ComponentRegistryEntry = {
       prop: 'interactive',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'When true, the card becomes focusable and clickable with role="button" and keyboard support via Enter/Space',
+      description:
+        'When true, the card becomes focusable and clickable with role="button" and keyboard support via Enter/Space',
     },
     {
       name: 'disabled',
       prop: 'disabled',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Reduces opacity to 50%, applies cursor-not-allowed, and disables pointer events. Also prevents link navigation when href is set.',
+      description:
+        'Reduces opacity to 50%, applies cursor-not-allowed, and disables pointer events. Also prevents link navigation when href is set.',
     },
     {
       name: 'linked',
       prop: 'href',
       isBoolean: false,
-      description: 'When href is provided, the card renders as an <a> tag instead of a div, enabling link navigation',
+      description:
+        'When href is provided, the card renders as an <a> tag instead of a div, enabling link navigation',
     },
   ],
 
@@ -202,12 +243,14 @@ export const cardEntry: ComponentRegistryEntry = {
     {
       name: 'onClick',
       signature: '(event: React.MouseEvent<HTMLDivElement>) => void',
-      description: 'Fired when the card is clicked. Also triggers the interactive mode (role="button") when no href is set.',
+      description:
+        'Fired when the card is clicked. Also triggers the interactive mode (role="button") when no href is set.',
     },
     {
       name: 'onKeyDown',
       signature: '(event: React.KeyboardEvent<HTMLDivElement>) => void',
-      description: 'Fired on key press while the interactive card has focus. Enter and Space trigger the onClick handler via useCardKeyboardInteraction.',
+      description:
+        'Fired on key press while the interactive card has focus. Enter and Space trigger the onClick handler via useCardKeyboardInteraction.',
     },
   ],
 
@@ -217,7 +260,8 @@ export const cardEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'role="button"',
-        description: 'Applied to interactive cards (when interactive=true or onClick is provided) to signal a clickable surface to assistive technology',
+        description:
+          'Applied to interactive cards (when interactive=true or onClick is provided) to signal a clickable surface to assistive technology',
         managedByComponent: true,
       },
       {
@@ -227,17 +271,20 @@ export const cardEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-disabled',
-        description: 'Set to true when the disabled prop is active, signaling the non-interactive state to screen readers',
+        description:
+          'Set to true when the disabled prop is active, signaling the non-interactive state to screen readers',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden (avatar)',
-        description: 'Applied to the avatar wrapper div in Card.Header to hide decorative avatars from assistive technology',
+        description:
+          'Applied to the avatar wrapper div in Card.Header to hide decorative avatars from assistive technology',
         managedByComponent: true,
       },
       {
         name: 'rel="noopener noreferrer"',
-        description: 'Automatically applied when target="_blank" is set to prevent reverse tabnapping security vulnerability',
+        description:
+          'Automatically applied when target="_blank" is set to prevent reverse tabnapping security vulnerability',
         managedByComponent: true,
       },
     ],
@@ -267,9 +314,7 @@ export const cardEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -277,15 +322,18 @@ export const cardEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'button',
-      reason: 'Buttons are commonly placed in Card.Header actions or Card.Footer for CTAs like "Read more" or "Follow"',
+      reason:
+        'Buttons are commonly placed in Card.Header actions or Card.Footer for CTAs like "Read more" or "Follow"',
     },
     {
       slug: 'typography',
-      reason: 'Typography components provide semantic heading and paragraph text inside Card.Content and Card.Header',
+      reason:
+        'Typography components provide semantic heading and paragraph text inside Card.Content and Card.Header',
     },
     {
       slug: 'badge',
-      reason: 'Badges can appear in Card.Header to indicate status, category, or notification counts alongside the title',
+      reason:
+        'Badges can appear in Card.Header to indicate status, category, or notification counts alongside the title',
     },
     {
       slug: 'divider',
@@ -293,7 +341,8 @@ export const cardEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'avatar',
-      reason: 'Avatars are frequently used as the Card.Header avatar prop for profile and user cards',
+      reason:
+        'Avatars are frequently used as the Card.Header avatar prop for profile and user cards',
     },
   ],
 
@@ -301,7 +350,8 @@ export const cardEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Default Card with Media',
-      description: 'A complete card with media image, header, content paragraph, and footer action button.',
+      description:
+        'A complete card with media image, header, content paragraph, and footer action button.',
       code: `import { Card, Typography, Button } from 'vayu-ui';
 
 export default function DefaultCard() {
@@ -333,7 +383,8 @@ export default function DefaultCard() {
     },
     {
       title: 'Interactive Card',
-      description: 'A clickable card that responds to click, Enter, and Space with role="button" and keyboard focus.',
+      description:
+        'A clickable card that responds to click, Enter, and Space with role="button" and keyboard focus.',
       code: `import { Card, Typography } from 'vayu-ui';
 
 export default function InteractiveCard() {
@@ -356,7 +407,8 @@ export default function InteractiveCard() {
     },
     {
       title: 'Linked Card',
-      description: 'A card that renders as an anchor tag, navigating to a URL on click with automatic security attributes.',
+      description:
+        'A card that renders as an anchor tag, navigating to a URL on click with automatic security attributes.',
       code: `import { Card, Typography } from 'vayu-ui';
 
 export default function LinkedCard() {
@@ -395,7 +447,8 @@ export default function DisabledCard() {
     },
     {
       title: 'Card with Avatar and Action',
-      description: 'A profile card using the Header avatar and action slots for a user avatar and follow button.',
+      description:
+        'A profile card using the Header avatar and action slots for a user avatar and follow button.',
       code: `import { Card, Button, Typography } from 'vayu-ui';
 
 export default function AvatarCard() {
@@ -433,31 +486,36 @@ export default function AvatarCard() {
       title: 'Nesting interactive elements inside an interactive card',
       bad: '<Card interactive onClick={handleClick}><a href="/link">Link</a></Card>',
       good: '<Card interactive onClick={() => router.push("/link")}><Card.Content>Link text</Card.Content></Card>',
-      reason: 'Nesting an <a> or <button> inside an element with role="button" violates HTML spec and creates confusing focus/activation behavior for screen readers.',
+      reason:
+        'Nesting an <a> or <button> inside an element with role="button" violates HTML spec and creates confusing focus/activation behavior for screen readers.',
     },
     {
       title: 'Using onClick without interactive or href',
       bad: '<Card onClick={handleClick}><Card.Content>Click me</Card.Content></Card>',
       good: '<Card interactive onClick={handleClick}><Card.Content>Click me</Card.Content></Card>',
-      reason: 'While onClick alone triggers the interactive mode internally, explicitly setting interactive makes the intent clear and ensures the card has the correct ARIA role and focus styling from the start.',
+      reason:
+        'While onClick alone triggers the interactive mode internally, explicitly setting interactive makes the intent clear and ensures the card has the correct ARIA role and focus styling from the start.',
     },
     {
       title: 'Omitting alt on Card.Media',
       bad: '<Card.Media src="/photo.jpg" alt="" />',
       good: '<Card.Media src="/photo.jpg" alt="Team collaborating around a whiteboard" />',
-      reason: 'The alt prop is required on Card.Media for a reason. Empty or decorative alt text should only be used when the image is purely decorative and adds no informational value. Meaningful alt text is essential for screen reader users.',
+      reason:
+        'The alt prop is required on Card.Media for a reason. Empty or decorative alt text should only be used when the image is purely decorative and adds no informational value. Meaningful alt text is essential for screen reader users.',
     },
     {
       title: 'Setting both href and onClick',
       bad: '<Card href="/page" onClick={handleClick}>...</Card>',
       good: '<Card href="/page">...</Card>  // use onClick on a Button inside Card.Footer instead',
-      reason: 'When href is set the card renders as an <a> tag, so onClick conflicts with native link navigation. If you need both, use a linked card for navigation and place action buttons in Card.Footer.',
+      reason:
+        'When href is set the card renders as an <a> tag, so onClick conflicts with native link navigation. If you need both, use a linked card for navigation and place action buttons in Card.Footer.',
     },
     {
       title: 'Using Card without sub-components',
       bad: '<Card><p>Some text</p><button>Action</button></Card>',
       good: '<Card><Card.Content><p>Some text</p></Card.Content><Card.Footer><button>Action</button></Card.Footer></Card>',
-      reason: 'Bypassing sub-components loses consistent spacing, typography, and layout. Card.Content provides proper text styling and Card.Footer provides the correct border and alignment.',
+      reason:
+        'Bypassing sub-components loses consistent spacing, typography, and layout. Card.Content provides proper text styling and Card.Footer provides the correct border and alignment.',
     },
   ],
 };

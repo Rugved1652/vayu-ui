@@ -40,13 +40,11 @@ export const usePermissionEntry: HookRegistryEntry = {
   targetPath: 'src/hooks',
 
   // ── Signature ─────────────────────────────────────────
-  signature:
-    'function usePermission(permissionName: PermissionName): UsePermissionReturn',
+  signature: 'function usePermission(permissionName: PermissionName): UsePermissionReturn',
   parameters: [
     {
       name: 'permissionName',
-      type:
-        "'camera' | 'microphone' | 'geolocation' | 'notifications' | 'persistent-storage' | 'push' | 'screen-wake-lock' | 'midi' | 'clipboard-read' | 'clipboard-write'",
+      type: "'camera' | 'microphone' | 'geolocation' | 'notifications' | 'persistent-storage' | 'push' | 'screen-wake-lock' | 'midi' | 'clipboard-read' | 'clipboard-write'",
       required: true,
       description:
         'The browser permission to query. Must be one of the 10 supported PermissionName literals. Changing this value between renders will unsubscribe from the old permission status and subscribe to the new one. Each permission maps to a specific browser API — the request() function uses the appropriate API for each name (e.g. getUserMedia for camera, getCurrentPosition for geolocation).',

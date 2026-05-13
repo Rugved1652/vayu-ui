@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { forwardRef } from "react";
-import { cn } from "../../utils";
-import type { ContextMenuLabelProps } from "./types";
+import React, { forwardRef } from 'react';
+import { cn } from '../../utils';
+import type { ContextMenuLabelProps } from './types';
 
 const ContextMenuLabel = forwardRef<HTMLDivElement, ContextMenuLabelProps>(
   ({ children, className, ...props }, ref) => (
@@ -10,17 +10,17 @@ const ContextMenuLabel = forwardRef<HTMLDivElement, ContextMenuLabelProps>(
       ref={ref}
       role="presentation"
       className={cn(
-        "px-3 py-2 text-xs font-semibold uppercase tracking-wide",
-        "text-muted-content",
-        className
+        'px-3 py-2 text-xs font-semibold uppercase tracking-wide',
+        'text-muted-content',
+        className,
       )}
       {...props}
     >
       {children}
     </div>
-  )
+  ),
 );
 
-ContextMenuLabel.displayName = "ContextMenu.Label";
+ContextMenuLabel.displayName = 'ContextMenu.Label';
 
 export { ContextMenuLabel };

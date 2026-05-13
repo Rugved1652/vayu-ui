@@ -10,7 +10,7 @@ export const useMediaQueryEntry: HookRegistryEntry = {
   description:
     'Reactive hook that tracks whether a CSS media query matches, returning a boolean that updates in real time when the match state changes.',
   longDescription:
-    'Wraps the browser\'s `window.matchMedia` API in a React-friendly hook using `useState` and `useEffect`. On mount, it evaluates the provided media query string and sets the initial match state. It then subscribes to the `MediaQueryList` change event so the returned boolean updates automatically whenever the query result changes — for example when the user resizes the window, toggles dark mode, rotates a mobile device, or changes system accessibility preferences. The hook is SSR-safe: it initializes state to `false` and guards all browser API access with `typeof window === \'undefined\'`, so server-rendered output is deterministic and no hydration mismatch occurs. When the `query` string changes between renders, the previous listener is cleaned up via the effect\'s return function and a fresh subscription is created for the new query. Use this hook instead of manual `matchMedia` calls or window resize listeners whenever you need declarative, reactive CSS media query matching in a React component.',
+    "Wraps the browser's `window.matchMedia` API in a React-friendly hook using `useState` and `useEffect`. On mount, it evaluates the provided media query string and sets the initial match state. It then subscribes to the `MediaQueryList` change event so the returned boolean updates automatically whenever the query result changes — for example when the user resizes the window, toggles dark mode, rotates a mobile device, or changes system accessibility preferences. The hook is SSR-safe: it initializes state to `false` and guards all browser API access with `typeof window === 'undefined'`, so server-rendered output is deterministic and no hydration mismatch occurs. When the `query` string changes between renders, the previous listener is cleaned up via the effect's return function and a fresh subscription is created for the new query. Use this hook instead of manual `matchMedia` calls or window resize listeners whenever you need declarative, reactive CSS media query matching in a React component.",
   tags: [
     'media-query',
     'responsive',
@@ -26,7 +26,7 @@ export const useMediaQueryEntry: HookRegistryEntry = {
   category: 'sensor',
   useCases: [
     'Conditionally render desktop vs mobile layouts by querying min-width or max-width breakpoints without hardcoded resize listeners',
-    'Detect the user\'s dark mode preference using prefers-color-scheme to automatically theme the UI',
+    "Detect the user's dark mode preference using prefers-color-scheme to automatically theme the UI",
     'Respect the prefers-reduced-motion accessibility setting to disable or simplify animations for users who need it',
     'Apply print-specific layouts or hide interactive elements when the user opens print preview via the print media query',
     'Implement orientation-aware layouts that adapt when a mobile device is rotated between portrait and landscape',
@@ -105,7 +105,7 @@ export default function ResponsiveLayout() {
     {
       title: 'Dark Mode Detection',
       description:
-        'Detects the user\'s system-level color scheme preference and applies a data attribute or conditional styling accordingly.',
+        "Detects the user's system-level color scheme preference and applies a data attribute or conditional styling accordingly.",
       code: `'use client';
 
 import { useMediaQuery } from 'vayu-ui';

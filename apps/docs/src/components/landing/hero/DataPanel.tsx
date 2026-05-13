@@ -2,12 +2,7 @@
 
 import { useState } from 'react';
 import { FolderTree } from 'lucide-react';
-import {
-  Badge,
-  Divider,
-  FileUpload,
-  Tree,
-} from 'vayu-ui';
+import { Badge, Divider, FileUpload, Tree } from 'vayu-ui';
 import { collageTreeData } from './constants';
 
 export function DataPanel() {

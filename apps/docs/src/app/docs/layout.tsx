@@ -9,6 +9,7 @@ export default function Layout({ children }: LayoutProps<'/docs'>) {
       tree={source.getPageTree()}
       {...baseOptions()}
       sidebar={{
+
         footer: <ColorThemePanel variant="sidebar" />,
       }}
     >

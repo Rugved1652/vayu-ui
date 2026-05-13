@@ -11,7 +11,10 @@ import { useCalendar } from './hooks';
 import { getEventColorClasses } from './utils';
 
 export const Event = forwardRef<HTMLDivElement, BigCalendarEventProps>(
-  ({ event, showRemove, height, variant = 'default', className, onClick, onKeyDown, ...props }, ref) => {
+  (
+    { event, showRemove, height, variant = 'default', className, onClick, onKeyDown, ...props },
+    ref,
+  ) => {
     const { onEventClick, onEventRemove } = useCalendar();
     const colors = getEventColorClasses(event.color);
     const shouldShowRemove = showRemove ?? !!onEventRemove;

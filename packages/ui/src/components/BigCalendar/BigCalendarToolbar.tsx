@@ -92,7 +92,10 @@ export const Toolbar = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>
               <path d="M9 18l6-6-6-6" />
             </svg>
           </button>
-          <h2 className="text-lg font-semibold font-primary text-surface-content ml-2" aria-live="polite">
+          <h2
+            className="text-lg font-semibold font-primary text-surface-content ml-2"
+            aria-live="polite"
+          >
             {title}
           </h2>
         </div>

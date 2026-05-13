@@ -25,7 +25,7 @@ export default function ContextMenuDemo() {
 
   return (
     <div className="not-prose flex flex-col gap-4 w-full max-w-md mx-auto">
-      <section className='my-4'>
+      <section className="my-4">
         <Typography.H5>Context Menu Examples</Typography.H5>
       </section>
 
@@ -34,7 +34,8 @@ export default function ContextMenuDemo() {
           Right-click the area below to open the context menu.
         </Typography.P>
         <Typography.P variant="secondary" className="text-xs">
-          <span className="font-medium">Keyboard shortcuts:</span> ↑/↓ navigate, → open submenu, ← close submenu, type to search, Home/End to jump
+          <span className="font-medium">Keyboard shortcuts:</span> ↑/↓ navigate, → open submenu, ←
+          close submenu, type to search, Home/End to jump
         </Typography.P>
       </div>
 

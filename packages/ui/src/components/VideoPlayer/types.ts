@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode, RefObject } from "react";
+import type { HTMLAttributes, ReactNode, RefObject } from 'react';
 
 // ============================================================================
 // Core Types
@@ -49,7 +49,7 @@ export interface VideoPlayerState {
   availableQualities: VideoQuality[];
 }
 
- export interface VideoPlayerActions {
+export interface VideoPlayerActions {
   play: () => void;
   pause: () => void;
   togglePlay: () => void;
@@ -75,9 +75,7 @@ export interface VideoPlayerState {
   clearError: () => void;
 }
 
- export interface VideoPlayerContextValue
-  extends VideoPlayerState,
-    VideoPlayerActions {
+export interface VideoPlayerContextValue extends VideoPlayerState, VideoPlayerActions {
   playerId: string;
   videoRef: RefObject<HTMLVideoElement | null>;
   containerRef: RefObject<HTMLDivElement | null>;
@@ -85,15 +83,14 @@ export interface VideoPlayerState {
   registerVideo: (element: HTMLVideoElement | null) => void;
 }
 
- // ============================================================================
+// ============================================================================
 // Component Props
 // ============================================================================
 
-export interface VideoPlayerRootProps
-  extends Omit<
-    HTMLAttributes<HTMLDivElement>,
-    "onPlay" | "onPause" | "onError" | "onTimeUpdate" | "onEnded"
-  > {
+export interface VideoPlayerRootProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'onPlay' | 'onPause' | 'onError' | 'onTimeUpdate' | 'onEnded'
+> {
   children: ReactNode;
   track?: VideoTrack;
   playlist?: VideoTrack[];
@@ -111,7 +108,7 @@ export interface VideoPlayerRootProps
   onFullscreenChange?: (isFullscreen: boolean) => void;
 }
 
- export interface VideoPlayerSourceProps {
+export interface VideoPlayerSourceProps {
   src: string;
   title?: string;
   artist?: string;
@@ -119,93 +116,97 @@ export interface VideoPlayerRootProps
   subtitleSrc?: string;
 }
 
- export interface VideoPlayerVideoProps extends HTMLAttributes<HTMLDivElement> {
+export interface VideoPlayerVideoProps extends HTMLAttributes<HTMLDivElement> {
   poster?: string;
-  objectFit?: "contain" | "cover";
+  objectFit?: 'contain' | 'cover';
 }
 
- export interface VideoPlayerPlaylistProps extends HTMLAttributes<HTMLDivElement> {
+export interface VideoPlayerPlaylistProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
- export interface VideoPlayerTrackItemProps extends HTMLAttributes<HTMLButtonElement> {
+export interface VideoPlayerTrackItemProps extends HTMLAttributes<HTMLButtonElement> {
   track: VideoTrack;
   activeClassName?: string;
   showIndex?: boolean;
 }
 
- export interface VideoPlayerTrackInfoProps extends HTMLAttributes<HTMLDivElement> {
+export interface VideoPlayerTrackInfoProps extends HTMLAttributes<HTMLDivElement> {
   showPoster?: boolean;
 }
 
- export interface VideoPlayerControlsProps extends HTMLAttributes<HTMLDivElement> {
+export interface VideoPlayerControlsProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   autoHide?: boolean;
   autoHideDelay?: number;
 }
 
- export interface VideoPlayerPlayPauseProps
-  extends Omit<HTMLAttributes<HTMLButtonElement>, "children"> {
+export interface VideoPlayerPlayPauseProps extends Omit<
+  HTMLAttributes<HTMLButtonElement>,
+  'children'
+> {
   children?: ReactNode | ((playing: boolean) => ReactNode);
 }
 
- export interface VideoPlayerNextProps extends HTMLAttributes<HTMLButtonElement> {
+export interface VideoPlayerNextProps extends HTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
 }
 
- export interface VideoPlayerPreviousProps extends HTMLAttributes<HTMLButtonElement> {
+export interface VideoPlayerPreviousProps extends HTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
 }
 
- export interface VideoPlayerProgressProps extends HTMLAttributes<HTMLDivElement> {
+export interface VideoPlayerProgressProps extends HTMLAttributes<HTMLDivElement> {
   showBuffer?: boolean;
 }
 
- export interface VideoPlayerSeekProps extends HTMLAttributes<HTMLDivElement> {
+export interface VideoPlayerSeekProps extends HTMLAttributes<HTMLDivElement> {
   showBuffer?: boolean;
   showThumb?: boolean;
 }
 
- export interface VideoPlayerTimeProps extends HTMLAttributes<HTMLDivElement> {
+export interface VideoPlayerTimeProps extends HTMLAttributes<HTMLDivElement> {
   showRemaining?: boolean;
 }
 
- export interface VideoPlayerVolumeProps extends HTMLAttributes<HTMLInputElement> {
+export interface VideoPlayerVolumeProps extends HTMLAttributes<HTMLInputElement> {
   vertical?: boolean;
 }
 
- export interface VideoPlayerMuteProps
-  extends Omit<HTMLAttributes<HTMLButtonElement>, "children"> {
+export interface VideoPlayerMuteProps extends Omit<HTMLAttributes<HTMLButtonElement>, 'children'> {
   children?: ReactNode | ((muted: boolean) => ReactNode);
 }
 
- export interface VideoPlayerFullscreenProps
-  extends Omit<HTMLAttributes<HTMLButtonElement>, "children"> {
+export interface VideoPlayerFullscreenProps extends Omit<
+  HTMLAttributes<HTMLButtonElement>,
+  'children'
+> {
   children?: ReactNode | ((isFullscreen: boolean) => ReactNode);
 }
 
- export interface VideoPlayerPiPProps
-  extends Omit<HTMLAttributes<HTMLButtonElement>, "children"> {
+export interface VideoPlayerPiPProps extends Omit<HTMLAttributes<HTMLButtonElement>, 'children'> {
   children?: ReactNode | ((isPiP: boolean) => ReactNode);
 }
 
- export interface VideoPlayerCaptionsProps
-  extends Omit<HTMLAttributes<HTMLButtonElement>, "children"> {
+export interface VideoPlayerCaptionsProps extends Omit<
+  HTMLAttributes<HTMLButtonElement>,
+  'children'
+> {
   children?: ReactNode | ((enabled: boolean) => ReactNode);
 }
 
- export interface VideoPlayerQualityProps extends HTMLAttributes<HTMLSelectElement> {}
+export interface VideoPlayerQualityProps extends HTMLAttributes<HTMLSelectElement> {}
 
- export interface VideoPlayerSpeedProps extends HTMLAttributes<HTMLSelectElement> {
+export interface VideoPlayerSpeedProps extends HTMLAttributes<HTMLSelectElement> {
   rates?: number[];
 }
 
- export interface VideoPlayerBufferProps extends HTMLAttributes<HTMLDivElement> {}
+export interface VideoPlayerBufferProps extends HTMLAttributes<HTMLDivElement> {}
 
- export interface VideoPlayerLoadingProps extends HTMLAttributes<HTMLDivElement> {
+export interface VideoPlayerLoadingProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
 }
 
- export interface VideoPlayerErrorProps extends HTMLAttributes<HTMLDivElement> {
+export interface VideoPlayerErrorProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
 }

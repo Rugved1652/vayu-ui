@@ -37,12 +37,34 @@ export const buttonEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Button',
   files: [
-    { name: 'Button.tsx', description: 'Root button component with variant styling, loading spinner, and all state management' },
-    { name: 'ButtonIcon.tsx', description: 'Icon wrapper that scales with button size and supports accessible labels' },
-    { name: 'ButtonBadge.tsx', description: 'Notification badge with value overflow, variant coloring, and absolute/inline positioning' },
-    { name: 'ButtonText.tsx', description: 'Text wrapper with truncation support for button labels' },
-    { name: 'types.ts', description: 'TypeScript type definitions for Button, Icon, Badge, and Text props, plus Status enum and variant/size unions' },
-    { name: 'index.ts', description: 'Barrel export file assembling the compound component and re-exporting all types' },
+    {
+      name: 'Button.tsx',
+      description:
+        'Root button component with variant styling, loading spinner, and all state management',
+    },
+    {
+      name: 'ButtonIcon.tsx',
+      description: 'Icon wrapper that scales with button size and supports accessible labels',
+    },
+    {
+      name: 'ButtonBadge.tsx',
+      description:
+        'Notification badge with value overflow, variant coloring, and absolute/inline positioning',
+    },
+    {
+      name: 'ButtonText.tsx',
+      description: 'Text wrapper with truncation support for button labels',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for Button, Icon, Badge, and Text props, plus Status enum and variant/size unions',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export file assembling the compound component and re-exporting all types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -52,7 +74,8 @@ export const buttonEntry: ComponentRegistryEntry = {
     {
       name: 'Icon',
       fileName: 'ButtonIcon.tsx',
-      description: 'Wraps an icon element inside the button, scaling it to match the button size and optionally providing an accessible label',
+      description:
+        'Wraps an icon element inside the button, scaling it to match the button size and optionally providing an accessible label',
       props: [
         {
           name: 'children',
@@ -62,7 +85,7 @@ export const buttonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'size',
-          type: "ButtonSize",
+          type: 'ButtonSize',
           required: false,
           defaultValue: "'small'",
           description: 'Controls the icon dimensions: small (16px), medium (20px), large (24px)',
@@ -72,7 +95,8 @@ export const buttonEntry: ComponentRegistryEntry = {
           name: 'label',
           type: 'string',
           required: false,
-          description: 'Accessible label for the icon; when provided, sets role="img" and aria-label; when omitted, the icon is aria-hidden',
+          description:
+            'Accessible label for the icon; when provided, sets role="img" and aria-label; when omitted, the icon is aria-hidden',
         },
         {
           name: 'className',
@@ -85,7 +109,8 @@ export const buttonEntry: ComponentRegistryEntry = {
     {
       name: 'Badge',
       fileName: 'ButtonBadge.tsx',
-      description: 'Renders a notification badge with numeric or text value, overflow handling, and multiple positioning modes',
+      description:
+        'Renders a notification badge with numeric or text value, overflow handling, and multiple positioning modes',
       props: [
         {
           name: 'value',
@@ -102,7 +127,7 @@ export const buttonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'position',
-          type: "BadgePosition",
+          type: 'BadgePosition',
           required: false,
           defaultValue: "'top-right'",
           description: 'Badge placement relative to the button',
@@ -110,7 +135,7 @@ export const buttonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'variant',
-          type: "BadgeVariant",
+          type: 'BadgeVariant',
           required: false,
           defaultValue: "'danger'",
           description: 'Color variant for the badge',
@@ -125,7 +150,7 @@ export const buttonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'size',
-          type: "ButtonSize",
+          type: 'ButtonSize',
           required: false,
           defaultValue: "'small'",
           description: 'Controls badge dimensions to match button size',
@@ -164,7 +189,7 @@ export const buttonEntry: ComponentRegistryEntry = {
   rootProps: [
     {
       name: 'variant',
-      type: "ButtonVariant",
+      type: 'ButtonVariant',
       required: false,
       defaultValue: "'primary'",
       description: 'Visual style variant of the button',
@@ -172,7 +197,7 @@ export const buttonEntry: ComponentRegistryEntry = {
     },
     {
       name: 'size',
-      type: "ButtonSize",
+      type: 'ButtonSize',
       required: false,
       defaultValue: "'small'",
       description: 'Button dimensions, padding, and font size',
@@ -182,8 +207,9 @@ export const buttonEntry: ComponentRegistryEntry = {
       name: 'loading',
       type: 'Status',
       required: false,
-      defaultValue: "Status.IDLE",
-      description: 'Async loading state controlled by the Status enum: IDLE, PENDING, SUCCESS, REJECTED. PENDING shows a spinner and disables interaction.',
+      defaultValue: 'Status.IDLE',
+      description:
+        'Async loading state controlled by the Status enum: IDLE, PENDING, SUCCESS, REJECTED. PENDING shows a spinner and disables interaction.',
       options: ['idle', 'pending', 'success', 'rejected'],
     },
     {
@@ -211,7 +237,8 @@ export const buttonEntry: ComponentRegistryEntry = {
       type: "'button' | 'submit' | 'reset'",
       required: false,
       defaultValue: "'button'",
-      description: 'HTML button type attribute; defaults to "button" to prevent accidental form submission',
+      description:
+        'HTML button type attribute; defaults to "button" to prevent accidental form submission',
     },
   ],
   rendersAs: 'button',
@@ -236,14 +263,16 @@ export const buttonEntry: ComponentRegistryEntry = {
       values: ['idle', 'pending', 'success', 'rejected'],
       isBoolean: false,
       defaultValue: 'idle',
-      description: 'Async operation state. When PENDING, the button shows a spinner, replaces children with loadingText, and disables interaction. SUCCESS and REJECTED can be used to trigger side effects while reverting to normal display.',
+      description:
+        'Async operation state. When PENDING, the button shows a spinner, replaces children with loadingText, and disables interaction. SUCCESS and REJECTED can be used to trigger side effects while reverting to normal display.',
     },
     {
       name: 'disabled',
       prop: 'disabled',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Disables the button. Also automatically true when loading is PENDING, preventing duplicate clicks during async operations.',
+      description:
+        'Disables the button. Also automatically true when loading is PENDING, preventing duplicate clicks during async operations.',
     },
   ],
 
@@ -267,7 +296,8 @@ export const buttonEntry: ComponentRegistryEntry = {
     {
       name: 'onKeyDown',
       signature: '(event: React.KeyboardEvent<HTMLButtonElement>) => void',
-      description: 'Fired on key press while the button has focus; Enter and Space trigger the native click event',
+      description:
+        'Fired on key press while the button has focus; Enter and Space trigger the native click event',
     },
   ],
 
@@ -277,37 +307,44 @@ export const buttonEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-disabled',
-        description: 'Applied when the button is disabled or loading. Set to true alongside the native disabled attribute for screen reader compatibility.',
+        description:
+          'Applied when the button is disabled or loading. Set to true alongside the native disabled attribute for screen reader compatibility.',
         managedByComponent: true,
       },
       {
         name: 'aria-busy',
-        description: 'Set to true when the button is in the PENDING loading state, signaling to assistive technology that an async operation is in progress.',
+        description:
+          'Set to true when the button is in the PENDING loading state, signaling to assistive technology that an async operation is in progress.',
         managedByComponent: true,
       },
       {
         name: 'aria-live',
-        description: 'Set to "polite" during loading so screen readers announce the loading state change without interrupting.',
+        description:
+          'Set to "polite" during loading so screen readers announce the loading state change without interrupting.',
         managedByComponent: true,
       },
       {
         name: 'aria-label',
-        description: 'Applied when the aria-label prop is provided. Essential for icon-only buttons that have no visible text content.',
+        description:
+          'Applied when the aria-label prop is provided. Essential for icon-only buttons that have no visible text content.',
         managedByComponent: false,
       },
       {
         name: 'aria-hidden (Icon)',
-        description: 'Set to true on Button.Icon when no label prop is provided, marking decorative icons as hidden from assistive technology.',
+        description:
+          'Set to true on Button.Icon when no label prop is provided, marking decorative icons as hidden from assistive technology.',
         managedByComponent: true,
       },
       {
         name: 'aria-label (Icon)',
-        description: 'Set on Button.Icon when the label prop is provided, giving the icon an accessible name and switching its role to "img".',
+        description:
+          'Set on Button.Icon when the label prop is provided, giving the icon an accessible name and switching its role to "img".',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden (Badge content)',
-        description: 'The visible badge text is wrapped in aria-hidden="true" to prevent double-reading alongside the Badge role="status" label.',
+        description:
+          'The visible badge text is wrapped in aria-hidden="true" to prevent double-reading alongside the Badge role="status" label.',
         managedByComponent: true,
       },
     ],
@@ -337,9 +374,7 @@ export const buttonEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -351,7 +386,8 @@ export const buttonEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'modal',
-      reason: 'Buttons are used as trigger elements and footer actions (confirm/cancel) inside modals',
+      reason:
+        'Buttons are used as trigger elements and footer actions (confirm/cancel) inside modals',
     },
     {
       slug: 'card',
@@ -359,11 +395,13 @@ export const buttonEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'alert',
-      reason: 'Destructive variant buttons are used alongside alerts for confirmation of critical actions',
+      reason:
+        'Destructive variant buttons are used alongside alerts for confirmation of critical actions',
     },
     {
       slug: 'tooltip',
-      reason: 'Icon-only buttons benefit from tooltips to provide an accessible text description on hover',
+      reason:
+        'Icon-only buttons benefit from tooltips to provide an accessible text description on hover',
     },
   ],
 
@@ -371,7 +409,8 @@ export const buttonEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Button Variants',
-      description: 'All five visual variants displayed side by side: primary, secondary, outline, ghost, and destructive.',
+      description:
+        'All five visual variants displayed side by side: primary, secondary, outline, ghost, and destructive.',
       code: `import { Button } from 'vayu-ui';
 
 export default function VariantsDemo() {
@@ -411,7 +450,8 @@ export default function SizesDemo() {
     },
     {
       title: 'Button with Icon',
-      description: 'Buttons composed with Button.Icon and Button.Text sub-components, demonstrating icon placement on both sides of the label.',
+      description:
+        'Buttons composed with Button.Icon and Button.Text sub-components, demonstrating icon placement on both sides of the label.',
       code: `import { Button } from 'vayu-ui';
 import { Mail, Trash2, Send } from 'lucide-react';
 
@@ -443,7 +483,8 @@ export default function IconDemo() {
     },
     {
       title: 'Loading State',
-      description: 'Button with async loading state that shows a spinner and custom loading text during the PENDING state.',
+      description:
+        'Button with async loading state that shows a spinner and custom loading text during the PENDING state.',
       code: `import { Button, Status } from 'vayu-ui';
 import React, { useState } from 'react';
 
@@ -473,7 +514,8 @@ export default function LoadingDemo() {
     },
     {
       title: 'Button with Badge',
-      description: 'Buttons with notification badges showing counts, overflow values, and custom string labels in different positions and variants.',
+      description:
+        'Buttons with notification badges showing counts, overflow values, and custom string labels in different positions and variants.',
       code: `import { Button } from 'vayu-ui';
 import { Bell } from 'lucide-react';
 
@@ -503,7 +545,8 @@ export default function BadgeDemo() {
     },
     {
       title: 'Disabled State',
-      description: 'Buttons in the disabled state across multiple variants, showing the reduced opacity and non-interactive behavior.',
+      description:
+        'Buttons in the disabled state across multiple variants, showing the reduced opacity and non-interactive behavior.',
       code: `import { Button } from 'vayu-ui';
 
 export default function DisabledDemo() {
@@ -531,31 +574,36 @@ export default function DisabledDemo() {
       title: 'Icon-only button without aria-label',
       bad: '<Button variant="ghost"><Button.Icon><Trash2 /></Button.Icon></Button>',
       good: '<Button variant="ghost" aria-label="Delete item"><Button.Icon><Trash2 /></Button.Icon></Button>',
-      reason: 'Without an aria-label, screen readers announce an unlabeled button or nothing at all. Every button must have an accessible name, either from visible text or an aria-label prop.',
+      reason:
+        'Without an aria-label, screen readers announce an unlabeled button or nothing at all. Every button must have an accessible name, either from visible text or an aria-label prop.',
     },
     {
       title: 'Using type="submit" on non-form buttons',
       bad: '<Button onClick={handleClick}>Filter</Button>',
       good: '<Button type="button" onClick={handleClick}>Filter</Button>',
-      reason: 'While the component defaults to type="button", if you override it to type="submit" outside a form, or forget that the default was previously "submit" in older code, it can cause unexpected page reloads. Always be intentional about the type attribute.',
+      reason:
+        'While the component defaults to type="button", if you override it to type="submit" outside a form, or forget that the default was previously "submit" in older code, it can cause unexpected page reloads. Always be intentional about the type attribute.',
     },
     {
       title: 'Placing interactive elements inside Button',
       bad: '<Button><a href="/link">Go</a></Button><Button><input type="checkbox" /></Button>',
       good: '<Button onClick={() => router.push("/link")}>Go</Button>',
-      reason: 'Nesting interactive elements (links, inputs, other buttons) inside a <button> violates HTML spec and breaks accessibility. Use the button\'s onClick handler instead.',
+      reason:
+        "Nesting interactive elements (links, inputs, other buttons) inside a <button> violates HTML spec and breaks accessibility. Use the button's onClick handler instead.",
     },
     {
       title: 'Setting loading to true instead of Status enum',
       bad: '<Button loading={true}>Submit</Button>',
       good: '<Button loading={Status.PENDING}>Submit</Button>',
-      reason: 'The loading prop expects a Status enum value (idle, pending, success, rejected), not a boolean. Passing true or false will not match any valid state and the button will behave unexpectedly.',
+      reason:
+        'The loading prop expects a Status enum value (idle, pending, success, rejected), not a boolean. Passing true or false will not match any valid state and the button will behave unexpectedly.',
     },
     {
       title: 'Using Button.Badge or Button.Text outside Button',
       bad: '<div><Button.Badge value={5} /></div>',
       good: '<Button variant="secondary"><Button.Badge value={5} /></Button>',
-      reason: 'Badge positions like "top-right" and "top-left" use absolute positioning that requires the Button\'s relative positioning context. Rendering Badge or Text outside a Button breaks layout and visual alignment.',
+      reason:
+        'Badge positions like "top-right" and "top-left" use absolute positioning that requires the Button\'s relative positioning context. Rendering Badge or Text outside a Button breaks layout and visual alignment.',
     },
   ],
 };

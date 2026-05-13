@@ -3,7 +3,8 @@ import { registerTool } from '../lib/register-tool.js';
 import { findComponent } from '../lib/registry.js';
 
 export function registerGetComponentA11y(server: Parameters<typeof registerTool>[0]) {
-  registerTool(server,
+  registerTool(
+    server,
     'get_component_a11y',
     'Get accessibility information for a component: ARIA roles, attributes, keyboard interactions, focus management, and WCAG compliance level.',
     {
@@ -14,7 +15,12 @@ export function registerGetComponentA11y(server: Parameters<typeof registerTool>
       const entry = findComponent(slug);
       if (!entry) {
         return {
-          content: [{ type: 'text' as const, text: JSON.stringify({ error: `No component found for slug "${slug}"` }) }],
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: `No component found for slug "${slug}"` }),
+            },
+          ],
           isError: true,
         };
       }

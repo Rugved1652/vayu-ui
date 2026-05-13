@@ -73,7 +73,9 @@ export const Step = forwardRef<HTMLDivElement, StepProps>(
             break;
           case 'End':
             e.preventDefault();
-            (clickableSteps[clickableSteps.length - 1] as HTMLElement)?.focus({ preventScroll: true });
+            (clickableSteps[clickableSteps.length - 1] as HTMLElement)?.focus({
+              preventScroll: true,
+            });
             break;
         }
         onKeyDown?.(e);

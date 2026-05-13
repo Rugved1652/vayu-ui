@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState, type ReactNode } from "react";
-import { createPortal } from "react-dom";
-import { cn } from "../../utils";
-import type { DraggablePreviewProps } from "./types";
-import { useDraggableContext } from "./hooks";
+import React, { useEffect, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
+import { cn } from '../../utils';
+import type { DraggablePreviewProps } from './types';
+import { useDraggableContext } from './hooks';
 
 export function DraggablePreview({ className, children }: DraggablePreviewProps) {
   const ctx = useDraggableContext();
@@ -18,8 +18,8 @@ export function DraggablePreview({ className, children }: DraggablePreviewProps)
     }
     setVisible(true);
     const onMove = (e: PointerEvent) => setPos({ x: e.clientX, y: e.clientY });
-    window.addEventListener("pointermove", onMove);
-    return () => window.removeEventListener("pointermove", onMove);
+    window.addEventListener('pointermove', onMove);
+    return () => window.removeEventListener('pointermove', onMove);
   }, [ctx.activeId, ctx.isKeyboardDragging]);
 
   if (!visible || !ctx.activeId || !ctx.initialRect) return null;
@@ -32,10 +32,10 @@ export function DraggablePreview({ className, children }: DraggablePreviewProps)
   return createPortal(
     <div
       className={cn(
-        "fixed z-50 pointer-events-none",
-        "bg-surface rounded-surface shadow-elevated",
-        "border border-border",
-        className
+        'fixed z-50 pointer-events-none',
+        'bg-surface rounded-surface shadow-elevated',
+        'border border-border',
+        className,
       )}
       style={{
         left: pos.x - ctx.dragOffset.x,
@@ -46,6 +46,6 @@ export function DraggablePreview({ className, children }: DraggablePreviewProps)
     >
       <div dangerouslySetInnerHTML={{ __html: activeEl.innerHTML }} />
     </div>,
-    document.body
+    document.body,
   );
 }

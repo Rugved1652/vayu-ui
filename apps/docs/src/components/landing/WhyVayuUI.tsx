@@ -1,11 +1,4 @@
-import {
-  Brain,
-  Code2,
-  Terminal,
-  Layers,
-  ShieldCheck,
-  Palette,
-} from 'lucide-react';
+import { Brain, Code2, Terminal, Layers, ShieldCheck, Palette } from 'lucide-react';
 import { Badge } from 'vayu-ui';
 
 const features = [

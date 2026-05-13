@@ -75,11 +75,7 @@ export const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>
       'rounded-control',
       'outline-none',
       validationState === 'default'
-        ? [
-            showBrand
-              ? 'border-brand'
-              : 'border-field hover:border-brand',
-          ]
+        ? [showBrand ? 'border-brand' : 'border-field hover:border-brand']
         : inputBorderStyles[validationState],
       disabled && inputDisabledMutedStyles,
       className,

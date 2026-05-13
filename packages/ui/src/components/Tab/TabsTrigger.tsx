@@ -47,15 +47,15 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
           'disabled:opacity-50 disabled:pointer-events-none',
           orientation === 'horizontal'
             ? cn(
-              'border-b-2 -mb-px',
-              isActive
-                ? 'border-brand text-brand'
-                : 'border-transparent text-muted-content hover:text-canvas-content',
-            )
+                'border-b-2 -mb-px',
+                isActive
+                  ? 'border-brand text-brand'
+                  : 'border-transparent text-muted-content hover:text-canvas-content',
+              )
             : cn(
-              'w-full text-left rounded',
-              isActive ? 'bg-brand/10 text-brand' : 'text-muted-content hover:bg-muted',
-            ),
+                'w-full text-left rounded',
+                isActive ? 'bg-brand/10 text-brand' : 'text-muted-content hover:bg-muted',
+              ),
           className,
         )}
         {...props}

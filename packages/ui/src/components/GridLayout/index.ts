@@ -1,9 +1,9 @@
-import GridLayoutRoot from "./GridLayout";
-import { GridLayoutContainer } from "./GridLayoutContainer";
-import { GridItem } from "./GridItem";
-import { GridDragHandle } from "./GridDragHandle";
-import { GridResizeHandle } from "./GridResizeHandle";
-import { GridPlaceholder } from "./GridPlaceholder";
+import GridLayoutRoot from './GridLayout';
+import { GridLayoutContainer } from './GridLayoutContainer';
+import { GridItem } from './GridItem';
+import { GridDragHandle } from './GridDragHandle';
+import { GridResizeHandle } from './GridResizeHandle';
+import { GridPlaceholder } from './GridPlaceholder';
 
 import type {
   GridLayoutRootProps,
@@ -17,7 +17,7 @@ import type {
   ResizeDirection,
   Breakpoints,
   ResponsiveBreakpoint,
-} from "./types";
+} from './types';
 
 const GridLayout = Object.assign(GridLayoutRoot, {
   Container: GridLayoutContainer,

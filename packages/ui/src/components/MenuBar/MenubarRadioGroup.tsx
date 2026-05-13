@@ -10,9 +10,9 @@ import type { MenuRadioGroupProps, MenuRadioItemProps } from './types';
 
 const MenuRadioGroupContext = createContext<
   | {
-    value?: string;
-    onValueChange?: (value: string) => void;
-  }
+      value?: string;
+      onValueChange?: (value: string) => void;
+    }
   | undefined
 >(undefined);
 

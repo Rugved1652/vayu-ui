@@ -129,13 +129,13 @@ export function ColorThemePanel({ variant = 'navbar' }: ColorThemePanelProps) {
   }, []);
 
   const activeThemeName = activeTheme
-    ? themes.find((t) => t.key === activeTheme)?.name ?? 'Default'
+    ? (themes.find((t) => t.key === activeTheme)?.name ?? 'Default')
     : 'Default';
 
   const isNavbar = variant === 'navbar';
 
   return (
-    <Modal open={open} onOpenChange={setOpen} size="sm">
+    <Modal open={open} onOpenChange={setOpen} closeOnEscape closeOnOverlayClick size="sm">
       <Modal.Trigger
         asChild
         className={
@@ -146,10 +146,11 @@ export function ColorThemePanel({ variant = 'navbar' }: ColorThemePanelProps) {
       >
         <button
           type="button"
+          className="flex justify-center items-center gap-2"
           aria-label={`Open theme settings (current: ${activeThemeName})`}
           title={`Theme: ${activeThemeName}`}
         >
-          <Palette className="h-4 w-4 text-surface-content flex-shrink-0" />
+          <Palette className="h-4 w-4 text-surface-content shrink-0" />
           {!isNavbar && (
             <span className="text-sm text-surface-content font-medium truncate">
               {activeThemeName}
@@ -158,12 +159,11 @@ export function ColorThemePanel({ variant = 'navbar' }: ColorThemePanelProps) {
         </button>
       </Modal.Trigger>
 
+      <Modal.Overlay />
       <Modal.Content>
-        <Modal.Header>
+        <Modal.Header className="py-2">
           <Modal.Title>Choose Theme</Modal.Title>
-          <Modal.Description>
-            Select a color preset for your documentation.
-          </Modal.Description>
+          <Modal.Description>Select a color preset for your documentation.</Modal.Description>
         </Modal.Header>
 
         <Modal.Body style={{ backgroundColor: 'var(--canvas)' }}>
@@ -207,27 +207,22 @@ export function ColorThemePanel({ variant = 'navbar' }: ColorThemePanelProps) {
                     </div>
                   </div>
 
-                  <span className="text-sm font-medium text-surface-content">
-                    {theme.name}
-                  </span>
+                  <span className="text-sm font-medium text-surface-content">{theme.name}</span>
                 </button>
               );
             })}
           </div>
         </Modal.Body>
 
-        <Modal.Footer className="flex justify-between items-center">
-          <Button
-            variant="outline"
-            size="small"
-            onClick={handleReset}
-            className="gap-1.5"
-          >
+        <Modal.Footer className="flex py-2 justify-between items-center">
+          <Button variant="outline" size="small" onClick={handleReset} className="gap-1.5">
             <RotateCcw className="h-3.5 w-3.5" />
             Reset
           </Button>
           <Modal.Close asChild>
-            <Button variant="primary" size="small">Done</Button>
+            <Button variant="primary" size="small">
+              Done
+            </Button>
           </Modal.Close>
         </Modal.Footer>
       </Modal.Content>

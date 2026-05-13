@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { VideoPlayer, type VideoTrack } from "vayu-ui";
+import { VideoPlayer, type VideoTrack } from 'vayu-ui';
 import {
   Play,
   Pause,
@@ -12,33 +12,33 @@ import {
   Minimize,
   PictureInPicture2,
   Subtitles,
-} from "lucide-react";
-import { clsx } from "clsx";
+} from 'lucide-react';
+import { clsx } from 'clsx';
 
 const tracks: VideoTrack[] = [
   {
-    id: "1",
-    src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-    title: "Big Buck Bunny (HLS)",
-    artist: "Blender Foundation",
+    id: '1',
+    src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    title: 'Big Buck Bunny (HLS)',
+    artist: 'Blender Foundation',
     poster:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/800px-Big_buck_bunny_poster_big.jpg",
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/800px-Big_buck_bunny_poster_big.jpg',
   },
   {
-    id: "2",
-    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    id: '2',
+    src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
     title: "Elephant's Dream",
-    artist: "Blender Foundation",
+    artist: 'Blender Foundation',
     poster:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Elephants_Dream_s5_both.jpg/800px-Elephants_Dream_s5_both.jpg",
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Elephants_Dream_s5_both.jpg/800px-Elephants_Dream_s5_both.jpg',
   },
   {
-    id: "3",
-    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-    title: "Sintel",
-    artist: "Blender Foundation",
+    id: '3',
+    src: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+    title: 'Sintel',
+    artist: 'Blender Foundation',
     poster:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Sintel_poster.jpg/800px-Sintel_poster.jpg",
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Sintel_poster.jpg/800px-Sintel_poster.jpg',
   },
 ];
 
@@ -85,11 +85,7 @@ export default function VideoPlayerDemo() {
 
               <VideoPlayer.PlayPause className="w-10 h-10">
                 {(playing) =>
-                  playing ? (
-                    <Pause className="w-5 h-5" />
-                  ) : (
-                    <Play className="w-5 h-5 ml-0.5" />
-                  )
+                  playing ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />
                 }
               </VideoPlayer.PlayPause>
 
@@ -113,10 +109,7 @@ export default function VideoPlayerDemo() {
               <VideoPlayer.Captions>
                 {(enabled) => (
                   <Subtitles
-                    className={clsx(
-                      "w-4 h-4",
-                      enabled ? "text-brand" : "text-muted-content"
-                    )}
+                    className={clsx('w-4 h-4', enabled ? 'text-brand' : 'text-muted-content')}
                   />
                 )}
               </VideoPlayer.Captions>
@@ -131,11 +124,7 @@ export default function VideoPlayerDemo() {
               </VideoPlayer.PiP>
               <VideoPlayer.Fullscreen>
                 {(isFullscreen) =>
-                  isFullscreen ? (
-                    <Minimize className="w-4 h-4" />
-                  ) : (
-                    <Maximize className="w-4 h-4" />
-                  )
+                  isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />
                 }
               </VideoPlayer.Fullscreen>
             </div>
@@ -145,12 +134,7 @@ export default function VideoPlayerDemo() {
         {/* Playlist */}
         <VideoPlayer.Playlist className="border-t border-border px-2 py-2 max-h-48 overflow-y-auto">
           {tracks.map((track) => (
-            <VideoPlayer.Track
-              key={track.id}
-              track={track}
-              showIndex
-              className="text-sm"
-            />
+            <VideoPlayer.Track key={track.id} track={track} showIndex className="text-sm" />
           ))}
         </VideoPlayer.Playlist>
       </VideoPlayer>

@@ -33,11 +33,23 @@ export const collapsibleEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Collapsible',
   files: [
-    { name: 'Collapsible.tsx', description: 'Root component with context provider and state management' },
-    { name: 'CollapsibleContent.tsx', description: 'Content panel with CSS line-clamp truncation when collapsed' },
-    { name: 'CollapsibleTrigger.tsx', description: 'Button trigger that toggles content with customizable labels' },
+    {
+      name: 'Collapsible.tsx',
+      description: 'Root component with context provider and state management',
+    },
+    {
+      name: 'CollapsibleContent.tsx',
+      description: 'Content panel with CSS line-clamp truncation when collapsed',
+    },
+    {
+      name: 'CollapsibleTrigger.tsx',
+      description: 'Button trigger that toggles content with customizable labels',
+    },
     { name: 'types.ts', description: 'TypeScript type definitions for all props and context' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and types' },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the compound component and types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -47,7 +59,8 @@ export const collapsibleEntry: ComponentRegistryEntry = {
     {
       name: 'Content',
       fileName: 'CollapsibleContent.tsx',
-      description: 'Content panel that displays text with CSS line-clamp truncation when collapsed and full text when expanded',
+      description:
+        'Content panel that displays text with CSS line-clamp truncation when collapsed and full text when expanded',
       props: [
         {
           name: 'children',
@@ -73,7 +86,8 @@ export const collapsibleEntry: ComponentRegistryEntry = {
     {
       name: 'Trigger',
       fileName: 'CollapsibleTrigger.tsx',
-      description: 'Button that toggles the collapsible content open or closed, displaying configurable label text',
+      description:
+        'Button that toggles the collapsible content open or closed, displaying configurable label text',
       props: [
         {
           name: 'showText',
@@ -142,7 +156,8 @@ export const collapsibleEntry: ComponentRegistryEntry = {
       prop: 'open / defaultOpen',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Controls whether the content is fully visible or truncated. Supports both controlled (via open prop) and uncontrolled (via defaultOpen prop) modes.',
+      description:
+        'Controls whether the content is fully visible or truncated. Supports both controlled (via open prop) and uncontrolled (via defaultOpen prop) modes.',
     },
   ],
 
@@ -151,12 +166,14 @@ export const collapsibleEntry: ComponentRegistryEntry = {
     {
       name: 'onOpenChange',
       signature: '(open: boolean) => void',
-      description: 'Fired when the trigger is clicked or external logic changes the open state. Receives the new open value.',
+      description:
+        'Fired when the trigger is clicked or external logic changes the open state. Receives the new open value.',
     },
     {
       name: 'onClick (internal)',
       signature: '() => void',
-      description: 'Trigger button click handler that toggles the open state. Handled internally via context toggle function.',
+      description:
+        'Trigger button click handler that toggles the open state. Handled internally via context toggle function.',
     },
   ],
 
@@ -166,17 +183,20 @@ export const collapsibleEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-expanded',
-        description: 'Applied to Collapsible.Trigger button; true when content is visible, false when collapsed.',
+        description:
+          'Applied to Collapsible.Trigger button; true when content is visible, false when collapsed.',
         managedByComponent: true,
       },
       {
         name: 'aria-controls',
-        description: 'Applied to Collapsible.Trigger button; references the auto-generated content panel ID to associate the trigger with its content.',
+        description:
+          'Applied to Collapsible.Trigger button; references the auto-generated content panel ID to associate the trigger with its content.',
         managedByComponent: true,
       },
       {
         name: 'aria-labelledby',
-        description: 'Applied to Collapsible.Content panel; references the auto-generated trigger button ID to label the region.',
+        description:
+          'Applied to Collapsible.Content panel; references the auto-generated trigger button ID to label the region.',
         managedByComponent: true,
       },
     ],
@@ -198,10 +218,7 @@ export const collapsibleEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'tailwind-merge' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'tailwind-merge' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -217,11 +234,13 @@ export const collapsibleEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'accordion',
-      reason: 'Alternative pattern for multiple expand/collapse sections with single-expand support',
+      reason:
+        'Alternative pattern for multiple expand/collapse sections with single-expand support',
     },
     {
       slug: 'tab',
-      reason: 'Alternative to Collapsible for switching between content sections without collapsing',
+      reason:
+        'Alternative to Collapsible for switching between content sections without collapsing',
     },
   ],
 
@@ -229,7 +248,8 @@ export const collapsibleEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic Collapsible',
-      description: 'Default uncontrolled collapsible with 3-line truncation and "Show more"/"Show less" toggle.',
+      description:
+        'Default uncontrolled collapsible with 3-line truncation and "Show more"/"Show less" toggle.',
       code: `import { Collapsible } from 'vayu-ui';
 
 const longText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...';
@@ -263,7 +283,8 @@ export default function CustomTextCollapsible() {
     },
     {
       title: 'Controlled State',
-      description: 'Collapsible with externally managed open state, allowing programmatic toggle via an external button.',
+      description:
+        'Collapsible with externally managed open state, allowing programmatic toggle via an external button.',
       code: `import { useState } from 'react';
 import { Collapsible } from 'vayu-ui';
 
@@ -311,31 +332,36 @@ export default function DefaultOpenCollapsible() {
       title: 'Using sub-components outside Collapsible root',
       bad: '<div><Collapsible.Trigger /></div>',
       good: '<Collapsible><Collapsible.Content>...</Collapsible.Content><Collapsible.Trigger /></Collapsible>',
-      reason: 'Content and Trigger depend on CollapsibleContext provided by the root Collapsible. Using them standalone throws a runtime error: "Collapsible components must be used within Collapsible.Root".',
+      reason:
+        'Content and Trigger depend on CollapsibleContext provided by the root Collapsible. Using them standalone throws a runtime error: "Collapsible components must be used within Collapsible.Root".',
     },
     {
       title: 'Mixing controlled and uncontrolled props',
       bad: '<Collapsible defaultOpen={true} open={isOpen} onOpenChange={setIsOpen}>...</Collapsible>',
       good: '<Collapsible open={isOpen} onOpenChange={setIsOpen}>...</Collapsible>',
-      reason: 'When the open prop is provided, the component runs in controlled mode and ignores defaultOpen. Supplying both is misleading — pick one pattern and stick with it.',
+      reason:
+        'When the open prop is provided, the component runs in controlled mode and ignores defaultOpen. Supplying both is misleading — pick one pattern and stick with it.',
     },
     {
       title: 'Omitting Content before Trigger',
       bad: '<Collapsible><Collapsible.Trigger /></Collapsible>',
       good: '<Collapsible><Collapsible.Content lines={3}>Content here</Collapsible.Content><Collapsible.Trigger /></Collapsible>',
-      reason: 'The Trigger toggles content visibility. Without a Content sibling, the trigger button has nothing to expand/collapse, resulting in a broken UI.',
+      reason:
+        'The Trigger toggles content visibility. Without a Content sibling, the trigger button has nothing to expand/collapse, resulting in a broken UI.',
     },
     {
       title: 'Using onOpenChange without open prop',
       bad: '<Collapsible onOpenChange={handleChange}>...</Collapsible>',
       good: '<Collapsible open={isOpen} onOpenChange={setIsOpen}>...</Collapsible>',
-      reason: 'While onOpenChange works in uncontrolled mode (it fires as a side-effect callback), relying on it to sync external state without the open prop will cause the UI and state to diverge. Use the controlled pattern (open + onOpenChange) when syncing external state.',
+      reason:
+        'While onOpenChange works in uncontrolled mode (it fires as a side-effect callback), relying on it to sync external state without the open prop will cause the UI and state to diverge. Use the controlled pattern (open + onOpenChange) when syncing external state.',
     },
     {
       title: 'Setting lines to 0 or negative values',
       bad: '<Collapsible.Content lines={0}>Content</Collapsible.Content>',
       good: '<Collapsible.Content lines={3}>Content</Collapsible.Content>',
-      reason: 'The lines prop maps to -webkit-line-clamp. A value of 0 or negative results in undefined browser behavior — the content may not clamp at all or disappear entirely. Use a positive integer (default is 3).',
+      reason:
+        'The lines prop maps to -webkit-line-clamp. A value of 0 or negative results in undefined browser behavior — the content may not clamp at all or disappear entirely. Use a positive integer (default is 3).',
     },
   ],
 };

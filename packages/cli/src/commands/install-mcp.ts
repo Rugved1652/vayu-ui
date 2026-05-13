@@ -1,19 +1,13 @@
-import { Command, Flags, ux } from '@oclif/core';
-import { homedir } from 'node:os';
-import {
-  TOOL_DEFINITIONS,
-  ALL_TOOL_IDS,
-  writeMcpConfig,
-  getConfigPath,
-  type ToolId,
-} from '../utils/mcp-config.js';
-import { confirm, findProjectRoot } from '../utils/project.js';
+import {Command, Flags, ux} from '@oclif/core'
+import {homedir} from 'node:os'
+import {TOOL_DEFINITIONS, ALL_TOOL_IDS, writeMcpConfig, getConfigPath, type ToolId} from '../utils/mcp-config.js'
+import {confirm, findProjectRoot} from '../utils/project.js'
 
 export default class InstallMcp extends Command {
-  static summary = 'Configure the Vayu UI MCP server for AI coding tools';
+  static summary = 'Configure the Vayu UI MCP server for AI coding tools'
 
   static description =
-    'Configures the Vayu UI MCP server (17 tools for component discovery, props, variants, scaffolding, etc.) for your AI coding tools. No local installation needed — the server runs via npx.';
+    'Configures the Vayu UI MCP server (17 tools for component discovery, props, variants, scaffolding, etc.) for your AI coding tools. No local installation needed — the server runs via npx.'
 
   static examples = [
     '<%= config.bin %> install-mcp',
@@ -22,7 +16,7 @@ export default class InstallMcp extends Command {
     '<%= config.bin %> install-mcp --global',
     '<%= config.bin %> install-mcp --dry-run',
     '<%= config.bin %> install-mcp --tool claude --force',
-  ];
+  ]
 
   static flags = {
     tool: Flags.string({
@@ -40,157 +34,142 @@ export default class InstallMcp extends Command {
       description: 'Skip prompts and overwrite existing config entries',
       default: false,
     }),
-  };
+  }
 
   async run(): Promise<void> {
-    const { flags } = await this.parse(InstallMcp);
-    const targetDir = flags.global ? homedir() : findProjectRoot(process.cwd());
+    const {flags} = await this.parse(InstallMcp)
+    const targetDir = flags.global ? homedir() : findProjectRoot(process.cwd())
 
     // Resolve which tools to configure
-    const toolIds = await this.resolveToolIds(flags);
+    const toolIds = await this.resolveToolIds(flags)
     if (toolIds.length === 0) {
-      this.log(ux.colorize('dim', '  No tools selected. Nothing to do.'));
-      return;
+      this.log(ux.colorize('dim', '  No tools selected. Nothing to do.'))
+      return
     }
 
     // Header
-    this.log('');
-    this.log(ux.colorize('bold', '  Vayu UI MCP Setup'));
-    this.log(ux.colorize('dim', '  ─────────────────────────────────────────────────────'));
-    this.log('');
+    this.log('')
+    this.log(ux.colorize('bold', '  Vayu UI MCP Setup'))
+    this.log(ux.colorize('dim', '  ─────────────────────────────────────────────────────'))
+    this.log('')
 
     // Print plan
-    this.printPlan(toolIds, targetDir, flags.global);
-    this.log('');
+    this.printPlan(toolIds, targetDir, flags.global)
+    this.log('')
 
-    this.log(ux.colorize('dim', '  The following entry will be added:'));
-    this.log('');
-    this.log(ux.colorize('dim', '    "vayu-ui": {'));
-    this.log(ux.colorize('dim', '      "command": "npx",'));
-    this.log(ux.colorize('dim', '      "args": ["-y", "vayu-ui-mcp"]'));
-    this.log(ux.colorize('dim', '    }'));
-    this.log('');
+    this.log(ux.colorize('dim', '  The following entry will be added:'))
+    this.log('')
+    this.log(ux.colorize('dim', '    "vayu-ui": {'))
+    this.log(ux.colorize('dim', '      "command": "npx",'))
+    this.log(ux.colorize('dim', '      "args": ["-y", "vayu-ui-mcp"]'))
+    this.log(ux.colorize('dim', '    }'))
+    this.log('')
 
     // Confirm
     if (!flags.force && !flags['dry-run']) {
-      const ok = await confirm('  Apply changes?');
+      const ok = await confirm('  Apply changes?')
       if (!ok) {
-        this.log(ux.colorize('dim', '  Aborted.'));
-        return;
+        this.log(ux.colorize('dim', '  Aborted.'))
+        return
       }
     }
 
     // Dry-run early exit
     if (flags['dry-run']) {
       for (const toolId of toolIds) {
-        const toolDef = TOOL_DEFINITIONS[toolId];
+        const toolDef = TOOL_DEFINITIONS[toolId]
         const result = writeMcpConfig(toolDef, targetDir, {
           dryRun: true,
           force: flags.force,
           isGlobal: flags.global,
-        });
-        const displayFile = flags.global && toolDef.globalConfigFileName ? toolDef.globalConfigFileName : toolDef.configFileName;
+        })
+        const displayFile =
+          flags.global && toolDef.globalConfigFileName ? toolDef.globalConfigFileName : toolDef.configFileName
         if (result.action === 'dry-run') {
-          this.log(`    ${ux.colorize('cyan', 'would write')} ${displayFile}`);
+          this.log(`    ${ux.colorize('cyan', 'would write')} ${displayFile}`)
         } else if (result.action === 'skipped-exists') {
-          this.log(
-            `    ${ux.colorize('yellow', 'already configured')} ${displayFile}`,
-          );
+          this.log(`    ${ux.colorize('yellow', 'already configured')} ${displayFile}`)
         }
       }
-      this.log('');
-      this.log(ux.colorize('dim', '  Dry run — no files were written.'));
-      this.log('');
-      return;
+      this.log('')
+      this.log(ux.colorize('dim', '  Dry run — no files were written.'))
+      this.log('')
+      return
     }
 
     // Write configs
-    const results = [];
+    const results = []
     for (const toolId of toolIds) {
-      const toolDef = TOOL_DEFINITIONS[toolId];
+      const toolDef = TOOL_DEFINITIONS[toolId]
       const result = writeMcpConfig(toolDef, targetDir, {
         dryRun: false,
         force: flags.force,
         isGlobal: flags.global,
-      });
-      results.push(result);
+      })
+      results.push(result)
     }
 
     // Summary
-    this.log('');
-    this.log(
-      ux.colorize(
-        'green',
-        `  Done! Configured ${results.length} tool${results.length > 1 ? 's' : ''}:`,
-      ),
-    );
-    this.log('');
+    this.log('')
+    this.log(ux.colorize('green', `  Done! Configured ${results.length} tool${results.length > 1 ? 's' : ''}:`))
+    this.log('')
 
     for (const result of results) {
-      const toolDef = TOOL_DEFINITIONS[result.toolId];
-      const fileName = flags.global && toolDef.globalConfigFileName ? toolDef.globalConfigFileName : toolDef.configFileName;
-      const relPath = fileName;
+      const toolDef = TOOL_DEFINITIONS[result.toolId]
+      const fileName =
+        flags.global && toolDef.globalConfigFileName ? toolDef.globalConfigFileName : toolDef.configFileName
+      const relPath = fileName
       if (result.action === 'created') {
-        this.log(`    ${ux.colorize('green', 'created')}  ${toolDef.name.padEnd(16)} ${relPath}`);
+        this.log(`    ${ux.colorize('green', 'created')}  ${toolDef.name.padEnd(16)} ${relPath}`)
       } else if (result.action === 'updated') {
-        this.log(`    ${ux.colorize('green', 'updated')}  ${toolDef.name.padEnd(16)} ${relPath}`);
+        this.log(`    ${ux.colorize('green', 'updated')}  ${toolDef.name.padEnd(16)} ${relPath}`)
       } else if (result.action === 'skipped-exists') {
         this.log(
           `    ${ux.colorize('yellow', 'exists')}    ${toolDef.name.padEnd(16)} ${relPath} ${ux.colorize('dim', '(use --force to overwrite)')}`,
-        );
+        )
       }
     }
 
-    this.log('');
-    this.log(
-      ux.colorize(
-        'dim',
-        '  Restart your AI tool to load the Vayu UI MCP server (17 tools available).',
-      ),
-    );
-    this.log('');
+    this.log('')
+    this.log(ux.colorize('dim', '  Restart your AI tool to load the Vayu UI MCP server (17 tools available).'))
+    this.log('')
   }
 
-  private async resolveToolIds(flags: {
-    tool?: string;
-    force: boolean;
-  }): Promise<ToolId[]> {
+  private async resolveToolIds(flags: {tool?: string; force: boolean}): Promise<ToolId[]> {
     if (flags.tool) {
-      const ids = flags.tool.split(',').map((s) => s.trim().toLowerCase() as ToolId);
+      const ids = flags.tool.split(',').map((s) => s.trim().toLowerCase() as ToolId)
       for (const id of ids) {
         if (!ALL_TOOL_IDS.includes(id)) {
-          this.error(
-            `Unknown tool "${id}". Valid options: ${ALL_TOOL_IDS.join(', ')}`,
-          );
+          this.error(`Unknown tool "${id}". Valid options: ${ALL_TOOL_IDS.join(', ')}`)
         }
       }
-      return ids;
+      return ids
     }
 
     if (flags.force) {
-      return [...ALL_TOOL_IDS];
+      return [...ALL_TOOL_IDS]
     }
 
     // Interactive selection
-    const selected: ToolId[] = [];
-    this.log(ux.colorize('bold', '  Configure Vayu UI MCP for:'));
-    this.log('');
+    const selected: ToolId[] = []
+    this.log(ux.colorize('bold', '  Configure Vayu UI MCP for:'))
+    this.log('')
     for (const id of ALL_TOOL_IDS) {
-      const def = TOOL_DEFINITIONS[id];
-      const ok = await confirm(`    ${def.name}?`);
-      if (ok) selected.push(id);
+      const def = TOOL_DEFINITIONS[id]
+      const ok = await confirm(`    ${def.name}?`)
+      if (ok) selected.push(id)
     }
-    return selected;
+    return selected
   }
 
   private printPlan(toolIds: ToolId[], targetDir: string, isGlobal: boolean): void {
-    const scope = isGlobal ? 'global' : 'project';
-    this.log(`  Configuring for (${scope}):`);
-    this.log('');
+    const scope = isGlobal ? 'global' : 'project'
+    this.log(`  Configuring for (${scope}):`)
+    this.log('')
     for (const id of toolIds) {
-      const def = TOOL_DEFINITIONS[id];
-      const configPath = getConfigPath(id, targetDir, isGlobal);
-      this.log(`    ${def.name.padEnd(16)} ${configPath}`);
+      const def = TOOL_DEFINITIONS[id]
+      const configPath = getConfigPath(id, targetDir, isGlobal)
+      this.log(`    ${def.name.padEnd(16)} ${configPath}`)
     }
   }
 }

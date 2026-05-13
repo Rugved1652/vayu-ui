@@ -37,13 +37,39 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'AvatarGroup',
   files: [
-    { name: 'AvatarGroup.tsx', description: 'Root component that maps users into AvatarItems and an optional OverflowButton' },
-    { name: 'AvatarItem.tsx', description: 'Internal wrapper that renders a single Avatar with stacking z-index and hover effects' },
-    { name: 'AvtarGroupOverflowButton.tsx', description: 'Internal overflow indicator button showing hidden user count with custom render support' },
-    { name: 'hooks.ts', description: 'Internal hooks: useSpacing (spacing-to-pixel mapping) and useKeyboardNavigation (arrow key focus)' },
-    { name: 'types.ts', description: 'TypeScript type definitions for AvatarGroup props, UserData, AvatarGroupSize, and AvatarGroupLayout' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the component and all public types' },
-    { name: 'README.md', description: 'Component documentation and usage guidelines', optional: true },
+    {
+      name: 'AvatarGroup.tsx',
+      description: 'Root component that maps users into AvatarItems and an optional OverflowButton',
+    },
+    {
+      name: 'AvatarItem.tsx',
+      description:
+        'Internal wrapper that renders a single Avatar with stacking z-index and hover effects',
+    },
+    {
+      name: 'AvtarGroupOverflowButton.tsx',
+      description:
+        'Internal overflow indicator button showing hidden user count with custom render support',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'Internal hooks: useSpacing (spacing-to-pixel mapping) and useKeyboardNavigation (arrow key focus)',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for AvatarGroup props, UserData, AvatarGroupSize, and AvatarGroupLayout',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the component and all public types',
+    },
+    {
+      name: 'README.md',
+      description: 'Component documentation and usage guidelines',
+      optional: true,
+    },
   ],
   targetPath: 'src/components',
 
@@ -59,11 +85,12 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
       type: 'UserData[]',
       required: false,
       defaultValue: '[]',
-      description: 'Array of user objects to render as avatars. Each user can have id, src, username, alt, fallback, and status.',
+      description:
+        'Array of user objects to render as avatars. Each user can have id, src, username, alt, fallback, and status.',
     },
     {
       name: 'size',
-      type: "AvatarGroupSize",
+      type: 'AvatarGroupSize',
       required: false,
       defaultValue: "'medium'",
       description: 'Avatar dimensions: small (32px), medium (48px), large (64px), xlarge (96px)',
@@ -78,10 +105,11 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
     },
     {
       name: 'layout',
-      type: "AvatarGroupLayout",
+      type: 'AvatarGroupLayout',
       required: false,
       defaultValue: "'stack'",
-      description: 'Layout mode: stack overlaps avatars horizontally, grid wraps them in a flex grid',
+      description:
+        'Layout mode: stack overlaps avatars horizontally, grid wraps them in a flex grid',
       options: ['stack', 'grid'],
     },
     {
@@ -89,26 +117,30 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
       type: "'tight' | 'normal' | 'loose' | number",
       required: false,
       defaultValue: "'normal'",
-      description: 'Controls overlap in stack layout. Presets map to pixel values: tight (-12px), normal (-8px), loose (-4px). A number is used directly as margin-left.',
+      description:
+        'Controls overlap in stack layout. Presets map to pixel values: tight (-12px), normal (-8px), loose (-4px). A number is used directly as margin-left.',
       options: ['tight', 'normal', 'loose'],
     },
     {
       name: 'renderOverflow',
       type: '(count: number) => React.ReactNode',
       required: false,
-      description: 'Custom renderer for the overflow indicator. Receives the count of hidden users. Defaults to "+count" text.',
+      description:
+        'Custom renderer for the overflow indicator. Receives the count of hidden users. Defaults to "+count" text.',
     },
     {
       name: 'onAvatarClick',
       type: '(user: UserData, index: number) => void',
       required: false,
-      description: 'Callback when an individual avatar is clicked. Receives the user data and its index in the array.',
+      description:
+        'Callback when an individual avatar is clicked. Receives the user data and its index in the array.',
     },
     {
       name: 'onOverflowClick',
       type: '(hiddenUsers: UserData[]) => void',
       required: false,
-      description: 'Callback when the overflow button is clicked. Receives the array of users beyond maxDisplay.',
+      description:
+        'Callback when the overflow button is clicked. Receives the array of users beyond maxDisplay.',
     },
   ],
   rendersAs: 'div',
@@ -127,14 +159,16 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
       prop: 'maxDisplay',
       isBoolean: false,
       defaultValue: '5',
-      description: 'When the users array exceeds maxDisplay, hidden users are represented by an overflow button showing the count.',
+      description:
+        'When the users array exceeds maxDisplay, hidden users are represented by an overflow button showing the count.',
     },
     {
       name: 'status',
       prop: 'users[].status',
       values: ['online', 'offline', 'away', 'busy'],
       isBoolean: false,
-      description: 'Each user can have a status indicator rendered by the underlying Avatar.Status sub-component.',
+      description:
+        'Each user can have a status indicator rendered by the underlying Avatar.Status sub-component.',
     },
   ],
 
@@ -143,17 +177,20 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
     {
       name: 'onAvatarClick',
       signature: '(user: UserData, index: number) => void',
-      description: 'Fired when an individual avatar is clicked. Provides the user data object and the index within the visible list.',
+      description:
+        'Fired when an individual avatar is clicked. Provides the user data object and the index within the visible list.',
     },
     {
       name: 'onOverflowClick',
       signature: '(hiddenUsers: UserData[]) => void',
-      description: 'Fired when the overflow indicator button is clicked. Provides the full array of hidden user objects for displaying in a popover or modal.',
+      description:
+        'Fired when the overflow indicator button is clicked. Provides the full array of hidden user objects for displaying in a popover or modal.',
     },
     {
       name: 'onKeyDown',
       signature: '(event: React.KeyboardEvent<HTMLDivElement>) => void',
-      description: 'Internal keyboard navigation handler for ArrowLeft/ArrowRight focus movement between avatars.',
+      description:
+        'Internal keyboard navigation handler for ArrowLeft/ArrowRight focus movement between avatars.',
     },
   ],
 
@@ -163,12 +200,14 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-label',
-        description: 'Set on the root container to announce the total member count, e.g. "Avatar group with 6 members".',
+        description:
+          'Set on the root container to announce the total member count, e.g. "Avatar group with 6 members".',
         managedByComponent: true,
       },
       {
         name: 'aria-label (overflow button)',
-        description: 'Set on the overflow button to announce the hidden count, e.g. "Show 3 more users".',
+        description:
+          'Set on the overflow button to announce the hidden count, e.g. "Show 3 more users".',
         managedByComponent: true,
       },
     ],
@@ -194,13 +233,12 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [
     {
       slug: 'avatar',
-      reason: 'AvatarGroup uses the Avatar compound component internally to render each user avatar with image, initials, and status support',
+      reason:
+        'AvatarGroup uses the Avatar compound component internally to render each user avatar with image, initials, and status support',
     },
   ],
   reactPeerDependency: '>=18.0.0',
@@ -209,11 +247,13 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'avatar',
-      reason: 'AvatarGroup is built on top of Avatar; use Avatar standalone for single-user displays',
+      reason:
+        'AvatarGroup is built on top of Avatar; use Avatar standalone for single-user displays',
     },
     {
       slug: 'tooltip',
-      reason: 'Add tooltips to individual avatars to show full user names or profile details on hover',
+      reason:
+        'Add tooltips to individual avatars to show full user names or profile details on hover',
     },
     {
       slug: 'popover',
@@ -221,7 +261,8 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'badge',
-      reason: 'Display a badge alongside the avatar group to show total member count or online count',
+      reason:
+        'Display a badge alongside the avatar group to show total member count or online count',
     },
     {
       slug: 'card',
@@ -233,7 +274,8 @@ export const avatarGroupEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic Stack',
-      description: 'Default stacked layout showing 4 of 6 users with an overflow indicator for the remaining 2.',
+      description:
+        'Default stacked layout showing 4 of 6 users with an overflow indicator for the remaining 2.',
       code: `import { AvatarGroup } from 'vayu-ui';
 
 const users = [
@@ -252,7 +294,8 @@ export default function BasicStack() {
     },
     {
       title: 'Grid Layout',
-      description: 'Grid layout that wraps avatars instead of overlapping them, useful for showing all members.',
+      description:
+        'Grid layout that wraps avatars instead of overlapping them, useful for showing all members.',
       code: `import { AvatarGroup } from 'vayu-ui';
 
 const users = [
@@ -275,7 +318,8 @@ export default function GridLayout() {
     },
     {
       title: 'Avatar Sizes',
-      description: 'All four sizes with matching spacing: small with tight, medium (default), large with loose, and xlarge.',
+      description:
+        'All four sizes with matching spacing: small with tight, medium (default), large with loose, and xlarge.',
       code: `import { AvatarGroup } from 'vayu-ui';
 
 const users = [
@@ -298,7 +342,8 @@ export default function SizesDemo() {
     },
     {
       title: 'Interactive with Click Handlers',
-      description: 'Click avatars to select a user and click the overflow button to reveal hidden members.',
+      description:
+        'Click avatars to select a user and click the overflow button to reveal hidden members.',
       code: `import React, { useState } from 'react';
 import { AvatarGroup } from 'vayu-ui';
 
@@ -329,7 +374,8 @@ export default function InteractiveDemo() {
     },
     {
       title: 'Custom Overflow Renderer',
-      description: 'Use renderOverflow to customize the overflow indicator instead of the default "+N" text.',
+      description:
+        'Use renderOverflow to customize the overflow indicator instead of the default "+N" text.',
       code: `import { AvatarGroup } from 'vayu-ui';
 
 const users = Array.from({ length: 10 }, (_, i) => ({
@@ -351,7 +397,8 @@ export default function CustomOverflow() {
     },
     {
       title: 'Status Indicators',
-      description: 'Avatars with online/offline/away/busy status indicators rendered by the underlying Avatar component.',
+      description:
+        'Avatars with online/offline/away/busy status indicators rendered by the underlying Avatar component.',
       code: `import { AvatarGroup } from 'vayu-ui';
 
 const users = [
@@ -374,31 +421,36 @@ export default function StatusDemo() {
       title: 'Providing users without unique ids',
       bad: '<AvatarGroup users={[{ username: "John" }, { username: "John" }]} />',
       good: '<AvatarGroup users={[{ id: 1, username: "John" }, { id: 2, username: "John" }]} />',
-      reason: 'Without unique id values, React uses array index as key, which causes incorrect rendering and state issues when users are added, removed, or reordered.',
+      reason:
+        'Without unique id values, React uses array index as key, which causes incorrect rendering and state issues when users are added, removed, or reordered.',
     },
     {
       title: 'Using grid layout for large user counts without a container width',
       bad: '<AvatarGroup users={manyUsers} layout="grid" maxDisplay={100} />',
       good: '<div className="max-w-md"><AvatarGroup users={manyUsers} layout="grid" maxDisplay={100} /></div>',
-      reason: 'Grid layout uses flex-wrap without a constrained parent width, so it may expand indefinitely and break the page layout.',
+      reason:
+        'Grid layout uses flex-wrap without a constrained parent width, so it may expand indefinitely and break the page layout.',
     },
     {
       title: 'Passing onClick to AvatarGroup instead of onAvatarClick',
       bad: '<AvatarGroup onClick={handleClick} users={users} />',
       good: '<AvatarGroup onAvatarClick={handleClick} users={users} />',
-      reason: 'onClick goes to the root container div and fires for any click in the group area (including gaps). onAvatarClick targets individual avatars with the specific user data and index.',
+      reason:
+        'onClick goes to the root container div and fires for any click in the group area (including gaps). onAvatarClick targets individual avatars with the specific user data and index.',
     },
     {
       title: 'Setting spacing to a positive number in stack layout',
       bad: '<AvatarGroup users={users} layout="stack" spacing={8} />',
       good: '<AvatarGroup users={users} layout="stack" spacing="tight" />',
-      reason: 'Stack layout relies on negative margins for the overlapping effect. Positive spacing separates avatars instead of stacking them, defeating the visual purpose of the stack layout.',
+      reason:
+        'Stack layout relies on negative margins for the overlapping effect. Positive spacing separates avatars instead of stacking them, defeating the visual purpose of the stack layout.',
     },
     {
       title: 'Using maxDisplay of 0 or negative values',
       bad: '<AvatarGroup users={users} maxDisplay={0} />',
       good: '<AvatarGroup users={users} maxDisplay={3} />',
-      reason: 'A maxDisplay of 0 or less shows no avatars, only the overflow button with all users hidden. Use a reasonable threshold that shows some avatars visually.',
+      reason:
+        'A maxDisplay of 0 or less shows no avatars, only the overflow button with all users hidden. Use a reasonable threshold that shows some avatars visually.',
     },
   ],
 };

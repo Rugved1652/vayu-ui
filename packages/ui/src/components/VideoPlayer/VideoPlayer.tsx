@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   createContext,
@@ -11,16 +11,16 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import Hls from "hls.js";
-import { clsx } from "clsx";
+} from 'react';
+import Hls from 'hls.js';
+import { clsx } from 'clsx';
 import type {
   VideoTrack,
   VideoQuality,
   VideoPlayerContextValue,
   VideoPlayerRootProps,
-} from "./types";
-import { isHLS } from "./utils";
+} from './types';
+import { isHLS } from './utils';
 
 // ============================================================================
 // Multi-Instance Manager
@@ -44,7 +44,7 @@ class VideoPlayerManager {
   notifyPlay(playerId: string): void {
     if (this.activePlayerId && this.activePlayerId !== playerId) {
       const pauseHandler = this.listeners.get(this.activePlayerId);
-    pauseHandler?.();
+      pauseHandler?.();
     }
     this.activePlayerId = playerId;
   }
@@ -65,38 +65,83 @@ const VideoPlayerContext = createContext<VideoPlayerContextValue | undefined>(un
 export const useVideoPlayer = (): VideoPlayerContextValue => {
   const ctx = useContext(VideoPlayerContext);
   if (!ctx) {
-    throw new Error("VideoPlayer.* components must be used within VideoPlayer.Root");
+    throw new Error('VideoPlayer.* components must be used within VideoPlayer.Root');
   }
   return ctx;
 };
 
 export const useVideoPlayerState = () => {
   const {
-    isPlaying, isLoading, currentTime, duration, buffered, volume, isMuted,
-    playbackRate, isSeeking, currentTrack, playlist, currentTrackIndex,
-    error, loop, shuffle, isFullscreen, isPiP,
-    captionsEnabled, selectedQuality, availableQualities,
+    isPlaying,
+    isLoading,
+    currentTime,
+    duration,
+    buffered,
+    volume,
+    isMuted,
+    playbackRate,
+    isSeeking,
+    currentTrack,
+    playlist,
+    currentTrackIndex,
+    error,
+    loop,
+    shuffle,
+    isFullscreen,
+    isPiP,
+    captionsEnabled,
+    selectedQuality,
+    availableQualities,
   } = useVideoPlayer();
   return {
-    isPlaying, isLoading, currentTime, duration, buffered, volume, isMuted,
-    playbackRate, isSeeking, currentTrack, playlist, currentTrackIndex,
-    error, loop, shuffle, isFullscreen, isPiP,
-    captionsEnabled, selectedQuality, availableQualities,
+    isPlaying,
+    isLoading,
+    currentTime,
+    duration,
+    buffered,
+    volume,
+    isMuted,
+    playbackRate,
+    isSeeking,
+    currentTrack,
+    playlist,
+    currentTrackIndex,
+    error,
+    loop,
+    shuffle,
+    isFullscreen,
+    isPiP,
+    captionsEnabled,
+    selectedQuality,
+    availableQualities,
   };
 };
 
 export const useVideoPlayerActions = () => {
   const ctx = useVideoPlayer();
   return {
-    play: ctx.play, pause: ctx.pause, togglePlay: ctx.togglePlay,
-    seek: ctx.seek, seekForward: ctx.seekForward, seekBackward: ctx.seekBackward,
-    setVolume: ctx.setVolume, volumeUp: ctx.volumeUp, volumeDown: ctx.volumeDown,
-    toggleMute: ctx.toggleMute, setPlaybackRate: ctx.setPlaybackRate,
-    nextTrack: ctx.nextTrack, previousTrack: ctx.previousTrack, playTrack: ctx.playTrack,
-    toggleLoop: ctx.toggleLoop, toggleShuffle: ctx.toggleShuffle,
-    toggleFullscreen: ctx.toggleFullscreen, togglePiP: ctx.togglePiP,
-    toggleCaptions: ctx.toggleCaptions, setQuality: ctx.setQuality,
-    formatTime: ctx.formatTime, setSeeking: ctx.setSeeking,
+    play: ctx.play,
+    pause: ctx.pause,
+    togglePlay: ctx.togglePlay,
+    seek: ctx.seek,
+    seekForward: ctx.seekForward,
+    seekBackward: ctx.seekBackward,
+    setVolume: ctx.setVolume,
+    volumeUp: ctx.volumeUp,
+    volumeDown: ctx.volumeDown,
+    toggleMute: ctx.toggleMute,
+    setPlaybackRate: ctx.setPlaybackRate,
+    nextTrack: ctx.nextTrack,
+    previousTrack: ctx.previousTrack,
+    playTrack: ctx.playTrack,
+    toggleLoop: ctx.toggleLoop,
+    toggleShuffle: ctx.toggleShuffle,
+    toggleFullscreen: ctx.toggleFullscreen,
+    togglePiP: ctx.togglePiP,
+    toggleCaptions: ctx.toggleCaptions,
+    setQuality: ctx.setQuality,
+    formatTime: ctx.formatTime,
+    setSeeking: ctx.setSeeking,
     clearError: ctx.clearError,
   };
 };
@@ -125,7 +170,7 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
       onFullscreenChange,
       className,
     },
-    ref
+    ref,
   ) => {
     const playerId = useId();
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -161,7 +206,7 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
     const [availableQualities, setAvailableQualities] = useState<VideoQuality[]>([]);
 
     const [playlist] = useState<VideoTrack[]>(
-      track ? [track, ...initialPlaylist] : initialPlaylist
+      track ? [track, ...initialPlaylist] : initialPlaylist,
     );
     const [currentTrackIndex, setCurrentTrackIndex] = useState(track ? 0 : -1);
     const currentTrack = currentTrackIndex >= 0 ? playlist[currentTrackIndex] : null;
@@ -232,7 +277,7 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
                 ? `${level.height}p`
                 : level.bitrate
                   ? `${Math.round(level.bitrate / 1000)}kbps`
-                  : "Unknown",
+                  : 'Unknown',
             }));
             setAvailableQualities(qualities);
             if (autoPlay) video.play().catch(() => {});
@@ -252,21 +297,25 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
             if (!data.fatal) return;
 
             if (recoveryAttemptsRef.current >= MAX_RECOVERY_ATTEMPTS) {
-              setError("Playback failed — max recovery attempts reached");
+              setError('Playback failed — max recovery attempts reached');
               hls.destroy();
               hlsRef.current = null;
-              onError?.("Playback failed — max recovery attempts reached");
+              onError?.('Playback failed — max recovery attempts reached');
               return;
             }
 
             recoveryAttemptsRef.current++;
             switch (data.type) {
               case Hls.ErrorTypes.NETWORK_ERROR:
-                setError(`Network error — retrying (${recoveryAttemptsRef.current}/${MAX_RECOVERY_ATTEMPTS})...`);
+                setError(
+                  `Network error — retrying (${recoveryAttemptsRef.current}/${MAX_RECOVERY_ATTEMPTS})...`,
+                );
                 hls.startLoad();
                 break;
               case Hls.ErrorTypes.MEDIA_ERROR:
-                setError(`Media error — retrying (${recoveryAttemptsRef.current}/${MAX_RECOVERY_ATTEMPTS})...`);
+                setError(
+                  `Media error — retrying (${recoveryAttemptsRef.current}/${MAX_RECOVERY_ATTEMPTS})...`,
+                );
                 hls.recoverMediaError();
                 break;
               default:
@@ -279,7 +328,7 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
           });
 
           hlsRef.current = hls;
-        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
           video.src = currentTrack.src;
           setIsLoading(false);
         }
@@ -291,12 +340,12 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
 
       // Add subtitle track
       if (currentTrack.subtitleSrc) {
-        const existing = video.querySelectorAll("track");
+        const existing = video.querySelectorAll('track');
         existing.forEach((t) => t.remove());
-        const trackEl = document.createElement("track");
-        trackEl.kind = "subtitles";
-        trackEl.label = "English";
-        trackEl.srclang = "en";
+        const trackEl = document.createElement('track');
+        trackEl.kind = 'subtitles';
+        trackEl.label = 'English';
+        trackEl.srclang = 'en';
         trackEl.src = currentTrack.subtitleSrc;
         trackEl.default = false;
         video.appendChild(trackEl);
@@ -342,17 +391,17 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
         video.currentTime = clamped;
         setCurrentTime(clamped);
       },
-      [duration]
+      [duration],
     );
 
     const seekForward = useCallback(
       (seconds = 5) => seek(currentTime + seconds),
-      [currentTime, seek]
+      [currentTime, seek],
     );
 
     const seekBackward = useCallback(
       (seconds = 5) => seek(currentTime - seconds),
-      [currentTime, seek]
+      [currentTime, seek],
     );
 
     const setVolume = useCallback(
@@ -366,18 +415,12 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
           if (video) video.muted = false;
         }
       },
-      [isMuted]
+      [isMuted],
     );
 
-    const volumeUp = useCallback(
-      (step = 0.1) => setVolume(volume + step),
-      [volume, setVolume]
-    );
+    const volumeUp = useCallback((step = 0.1) => setVolume(volume + step), [volume, setVolume]);
 
-    const volumeDown = useCallback(
-      (step = 0.1) => setVolume(volume - step),
-      [volume, setVolume]
-    );
+    const volumeDown = useCallback((step = 0.1) => setVolume(volume - step), [volume, setVolume]);
 
     const toggleMute = useCallback(() => {
       const video = videoRef.current;
@@ -408,7 +451,7 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
           }
         });
       },
-      [playlist]
+      [playlist],
     );
 
     const getShuffledIndex = useCallback(
@@ -420,7 +463,7 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
         } while (newIndex === currentIndex);
         return newIndex;
       },
-      [playlist.length]
+      [playlist.length],
     );
 
     const nextTrack = useCallback(() => {
@@ -435,7 +478,16 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
         }
         playTrack(next);
       }
-    }, [currentTrackIndex, playlist.length, shuffle, loop, playTrack, getShuffledIndex, pause, seek]);
+    }, [
+      currentTrackIndex,
+      playlist.length,
+      shuffle,
+      loop,
+      playTrack,
+      getShuffledIndex,
+      pause,
+      seek,
+    ]);
 
     const previousTrack = useCallback(() => {
       if (currentTime > 3) {
@@ -484,7 +536,7 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
       if (!video || video.textTracks.length === 0) return;
       const track = video.textTracks[0];
       const newEnabled = !captionsEnabled;
-      track.mode = newEnabled ? "showing" : "hidden";
+      track.mode = newEnabled ? 'showing' : 'hidden';
       setCaptionsEnabled(newEnabled);
     }, [captionsEnabled]);
 
@@ -498,25 +550,30 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
     const setSeeking = useCallback((seeking: boolean) => setIsSeeking(seeking), []);
     const clearError = useCallback(() => setError(null), []);
 
-    const formatTime = useCallback(
-      (seconds: number): string => {
-        if (!isFinite(seconds) || isNaN(seconds) || seconds < 0) return "0:00";
-        const h = Math.floor(seconds / 3600);
-        const m = Math.floor((seconds % 3600) / 60);
-        const s = Math.floor(seconds % 60);
-        if (h > 0) return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-        return `${m}:${s.toString().padStart(2, "0")}`;
-      },
-      []
-    );
+    const formatTime = useCallback((seconds: number): string => {
+      if (!isFinite(seconds) || isNaN(seconds) || seconds < 0) return '0:00';
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = Math.floor(seconds % 60);
+      if (h > 0) return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }, []);
 
     // Video event listeners (depends on videoElement)
     useEffect(() => {
       if (!videoElement) return;
       const video = videoElement;
 
-      const onPlayEvt = () => { setIsPlaying(true); setIsLoading(false); notifyGlobalPlay(); onPlay?.(); };
-      const onPauseEvt = () => { setIsPlaying(false); onPause?.(); };
+      const onPlayEvt = () => {
+        setIsPlaying(true);
+        setIsLoading(false);
+        notifyGlobalPlay();
+        onPlay?.();
+      };
+      const onPauseEvt = () => {
+        setIsPlaying(false);
+        onPause?.();
+      };
       const onWaiting = () => setIsLoading(true);
       const onCanPlay = () => setIsLoading(false);
       const onDuration = () => setDuration(video.duration);
@@ -539,26 +596,34 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
           nextTrack();
         }
       };
-      const onVol = () => { setVolumeState(video.volume); setIsMuted(video.muted); };
+      const onVol = () => {
+        setVolumeState(video.volume);
+        setIsMuted(video.muted);
+      };
       const onRate = () => setPlaybackRateState(video.playbackRate);
       const onEnterPiP = () => setIsPiP(true);
       const onLeavePiP = () => setIsPiP(false);
       const onErrorEvt = () => {
         const code = video.error?.code;
-        const msg = video.error?.message || "Unknown error";
+        const msg = video.error?.message || 'Unknown error';
         setError(`Error ${code}: ${msg}`);
         onError?.(`Error ${code}: ${msg}`);
       };
 
       const events: [string, EventListener][] = [
-        ["play", onPlayEvt], ["pause", onPauseEvt],
-        ["waiting", onWaiting], ["canplay", onCanPlay],
-        ["durationchange", onDuration], ["timeupdate", onTime],
-        ["progress", onProgress], ["ended", onEnd],
-        ["volumechange", onVol], ["ratechange", onRate],
-        ["enterpictureinpicture", onEnterPiP],
-        ["leavepictureinpicture", onLeavePiP],
-        ["error", onErrorEvt],
+        ['play', onPlayEvt],
+        ['pause', onPauseEvt],
+        ['waiting', onWaiting],
+        ['canplay', onCanPlay],
+        ['durationchange', onDuration],
+        ['timeupdate', onTime],
+        ['progress', onProgress],
+        ['ended', onEnd],
+        ['volumechange', onVol],
+        ['ratechange', onRate],
+        ['enterpictureinpicture', onEnterPiP],
+        ['leavepictureinpicture', onLeavePiP],
+        ['error', onErrorEvt],
       ];
 
       events.forEach(([e, h]) => video.addEventListener(e, h));
@@ -567,7 +632,21 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
       video.playbackRate = defaultPlaybackRate;
 
       return () => events.forEach(([e, h]) => video.removeEventListener(e, h));
-    }, [videoElement, defaultVolume, defaultMuted, defaultPlaybackRate, isSeeking, loop, nextTrack, notifyGlobalPlay, onPlay, onPause, onTimeUpdate, onEnded, onError]);
+    }, [
+      videoElement,
+      defaultVolume,
+      defaultMuted,
+      defaultPlaybackRate,
+      isSeeking,
+      loop,
+      nextTrack,
+      notifyGlobalPlay,
+      onPlay,
+      onPause,
+      onTimeUpdate,
+      onEnded,
+      onError,
+    ]);
 
     // Fullscreen listener
     useEffect(() => {
@@ -576,58 +655,180 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
         setIsFullscreen(fs);
         onFullscreenChange?.(fs);
       };
-      document.addEventListener("fullscreenchange", handler);
-      return () => document.removeEventListener("fullscreenchange", handler);
+      document.addEventListener('fullscreenchange', handler);
+      return () => document.removeEventListener('fullscreenchange', handler);
     }, [onFullscreenChange]);
 
     // Keyboard
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
         const target = e.target as HTMLElement;
-        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT") return;
+        if (
+          target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT'
+        )
+          return;
         switch (e.key) {
-          case " ": case "k": e.preventDefault(); togglePlay(); break;
-          case "m": toggleMute(); break;
-          case "f": toggleFullscreen(); break;
-          case "c": toggleCaptions(); break;
-          case "ArrowLeft": e.preventDefault(); seekBackward(5); break;
-          case "ArrowRight": e.preventDefault(); seekForward(5); break;
-          case "ArrowUp": e.preventDefault(); volumeUp(); break;
-          case "ArrowDown": e.preventDefault(); volumeDown(); break;
-          case "n": nextTrack(); break;
-          case "p": previousTrack(); break;
-          case "l": toggleLoop(); break;
-          case "s": toggleShuffle(); break;
+          case ' ':
+          case 'k':
+            e.preventDefault();
+            togglePlay();
+            break;
+          case 'm':
+            toggleMute();
+            break;
+          case 'f':
+            toggleFullscreen();
+            break;
+          case 'c':
+            toggleCaptions();
+            break;
+          case 'ArrowLeft':
+            e.preventDefault();
+            seekBackward(5);
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            seekForward(5);
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            volumeUp();
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            volumeDown();
+            break;
+          case 'n':
+            nextTrack();
+            break;
+          case 'p':
+            previousTrack();
+            break;
+          case 'l':
+            toggleLoop();
+            break;
+          case 's':
+            toggleShuffle();
+            break;
         }
       },
-      [togglePlay, toggleMute, toggleFullscreen, toggleCaptions, seekBackward, seekForward, volumeUp, volumeDown, nextTrack, previousTrack, toggleLoop, toggleShuffle]
+      [
+        togglePlay,
+        toggleMute,
+        toggleFullscreen,
+        toggleCaptions,
+        seekBackward,
+        seekForward,
+        volumeUp,
+        volumeDown,
+        nextTrack,
+        previousTrack,
+        toggleLoop,
+        toggleShuffle,
+      ],
     );
 
     // Context value
     const contextValue = useMemo<VideoPlayerContextValue>(
       () => ({
-        isPlaying, isLoading, currentTime, duration, buffered, volume, isMuted,
-        playbackRate, isSeeking, currentTrack, playlist, currentTrackIndex,
-        error, loop, shuffle, isFullscreen, isPiP, captionsEnabled,
-        selectedQuality, availableQualities,
-        play, pause, togglePlay, seek, seekForward, seekBackward,
-        setVolume, volumeUp, volumeDown, toggleMute, setPlaybackRate,
-        nextTrack, previousTrack, playTrack, toggleLoop, toggleShuffle,
-        toggleFullscreen, togglePiP, toggleCaptions, setQuality,
-        formatTime, setSeeking, clearError,
-        playerId, videoRef, containerRef, allowMultiple, registerVideo,
+        isPlaying,
+        isLoading,
+        currentTime,
+        duration,
+        buffered,
+        volume,
+        isMuted,
+        playbackRate,
+        isSeeking,
+        currentTrack,
+        playlist,
+        currentTrackIndex,
+        error,
+        loop,
+        shuffle,
+        isFullscreen,
+        isPiP,
+        captionsEnabled,
+        selectedQuality,
+        availableQualities,
+        play,
+        pause,
+        togglePlay,
+        seek,
+        seekForward,
+        seekBackward,
+        setVolume,
+        volumeUp,
+        volumeDown,
+        toggleMute,
+        setPlaybackRate,
+        nextTrack,
+        previousTrack,
+        playTrack,
+        toggleLoop,
+        toggleShuffle,
+        toggleFullscreen,
+        togglePiP,
+        toggleCaptions,
+        setQuality,
+        formatTime,
+        setSeeking,
+        clearError,
+        playerId,
+        videoRef,
+        containerRef,
+        allowMultiple,
+        registerVideo,
       }),
       [
-        isPlaying, isLoading, currentTime, duration, buffered, volume, isMuted,
-        playbackRate, isSeeking, currentTrack, playlist, currentTrackIndex,
-        error, loop, shuffle, isFullscreen, isPiP, captionsEnabled,
-        selectedQuality, availableQualities,
-        play, pause, togglePlay, seek, seekForward, seekBackward,
-        setVolume, volumeUp, volumeDown, toggleMute, setPlaybackRate,
-        nextTrack, previousTrack, playTrack, toggleLoop, toggleShuffle,
-        toggleFullscreen, togglePiP, toggleCaptions, setQuality,
-        setSeeking, clearError, playerId, allowMultiple, registerVideo,
-      ]
+        isPlaying,
+        isLoading,
+        currentTime,
+        duration,
+        buffered,
+        volume,
+        isMuted,
+        playbackRate,
+        isSeeking,
+        currentTrack,
+        playlist,
+        currentTrackIndex,
+        error,
+        loop,
+        shuffle,
+        isFullscreen,
+        isPiP,
+        captionsEnabled,
+        selectedQuality,
+        availableQualities,
+        play,
+        pause,
+        togglePlay,
+        seek,
+        seekForward,
+        seekBackward,
+        setVolume,
+        volumeUp,
+        volumeDown,
+        toggleMute,
+        setPlaybackRate,
+        nextTrack,
+        previousTrack,
+        playTrack,
+        toggleLoop,
+        toggleShuffle,
+        toggleFullscreen,
+        togglePiP,
+        toggleCaptions,
+        setQuality,
+        setSeeking,
+        clearError,
+        playerId,
+        allowMultiple,
+        registerVideo,
+      ],
     );
 
     return (
@@ -635,20 +836,20 @@ export const VideoPlayerRoot = forwardRef<HTMLDivElement, VideoPlayerRootProps>(
         <div
           ref={(node: HTMLDivElement | null) => {
             (containerRef as React.RefObject<HTMLDivElement | null>).current = node;
-            if (typeof ref === "function") ref(node);
+            if (typeof ref === 'function') ref(node);
             else if (ref) (ref as React.RefObject<HTMLDivElement | null>).current = node;
           }}
           role="region"
           aria-label="Video Player"
           tabIndex={-1}
           onKeyDown={handleKeyDown}
-          className={clsx("relative overflow-hidden", className)}
+          className={clsx('relative overflow-hidden', className)}
         >
           {children}
         </div>
       </VideoPlayerContext.Provider>
     );
-  }
+  },
 );
 
-VideoPlayerRoot.displayName = "VideoPlayer.Root";
+VideoPlayerRoot.displayName = 'VideoPlayer.Root';

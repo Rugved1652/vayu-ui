@@ -37,8 +37,7 @@ export const useTimeoutEntry: HookRegistryEntry = {
   targetPath: 'src/hooks',
 
   // ── Signature ─────────────────────────────────────────
-  signature:
-    'function useTimeout(callback: () => void, ms: number): { clearTimeout: () => void }',
+  signature: 'function useTimeout(callback: () => void, ms: number): { clearTimeout: () => void }',
   parameters: [
     {
       name: 'callback',

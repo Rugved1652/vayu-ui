@@ -2,12 +2,7 @@
 
 import { useState } from 'react';
 import { GripVertical } from 'lucide-react';
-import {
-  Accordion,
-  Badge,
-  Divider,
-  Draggable,
-} from 'vayu-ui';
+import { Accordion, Badge, Divider, Draggable } from 'vayu-ui';
 import { taskSeed } from './constants';
 
 export function DraggableTasksPanel() {
@@ -59,7 +54,8 @@ export function DraggableTasksPanel() {
             <Accordion.Header itemId="task-help">How do tasks work?</Accordion.Header>
             <Accordion.Body itemId="task-help">
               <p className="text-xs text-muted-content">
-                Drag items by their handle to reorder. Tasks represent component groups in your project.
+                Drag items by their handle to reorder. Tasks represent component groups in your
+                project.
               </p>
             </Accordion.Body>
           </Accordion.Item>
@@ -67,7 +63,8 @@ export function DraggableTasksPanel() {
             <Accordion.Header itemId="customization">Can I customize the tasks?</Accordion.Header>
             <Accordion.Body itemId="customization">
               <p className="text-xs text-muted-content">
-                Yes, you can completely customize the visual style and behavior of the tasks using our design tokens.
+                Yes, you can completely customize the visual style and behavior of the tasks using
+                our design tokens.
               </p>
             </Accordion.Body>
           </Accordion.Item>
@@ -75,7 +72,8 @@ export function DraggableTasksPanel() {
             <Accordion.Header itemId="data-source">Where is the data stored?</Accordion.Header>
             <Accordion.Body itemId="data-source">
               <p className="text-xs text-muted-content">
-                Currently, it's stored in local state. You can easily connect the Draggable component to your own backend.
+                Currently, it's stored in local state. You can easily connect the Draggable
+                component to your own backend.
               </p>
             </Accordion.Body>
           </Accordion.Item>

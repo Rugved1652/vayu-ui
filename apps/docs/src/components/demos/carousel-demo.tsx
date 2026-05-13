@@ -31,7 +31,9 @@ export default function CarouselDemo() {
           <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
             <div>
               <Typography.H5>Featured Gallery</Typography.H5>
-              <Typography.P variant="secondary" className="text-sm">WCAG Compliant Interactive Media</Typography.P>
+              <Typography.P variant="secondary" className="text-sm">
+                WCAG Compliant Interactive Media
+              </Typography.P>
             </div>
           </header>
 

@@ -81,8 +81,10 @@ export interface CommandBoxRootProps extends Omit<HTMLAttributes<HTMLDivElement>
   loading?: boolean;
 }
 
-export interface CommandBoxInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
+export interface CommandBoxInputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange'
+> {
   placeholder?: string;
   icon?: ReactNode;
 }
@@ -91,8 +93,10 @@ export interface CommandBoxListProps extends HTMLAttributes<HTMLDivElement> {
   maxHeight?: string;
 }
 
-export interface CommandBoxItemProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'onSelect'> {
+export interface CommandBoxItemProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  'id' | 'onSelect'
+> {
   id: string;
   disabled?: boolean;
   shortcut?: string[];

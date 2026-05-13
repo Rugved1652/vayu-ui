@@ -18,7 +18,17 @@ import { Loader2 } from 'lucide-react';
 
 export const ColorPickerTrigger = forwardRef<HTMLButtonElement, ColorPickerTriggerProps>(
   ({ size = 'md', className, ...props }, ref) => {
-    const { color, open, disabled, loading, validationState, setOpen, triggerRef, dropdownId, labelId } = useColorPicker();
+    const {
+      color,
+      open,
+      disabled,
+      loading,
+      validationState,
+      setOpen,
+      triggerRef,
+      dropdownId,
+      labelId,
+    } = useColorPicker();
 
     const sizeClasses = {
       sm: 'w-8 h-8',

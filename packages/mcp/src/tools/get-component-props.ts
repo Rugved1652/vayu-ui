@@ -3,7 +3,8 @@ import { registerTool } from '../lib/register-tool.js';
 import { findComponent } from '../lib/registry.js';
 
 export function registerGetComponentProps(server: Parameters<typeof registerTool>[0]) {
-  registerTool(server,
+  registerTool(
+    server,
     'get_component_props',
     'Get all props for a component including root props and sub-component props with types, defaults, descriptions, and accepted values.',
     {
@@ -14,7 +15,12 @@ export function registerGetComponentProps(server: Parameters<typeof registerTool
       const entry = findComponent(slug);
       if (!entry) {
         return {
-          content: [{ type: 'text' as const, text: JSON.stringify({ error: `No component found for slug "${slug}"` }) }],
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: `No component found for slug "${slug}"` }),
+            },
+          ],
           isError: true,
         };
       }

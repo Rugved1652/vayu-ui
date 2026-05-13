@@ -2,10 +2,7 @@
   "mcpServers": {
     "vayu-ui": {
       "command": "npx",
-      "args": [
-        "-y",
-        "vayu-ui-mcp"
-      ]
+      "args": ["-y", "vayu-ui-mcp"]
     }
   }
 }

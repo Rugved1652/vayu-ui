@@ -61,45 +61,45 @@ Add the following to your AI tool's MCP config file:
 
 ### Discovery
 
-| Tool | Description |
-| --- | --- |
+| Tool              | Description                                                              |
+| ----------------- | ------------------------------------------------------------------------ |
 | `list_components` | List all components and hooks with optional filters by type and category |
-| `find_component` | Natural language search with relevance scoring (returns top 5 matches) |
+| `find_component`  | Natural language search with relevance scoring (returns top 5 matches)   |
 
 ### Component Detail
 
-| Tool | Description |
-| --- | --- |
-| `get_component_summary` | Name, type, category, description, tags, and use cases |
-| `get_component_props` | All props for root and sub-components with types and defaults |
-| `get_component_variants` | Visual variants and sizes with default values |
-| `get_component_states` | Interactive states (loading, disabled, open, etc.) |
-| `get_component_events` | Event handlers with TypeScript signatures |
-| `get_component_a11y` | Accessibility info (ARIA, keyboard nav, focus, WCAG compliance) |
-| `get_component_do_not` | Anti-patterns to avoid with bad vs. good code examples |
-| `get_component_dependencies` | NPM packages and registry dependencies |
-| `get_component_peer_components` | Frequently co-used components |
-| `get_component_composition` | Compound component structure (sub-components, hooks) |
-| `get_component_example` | Code examples filterable by tag |
+| Tool                            | Description                                                     |
+| ------------------------------- | --------------------------------------------------------------- |
+| `get_component_summary`         | Name, type, category, description, tags, and use cases          |
+| `get_component_props`           | All props for root and sub-components with types and defaults   |
+| `get_component_variants`        | Visual variants and sizes with default values                   |
+| `get_component_states`          | Interactive states (loading, disabled, open, etc.)              |
+| `get_component_events`          | Event handlers with TypeScript signatures                       |
+| `get_component_a11y`            | Accessibility info (ARIA, keyboard nav, focus, WCAG compliance) |
+| `get_component_do_not`          | Anti-patterns to avoid with bad vs. good code examples          |
+| `get_component_dependencies`    | NPM packages and registry dependencies                          |
+| `get_component_peer_components` | Frequently co-used components                                   |
+| `get_component_composition`     | Compound component structure (sub-components, hooks)            |
+| `get_component_example`         | Code examples filterable by tag                                 |
 
 ### Code Generation
 
-| Tool | Description |
-| --- | --- |
+| Tool                       | Description                                                      |
+| -------------------------- | ---------------------------------------------------------------- |
 | `scaffold_component_usage` | Generate working TSX code snippets with imports and dependencies |
 
 ### Hooks
 
-| Tool | Description |
-| --- | --- |
+| Tool               | Description                                             |
+| ------------------ | ------------------------------------------------------- |
 | `get_hook_details` | Full API details — signature, parameters, return values |
 
 ### Design System
 
-| Tool | Description |
-| --- | --- |
+| Tool                | Description                                                    |
+| ------------------- | -------------------------------------------------------------- |
 | `get_install_guide` | CLI commands and imports needed to install and use a component |
-| `get_design_tokens` | Design tokens (colors, radius, shadows) with Tailwind classes |
+| `get_design_tokens` | Design tokens (colors, radius, shadows) with Tailwind classes  |
 
 ---
 

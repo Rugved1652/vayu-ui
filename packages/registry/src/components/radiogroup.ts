@@ -77,8 +77,7 @@ export const radioGroupEntry: ComponentRegistryEntry = {
           name: 'value',
           type: 'string',
           required: true,
-          description:
-            'Unique value for this radio item, used as the selected value when chosen',
+          description: 'Unique value for this radio item, used as the selected value when chosen',
         },
         {
           name: 'label',
@@ -90,16 +89,14 @@ export const radioGroupEntry: ComponentRegistryEntry = {
           name: 'description',
           type: 'string',
           required: false,
-          description:
-            'Secondary text displayed below the label for additional context',
+          description: 'Secondary text displayed below the label for additional context',
         },
         {
           name: 'disabled',
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description:
-            'Disables this specific radio item regardless of group disabled state',
+          description: 'Disables this specific radio item regardless of group disabled state',
         },
       ],
     },
@@ -120,8 +117,7 @@ export const radioGroupEntry: ComponentRegistryEntry = {
       type: 'string',
       required: false,
       defaultValue: "''",
-      description:
-        'Initial selected value for uncontrolled mode. Ignored when value prop is set.',
+      description: 'Initial selected value for uncontrolled mode. Ignored when value prop is set.',
     },
     {
       name: 'onChange',
@@ -170,15 +166,13 @@ export const radioGroupEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description:
-        'Displays the group in an error state with invalid styling and error text.',
+      description: 'Displays the group in an error state with invalid styling and error text.',
     },
     {
       name: 'errorText',
       type: 'string',
       required: false,
-      description:
-        'Error message displayed below the radio items when error is true.',
+      description: 'Error message displayed below the radio items when error is true.',
     },
     {
       name: 'required',
@@ -301,8 +295,7 @@ export const radioGroupEntry: ComponentRegistryEntry = {
       },
       {
         key: 'Shift+Tab',
-        behavior:
-          'Moves focus to the previous radio item or out of the group',
+        behavior: 'Moves focus to the previous radio item or out of the group',
       },
       {
         key: 'Space',
@@ -396,8 +389,7 @@ export default function BasicDemo() {
     },
     {
       title: 'Horizontal Layout',
-      description:
-        'Radio buttons arranged horizontally using the orientation prop.',
+      description: 'Radio buttons arranged horizontally using the orientation prop.',
       code: `import { RadioGroup } from 'vayu-ui';
 import { useState } from 'react';
 
@@ -423,8 +415,7 @@ export default function HorizontalDemo() {
     },
     {
       title: 'Error State with Disabled Item',
-      description:
-        'A radio group showing validation error styling with one disabled option.',
+      description: 'A radio group showing validation error styling with one disabled option.',
       code: `import { RadioGroup } from 'vayu-ui';
 
 export default function ErrorDemo() {

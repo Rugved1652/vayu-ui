@@ -1,17 +1,11 @@
-"use client";
+'use client';
 
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { cn, useMergeRefs } from "../../utils";
-import { ContextMenuContext, useTypeahead } from "./hooks";
-import { useOnClickOutside } from "../../hooks/useOnClickOutside";
-import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
-import type { ContextMenuProps } from "./types";
+import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import { cn, useMergeRefs } from '../../utils';
+import { ContextMenuContext, useTypeahead } from './hooks';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import { useLockBodyScroll } from '../../hooks/useLockBodyScroll';
+import type { ContextMenuProps } from './types';
 
 const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
   ({ children, onOpenChange, className, ...props }, ref) => {
@@ -29,28 +23,25 @@ const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
         setIsOpen(open);
         onOpenChange?.(open);
       },
-      [onOpenChange]
+      [onOpenChange],
     );
 
     const closeMenu = useCallback(() => {
       setIsOpenWrapped(false);
     }, [setIsOpenWrapped]);
 
-    useOnClickOutside(
-      [rootRef, menuRef] as React.RefObject<HTMLElement>[],
-      () => {
-        if (isOpen) closeMenu();
-      },
-    );
+    useOnClickOutside([rootRef, menuRef] as React.RefObject<HTMLElement>[], () => {
+      if (isOpen) closeMenu();
+    });
 
     // Escape to close
     useEffect(() => {
       if (!isOpen) return;
       const handleKey = (e: KeyboardEvent) => {
-        if (e.key === "Escape") closeMenu();
+        if (e.key === 'Escape') closeMenu();
       };
-      document.addEventListener("keydown", handleKey);
-      return () => document.removeEventListener("keydown", handleKey);
+      document.addEventListener('keydown', handleKey);
+      return () => document.removeEventListener('keydown', handleKey);
     }, [isOpen, closeMenu]);
 
     const mergedRef = useMergeRefs(rootRef, ref);
@@ -71,9 +62,9 @@ const ContextMenuRoot = forwardRef<HTMLDivElement, ContextMenuProps>(
         </div>
       </ContextMenuContext.Provider>
     );
-  }
+  },
 );
 
-ContextMenuRoot.displayName = "ContextMenu";
+ContextMenuRoot.displayName = 'ContextMenu';
 
 export { ContextMenuRoot };

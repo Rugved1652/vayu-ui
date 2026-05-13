@@ -5,10 +5,7 @@ import { forwardRef } from 'react';
 import { clsx } from 'clsx';
 import { useOTPInput } from './OTPInput';
 import type { OTPInputSlotProps } from './types';
-import {
-  inputSlotSizeStyles,
-  inputBorderStyles,
-} from '../../utils/input-styles';
+import { inputSlotSizeStyles, inputBorderStyles } from '../../utils/input-styles';
 
 const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
   ({ index, className, ...props }, ref) => {
@@ -31,9 +28,7 @@ const OTPInputSlot = forwardRef<HTMLDivElement, OTPInputSlotProps>(
           // Overlap with previous slot to avoid double 4px seams
           '[&:not(:first-child)]:-ml-[2px]',
           // Border color — brand for active/filled, otherwise state color
-          showBrand
-            ? 'border-brand z-10'
-            : inputBorderStyles[validationState],
+          showBrand ? 'border-brand z-10' : inputBorderStyles[validationState],
           // Text
           validationState === 'error' ? 'text-destructive' : 'text-surface-content',
           // Corners — only first and last slot in their container get rounding

@@ -2,15 +2,7 @@
 
 import { useState } from 'react';
 import { ArrowRight, Calendar, Info } from 'lucide-react';
-import {
-  Alert,
-  Badge,
-  Button,
-  DatePicker,
-  Divider,
-  Switch,
-  Timepicker,
-} from 'vayu-ui';
+import { Alert, Badge, Button, DatePicker, Divider, Switch, Timepicker } from 'vayu-ui';
 
 export function SchedulePanel() {
   const [allDay, setAllDay] = useState(false);

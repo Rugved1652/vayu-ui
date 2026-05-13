@@ -1,10 +1,16 @@
-"use client";
+'use client';
 
-import React, { forwardRef, useCallback, useContext, useRef } from "react";
-import { cn } from "../../utils";
-import { RadioGroupContext, useContextMenuCtx, getFocusableItems, useItemKeyDown, baseItemStyles } from "./hooks";
-import { SubContext } from "./hooks";
-import type { ContextMenuRadioGroupProps, ContextMenuRadioItemProps } from "./types";
+import React, { forwardRef, useCallback, useContext, useRef } from 'react';
+import { cn } from '../../utils';
+import {
+  RadioGroupContext,
+  useContextMenuCtx,
+  getFocusableItems,
+  useItemKeyDown,
+  baseItemStyles,
+} from './hooks';
+import { SubContext } from './hooks';
+import type { ContextMenuRadioGroupProps, ContextMenuRadioItemProps } from './types';
 
 // ─── RadioGroup ──────────────────────────────────────────────
 
@@ -18,7 +24,7 @@ const ContextMenuRadioGroup: React.FC<ContextMenuRadioGroupProps> = ({
   </RadioGroupContext.Provider>
 );
 
-ContextMenuRadioGroup.displayName = "ContextMenu.RadioGroup";
+ContextMenuRadioGroup.displayName = 'ContextMenu.RadioGroup';
 
 // ─── RadioItem ───────────────────────────────────────────────
 
@@ -41,7 +47,7 @@ const ContextMenuRadioItem = forwardRef<HTMLButtonElement, ContextMenuRadioItemP
         const items = getFocusableItems(menuEl);
 
         switch (e.key) {
-          case "ArrowDown":
+          case 'ArrowDown':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) {
@@ -49,7 +55,7 @@ const ContextMenuRadioItem = forwardRef<HTMLButtonElement, ContextMenuRadioItemP
               items[(idx + 1) % items.length]?.focus({ preventScroll: true });
             }
             break;
-          case "ArrowUp":
+          case 'ArrowUp':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) {
@@ -57,17 +63,17 @@ const ContextMenuRadioItem = forwardRef<HTMLButtonElement, ContextMenuRadioItemP
               items[idx <= 0 ? items.length - 1 : idx - 1]?.focus({ preventScroll: true });
             }
             break;
-          case "Home":
+          case 'Home':
             e.preventDefault();
             e.stopPropagation();
             items[0]?.focus({ preventScroll: true });
             break;
-          case "End":
+          case 'End':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) items[items.length - 1]?.focus({ preventScroll: true });
             break;
-          case "Escape":
+          case 'Escape':
             e.preventDefault();
             e.stopPropagation();
             closeMenu();
@@ -78,7 +84,7 @@ const ContextMenuRadioItem = forwardRef<HTMLButtonElement, ContextMenuRadioItemP
             break;
         }
       },
-      [disabled, handleActionKeyDown, closeMenu]
+      [disabled, handleActionKeyDown, closeMenu],
     );
 
     return (
@@ -90,7 +96,7 @@ const ContextMenuRadioItem = forwardRef<HTMLButtonElement, ContextMenuRadioItemP
         aria-disabled={disabled || undefined}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-        className={cn(baseItemStyles(disabled), className, "w-full")}
+        className={cn(baseItemStyles(disabled), className, 'w-full')}
         {...props}
       >
         <span className="shrink-0 w-4 h-4 flex items-center justify-center" aria-hidden="true">
@@ -109,15 +115,13 @@ const ContextMenuRadioItem = forwardRef<HTMLButtonElement, ContextMenuRadioItemP
         )}
         <span className="truncate">{children}</span>
         {shortcut && (
-          <span className="text-xs text-muted-content shrink-0 ml-auto">
-            {shortcut}
-          </span>
+          <span className="text-xs text-muted-content shrink-0 ml-auto">{shortcut}</span>
         )}
       </button>
     );
-  }
+  },
 );
 
-ContextMenuRadioItem.displayName = "ContextMenu.RadioItem";
+ContextMenuRadioItem.displayName = 'ContextMenu.RadioItem';
 
 export { ContextMenuRadioGroup, ContextMenuRadioItem };

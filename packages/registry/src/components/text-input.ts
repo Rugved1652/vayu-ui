@@ -40,24 +40,91 @@ export const textInputEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'TextInput',
   files: [
-    { name: 'TextInput.tsx', description: 'Root component with context provider managing value, focus, validation, and state for all sub-components' },
-    { name: 'Input.tsx', description: 'Base input element with ARIA attributes (labelledby, describedby, invalid, required) and icon slot support' },
-    { name: 'TextInputField.tsx', description: 'Field wrapper applying size-based padding, validation border colors, and focus ring styling' },
-    { name: 'TextInputLabel.tsx', description: 'Label with htmlFor linkage, required asterisk indicator, and optional badge support' },
-    { name: 'TextInputDescription.tsx', description: 'Helper text linked to the input via aria-describedby' },
-    { name: 'TextInputErrorMessage.tsx', description: 'Error message with role="alert" and aria-live, conditionally shown when validationState is "error"' },
-    { name: 'TextInputWarningMessage.tsx', description: 'Warning message with role="status" and aria-live, conditionally shown when validationState is "warning"' },
-    { name: 'TextInputSuccessMessage.tsx', description: 'Success message with role="status" and aria-live, conditionally shown when validationState is "success"' },
-    { name: 'TextInputIcon.tsx', description: 'Icon wrapper for left/right icons within the field' },
-    { name: 'TextInputClearButton.tsx', description: 'Clear button that appears when the input has a value, with aria-label="Clear input"' },
-    { name: 'TextInputCharacterCount.tsx', description: 'Character count display with configurable visibility (always, focus, near-limit) and threshold' },
-    { name: 'TextInputLoadingSpinner.tsx', description: 'Animated spinner shown when the loading prop is true' },
-    { name: 'TextInputPasswordInput.tsx', description: 'Password input with visibility toggle (Eye/EyeClosed icons) and aria-label on toggle button' },
-    { name: 'TextInputNumberInput.tsx', description: 'Number input with keyboard filtering, paste validation, and min/max blur constraints per numberType' },
-    { name: 'TextInputSearchInput.tsx', description: 'Search input with built-in Search icon from lucide-react' },
-    { name: 'types.ts', description: 'TypeScript type definitions for all component props, context value, and union types' },
-    { name: 'index.ts', description: 'Barrel export file assembling the compound component and re-exporting types' },
-    { name: 'README.md', description: 'Component documentation and usage guidelines', optional: true },
+    {
+      name: 'TextInput.tsx',
+      description:
+        'Root component with context provider managing value, focus, validation, and state for all sub-components',
+    },
+    {
+      name: 'Input.tsx',
+      description:
+        'Base input element with ARIA attributes (labelledby, describedby, invalid, required) and icon slot support',
+    },
+    {
+      name: 'TextInputField.tsx',
+      description:
+        'Field wrapper applying size-based padding, validation border colors, and focus ring styling',
+    },
+    {
+      name: 'TextInputLabel.tsx',
+      description:
+        'Label with htmlFor linkage, required asterisk indicator, and optional badge support',
+    },
+    {
+      name: 'TextInputDescription.tsx',
+      description: 'Helper text linked to the input via aria-describedby',
+    },
+    {
+      name: 'TextInputErrorMessage.tsx',
+      description:
+        'Error message with role="alert" and aria-live, conditionally shown when validationState is "error"',
+    },
+    {
+      name: 'TextInputWarningMessage.tsx',
+      description:
+        'Warning message with role="status" and aria-live, conditionally shown when validationState is "warning"',
+    },
+    {
+      name: 'TextInputSuccessMessage.tsx',
+      description:
+        'Success message with role="status" and aria-live, conditionally shown when validationState is "success"',
+    },
+    {
+      name: 'TextInputIcon.tsx',
+      description: 'Icon wrapper for left/right icons within the field',
+    },
+    {
+      name: 'TextInputClearButton.tsx',
+      description:
+        'Clear button that appears when the input has a value, with aria-label="Clear input"',
+    },
+    {
+      name: 'TextInputCharacterCount.tsx',
+      description:
+        'Character count display with configurable visibility (always, focus, near-limit) and threshold',
+    },
+    {
+      name: 'TextInputLoadingSpinner.tsx',
+      description: 'Animated spinner shown when the loading prop is true',
+    },
+    {
+      name: 'TextInputPasswordInput.tsx',
+      description:
+        'Password input with visibility toggle (Eye/EyeClosed icons) and aria-label on toggle button',
+    },
+    {
+      name: 'TextInputNumberInput.tsx',
+      description:
+        'Number input with keyboard filtering, paste validation, and min/max blur constraints per numberType',
+    },
+    {
+      name: 'TextInputSearchInput.tsx',
+      description: 'Search input with built-in Search icon from lucide-react',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for all component props, context value, and union types',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file assembling the compound component and re-exporting types',
+    },
+    {
+      name: 'README.md',
+      description: 'Component documentation and usage guidelines',
+      optional: true,
+    },
   ],
   targetPath: 'src/components',
 
@@ -67,7 +134,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'Label',
       fileName: 'TextInputLabel.tsx',
-      description: 'Renders a label element linked to the input via htmlFor/id. Shows a required asterisk when the root required prop is true, or an "(optional)" badge when the optional prop is set.',
+      description:
+        'Renders a label element linked to the input via htmlFor/id. Shows a required asterisk when the root required prop is true, or an "(optional)" badge when the optional prop is set.',
       props: [
         {
           name: 'children',
@@ -94,7 +162,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'Field',
       fileName: 'TextInputField.tsx',
-      description: 'Wraps the input and icons in a styled container. Applies size-based padding, validation border colors (destructive, warning, success), and focus ring styling. Handles focus/blur events to update context state.',
+      description:
+        'Wraps the input and icons in a styled container. Applies size-based padding, validation border colors (destructive, warning, success), and focus ring styling. Handles focus/blur events to update context state.',
       props: [
         {
           name: 'children',
@@ -114,7 +183,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'Input',
       fileName: 'Input.tsx',
-      description: 'The base HTML input element with automatic ARIA attributes (aria-labelledby, aria-describedby, aria-invalid, aria-required). Merges the internal ref with a forwarded ref. Supports left and right icon slots.',
+      description:
+        'The base HTML input element with automatic ARIA attributes (aria-labelledby, aria-describedby, aria-invalid, aria-required). Merges the internal ref with a forwarded ref. Supports left and right icon slots.',
       props: [
         {
           name: 'leftIcon',
@@ -130,7 +200,7 @@ export const textInputEntry: ComponentRegistryEntry = {
         },
         {
           name: 'type',
-          type: "InputType",
+          type: 'InputType',
           required: false,
           description: 'Overrides the inputType set on the root TextInput component.',
           options: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'],
@@ -147,7 +217,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'PasswordInput',
       fileName: 'TextInputPasswordInput.tsx',
-      description: 'Password-specific input with a visibility toggle button (Eye/EyeClosed icons). Automatically shows/hides the password. Should be used inside TextInput.Field when the root inputType is "password".',
+      description:
+        'Password-specific input with a visibility toggle button (Eye/EyeClosed icons). Automatically shows/hides the password. Should be used inside TextInput.Field when the root inputType is "password".',
       props: [
         {
           name: 'leftIcon',
@@ -159,11 +230,12 @@ export const textInputEntry: ComponentRegistryEntry = {
           name: 'rightIcon',
           type: 'React.ReactNode',
           required: false,
-          description: 'Icon element rendered on the right side of the input (shown alongside the visibility toggle).',
+          description:
+            'Icon element rendered on the right side of the input (shown alongside the visibility toggle).',
         },
         {
           name: 'type',
-          type: "InputType",
+          type: 'InputType',
           required: false,
           description: 'Overrides the inputType set on the root TextInput component.',
           options: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'],
@@ -180,14 +252,16 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'NumberInput',
       fileName: 'TextInputNumberInput.tsx',
-      description: 'Numeric input with keyboard filtering, paste validation, and blur constraints based on numberType. Supports integer, decimal, positive, and natural number modes with min/max enforcement.',
+      description:
+        'Numeric input with keyboard filtering, paste validation, and blur constraints based on numberType. Supports integer, decimal, positive, and natural number modes with min/max enforcement.',
       props: [
         {
           name: 'numberType',
-          type: "NumberType",
+          type: 'NumberType',
           required: false,
           defaultValue: "'decimal'",
-          description: 'Type of number validation to apply. Controls allowed keys, paste validation, and accepted character patterns.',
+          description:
+            'Type of number validation to apply. Controls allowed keys, paste validation, and accepted character patterns.',
           options: ['integer', 'decimal', 'positive', 'natural'],
         },
         {
@@ -206,20 +280,23 @@ export const textInputEntry: ComponentRegistryEntry = {
           name: 'step',
           type: 'number',
           required: false,
-          description: 'Step increment for the native number input. Passed through to the HTML input element.',
+          description:
+            'Step increment for the native number input. Passed through to the HTML input element.',
         },
       ],
     },
     {
       name: 'SearchInput',
       fileName: 'TextInputSearchInput.tsx',
-      description: 'Search-specific input with a built-in Search icon from lucide-react. Extends native input attributes (except type, value, onChange, size).',
+      description:
+        'Search-specific input with a built-in Search icon from lucide-react. Extends native input attributes (except type, value, onChange, size).',
       props: [],
     },
     {
       name: 'Description',
       fileName: 'TextInputDescription.tsx',
-      description: 'Helper text rendered below the field. Linked to the input via the auto-generated descriptionId and aria-describedby.',
+      description:
+        'Helper text rendered below the field. Linked to the input via the auto-generated descriptionId and aria-describedby.',
       props: [
         {
           name: 'children',
@@ -239,7 +316,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'ErrorMessage',
       fileName: 'TextInputErrorMessage.tsx',
-      description: 'Error message with an AlertCircle icon, role="alert", and aria-live="polite". Only rendered when the root validationState is "error".',
+      description:
+        'Error message with an AlertCircle icon, role="alert", and aria-live="polite". Only rendered when the root validationState is "error".',
       props: [
         {
           name: 'children',
@@ -259,7 +337,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'WarningMessage',
       fileName: 'TextInputWarningMessage.tsx',
-      description: 'Warning message with an AlertCircle icon, role="status", and aria-live="polite". Only rendered when the root validationState is "warning".',
+      description:
+        'Warning message with an AlertCircle icon, role="status", and aria-live="polite". Only rendered when the root validationState is "warning".',
       props: [
         {
           name: 'children',
@@ -279,7 +358,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'SuccessMessage',
       fileName: 'TextInputSuccessMessage.tsx',
-      description: 'Success message with a CheckCircle icon, role="status", and aria-live="polite". Only rendered when the root validationState is "success".',
+      description:
+        'Success message with a CheckCircle icon, role="status", and aria-live="polite". Only rendered when the root validationState is "success".',
       props: [
         {
           name: 'children',
@@ -299,7 +379,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'Icon',
       fileName: 'TextInputIcon.tsx',
-      description: 'Wrapper for rendering icons inside the field. Positions the icon and applies muted text color.',
+      description:
+        'Wrapper for rendering icons inside the field. Positions the icon and applies muted text color.',
       props: [
         {
           name: 'children',
@@ -319,7 +400,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'ClearButton',
       fileName: 'TextInputClearButton.tsx',
-      description: 'A button that clears the input value. Only visible when the input has a value. Uses an X icon and has aria-label="Clear input".',
+      description:
+        'A button that clears the input value. Only visible when the input has a value. Uses an X icon and has aria-label="Clear input".',
       props: [
         {
           name: 'onClear',
@@ -339,20 +421,23 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'CharacterCount',
       fileName: 'TextInputCharacterCount.tsx',
-      description: 'Displays current character count relative to maxLength. Supports configurable visibility (always, on focus, or near limit) with threshold-based color changes.',
+      description:
+        'Displays current character count relative to maxLength. Supports configurable visibility (always, on focus, or near limit) with threshold-based color changes.',
       props: [
         {
           name: 'maxLength',
           type: 'number',
           required: true,
-          description: 'Maximum allowed character count. Used to calculate remaining count and near-limit percentage.',
+          description:
+            'Maximum allowed character count. Used to calculate remaining count and near-limit percentage.',
         },
         {
           name: 'showCount',
           type: "'always' | 'focus' | 'near-limit'",
           required: false,
           defaultValue: "'always'",
-          description: 'When to display the character count: always, only when the input is focused, or only when near the limit.',
+          description:
+            'When to display the character count: always, only when the input is focused, or only when near the limit.',
           options: ['always', 'focus', 'near-limit'],
         },
         {
@@ -360,7 +445,8 @@ export const textInputEntry: ComponentRegistryEntry = {
           type: 'number',
           required: false,
           defaultValue: '0.8',
-          description: 'Fraction of maxLength at which the count is considered "near limit" and switches to warning color (0 to 1).',
+          description:
+            'Fraction of maxLength at which the count is considered "near limit" and switches to warning color (0 to 1).',
         },
         {
           name: 'className',
@@ -374,7 +460,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'LoadingSpinner',
       fileName: 'TextInputLoadingSpinner.tsx',
-      description: 'Animated spinner (Loader2 icon) shown inside the field when the root loading prop is true. Uses aria-label="Loading" for accessibility.',
+      description:
+        'Animated spinner (Loader2 icon) shown inside the field when the root loading prop is true. Uses aria-label="Loading" for accessibility.',
       props: [],
     },
   ],
@@ -386,7 +473,8 @@ export const textInputEntry: ComponentRegistryEntry = {
       name: 'value',
       type: 'string',
       required: false,
-      description: 'Controlled input value. When provided, the component operates in controlled mode.',
+      description:
+        'Controlled input value. When provided, the component operates in controlled mode.',
     },
     {
       name: 'defaultValue',
@@ -403,15 +491,16 @@ export const textInputEntry: ComponentRegistryEntry = {
     },
     {
       name: 'inputType',
-      type: "InputType",
+      type: 'InputType',
       required: false,
       defaultValue: "'text'",
-      description: 'The HTML input type. Determines which specialized input variant is used (e.g. password shows a toggle, number enables numeric filtering).',
+      description:
+        'The HTML input type. Determines which specialized input variant is used (e.g. password shows a toggle, number enables numeric filtering).',
       options: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'],
     },
     {
       name: 'size',
-      type: "InputSize",
+      type: 'InputSize',
       required: false,
       defaultValue: "'md'",
       description: 'Input size affecting padding, text size, and icon sizing.',
@@ -419,10 +508,11 @@ export const textInputEntry: ComponentRegistryEntry = {
     },
     {
       name: 'validationState',
-      type: "ValidationState",
+      type: 'ValidationState',
       required: false,
       defaultValue: "'default'",
-      description: 'Current validation state. Controls border color, ring color, and which message sub-component is visible.',
+      description:
+        'Current validation state. Controls border color, ring color, and which message sub-component is visible.',
       options: ['default', 'error', 'warning', 'success'],
     },
     {
@@ -444,7 +534,8 @@ export const textInputEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Marks the input as required. Shows a required asterisk on the Label and sets aria-required on the input.',
+      description:
+        'Marks the input as required. Shows a required asterisk on the Label and sets aria-required on the input.',
     },
     {
       name: 'loading',
@@ -477,14 +568,16 @@ export const textInputEntry: ComponentRegistryEntry = {
       prop: 'isFocused',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Applied when the input element has focus. Shows a focus ring on the Field wrapper and may trigger CharacterCount display in "focus" mode.',
+      description:
+        'Applied when the input element has focus. Shows a focus ring on the Field wrapper and may trigger CharacterCount display in "focus" mode.',
     },
     {
       name: 'disabled',
       prop: 'disabled',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Prevents user interaction with the input. Applied to the HTML input element via the disabled attribute.',
+      description:
+        'Prevents user interaction with the input. Applied to the HTML input element via the disabled attribute.',
     },
     {
       name: 'readOnly',
@@ -498,14 +591,16 @@ export const textInputEntry: ComponentRegistryEntry = {
       prop: 'required',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Marks the input as required. Sets aria-required="true" and shows an asterisk on the Label.',
+      description:
+        'Marks the input as required. Sets aria-required="true" and shows an asterisk on the Label.',
     },
     {
       name: 'loading',
       prop: 'loading',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Shows a spinning Loader2 icon inside the field via the LoadingSpinner sub-component.',
+      description:
+        'Shows a spinning Loader2 icon inside the field via the LoadingSpinner sub-component.',
     },
     {
       name: 'validation',
@@ -513,7 +608,8 @@ export const textInputEntry: ComponentRegistryEntry = {
       values: ['default', 'error', 'warning', 'success'],
       isBoolean: false,
       defaultValue: "'default'",
-      description: 'Controls the visual validation state. Applies themed border and ring colors, and determines which message sub-component (Error, Warning, Success) is visible.',
+      description:
+        'Controls the visual validation state. Applies themed border and ring colors, and determines which message sub-component (Error, Warning, Success) is visible.',
     },
   ],
 
@@ -522,7 +618,8 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'onChange',
       signature: '(value: string) => void',
-      description: 'Fired each time the input value changes. Receives the new string value, not a React ChangeEvent.',
+      description:
+        'Fired each time the input value changes. Receives the new string value, not a React ChangeEvent.',
     },
   ],
 
@@ -531,17 +628,20 @@ export const textInputEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-labelledby',
-        description: 'Automatically links the input to the Label component via a generated labelId. Applied to the Input element.',
+        description:
+          'Automatically links the input to the Label component via a generated labelId. Applied to the Input element.',
         managedByComponent: true,
       },
       {
         name: 'aria-describedby',
-        description: 'References the Description element via a generated descriptionId. When validationState is "error", also includes the ErrorMessage element via errorId.',
+        description:
+          'References the Description element via a generated descriptionId. When validationState is "error", also includes the ErrorMessage element via errorId.',
         managedByComponent: true,
       },
       {
         name: 'aria-invalid',
-        description: 'Set to true on the Input element when validationState is "error", indicating a validation error to screen readers.',
+        description:
+          'Set to true on the Input element when validationState is "error", indicating a validation error to screen readers.',
         managedByComponent: true,
       },
       {
@@ -551,17 +651,20 @@ export const textInputEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-label',
-        description: 'Applied to the ClearButton ("Clear input"), LoadingSpinner ("Loading"), and the PasswordInput toggle button ("Show password"/"Hide password").',
+        description:
+          'Applied to the ClearButton ("Clear input"), LoadingSpinner ("Loading"), and the PasswordInput toggle button ("Show password"/"Hide password").',
         managedByComponent: true,
       },
       {
         name: 'aria-live',
-        description: 'Set to "polite" on ErrorMessage (role="alert"), WarningMessage (role="status"), SuccessMessage (role="status"), and CharacterCount (aria-atomic="true").',
+        description:
+          'Set to "polite" on ErrorMessage (role="alert"), WarningMessage (role="status"), SuccessMessage (role="status"), and CharacterCount (aria-atomic="true").',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Set to "true" on required asterisk icons, validation message icons, and the PasswordInput toggle icon to prevent screen reader announcement.',
+        description:
+          'Set to "true" on required asterisk icons, validation message icons, and the PasswordInput toggle icon to prevent screen reader announcement.',
         managedByComponent: true,
       },
     ],
@@ -583,10 +686,7 @@ export const textInputEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'lucide-react' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'lucide-react' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -640,7 +740,8 @@ export default function BasicInput() {
     },
     {
       title: 'Required and Optional Fields',
-      description: 'A required field showing a red asterisk and an optional field with an "(optional)" badge.',
+      description:
+        'A required field showing a red asterisk and an optional field with an "(optional)" badge.',
       code: `import { TextInput } from 'vayu-ui';
 import { User } from 'lucide-react';
 
@@ -712,7 +813,8 @@ export default function SearchInput() {
     },
     {
       title: 'Number Inputs with Constraints',
-      description: 'Natural number, integer, and positive decimal inputs with different numberType constraints and min/max clamping.',
+      description:
+        'Natural number, integer, and positive decimal inputs with different numberType constraints and min/max clamping.',
       code: `import { TextInput } from 'vayu-ui';
 import { DollarSign } from 'lucide-react';
 
@@ -756,7 +858,8 @@ export default function NumberInputs() {
     },
     {
       title: 'Validation States',
-      description: 'Inputs demonstrating error, warning, and success validation states with their respective message components.',
+      description:
+        'Inputs demonstrating error, warning, and success validation states with their respective message components.',
       code: `import { TextInput } from 'vayu-ui';
 import { Mail, User } from 'lucide-react';
 
@@ -890,31 +993,36 @@ export default function InputStates() {
       title: 'Using sub-components outside TextInput root',
       bad: '<div><TextInput.Input placeholder="..." /></div>',
       good: '<TextInput><TextInput.Field><TextInput.Input placeholder="..." /></TextInput.Field></TextInput>',
-      reason: 'Sub-components like Input, Label, and Field read state from TextInputContext via useTextInput(). Using them outside the TextInput root throws an error because no context provider exists.',
+      reason:
+        'Sub-components like Input, Label, and Field read state from TextInputContext via useTextInput(). Using them outside the TextInput root throws an error because no context provider exists.',
     },
     {
       title: 'Using onChange with React.ChangeEvent signature',
       bad: '<TextInput onChange={(e: React.ChangeEvent<HTMLInputElement>) => ...} />',
       good: '<TextInput onChange={(value: string) => ...} />',
-      reason: "The TextInput onChange prop receives a string (the current value), not a React ChangeEvent. The component's types omit the HTML input onChange to prevent this mistake.",
+      reason:
+        "The TextInput onChange prop receives a string (the current value), not a React ChangeEvent. The component's types omit the HTML input onChange to prevent this mistake.",
     },
     {
       title: 'Setting inputType="password" without PasswordInput',
       bad: '<TextInput inputType="password"><TextInput.Field><TextInput.Input /></TextInput.Field></TextInput>',
       good: '<TextInput inputType="password"><TextInput.Field><TextInput.PasswordInput /></TextInput.Field></TextInput>',
-      reason: 'When inputType is "password", use TextInput.PasswordInput instead of TextInput.Input. PasswordInput provides the visibility toggle button with proper aria-label for accessibility.',
+      reason:
+        'When inputType is "password", use TextInput.PasswordInput instead of TextInput.Input. PasswordInput provides the visibility toggle button with proper aria-label for accessibility.',
     },
     {
       title: 'Hardcoding validation colors on the Field',
       bad: '<TextInput validationState="error"><TextInput.Field className="border-red-500"><TextInput.Input /></TextInput.Field></TextInput>',
       good: '<TextInput validationState="error"><TextInput.Field><TextInput.Input /></TextInput.Field></TextInput>',
-      reason: 'The Field component already applies design-token-based validation colors (border-destructive, border-warning, border-success). Hardcoding colors bypasses the design system and does not update with theme changes.',
+      reason:
+        'The Field component already applies design-token-based validation colors (border-destructive, border-warning, border-success). Hardcoding colors bypasses the design system and does not update with theme changes.',
     },
     {
       title: 'Placing ErrorMessage outside the TextInput root',
       bad: '<TextInput validationState="error">...</TextInput><p className="text-red-500">Error message</p>',
       good: '<TextInput validationState="error"><TextInput.Label>Email</TextInput.Label><TextInput.Field><TextInput.Input /></TextInput.Field><TextInput.ErrorMessage>Please enter a valid email.</TextInput.ErrorMessage></TextInput>',
-      reason: 'The ErrorMessage sub-component is automatically linked to the input via aria-describedby using a generated errorId. Placing it outside the TextInput root breaks this association and the message will not be announced by screen readers.',
+      reason:
+        'The ErrorMessage sub-component is automatically linked to the input via aria-describedby using a generated errorId. Placing it outside the TextInput root breaks this association and the message will not be announced by screen readers.',
     },
   ],
 };

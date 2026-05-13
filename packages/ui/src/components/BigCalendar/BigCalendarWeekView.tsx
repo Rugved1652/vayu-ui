@@ -31,10 +31,7 @@ export const WeekView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement
 
     const cellRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    const cellIndex = useCallback(
-      (hourIdx: number, dayIdx: number) => hourIdx * 7 + dayIdx,
-      [],
-    );
+    const cellIndex = useCallback((hourIdx: number, dayIdx: number) => hourIdx * 7 + dayIdx, []);
 
     const handleCellKeyDown = useCallback(
       (e: React.KeyboardEvent, hourIdx: number, dayIdx: number, day: Date, hour: number) => {
@@ -64,7 +61,10 @@ export const WeekView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement
     return (
       <div ref={ref} className={clsx('flex-1 overflow-auto', className)} {...props}>
         {/* Day headers */}
-        <div role="row" className="grid grid-cols-[60px_repeat(7,1fr)] border-b border-border sticky top-0 bg-surface z-10">
+        <div
+          role="row"
+          className="grid grid-cols-[60px_repeat(7,1fr)] border-b border-border sticky top-0 bg-surface z-10"
+        >
           <div role="columnheader" aria-hidden="true" />
           {weekDays.map((day, i) => (
             <div
@@ -76,15 +76,16 @@ export const WeekView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement
                 isToday(day) && 'bg-brand/10',
               )}
             >
-              <div className="text-xs font-secondary font-medium text-muted-content uppercase" aria-hidden="true">
+              <div
+                className="text-xs font-secondary font-medium text-muted-content uppercase"
+                aria-hidden="true"
+              >
                 {DAY_NAMES_SHORT[day.getDay()]}
               </div>
               <div
                 className={clsx(
                   'text-lg font-semibold font-primary',
-                  isToday(day)
-                    ? 'text-brand'
-                    : 'text-surface-content',
+                  isToday(day) ? 'text-brand' : 'text-surface-content',
                 )}
                 aria-hidden="true"
               >
@@ -104,7 +105,10 @@ export const WeekView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement
             <div key={hour} role="row" className="contents">
               {/* Time label */}
               <div className="h-14 flex items-start justify-end pr-2 pt-0.5" role="rowheader">
-                <span className="text-[10px] font-secondary text-muted-content" aria-label={formatHour(hour)}>
+                <span
+                  className="text-[10px] font-secondary text-muted-content"
+                  aria-label={formatHour(hour)}
+                >
                   {formatHour(hour)}
                 </span>
               </div>
@@ -158,13 +162,7 @@ export const WeekView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement
                         (1000 * 60 * 60);
                       const heightPx = Math.max(durationHours * 56, 24);
 
-                      return (
-                        <Event
-                          key={event.id}
-                          event={event}
-                          height={heightPx}
-                        />
-                      );
+                      return <Event key={event.id} event={event} height={heightPx} />;
                     })}
                   </div>
                 );

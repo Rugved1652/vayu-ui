@@ -1,4 +1,4 @@
-import { createContext, type ReactNode } from "react";
+import { createContext, type ReactNode } from 'react';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -11,7 +11,7 @@ export interface DraggableContextValue {
   items: string[];
   activeId: string | null;
   overIndex: number;
-  layout: "list" | "grid";
+  layout: 'list' | 'grid';
   columns: number;
   focusedId: string | null;
   isKeyboardDragging: boolean;
@@ -38,19 +38,14 @@ export interface DraggableContextValue {
   registerContainer: (id: string, el: HTMLDivElement) => void;
   unregisterContainer: (id: string) => void;
   /* pointer drag */
-  startDrag: (
-    id: string,
-    containerId: string | null,
-    offsetX?: number,
-    offsetY?: number
-  ) => void;
+  startDrag: (id: string, containerId: string | null, offsetX?: number, offsetY?: number) => void;
   moveDrag: (x: number, y: number) => void;
   endDrag: () => void;
   cancelDrag: () => void;
 
   /* keyboard drag */
   keyboardGrab: (id: string) => void;
-  keyboardMove: (direction: "up" | "down" | "left" | "right") => void;
+  keyboardMove: (direction: 'up' | 'down' | 'left' | 'right') => void;
   keyboardDrop: () => void;
   keyboardCancel: () => void;
 
@@ -76,10 +71,10 @@ export interface DraggableRootProps {
 /* ---- Container props ---- */
 export interface DraggableContainerProps {
   children: ReactNode;
-  layout?: "list" | "grid";
+  layout?: 'list' | 'grid';
   columns?: number;
   containerId?: string;
-  "aria-label"?: string;
+  'aria-label'?: string;
   className?: string;
 }
 
@@ -139,8 +134,8 @@ export function getClosestIndex(
   y: number,
   itemRefs: Map<string, HTMLDivElement>,
   items: string[],
-  layout: "list" | "grid",
-  activeId: string | null
+  layout: 'list' | 'grid',
+  activeId: string | null,
 ): number {
   let closest = -1;
   let minDist = Infinity;
@@ -151,8 +146,11 @@ export function getClosestIndex(
     const rect = el.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
-    const dist = layout === "grid" ? Math.hypot(x - cx, y - cy) : Math.abs(y - cy);
-    if (dist < minDist) { minDist = dist; closest = index; }
+    const dist = layout === 'grid' ? Math.hypot(x - cx, y - cy) : Math.abs(y - cy);
+    if (dist < minDist) {
+      minDist = dist;
+      closest = index;
+    }
   });
   if (closest < 0) return items.length;
 
@@ -160,9 +158,10 @@ export function getClosestIndex(
   if (!closestEl) return items.length;
 
   const rect = closestEl.getBoundingClientRect();
-  const isAfter = layout === "grid"
-    ? (y > rect.top + rect.height / 2) || (y >= rect.top && x > rect.left + rect.width / 2)
-    : y >= rect.top + rect.height / 2;
+  const isAfter =
+    layout === 'grid'
+      ? y > rect.top + rect.height / 2 || (y >= rect.top && x > rect.left + rect.width / 2)
+      : y >= rect.top + rect.height / 2;
 
   return isAfter ? closest + 1 : closest;
 }
@@ -170,7 +169,7 @@ export function getClosestIndex(
 export function getContainerAtPoint(
   x: number,
   y: number,
-  containerRefs: Map<string, HTMLDivElement>
+  containerRefs: Map<string, HTMLDivElement>,
 ): string | null {
   for (const [id, el] of containerRefs) {
     const rect = el.getBoundingClientRect();

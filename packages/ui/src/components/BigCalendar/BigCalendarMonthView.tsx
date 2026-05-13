@@ -164,13 +164,7 @@ export const MonthView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElemen
                       );
                     }
 
-                    return (
-                      <Event
-                        key={event.id}
-                        event={event}
-                        variant="compact"
-                      />
-                    );
+                    return <Event key={event.id} event={event} variant="compact" />;
                   })}
                   {dayEvents.length > 3 && (
                     <span

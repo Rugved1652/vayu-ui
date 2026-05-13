@@ -29,12 +29,15 @@ const PopoverRoot = forwardRef<HTMLDivElement, PopoverProps>(
     const isControlled = controlledOpen !== undefined;
     const open = isControlled ? controlledOpen : internalOpen;
 
-    const setOpen = useCallback((newOpen: boolean) => {
-      if (!isControlled) {
-        setInternalOpen(newOpen);
-      }
-      onOpenChange?.(newOpen);
-    }, [isControlled, onOpenChange]);
+    const setOpen = useCallback(
+      (newOpen: boolean) => {
+        if (!isControlled) {
+          setInternalOpen(newOpen);
+        }
+        onOpenChange?.(newOpen);
+      },
+      [isControlled, onOpenChange],
+    );
 
     useOnClickOutside([triggerRef, contentRef] as React.RefObject<HTMLElement>[], () => {
       if (open) setOpen(false);

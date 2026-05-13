@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   forwardRef,
@@ -8,15 +8,15 @@ import React, {
   useLayoutEffect,
   useRef,
   useState,
-} from "react";
-import { createPortal } from "react-dom";
-import { cn } from "../../utils";
-import { SubContext, useContextMenuCtx, useTypeahead, getFocusableItems } from "./hooks";
+} from 'react';
+import { createPortal } from 'react-dom';
+import { cn } from '../../utils';
+import { SubContext, useContextMenuCtx, useTypeahead, getFocusableItems } from './hooks';
 import type {
   ContextMenuSubProps,
   ContextMenuSubTriggerProps,
   ContextMenuSubContentProps,
-} from "./types";
+} from './types';
 
 // ─── Sub (wrapper) ──────────────────────────────────────────
 
@@ -64,7 +64,7 @@ const ContextMenuSub: React.FC<ContextMenuSubProps> = ({ children }) => {
   );
 };
 
-ContextMenuSub.displayName = "ContextMenu.Sub";
+ContextMenuSub.displayName = 'ContextMenu.Sub';
 
 // ─── SubTrigger ──────────────────────────────────────────────
 
@@ -72,7 +72,7 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
   ({ children, disabled = false, icon, className, ...props }, ref) => {
     const { closeMenu } = useContextMenuCtx();
     const subCtx = useContext(SubContext);
-    if (!subCtx) throw new Error("SubTrigger must be used within ContextMenu.Sub");
+    if (!subCtx) throw new Error('SubTrigger must be used within ContextMenu.Sub');
 
     const { isOpen, setIsOpen, triggerRef, openSub, closeSub, subMenuRef } = subCtx;
 
@@ -87,7 +87,7 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
     const focusFirstItem = useCallback(() => {
       requestAnimationFrame(() => {
         const first = subMenuRef.current?.querySelector<HTMLElement>(
-          '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+          '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])',
         );
         first?.focus({ preventScroll: true });
       });
@@ -101,21 +101,21 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
         const items = getFocusableItems(menuEl);
 
         switch (e.key) {
-          case "Enter":
-          case " ":
-          case "ArrowRight":
+          case 'Enter':
+          case ' ':
+          case 'ArrowRight':
             e.preventDefault();
             e.stopPropagation();
             setIsOpen(true);
             focusFirstItem();
             break;
-          case "ArrowLeft":
+          case 'ArrowLeft':
             e.preventDefault();
             e.stopPropagation();
             setIsOpen(false);
             triggerRef.current?.focus({ preventScroll: true });
             break;
-          case "ArrowDown":
+          case 'ArrowDown':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) {
@@ -123,7 +123,7 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
               items[(idx + 1) % items.length]?.focus({ preventScroll: true });
             }
             break;
-          case "ArrowUp":
+          case 'ArrowUp':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) {
@@ -131,24 +131,24 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
               items[idx <= 0 ? items.length - 1 : idx - 1]?.focus({ preventScroll: true });
             }
             break;
-          case "Home":
+          case 'Home':
             e.preventDefault();
             e.stopPropagation();
             items[0]?.focus({ preventScroll: true });
             break;
-          case "End":
+          case 'End':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) items[items.length - 1]?.focus({ preventScroll: true });
             break;
-          case "Escape":
+          case 'Escape':
             e.preventDefault();
             e.stopPropagation();
             closeMenu();
             break;
         }
       },
-      [disabled, setIsOpen, focusFirstItem, closeMenu, triggerRef]
+      [disabled, setIsOpen, focusFirstItem, closeMenu, triggerRef],
     );
 
     return (
@@ -159,22 +159,22 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
         aria-expanded={isOpen}
         tabIndex={-1}
         aria-disabled={disabled || undefined}
-        data-state={isOpen ? "open" : "closed"}
+        data-state={isOpen ? 'open' : 'closed'}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onKeyDown={handleKeyDown}
         className={cn(
-          "px-3 py-2 w-full  rounded-control flex items-center justify-between gap-3",
-          "text-sm duration-(--transition-fast) cursor-pointer",
-          "focus:outline-none",
-          "focus-visible:bg-muted/80 focus-visible:text-brand",
-          "dark:focus-visible:bg-white/10",
+          'px-3 py-2 w-full  rounded-control flex items-center justify-between gap-3',
+          'text-sm duration-(--transition-fast) cursor-pointer',
+          'focus:outline-none',
+          'focus-visible:bg-muted/80 focus-visible:text-brand',
+          'dark:focus-visible:bg-white/10',
           disabled
-            ? "opacity-50 cursor-not-allowed"
+            ? 'opacity-50 cursor-not-allowed'
             : isOpen
-              ? "bg-muted/80 text-surface-content dark:bg-white/10"
-              : "text-surface-content hover:bg-muted/80 dark:hover:bg-white/10",
-          className
+              ? 'bg-muted/80 text-surface-content dark:bg-white/10'
+              : 'text-surface-content hover:bg-muted/80 dark:hover:bg-white/10',
+          className,
         )}
         {...props}
       >
@@ -197,17 +197,17 @@ const ContextMenuSubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTrigge
         </svg>
       </button>
     );
-  }
+  },
 );
 
-ContextMenuSubTrigger.displayName = "ContextMenu.SubTrigger";
+ContextMenuSubTrigger.displayName = 'ContextMenu.SubTrigger';
 
 // ─── SubContent ──────────────────────────────────────────────
 
 const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentProps>(
   ({ children, className, ...props }, ref) => {
     const subCtx = useContext(SubContext);
-    if (!subCtx) throw new Error("SubContent must be used within ContextMenu.Sub");
+    if (!subCtx) throw new Error('SubContent must be used within ContextMenu.Sub');
 
     const { isOpen, subMenuRef, triggerRef, handleTypeahead, openSub, closeSub } = subCtx;
     const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -245,7 +245,7 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
       if (isOpen && subMenuRef.current) {
         requestAnimationFrame(() => {
           const first = subMenuRef.current?.querySelector<HTMLElement>(
-            '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])'
+            '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled]), [role="menuitemradio"]:not([disabled])',
           );
           first?.focus({ preventScroll: true });
         });
@@ -255,14 +255,14 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
     // Typeahead on the submenu
     const handleMenuKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
-        if (e.key === "Escape") {
+        if (e.key === 'Escape') {
           e.preventDefault();
           e.stopPropagation();
           closeSub();
           triggerRef.current?.focus({ preventScroll: true });
           return;
         }
-        if (e.key === "ArrowLeft") {
+        if (e.key === 'ArrowLeft') {
           e.preventDefault();
           e.stopPropagation();
           closeSub();
@@ -274,7 +274,7 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
           handleTypeahead(e.key);
         }
       },
-      [handleTypeahead, closeSub, triggerRef]
+      [handleTypeahead, closeSub, triggerRef],
     );
 
     if (!isOpen) return null;
@@ -286,19 +286,19 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
         role="menu"
         aria-label="Submenu"
         style={{
-          position: "fixed",
+          position: 'fixed',
           top: `${position.top}px`,
           left: `${position.left}px`,
           zIndex: 10000,
         }}
         className={cn(
-          "min-w-[200px]",
-          "bg-elevated",
-          "border border-border",
-          "rounded-surface shadow-elevated",
-          "py-1 animate-fade-in",
-          "overflow-y-auto",
-          className
+          'min-w-[200px]',
+          'bg-elevated',
+          'border border-border',
+          'rounded-surface shadow-elevated',
+          'py-1 animate-fade-in',
+          'overflow-y-auto',
+          className,
         )}
         onMouseEnter={openSub}
         onMouseLeave={closeSub}
@@ -309,11 +309,11 @@ const ContextMenuSubContent = forwardRef<HTMLDivElement, ContextMenuSubContentPr
       >
         {children}
       </div>,
-      document.body
+      document.body,
     );
-  }
+  },
 );
 
-ContextMenuSubContent.displayName = "ContextMenu.SubContent";
+ContextMenuSubContent.displayName = 'ContextMenu.SubContent';
 
 export { ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent };

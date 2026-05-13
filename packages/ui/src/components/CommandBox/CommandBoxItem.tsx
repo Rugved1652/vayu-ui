@@ -44,7 +44,17 @@ export const CommandBoxItem = forwardRef<HTMLDivElement, CommandBoxItemProps>(
         group: groupLabel,
       });
       return () => unregisterItem(itemId);
-    }, [itemId, itemTitle, description, icon, shortcut, disabled, groupLabel, registerItem, unregisterItem]);
+    }, [
+      itemId,
+      itemTitle,
+      description,
+      icon,
+      shortcut,
+      disabled,
+      groupLabel,
+      registerItem,
+      unregisterItem,
+    ]);
 
     // Check if item is in filtered results
     const isVisible = useMemo(() => {
@@ -86,8 +96,7 @@ export const CommandBoxItem = forwardRef<HTMLDivElement, CommandBoxItemProps>(
           // Highlighted state
           isHighlighted && 'bg-brand/90 text-brand-content',
           // Default and hover states
-          !isHighlighted &&
-            !disabled && ['text-elevated-content', 'hover:bg-muted focus:bg-muted'],
+          !isHighlighted && !disabled && ['text-elevated-content', 'hover:bg-muted focus:bg-muted'],
           // Disabled state
           disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
           // Focus ring

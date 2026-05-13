@@ -55,7 +55,11 @@ export const SelectContent: React.FC<SelectContentProps> = ({ children, classNam
 
   if (!open) {
     // Hidden container keeps children mounted so options register in optionsMap
-    return <div style={{ display: 'none' }} aria-hidden="true">{children}</div>;
+    return (
+      <div style={{ display: 'none' }} aria-hidden="true">
+        {children}
+      </div>
+    );
   }
 
   return createPortal(

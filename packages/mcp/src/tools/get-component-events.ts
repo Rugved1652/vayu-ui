@@ -3,7 +3,8 @@ import { registerTool } from '../lib/register-tool.js';
 import { findComponent } from '../lib/registry.js';
 
 export function registerGetComponentEvents(server: Parameters<typeof registerTool>[0]) {
-  registerTool(server,
+  registerTool(
+    server,
     'get_component_events',
     'Get event handlers for a component with full TypeScript signatures.',
     {
@@ -14,7 +15,12 @@ export function registerGetComponentEvents(server: Parameters<typeof registerToo
       const entry = findComponent(slug);
       if (!entry) {
         return {
-          content: [{ type: 'text' as const, text: JSON.stringify({ error: `No component found for slug "${slug}"` }) }],
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: `No component found for slug "${slug}"` }),
+            },
+          ],
           isError: true,
         };
       }

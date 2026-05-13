@@ -91,8 +91,7 @@ export function useKeyPress(
   ) {
     // Overload 2: useKeyPress(bindings, options?)
     bindings = targetOrBindings as KeyBinding[];
-    enabled =
-      (callbackOrOptions as { enabled?: boolean } | undefined)?.enabled ?? true;
+    enabled = (callbackOrOptions as { enabled?: boolean } | undefined)?.enabled ?? true;
   } else {
     // Overload 1: useKeyPress(target, callback, options?)
     bindings = [

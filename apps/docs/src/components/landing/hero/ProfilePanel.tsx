@@ -2,15 +2,7 @@
 
 import { useState } from 'react';
 import { User } from 'lucide-react';
-import {
-  Avatar,
-  AvatarGroup,
-  Badge,
-  Card,
-  Divider,
-  Switch,
-  TextArea,
-} from 'vayu-ui';
+import { Avatar, AvatarGroup, Badge, Card, Divider, Switch, TextArea } from 'vayu-ui';
 import { teamUsers } from './constants';
 
 export function ProfilePanel() {

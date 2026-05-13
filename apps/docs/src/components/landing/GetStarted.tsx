@@ -77,10 +77,7 @@ export function GetStarted() {
           </p>
           <Marquee speed="slow" showControls={false} label="Component names" className="opacity-60">
             {componentNames.map((name) => (
-              <span
-                key={name}
-                className="shrink-0 text-sm font-tertiary text-surface-content"
-              >
+              <span key={name} className="shrink-0 text-sm font-tertiary text-surface-content">
                 {name}
               </span>
             ))}

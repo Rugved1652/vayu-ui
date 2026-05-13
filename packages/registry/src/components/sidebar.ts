@@ -8,9 +8,22 @@ export const sidebarEntry: ComponentRegistryEntry = {
   category: 'navigation',
 
   // ── Description ───────────────────────────────────────
-  description: 'A responsive sidebar navigation component with collapsible desktop mode, mobile overlay with focus trap, grouped menu items, badges, sub-items, and tooltips.',
-  longDescription: 'Sidebar is a compound component providing a full navigation shell. It supports desktop collapsible mode (collapsed icon-only view with tooltips), mobile overlay mode with a hamburger toggle, focus trap, and escape-to-close. Menu items support icons, badges, active states, and expandable sub-items. The component auto-detects mobile viewport width (< 768px) and switches behavior accordingly.',
-  tags: ['sidebar', 'navigation', 'drawer', 'menu', 'nav', 'sidebar-nav', 'responsive', 'collapsible', 'mobile-menu', 'layout'],
+  description:
+    'A responsive sidebar navigation component with collapsible desktop mode, mobile overlay with focus trap, grouped menu items, badges, sub-items, and tooltips.',
+  longDescription:
+    'Sidebar is a compound component providing a full navigation shell. It supports desktop collapsible mode (collapsed icon-only view with tooltips), mobile overlay mode with a hamburger toggle, focus trap, and escape-to-close. Menu items support icons, badges, active states, and expandable sub-items. The component auto-detects mobile viewport width (< 768px) and switches behavior accordingly.',
+  tags: [
+    'sidebar',
+    'navigation',
+    'drawer',
+    'menu',
+    'nav',
+    'sidebar-nav',
+    'responsive',
+    'collapsible',
+    'mobile-menu',
+    'layout',
+  ],
   useCases: [
     'Main application sidebar navigation with grouped menu items and nested links',
     'Collapsible dashboard sidebar that shrinks to icon-only view on desktop',
@@ -22,14 +35,33 @@ export const sidebarEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Sidebar',
   files: [
-    { name: 'Sidebar.tsx', description: 'SidebarProvider context and Sidebar root component with mobile overlay and focus trap' },
+    {
+      name: 'Sidebar.tsx',
+      description:
+        'SidebarProvider context and Sidebar root component with mobile overlay and focus trap',
+    },
     { name: 'SidebarHeader.tsx', description: 'Header section with collapse-aware padding' },
-    { name: 'SidebarContent.tsx', description: 'Scrollable content area with thin scrollbar styling' },
+    {
+      name: 'SidebarContent.tsx',
+      description: 'Scrollable content area with thin scrollbar styling',
+    },
     { name: 'SidebarFooter.tsx', description: 'Footer section with collapse-aware padding' },
-    { name: 'SidebarMenu.tsx', description: 'Nav wrapper and SidebarMenuGroup with labeled sections' },
-    { name: 'SidebarMenuItem.tsx', description: 'Menu item with icon, badge, active state, sub-items, and collapsed tooltip' },
-    { name: 'SidebarToggle.tsx', description: 'Collapse/expand toggle button positioned on the sidebar edge' },
-    { name: 'SidebarMobileMenuButton.tsx', description: 'Hamburger/close button for mobile overlay mode' },
+    {
+      name: 'SidebarMenu.tsx',
+      description: 'Nav wrapper and SidebarMenuGroup with labeled sections',
+    },
+    {
+      name: 'SidebarMenuItem.tsx',
+      description: 'Menu item with icon, badge, active state, sub-items, and collapsed tooltip',
+    },
+    {
+      name: 'SidebarToggle.tsx',
+      description: 'Collapse/expand toggle button positioned on the sidebar edge',
+    },
+    {
+      name: 'SidebarMobileMenuButton.tsx',
+      description: 'Hamburger/close button for mobile overlay mode',
+    },
     { name: 'hooks.ts', description: 'SidebarContext and useSidebar hook' },
     { name: 'types.ts', description: 'TypeScript type definitions for all sub-components' },
     { name: 'index.ts', description: 'Public API exports' },
@@ -42,7 +74,8 @@ export const sidebarEntry: ComponentRegistryEntry = {
     {
       name: 'SidebarProvider',
       fileName: 'Sidebar.tsx',
-      description: 'Context provider that manages collapsed, mobile, and mobileOpen state with resize detection and escape key handling',
+      description:
+        'Context provider that manages collapsed, mobile, and mobileOpen state with resize detection and escape key handling',
       props: [
         {
           name: 'children',
@@ -126,7 +159,8 @@ export const sidebarEntry: ComponentRegistryEntry = {
     {
       name: 'SidebarMenuItem',
       fileName: 'SidebarMenuItem.tsx',
-      description: 'Individual navigation item with icon, badge, active state, expandable sub-items, and tooltip when collapsed',
+      description:
+        'Individual navigation item with icon, badge, active state, expandable sub-items, and tooltip when collapsed',
       props: [
         {
           name: 'icon',
@@ -163,20 +197,23 @@ export const sidebarEntry: ComponentRegistryEntry = {
           name: 'subItems',
           type: 'SubItem[]',
           required: false,
-          description: 'Array of expandable sub-navigation items with label, href, and active fields',
+          description:
+            'Array of expandable sub-navigation items with label, href, and active fields',
         },
       ],
     },
     {
       name: 'SidebarToggle',
       fileName: 'SidebarToggle.tsx',
-      description: 'Desktop-only collapse/expand button positioned on the sidebar edge; hidden in mobile mode',
+      description:
+        'Desktop-only collapse/expand button positioned on the sidebar edge; hidden in mobile mode',
       props: [],
     },
     {
       name: 'MobileMenuButton',
       fileName: 'SidebarMobileMenuButton.tsx',
-      description: 'Mobile-only hamburger/close button to toggle the sidebar overlay; hidden on desktop',
+      description:
+        'Mobile-only hamburger/close button to toggle the sidebar overlay; hidden on desktop',
       props: [],
     },
   ],
@@ -203,35 +240,40 @@ export const sidebarEntry: ComponentRegistryEntry = {
       prop: 'collapsed (context)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Desktop sidebar shrinks to 80px icon-only width. Labels, badges, and group headings are hidden; items show tooltips on hover.',
+      description:
+        'Desktop sidebar shrinks to 80px icon-only width. Labels, badges, and group headings are hidden; items show tooltips on hover.',
     },
     {
       name: 'mobile',
       prop: 'mobile (context)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Auto-detected when viewport is below 768px. Sidebar becomes an absolute-positioned overlay that slides in from the left.',
+      description:
+        'Auto-detected when viewport is below 768px. Sidebar becomes an absolute-positioned overlay that slides in from the left.',
     },
     {
       name: 'mobileOpen',
       prop: 'mobileOpen (context)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Controls whether the mobile sidebar overlay is visible. Toggled by MobileMenuButton, overlay click, or Escape key.',
+      description:
+        'Controls whether the mobile sidebar overlay is visible. Toggled by MobileMenuButton, overlay click, or Escape key.',
     },
     {
       name: 'active',
       prop: 'active (SidebarMenuItem)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Highlights the menu item with brand background and sets aria-current="page" on the link.',
+      description:
+        'Highlights the menu item with brand background and sets aria-current="page" on the link.',
     },
     {
       name: 'expanded',
       prop: 'expanded (SidebarMenuItem internal)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Controls whether sub-items are visible under a menu item. Toggled by clicking the parent item button.',
+      description:
+        'Controls whether sub-items are visible under a menu item. Toggled by clicking the parent item button.',
     },
   ],
 
@@ -270,7 +312,8 @@ export const sidebarEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-label (MobileMenuButton)',
-        description: 'Dynamic label: "Open navigation menu" or "Close navigation menu" based on state',
+        description:
+          'Dynamic label: "Open navigation menu" or "Close navigation menu" based on state',
         managedByComponent: true,
       },
       {
@@ -300,7 +343,8 @@ export const sidebarEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-current',
-        description: 'Set to "page" on active menu items and active sub-items to indicate current page',
+        description:
+          'Set to "page" on active menu items and active sub-items to indicate current page',
         managedByComponent: true,
       },
       {
@@ -311,22 +355,30 @@ export const sidebarEntry: ComponentRegistryEntry = {
     ],
     keyboardInteractions: [
       { key: 'Escape', behavior: 'Closes the mobile sidebar overlay' },
-      { key: 'Tab', behavior: 'Focus is trapped within the mobile sidebar when open; wraps from last to first focusable element' },
-      { key: 'Shift+Tab', behavior: 'Focus wraps from first to last focusable element in mobile mode' },
+      {
+        key: 'Tab',
+        behavior:
+          'Focus is trapped within the mobile sidebar when open; wraps from last to first focusable element',
+      },
+      {
+        key: 'Shift+Tab',
+        behavior: 'Focus wraps from first to last focusable element in mobile mode',
+      },
     ],
-    focusManagement: 'When the mobile sidebar opens, focus moves to the sidebar element (tabIndex=-1). A focus trap cycles Tab/Shift+Tab between the first and last focusable elements inside the sidebar.',
+    focusManagement:
+      'When the mobile sidebar opens, focus moves to the sidebar element (tabIndex=-1). A focus trap cycles Tab/Shift+Tab between the first and last focusable elements inside the sidebar.',
     wcagLevel: 'AA',
-    notes: 'The sidebar uses semantic HTML (aside, nav) with ARIA landmarks. MobileMenuButton links to the sidebar via aria-controls. Sub-menu regions use role="region" with descriptive aria-label.',
+    notes:
+      'The sidebar uses semantic HTML (aside, nav) with ARIA landmarks. MobileMenuButton links to the sidebar via aria-controls. Sub-menu regions use role="region" with descriptive aria-label.',
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'lucide-react' },
-  ],
+  npmDependencies: [{ name: 'lucide-react' }],
   registryDependencies: [
     {
       slug: 'tooltip',
-      reason: 'SidebarMenuItem wraps collapsed items in a Tooltip to show labels when the sidebar is in icon-only mode',
+      reason:
+        'SidebarMenuItem wraps collapsed items in a Tooltip to show labels when the sidebar is in icon-only mode',
     },
   ],
   reactPeerDependency: '>=18.0.0',
@@ -359,7 +411,8 @@ export const sidebarEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Dashboard Sidebar with Groups and Badges',
-      description: 'A full dashboard sidebar with header branding, grouped navigation, badges, sub-items, and a user footer.',
+      description:
+        'A full dashboard sidebar with header branding, grouped navigation, badges, sub-items, and a user footer.',
       tags: ['dashboard', 'groups', 'badges', 'sub-items', 'full-layout'],
       code: `import {
   Sidebar,
@@ -583,31 +636,36 @@ export default function SidebarWithSubItems() {
       title: 'Do not use Sidebar components outside SidebarProvider',
       bad: '<Sidebar><SidebarContent>...</SidebarContent></Sidebar>',
       good: 'Always wrap with <SidebarProvider> at the layout level, then render <Sidebar> inside it.',
-      reason: 'All sidebar sub-components call useSidebar() which throws if no SidebarProvider context is found.',
+      reason:
+        'All sidebar sub-components call useSidebar() which throws if no SidebarProvider context is found.',
     },
     {
       title: 'Do not forget the relative parent for MobileMenuButton',
       bad: '<SidebarProvider><MobileMenuButton />...</SidebarProvider>',
       good: 'Wrap SidebarProvider in a container with className="relative" so MobileMenuButton (absolute positioning) stays inside the layout.',
-      reason: 'MobileMenuButton uses absolute positioning. Without a positioned parent, it will be positioned relative to the nearest positioned ancestor or the viewport.',
+      reason:
+        'MobileMenuButton uses absolute positioning. Without a positioned parent, it will be positioned relative to the nearest positioned ancestor or the viewport.',
     },
     {
       title: 'Do not hardcode sidebar widths or breakpoint values',
       bad: '<aside className="w-64 md:w-72">',
       good: 'Use the Sidebar component which manages width internally (w-72 expanded, w-20 collapsed) and detects mobile at 768px.',
-      reason: 'Hardcoding widths conflicts with the internal collapse/expand animation and mobile responsive behavior.',
+      reason:
+        'Hardcoding widths conflicts with the internal collapse/expand animation and mobile responsive behavior.',
     },
     {
       title: 'Do not put MobileMenuButton inside Sidebar',
       bad: '<Sidebar><MobileMenuButton />...</Sidebar>',
       good: 'Place MobileMenuButton as a sibling of Sidebar, both inside SidebarProvider.',
-      reason: 'MobileMenuButton must remain visible when the sidebar is hidden (mobile closed state). Placing it inside the sidebar means it slides away with the sidebar.',
+      reason:
+        'MobileMenuButton must remain visible when the sidebar is hidden (mobile closed state). Placing it inside the sidebar means it slides away with the sidebar.',
     },
     {
       title: 'Do not override the nav role on SidebarMenu',
       bad: '<SidebarMenu className="role="list"">',
       good: 'Leave SidebarMenu as-is; it renders a <nav> element which is the correct semantic role for navigation.',
-      reason: 'SidebarMenu renders a <nav> element. Overriding its role breaks landmark navigation for screen readers.',
+      reason:
+        'SidebarMenu renders a <nav> element. Overriding its role breaks landmark navigation for screen readers.',
     },
   ],
 };

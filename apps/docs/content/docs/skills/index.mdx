@@ -18,14 +18,20 @@ import { Bot, Code, Workflow, BookOpen, Terminal, Cpu } from 'lucide-react';
   </p>
 </div>
 
-## Status
+## Available Skills
 
-<div className="not-prose my-8 rounded-surface border border-border bg-surface p-6 text-center">
-  <p className="text-lg font-medium text-surface-content">
-    Skills are in the design and prototyping phase.
-  </p>
-  <p className="mt-2 text-muted-content">
-    We're building a curated set of prompt templates and CLI-integrated workflows. Early previews
-    will be available alongside the next Vayu UI release.
-  </p>
-</div>
+<Cards>
+  <Card
+    href="/docs/skills/tanstack-query"
+    title="TanStack Query API Integration"
+    icon={<Workflow />}
+  >
+    Layered architecture for API integration using Axios service functions and TanStack Query hooks.
+  </Card>
+  <Card href="/docs/skills/mcp-server" title="Vayu UI MCP Server" icon={<Cpu />}>
+    Development guide for the Model Context Protocol server powering AI tool integration.
+  </Card>
+  <Card href="/docs/skills/react-hook-form" title="React Hook Form + Zod" icon={<Code />}>
+    Patterns for building validated forms with React Hook Form, Zod schemas, and mutations.
+  </Card>
+</Cards>

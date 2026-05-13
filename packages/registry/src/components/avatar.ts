@@ -37,14 +37,45 @@ export const avatarEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Avatar',
   files: [
-    { name: 'Avatar.tsx', description: 'Root component with size styling, interactive behavior, ARIA attributes, and compound component assembly' },
-    { name: 'AvatarImage.tsx', description: 'Image sub-component with loading spinner, error handling, and fallback source support' },
-    { name: 'AvatarInitials.tsx', description: 'Initials sub-component that generates letters from username with deterministic WCAG-compliant background colors' },
-    { name: 'AvatarFallback.tsx', description: 'Fallback sub-component rendering a default silhouette image when profile photos are unavailable' },
-    { name: 'AvatarStatus.tsx', description: 'Status indicator sub-component showing online, offline, away, or busy presence dots' },
-    { name: 'types.ts', description: 'TypeScript type definitions for AvatarSize, AvatarStatus, and all component prop interfaces' },
-    { name: 'hooks.ts', description: 'Utility functions: generateInitials and getInitialsColor for deterministic avatar rendering' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the Avatar component and all type definitions' },
+    {
+      name: 'Avatar.tsx',
+      description:
+        'Root component with size styling, interactive behavior, ARIA attributes, and compound component assembly',
+    },
+    {
+      name: 'AvatarImage.tsx',
+      description:
+        'Image sub-component with loading spinner, error handling, and fallback source support',
+    },
+    {
+      name: 'AvatarInitials.tsx',
+      description:
+        'Initials sub-component that generates letters from username with deterministic WCAG-compliant background colors',
+    },
+    {
+      name: 'AvatarFallback.tsx',
+      description:
+        'Fallback sub-component rendering a default silhouette image when profile photos are unavailable',
+    },
+    {
+      name: 'AvatarStatus.tsx',
+      description:
+        'Status indicator sub-component showing online, offline, away, or busy presence dots',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for AvatarSize, AvatarStatus, and all component prop interfaces',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'Utility functions: generateInitials and getInitialsColor for deterministic avatar rendering',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the Avatar component and all type definitions',
+    },
     { name: 'README.md', description: 'Component documentation, anatomy, and usage guidelines' },
   ],
   targetPath: 'src/components',
@@ -55,13 +86,15 @@ export const avatarEntry: ComponentRegistryEntry = {
     {
       name: 'Image',
       fileName: 'AvatarImage.tsx',
-      description: 'Renders the user profile image with a loading spinner while loading, error state handling, and optional fallback image source.',
+      description:
+        'Renders the user profile image with a loading spinner while loading, error state handling, and optional fallback image source.',
       props: [
         {
           name: 'fallbackSrc',
           type: 'string',
           required: false,
-          description: 'Alternate image URL to attempt if the primary src fails to load. Only tried once before showing error state.',
+          description:
+            'Alternate image URL to attempt if the primary src fails to load. Only tried once before showing error state.',
         },
         {
           name: 'src',
@@ -80,39 +113,45 @@ export const avatarEntry: ComponentRegistryEntry = {
           name: 'onError',
           type: 'React.SyntheticEvent<HTMLImageElement>',
           required: false,
-          description: 'Called when the image fails to load (after fallback attempt if fallbackSrc is provided). Inherited from ImgHTMLAttributes.',
+          description:
+            'Called when the image fails to load (after fallback attempt if fallbackSrc is provided). Inherited from ImgHTMLAttributes.',
         },
         {
           name: 'onLoad',
           type: 'React.SyntheticEvent<HTMLImageElement>',
           required: false,
-          description: 'Called when the image successfully loads. Inherited from ImgHTMLAttributes.',
+          description:
+            'Called when the image successfully loads. Inherited from ImgHTMLAttributes.',
         },
       ],
     },
     {
       name: 'Initials',
       fileName: 'AvatarInitials.tsx',
-      description: 'Generates and displays the user initials from their username with a deterministic, WCAG-compliant background color.',
+      description:
+        'Generates and displays the user initials from their username with a deterministic, WCAG-compliant background color.',
       props: [
         {
           name: 'username',
           type: 'string',
           required: true,
-          description: 'Full name used to generate initials. Single word returns first letter; multiple words return first and last initials.',
+          description:
+            'Full name used to generate initials. Single word returns first letter; multiple words return first and last initials.',
         },
       ],
     },
     {
       name: 'Fallback',
       fileName: 'AvatarFallback.tsx',
-      description: 'Displays a default silhouette image when no profile photo or initials are available.',
+      description:
+        'Displays a default silhouette image when no profile photo or initials are available.',
       props: [
         {
           name: 'src',
           type: 'string',
           required: false,
-          defaultValue: "'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'",
+          defaultValue:
+            "'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'",
           description: 'URL for the fallback silhouette image. Defaults to a generic user photo.',
         },
         {
@@ -127,20 +166,23 @@ export const avatarEntry: ComponentRegistryEntry = {
     {
       name: 'Status',
       fileName: 'AvatarStatus.tsx',
-      description: 'Renders a small colored dot indicating the user online presence or availability status.',
+      description:
+        'Renders a small colored dot indicating the user online presence or availability status.',
       props: [
         {
           name: 'status',
-          type: "AvatarStatus",
+          type: 'AvatarStatus',
           required: true,
-          description: 'The presence status to display. Controls the dot color: green for online, gray for offline, yellow for away, red for busy.',
+          description:
+            'The presence status to display. Controls the dot color: green for online, gray for offline, yellow for away, red for busy.',
           options: ['online', 'offline', 'away', 'busy'],
         },
         {
           name: 'label',
           type: 'string',
           required: false,
-          description: 'Custom accessible label for the status indicator, overriding the default (e.g. "In a meeting" instead of "Busy").',
+          description:
+            'Custom accessible label for the status indicator, overriding the default (e.g. "In a meeting" instead of "Busy").',
         },
       ],
     },
@@ -151,10 +193,11 @@ export const avatarEntry: ComponentRegistryEntry = {
   rootProps: [
     {
       name: 'size',
-      type: "AvatarSize | number",
+      type: 'AvatarSize | number',
       required: false,
       defaultValue: "'medium'",
-      description: 'Controls the avatar dimensions. Named sizes map to fixed pixel values (small: 32px, medium: 48px, large: 64px, xlarge: 96px). A number sets custom pixel dimensions with auto-scaled font size.',
+      description:
+        'Controls the avatar dimensions. Named sizes map to fixed pixel values (small: 32px, medium: 48px, large: 64px, xlarge: 96px). A number sets custom pixel dimensions with auto-scaled font size.',
       options: ['small', 'medium', 'large', 'xlarge'],
     },
     {
@@ -162,38 +205,44 @@ export const avatarEntry: ComponentRegistryEntry = {
       type: 'string',
       required: false,
       defaultValue: "''",
-      description: 'User name used to generate the aria-label and passed to Initials sub-component for letter generation.',
+      description:
+        'User name used to generate the aria-label and passed to Initials sub-component for letter generation.',
     },
     {
       name: 'alt',
       type: 'string',
       required: false,
-      description: 'Alternative text for the avatar, used in the aria-label. Takes precedence over username when both are provided.',
+      description:
+        'Alternative text for the avatar, used in the aria-label. Takes precedence over username when both are provided.',
     },
     {
       name: 'status',
-      type: "AvatarStatus",
+      type: 'AvatarStatus',
       required: false,
-      description: 'Presence status appended to the aria-label (e.g. "User avatar (online)"). Does not render the status dot by itself — use Avatar.Status for the visual indicator.',
+      description:
+        'Presence status appended to the aria-label (e.g. "User avatar (online)"). Does not render the status dot by itself — use Avatar.Status for the visual indicator.',
       options: ['online', 'offline', 'away', 'busy'],
     },
     {
       name: 'onClick',
       type: '() => void',
       required: false,
-      description: 'Makes the avatar interactive. When provided, the root element renders with role="button", tabIndex={0}, cursor-pointer, and keyboard activation via Enter/Space.',
+      description:
+        'Makes the avatar interactive. When provided, the root element renders with role="button", tabIndex={0}, cursor-pointer, and keyboard activation via Enter/Space.',
     },
     {
       name: 'tabIndex',
       type: 'number',
       required: false,
-      description: 'Overrides the default tab index. Automatically set to 0 when onClick is provided; can be set to -1 to remove from tab order.',
+      description:
+        'Overrides the default tab index. Automatically set to 0 when onClick is provided; can be set to -1 to remove from tab order.',
     },
     {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description: 'Content rendered inside the avatar — typically one of Image, Initials, or Fallback, optionally alongside Status.',
+      description:
+        'Content rendered inside the avatar — typically one of Image, Initials, or Fallback, optionally alongside Status.',
     },
   ],
   rendersAs: 'span',
@@ -212,28 +261,32 @@ export const avatarEntry: ComponentRegistryEntry = {
       prop: 'src (Avatar.Image)',
       isBoolean: true,
       defaultValue: 'true',
-      description: 'Managed internally by AvatarImage. Shows a spinning loader while the image loads, then fades in the image via opacity transition.',
+      description:
+        'Managed internally by AvatarImage. Shows a spinning loader while the image loads, then fades in the image via opacity transition.',
     },
     {
       name: 'imageError',
       prop: 'src (Avatar.Image)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Managed internally by AvatarImage. Set to true when the primary image fails and no fallbackSrc is available (or fallback also fails). Triggers the parent Fallback component if present.',
+      description:
+        'Managed internally by AvatarImage. Set to true when the primary image fails and no fallbackSrc is available (or fallback also fails). Triggers the parent Fallback component if present.',
     },
     {
       name: 'interactive',
       prop: 'onClick',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'When onClick is provided, the avatar becomes interactive with role="button", keyboard activation, focus ring, hover shadow, and active scale-down effect.',
+      description:
+        'When onClick is provided, the avatar becomes interactive with role="button", keyboard activation, focus ring, hover shadow, and active scale-down effect.',
     },
     {
       name: 'status',
       prop: 'status',
       isBoolean: false,
       values: ['online', 'offline', 'away', 'busy'],
-      description: 'Presence status displayed via Avatar.Status sub-component. Each value maps to a semantic color: success (green), muted-content (gray), warning (yellow), destructive (red).',
+      description:
+        'Presence status displayed via Avatar.Status sub-component. Each value maps to a semantic color: success (green), muted-content (gray), warning (yellow), destructive (red).',
     },
   ],
 
@@ -242,17 +295,20 @@ export const avatarEntry: ComponentRegistryEntry = {
     {
       name: 'onClick',
       signature: '() => void',
-      description: 'Fired when the interactive avatar is clicked or activated via keyboard. Makes the avatar focusable and adds button semantics.',
+      description:
+        'Fired when the interactive avatar is clicked or activated via keyboard. Makes the avatar focusable and adds button semantics.',
     },
     {
       name: 'onError',
       signature: '(event: React.SyntheticEvent<HTMLImageElement>) => void',
-      description: 'Fired by Avatar.Image when the image fails to load. Called after the fallback source has been attempted (if provided).',
+      description:
+        'Fired by Avatar.Image when the image fails to load. Called after the fallback source has been attempted (if provided).',
     },
     {
       name: 'onLoad',
       signature: '(event: React.SyntheticEvent<HTMLImageElement>) => void',
-      description: 'Fired by Avatar.Image when the image successfully loads, after internal loading state is cleared.',
+      description:
+        'Fired by Avatar.Image when the image successfully loads, after internal loading state is cleared.',
     },
   ],
 
@@ -262,52 +318,62 @@ export const avatarEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-label',
-        description: 'Automatically generated as "{alt or username}\'s avatar" and appended with "({status})" when status is provided. Example: "John Doe\'s avatar (online)".',
+        description:
+          'Automatically generated as "{alt or username}\'s avatar" and appended with "({status})" when status is provided. Example: "John Doe\'s avatar (online)".',
         managedByComponent: true,
       },
       {
         name: 'role="button"',
-        description: 'Applied to the root span when onClick is provided, making the avatar behave as an interactive button for assistive technologies.',
+        description:
+          'Applied to the root span when onClick is provided, making the avatar behave as an interactive button for assistive technologies.',
         managedByComponent: true,
       },
       {
         name: 'role="img"',
-        description: 'Applied to the root span when no onClick is provided, indicating a non-interactive image representation.',
+        description:
+          'Applied to the root span when no onClick is provided, indicating a non-interactive image representation.',
         managedByComponent: true,
       },
       {
         name: 'role="status"',
-        description: 'Applied to the AvatarStatus dot and the loading spinner, announcing state changes to screen readers.',
+        description:
+          'Applied to the AvatarStatus dot and the loading spinner, announcing state changes to screen readers.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden="true"',
-        description: 'Applied to AvatarInitials, AvatarFallback, and the loading spinner inner element since they are decorative — the meaningful label is on the root element.',
+        description:
+          'Applied to AvatarInitials, AvatarFallback, and the loading spinner inner element since they are decorative — the meaningful label is on the root element.',
         managedByComponent: true,
       },
       {
         name: 'aria-live="polite"',
-        description: 'Applied to the AvatarImage loading spinner container so screen readers announce loading state changes without interrupting.',
+        description:
+          'Applied to the AvatarImage loading spinner container so screen readers announce loading state changes without interrupting.',
         managedByComponent: true,
       },
       {
         name: 'aria-busy="true"',
-        description: 'Applied to the AvatarImage loading spinner container while the image is being fetched.',
+        description:
+          'Applied to the AvatarImage loading spinner container while the image is being fetched.',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Enter',
-        behavior: 'Activates the interactive avatar (triggers onClick) when the avatar has focus. Only available when onClick is provided.',
+        behavior:
+          'Activates the interactive avatar (triggers onClick) when the avatar has focus. Only available when onClick is provided.',
       },
       {
         key: 'Space',
-        behavior: 'Activates the interactive avatar (triggers onClick) when the avatar has focus. Only available when onClick is provided.',
+        behavior:
+          'Activates the interactive avatar (triggers onClick) when the avatar has focus. Only available when onClick is provided.',
       },
       {
         key: 'Tab',
-        behavior: 'Moves focus to the interactive avatar when onClick is provided. Static avatars are not focusable.',
+        behavior:
+          'Moves focus to the interactive avatar when onClick is provided. Static avatars are not focusable.',
       },
     ],
     focusManagement:
@@ -326,23 +392,28 @@ export const avatarEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'button',
-      reason: 'Avatars are frequently embedded inside buttons for profile menus, user selectors, or account actions',
+      reason:
+        'Avatars are frequently embedded inside buttons for profile menus, user selectors, or account actions',
     },
     {
       slug: 'card',
-      reason: 'Avatars appear in card headers for user attributions, author info, or team member cards',
+      reason:
+        'Avatars appear in card headers for user attributions, author info, or team member cards',
     },
     {
       slug: 'typography',
-      reason: 'Used alongside avatars to display usernames, roles, or status text in user info layouts',
+      reason:
+        'Used alongside avatars to display usernames, roles, or status text in user info layouts',
     },
     {
       slug: 'badge',
-      reason: 'Combined with avatars to show notification counts or verification badges overlaid on profile pictures',
+      reason:
+        'Combined with avatars to show notification counts or verification badges overlaid on profile pictures',
     },
     {
       slug: 'divider',
-      reason: 'Used between avatar groups or to separate user list sections in layouts like team directories',
+      reason:
+        'Used between avatar groups or to separate user list sections in layouts like team directories',
     },
   ],
 
@@ -375,7 +446,8 @@ export default function AvatarSizes() {
     },
     {
       title: 'Image, Initials, and Fallback',
-      description: 'Three rendering modes: profile photo, generated initials, and automatic fallback when the image fails.',
+      description:
+        'Three rendering modes: profile photo, generated initials, and automatic fallback when the image fails.',
       code: `import { Avatar } from 'vayu-ui';
 
 export default function AvatarVariants() {
@@ -406,7 +478,8 @@ export default function AvatarVariants() {
     },
     {
       title: 'Status Indicators',
-      description: 'Online presence dots in all four status states: online, away, busy, and offline.',
+      description:
+        'Online presence dots in all four status states: online, away, busy, and offline.',
       code: `import { Avatar } from 'vayu-ui';
 
 export default function AvatarStatuses() {
@@ -435,7 +508,8 @@ export default function AvatarStatuses() {
     },
     {
       title: 'Interactive Avatars',
-      description: 'Clickable avatars that respond to click and keyboard activation with button semantics.',
+      description:
+        'Clickable avatars that respond to click and keyboard activation with button semantics.',
       code: `import { Avatar } from 'vayu-ui';
 
 export default function InteractiveAvatars() {
@@ -511,25 +585,29 @@ export default function AvatarInButton() {
       title: 'Using status prop without Avatar.Status sub-component',
       bad: '<Avatar status="online"><Avatar.Initials username="User" /></Avatar>',
       good: '<Avatar status="online"><Avatar.Initials username="User" /><Avatar.Status status="online" /></Avatar>',
-      reason: 'The status prop on the root only sets the aria-label suffix for accessibility. It does not render a visual indicator — you must explicitly include Avatar.Status to show the colored dot.',
+      reason:
+        'The status prop on the root only sets the aria-label suffix for accessibility. It does not render a visual indicator — you must explicitly include Avatar.Status to show the colored dot.',
     },
     {
       title: 'Nesting an interactive Avatar inside a button or link',
       bad: '<button><Avatar onClick={handleClick}><Avatar.Initials username="User" /></Avatar></button>',
       good: '<Avatar onClick={handleClick}><Avatar.Initials username="User" /></Avatar>',
-      reason: 'When onClick is provided, the avatar already renders with role="button" and is keyboard-interactive. Nesting it inside another button or link creates invalid HTML and breaks accessibility.',
+      reason:
+        'When onClick is provided, the avatar already renders with role="button" and is keyboard-interactive. Nesting it inside another button or link creates invalid HTML and breaks accessibility.',
     },
     {
       title: 'Omitting username when using Initials',
       bad: '<Avatar><Avatar.Initials /></Avatar>',
       good: '<Avatar username="Jane Doe"><Avatar.Initials username="Jane Doe" /></Avatar>',
-      reason: 'The username prop is required on AvatarInitials to generate the initials text. Without it, the component returns null. The root username prop should also be set for the aria-label.',
+      reason:
+        'The username prop is required on AvatarInitials to generate the initials text. Without it, the component returns null. The root username prop should also be set for the aria-label.',
     },
     {
       title: 'Hardcoding avatar colors or sizes with custom CSS',
       bad: '<Avatar className="w-16 h-16 bg-blue-500"><Avatar.Initials username="User" /></Avatar>',
       good: '<Avatar size="large"><Avatar.Initials username="User" /></Avatar>',
-      reason: 'Hardcoding Tailwind classes bypasses the design token system and may conflict with the component internal sizing logic. Use the size prop for consistent, token-based dimensions.',
+      reason:
+        'Hardcoding Tailwind classes bypasses the design token system and may conflict with the component internal sizing logic. Use the size prop for consistent, token-based dimensions.',
     },
   ],
 };

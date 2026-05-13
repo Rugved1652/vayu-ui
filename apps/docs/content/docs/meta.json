@@ -1,4 +1,16 @@
 {
   "title": "Documentation",
-  "pages": ["index", "design-system", "components", "hooks", "3D-Designs", "mcp-support", "cli-support","figma-assets","stitch-assets", "skills", "maintainers"]
+  "pages": [
+    "index",
+    "design-system",
+    "components",
+    "hooks",
+    "3D-Designs",
+    "mcp-support",
+    "cli-support",
+    "figma-assets",
+    "stitch-assets",
+    "skills",
+    "maintainers"
+  ]
 }

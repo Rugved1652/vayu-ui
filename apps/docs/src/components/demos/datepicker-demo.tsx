@@ -57,9 +57,7 @@ export default function DatePickerDemo() {
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold text-canvas-content">
-            DatePicker Component
-          </h1>
+          <h1 className="text-3xl font-bold text-canvas-content">DatePicker Component</h1>
           <p className="text-muted-content">
             WCAG 2.2 AA Compliant • Keyboard Navigation • Range Selection • Disabled Dates
           </p>
@@ -86,9 +84,7 @@ export default function DatePickerDemo() {
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
                 Selected:{' '}
-                <code className="bg-muted px-2 py-0.5 rounded">
-                  {formatDate(selectedDate)}
-                </code>
+                <code className="bg-muted px-2 py-0.5 rounded">{formatDate(selectedDate)}</code>
               </p>
             </CardContent>
           </Card>
@@ -114,9 +110,7 @@ export default function DatePickerDemo() {
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
                 Range:{' '}
-                <code className="bg-muted px-2 py-0.5 rounded">
-                  {formatRange(dateRange)}
-                </code>
+                <code className="bg-muted px-2 py-0.5 rounded">{formatRange(dateRange)}</code>
               </p>
             </CardContent>
           </Card>
@@ -144,9 +138,7 @@ export default function DatePickerDemo() {
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
                 Selected:{' '}
-                <code className="bg-muted px-2 py-0.5 rounded">
-                  {formatDate(weekdayDate)}
-                </code>
+                <code className="bg-muted px-2 py-0.5 rounded">{formatDate(weekdayDate)}</code>
               </p>
               <p className="mt-2 text-xs text-muted-content">
                 Note: Weekends are shown with strikethrough and cannot be selected
@@ -175,9 +167,7 @@ export default function DatePickerDemo() {
               </DatePicker.Root>
               <p className="mt-3 text-sm text-muted-content">
                 Selected:{' '}
-                <code className="bg-muted px-2 py-0.5 rounded">
-                  {formatDate(holidayDate)}
-                </code>
+                <code className="bg-muted px-2 py-0.5 rounded">{formatDate(holidayDate)}</code>
               </p>
               <p className="mt-2 text-xs text-muted-content">
                 Blocked dates: 15th, 20th of this month, and 1st of next month

@@ -25,8 +25,8 @@ export default function CardDemo() {
             />
             <Card.Content>
               <Typography.P variant="secondary">
-                Ground, primary, secondary, and semantic colors work seamlessly across light and dark
-                mode.
+                Ground, primary, secondary, and semantic colors work seamlessly across light and
+                dark mode.
               </Typography.P>
             </Card.Content>
             <Card.Footer>

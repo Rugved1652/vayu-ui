@@ -83,7 +83,6 @@ export default function ResizablePaneDemo() {
           Vertical
         </Typography.P>
         <div className="h-64 border-2 border-border rounded-surface overflow-hidden">
-
           <ResizablePane direction="vertical">
             <ResizablePane.Panel defaultSize={40} minSize={20}>
               <div className="h-full p-4 bg-brand/10 dark:bg-brand/5">

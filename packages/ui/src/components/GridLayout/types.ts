@@ -1,4 +1,4 @@
-import { createContext, type ReactNode } from "react";
+import { createContext, type ReactNode } from 'react';
 
 /* ------------------------------------------------------------------ */
 /*  Core Layout Types                                                  */
@@ -31,7 +31,7 @@ export interface GridLayoutItem {
 /*  Resize Types                                                       */
 /* ------------------------------------------------------------------ */
 
-export type ResizeDirection = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
+export type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 
 /* ------------------------------------------------------------------ */
 /*  Responsive Types                                                   */
@@ -75,7 +75,7 @@ export interface GridLayoutContextValue {
 
   /* active interaction */
   activeId: string | null;
-  interactionType: "drag" | "resize" | null;
+  interactionType: 'drag' | 'resize' | null;
   activeResizeDirection: ResizeDirection | null;
   placeholder: GridLayoutItem | null;
   movingLayout: GridLayoutItem[] | null;
@@ -95,14 +95,19 @@ export interface GridLayoutContextValue {
   cancelDrag: () => void;
 
   /* resize lifecycle */
-  startResize: (id: string, direction: ResizeDirection, startPointerX: number, startPointerY: number) => void;
+  startResize: (
+    id: string,
+    direction: ResizeDirection,
+    startPointerX: number,
+    startPointerY: number,
+  ) => void;
   moveResize: (x: number, y: number) => void;
   endResize: () => void;
 
   /* keyboard */
   keyboardGrab: (id: string) => void;
-  keyboardMove: (id: string, direction: "up" | "down" | "left" | "right") => void;
-  keyboardResize: (id: string, direction: "up" | "down" | "left" | "right") => void;
+  keyboardMove: (id: string, direction: 'up' | 'down' | 'left' | 'right') => void;
+  keyboardResize: (id: string, direction: 'up' | 'down' | 'left' | 'right') => void;
   keyboardDrop: () => void;
   keyboardCancel: () => void;
 
@@ -166,7 +171,7 @@ export interface GridLayoutRootProps {
 export interface GridContainerProps {
   children: ReactNode;
   className?: string;
-  "aria-label"?: string;
+  'aria-label'?: string;
 }
 
 export interface GridItemProps {

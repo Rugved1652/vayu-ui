@@ -92,11 +92,7 @@ export default function TreeDemo() {
       <Typography.H5>Tree</Typography.H5>
 
       {/* Mode toggle */}
-      <RadioGroup
-        value={mode}
-        onChange={setMode}
-        orientation="horizontal"
-      >
+      <RadioGroup value={mode} onChange={setMode} orientation="horizontal">
         <RadioGroup.Item value="normal" label="Normal" />
         <RadioGroup.Item value="checkbox" label="Checkbox" />
       </RadioGroup>

@@ -12,16 +12,7 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
     'Accessible, draggable split-pane layout with mouse, touch, and keyboard resize support.',
   longDescription:
     'The ResizablePane component uses the compound component pattern (ResizablePane.Panel, ResizablePane.Handle) to create split-pane layouts with draggable dividers. Panels are sized as percentages of the container, support min/max constraints, and can be nested for complex grid layouts. Handles support mouse drag, touch drag, and full keyboard navigation with WAI-ARIA separator semantics.',
-  tags: [
-    'resizable',
-    'split-pane',
-    'panel',
-    'layout',
-    'divider',
-    'drag',
-    'handle',
-    'sidebar',
-  ],
+  tags: ['resizable', 'split-pane', 'panel', 'layout', 'divider', 'drag', 'handle', 'sidebar'],
   useCases: [
     'Building IDE-style layouts with a resizable sidebar and main content area',
     'Creating dashboard layouts where users adjust panel proportions to focus on specific data',
@@ -34,11 +25,29 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'ResizablePane',
   files: [
-    { name: 'ResizablePane.tsx', description: 'Root component with context provider, panel registration, and resize logic' },
-    { name: 'ResizablePanel.tsx', description: 'Individual panel that registers itself and renders content within sized flex slots' },
-    { name: 'ResizablePaneHandle.tsx', description: 'Draggable divider handle with mouse, touch, and keyboard resize support' },
-    { name: 'types.ts', description: 'TypeScript type definitions for Direction, ResizablePaneProps, PanelProps, and HandleProps' },
-    { name: 'index.ts', description: 'Barrel export re-exporting the compound component, types, and useResizablePane hook' },
+    {
+      name: 'ResizablePane.tsx',
+      description: 'Root component with context provider, panel registration, and resize logic',
+    },
+    {
+      name: 'ResizablePanel.tsx',
+      description:
+        'Individual panel that registers itself and renders content within sized flex slots',
+    },
+    {
+      name: 'ResizablePaneHandle.tsx',
+      description: 'Draggable divider handle with mouse, touch, and keyboard resize support',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for Direction, ResizablePaneProps, PanelProps, and HandleProps',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export re-exporting the compound component, types, and useResizablePane hook',
+    },
   ],
   targetPath: 'src/components',
 
@@ -48,7 +57,8 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
     {
       name: 'Panel',
       fileName: 'ResizablePanel.tsx',
-      description: 'A single resizable panel that registers with the parent ResizablePane and renders children in a proportionally sized flex slot',
+      description:
+        'A single resizable panel that registers with the parent ResizablePane and renders children in a proportionally sized flex slot',
       props: [
         {
           name: 'defaultSize',
@@ -88,7 +98,8 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
     {
       name: 'Handle',
       fileName: 'ResizablePaneHandle.tsx',
-      description: 'Draggable divider between two panels with visual grip indicator, supporting mouse, touch, and keyboard resize',
+      description:
+        'Draggable divider between two panels with visual grip indicator, supporting mouse, touch, and keyboard resize',
       props: [
         {
           name: 'step',
@@ -101,7 +112,8 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
           name: 'aria-label',
           type: 'string',
           required: false,
-          description: 'Accessible label for the handle; defaults to "Resize columns" or "Resize rows"',
+          description:
+            'Accessible label for the handle; defaults to "Resize columns" or "Resize rows"',
         },
         {
           name: 'className',
@@ -154,14 +166,16 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['number[] (percentage values)'],
       defaultValue: '[]',
-      description: 'Array of panel sizes in percentages, managed internally. Each panel registers its defaultSize on mount and is adjusted during drag/keyboard resize.',
+      description:
+        'Array of panel sizes in percentages, managed internally. Each panel registers its defaultSize on mount and is adjusted during drag/keyboard resize.',
     },
     {
       name: 'dragging',
       prop: 'handle interaction (internal)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Active drag state on a Handle. While dragging, the body cursor is set to col-resize or row-resize and text selection is disabled.',
+      description:
+        'Active drag state on a Handle. While dragging, the body cursor is set to col-resize or row-resize and text selection is disabled.',
     },
   ],
 
@@ -170,17 +184,20 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
     {
       name: 'onMouseDown (internal)',
       signature: '(e: React.MouseEvent) => void',
-      description: 'Handle mouse-down initiates drag mode, attaching mousemove and mouseup listeners to the document. Handled internally.',
+      description:
+        'Handle mouse-down initiates drag mode, attaching mousemove and mouseup listeners to the document. Handled internally.',
     },
     {
       name: 'onTouchStart (internal)',
       signature: '(e: React.TouchEvent) => void',
-      description: 'Handle touch-start initiates drag mode for mobile, attaching touchmove and touchend listeners. Prevents page scroll during drag. Handled internally.',
+      description:
+        'Handle touch-start initiates drag mode for mobile, attaching touchmove and touchend listeners. Prevents page scroll during drag. Handled internally.',
     },
     {
       name: 'onKeyDown (internal)',
       signature: '(e: React.KeyboardEvent) => void',
-      description: 'Handle keyboard handler for Arrow keys (resize by step), Shift+Arrow (resize by step×5), Home (resize to minimum), and End (resize to maximum). Handled internally.',
+      description:
+        'Handle keyboard handler for Arrow keys (resize by step), Shift+Arrow (resize by step×5), Home (resize to minimum), and End (resize to maximum). Handled internally.',
     },
   ],
 
@@ -189,52 +206,60 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'role="separator"',
-        description: 'Applied to each Handle to identify it as a draggable divider between sections.',
+        description:
+          'Applied to each Handle to identify it as a draggable divider between sections.',
         managedByComponent: true,
       },
       {
         name: 'aria-orientation',
-        description: 'Applied to Handle; set to "vertical" when direction is horizontal (columns split vertically) and "horizontal" when direction is vertical.',
+        description:
+          'Applied to Handle; set to "vertical" when direction is horizontal (columns split vertically) and "horizontal" when direction is vertical.',
         managedByComponent: true,
       },
       {
         name: 'aria-valuenow',
-        description: 'Applied to Handle; reflects the current size of the preceding panel as a rounded percentage.',
+        description:
+          'Applied to Handle; reflects the current size of the preceding panel as a rounded percentage.',
         managedByComponent: true,
       },
       {
         name: 'aria-valuemin',
-        description: 'Applied to Handle; set to the preceding panel\'s minSize constraint.',
+        description: "Applied to Handle; set to the preceding panel's minSize constraint.",
         managedByComponent: true,
       },
       {
         name: 'aria-valuemax',
-        description: 'Applied to Handle; set to the preceding panel\'s maxSize constraint.',
+        description: "Applied to Handle; set to the preceding panel's maxSize constraint.",
         managedByComponent: true,
       },
       {
         name: 'aria-label',
-        description: 'Applied to Handle; defaults to "Resize columns" for horizontal or "Resize rows" for vertical. Can be overridden per handle.',
+        description:
+          'Applied to Handle; defaults to "Resize columns" for horizontal or "Resize rows" for vertical. Can be overridden per handle.',
         managedByComponent: true,
       },
       {
         name: 'tabIndex={0}',
-        description: 'Applied to Handle to make it keyboard focusable for WCAG 2.4.7 focus visibility.',
+        description:
+          'Applied to Handle to make it keyboard focusable for WCAG 2.4.7 focus visibility.',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'ArrowRight / ArrowDown',
-        behavior: 'Increases the preceding panel size by step%. In horizontal mode, ArrowRight resizes; in vertical mode, ArrowDown resizes.',
+        behavior:
+          'Increases the preceding panel size by step%. In horizontal mode, ArrowRight resizes; in vertical mode, ArrowDown resizes.',
       },
       {
         key: 'ArrowLeft / ArrowUp',
-        behavior: 'Decreases the preceding panel size by step%. In horizontal mode, ArrowLeft resizes; in vertical mode, ArrowUp resizes.',
+        behavior:
+          'Decreases the preceding panel size by step%. In horizontal mode, ArrowLeft resizes; in vertical mode, ArrowUp resizes.',
       },
       {
         key: 'Shift + Arrow',
-        behavior: 'Increases or decreases the preceding panel size by step×5% for faster adjustment.',
+        behavior:
+          'Increases or decreases the preceding panel size by step×5% for faster adjustment.',
       },
       {
         key: 'Home',
@@ -253,9 +278,7 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -263,7 +286,8 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'card',
-      reason: 'ResizablePane is often placed inside a Card container for bordered, rounded split layouts',
+      reason:
+        'ResizablePane is often placed inside a Card container for bordered, rounded split layouts',
     },
     {
       slug: 'tab',
@@ -275,7 +299,8 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'scroll-area',
-      reason: 'Panels with overflow content often need scroll containers alongside the resize behavior',
+      reason:
+        'Panels with overflow content often need scroll containers alongside the resize behavior',
     },
   ],
 
@@ -283,7 +308,8 @@ export const resizablePaneEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Horizontal Split',
-      description: 'Two panels arranged side by side with a draggable handle. Drag the handle left or right to resize panels.',
+      description:
+        'Two panels arranged side by side with a draggable handle. Drag the handle left or right to resize panels.',
       code: `import { ResizablePane } from 'vayu-ui';
 
 export default function HorizontalSplit() {
@@ -305,7 +331,8 @@ export default function HorizontalSplit() {
     },
     {
       title: 'Vertical Split',
-      description: 'Two panels stacked vertically with a horizontal draggable handle. Drag up or down to resize panels.',
+      description:
+        'Two panels stacked vertically with a horizontal draggable handle. Drag up or down to resize panels.',
       code: `import { ResizablePane } from 'vayu-ui';
 
 export default function VerticalSplit() {
@@ -327,7 +354,8 @@ export default function VerticalSplit() {
     },
     {
       title: 'Nested Horizontal and Vertical',
-      description: 'A horizontal split with a nested vertical split in the second panel, creating a 2×2 grid layout.',
+      description:
+        'A horizontal split with a nested vertical split in the second panel, creating a 2×2 grid layout.',
       code: `import { ResizablePane } from 'vayu-ui';
 
 export default function NestedLayout() {
@@ -357,7 +385,8 @@ export default function NestedLayout() {
     },
     {
       title: 'Three Panels',
-      description: 'Three side-by-side panels with two handles. Each handle has a custom aria-label for accessibility.',
+      description:
+        'Three side-by-side panels with two handles. Each handle has a custom aria-label for accessibility.',
       code: `import { ResizablePane } from 'vayu-ui';
 
 export default function ThreePanels() {
@@ -389,31 +418,36 @@ export default function ThreePanels() {
       title: 'Omitting Handle between panels',
       bad: '<ResizablePane><ResizablePane.Panel /><ResizablePane.Panel /></ResizablePane>',
       good: '<ResizablePane><ResizablePane.Panel /><ResizablePane.Handle /><ResizablePane.Panel /></ResizablePane>',
-      reason: 'Panels must be separated by Handle components. Without handles, panels cannot be resized and the layout becomes static.',
+      reason:
+        'Panels must be separated by Handle components. Without handles, panels cannot be resized and the layout becomes static.',
     },
     {
       title: 'Using size values outside 0–100',
       bad: '<ResizablePane.Panel defaultSize={200} minSize={-10}>',
       good: '<ResizablePane.Panel defaultSize={50} minSize={10} maxSize={90}>',
-      reason: 'Panel sizes are percentages (0–100). Values outside this range break the flex layout calculation and may cause panels to overflow or collapse.',
+      reason:
+        'Panel sizes are percentages (0–100). Values outside this range break the flex layout calculation and may cause panels to overflow or collapse.',
     },
     {
       title: 'Using Panel or Handle outside ResizablePane',
       bad: '<div><ResizablePane.Panel>Content</ResizablePane.Panel></div>',
       good: '<ResizablePane><ResizablePane.Panel>Content</ResizablePane.Panel></ResizablePane>',
-      reason: 'Panel and Handle depend on the ResizablePaneContext provided by the root ResizablePane. Using them standalone throws a runtime error.',
+      reason:
+        'Panel and Handle depend on the ResizablePaneContext provided by the root ResizablePane. Using them standalone throws a runtime error.',
     },
     {
       title: 'Setting minSize greater than maxSize',
       bad: '<ResizablePane.Panel minSize={80} maxSize={20}>',
       good: '<ResizablePane.Panel minSize={20} maxSize={80}>',
-      reason: 'minSize must be less than or equal to maxSize. Inverted constraints break the resize clamp logic and produce unpredictable layout behavior.',
+      reason:
+        'minSize must be less than or equal to maxSize. Inverted constraints break the resize clamp logic and produce unpredictable layout behavior.',
     },
     {
       title: 'Forgetting overflow-hidden on the container',
       bad: '<div><ResizablePane>...</ResizablePane></div>',
       good: '<div className="overflow-hidden border border-border rounded-surface"><ResizablePane>...</ResizablePane></div>',
-      reason: 'The parent container must have overflow-hidden (and a defined height for vertical layouts). Without it, resized panels can overflow the viewport and cause layout shifts.',
+      reason:
+        'The parent container must have overflow-hidden (and a defined height for vertical layouts). Without it, resized panels can overflow the viewport and cause layout shifts.',
     },
   ],
 };

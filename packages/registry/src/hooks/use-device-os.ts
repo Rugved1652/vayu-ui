@@ -8,7 +8,7 @@ export const useDeviceOSEntry: HookRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'Detects the user\'s operating system, browser, device type, and touch capability by parsing navigator.userAgent and exposes them as reactive, SSR-safe state.',
+    "Detects the user's operating system, browser, device type, and touch capability by parsing navigator.userAgent and exposes them as reactive, SSR-safe state.",
   longDescription:
     'Parses navigator.userAgent via regex-based detection to identify the OS (Windows, macOS, Linux, Android, iOS, ChromeOS), browser (Chrome, Firefox, Safari, Edge, Opera, Samsung Internet), and device category (mobile, tablet, desktop). Touch capability is determined by checking for the ontouchstart event or navigator.maxTouchPoints. The hook is fully SSR-safe — it initializes with safe defaults (os: "Unknown", browser: "Unknown", deviceType: "desktop", isTouchDevice: false, userAgent: "", isReady: false) and only runs detection inside a useEffect after mount. The isReady flag is the key differentiator from naive window.navigator checks: it lets components distinguish between "detection has not run yet" (SSR or initial render) and "detection ran but could not identify the platform". This prevents hydration mismatches in Next.js, Remix, or any framework that server-renders HTML. No external dependencies beyond React are required.',
   tags: [
@@ -309,7 +309,7 @@ const supportsViewTransitions = browser === 'Chrome';`,
 // The hook runs detection once on mount via useEffect.
 // OS and browser do not change during a session.`,
       reason:
-        'The user\'s OS and browser do not change during a page session. The hook correctly runs detection once in a useEffect on mount. Polling wastes resources and introduces unnecessary re-renders.',
+        "The user's OS and browser do not change during a page session. The hook correctly runs detection once in a useEffect on mount. Polling wastes resources and introduces unnecessary re-renders.",
     },
     {
       title: 'Assuming 100% detection accuracy',

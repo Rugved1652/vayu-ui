@@ -1,13 +1,25 @@
-"use client";
+'use client';
 
-import React, { forwardRef, useCallback, useRef } from "react";
-import { cn } from "../../utils";
-import { useContextMenuCtx, getFocusableItems, useItemKeyDown, baseItemStyles } from "./hooks";
-import { SubContext } from "./hooks";
-import type { ContextMenuCheckboxItemProps } from "./types";
+import React, { forwardRef, useCallback, useRef } from 'react';
+import { cn } from '../../utils';
+import { useContextMenuCtx, getFocusableItems, useItemKeyDown, baseItemStyles } from './hooks';
+import { SubContext } from './hooks';
+import type { ContextMenuCheckboxItemProps } from './types';
 
 const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckboxItemProps>(
-  ({ children, checked = false, onCheckedChange, disabled = false, icon, shortcut, className, ...props }, ref) => {
+  (
+    {
+      children,
+      checked = false,
+      onCheckedChange,
+      disabled = false,
+      icon,
+      shortcut,
+      className,
+      ...props
+    },
+    ref,
+  ) => {
     const { closeMenu } = useContextMenuCtx();
     const subCtx = React.useContext(SubContext);
     const itemRef = useRef<HTMLButtonElement>(null);
@@ -25,7 +37,7 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
         const items = getFocusableItems(menuEl);
 
         switch (e.key) {
-          case "ArrowDown":
+          case 'ArrowDown':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) {
@@ -33,7 +45,7 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
               items[(idx + 1) % items.length]?.focus({ preventScroll: true });
             }
             break;
-          case "ArrowUp":
+          case 'ArrowUp':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) {
@@ -41,17 +53,17 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
               items[idx <= 0 ? items.length - 1 : idx - 1]?.focus({ preventScroll: true });
             }
             break;
-          case "Home":
+          case 'Home':
             e.preventDefault();
             e.stopPropagation();
             items[0]?.focus({ preventScroll: true });
             break;
-          case "End":
+          case 'End':
             e.preventDefault();
             e.stopPropagation();
             if (items.length > 0) items[items.length - 1]?.focus({ preventScroll: true });
             break;
-          case "Escape":
+          case 'Escape':
             e.preventDefault();
             e.stopPropagation();
             closeMenu();
@@ -62,7 +74,7 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
             break;
         }
       },
-      [disabled, handleActionKeyDown, closeMenu]
+      [disabled, handleActionKeyDown, closeMenu],
     );
 
     return (
@@ -74,13 +86,23 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
         aria-disabled={disabled || undefined}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-        className={cn(baseItemStyles(disabled), className, "w-full")}
+        className={cn(baseItemStyles(disabled), className, 'w-full')}
         {...props}
       >
         <span className="shrink-0 w-4 h-4 flex items-center justify-center" aria-hidden="true">
           {checked && (
-            <svg className="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <svg
+              className="w-4 h-4 text-brand"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           )}
         </span>
@@ -91,15 +113,13 @@ const ContextMenuCheckboxItem = forwardRef<HTMLButtonElement, ContextMenuCheckbo
         )}
         <span className="truncate">{children}</span>
         {shortcut && (
-          <span className="text-xs text-muted-content shrink-0 ml-auto">
-            {shortcut}
-          </span>
+          <span className="text-xs text-muted-content shrink-0 ml-auto">{shortcut}</span>
         )}
       </button>
     );
-  }
+  },
 );
 
-ContextMenuCheckboxItem.displayName = "ContextMenu.CheckboxItem";
+ContextMenuCheckboxItem.displayName = 'ContextMenu.CheckboxItem';
 
 export { ContextMenuCheckboxItem };

@@ -50,7 +50,9 @@ function DraggableListDemo() {
 
   return (
     <div className="w-full">
-      <Typography.H5 className="py-4">List — Drag or keyboard (Space → Arrow ↑↓ → Space)</Typography.H5>
+      <Typography.H5 className="py-4">
+        List — Drag or keyboard (Space → Arrow ↑↓ → Space)
+      </Typography.H5>
 
       <Draggable items={items.map((i) => i.id)} onReorder={handleReorder}>
         <Draggable.Container layout="list">
@@ -67,9 +69,7 @@ function DraggableListDemo() {
                     <p className="text-sm font-secondary font-semibold text-surface-content truncate">
                       {item.title}
                     </p>
-                    <p className="text-xs font-secondary text-muted-content">
-                      {item.subtitle}
-                    </p>
+                    <p className="text-xs font-secondary text-muted-content">{item.subtitle}</p>
                   </div>
                 </div>
               </Draggable.Item>
@@ -166,7 +166,9 @@ function DraggableCrossListDemo() {
                 <Draggable.Item key={id} value={id}>
                   <div className="flex items-center gap-3 p-3 bg-surface rounded-surface border border-border">
                     <Draggable.Handle />
-                    <span className="text-sm font-secondary text-surface-content">{taskMap[id]}</span>
+                    <span className="text-sm font-secondary text-surface-content">
+                      {taskMap[id]}
+                    </span>
                   </div>
                 </Draggable.Item>
               ))}
@@ -177,12 +179,19 @@ function DraggableCrossListDemo() {
             <h3 className="text-sm font-secondary font-bold text-surface-content mb-3 uppercase tracking-wide">
               Done ({containers.done.length})
             </h3>
-            <Draggable.Container containerId="done" layout="list" aria-label="Done items" className="min-h-[80px]">
+            <Draggable.Container
+              containerId="done"
+              layout="list"
+              aria-label="Done items"
+              className="min-h-[80px]"
+            >
               {containers.done.map((id) => (
                 <Draggable.Item key={id} value={id}>
                   <div className="flex items-center gap-3 p-3 bg-surface rounded-surface border border-border">
                     <Draggable.Handle />
-                    <span className="text-sm font-secondary text-surface-content">{taskMap[id]}</span>
+                    <span className="text-sm font-secondary text-surface-content">
+                      {taskMap[id]}
+                    </span>
                   </div>
                 </Draggable.Item>
               ))}

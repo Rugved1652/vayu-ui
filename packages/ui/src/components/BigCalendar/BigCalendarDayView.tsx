@@ -46,9 +46,7 @@ export const DayView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>
         {/* All-day events */}
         {allDayEvents.length > 0 && (
           <div className="px-4 py-2 border-b border-border bg-muted/30">
-            <p className="text-xs font-secondary font-medium text-muted-content mb-1">
-              All day
-            </p>
+            <p className="text-xs font-secondary font-medium text-muted-content mb-1">All day</p>
             <div className="flex flex-wrap gap-1" role="list" aria-label="All-day events">
               {allDayEvents.map((event) => (
                 <Event key={event.id} event={event} variant="compact" />
@@ -72,7 +70,10 @@ export const DayView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>
             return (
               <div key={hour} role="row" className="contents">
                 <div className="h-14 flex items-start justify-end pr-2 pt-0.5" role="rowheader">
-                  <span className="text-[10px] font-secondary text-muted-content" aria-label={formatHour(hour)}>
+                  <span
+                    className="text-[10px] font-secondary text-muted-content"
+                    aria-label={formatHour(hour)}
+                  >
                     {formatHour(hour)}
                   </span>
                 </div>
@@ -115,13 +116,7 @@ export const DayView = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>
                       (1000 * 60 * 60);
                     const heightPx = Math.max(durationHours * 56, 24);
 
-                    return (
-                      <Event
-                        key={event.id}
-                        event={event}
-                        height={heightPx}
-                      />
-                    );
+                    return <Event key={event.id} event={event} height={heightPx} />;
                   })}
                 </div>
               </div>

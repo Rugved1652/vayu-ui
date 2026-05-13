@@ -8,7 +8,7 @@ export const useConfirmExitEntry: HookRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'Prevents accidental page navigation when the user has unsaved changes by attaching a beforeunload listener that triggers the browser\'s native confirmation dialog.',
+    "Prevents accidental page navigation when the user has unsaved changes by attaching a beforeunload listener that triggers the browser's native confirmation dialog.",
   longDescription:
     'Wraps the browser\'s `beforeunload` event into a declarative React hook controlled by a single `enabled` boolean. When enabled, it attaches a `beforeunload` listener that calls `event.preventDefault()` and sets `event.returnValue` to trigger the browser\'s built-in "Leave site?" confirmation dialog. The hook uses a `useRef` to store the current message string, so the prompt text can be updated dynamically without re-registering the event listener (avoiding stale closures and unnecessary attach/detach cycles). The `useCallback` handler is memoized on `enabled`, and `useEffect` gates listener registration behind the enabled flag. SSR-safe: the `window.addEventListener` call only runs inside `useEffect` (client-only), so no `window is not defined` errors during server rendering. Note: modern browsers ignore the custom message text for security reasons — the dialog always shows a generic browser-defined message. The hook still accepts a `message` parameter for backward compatibility and for environments or older browsers that may still display it. This is a side-effect-only hook (returns void) intended to be called unconditionally at the top level of a component.',
   tags: [
@@ -25,11 +25,11 @@ export const useConfirmExitEntry: HookRegistryEntry = {
   category: 'side-effect',
   useCases: [
     'Prevent users from losing unsaved form data by showing a browser confirmation dialog when they try to close the tab or navigate away',
-    'Guard a draft content editor (blog post, email, document) so accidental back-button presses or tab closes don\'t discard work',
+    "Guard a draft content editor (blog post, email, document) so accidental back-button presses or tab closes don't discard work",
     'Protect multi-step wizard or onboarding flows where leaving mid-process would lose partially completed state',
     'Warn before navigating away during long-running operations like file uploads or data exports that should not be interrupted',
     'Conditionally activate the exit guard only when a form is "dirty" (has been modified), and deactivate it after successful save or submission',
-    'Combine with a router\'s route-change blocker for single-page applications where `beforeunload` alone does not intercept client-side navigation',
+    "Combine with a router's route-change blocker for single-page applications where `beforeunload` alone does not intercept client-side navigation",
   ],
 
   // ── File & CLI ────────────────────────────────────────
@@ -37,8 +37,7 @@ export const useConfirmExitEntry: HookRegistryEntry = {
   targetPath: 'src/hooks',
 
   // ── Signature ─────────────────────────────────────────
-  signature:
-    'function useConfirmExit(options: UseConfirmExitOptions): void',
+  signature: 'function useConfirmExit(options: UseConfirmExitOptions): void',
   returnType: 'void',
   parameters: [
     {
@@ -52,8 +51,7 @@ export const useConfirmExitEntry: HookRegistryEntry = {
       name: 'options.message',
       type: 'string',
       required: false,
-      defaultValue:
-        "'You have unsaved changes. Are you sure you want to leave?'",
+      defaultValue: "'You have unsaved changes. Are you sure you want to leave?'",
       description:
         'Custom text to set as `event.returnValue`. Note: modern browsers (Chrome 51+, Firefox 44+) ignore this and display a generic "Leave site?" message for security reasons. The parameter is retained for backward compatibility and older browser support.',
     },
@@ -315,7 +313,7 @@ useConfirmExit({ enabled: isDirty, message: getWarningText() });`,
   // Only prompts when the form actually has changes
 }`,
       reason:
-        'Always guarding with `enabled: true` annoys users by showing the confirmation dialog even when they haven\'t made any changes. Tie `enabled` to a dirty-state flag that flips on when form values differ from their saved originals.',
+        "Always guarding with `enabled: true` annoys users by showing the confirmation dialog even when they haven't made any changes. Tie `enabled` to a dirty-state flag that flips on when form values differ from their saved originals.",
     },
     {
       title: 'Expecting the custom message to appear in modern browsers',

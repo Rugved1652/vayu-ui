@@ -9,7 +9,6 @@ export default function AvatarDemo() {
     <div className="w-full max-w-2xl not-prose space-y-8">
       <Typography.H5 variant="primary">Avatar Examples</Typography.H5>
 
-
       {/* 1. Sizes */}
       <div className="flex flex-col gap-4">
         <Typography.H5 variant="primary">Sizes</Typography.H5>

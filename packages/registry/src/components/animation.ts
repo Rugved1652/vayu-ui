@@ -46,20 +46,49 @@ export const animationEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Animation',
   files: [
-    { name: 'Animation.tsx', description: 'Root component with compound composition wrapping all animation variants' },
-    { name: 'AnimateInView.tsx', description: 'Viewport-triggered animation variant using IntersectionObserver (client component)' },
+    {
+      name: 'Animation.tsx',
+      description: 'Root component with compound composition wrapping all animation variants',
+    },
+    {
+      name: 'AnimateInView.tsx',
+      description:
+        'Viewport-triggered animation variant using IntersectionObserver (client component)',
+    },
     { name: 'FadeAnimation.tsx', description: 'Fade-in opacity transition variant' },
-    { name: 'SlideAnimation.tsx', description: 'Directional slide-in variant (up, down, left, right)' },
-    { name: 'BounceAnimation.tsx', description: 'Scale-based bounce entrance variant (small, medium, large)' },
-    { name: 'FlipAnimation.tsx', description: 'Axis-based flip rotation variant (X-axis or Y-axis)' },
+    {
+      name: 'SlideAnimation.tsx',
+      description: 'Directional slide-in variant (up, down, left, right)',
+    },
+    {
+      name: 'BounceAnimation.tsx',
+      description: 'Scale-based bounce entrance variant (small, medium, large)',
+    },
+    {
+      name: 'FlipAnimation.tsx',
+      description: 'Axis-based flip rotation variant (X-axis or Y-axis)',
+    },
     { name: 'RotateAnimation.tsx', description: 'Custom degree rotation entrance variant' },
-    { name: 'ZoomAnimation.tsx', description: 'Scale-based zoom entrance variant (small, medium, large)' },
+    {
+      name: 'ZoomAnimation.tsx',
+      description: 'Scale-based zoom entrance variant (small, medium, large)',
+    },
     { name: 'RollAnimation.tsx', description: 'Directional rolling entrance variant' },
     { name: 'JackInTheBoxAnimation.tsx', description: 'Playful spring-loaded entrance variant' },
     { name: 'HingeAnimation.tsx', description: 'Element swings and falls off the page variant' },
-    { name: 'types.ts', description: 'TypeScript type definitions, prop interfaces, and Tailwind class mapping objects' },
-    { name: 'utils.ts', description: 'buildAnimationClasses utility for composing animation CSS classes' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and all types' },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions, prop interfaces, and Tailwind class mapping objects',
+    },
+    {
+      name: 'utils.ts',
+      description: 'buildAnimationClasses utility for composing animation CSS classes',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the compound component and all types',
+    },
     { name: 'README.md', description: 'Component anatomy and use-case reference', optional: true },
   ],
   targetPath: 'src/components',
@@ -80,7 +109,7 @@ export const animationEntry: ComponentRegistryEntry = {
       props: [
         {
           name: 'direction',
-          type: "AnimationDirection",
+          type: 'AnimationDirection',
           required: false,
           defaultValue: "'left'",
           description: 'Direction the element slides in from',
@@ -95,7 +124,7 @@ export const animationEntry: ComponentRegistryEntry = {
       props: [
         {
           name: 'scale',
-          type: "AnimationScale",
+          type: 'AnimationScale',
           required: false,
           defaultValue: "'medium'",
           description: 'Intensity of the bounce entrance effect',
@@ -106,11 +135,12 @@ export const animationEntry: ComponentRegistryEntry = {
     {
       name: 'Flip',
       fileName: 'FlipAnimation.tsx',
-      description: 'Rotates the element on the X or Y axis (up/down flip on X-axis, left/right flip on Y-axis)',
+      description:
+        'Rotates the element on the X or Y axis (up/down flip on X-axis, left/right flip on Y-axis)',
       props: [
         {
           name: 'direction',
-          type: "AnimationDirection",
+          type: 'AnimationDirection',
           required: false,
           defaultValue: "'up'",
           description: 'Flip direction. up/down flip on X-axis, left/right flip on Y-axis',
@@ -128,7 +158,8 @@ export const animationEntry: ComponentRegistryEntry = {
           type: 'number',
           required: false,
           defaultValue: '-200',
-          description: 'Starting rotation angle in degrees. Negative values rotate counter-clockwise.',
+          description:
+            'Starting rotation angle in degrees. Negative values rotate counter-clockwise.',
         },
       ],
     },
@@ -139,7 +170,7 @@ export const animationEntry: ComponentRegistryEntry = {
       props: [
         {
           name: 'scale',
-          type: "AnimationScale",
+          type: 'AnimationScale',
           required: false,
           defaultValue: "'medium'",
           description: 'Starting scale intensity before zooming to full size',
@@ -154,7 +185,7 @@ export const animationEntry: ComponentRegistryEntry = {
       props: [
         {
           name: 'direction',
-          type: "AnimationDirection",
+          type: 'AnimationDirection',
           required: false,
           defaultValue: "'left'",
           description: 'Direction the element rolls in from',
@@ -171,24 +202,36 @@ export const animationEntry: ComponentRegistryEntry = {
     {
       name: 'Hinge',
       fileName: 'HingeAnimation.tsx',
-      description: 'Element swings from the top and falls off the page; defaults fillMode to forwards so the element stays in final position',
+      description:
+        'Element swings from the top and falls off the page; defaults fillMode to forwards so the element stays in final position',
       props: [],
     },
     {
       name: 'InView',
       fileName: 'AnimateInView.tsx',
-      description: 'Viewport-triggered animation that plays when the element scrolls into view using IntersectionObserver. Supports all animation variants via the variant prop. Client component — children can still be server-rendered.',
+      description:
+        'Viewport-triggered animation that plays when the element scrolls into view using IntersectionObserver. Supports all animation variants via the variant prop. Client component — children can still be server-rendered.',
       props: [
         {
           name: 'variant',
-          type: "AnimationVariant",
+          type: 'AnimationVariant',
           required: true,
           description: 'Animation type to play when the element enters the viewport',
-          options: ['fade', 'slide', 'bounce', 'flip', 'rotate', 'zoom', 'roll', 'jackInTheBox', 'hinge'],
+          options: [
+            'fade',
+            'slide',
+            'bounce',
+            'flip',
+            'rotate',
+            'zoom',
+            'roll',
+            'jackInTheBox',
+            'hinge',
+          ],
         },
         {
           name: 'direction',
-          type: "AnimationDirection",
+          type: 'AnimationDirection',
           required: false,
           defaultValue: "'left'",
           description: 'Direction for slide, flip, and roll variants',
@@ -196,7 +239,7 @@ export const animationEntry: ComponentRegistryEntry = {
         },
         {
           name: 'scale',
-          type: "AnimationScale",
+          type: 'AnimationScale',
           required: false,
           defaultValue: "'medium'",
           description: 'Scale intensity for bounce and zoom variants',
@@ -244,7 +287,7 @@ export const animationEntry: ComponentRegistryEntry = {
     },
     {
       name: 'duration',
-      type: "AnimationDuration",
+      type: 'AnimationDuration',
       required: false,
       defaultValue: "'normal'",
       description: 'Animation duration controlling how long the entrance takes to complete',
@@ -252,7 +295,7 @@ export const animationEntry: ComponentRegistryEntry = {
     },
     {
       name: 'delay',
-      type: "AnimationDelay",
+      type: 'AnimationDelay',
       required: false,
       defaultValue: "'none'",
       description: 'Delay before the animation starts. Useful for staggered entrance sequences.',
@@ -260,7 +303,7 @@ export const animationEntry: ComponentRegistryEntry = {
     },
     {
       name: 'iteration',
-      type: "AnimationIteration",
+      type: 'AnimationIteration',
       required: false,
       defaultValue: '1',
       description: 'Number of times the animation repeats. Use "infinite" for looping effects.',
@@ -268,10 +311,11 @@ export const animationEntry: ComponentRegistryEntry = {
     },
     {
       name: 'fillMode',
-      type: "AnimationFillMode",
+      type: 'AnimationFillMode',
       required: false,
       defaultValue: "'none'",
-      description: 'How the animation applies styles before and after execution. Animation.Hinge defaults to "forwards".',
+      description:
+        'How the animation applies styles before and after execution. Animation.Hinge defaults to "forwards".',
       options: ['none', 'forwards', 'backwards', 'both'],
     },
     {
@@ -290,7 +334,8 @@ export const animationEntry: ComponentRegistryEntry = {
       prop: 'CSS animation state',
       isBoolean: true,
       defaultValue: 'true',
-      description: 'The animation plays on mount by default. Duration and fill mode control when it completes and whether styles persist.',
+      description:
+        'The animation plays on mount by default. Duration and fill mode control when it completes and whether styles persist.',
     },
     {
       name: 'delayed',
@@ -298,7 +343,8 @@ export const animationEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['none', 'short', 'medium', 'long'],
       defaultValue: "'none'",
-      description: 'The element waits for the configured delay before starting the entrance animation.',
+      description:
+        'The element waits for the configured delay before starting the entrance animation.',
     },
     {
       name: 'repeating',
@@ -306,14 +352,16 @@ export const animationEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['1', '2', '3', 'infinite'],
       defaultValue: '1',
-      description: 'Controls how many times the animation repeats. "infinite" creates a perpetual loop.',
+      description:
+        'Controls how many times the animation repeats. "infinite" creates a perpetual loop.',
     },
     {
       name: 'reducedMotion',
       prop: 'prefers-reduced-motion (system)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Automatically detected from the user OS preference. When enabled, animations are suppressed via CSS and content is shown at full opacity.',
+      description:
+        'Automatically detected from the user OS preference. When enabled, animations are suppressed via CSS and content is shown at full opacity.',
     },
   ],
 
@@ -325,7 +373,8 @@ export const animationEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'motion-reduce:opacity-100',
-        description: 'Applied via Tailwind CSS class to ensure content remains visible at full opacity when the user OS prefers-reduced-motion setting is active.',
+        description:
+          'Applied via Tailwind CSS class to ensure content remains visible at full opacity when the user OS prefers-reduced-motion setting is active.',
         managedByComponent: true,
       },
     ],
@@ -336,10 +385,7 @@ export const animationEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'tailwind-merge' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'tailwind-merge' }],
   registryDependencies: [],
   reactPeerDependency: '>=19.0.0',
 
@@ -347,23 +393,28 @@ export const animationEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'card',
-      reason: 'Cards are commonly animated into view using Animation.Fade or Animation.Slide for staggered entrance effects',
+      reason:
+        'Cards are commonly animated into view using Animation.Fade or Animation.Slide for staggered entrance effects',
     },
     {
       slug: 'button',
-      reason: 'Buttons can be wrapped with Animation.Bounce or Animation.JackInTheBox for attention-drawing call-to-action effects',
+      reason:
+        'Buttons can be wrapped with Animation.Bounce or Animation.JackInTheBox for attention-drawing call-to-action effects',
     },
     {
       slug: 'skeleton',
-      reason: 'Skeleton placeholders can transition into real content using Animation.Fade for a smooth loading reveal',
+      reason:
+        'Skeleton placeholders can transition into real content using Animation.Fade for a smooth loading reveal',
     },
     {
       slug: 'badge',
-      reason: 'Badges use Animation.Bounce or Animation.Zoom for notification count updates and status change highlights',
+      reason:
+        'Badges use Animation.Bounce or Animation.Zoom for notification count updates and status change highlights',
     },
     {
       slug: 'alert',
-      reason: 'Alerts and toast notifications use Animation.Slide or Animation.Fade for entrance and exit transitions',
+      reason:
+        'Alerts and toast notifications use Animation.Slide or Animation.Fade for entrance and exit transitions',
     },
   ],
 
@@ -371,7 +422,8 @@ export const animationEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic Fade and Slide Animations',
-      description: 'Simple entrance animations using Fade with a long delay and Slide from the left.',
+      description:
+        'Simple entrance animations using Fade with a long delay and Slide from the left.',
       code: `import { Animation } from 'vayu-ui';
 
 export default function BasicAnimationDemo() {
@@ -431,7 +483,8 @@ export default function DirectionalDemo() {
     },
     {
       title: 'Scale-Based Animations (Bounce, Zoom)',
-      description: 'Bounce and Zoom variants with different scale options and an infinite looping bounce.',
+      description:
+        'Bounce and Zoom variants with different scale options and an infinite looping bounce.',
       code: `import { Animation } from 'vayu-ui';
 
 export default function ScaleDemo() {
@@ -467,7 +520,8 @@ export default function ScaleDemo() {
     },
     {
       title: 'Custom Rotation and Special Effects',
-      description: 'Rotate with custom degrees, JackInTheBox spring effect, and Hinge fall-off animation.',
+      description:
+        'Rotate with custom degrees, JackInTheBox spring effect, and Hinge fall-off animation.',
       code: `import { Animation } from 'vayu-ui';
 
 export default function SpecialDemo() {
@@ -495,7 +549,8 @@ export default function SpecialDemo() {
     },
     {
       title: 'Staggered Card Entrance',
-      description: 'Multiple cards entering with increasing delays to create a staggered reveal effect.',
+      description:
+        'Multiple cards entering with increasing delays to create a staggered reveal effect.',
       code: `import { Animation } from 'vayu-ui';
 
 export default function StaggeredDemo() {
@@ -528,7 +583,8 @@ export default function StaggeredDemo() {
     },
     {
       title: 'Viewport-Triggered Scroll Animations',
-      description: 'Animation.InView triggers animations when elements scroll into the viewport, using IntersectionObserver.',
+      description:
+        'Animation.InView triggers animations when elements scroll into the viewport, using IntersectionObserver.',
       code: `import { Animation } from 'vayu-ui';
 
 export default function InViewDemo() {
@@ -562,43 +618,50 @@ export default function InViewDemo() {
       title: 'Wrapping interactive elements that depend on initial visibility',
       bad: '<Animation.Fade><input placeholder="Enter name" /></Animation.Fade>',
       good: '<div><input placeholder="Enter name" /></div>',
-      reason: 'Animation keyframes start at opacity: 0. If the animation fails to load or is suppressed, form inputs could be invisible or unclickable. Use animations on decorative wrappers, not directly on interactive elements.',
+      reason:
+        'Animation keyframes start at opacity: 0. If the animation fails to load or is suppressed, form inputs could be invisible or unclickable. Use animations on decorative wrappers, not directly on interactive elements.',
     },
     {
       title: 'Setting iteration="infinite" on content that users need to read',
       bad: '<Animation.Bounce iteration="infinite"><p>Important notice text</p></Animation.Bounce>',
       good: '<Animation.Bounce iteration={1}><p>Important notice text</p></Animation.Bounce>',
-      reason: 'Infinite animations cause continuous motion that makes text hard to read and violates WCAG 2.3.3. Use iteration={1} for content that conveys meaning.',
+      reason:
+        'Infinite animations cause continuous motion that makes text hard to read and violates WCAG 2.3.3. Use iteration={1} for content that conveys meaning.',
     },
     {
       title: 'Using Animation.Hinge without fillMode="forwards"',
       bad: '<Animation.Hinge fillMode="none">...</Animation.Hinge>',
       good: '<Animation.Hinge>...</Animation.Hinge>',
-      reason: 'Hinge defaults to fillMode="forwards" for a reason: the animation ends with the element fallen off-screen. Without "forwards", the element snaps back to its original position, creating a jarring visual glitch.',
+      reason:
+        'Hinge defaults to fillMode="forwards" for a reason: the animation ends with the element fallen off-screen. Without "forwards", the element snaps back to its original position, creating a jarring visual glitch.',
     },
     {
       title: 'Nesting animation components inside each other',
       bad: '<Animation.Fade><Animation.Slide direction="left">...</Animation.Slide></Animation.Fade>',
       good: '<Animation.Slide direction="left">...</Animation.Slide>',
-      reason: 'Nesting animations creates conflicting opacity and transform transitions that produce unpredictable visual results. Use a single animation variant per element.',
+      reason:
+        'Nesting animations creates conflicting opacity and transform transitions that produce unpredictable visual results. Use a single animation variant per element.',
     },
     {
       title: 'Overriding the motion-reduce class via className',
       bad: '<Animation.Fade className="!opacity-0">...</Animation.Fade>',
       good: '<Animation.Fade className="mt-4">...</Animation.Fade>',
-      reason: 'Overriding opacity or animation properties via className breaks the reduced-motion fallback. The motion-reduce:opacity-100 class ensures content stays visible for users who prefer reduced motion. Avoid overriding animation-related CSS properties.',
+      reason:
+        'Overriding opacity or animation properties via className breaks the reduced-motion fallback. The motion-reduce:opacity-100 class ensures content stays visible for users who prefer reduced motion. Avoid overriding animation-related CSS properties.',
     },
     {
       title: 'Using Animation.InView for above-the-fold content',
       bad: '<Animation.InView variant="fade"><h1>Welcome to our site</h1></Animation.InView>',
       good: '<Animation.Fade><h1>Welcome to our site</h1></Animation.Fade>',
-      reason: 'Animation.InView starts with opacity: 0 and relies on IntersectionObserver to trigger. For above-the-fold content that is already visible on page load, use the standard Animation variants instead to avoid a flash of invisible content.',
+      reason:
+        'Animation.InView starts with opacity: 0 and relies on IntersectionObserver to trigger. For above-the-fold content that is already visible on page load, use the standard Animation variants instead to avoid a flash of invisible content.',
     },
     {
       title: 'Nesting Animation.InView inside another Animation component',
       bad: '<Animation.Fade><Animation.InView variant="slide" direction="up">...</Animation.InView></Animation.Fade>',
       good: '<Animation.InView variant="slide" direction="up">...</Animation.InView>',
-      reason: 'Animation.InView already handles the animation — nesting it inside another Animation component creates conflicting opacity and transform transitions. Use Animation.InView alone with the desired variant prop.',
+      reason:
+        'Animation.InView already handles the animation — nesting it inside another Animation component creates conflicting opacity and transform transitions. Use Animation.InView alone with the desired variant prop.',
     },
   ],
 };

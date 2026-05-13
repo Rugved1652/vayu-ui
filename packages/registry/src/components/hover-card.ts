@@ -38,11 +38,29 @@ export const hoverCardEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'HoverCard',
   files: [
-    { name: 'HoverCard.tsx', description: 'ForwardRef component with portal rendering, positioning, open/close timing, and arrow rendering' },
-    { name: 'HoverCardArrow.tsx', description: 'Presentational directional arrow sub-component using a rotated square div' },
-    { name: 'types.ts', description: 'TypeScript interfaces for HoverCardProps, HoverCardSide, HoverCardAlign, and arrow border helpers' },
-    { name: 'hooks.ts', description: 'Custom hooks: useHoverCardOpen (delayed open/close with Escape dismiss) and useHoverCardPosition (viewport-aware positioning with auto-flip)' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting HoverCard and all type definitions' },
+    {
+      name: 'HoverCard.tsx',
+      description:
+        'ForwardRef component with portal rendering, positioning, open/close timing, and arrow rendering',
+    },
+    {
+      name: 'HoverCardArrow.tsx',
+      description: 'Presentational directional arrow sub-component using a rotated square div',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript interfaces for HoverCardProps, HoverCardSide, HoverCardAlign, and arrow border helpers',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'Custom hooks: useHoverCardOpen (delayed open/close with Escape dismiss) and useHoverCardPosition (viewport-aware positioning with auto-flip)',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting HoverCard and all type definitions',
+    },
     { name: 'README.md', description: 'Component anatomy and use-case documentation' },
   ],
   targetPath: 'src/components',
@@ -53,13 +71,15 @@ export const hoverCardEntry: ComponentRegistryEntry = {
     {
       name: 'HoverCardArrow',
       fileName: 'HoverCardArrow.tsx',
-      description: 'Internal directional arrow rendered at the edge of the hover card pointing toward the trigger; not exported publicly',
+      description:
+        'Internal directional arrow rendered at the edge of the hover card pointing toward the trigger; not exported publicly',
       props: [
         {
           name: 'side',
-          type: "HoverCardSide",
+          type: 'HoverCardSide',
           required: true,
-          description: 'The current side the card is rendered on, used to determine which borders to hide on the rotated square',
+          description:
+            'The current side the card is rendered on, used to determine which borders to hide on the rotated square',
         },
         {
           name: 'position',
@@ -91,7 +111,8 @@ export const hoverCardEntry: ComponentRegistryEntry = {
       type: "'top' | 'right' | 'bottom' | 'left'",
       required: false,
       defaultValue: "'bottom'",
-      description: 'Preferred side of the trigger to place the hover card; auto-flips if insufficient viewport space',
+      description:
+        'Preferred side of the trigger to place the hover card; auto-flips if insufficient viewport space',
       options: ['top', 'right', 'bottom', 'left'],
     },
     {
@@ -121,14 +142,16 @@ export const hoverCardEntry: ComponentRegistryEntry = {
       type: 'number',
       required: false,
       defaultValue: '200',
-      description: 'Delay in milliseconds before the hover card appears after the trigger is hovered or focused',
+      description:
+        'Delay in milliseconds before the hover card appears after the trigger is hovered or focused',
     },
     {
       name: 'closeDelay',
       type: 'number',
       required: false,
       defaultValue: '300',
-      description: 'Delay in milliseconds before the hover card disappears after the cursor leaves the trigger or card',
+      description:
+        'Delay in milliseconds before the hover card disappears after the cursor leaves the trigger or card',
     },
     {
       name: 'contentClassName',
@@ -148,7 +171,8 @@ export const hoverCardEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'true',
-      description: 'Whether to render a directional arrow pointing from the hover card to the trigger',
+      description:
+        'Whether to render a directional arrow pointing from the hover card to the trigger',
     },
   ],
   rendersAs: 'div',
@@ -163,7 +187,8 @@ export const hoverCardEntry: ComponentRegistryEntry = {
       prop: 'isOpen (internal)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'The hover card portal is mounted and positioned; controlled internally by hover/focus timeouts',
+      description:
+        'The hover card portal is mounted and positioned; controlled internally by hover/focus timeouts',
     },
     {
       name: 'disabled',
@@ -177,14 +202,16 @@ export const hoverCardEntry: ComponentRegistryEntry = {
       prop: 'mounted (internal)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Client-side hydration flag; portal only renders after mount to avoid SSR mismatches',
+      description:
+        'Client-side hydration flag; portal only renders after mount to avoid SSR mismatches',
     },
     {
       name: 'flipped',
       prop: 'currentSide (internal)',
       isBoolean: false,
       defaultValue: "'bottom'",
-      description: 'When the preferred side lacks viewport space, the card auto-flips to the opposite side',
+      description:
+        'When the preferred side lacks viewport space, the card auto-flips to the opposite side',
     },
   ],
 
@@ -217,33 +244,39 @@ export const hoverCardEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-haspopup',
-        description: 'Applied to the trigger element with value "true" to indicate it has an associated popup',
+        description:
+          'Applied to the trigger element with value "true" to indicate it has an associated popup',
         managedByComponent: true,
       },
       {
         name: 'aria-expanded',
-        description: 'Applied to the trigger element; dynamically set to true when the hover card is visible and false when hidden',
+        description:
+          'Applied to the trigger element; dynamically set to true when the hover card is visible and false when hidden',
         managedByComponent: true,
       },
       {
         name: 'aria-describedby',
-        description: 'Applied to the trigger when the card is visible; references the portal element by auto-generated ID to associate the content with the trigger',
+        description:
+          'Applied to the trigger when the card is visible; references the portal element by auto-generated ID to associate the content with the trigger',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Applied to the directional arrow div to hide the decorative element from the accessibility tree',
+        description:
+          'Applied to the directional arrow div to hide the decorative element from the accessibility tree',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Tab',
-        behavior: 'Focuses the trigger element, which initiates the open delay and displays the hover card',
+        behavior:
+          'Focuses the trigger element, which initiates the open delay and displays the hover card',
       },
       {
         key: 'Shift+Tab',
-        behavior: 'Moves focus away from the trigger, which initiates the close delay and dismisses the hover card',
+        behavior:
+          'Moves focus away from the trigger, which initiates the close delay and dismisses the hover card',
       },
       {
         key: 'Escape',
@@ -258,9 +291,7 @@ export const hoverCardEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -272,19 +303,23 @@ export const hoverCardEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'button',
-      reason: 'Buttons are the most common trigger element for HoverCards, especially for link previews or action menus',
+      reason:
+        'Buttons are the most common trigger element for HoverCards, especially for link previews or action menus',
     },
     {
       slug: 'badge',
-      reason: 'Badges with abbreviated text benefit from HoverCards showing expanded information on hover',
+      reason:
+        'Badges with abbreviated text benefit from HoverCards showing expanded information on hover',
     },
     {
       slug: 'card',
-      reason: 'Cards share a similar content-rich display pattern and are often used alongside HoverCards for detail views',
+      reason:
+        'Cards share a similar content-rich display pattern and are often used alongside HoverCards for detail views',
     },
     {
       slug: 'tooltip',
-      reason: 'Tooltip is a lighter alternative for simple text hints when rich content is not needed',
+      reason:
+        'Tooltip is a lighter alternative for simple text hints when rich content is not needed',
     },
   ],
 
@@ -292,7 +327,8 @@ export const hoverCardEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic profile card',
-      description: 'A user profile hover card with avatar, name, handle, bio, and metadata displayed on hover.',
+      description:
+        'A user profile hover card with avatar, name, handle, bio, and metadata displayed on hover.',
       code: `import { HoverCard } from 'vayu-ui';
 import { CalendarDays, MapPin } from 'lucide-react';
 
@@ -365,7 +401,8 @@ export default function SidesHoverCard() {
     },
     {
       title: 'Rich content',
-      description: 'A contact info hover card with icons, links, and an interactive action button inside the card.',
+      description:
+        'A contact info hover card with icons, links, and an interactive action button inside the card.',
       code: `import { HoverCard } from 'vayu-ui';
 import { Mail, ExternalLink } from 'lucide-react';
 
@@ -408,31 +445,36 @@ export default function RichHoverCard() {
       title: 'Putting critical information only in a hover card',
       bad: '<HoverCard content="Deleting this item is permanent"><Button variant="destructive">Delete</Button></HoverCard>',
       good: '<Button variant="destructive" onClick={openConfirmDialog}>Delete</Button> with a confirmation Modal showing the warning',
-      reason: 'Hover cards are supplementary — they disappear on mouse leave, Escape, or scroll. Critical actions, warnings, or required instructions must be persistently visible, not hidden behind a hover interaction.',
+      reason:
+        'Hover cards are supplementary — they disappear on mouse leave, Escape, or scroll. Critical actions, warnings, or required instructions must be persistently visible, not hidden behind a hover interaction.',
     },
     {
       title: 'Setting closeDelay to 0',
       bad: '<HoverCard content={...} closeDelay={0}>...</HoverCard>',
       good: '<HoverCard content={...} closeDelay={300}>...</HoverCard>',
-      reason: 'A zero close delay makes the card disappear the instant the cursor leaves the trigger, violating WCAG 2.5.7. Users need time to move their cursor into the card body to interact with its content. Use at least 150–300ms.',
+      reason:
+        'A zero close delay makes the card disappear the instant the cursor leaves the trigger, violating WCAG 2.5.7. Users need time to move their cursor into the card body to interact with its content. Use at least 150–300ms.',
     },
     {
       title: 'Wrapping non-interactive elements without ensuring focusability',
       bad: '<HoverCard content="Detail"><span>Some text</span></HoverCard>',
       good: '<HoverCard content="Detail"><button type="button" className="...">Some text</button></HoverCard>',
-      reason: 'The trigger uses onFocus/onBlur to show/hide the card. Plain <span> elements are not keyboard-focusable by default, so the hover card will be invisible to keyboard and assistive technology users.',
+      reason:
+        'The trigger uses onFocus/onBlur to show/hide the card. Plain <span> elements are not keyboard-focusable by default, so the hover card will be invisible to keyboard and assistive technology users.',
     },
     {
       title: 'Using HoverCard instead of Tooltip for simple text labels',
       bad: '<HoverCard content="Save changes"><Button>Save</Button></HoverCard>',
       good: '<Tooltip content="Save changes"><Button><Icon /></Button></Tooltip>',
-      reason: 'HoverCard is designed for rich content (profiles, contact info, previews). For simple one-line text hints, use the lighter Tooltip component which has the proper role="tooltip" ARIA semantics.',
+      reason:
+        'HoverCard is designed for rich content (profiles, contact info, previews). For simple one-line text hints, use the lighter Tooltip component which has the proper role="tooltip" ARIA semantics.',
     },
     {
       title: 'Relying on interactive content inside the card for primary actions',
       bad: '<HoverCard content={<button onClick={deleteAccount}>Delete Account</button>}>...</HoverCard>',
       good: 'Use a Button trigger that opens a confirmation Modal or Popover with the destructive action',
-      reason: 'Hover cards are transient by nature and close when the cursor leaves. Interactive elements like destructive action buttons should not live inside hover cards because they can vanish mid-interaction. Use a Popover or Modal for persistent interactive panels.',
+      reason:
+        'Hover cards are transient by nature and close when the cursor leaves. Interactive elements like destructive action buttons should not live inside hover cards because they can vanish mid-interaction. Use a Popover or Modal for persistent interactive panels.',
     },
   ],
 };

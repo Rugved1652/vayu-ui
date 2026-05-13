@@ -35,12 +35,36 @@ export const popoverEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Popover',
   files: [
-    { name: 'Popover.tsx', description: 'Root component providing PopoverContext, controlled/uncontrolled state management, click-outside dismissal, and Escape key handling' },
-    { name: 'PopoverTrigger.tsx', description: 'Trigger button that toggles the popover; supports asChild for custom trigger elements with aria-expanded and aria-haspopup' },
-    { name: 'PopoverContent.tsx', description: 'Positioned floating panel with collision detection, arrow rendering, auto-focus on open, and optional modal backdrop' },
-    { name: 'hooks.ts', description: 'PopoverContext, usePopover hook for consuming context, and usePopoverPosition hook for viewport-aware positioning logic' },
-    { name: 'types.ts', description: 'TypeScript type definitions for PopoverProps, PopoverTriggerProps, PopoverContentProps, PopoverContextType, and arrow position classes' },
-    { name: 'index.ts', description: 'Barrel export file assembling the compound component via Object.assign and re-exporting all types' },
+    {
+      name: 'Popover.tsx',
+      description:
+        'Root component providing PopoverContext, controlled/uncontrolled state management, click-outside dismissal, and Escape key handling',
+    },
+    {
+      name: 'PopoverTrigger.tsx',
+      description:
+        'Trigger button that toggles the popover; supports asChild for custom trigger elements with aria-expanded and aria-haspopup',
+    },
+    {
+      name: 'PopoverContent.tsx',
+      description:
+        'Positioned floating panel with collision detection, arrow rendering, auto-focus on open, and optional modal backdrop',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'PopoverContext, usePopover hook for consuming context, and usePopoverPosition hook for viewport-aware positioning logic',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for PopoverProps, PopoverTriggerProps, PopoverContentProps, PopoverContextType, and arrow position classes',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export file assembling the compound component via Object.assign and re-exporting all types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -50,27 +74,31 @@ export const popoverEntry: ComponentRegistryEntry = {
     {
       name: 'Trigger',
       fileName: 'PopoverTrigger.tsx',
-      description: 'Button that toggles the popover open/closed. When asChild is true, merges event handlers and ARIA attributes onto the child element instead of rendering a default button.',
+      description:
+        'Button that toggles the popover open/closed. When asChild is true, merges event handlers and ARIA attributes onto the child element instead of rendering a default button.',
       props: [
         {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
-          description: 'Content to render; either a custom element (with asChild) or the default button label text',
+          description:
+            'Content to render; either a custom element (with asChild) or the default button label text',
         },
         {
           name: 'asChild',
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, merges event handlers and ARIA attributes onto the child element instead of rendering a wrapping button',
+          description:
+            'When true, merges event handlers and ARIA attributes onto the child element instead of rendering a wrapping button',
         },
         {
           name: 'disabled',
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'Disables the trigger, preventing popover toggling on click or keyboard activation',
+          description:
+            'Disables the trigger, preventing popover toggling on click or keyboard activation',
         },
       ],
       supportsAsChild: true,
@@ -78,7 +106,8 @@ export const popoverEntry: ComponentRegistryEntry = {
     {
       name: 'Content',
       fileName: 'PopoverContent.tsx',
-      description: 'Positioned floating panel anchored to the trigger. Handles auto-focus on open, collision detection with side flipping, optional arrow rendering, and modal backdrop mode.',
+      description:
+        'Positioned floating panel anchored to the trigger. Handles auto-focus on open, collision detection with side flipping, optional arrow rendering, and modal backdrop mode.',
       props: [
         {
           name: 'children',
@@ -121,14 +150,16 @@ export const popoverEntry: ComponentRegistryEntry = {
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, renders a small directional arrow pointing from the popover to the trigger',
+          description:
+            'When true, renders a small directional arrow pointing from the popover to the trigger',
         },
         {
           name: 'avoidCollisions',
           type: 'boolean',
           required: false,
           defaultValue: 'true',
-          description: 'When true, automatically flips the popover to the opposite side if there is not enough viewport space',
+          description:
+            'When true, automatically flips the popover to the opposite side if there is not enough viewport space',
         },
       ],
     },
@@ -167,7 +198,8 @@ export const popoverEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'When true, renders a semi-transparent backdrop overlay behind the popover and sets aria-modal to "true"',
+      description:
+        'When true, renders a semi-transparent backdrop overlay behind the popover and sets aria-modal to "true"',
     },
   ],
   rendersAs: 'div',
@@ -182,14 +214,16 @@ export const popoverEntry: ComponentRegistryEntry = {
       prop: 'open',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Whether the popover is visible. In controlled mode, set via the open prop; in uncontrolled mode, toggled by Trigger click, Escape key, or click-outside.',
+      description:
+        'Whether the popover is visible. In controlled mode, set via the open prop; in uncontrolled mode, toggled by Trigger click, Escape key, or click-outside.',
     },
     {
       name: 'modal',
       prop: 'modal',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'When true, renders a backdrop overlay that blocks interaction with the rest of the page and sets aria-modal="true" on the content.',
+      description:
+        'When true, renders a backdrop overlay that blocks interaction with the rest of the page and sets aria-modal="true" on the content.',
     },
     {
       name: 'disabled',
@@ -197,7 +231,8 @@ export const popoverEntry: ComponentRegistryEntry = {
       values: undefined,
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Disables the Trigger sub-component, preventing the popover from opening on click or keyboard activation.',
+      description:
+        'Disables the Trigger sub-component, preventing the popover from opening on click or keyboard activation.',
     },
   ],
 
@@ -206,22 +241,26 @@ export const popoverEntry: ComponentRegistryEntry = {
     {
       name: 'onOpenChange',
       signature: '(open: boolean) => void',
-      description: 'Fired when the popover open state changes (toggled by Trigger click, closed via Escape key or click-outside). Use this in controlled mode.',
+      description:
+        'Fired when the popover open state changes (toggled by Trigger click, closed via Escape key or click-outside). Use this in controlled mode.',
     },
     {
       name: 'onClick (Trigger)',
       signature: '(event: React.MouseEvent<HTMLElement>) => void',
-      description: 'Fired when the Trigger is clicked, before the popover toggles. Respects the disabled prop.',
+      description:
+        'Fired when the Trigger is clicked, before the popover toggles. Respects the disabled prop.',
     },
     {
       name: 'onKeyDown (Trigger)',
       signature: '(event: React.KeyboardEvent<HTMLElement>) => void',
-      description: 'Fired on key down while the trigger has focus. Enter and Space toggle the popover open state.',
+      description:
+        'Fired on key down while the trigger has focus. Enter and Space toggle the popover open state.',
     },
     {
       name: 'onClick (Backdrop)',
       signature: '(event: React.MouseEvent<HTMLDivElement>) => void',
-      description: 'Fired when the modal backdrop is clicked (only when modal=true), which closes the popover.',
+      description:
+        'Fired when the modal backdrop is clicked (only when modal=true), which closes the popover.',
     },
   ],
 
@@ -231,12 +270,14 @@ export const popoverEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-expanded',
-        description: 'Set on Popover.Trigger to reflect whether the popover is currently open or closed',
+        description:
+          'Set on Popover.Trigger to reflect whether the popover is currently open or closed',
         managedByComponent: true,
       },
       {
         name: 'aria-haspopup',
-        description: 'Set to "dialog" on Popover.Trigger to indicate that activating it opens a popup dialog',
+        description:
+          'Set to "dialog" on Popover.Trigger to indicate that activating it opens a popup dialog',
         managedByComponent: true,
       },
       {
@@ -246,17 +287,20 @@ export const popoverEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-modal',
-        description: 'Set to "true" on Popover.Content when modal mode is enabled, restricting screen reader navigation to the popover content',
+        description:
+          'Set to "true" on Popover.Content when modal mode is enabled, restricting screen reader navigation to the popover content',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden (arrow)',
-        description: 'Set to "true" on the arrow element to hide the decorative arrow from the accessibility tree',
+        description:
+          'Set to "true" on the arrow element to hide the decorative arrow from the accessibility tree',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden (backdrop)',
-        description: 'Set to "true" on the modal backdrop overlay to hide it from the accessibility tree',
+        description:
+          'Set to "true" on the modal backdrop overlay to hide it from the accessibility tree',
         managedByComponent: true,
       },
     ],
@@ -286,9 +330,7 @@ export const popoverEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [
     {
       slug: 'button',
@@ -305,11 +347,13 @@ export const popoverEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'modal',
-      reason: 'Alternative overlay pattern for center-screen dialogs; both share controlled/uncontrolled state patterns',
+      reason:
+        'Alternative overlay pattern for center-screen dialogs; both share controlled/uncontrolled state patterns',
     },
     {
       slug: 'tooltip',
-      reason: 'Similar floating panel pattern for hover-triggered information; used alongside popovers for different interaction patterns',
+      reason:
+        'Similar floating panel pattern for hover-triggered information; used alongside popovers for different interaction patterns',
     },
     {
       slug: 'typography',
@@ -325,7 +369,8 @@ export const popoverEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic Popover',
-      description: 'A simple popover with a default trigger button and content panel positioned below.',
+      description:
+        'A simple popover with a default trigger button and content panel positioned below.',
       code: `import { Popover, Typography } from 'vayu-ui';
 
 export default function BasicPopoverDemo() {
@@ -349,7 +394,8 @@ export default function BasicPopoverDemo() {
     },
     {
       title: 'Popover with Arrow',
-      description: 'A popover that renders above the trigger with a directional arrow pointing to it.',
+      description:
+        'A popover that renders above the trigger with a directional arrow pointing to it.',
       code: `import { Popover, Typography } from 'vayu-ui';
 
 export default function ArrowPopoverDemo() {
@@ -370,7 +416,8 @@ export default function ArrowPopoverDemo() {
     },
     {
       title: 'Position Variants',
-      description: 'All four placement sides (top, bottom, left, right) with arrows demonstrating directional positioning.',
+      description:
+        'All four placement sides (top, bottom, left, right) with arrows demonstrating directional positioning.',
       code: `import { Popover, Typography } from 'vayu-ui';
 
 export default function PositionPopoverDemo() {
@@ -418,7 +465,8 @@ export default function PositionPopoverDemo() {
     },
     {
       title: 'Alignment Options',
-      description: 'All three alignment options (start, center, end) for bottom-positioned popovers.',
+      description:
+        'All three alignment options (start, center, end) for bottom-positioned popovers.',
       code: `import { Popover, Typography } from 'vayu-ui';
 
 export default function AlignmentPopoverDemo() {
@@ -457,7 +505,8 @@ export default function AlignmentPopoverDemo() {
     },
     {
       title: 'Custom Trigger with asChild',
-      description: 'Using the asChild pattern to render a custom Button component as the popover trigger while maintaining all ARIA attributes.',
+      description:
+        'Using the asChild pattern to render a custom Button component as the popover trigger while maintaining all ARIA attributes.',
       code: `import { Popover, Button, Typography } from 'vayu-ui';
 
 export default function CustomTriggerPopoverDemo() {
@@ -480,7 +529,8 @@ export default function CustomTriggerPopoverDemo() {
     },
     {
       title: 'Controlled Popover',
-      description: 'Popover with externally managed open state using open and onOpenChange props for programmatic control.',
+      description:
+        'Popover with externally managed open state using open and onOpenChange props for programmatic control.',
       code: `import { useState } from 'react';
 import { Popover, Button, Typography } from 'vayu-ui';
 
@@ -523,31 +573,36 @@ export default function ControlledPopoverDemo() {
       title: 'Mixing controlled and uncontrolled props',
       bad: '<Popover open={isVisible} defaultOpen={true}>',
       good: '<Popover open={isVisible} onOpenChange={setIsVisible}>',
-      reason: 'Passing both open and defaultOpen creates conflicting state management. Use open + onOpenChange for controlled mode, or defaultOpen for uncontrolled mode — never both.',
+      reason:
+        'Passing both open and defaultOpen creates conflicting state management. Use open + onOpenChange for controlled mode, or defaultOpen for uncontrolled mode — never both.',
     },
     {
       title: 'Using Popover.Trigger without asChild for custom elements',
       bad: '<Popover.Trigger><Button variant="primary">Open</Button></Popover.Trigger>',
       good: '<Popover.Trigger asChild><Button variant="primary">Open</Button></Popover.Trigger>',
-      reason: 'Without asChild, Popover.Trigger wraps children in a <button> element, resulting in a nested <button> inside <button> which is invalid HTML and causes accessibility issues.',
+      reason:
+        'Without asChild, Popover.Trigger wraps children in a <button> element, resulting in a nested <button> inside <button> which is invalid HTML and causes accessibility issues.',
     },
     {
       title: 'Using Popover.Content outside of Popover',
       bad: '<div><Popover.Content>Content</Popover.Content></div>',
       good: '<Popover><Popover.Trigger>Open</Popover.Trigger><Popover.Content>Content</Popover.Content></Popover>',
-      reason: 'Popover.Content requires the Popover context (open state, trigger/content refs, positioning) provided by the root Popover component. Using it outside Popover throws a runtime error.',
+      reason:
+        'Popover.Content requires the Popover context (open state, trigger/content refs, positioning) provided by the root Popover component. Using it outside Popover throws a runtime error.',
     },
     {
       title: 'Setting avoidCollisions to false without testing viewport edges',
       bad: '<Popover.Content side="right" avoidCollisions={false}>',
       good: '<Popover.Content side="right" avoidCollisions={true}>',
-      reason: 'Disabling collision detection can cause the popover to render outside the viewport, making content unreachable. Only disable it if you have guaranteed viewport space or custom overflow handling.',
+      reason:
+        'Disabling collision detection can cause the popover to render outside the viewport, making content unreachable. Only disable it if you have guaranteed viewport space or custom overflow handling.',
     },
     {
       title: 'Omitting accessible content in Popover.Content',
       bad: '<Popover.Content><img src="chart.png" /></Popover.Content>',
       good: '<Popover.Content><img src="chart.png" alt="Q4 revenue chart" /><Typography.P variant="secondary">Revenue increased 15%</Typography.P></Popover.Content>',
-      reason: 'The content panel uses role="dialog" which screen readers announce as a dialog. Ensure there is readable text content (headings, descriptions) so users understand the popover purpose.',
+      reason:
+        'The content panel uses role="dialog" which screen readers announce as a dialog. Ensure there is readable text content (headings, descriptions) so users understand the popover purpose.',
     },
   ],
 };

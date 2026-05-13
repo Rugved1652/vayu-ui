@@ -19,7 +19,8 @@ export const CommandBoxList = forwardRef<HTMLDivElement, CommandBoxListProps>(
       if (localRef.current) {
         (listRef as React.MutableRefObject<HTMLDivElement | null>).current = localRef.current;
         if (typeof ref === 'function') ref(localRef.current);
-        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = localRef.current;
+        else if (ref)
+          (ref as React.MutableRefObject<HTMLDivElement | null>).current = localRef.current;
       }
     }, [localRef.current, ref, listRef]);
 

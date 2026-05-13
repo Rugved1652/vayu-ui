@@ -74,13 +74,13 @@ export const VayuUILogo: React.FC<VayuUILogoProps> = ({ size = 48, className = '
 
       {/* Text Logo */}
       <div className="flex items-baseline gap-1">
-        <span className="font-secondary font-bold text-canvas-content" style={{ fontSize: size * 0.5 }}>
-          Vayu
-        </span>
         <span
-          className="font-secondary font-bold text-brand"
+          className="font-secondary font-bold text-canvas-content"
           style={{ fontSize: size * 0.5 }}
         >
+          Vayu
+        </span>
+        <span className="font-secondary font-bold text-brand" style={{ fontSize: size * 0.5 }}>
           UI
         </span>
       </div>

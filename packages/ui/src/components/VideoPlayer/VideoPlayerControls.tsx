@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { clsx } from "clsx";
-import { useVideoPlayer } from "./VideoPlayer";
-import type { VideoPlayerControlsProps } from "./types";
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import { clsx } from 'clsx';
+import { useVideoPlayer } from './VideoPlayer';
+import type { VideoPlayerControlsProps } from './types';
 
 export const VideoPlayerControls = forwardRef<HTMLDivElement, VideoPlayerControlsProps>(
   ({ children, autoHide = true, autoHideDelay = 3000, className, ...props }, ref) => {
@@ -37,9 +37,9 @@ export const VideoPlayerControls = forwardRef<HTMLDivElement, VideoPlayerControl
         role="group"
         aria-label="Video controls"
         className={clsx(
-          "transition-opacity duration-300",
-          !visible && autoHide && isPlaying && "opacity-0 pointer-events-none",
-          className
+          'transition-opacity duration-300',
+          !visible && autoHide && isPlaying && 'opacity-0 pointer-events-none',
+          className,
         )}
         onMouseMove={resetTimer}
         onTouchStart={resetTimer}
@@ -48,7 +48,7 @@ export const VideoPlayerControls = forwardRef<HTMLDivElement, VideoPlayerControl
         {children}
       </div>
     );
-  }
+  },
 );
 
-VideoPlayerControls.displayName = "VideoPlayer.Controls";
+VideoPlayerControls.displayName = 'VideoPlayer.Controls';

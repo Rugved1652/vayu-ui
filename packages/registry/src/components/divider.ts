@@ -36,11 +36,29 @@ export const dividerEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Divider',
   files: [
-    { name: 'Divider.tsx', description: 'Root compound object assembling DividerRoot, DividerLine, and DividerLabel into a single namespace' },
-    { name: 'DividerLine.tsx', description: 'Line sub-component with variant, color, size, thickness, opacity, and orientation controls' },
-    { name: 'DividerLabel.tsx', description: 'Label sub-component rendering text between divider lines with color variants' },
-    { name: 'types.ts', description: 'TypeScript interfaces for all props plus design token maps for spacing, variants, colors, and sizes' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the Divider namespace and all type definitions' },
+    {
+      name: 'Divider.tsx',
+      description:
+        'Root compound object assembling DividerRoot, DividerLine, and DividerLabel into a single namespace',
+    },
+    {
+      name: 'DividerLine.tsx',
+      description:
+        'Line sub-component with variant, color, size, thickness, opacity, and orientation controls',
+    },
+    {
+      name: 'DividerLabel.tsx',
+      description: 'Label sub-component rendering text between divider lines with color variants',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript interfaces for all props plus design token maps for spacing, variants, colors, and sizes',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the Divider namespace and all type definitions',
+    },
   ],
   targetPath: 'src/components',
 
@@ -50,7 +68,8 @@ export const dividerEntry: ComponentRegistryEntry = {
     {
       name: 'Line',
       fileName: 'DividerLine.tsx',
-      description: 'Renders a horizontal or vertical border line with variant, color, size, thickness, and opacity controls; always marked aria-hidden="true"',
+      description:
+        'Renders a horizontal or vertical border line with variant, color, size, thickness, and opacity controls; always marked aria-hidden="true"',
       props: [
         {
           name: 'variant',
@@ -94,7 +113,8 @@ export const dividerEntry: ComponentRegistryEntry = {
           type: "'horizontal' | 'vertical'",
           required: false,
           defaultValue: "'horizontal'",
-          description: 'Direction of the line; horizontal uses border-top, vertical uses border-left',
+          description:
+            'Direction of the line; horizontal uses border-top, vertical uses border-left',
           options: ['horizontal', 'vertical'],
         },
       ],
@@ -102,14 +122,16 @@ export const dividerEntry: ComponentRegistryEntry = {
     {
       name: 'Label',
       fileName: 'DividerLabel.tsx',
-      description: 'Renders a <span> with text between divider lines, styled with color variants and whitespace-nowrap',
+      description:
+        'Renders a <span> with text between divider lines, styled with color variants and whitespace-nowrap',
       props: [
         {
           name: 'color',
           type: "'default' | 'brand' | 'success' | 'warning' | 'destructive' | 'info'",
           required: false,
           defaultValue: "'default'",
-          description: 'Semantic text color mapped to design tokens (text-muted-content, text-brand, etc.)',
+          description:
+            'Semantic text color mapped to design tokens (text-muted-content, text-brand, etc.)',
           options: ['default', 'brand', 'success', 'warning', 'destructive', 'info'],
         },
       ],
@@ -123,7 +145,8 @@ export const dividerEntry: ComponentRegistryEntry = {
       type: "'horizontal' | 'vertical'",
       required: false,
       defaultValue: "'horizontal'",
-      description: 'Direction of the divider layout; horizontal uses flex-row, vertical uses flex-col',
+      description:
+        'Direction of the divider layout; horizontal uses flex-row, vertical uses flex-col',
       options: ['horizontal', 'vertical'],
     },
     {
@@ -131,7 +154,8 @@ export const dividerEntry: ComponentRegistryEntry = {
       type: "'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'",
       required: false,
       defaultValue: "'md'",
-      description: 'Margin around the divider mapped to design tokens (my-0 through my-12 / mx-0 through mx-12)',
+      description:
+        'Margin around the divider mapped to design tokens (my-0 through my-12 / mx-0 through mx-12)',
       options: ['none', 'sm', 'md', 'lg', 'xl', '2xl'],
     },
     {
@@ -139,7 +163,8 @@ export const dividerEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'When true, marks the divider as decorative with aria-hidden="true" to exclude it from the accessibility tree',
+      description:
+        'When true, marks the divider as decorative with aria-hidden="true" to exclude it from the accessibility tree',
     },
   ],
   rendersAs: 'div',
@@ -163,7 +188,8 @@ export const dividerEntry: ComponentRegistryEntry = {
       prop: 'decorative',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Hides the divider from assistive technology by applying aria-hidden="true" and removing the separator role',
+      description:
+        'Hides the divider from assistive technology by applying aria-hidden="true" and removing the separator role',
     },
     {
       name: 'orientation',
@@ -180,7 +206,8 @@ export const dividerEntry: ComponentRegistryEntry = {
     {
       name: 'onClick',
       signature: '(event: React.MouseEvent<HTMLDivElement>) => void',
-      description: 'Fired when the root divider element is clicked; inherited from HTMLDivElement attributes',
+      description:
+        'Fired when the root divider element is clicked; inherited from HTMLDivElement attributes',
     },
     {
       name: 'onMouseEnter',
@@ -200,17 +227,20 @@ export const dividerEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'role',
-        description: 'Applied as "separator" on unlabeled, non-decorative dividers to convey structural separation to assistive technology',
+        description:
+          'Applied as "separator" on unlabeled, non-decorative dividers to convey structural separation to assistive technology',
         managedByComponent: true,
       },
       {
         name: 'aria-orientation',
-        description: 'Set to match the orientation prop ("horizontal" or "vertical") on unlabeled, non-decorative dividers',
+        description:
+          'Set to match the orientation prop ("horizontal" or "vertical") on unlabeled, non-decorative dividers',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Set to "true" on decorative dividers and on all Divider.Line elements to hide them from the accessibility tree',
+        description:
+          'Set to "true" on decorative dividers and on all Divider.Line elements to hide them from the accessibility tree',
         managedByComponent: true,
       },
     ],
@@ -254,7 +284,8 @@ export const dividerEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Default Divider',
-      description: 'A simple horizontal divider with default solid style, normal size, and medium spacing.',
+      description:
+        'A simple horizontal divider with default solid style, normal size, and medium spacing.',
       code: `import { Divider } from 'vayu-ui';
 
 export default function DefaultDivider() {
@@ -282,7 +313,8 @@ export default function VerticalDivider() {
     },
     {
       title: 'Labeled Divider',
-      description: 'A divider with a text label between two line segments using the compound pattern.',
+      description:
+        'A divider with a text label between two line segments using the compound pattern.',
       code: `import { Divider } from 'vayu-ui';
 
 export default function LabeledDivider() {
@@ -298,7 +330,8 @@ export default function LabeledDivider() {
     },
     {
       title: 'Variants and Colors',
-      description: 'Dividers with dashed, dotted, and solid variants in brand, success, warning, destructive, and info colors.',
+      description:
+        'Dividers with dashed, dotted, and solid variants in brand, success, warning, destructive, and info colors.',
       code: `import { Divider } from 'vayu-ui';
 
 export default function VariantColorDivider() {
@@ -365,7 +398,8 @@ export default function SizeDivider() {
     },
     {
       title: 'Spacing',
-      description: 'Dividers with all spacing options from none to 2xl, demonstrating consistent design token margins.',
+      description:
+        'Dividers with all spacing options from none to 2xl, demonstrating consistent design token margins.',
       code: `import { Divider } from 'vayu-ui';
 
 export default function SpacingDivider() {
@@ -406,31 +440,37 @@ export default function ButtonDivider() {
       title: 'Using a labeled divider without Divider.Line children',
       bad: '<Divider><Divider.Label>OR</Divider.Label></Divider>',
       good: '<Divider><Divider.Line /><Divider.Label>OR</Divider.Label><Divider.Line /></Divider>',
-      reason: 'Without Divider.Line children, the label has no visual line segments flanking it. Always pair Label with at least one Line for a proper visual divider.',
+      reason:
+        'Without Divider.Line children, the label has no visual line segments flanking it. Always pair Label with at least one Line for a proper visual divider.',
     },
     {
       title: 'Setting decorative="true" on a labeled divider',
       bad: '<Divider decorative><Divider.Label>Section</Divider.Label></Divider>',
       good: '<Divider decorative /><Divider.Label>Section</Divider.Label>',
-      reason: 'Decorative hides the divider from assistive technology with aria-hidden="true", but a labeled divider has readable content. Use decorative only on visual-only dividers, and keep label text accessible.',
+      reason:
+        'Decorative hides the divider from assistive technology with aria-hidden="true", but a labeled divider has readable content. Use decorative only on visual-only dividers, and keep label text accessible.',
     },
     {
       title: 'Hardcoding colors instead of using the color prop',
       bad: '<Divider.Line className="border-red-500" />',
       good: '<Divider.Line color="destructive" />',
-      reason: 'Hardcoded Tailwind colors bypass design tokens and will not adapt to theme changes (light/dark mode). The color prop maps to semantic tokens that ensure consistent theming.',
+      reason:
+        'Hardcoded Tailwind colors bypass design tokens and will not adapt to theme changes (light/dark mode). The color prop maps to semantic tokens that ensure consistent theming.',
     },
     {
-      title: 'Using a horizontal divider inside a vertical flex container without orientation="vertical"',
+      title:
+        'Using a horizontal divider inside a vertical flex container without orientation="vertical"',
       bad: '<div className="flex flex-col"><Divider /></div>',
       good: '<div className="flex flex-col"><Divider orientation="vertical" /></div>',
-      reason: 'A horizontal divider inside a vertical flex container will not render correctly. Match the divider orientation to the flex direction of its parent for proper visual alignment.',
+      reason:
+        'A horizontal divider inside a vertical flex container will not render correctly. Match the divider orientation to the flex direction of its parent for proper visual alignment.',
     },
     {
       title: 'Overriding spacing with arbitrary margins instead of the spacing prop',
       bad: '<Divider className="my-8" />',
       good: '<Divider spacing="xl" />',
-      reason: 'Using arbitrary margins breaks the design token system. The spacing prop uses consistent token values (none/sm/md/lg/xl/2xl) that adapt to both horizontal and vertical orientations automatically.',
+      reason:
+        'Using arbitrary margins breaks the design token system. The spacing prop uses consistent token values (none/sm/md/lg/xl/2xl) that adapt to both horizontal and vertical orientations automatically.',
     },
   ],
 };

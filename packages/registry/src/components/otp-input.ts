@@ -37,13 +37,37 @@ export const otpInputEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'OTPInput',
   files: [
-    { name: 'OTPInput.tsx', description: 'Root component with context provider and hidden native input handling focus, value, and keyboard events' },
-    { name: 'OTPInputGroup.tsx', description: 'Presentational wrapper for grouping character slots' },
-    { name: 'OTPInputSlot.tsx', description: 'Individual character slot with active focus ring, filled state styling, and blinking caret' },
-    { name: 'OTPSeparator.tsx', description: 'Visual separator between slot groups with a default dot indicator' },
-    { name: 'types.ts', description: 'TypeScript type definitions for all component props and context value' },
-    { name: 'index.ts', description: 'Barrel export file assembling the compound component and re-exporting types' },
-    { name: 'README.md', description: 'Component documentation and usage guidelines', optional: true },
+    {
+      name: 'OTPInput.tsx',
+      description:
+        'Root component with context provider and hidden native input handling focus, value, and keyboard events',
+    },
+    {
+      name: 'OTPInputGroup.tsx',
+      description: 'Presentational wrapper for grouping character slots',
+    },
+    {
+      name: 'OTPInputSlot.tsx',
+      description:
+        'Individual character slot with active focus ring, filled state styling, and blinking caret',
+    },
+    {
+      name: 'OTPSeparator.tsx',
+      description: 'Visual separator between slot groups with a default dot indicator',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript type definitions for all component props and context value',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file assembling the compound component and re-exporting types',
+    },
+    {
+      name: 'README.md',
+      description: 'Component documentation and usage guidelines',
+      optional: true,
+    },
   ],
   targetPath: 'src/components',
 
@@ -53,7 +77,8 @@ export const otpInputEntry: ComponentRegistryEntry = {
     {
       name: 'Group',
       fileName: 'OTPInputGroup.tsx',
-      description: 'Presentational flex wrapper for grouping character slots. Use multiple Groups with Separators between them for split layouts (e.g. 3-3).',
+      description:
+        'Presentational flex wrapper for grouping character slots. Use multiple Groups with Separators between them for split layouts (e.g. 3-3).',
       props: [
         {
           name: 'children',
@@ -72,13 +97,15 @@ export const otpInputEntry: ComponentRegistryEntry = {
     {
       name: 'Slot',
       fileName: 'OTPInputSlot.tsx',
-      description: 'Renders an individual character slot with active focus ring, filled state background, error styling, and an animated blinking caret on the active empty slot.',
+      description:
+        'Renders an individual character slot with active focus ring, filled state background, error styling, and an animated blinking caret on the active empty slot.',
       props: [
         {
           name: 'index',
           type: 'number',
           required: true,
-          description: 'Zero-based position of this slot within the OTP code. Determines which character to display and which slot shows the caret.',
+          description:
+            'Zero-based position of this slot within the OTP code. Determines which character to display and which slot shows the caret.',
         },
         {
           name: 'className',
@@ -91,7 +118,8 @@ export const otpInputEntry: ComponentRegistryEntry = {
     {
       name: 'Separator',
       fileName: 'OTPSeparator.tsx',
-      description: 'Renders a visual separator between Groups. Displays a small dot by default, or custom children.',
+      description:
+        'Renders a visual separator between Groups. Displays a small dot by default, or custom children.',
       props: [
         {
           name: 'children',
@@ -116,20 +144,23 @@ export const otpInputEntry: ComponentRegistryEntry = {
       name: 'value',
       type: 'string',
       required: false,
-      description: 'Controlled OTP value. When provided, the component operates in controlled mode.',
+      description:
+        'Controlled OTP value. When provided, the component operates in controlled mode.',
     },
     {
       name: 'onChange',
       type: '(value: string) => void',
       required: false,
-      description: 'Callback fired when the value changes. Receives the current numeric string (digits only).',
+      description:
+        'Callback fired when the value changes. Receives the current numeric string (digits only).',
     },
     {
       name: 'maxLength',
       type: 'number',
       required: false,
       defaultValue: '6',
-      description: 'Maximum number of digits in the OTP code. Determines how many Slots to render and when onComplete fires.',
+      description:
+        'Maximum number of digits in the OTP code. Determines how many Slots to render and when onComplete fires.',
     },
     {
       name: 'onComplete',
@@ -142,20 +173,23 @@ export const otpInputEntry: ComponentRegistryEntry = {
       type: 'string',
       required: false,
       defaultValue: '"One-time password"',
-      description: 'Accessible label for the input group. Applied as aria-label on both the group container and hidden input.',
+      description:
+        'Accessible label for the input group. Applied as aria-label on both the group container and hidden input.',
     },
     {
       name: 'hasError',
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Whether the input has a validation error. Applies destructive styling to slots and sets aria-invalid on the input.',
+      description:
+        'Whether the input has a validation error. Applies destructive styling to slots and sets aria-invalid on the input.',
     },
     {
       name: 'errorMessageId',
       type: 'string',
       required: false,
-      description: 'ID of the element that describes the error message. Linked to the input via aria-errormessage.',
+      description:
+        'ID of the element that describes the error message. Linked to the input via aria-errormessage.',
     },
     {
       name: 'containerClassName',
@@ -180,7 +214,8 @@ export const otpInputEntry: ComponentRegistryEntry = {
       name: 'id',
       type: 'string',
       required: false,
-      description: 'Custom ID for the hidden input element. Auto-generated via useId() if not provided.',
+      description:
+        'Custom ID for the hidden input element. Auto-generated via useId() if not provided.',
     },
   ],
   rendersAs: 'div',
@@ -195,21 +230,24 @@ export const otpInputEntry: ComponentRegistryEntry = {
       prop: 'autoFocus',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'The active slot shows a ring-2 focus indicator and a blinking caret when the input is focused. Auto-focusable on mount via autoFocus.',
+      description:
+        'The active slot shows a ring-2 focus indicator and a blinking caret when the input is focused. Auto-focusable on mount via autoFocus.',
     },
     {
       name: 'disabled',
       prop: 'disabled',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Prevents user interaction, applies opacity-50 and cursor-not-allowed, and sets aria-disabled on the group container.',
+      description:
+        'Prevents user interaction, applies opacity-50 and cursor-not-allowed, and sets aria-disabled on the group container.',
     },
     {
       name: 'error',
       prop: 'hasError',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Applies destructive border and text color to slots, sets aria-invalid="true" on the hidden input, and shows destructive focus ring on the active slot.',
+      description:
+        'Applies destructive border and text color to slots, sets aria-invalid="true" on the hidden input, and shows destructive focus ring on the active slot.',
     },
   ],
 
@@ -218,12 +256,14 @@ export const otpInputEntry: ComponentRegistryEntry = {
     {
       name: 'onChange',
       signature: '(value: string) => void',
-      description: 'Fired each time a digit is entered or deleted. Receives the current numeric string value with only digits.',
+      description:
+        'Fired each time a digit is entered or deleted. Receives the current numeric string value with only digits.',
     },
     {
       name: 'onComplete',
       signature: '(code: string) => void',
-      description: 'Fired when the value length reaches maxLength. Receives the complete OTP code string. Useful for auto-submitting verification.',
+      description:
+        'Fired when the value length reaches maxLength. Receives the complete OTP code string. Useful for auto-submitting verification.',
     },
   ],
 
@@ -233,7 +273,8 @@ export const otpInputEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-label',
-        description: 'Applied to both the group container and the hidden input. Defaults to "One-time password" via the label prop.',
+        description:
+          'Applied to both the group container and the hidden input. Defaults to "One-time password" via the label prop.',
         managedByComponent: true,
       },
       {
@@ -243,29 +284,34 @@ export const otpInputEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-invalid',
-        description: 'Set to true on the hidden input when hasError is true, indicating a validation error to screen readers.',
+        description:
+          'Set to true on the hidden input when hasError is true, indicating a validation error to screen readers.',
         managedByComponent: true,
       },
       {
         name: 'aria-errormessage',
-        description: 'Set on the hidden input to reference the error message element by ID when errorMessageId is provided.',
+        description:
+          'Set on the hidden input to reference the error message element by ID when errorMessageId is provided.',
         managedByComponent: false,
       },
       {
         name: 'aria-describedby',
-        description: 'Combined from errorMessageId and any user-provided aria-describedby on the root. Links descriptive content to the input.',
+        description:
+          'Combined from errorMessageId and any user-provided aria-describedby on the root. Links descriptive content to the input.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Set to "true" on all Slot and Separator elements to prevent double-announcement — the hidden native input handles screen reader output.',
+        description:
+          'Set to "true" on all Slot and Separator elements to prevent double-announcement — the hidden native input handles screen reader output.',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: '0-9',
-        behavior: 'Appends a digit to the value. Non-numeric characters are stripped automatically.',
+        behavior:
+          'Appends a digit to the value. Non-numeric characters are stripped automatically.',
       },
       {
         key: 'Backspace',
@@ -284,9 +330,7 @@ export const otpInputEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -306,7 +350,8 @@ export const otpInputEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'alert',
-      reason: 'Used to display verification status feedback (success or error) after OTP submission',
+      reason:
+        'Used to display verification status feedback (success or error) after OTP submission',
     },
     {
       slug: 'divider',
@@ -318,7 +363,8 @@ export const otpInputEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic Controlled OTP Input',
-      description: 'A controlled 6-digit OTP input with value state tracking and an onComplete callback.',
+      description:
+        'A controlled 6-digit OTP input with value state tracking and an onComplete callback.',
       code: `import { OTPInput } from 'vayu-ui';
 import { useState } from 'react';
 
@@ -347,7 +393,8 @@ export default function BasicOTP() {
     },
     {
       title: 'Grouped with Separator',
-      description: 'A 6-digit OTP input split into two groups of 3 with a visual separator between them.',
+      description:
+        'A 6-digit OTP input split into two groups of 3 with a visual separator between them.',
       code: `import { OTPInput } from 'vayu-ui';
 
 export default function GroupedOTP() {
@@ -422,31 +469,36 @@ export default function DisabledOTP() {
       title: 'Using Slot outside OTPInput.Root',
       bad: '<div><OTPInput.Slot index={0} /></div>',
       good: '<OTPInput.Root><OTPInput.Group><OTPInput.Slot index={0} /></OTPInput.Group></OTPInput.Root>',
-      reason: 'OTPInput.Slot reads state from OTPInputContext via useOTPInput(). Using it outside OTPInput.Root throws an error because no context provider exists.',
+      reason:
+        'OTPInput.Slot reads state from OTPInputContext via useOTPInput(). Using it outside OTPInput.Root throws an error because no context provider exists.',
     },
     {
       title: 'Using onChange with React.ChangeEvent signature',
       bad: '<OTPInput.Root onChange={(e: React.ChangeEvent<HTMLInputElement>) => ...} />',
       good: '<OTPInput.Root onChange={(value: string) => ...} />',
-      reason: "The OTPInput onChange prop receives a string (the current numeric value), not a React ChangeEvent. The component's types omit the HTML input onChange to prevent this mistake.",
+      reason:
+        "The OTPInput onChange prop receives a string (the current numeric value), not a React ChangeEvent. The component's types omit the HTML input onChange to prevent this mistake.",
     },
     {
       title: 'Hardcoding error styling on Slots',
       bad: '<OTPInput.Slot index={0} className="border-red-500 text-red-500" />',
       good: '<OTPInput.Root hasError><OTPInput.Slot index={0} /></OTPInput.Root>',
-      reason: 'Hardcoding colors bypasses design tokens (destructive) and does not set aria-invalid="true" on the input. Always use the hasError prop for proper styling and accessibility.',
+      reason:
+        'Hardcoding colors bypasses design tokens (destructive) and does not set aria-invalid="true" on the input. Always use the hasError prop for proper styling and accessibility.',
     },
     {
       title: 'Rendering non-numeric input characters',
       bad: '<OTPInput.Root maxLength={6}><input type="text" /></OTPInput.Root>',
       good: 'Use the component as-is — the hidden input already has inputMode="numeric" and pattern="[0-9]*" to enforce digits only.',
-      reason: 'The hidden input strips non-digit characters (\\D) automatically. Adding your own input element inside OTPInput.Root breaks the compound pattern and conflicts with internal state management.',
+      reason:
+        'The hidden input strips non-digit characters (\\D) automatically. Adding your own input element inside OTPInput.Root breaks the compound pattern and conflicts with internal state management.',
     },
     {
       title: 'Using errorMessageId without a matching error element',
       bad: '<OTPInput.Root hasError errorMessageId="otp-error" />',
       good: '<OTPInput.Root hasError errorMessageId="otp-error" />\n<p id="otp-error" role="alert">Invalid code</p>',
-      reason: 'errorMessageId sets aria-errormessage on the input, referencing an element by ID. Without a matching element, screen readers cannot locate the error description, making the error state inaccessible.',
+      reason:
+        'errorMessageId sets aria-errormessage on the input, referencing an element by ID. Without a matching element, screen readers cannot locate the error description, making the error state inaccessible.',
     },
   ],
 };

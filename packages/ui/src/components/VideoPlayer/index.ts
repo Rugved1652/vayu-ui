@@ -1,41 +1,30 @@
-import { VideoPlayerRoot } from "./VideoPlayer";
-import { VideoPlayerVideo } from "./Video";
+import { VideoPlayerRoot } from './VideoPlayer';
+import { VideoPlayerVideo } from './Video';
 import {
   VideoPlayerSource,
   VideoPlayerPlaylist,
   VideoPlayerTrackItem,
   VideoPlayerTrackInfo,
-} from "./VideoPlayerPlaylist";
-import { VideoPlayerControls } from "./VideoPlayerControls";
-import {
-  VideoPlayerPlayPause,
-  VideoPlayerNext,
-  VideoPlayerPrevious,
-} from "./VideoPlayerPlayback";
+} from './VideoPlayerPlaylist';
+import { VideoPlayerControls } from './VideoPlayerControls';
+import { VideoPlayerPlayPause, VideoPlayerNext, VideoPlayerPrevious } from './VideoPlayerPlayback';
 import {
   VideoPlayerProgress,
   VideoPlayerSeek,
   VideoPlayerTime,
   VideoPlayerBuffer,
-} from "./VideoPlayerProgress";
-import { VideoPlayerVolume, VideoPlayerMute } from "./VideoPlayerVolume";
+} from './VideoPlayerProgress';
+import { VideoPlayerVolume, VideoPlayerMute } from './VideoPlayerVolume';
 import {
   VideoPlayerFullscreen,
   VideoPlayerPiP,
   VideoPlayerCaptions,
   VideoPlayerQuality,
   VideoPlayerSpeed,
-} from "./VideoPlayerAdvanced";
-import {
-  VideoPlayerLoading,
-  VideoPlayerError,
-} from "./VideoPlayerStatus";
+} from './VideoPlayerAdvanced';
+import { VideoPlayerLoading, VideoPlayerError } from './VideoPlayerStatus';
 
-export {
-  useVideoPlayer,
-  useVideoPlayerState,
-  useVideoPlayerActions,
-} from "./VideoPlayer";
+export { useVideoPlayer, useVideoPlayerState, useVideoPlayerActions } from './VideoPlayer';
 
 export type {
   VideoTrack,
@@ -44,7 +33,7 @@ export type {
   VideoPlayerState,
   VideoPlayerActions,
   VideoPlayerContextValue,
-} from "./types";
+} from './types';
 
 // ============================================================================
 // Namespace object (compound component pattern)

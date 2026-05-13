@@ -418,7 +418,7 @@ export const VAYU_TOKENS_CSS = `@custom-variant dark (&:where(.dark, .dark *));
     animation: none !important;
   }
 }
-`;
+`
 
-export const TOKENS_START_MARKER = '/* Vayu UI Tokens - Start */';
-export const TOKENS_END_MARKER = '/* Vayu UI Tokens - End */';
+export const TOKENS_START_MARKER = '/* Vayu UI Tokens - Start */'
+export const TOKENS_END_MARKER = '/* Vayu UI Tokens - End */'

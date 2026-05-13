@@ -36,14 +36,42 @@ export const paginationEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Pagination',
   files: [
-    { name: 'Pagination.tsx', description: 'Compound export composing Root, Info, Buttons, and Compact sub-components' },
-    { name: 'PaginationRoot.tsx', description: 'Nav landmark wrapper with aria-label="Pagination" and flex column layout' },
-    { name: 'PaginationInfo.tsx', description: '"Showing X to Y of Z results" display with role="status" and aria-live="polite"' },
-    { name: 'PaginationButtons.tsx', description: 'Full page navigation rendering first/prev/page-numbers/next/last buttons with Next.js Link' },
-    { name: 'CompactPagination.tsx', description: 'Mobile-friendly prev/next-only variant with inline page indicator and nav landmark' },
-    { name: 'utils.ts', description: 'Page range calculation logic with compact/extended/full modes and ellipsis placement' },
-    { name: 'types.ts', description: 'TypeScript interfaces for all pagination props and PageRange type' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and all types' },
+    {
+      name: 'Pagination.tsx',
+      description: 'Compound export composing Root, Info, Buttons, and Compact sub-components',
+    },
+    {
+      name: 'PaginationRoot.tsx',
+      description: 'Nav landmark wrapper with aria-label="Pagination" and flex column layout',
+    },
+    {
+      name: 'PaginationInfo.tsx',
+      description:
+        '"Showing X to Y of Z results" display with role="status" and aria-live="polite"',
+    },
+    {
+      name: 'PaginationButtons.tsx',
+      description:
+        'Full page navigation rendering first/prev/page-numbers/next/last buttons with Next.js Link',
+    },
+    {
+      name: 'CompactPagination.tsx',
+      description:
+        'Mobile-friendly prev/next-only variant with inline page indicator and nav landmark',
+    },
+    {
+      name: 'utils.ts',
+      description:
+        'Page range calculation logic with compact/extended/full modes and ellipsis placement',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript interfaces for all pagination props and PageRange type',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the compound component and all types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -53,13 +81,15 @@ export const paginationEntry: ComponentRegistryEntry = {
     {
       name: 'Root',
       fileName: 'PaginationRoot.tsx',
-      description: 'Semantic <nav> landmark wrapper that provides aria-label and vertical flex layout for Info and Buttons',
+      description:
+        'Semantic <nav> landmark wrapper that provides aria-label and vertical flex layout for Info and Buttons',
       props: [
         {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
-          description: 'PaginationInfo and/or PaginationButtons components to display inside the nav',
+          description:
+            'PaginationInfo and/or PaginationButtons components to display inside the nav',
         },
         {
           name: 'className',
@@ -79,7 +109,8 @@ export const paginationEntry: ComponentRegistryEntry = {
     {
       name: 'Info',
       fileName: 'PaginationInfo.tsx',
-      description: 'Displays "Showing X to Y of Z results" with live region announcements for screen readers',
+      description:
+        'Displays "Showing X to Y of Z results" with live region announcements for screen readers',
       props: [
         {
           name: 'totalItems',
@@ -110,7 +141,8 @@ export const paginationEntry: ComponentRegistryEntry = {
     {
       name: 'Buttons',
       fileName: 'PaginationButtons.tsx',
-      description: 'Full page navigation with first/prev/page-numbers/next/last buttons, configurable page range modes, and Next.js Link routing',
+      description:
+        'Full page navigation with first/prev/page-numbers/next/last buttons, configurable page range modes, and Next.js Link routing',
       props: [
         {
           name: 'currentPage',
@@ -128,14 +160,16 @@ export const paginationEntry: ComponentRegistryEntry = {
           name: 'hrefBuilder',
           type: '(page: number) => string',
           required: true,
-          description: 'Function that returns the URL for a given page number, used by Next.js Link href',
+          description:
+            'Function that returns the URL for a given page number, used by Next.js Link href',
         },
         {
           name: 'pageRange',
-          type: "PageRange",
+          type: 'PageRange',
           required: false,
           defaultValue: "'compact'",
-          description: 'Controls how many page numbers are shown: compact (ellipsis for distant pages), extended (more visible pages), or full (all pages)',
+          description:
+            'Controls how many page numbers are shown: compact (ellipsis for distant pages), extended (more visible pages), or full (all pages)',
           options: ['compact', 'extended', 'full'],
         },
         {
@@ -143,7 +177,8 @@ export const paginationEntry: ComponentRegistryEntry = {
           type: 'number',
           required: false,
           defaultValue: '1',
-          description: 'Number of sibling pages to show on each side of the current page in compact/extended modes',
+          description:
+            'Number of sibling pages to show on each side of the current page in compact/extended modes',
         },
         {
           name: 'className',
@@ -156,7 +191,8 @@ export const paginationEntry: ComponentRegistryEntry = {
     {
       name: 'Compact',
       fileName: 'CompactPagination.tsx',
-      description: 'Mobile-friendly prev/next-only pagination with inline "Page X of Y" indicator, rendering its own <nav> landmark',
+      description:
+        'Mobile-friendly prev/next-only pagination with inline "Page X of Y" indicator, rendering its own <nav> landmark',
       props: [
         {
           name: 'currentPage',
@@ -174,7 +210,8 @@ export const paginationEntry: ComponentRegistryEntry = {
           name: 'hrefBuilder',
           type: '(page: number) => string',
           required: true,
-          description: 'Function that returns the URL for a given page number, used by Next.js Link href',
+          description:
+            'Function that returns the URL for a given page number, used by Next.js Link href',
         },
         {
           name: 'className',
@@ -199,7 +236,8 @@ export const paginationEntry: ComponentRegistryEntry = {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description: 'PaginationInfo and/or PaginationButtons components to render inside the navigation landmark',
+      description:
+        'PaginationInfo and/or PaginationButtons components to render inside the navigation landmark',
     },
     {
       name: 'className',
@@ -231,14 +269,16 @@ export const paginationEntry: ComponentRegistryEntry = {
       prop: 'currentPage',
       isBoolean: false,
       defaultValue: 'undefined (required)',
-      description: 'The currently active page receives aria-current="page", brand-colored background, and distinct visual styling to indicate the selected page.',
+      description:
+        'The currently active page receives aria-current="page", brand-colored background, and distinct visual styling to indicate the selected page.',
     },
     {
       name: 'disabled',
       prop: 'currentPage (boundary detection)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'First/Previous buttons are disabled when currentPage === 1; Next/Last buttons are disabled when currentPage === totalPages. Disabled buttons use aria-disabled="true", reduced opacity, and pointer-events-none.',
+      description:
+        'First/Previous buttons are disabled when currentPage === 1; Next/Last buttons are disabled when currentPage === totalPages. Disabled buttons use aria-disabled="true", reduced opacity, and pointer-events-none.',
     },
     {
       name: 'page-range',
@@ -246,7 +286,8 @@ export const paginationEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['compact', 'extended', 'full'],
       defaultValue: "'compact'",
-      description: 'Controls the density of displayed page numbers. "compact" uses ellipsis with 1 sibling, "extended" shows more pages with configurable siblingCount, and "full" shows every page number.',
+      description:
+        'Controls the density of displayed page numbers. "compact" uses ellipsis with 1 sibling, "extended" shows more pages with configurable siblingCount, and "full" shows every page number.',
     },
   ],
 
@@ -258,44 +299,52 @@ export const paginationEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-label',
-        description: 'Applied to the <nav> element with value "Pagination" (customizable) to identify the navigation landmark for screen readers.',
+        description:
+          'Applied to the <nav> element with value "Pagination" (customizable) to identify the navigation landmark for screen readers.',
         managedByComponent: true,
       },
       {
         name: 'aria-current',
-        description: 'Applied to the active page button with value "page" to indicate the currently selected page to assistive technologies.',
+        description:
+          'Applied to the active page button with value "page" to indicate the currently selected page to assistive technologies.',
         managedByComponent: true,
       },
       {
         name: 'aria-disabled',
-        description: 'Applied to disabled navigation buttons (first/prev at page 1, next/last at last page) with value "true" to communicate non-interactive state.',
+        description:
+          'Applied to disabled navigation buttons (first/prev at page 1, next/last at last page) with value "true" to communicate non-interactive state.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Applied to chevron icons and ellipsis indicators with value "true" since they are decorative and not meant for screen readers.',
+        description:
+          'Applied to chevron icons and ellipsis indicators with value "true" since they are decorative and not meant for screen readers.',
         managedByComponent: true,
       },
       {
         name: 'aria-live',
-        description: 'Applied to the PaginationInfo paragraph and Compact page indicator with value "polite" so screen readers announce page changes.',
+        description:
+          'Applied to the PaginationInfo paragraph and Compact page indicator with value "polite" so screen readers announce page changes.',
         managedByComponent: true,
       },
       {
         name: 'role="status"',
-        description: 'Applied to PaginationInfo and Compact page indicator elements to mark them as live regions for page change announcements.',
+        description:
+          'Applied to PaginationInfo and Compact page indicator elements to mark them as live regions for page change announcements.',
         managedByComponent: true,
       },
       {
         name: 'role="group"',
-        description: 'Applied to the PaginationButtons container <div> to group the navigation buttons as a single control set.',
+        description:
+          'Applied to the PaginationButtons container <div> to group the navigation buttons as a single control set.',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Tab',
-        behavior: 'Moves focus between page number links and first/prev/next/last navigation links in order.',
+        behavior:
+          'Moves focus between page number links and first/prev/next/last navigation links in order.',
       },
       {
         key: 'Shift+Tab',
@@ -314,11 +363,7 @@ export const paginationEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'tailwind-merge' },
-    { name: 'lucide-react' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'tailwind-merge' }, { name: 'lucide-react' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -330,19 +375,23 @@ export const paginationEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'typography',
-      reason: 'Used alongside pagination for page titles and section headings that contextualize the paginated content',
+      reason:
+        'Used alongside pagination for page titles and section headings that contextualize the paginated content',
     },
     {
       slug: 'divider',
-      reason: 'Commonly placed between different pagination variants in layouts showing multiple pagination styles',
+      reason:
+        'Commonly placed between different pagination variants in layouts showing multiple pagination styles',
     },
     {
       slug: 'breadcrumb',
-      reason: 'Both are navigation landmarks — breadcrumbs show hierarchical position while pagination shows sequential position',
+      reason:
+        'Both are navigation landmarks — breadcrumbs show hierarchical position while pagination shows sequential position',
     },
     {
       slug: 'card',
-      reason: 'Paginated content is often wrapped in cards with pagination controls placed in the card footer',
+      reason:
+        'Paginated content is often wrapped in cards with pagination controls placed in the card footer',
     },
   ],
 
@@ -350,7 +399,8 @@ export const paginationEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Default Pagination with Info',
-      description: 'Standard pagination showing item count info ("Showing X to Y of Z") and full page navigation with compact page range.',
+      description:
+        'Standard pagination showing item count info ("Showing X to Y of Z") and full page navigation with compact page range.',
       code: `import { Pagination } from 'vayu-ui';
 
 const buildPageUrl = (page: number) => \`?page=\${page}\`;
@@ -382,7 +432,8 @@ export default function DefaultPagination() {
     },
     {
       title: 'Extended Page Range',
-      description: 'Pagination with more visible page numbers using pageRange="extended" and siblingCount={2} to show 2 sibling pages on each side of the current page.',
+      description:
+        'Pagination with more visible page numbers using pageRange="extended" and siblingCount={2} to show 2 sibling pages on each side of the current page.',
       code: `import { Pagination } from 'vayu-ui';
 
 const buildPageUrl = (page: number) => \`?page=\${page}\`;
@@ -409,7 +460,8 @@ export default function ExtendedPagination() {
     },
     {
       title: 'Full Page Range',
-      description: 'Pagination showing every page number without ellipsis using pageRange="full". Best for small page counts.',
+      description:
+        'Pagination showing every page number without ellipsis using pageRange="full". Best for small page counts.',
       code: `import { Pagination } from 'vayu-ui';
 
 const buildPageUrl = (page: number) => \`?page=\${page}\`;
@@ -435,7 +487,8 @@ export default function FullPagination() {
     },
     {
       title: 'Compact Pagination',
-      description: 'Mobile-friendly prev/next-only variant showing "Page X of Y" between navigation buttons. Renders its own nav landmark.',
+      description:
+        'Mobile-friendly prev/next-only variant showing "Page X of Y" between navigation buttons. Renders its own nav landmark.',
       code: `import { Pagination } from 'vayu-ui';
 
 const buildPageUrl = (page: number) => \`?page=\${page}\`;
@@ -462,31 +515,36 @@ export default function CompactPaginationExample() {
       title: 'Using Buttons without Root',
       bad: '<Pagination.Buttons currentPage={1} totalPages={10} hrefBuilder={url} />',
       good: '<Pagination.Root>\n  <Pagination.Buttons currentPage={1} totalPages={10} hrefBuilder={url} />\n</Pagination.Root>',
-      reason: 'PaginationButtons does not render a <nav> landmark. Without PaginationRoot, the buttons lack the semantic navigation role and aria-label required by WCAG for page navigation.',
+      reason:
+        'PaginationButtons does not render a <nav> landmark. Without PaginationRoot, the buttons lack the semantic navigation role and aria-label required by WCAG for page navigation.',
     },
     {
       title: 'Passing out-of-range page numbers',
       bad: '<Pagination.Buttons currentPage={0} totalPages={10} hrefBuilder={url} />',
       good: '<Pagination.Buttons currentPage={1} totalPages={10} hrefBuilder={url} />',
-      reason: 'currentPage must be a 1-based integer between 1 and totalPages. Passing 0, negative numbers, or values exceeding totalPages produces incorrect info text and disables wrong navigation buttons.',
+      reason:
+        'currentPage must be a 1-based integer between 1 and totalPages. Passing 0, negative numbers, or values exceeding totalPages produces incorrect info text and disables wrong navigation buttons.',
     },
     {
       title: 'Omitting hrefBuilder',
       bad: '<Pagination.Buttons currentPage={1} totalPages={10} />',
       good: '<Pagination.Buttons currentPage={1} totalPages={10} hrefBuilder={(page) => `/page/${page}`} />',
-      reason: 'hrefBuilder is a required prop that generates URLs for each page link. Without it, the component cannot render navigation links and TypeScript will report a compile error.',
+      reason:
+        'hrefBuilder is a required prop that generates URLs for each page link. Without it, the component cannot render navigation links and TypeScript will report a compile error.',
     },
     {
       title: 'Using Compact on desktop layouts',
       bad: '<Pagination.Compact currentPage={1} totalPages={100} hrefBuilder={url} />',
       good: '<Pagination.Root>\n  <Pagination.Info totalItems={1000} pageSize={10} currentPage={1} />\n  <Pagination.Buttons currentPage={1} totalPages={100} hrefBuilder={url} />\n</Pagination.Root>',
-      reason: 'Compact hides page numbers and only shows prev/next. On desktop with sufficient space, full Pagination.Buttons gives users direct access to any page, improving usability for large datasets.',
+      reason:
+        'Compact hides page numbers and only shows prev/next. On desktop with sufficient space, full Pagination.Buttons gives users direct access to any page, improving usability for large datasets.',
     },
     {
       title: 'Not syncing currentPage with URL state',
       bad: 'const [page, setPage] = useState(1); // never reads from URL',
       good: 'useEffect(() => {\n  const p = searchParams.get("page");\n  if (p) setCurrentPage(parseInt(p, 10));\n}, [searchParams]);',
-      reason: 'Since Pagination uses Next.js Link for server-rendered navigation, the currentPage prop must be kept in sync with the URL. Not reading page state from URL params causes the active page indicator to stay on page 1 after clicking a different page.',
+      reason:
+        'Since Pagination uses Next.js Link for server-rendered navigation, the currentPage prop must be kept in sync with the URL. Not reading page state from URL params causes the active page indicator to stay on page 1 after clicking a different page.',
     },
   ],
 };

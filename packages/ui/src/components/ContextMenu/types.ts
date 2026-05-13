@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 // ─── Context Types ───────────────────────────────────────────
 
@@ -41,7 +41,7 @@ export interface ContextMenuTriggerProps extends React.HTMLAttributes<HTMLDivEle
 
 export interface ContextMenuContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  align?: "start" | "center" | "end";
+  align?: 'start' | 'center' | 'end';
   sideOffset?: number;
 }
 
@@ -54,8 +54,10 @@ export interface ContextMenuItemProps extends React.HTMLAttributes<HTMLButtonEle
   shortcut?: string;
 }
 
-export interface ContextMenuCheckboxItemProps
-  extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onSelect"> {
+export interface ContextMenuCheckboxItemProps extends Omit<
+  React.HTMLAttributes<HTMLButtonElement>,
+  'onSelect'
+> {
   children: React.ReactNode;
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
@@ -70,8 +72,10 @@ export interface ContextMenuRadioGroupProps extends React.HTMLAttributes<HTMLDiv
   onValueChange?: (value: string) => void;
 }
 
-export interface ContextMenuRadioItemProps
-  extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onSelect"> {
+export interface ContextMenuRadioItemProps extends Omit<
+  React.HTMLAttributes<HTMLButtonElement>,
+  'onSelect'
+> {
   children: React.ReactNode;
   value: string;
   disabled?: boolean;

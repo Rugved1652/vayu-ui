@@ -30,17 +30,17 @@ export const MenuItem = ({
 
   const itemClasses = danger
     ? cn(
-      'text-destructive dark:text-destructive',
-      'hover:bg-destructive/10 dark:hover:bg-destructive/20',
-      'focus-visible:bg-destructive/10 focus-visible:text-destructive',
-      'dark:focus-visible:bg-destructive/20 dark:focus-visible:text-destructive',
-    )
+        'text-destructive dark:text-destructive',
+        'hover:bg-destructive/10 dark:hover:bg-destructive/20',
+        'focus-visible:bg-destructive/10 focus-visible:text-destructive',
+        'dark:focus-visible:bg-destructive/20 dark:focus-visible:text-destructive',
+      )
     : cn(
-      'text-surface-content dark:text-surface-content',
-      'hover:bg-muted/80 dark:hover:bg-white/10',
-      'focus-visible:bg-muted/80 focus-visible:text-brand',
-      'dark:focus-visible:bg-white/10 dark:focus-visible:text-brand',
-    );
+        'text-surface-content dark:text-surface-content',
+        'hover:bg-muted/80 dark:hover:bg-white/10',
+        'focus-visible:bg-muted/80 focus-visible:text-brand',
+        'dark:focus-visible:bg-white/10 dark:focus-visible:text-brand',
+      );
 
   return (
     <button

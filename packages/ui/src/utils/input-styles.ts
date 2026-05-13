@@ -28,8 +28,7 @@ export const inputBaseStyles =
   'flex items-center w-full bg-surface border-2 rounded-control transition-all duration-200';
 
 /** Classes for the native/native-like input element inside the container. */
-export const inputTextStyles =
-  'font-secondary text-surface-content placeholder:text-muted-content';
+export const inputTextStyles = 'font-secondary text-surface-content placeholder:text-muted-content';
 
 /** Container gap between prefix icon, input, suffix actions. */
 export const inputGapStyles = 'gap-2';
@@ -62,8 +61,7 @@ export const inputSlotSizeStyles: Record<InputSize, string> = {
  * input is focused (`focus-within`).
  */
 export const inputStateStyles: Record<ValidationState, string> = {
-  default:
-    'border-field focus-within:border-brand hover:border-brand',
+  default: 'border-field focus-within:border-brand hover:border-brand',
   error: 'border-destructive',
   warning: 'border-warning',
   success: 'border-success',
@@ -101,20 +99,17 @@ export const inputFocusBorderStyles: Record<ValidationState, string> = {
 export const inputHoverBorder = 'hover:border-brand';
 
 /** Disabled state for field containers. */
-export const inputDisabledStyles =
-  'disabled:opacity-50 disabled:cursor-not-allowed';
+export const inputDisabledStyles = 'disabled:opacity-50 disabled:cursor-not-allowed';
 
 /** Disabled state that also swaps background (used by TextInput/TextArea). */
-export const inputDisabledMutedStyles =
-  'opacity-60 cursor-not-allowed bg-muted';
+export const inputDisabledMutedStyles = 'opacity-60 cursor-not-allowed bg-muted';
 
 /* ------------------------------------------------------------------ */
 /*  Loading                                                           */
 /* ------------------------------------------------------------------ */
 
 /** Spinner classes shown inside input triggers. */
-export const inputLoadingSpinnerStyles =
-  'w-4 h-4 text-brand animate-spin shrink-0';
+export const inputLoadingSpinnerStyles = 'w-4 h-4 text-brand animate-spin shrink-0';
 
 /** ARIA attributes for a loading input. */
 export const inputLoadingAria = {
@@ -130,8 +125,7 @@ export const inputLoadingAria = {
 export const inputRootLayout = 'w-full flex flex-col gap-1.5';
 
 /** Label text above the field. */
-export const inputLabelStyles =
-  'block font-primary font-medium text-surface-content mb-1.5';
+export const inputLabelStyles = 'block font-primary font-medium text-surface-content mb-1.5';
 
 /** Optional / required adornments inside the label row. */
 export const inputLabelMetaStyles = 'text-sm font-secondary font-normal';
@@ -139,8 +133,7 @@ export const inputRequiredStyles = 'text-destructive ml-1';
 export const inputOptionalStyles = 'text-muted-content ml-2';
 
 /** Base classes for helper / status messages. */
-export const inputMessageBase =
-  'mt-1.5 text-sm font-secondary flex items-center gap-1.5';
+export const inputMessageBase = 'mt-1.5 text-sm font-secondary flex items-center gap-1.5';
 
 export const inputErrorMessageStyles = 'text-destructive';
 export const inputWarningMessageStyles = 'text-warning';
@@ -157,8 +150,7 @@ export const dropdownOverlayStyles =
 export const dropdownItemStyles =
   'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors';
 
-export const dropdownItemActiveStyles =
-  'bg-brand/90 text-brand-content font-medium';
+export const dropdownItemActiveStyles = 'bg-brand/90 text-brand-content font-medium';
 
 export const dropdownItemInactiveStyles =
   'text-elevated-content bg-elevated hover:text-brand-content focus:text-brand-content hover:bg-brand/90 focus:bg-brand/90';
@@ -200,12 +192,7 @@ export function buildInputContainerClasses(
   state: ValidationState = 'default',
   extra?: string,
 ): string {
-  const parts = [
-    inputBaseStyles,
-    inputGapStyles,
-    inputSizeStyles[size],
-    inputStateStyles[state],
-  ];
+  const parts = [inputBaseStyles, inputGapStyles, inputSizeStyles[size], inputStateStyles[state]];
   if (extra) parts.push(extra);
   return parts.join(' ');
 }

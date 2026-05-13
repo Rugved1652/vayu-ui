@@ -36,13 +36,35 @@ export const switchEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Switch',
   files: [
-    { name: 'Switch.tsx', description: 'Root component with controlled/uncontrolled state wiring and accessibility attributes' },
-    { name: 'SwitchTrack.tsx', description: 'Visual track and thumb with checked, disabled, and error styling using design tokens' },
-    { name: 'SwitchLabel.tsx', description: 'Label and description text with proper ARIA ID linking and disabled/error states' },
-    { name: 'hooks.ts', description: 'useSwitchControl hook managing controlled and uncontrolled toggle state' },
+    {
+      name: 'Switch.tsx',
+      description:
+        'Root component with controlled/uncontrolled state wiring and accessibility attributes',
+    },
+    {
+      name: 'SwitchTrack.tsx',
+      description:
+        'Visual track and thumb with checked, disabled, and error styling using design tokens',
+    },
+    {
+      name: 'SwitchLabel.tsx',
+      description:
+        'Label and description text with proper ARIA ID linking and disabled/error states',
+    },
+    {
+      name: 'hooks.ts',
+      description: 'useSwitchControl hook managing controlled and uncontrolled toggle state',
+    },
     { name: 'types.ts', description: 'TypeScript type definitions for SwitchProps' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the component and its types' },
-    { name: 'README.md', description: 'Component documentation and usage guidelines', optional: true },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the component and its types',
+    },
+    {
+      name: 'README.md',
+      description: 'Component documentation and usage guidelines',
+      optional: true,
+    },
   ],
   targetPath: 'src/components',
 
@@ -57,26 +79,30 @@ export const switchEntry: ComponentRegistryEntry = {
       name: 'label',
       type: 'ReactNode',
       required: false,
-      description: 'Label text displayed next to the switch. Automatically linked to the input via aria-labelledby.',
+      description:
+        'Label text displayed next to the switch. Automatically linked to the input via aria-labelledby.',
     },
     {
       name: 'description',
       type: 'ReactNode',
       required: false,
-      description: 'Description text displayed below the label. Linked to the input via aria-describedby for screen reader context.',
+      description:
+        'Description text displayed below the label. Linked to the input via aria-describedby for screen reader context.',
     },
     {
       name: 'error',
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Shows error styling (destructive ring on track) and sets aria-invalid on the input.',
+      description:
+        'Shows error styling (destructive ring on track) and sets aria-invalid on the input.',
     },
     {
       name: 'checked',
       type: 'boolean',
       required: false,
-      description: 'Controlled state value. When provided, the component operates in controlled mode and does not manage internal state.',
+      description:
+        'Controlled state value. When provided, the component operates in controlled mode and does not manage internal state.',
     },
     {
       name: 'defaultChecked',
@@ -89,7 +115,8 @@ export const switchEntry: ComponentRegistryEntry = {
       name: 'onCheckedChange',
       type: '(checked: boolean) => void',
       required: false,
-      description: 'Callback fired when the switch state changes. Receives the new boolean value. Works in both controlled and uncontrolled modes.',
+      description:
+        'Callback fired when the switch state changes. Receives the new boolean value. Works in both controlled and uncontrolled modes.',
     },
     {
       name: 'disabled',
@@ -111,21 +138,24 @@ export const switchEntry: ComponentRegistryEntry = {
       prop: 'checked',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Whether the switch is on. In controlled mode, set via the checked prop; in uncontrolled mode, managed internally via defaultChecked.',
+      description:
+        'Whether the switch is on. In controlled mode, set via the checked prop; in uncontrolled mode, managed internally via defaultChecked.',
     },
     {
       name: 'disabled',
       prop: 'disabled',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Prevents user interaction, applies opacity-50, and sets cursor-not-allowed on the label and track.',
+      description:
+        'Prevents user interaction, applies opacity-50, and sets cursor-not-allowed on the label and track.',
     },
     {
       name: 'error',
       prop: 'error',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Applies destructive ring on the unchecked track and sets aria-invalid="true" on the hidden input.',
+      description:
+        'Applies destructive ring on the unchecked track and sets aria-invalid="true" on the hidden input.',
     },
   ],
 
@@ -134,7 +164,8 @@ export const switchEntry: ComponentRegistryEntry = {
     {
       name: 'onCheckedChange',
       signature: '(checked: boolean) => void',
-      description: 'Fired when the user toggles the switch. Receives the new checked state as a boolean. Does not fire when disabled.',
+      description:
+        'Fired when the user toggles the switch. Receives the new checked state as a boolean. Does not fire when disabled.',
     },
   ],
 
@@ -144,12 +175,14 @@ export const switchEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-checked',
-        description: 'Reflects the current on/off state of the switch. Set to true when checked, false when unchecked.',
+        description:
+          'Reflects the current on/off state of the switch. Set to true when checked, false when unchecked.',
         managedByComponent: true,
       },
       {
         name: 'aria-invalid',
-        description: 'Set to "true" when the error prop is true, indicating a validation error to screen readers.',
+        description:
+          'Set to "true" when the error prop is true, indicating a validation error to screen readers.',
         managedByComponent: true,
       },
       {
@@ -159,12 +192,14 @@ export const switchEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-describedby',
-        description: 'Automatically references the description element ID when a description prop is provided.',
+        description:
+          'Automatically references the description element ID when a description prop is provided.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Set to "true" on the visual track element to prevent double-announcement — the hidden native input handles screen reader output.',
+        description:
+          'Set to "true" on the visual track element to prevent double-announcement — the hidden native input handles screen reader output.',
         managedByComponent: true,
       },
     ],
@@ -175,7 +210,8 @@ export const switchEntry: ComponentRegistryEntry = {
       },
       {
         key: 'Tab',
-        behavior: 'Moves focus to or from the switch input. Focus ring appears only on keyboard focus via focus-visible.',
+        behavior:
+          'Moves focus to or from the switch input. Focus ring appears only on keyboard focus via focus-visible.',
       },
     ],
     focusManagement:
@@ -186,9 +222,7 @@ export const switchEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -335,25 +369,29 @@ export default function DarkModeToggle() {
       title: 'Using onChange instead of onCheckedChange',
       bad: '<Switch onChange={(e) => ...} />',
       good: '<Switch onCheckedChange={(checked: boolean) => ...} />',
-      reason: 'The SwitchProps type omits the native onChange. The component provides onCheckedChange which receives a clean boolean instead of a ChangeEvent.',
+      reason:
+        'The SwitchProps type omits the native onChange. The component provides onCheckedChange which receives a clean boolean instead of a ChangeEvent.',
     },
     {
       title: 'Setting aria-checked or role manually',
       bad: '<Switch role="switch" aria-checked={value} />',
       good: '<Switch checked={value} />',
-      reason: 'The component automatically manages role="switch" and aria-checked on the hidden input. Setting them manually on the wrapper div has no effect on the actual accessibility node.',
+      reason:
+        'The component automatically manages role="switch" and aria-checked on the hidden input. Setting them manually on the wrapper div has no effect on the actual accessibility node.',
     },
     {
       title: 'Using the switch without a label or aria-label',
       bad: '<Switch checked={on} onCheckedChange={setOn} />',
       good: '<Switch label="Dark mode" checked={on} onCheckedChange={setOn} />',
-      reason: 'Without a label prop or aria-label, screen readers cannot determine the purpose of the switch. Always provide at least one.',
+      reason:
+        'Without a label prop or aria-label, screen readers cannot determine the purpose of the switch. Always provide at least one.',
     },
     {
       title: 'Using checked without onCheckedChange in controlled mode',
       bad: '<Switch checked={value} />',
       good: '<Switch checked={value} onCheckedChange={setValue} />',
-      reason: 'Providing checked without onCheckedChange creates a read-only switch that cannot be toggled. In controlled mode, both props must be provided together.',
+      reason:
+        'Providing checked without onCheckedChange creates a read-only switch that cannot be toggled. In controlled mode, both props must be provided together.',
     },
   ],
 };

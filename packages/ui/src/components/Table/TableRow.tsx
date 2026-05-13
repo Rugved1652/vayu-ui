@@ -25,7 +25,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
           'hover:bg-muted dark:hover:bg-muted',
           selected && 'bg-muted dark:bg-muted',
           selectable &&
-          'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
+            'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
           className,
         )}
         role="row"

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useCallback, useContext, useEffect, useRef, type ReactNode } from "react";
-import { cn } from "../../utils";
-import { ContainerIdContext, DraggableItemContext, type DraggableItemProps } from "./types";
-import { useDraggableContext } from "./hooks";
+import React, { useCallback, useContext, useEffect, useRef, type ReactNode } from 'react';
+import { cn } from '../../utils';
+import { ContainerIdContext, DraggableItemContext, type DraggableItemProps } from './types';
+import { useDraggableContext } from './hooks';
 
 export function DraggableItem({
   children,
@@ -38,45 +38,60 @@ export function DraggableItem({
       if (!rect) return;
       ctx.startDrag(value, containerId, e.clientX - rect.left, e.clientY - rect.top);
     },
-    [value, disabled, containerId, ctx]
+    [value, disabled, containerId, ctx],
   );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (disabled) return;
-      if (e.key === " " || e.key === "Enter") {
+      if (e.key === ' ' || e.key === 'Enter') {
         e.preventDefault();
         if (ctx.activeId === value) ctx.keyboardDrop();
         else if (!ctx.activeId) ctx.keyboardGrab(value);
-      } else if (e.key === "Escape" && ctx.activeId === value) {
+      } else if (e.key === 'Escape' && ctx.activeId === value) {
         e.preventDefault();
         ctx.keyboardCancel();
       } else if (ctx.activeId === value) {
-        if (e.key === "ArrowUp") { e.preventDefault(); ctx.keyboardMove("up"); }
-        else if (e.key === "ArrowDown") { e.preventDefault(); ctx.keyboardMove("down"); }
-        else if (e.key === "ArrowLeft") { e.preventDefault(); ctx.keyboardMove("left"); }
-        else if (e.key === "ArrowRight") { e.preventDefault(); ctx.keyboardMove("right"); }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          ctx.keyboardMove('up');
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          ctx.keyboardMove('down');
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          ctx.keyboardMove('left');
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          ctx.keyboardMove('right');
+        }
       } else if (!ctx.activeId) {
         const idx = effectiveItems.indexOf(value);
-        if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
           e.preventDefault();
           const nextId = effectiveItems[Math.min(effectiveItems.length - 1, idx + 1)];
-          if (nextId) { ctx.setFocusedId(nextId); document.getElementById(`draggable-item-${nextId}`)?.focus({ preventScroll: true }); }
-        } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+          if (nextId) {
+            ctx.setFocusedId(nextId);
+            document.getElementById(`draggable-item-${nextId}`)?.focus({ preventScroll: true });
+          }
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
           e.preventDefault();
           const prevId = effectiveItems[Math.max(0, idx - 1)];
-          if (prevId) { ctx.setFocusedId(prevId); document.getElementById(`draggable-item-${prevId}`)?.focus({ preventScroll: true }); }
+          if (prevId) {
+            ctx.setFocusedId(prevId);
+            document.getElementById(`draggable-item-${prevId}`)?.focus({ preventScroll: true });
+          }
         }
       }
     },
-    [value, disabled, effectiveItems, ctx]
+    [value, disabled, effectiveItems, ctx],
   );
 
   return (
     <div
       id={`draggable-item-${value}`}
       ref={ref}
-      role={ctx.layout === "grid" ? "gridcell" : "listitem"}
+      role={ctx.layout === 'grid' ? 'gridcell' : 'listitem'}
       aria-grabbed={isActive || undefined}
       aria-roledescription="sortable item"
       aria-disabled={disabled || undefined}
@@ -86,15 +101,15 @@ export function DraggableItem({
       onFocus={() => ctx.setFocusedId(value)}
       onPointerDown={handlePointerDown}
       className={cn(
-        "relative min-h-[44px] will-change-transform",
-        "outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 rounded-surface",
-        "transition-shadow duration-150",
-        isActive && !ctx.isKeyboardDragging && "opacity-0",
-        isActive && ctx.isKeyboardDragging && "ring-2 ring-brand shadow-elevated",
-        isOverTarget && "ring-2 ring-brand/50",
-        disabled && "opacity-50 cursor-not-allowed",
-        !disabled && "cursor-grab active:cursor-grabbing",
-        className
+        'relative min-h-[44px] will-change-transform',
+        'outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1 rounded-surface',
+        'transition-shadow duration-150',
+        isActive && !ctx.isKeyboardDragging && 'opacity-0',
+        isActive && ctx.isKeyboardDragging && 'ring-2 ring-brand shadow-elevated',
+        isOverTarget && 'ring-2 ring-brand/50',
+        disabled && 'opacity-50 cursor-not-allowed',
+        !disabled && 'cursor-grab active:cursor-grabbing',
+        className,
       )}
     >
       <span id="draggable-instructions" className="sr-only">

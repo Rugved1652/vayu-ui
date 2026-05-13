@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { clsx } from "clsx";
-import { useVideoPlayer } from "./VideoPlayer";
-import { formatTime as formatTimeUtil } from "./utils";
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import { clsx } from 'clsx';
+import { useVideoPlayer } from './VideoPlayer';
+import { formatTime as formatTimeUtil } from './utils';
 import type {
   VideoPlayerProgressProps,
   VideoPlayerSeekProps,
   VideoPlayerTimeProps,
   VideoPlayerBufferProps,
-} from "./types";
+} from './types';
 
 // ============================================================================
 // Progress (read-only)
@@ -29,7 +29,7 @@ export const VideoPlayerProgress = forwardRef<HTMLDivElement, VideoPlayerProgres
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(progress)}
-        className={clsx("relative h-2 w-full rounded-full bg-muted overflow-hidden", className)}
+        className={clsx('relative h-2 w-full rounded-full bg-muted overflow-hidden', className)}
         {...props}
       >
         {showBuffer && (
@@ -44,10 +44,10 @@ export const VideoPlayerProgress = forwardRef<HTMLDivElement, VideoPlayerProgres
         />
       </div>
     );
-  }
+  },
 );
 
-VideoPlayerProgress.displayName = "VideoPlayer.Progress";
+VideoPlayerProgress.displayName = 'VideoPlayer.Progress';
 
 // ============================================================================
 // Seek (interactive slider)
@@ -56,8 +56,14 @@ VideoPlayerProgress.displayName = "VideoPlayer.Progress";
 export const VideoPlayerSeek = forwardRef<HTMLDivElement, VideoPlayerSeekProps>(
   ({ showBuffer = true, showThumb = true, className, ...props }, ref) => {
     const {
-      currentTime, duration, buffered, seek,
-      seekForward, seekBackward, setSeeking, isSeeking,
+      currentTime,
+      duration,
+      buffered,
+      seek,
+      seekForward,
+      seekBackward,
+      setSeeking,
+      isSeeking,
     } = useVideoPlayer();
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -74,7 +80,7 @@ export const VideoPlayerSeek = forwardRef<HTMLDivElement, VideoPlayerSeekProps>(
         seek(percent * duration);
         setLocalProgress(null);
       },
-      [duration, seek]
+      [duration, seek],
     );
 
     const handleMouseDown = useCallback(
@@ -94,26 +100,38 @@ export const VideoPlayerSeek = forwardRef<HTMLDivElement, VideoPlayerSeekProps>(
         const handleMouseUp = (e: MouseEvent) => {
           handleSeek(e.clientX);
           setSeeking(false);
-          document.removeEventListener("mousemove", handleMouseMove);
-          document.removeEventListener("mouseup", handleMouseUp);
+          document.removeEventListener('mousemove', handleMouseMove);
+          document.removeEventListener('mouseup', handleMouseUp);
         };
 
-        document.addEventListener("mousemove", handleMouseMove);
-        document.addEventListener("mouseup", handleMouseUp);
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
       },
-      [handleSeek, setSeeking]
+      [handleSeek, setSeeking],
     );
 
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
         switch (e.key) {
-          case "ArrowRight": e.preventDefault(); seekForward(); break;
-          case "ArrowLeft": e.preventDefault(); seekBackward(); break;
-          case "Home": e.preventDefault(); seek(0); break;
-          case "End": e.preventDefault(); seek(duration); break;
+          case 'ArrowRight':
+            e.preventDefault();
+            seekForward();
+            break;
+          case 'ArrowLeft':
+            e.preventDefault();
+            seekBackward();
+            break;
+          case 'Home':
+            e.preventDefault();
+            seek(0);
+            break;
+          case 'End':
+            e.preventDefault();
+            seek(duration);
+            break;
         }
       },
-      [seekForward, seekBackward, seek, duration]
+      [seekForward, seekBackward, seek, duration],
     );
 
     return (
@@ -129,9 +147,9 @@ export const VideoPlayerSeek = forwardRef<HTMLDivElement, VideoPlayerSeekProps>(
         onKeyDown={handleKeyDown}
         onMouseDown={handleMouseDown}
         className={clsx(
-          "relative h-2 w-full rounded-full bg-muted cursor-pointer group",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-          className
+          'relative h-2 w-full rounded-full bg-muted cursor-pointer group',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+          className,
         )}
         {...props}
       >
@@ -143,29 +161,29 @@ export const VideoPlayerSeek = forwardRef<HTMLDivElement, VideoPlayerSeekProps>(
         )}
         <div
           className={clsx(
-            "absolute h-full bg-brand rounded-full transition-all",
-            isSeeking && "transition-none"
+            'absolute h-full bg-brand rounded-full transition-all',
+            isSeeking && 'transition-none',
           )}
           style={{ width: `${progress}%` }}
         />
         {showThumb && (
           <div
             className={clsx(
-              "absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full",
-              "bg-brand border-2 border-elevated shadow-sm",
-              "opacity-0 group-hover:opacity-100 group-focus:opacity-100",
-              "transition-opacity",
-              isSeeking && "opacity-100"
+              'absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full',
+              'bg-brand border-2 border-elevated shadow-sm',
+              'opacity-0 group-hover:opacity-100 group-focus:opacity-100',
+              'transition-opacity',
+              isSeeking && 'opacity-100',
             )}
-            style={{ left: `${progress}%`, transform: "translate(-50%, -50%)" }}
+            style={{ left: `${progress}%`, transform: 'translate(-50%, -50%)' }}
           />
         )}
       </div>
     );
-  }
+  },
 );
 
-VideoPlayerSeek.displayName = "VideoPlayer.Seek";
+VideoPlayerSeek.displayName = 'VideoPlayer.Seek';
 
 // ============================================================================
 // Time display
@@ -179,7 +197,10 @@ export const VideoPlayerTime = forwardRef<HTMLDivElement, VideoPlayerTimeProps>(
     return (
       <div
         ref={ref}
-        className={clsx("flex items-center gap-1 text-xs text-muted-content font-mono select-none", className)}
+        className={clsx(
+          'flex items-center gap-1 text-xs text-muted-content font-mono select-none',
+          className,
+        )}
         {...props}
       >
         <span>{formatTime(currentTime)}</span>
@@ -187,10 +208,10 @@ export const VideoPlayerTime = forwardRef<HTMLDivElement, VideoPlayerTimeProps>(
         <span>{showRemaining ? `-${formatTime(remaining)}` : formatTime(duration)}</span>
       </div>
     );
-  }
+  },
 );
 
-VideoPlayerTime.displayName = "VideoPlayer.Time";
+VideoPlayerTime.displayName = 'VideoPlayer.Time';
 
 // ============================================================================
 // Buffer bar
@@ -209,7 +230,7 @@ export const VideoPlayerBuffer = forwardRef<HTMLDivElement, VideoPlayerBufferPro
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.floor(bufferPercent)}
-        className={clsx("h-1 w-full rounded-full bg-muted overflow-hidden", className)}
+        className={clsx('h-1 w-full rounded-full bg-muted overflow-hidden', className)}
         {...props}
       >
         <div
@@ -218,7 +239,7 @@ export const VideoPlayerBuffer = forwardRef<HTMLDivElement, VideoPlayerBufferPro
         />
       </div>
     );
-  }
+  },
 );
 
-VideoPlayerBuffer.displayName = "VideoPlayer.Buffer";
+VideoPlayerBuffer.displayName = 'VideoPlayer.Buffer';

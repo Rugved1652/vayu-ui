@@ -473,7 +473,7 @@ useEffect(() => {
   }
 }, [set]);`,
       reason:
-        "has() reads from the Set captured during the current render. Calling add() schedules a state update but does not synchronously update the Set reference. Inside the same event handler, has() will return the pre-update value. Use useEffect or track the value locally if you need to react to the new state immediately.",
+        'has() reads from the Set captured during the current render. Calling add() schedules a state update but does not synchronously update the Set reference. Inside the same event handler, has() will return the pre-update value. Use useEffect or track the value locally if you need to react to the new state immediately.',
     },
   ],
 };

@@ -39,8 +39,16 @@ export const aspectratioEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'AspectRatio',
   files: [
-    { name: 'AspectRatio.tsx', description: 'Root component with ratio calculation, overflow, object-fit styling, and accessibility logic' },
-    { name: 'types.ts', description: 'TypeScript type definitions, preset ratio map, and constant maps for overflow/object-fit' },
+    {
+      name: 'AspectRatio.tsx',
+      description:
+        'Root component with ratio calculation, overflow, object-fit styling, and accessibility logic',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions, preset ratio map, and constant maps for overflow/object-fit',
+    },
     { name: 'index.ts', description: 'Barrel export file re-exporting the component and types' },
     { name: 'README.md', description: 'Component documentation and usage guidelines' },
   ],
@@ -54,11 +62,23 @@ export const aspectratioEntry: ComponentRegistryEntry = {
   rootProps: [
     {
       name: 'ratio',
-      type: "number | AspectRatioPreset",
+      type: 'number | AspectRatioPreset',
       required: false,
       defaultValue: "'square'",
       description: 'Aspect ratio expressed as width/height. Use a named preset or a numeric value.',
-      options: ['square', 'video', 'photo', 'landscape', 'ultrawide', 'portrait', 'golden', 'a4', 'cinema', 'iphone', 'ipad'],
+      options: [
+        'square',
+        'video',
+        'photo',
+        'landscape',
+        'ultrawide',
+        'portrait',
+        'golden',
+        'a4',
+        'cinema',
+        'iphone',
+        'ipad',
+      ],
     },
     {
       name: 'overflow',
@@ -79,7 +99,8 @@ export const aspectratioEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Marks the container as decorative, hiding it from screen readers with role="presentation" and aria-hidden="true".',
+      description:
+        'Marks the container as decorative, hiding it from screen readers with role="presentation" and aria-hidden="true".',
     },
     {
       name: 'rounded',
@@ -106,7 +127,8 @@ export const aspectratioEntry: ComponentRegistryEntry = {
       name: 'aria-label',
       type: 'string',
       required: false,
-      description: 'Accessible label for screen readers. When provided, the container gets role="region" to become a named landmark.',
+      description:
+        'Accessible label for screen readers. When provided, the container gets role="region" to become a named landmark.',
     },
     {
       name: 'className',
@@ -118,7 +140,8 @@ export const aspectratioEntry: ComponentRegistryEntry = {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description: 'Content to render inside the aspect ratio container, typically an <img> or <video> element.',
+      description:
+        'Content to render inside the aspect ratio container, typically an <img> or <video> element.',
     },
   ],
   rendersAs: 'div',
@@ -133,15 +156,29 @@ export const aspectratioEntry: ComponentRegistryEntry = {
       prop: 'decorative',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'When true, sets role="presentation" and aria-hidden="true" so the container is invisible to assistive technology.',
+      description:
+        'When true, sets role="presentation" and aria-hidden="true" so the container is invisible to assistive technology.',
     },
     {
       name: 'ratio',
       prop: 'ratio',
       isBoolean: false,
-      values: ['square', 'video', 'photo', 'landscape', 'ultrawide', 'portrait', 'golden', 'a4', 'cinema', 'iphone', 'ipad'],
+      values: [
+        'square',
+        'video',
+        'photo',
+        'landscape',
+        'ultrawide',
+        'portrait',
+        'golden',
+        'a4',
+        'cinema',
+        'iphone',
+        'ipad',
+      ],
       defaultValue: "'square'",
-      description: 'Controls the aspect ratio of the container. Presets use native CSS aspect-ratio; numeric values use padding-bottom fallback.',
+      description:
+        'Controls the aspect ratio of the container. Presets use native CSS aspect-ratio; numeric values use padding-bottom fallback.',
     },
     {
       name: 'objectFit',
@@ -157,7 +194,8 @@ export const aspectratioEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['hidden', 'visible', 'auto', 'scroll'],
       defaultValue: "'hidden'",
-      description: 'Controls overflow behavior. Defaults to hidden to clip content that exceeds the ratio bounds.',
+      description:
+        'Controls overflow behavior. Defaults to hidden to clip content that exceeds the ratio bounds.',
     },
   ],
 
@@ -169,17 +207,20 @@ export const aspectratioEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'role',
-        description: 'Set to "presentation" when decorative is true. Set to "region" when aria-label is provided (creating a named landmark). No role is set otherwise.',
+        description:
+          'Set to "presentation" when decorative is true. Set to "region" when aria-label is provided (creating a named landmark). No role is set otherwise.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Set to "true" when decorative is true, hiding the container and its children from the accessibility tree.',
+        description:
+          'Set to "true" when decorative is true, hiding the container and its children from the accessibility tree.',
         managedByComponent: true,
       },
       {
         name: 'aria-label',
-        description: 'When provided by the developer, the container becomes a named region. The component does not generate this attribute automatically.',
+        description:
+          'When provided by the developer, the container becomes a named region. The component does not generate this attribute automatically.',
         managedByComponent: false,
       },
     ],
@@ -192,10 +233,7 @@ export const aspectratioEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'tailwind-merge' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'tailwind-merge' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -207,7 +245,8 @@ export const aspectratioEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'typography',
-      reason: 'Used alongside Typography for image captions, titles, and description overlays within aspect-ratio containers',
+      reason:
+        'Used alongside Typography for image captions, titles, and description overlays within aspect-ratio containers',
     },
     {
       slug: 'button',
@@ -223,7 +262,8 @@ export const aspectratioEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Preset Ratios Grid',
-      description: 'Multiple preset ratios displayed in a responsive grid with rounded corners and shadows.',
+      description:
+        'Multiple preset ratios displayed in a responsive grid with rounded corners and shadows.',
       code: `import { AspectRatio } from 'vayu-ui';
 
 export default function PresetGrid() {
@@ -347,25 +387,29 @@ export default function ObjectFitComparison() {
       title: 'Using ratio={0} or negative ratios',
       bad: '<AspectRatio ratio={0} decorative>...</AspectRatio>',
       good: '<AspectRatio ratio="square" decorative>...</AspectRatio>',
-      reason: 'A ratio of 0 or a negative value produces undefined behavior — the padding-bottom fallback divides by the ratio value. Use a named preset or a positive numeric value.',
+      reason:
+        'A ratio of 0 or a negative value produces undefined behavior — the padding-bottom fallback divides by the ratio value. Use a named preset or a positive numeric value.',
     },
     {
       title: 'Setting both decorative and aria-label',
       bad: '<AspectRatio decorative aria-label="Product image">...</AspectRatio>',
       good: '<AspectRatio aria-label="Product image">...</AspectRatio>',
-      reason: 'When decorative is true, the component sets aria-hidden="true" and removes aria-label. The two props conflict — decorative means "this has no meaning", while aria-label means "this has a meaningful name".',
+      reason:
+        'When decorative is true, the component sets aria-hidden="true" and removes aria-label. The two props conflict — decorative means "this has no meaning", while aria-label means "this has a meaningful name".',
     },
     {
       title: 'Hardcoding aspect-ratio in className',
       bad: '<AspectRatio ratio="video" className="aspect-3/4">...</AspectRatio>',
       good: '<AspectRatio ratio="portrait">...</AspectRatio>',
-      reason: 'Overriding the aspect-ratio via className fights with the component\'s built-in Tailwind classes. Use the ratio prop with a preset or numeric value instead.',
+      reason:
+        "Overriding the aspect-ratio via className fights with the component's built-in Tailwind classes. Use the ratio prop with a preset or numeric value instead.",
     },
     {
       title: 'Nesting AspectRatio containers',
       bad: '<AspectRatio ratio="video"><AspectRatio ratio="square">...</AspectRatio></AspectRatio>',
       good: '<AspectRatio ratio="video"><div className="w-full h-full">...</div></AspectRatio>',
-      reason: 'Nesting AspectRatio components creates conflicting absolute-positioning contexts and unpredictable sizing. Place content directly inside a single AspectRatio.',
+      reason:
+        'Nesting AspectRatio components creates conflicting absolute-positioning contexts and unpredictable sizing. Place content directly inside a single AspectRatio.',
     },
   ],
 };

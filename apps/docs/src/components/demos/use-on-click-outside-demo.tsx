@@ -8,9 +8,8 @@ export function UseOnClickOutsideDemo() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(
-    [triggerRef, dropdownRef] as React.RefObject<HTMLElement>[],
-    () => setIsOpen(false),
+  useOnClickOutside([triggerRef, dropdownRef] as React.RefObject<HTMLElement>[], () =>
+    setIsOpen(false),
   );
 
   return (
@@ -30,19 +29,12 @@ export function UseOnClickOutsideDemo() {
         >
           <p className="text-sm font-medium mb-2">Dropdown Menu</p>
           <p className="text-xs text-muted-foreground mb-3">
-            Clicking the button or inside this panel does nothing. Click
-            anywhere else to close.
+            Clicking the button or inside this panel does nothing. Click anywhere else to close.
           </p>
           <ul className="space-y-1 text-sm">
-            <li className="px-2 py-1 rounded hover:bg-muted cursor-pointer">
-              Profile
-            </li>
-            <li className="px-2 py-1 rounded hover:bg-muted cursor-pointer">
-              Settings
-            </li>
-            <li className="px-2 py-1 rounded hover:bg-muted cursor-pointer">
-              Log out
-            </li>
+            <li className="px-2 py-1 rounded hover:bg-muted cursor-pointer">Profile</li>
+            <li className="px-2 py-1 rounded hover:bg-muted cursor-pointer">Settings</li>
+            <li className="px-2 py-1 rounded hover:bg-muted cursor-pointer">Log out</li>
           </ul>
         </div>
       )}

@@ -38,8 +38,7 @@ export const useScrollPositionEntry: HookRegistryEntry = {
   targetPath: 'src/hooks',
 
   // ── Signature ─────────────────────────────────────────
-  signature:
-    'function useScrollPosition(options?: UseScrollPositionOptions): ScrollPosition',
+  signature: 'function useScrollPosition(options?: UseScrollPositionOptions): ScrollPosition',
   parameters: [
     {
       name: 'options',
@@ -59,7 +58,7 @@ export const useScrollPositionEntry: HookRegistryEntry = {
     },
     {
       name: 'options.element',
-      type: "React.RefObject<HTMLElement | null>",
+      type: 'React.RefObject<HTMLElement | null>',
       required: false,
       description:
         'A React ref attached to the scrollable container element whose scroll position you want to track. When provided, the hook reads scrollTop/scrollLeft/scrollHeight/clientHeight from this element. When omitted (or when the ref is null), the hook tracks window scroll instead. Changing the ref between renders re-subscribes the scroll listener to the new target.',

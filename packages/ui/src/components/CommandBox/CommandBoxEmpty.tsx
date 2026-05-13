@@ -9,7 +9,11 @@ import React from 'react';
 import { useCommandBox } from './hooks';
 import type { CommandBoxEmptyProps } from './types';
 
-export const CommandBoxEmpty: React.FC<CommandBoxEmptyProps> = ({ children, className, ...props }) => {
+export const CommandBoxEmpty: React.FC<CommandBoxEmptyProps> = ({
+  children,
+  className,
+  ...props
+}) => {
   const { filteredItems, searchQuery, loading } = useCommandBox();
 
   // Don't show if loading, no search, or has results

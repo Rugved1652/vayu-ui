@@ -34,9 +34,7 @@ export default function BadgeDemoPage() {
         <Typography.H5>Badge Examples</Typography.H5>
         {/* Section 1: Variants */}
         <section className="space-y-2">
-          <Typography.H5>
-            Variants
-          </Typography.H5>
+          <Typography.H5>Variants</Typography.H5>
           <div className="flex flex-wrap gap-4 items-center">
             <Badge variant="brand">Brand</Badge>
             <Badge variant="muted">Muted</Badge>
@@ -53,9 +51,7 @@ export default function BadgeDemoPage() {
 
         {/* Section 2: Sizes */}
         <section className="space-y-2">
-          <Typography.H5>
-            Sizes
-          </Typography.H5>
+          <Typography.H5>Sizes</Typography.H5>
           <div className="flex flex-wrap gap-4 items-center">
             <Badge size="sm" variant="brand">
               Small (24px)
@@ -75,9 +71,7 @@ export default function BadgeDemoPage() {
 
         {/* Section 3: Interactive (Clickable) */}
         <section className="space-y-2">
-          <Typography.H5>
-            Interactive
-          </Typography.H5>
+          <Typography.H5>Interactive</Typography.H5>
           <Typography.P variant="secondary" className="text-sm">
             Click to trigger an alert.
           </Typography.P>
@@ -98,9 +92,7 @@ export default function BadgeDemoPage() {
 
         {/* Section 4: Dismissible (Stateful) */}
         <section className="space-y-2">
-          <Typography.H5>
-            Dismissible
-          </Typography.H5>
+          <Typography.H5>Dismissible</Typography.H5>
           <Typography.P variant="secondary" className="text-sm">
             Click the X to remove tags.
           </Typography.P>
@@ -133,9 +125,7 @@ export default function BadgeDemoPage() {
 
         {/* Section 5: Interactive & Dismissible (Complex) */}
         <section className="space-y-2">
-          <Typography.H5>
-            Interactive + Dismissible
-          </Typography.H5>
+          <Typography.H5>Interactive + Dismissible</Typography.H5>
           <Typography.P variant="secondary" className="text-sm">
             Click text to trigger filter, click X to remove.
           </Typography.P>

@@ -81,9 +81,9 @@ const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
           preset
             ? style
             : {
-              paddingBottom,
-              ...style,
-            }
+                paddingBottom,
+                ...style,
+              }
         }
         {...ariaProps}
         {...props}

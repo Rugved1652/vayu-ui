@@ -8,7 +8,7 @@ export const useNetworkStatusEntry: HookRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'Tracks the browser\'s online/offline connectivity status in real time and records a timestamp when the connection is lost.',
+    "Tracks the browser's online/offline connectivity status in real time and records a timestamp when the connection is lost.",
   longDescription:
     'Subscribes to the browser\'s native "online" and "offline" events on the window object and exposes the current connectivity state through a reactive React value. On initial render the hook reads navigator.onLine — falling back to true when navigator is unavailable (e.g. during SSR or in certain test environments) — so server and client produce the same initial output with no hydration mismatch. When the browser detects a loss of connectivity, the hook sets isOnline to false and captures the current time in offlineAt, enabling UI that shows how long the user has been disconnected. When connectivity is restored, isOnline flips back to true and offlineAt is cleared. The event listeners are cleaned up on unmount. Use this hook instead of manually adding window event listeners when you need a declarative, React-friendly way to react to network changes — especially for showing offline banners, disabling network-dependent actions, or queueing operations for retry.',
   tags: [
@@ -30,7 +30,7 @@ export const useNetworkStatusEntry: HookRegistryEntry = {
     'Track how long the user has been disconnected using the offlineAt timestamp to show elapsed time or trigger reconnection logic after a threshold',
     'Queue mutations or write operations while offline and automatically flush them when connectivity is restored',
     'Build a network-aware data fetching layer that skips requests when offline and retries them once the connection is back',
-    'Show contextual messaging in collaborative or real-time apps (e.g. document editors, chat) when a teammate\'s connection drops',
+    "Show contextual messaging in collaborative or real-time apps (e.g. document editors, chat) when a teammate's connection drops",
   ],
 
   // ── File & CLI ────────────────────────────────────────

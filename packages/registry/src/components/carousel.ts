@@ -36,18 +36,58 @@ export const carouselEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Carousel',
   files: [
-    { name: 'Carousel.tsx', description: 'Root component with state management, navigation logic, and context provider' },
-    { name: 'CarouselViewport.tsx', description: 'Overflow container with touch swipe, keyboard navigation, and sliding track wrapper' },
-    { name: 'CarouselSlide.tsx', description: 'Individual slide wrapper supporting crossfade (single) and flex (multi-item) layouts' },
-    { name: 'CarouselPrevious.tsx', description: 'Previous navigation button with ChevronLeft icon and boundary disable logic' },
-    { name: 'CarouselNext.tsx', description: 'Next navigation button with ChevronRight icon and boundary disable logic' },
-    { name: 'CarouselBullets.tsx', description: 'Dot pagination indicators with page-aware active state for multi-item mode' },
-    { name: 'CarouselPlayPause.tsx', description: 'Toggle button to play/pause auto-play with Play and Pause icons' },
-    { name: 'CarouselSpeedControl.tsx', description: 'Speed selector dropdown with options 0.5x, 1x, 1.5x, 2x' },
-    { name: 'CarouselGallery.tsx', description: 'Thumbnail strip for direct slide navigation with visual active indicator' },
-    { name: 'hooks.ts', description: 'Context hook, usePrefersReducedMotion, and useResolvedItemsPerSlide for responsive breakpoints' },
-    { name: 'types.ts', description: 'TypeScript type definitions for all props, context, and responsive breakpoint types' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and all types' },
+    {
+      name: 'Carousel.tsx',
+      description: 'Root component with state management, navigation logic, and context provider',
+    },
+    {
+      name: 'CarouselViewport.tsx',
+      description:
+        'Overflow container with touch swipe, keyboard navigation, and sliding track wrapper',
+    },
+    {
+      name: 'CarouselSlide.tsx',
+      description:
+        'Individual slide wrapper supporting crossfade (single) and flex (multi-item) layouts',
+    },
+    {
+      name: 'CarouselPrevious.tsx',
+      description: 'Previous navigation button with ChevronLeft icon and boundary disable logic',
+    },
+    {
+      name: 'CarouselNext.tsx',
+      description: 'Next navigation button with ChevronRight icon and boundary disable logic',
+    },
+    {
+      name: 'CarouselBullets.tsx',
+      description: 'Dot pagination indicators with page-aware active state for multi-item mode',
+    },
+    {
+      name: 'CarouselPlayPause.tsx',
+      description: 'Toggle button to play/pause auto-play with Play and Pause icons',
+    },
+    {
+      name: 'CarouselSpeedControl.tsx',
+      description: 'Speed selector dropdown with options 0.5x, 1x, 1.5x, 2x',
+    },
+    {
+      name: 'CarouselGallery.tsx',
+      description: 'Thumbnail strip for direct slide navigation with visual active indicator',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'Context hook, usePrefersReducedMotion, and useResolvedItemsPerSlide for responsive breakpoints',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for all props, context, and responsive breakpoint types',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the compound component and all types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -57,7 +97,8 @@ export const carouselEntry: ComponentRegistryEntry = {
     {
       name: 'Viewport',
       fileName: 'CarouselViewport.tsx',
-      description: 'Overflow-hidden container that wraps slides, handles touch swipe gestures and keyboard navigation, and renders the sliding track in multi-item mode',
+      description:
+        'Overflow-hidden container that wraps slides, handles touch swipe gestures and keyboard navigation, and renders the sliding track in multi-item mode',
       props: [
         {
           name: 'children',
@@ -76,13 +117,15 @@ export const carouselEntry: ComponentRegistryEntry = {
     {
       name: 'Slide',
       fileName: 'CarouselSlide.tsx',
-      description: 'Individual slide wrapper that adapts between crossfade (single-item) and flex (multi-item) rendering modes',
+      description:
+        'Individual slide wrapper that adapts between crossfade (single-item) and flex (multi-item) rendering modes',
       props: [
         {
           name: 'index',
           type: 'number',
           required: true,
-          description: 'Zero-based position of this slide in the total sequence, used for active state and ARIA labels',
+          description:
+            'Zero-based position of this slide in the total sequence, used for active state and ARIA labels',
         },
         {
           name: 'children',
@@ -101,7 +144,8 @@ export const carouselEntry: ComponentRegistryEntry = {
     {
       name: 'Previous',
       fileName: 'CarouselPrevious.tsx',
-      description: 'Absolutely positioned previous navigation button with ChevronLeft icon, auto-disabled at the first slide or page when loop is off',
+      description:
+        'Absolutely positioned previous navigation button with ChevronLeft icon, auto-disabled at the first slide or page when loop is off',
       props: [
         {
           name: 'showLabel',
@@ -121,7 +165,8 @@ export const carouselEntry: ComponentRegistryEntry = {
     {
       name: 'Next',
       fileName: 'CarouselNext.tsx',
-      description: 'Absolutely positioned next navigation button with ChevronRight icon, auto-disabled at the last slide or page when loop is off',
+      description:
+        'Absolutely positioned next navigation button with ChevronRight icon, auto-disabled at the last slide or page when loop is off',
       props: [
         {
           name: 'showLabel',
@@ -141,7 +186,8 @@ export const carouselEntry: ComponentRegistryEntry = {
     {
       name: 'Bullets',
       fileName: 'CarouselBullets.tsx',
-      description: 'Dot pagination indicators that adapt between per-slide (single-item) and per-page (multi-item) mode with direct navigation on click',
+      description:
+        'Dot pagination indicators that adapt between per-slide (single-item) and per-page (multi-item) mode with direct navigation on click',
       props: [
         {
           name: 'className',
@@ -154,7 +200,8 @@ export const carouselEntry: ComponentRegistryEntry = {
     {
       name: 'PlayPause',
       fileName: 'CarouselPlayPause.tsx',
-      description: 'Toggle button that plays or pauses the auto-play slideshow with Play and Pause icons and aria-pressed state',
+      description:
+        'Toggle button that plays or pauses the auto-play slideshow with Play and Pause icons and aria-pressed state',
       props: [
         {
           name: 'showLabel',
@@ -174,7 +221,8 @@ export const carouselEntry: ComponentRegistryEntry = {
     {
       name: 'SpeedControl',
       fileName: 'CarouselSpeedControl.tsx',
-      description: 'Playback speed selector dropdown with options 0.5x, 1x, 1.5x, 2x that adjusts the auto-play interval',
+      description:
+        'Playback speed selector dropdown with options 0.5x, 1x, 1.5x, 2x that adjusts the auto-play interval',
       props: [
         {
           name: 'showLabel',
@@ -194,13 +242,15 @@ export const carouselEntry: ComponentRegistryEntry = {
     {
       name: 'Gallery',
       fileName: 'CarouselGallery.tsx',
-      description: 'Horizontally scrollable thumbnail strip for direct slide navigation with visual active indicator border',
+      description:
+        'Horizontally scrollable thumbnail strip for direct slide navigation with visual active indicator border',
       props: [
         {
           name: 'items',
           type: 'GalleryItem[]',
           required: true,
-          description: 'Array of { src, alt } objects for thumbnail images, must match totalItems count',
+          description:
+            'Array of { src, alt } objects for thumbnail images, must match totalItems count',
         },
         {
           name: 'className',
@@ -221,7 +271,8 @@ export const carouselEntry: ComponentRegistryEntry = {
       name: 'totalItems',
       type: 'number',
       required: true,
-      description: 'Total number of slides in the carousel. Must match the number of Carousel.Slide children rendered.',
+      description:
+        'Total number of slides in the carousel. Must match the number of Carousel.Slide children rendered.',
     },
     {
       name: 'autoPlay',
@@ -235,14 +286,16 @@ export const carouselEntry: ComponentRegistryEntry = {
       type: 'number',
       required: false,
       defaultValue: '3000',
-      description: 'Time in milliseconds between auto-play slide transitions. Actual interval is divided by the current speed multiplier.',
+      description:
+        'Time in milliseconds between auto-play slide transitions. Actual interval is divided by the current speed multiplier.',
     },
     {
       name: 'loop',
       type: 'boolean',
       required: false,
       defaultValue: 'true',
-      description: 'When true, wraps from last slide back to first. When false, stops at boundaries and disables navigation buttons.',
+      description:
+        'When true, wraps from last slide back to first. When false, stops at boundaries and disables navigation buttons.',
     },
     {
       name: 'defaultSpeed',
@@ -264,13 +317,15 @@ export const carouselEntry: ComponentRegistryEntry = {
       type: 'ItemsPerSlide',
       required: false,
       defaultValue: '1',
-      description: 'Number of items visible per slide. Accepts a static number or a responsive object { base, sm?, md?, lg?, xl?, 2xl? } matching Tailwind breakpoints. Values > 1 switch from crossfade to horizontal sliding track.',
+      description:
+        'Number of items visible per slide. Accepts a static number or a responsive object { base, sm?, md?, lg?, xl?, 2xl? } matching Tailwind breakpoints. Values > 1 switch from crossfade to horizontal sliding track.',
     },
     {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description: 'Carousel sub-components (Viewport, Slide, Previous, Next, Bullets, PlayPause, SpeedControl, Gallery)',
+      description:
+        'Carousel sub-components (Viewport, Slide, Previous, Next, Bullets, PlayPause, SpeedControl, Gallery)',
     },
     {
       name: 'className',
@@ -288,14 +343,16 @@ export const carouselEntry: ComponentRegistryEntry = {
       prop: 'autoPlay / internal isPlaying',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Controls whether the carousel auto-advances slides. Toggled by PlayPause button, paused on hover, and stops at the end when loop is false.',
+      description:
+        'Controls whether the carousel auto-advances slides. Toggled by PlayPause button, paused on hover, and stops at the end when loop is false.',
     },
     {
       name: 'pausedByHover',
       prop: 'internal isPausedByHover',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Temporarily pauses auto-play while the mouse hovers over the carousel region. Resumes on mouse leave.',
+      description:
+        'Temporarily pauses auto-play while the mouse hovers over the carousel region. Resumes on mouse leave.',
     },
     {
       name: 'speed',
@@ -303,28 +360,32 @@ export const carouselEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['0.5', '1', '1.5', '2'],
       defaultValue: '1',
-      description: 'Playback speed multiplier. Effective interval = interval / speed. Higher values advance slides faster.',
+      description:
+        'Playback speed multiplier. Effective interval = interval / speed. Higher values advance slides faster.',
     },
     {
       name: 'currentIndex',
       prop: 'defaultIndex / internal state',
       isBoolean: false,
       defaultValue: '0',
-      description: 'The zero-based index of the currently visible slide (or page start in multi-item mode). Advanced by navigation and auto-play.',
+      description:
+        'The zero-based index of the currently visible slide (or page start in multi-item mode). Advanced by navigation and auto-play.',
     },
     {
       name: 'looping',
       prop: 'loop',
       isBoolean: true,
       defaultValue: 'true',
-      description: 'When true, navigation wraps around from last to first. When false, navigation buttons are disabled at boundaries.',
+      description:
+        'When true, navigation wraps around from last to first. When false, navigation buttons are disabled at boundaries.',
     },
     {
       name: 'reducedMotion',
       prop: 'prefers-reduced-motion (system)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Automatically detected from the user OS preference. When true, auto-play is suppressed to prevent motion.',
+      description:
+        'Automatically detected from the user OS preference. When true, auto-play is suppressed to prevent motion.',
     },
   ],
 
@@ -333,12 +394,14 @@ export const carouselEntry: ComponentRegistryEntry = {
     {
       name: 'onMouseEnter',
       signature: '(event: React.MouseEvent<HTMLDivElement>) => void',
-      description: 'Fires when the mouse enters the carousel region. Pauses auto-play by setting isPausedByHover to true.',
+      description:
+        'Fires when the mouse enters the carousel region. Pauses auto-play by setting isPausedByHover to true.',
     },
     {
       name: 'onMouseLeave',
       signature: '(event: React.MouseEvent<HTMLDivElement>) => void',
-      description: 'Fires when the mouse leaves the carousel region. Resumes auto-play by setting isPausedByHover to false.',
+      description:
+        'Fires when the mouse leaves the carousel region. Resumes auto-play by setting isPausedByHover to false.',
     },
     {
       name: 'onTouchStart (Viewport)',
@@ -348,17 +411,20 @@ export const carouselEntry: ComponentRegistryEntry = {
     {
       name: 'onTouchEnd (Viewport)',
       signature: '(event: React.TouchEvent<HTMLDivElement>) => void',
-      description: 'Completes swipe detection; if the gesture exceeds 50px horizontal, triggers goNext or goPrevious.',
+      description:
+        'Completes swipe detection; if the gesture exceeds 50px horizontal, triggers goNext or goPrevious.',
     },
     {
       name: 'onKeyDown (Viewport)',
       signature: '(event: React.KeyboardEvent<HTMLDivElement>) => void',
-      description: 'Handles ArrowLeft (goPrevious), ArrowRight (goNext), Home (goTo first), End (goTo last) keyboard navigation.',
+      description:
+        'Handles ArrowLeft (goPrevious), ArrowRight (goNext), Home (goTo first), End (goTo last) keyboard navigation.',
     },
     {
       name: 'onClick (Next/Previous)',
       signature: '(event: React.MouseEvent<HTMLButtonElement>) => void',
-      description: 'Triggers goNext or goPrevious navigation. Disabled at boundaries when loop is false.',
+      description:
+        'Triggers goNext or goPrevious navigation. Disabled at boundaries when loop is false.',
     },
     {
       name: 'onClick (Bullets)',
@@ -388,7 +454,8 @@ export const carouselEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-roledescription="carousel"',
-        description: 'Applied to the root div to communicate the carousel pattern to screen readers.',
+        description:
+          'Applied to the root div to communicate the carousel pattern to screen readers.',
         managedByComponent: true,
       },
       {
@@ -398,32 +465,38 @@ export const carouselEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-roledescription="slide"',
-        description: 'Applied to each Carousel.Slide div to identify it as a slide within the carousel.',
+        description:
+          'Applied to each Carousel.Slide div to identify it as a slide within the carousel.',
         managedByComponent: true,
       },
       {
         name: 'aria-label (Slide)',
-        description: 'Applied to each Slide with value "Slide N" (e.g. "Slide 1", "Slide 2") for identification.',
+        description:
+          'Applied to each Slide with value "Slide N" (e.g. "Slide 1", "Slide 2") for identification.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden (Slide)',
-        description: 'Applied to inactive slides to hide them from screen readers. Only the visible slide(s) are accessible.',
+        description:
+          'Applied to inactive slides to hide them from screen readers. Only the visible slide(s) are accessible.',
         managedByComponent: true,
       },
       {
         name: 'aria-live="polite"',
-        description: 'Applied to a visually hidden div inside the Viewport to announce slide/page changes to screen readers without interrupting.',
+        description:
+          'Applied to a visually hidden div inside the Viewport to announce slide/page changes to screen readers without interrupting.',
         managedByComponent: true,
       },
       {
         name: 'aria-atomic="true"',
-        description: 'Applied alongside aria-live to ensure the entire live region content is announced atomically.',
+        description:
+          'Applied alongside aria-live to ensure the entire live region content is announced atomically.',
         managedByComponent: true,
       },
       {
         name: 'aria-label (Viewport)',
-        description: 'Dynamic label reading "Slide N of M" (single-item) or "Page N of M" (multi-item) to convey current position.',
+        description:
+          'Dynamic label reading "Slide N of M" (single-item) or "Page N of M" (multi-item) to convey current position.',
         managedByComponent: true,
       },
       {
@@ -433,7 +506,8 @@ export const carouselEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-label (PlayPause)',
-        description: 'Dynamic label reading "Pause slideshow" or "Play slideshow" based on current state.',
+        description:
+          'Dynamic label reading "Pause slideshow" or "Play slideshow" based on current state.',
         managedByComponent: true,
       },
       {
@@ -453,12 +527,14 @@ export const carouselEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-current (Bullets)',
-        description: 'Applied to the active bullet with value "true" for additional current-item semantics.',
+        description:
+          'Applied to the active bullet with value "true" for additional current-item semantics.',
         managedByComponent: true,
       },
       {
         name: 'aria-label (Gallery)',
-        description: 'Applied to each thumbnail button with value "Go to slide N: {alt}" for descriptive navigation.',
+        description:
+          'Applied to each thumbnail button with value "Go to slide N: {alt}" for descriptive navigation.',
         managedByComponent: true,
       },
       {
@@ -468,18 +544,21 @@ export const carouselEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-hidden (Icons)',
-        description: 'Applied to all decorative icons (ChevronLeft, ChevronRight, Play, Pause) since they are supplementary to the text labels.',
+        description:
+          'Applied to all decorative icons (ChevronLeft, ChevronRight, Play, Pause) since they are supplementary to the text labels.',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'ArrowRight',
-        behavior: 'Advances to the next slide (single-item) or next page (multi-item). Wraps if loop is enabled.',
+        behavior:
+          'Advances to the next slide (single-item) or next page (multi-item). Wraps if loop is enabled.',
       },
       {
         key: 'ArrowLeft',
-        behavior: 'Goes to the previous slide (single-item) or previous page (multi-item). Wraps if loop is enabled.',
+        behavior:
+          'Goes to the previous slide (single-item) or previous page (multi-item). Wraps if loop is enabled.',
       },
       {
         key: 'Home',
@@ -498,11 +577,7 @@ export const carouselEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'tailwind-merge' },
-    { name: 'lucide-react' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'tailwind-merge' }, { name: 'lucide-react' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -510,7 +585,8 @@ export const carouselEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'card',
-      reason: 'Often used inside Carousel.Slide to display product cards, testimonials, or content blocks',
+      reason:
+        'Often used inside Carousel.Slide to display product cards, testimonials, or content blocks',
     },
     {
       slug: 'badge',
@@ -522,7 +598,8 @@ export const carouselEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'button',
-      reason: 'Used for carousel section CTAs or custom navigation controls outside the built-in Next/Previous',
+      reason:
+        'Used for carousel section CTAs or custom navigation controls outside the built-in Next/Previous',
     },
     {
       slug: 'skeleton',
@@ -534,7 +611,8 @@ export const carouselEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic Auto-Play Carousel',
-      description: 'Single-item crossfade carousel with auto-play, play/pause, speed control, navigation buttons, bullet indicators, and thumbnail gallery.',
+      description:
+        'Single-item crossfade carousel with auto-play, play/pause, speed control, navigation buttons, bullet indicators, and thumbnail gallery.',
       code: `import { Carousel, type GalleryItem } from 'vayu-ui';
 
 const galleryItems: GalleryItem[] = [
@@ -580,7 +658,8 @@ export default function BasicCarouselDemo() {
     },
     {
       title: 'Responsive Multi-Item Carousel',
-      description: 'Product showcase carousel using itemsPerSlide with responsive breakpoints — 1 item on mobile, 2 on sm, 3 on lg. Uses horizontal sliding track transitions.',
+      description:
+        'Product showcase carousel using itemsPerSlide with responsive breakpoints — 1 item on mobile, 2 on sm, 3 on lg. Uses horizontal sliding track transitions.',
       code: `import { Carousel, type GalleryItem } from 'vayu-ui';
 
 const productItems: GalleryItem[] = [
@@ -636,31 +715,36 @@ export default function MultiItemCarouselDemo() {
       title: 'Mismatching totalItems and rendered slides',
       bad: '<Carousel totalItems={5}>{items.slice(0, 3).map(...)}</Carousel>',
       good: '<Carousel totalItems={items.length}>{items.map(...)}</Carousel>',
-      reason: 'totalItems must exactly match the number of Carousel.Slide children. A mismatch breaks bullet count, navigation boundaries, ARIA labels, and auto-play end detection.',
+      reason:
+        'totalItems must exactly match the number of Carousel.Slide children. A mismatch breaks bullet count, navigation boundaries, ARIA labels, and auto-play end detection.',
     },
     {
       title: 'Using sub-components outside Carousel',
       bad: '<div><Carousel.Slide index={0}>...</Carousel.Slide></div>',
       good: '<Carousel totalItems={1}><Carousel.Viewport><Carousel.Slide index={0}>...</Carousel.Slide></Carousel.Viewport></Carousel>',
-      reason: 'All sub-components depend on CarouselContext. Using them outside the root Carousel throws a runtime error.',
+      reason:
+        'All sub-components depend on CarouselContext. Using them outside the root Carousel throws a runtime error.',
     },
     {
       title: 'Skipping the Viewport wrapper',
       bad: '<Carousel totalItems={3}><Carousel.Slide index={0}>...</Carousel.Slide></Carousel>',
       good: '<Carousel totalItems={3}><Carousel.Viewport><Carousel.Slide index={0}>...</Carousel.Slide></Carousel.Viewport></Carousel>',
-      reason: 'Slides must be inside Carousel.Viewport which provides overflow-hidden, touch handling, keyboard navigation, and the sliding track in multi-item mode.',
+      reason:
+        'Slides must be inside Carousel.Viewport which provides overflow-hidden, touch handling, keyboard navigation, and the sliding track in multi-item mode.',
     },
     {
       title: 'Using itemsPerSlide with non-integer values',
       bad: '<Carousel totalItems={6} itemsPerSlide={2.5}>',
       good: '<Carousel totalItems={6} itemsPerSlide={{ base: 1, md: 2, lg: 3 }}>',
-      reason: 'itemsPerSlide must be a positive integer. Non-integer values produce broken flex calculations and undefined slide widths. Use responsive breakpoints instead of fractional values.',
+      reason:
+        'itemsPerSlide must be a positive integer. Non-integer values produce broken flex calculations and undefined slide widths. Use responsive breakpoints instead of fractional values.',
     },
     {
       title: 'Placing Next/Previous outside a relative container',
       bad: '<Carousel.Viewport>...<Carousel.Next /></Carousel.Viewport>',
       good: '<div className="relative"><Carousel.Viewport>...</Carousel.Viewport><Carousel.Previous /><Carousel.Next /></div>',
-      reason: 'Next and Previous are absolutely positioned (absolute right-2 / left-2). They need a relative-positioned parent to anchor correctly over the viewport.',
+      reason:
+        'Next and Previous are absolutely positioned (absolute right-2 / left-2). They need a relative-positioned parent to anchor correctly over the viewport.',
     },
   ],
 };

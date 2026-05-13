@@ -44,15 +44,12 @@ export interface AudioPlayerGetters {
   getTrack: (index: number) => Track | null;
 }
 
-export type PropGetter<P = Record<string, unknown>> = (
-  props?: P,
-) => P & React.HTMLAttributes<any>;
+export type PropGetter<P = Record<string, unknown>> = (props?: P) => P & React.HTMLAttributes<any>;
 
-export interface RootProps
-  extends Omit<
-    React.HTMLAttributes<HTMLDivElement>,
-    'onPlay' | 'onPause' | 'onEnded'
-  > {
+export interface RootProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onPlay' | 'onPause' | 'onEnded'
+> {
   children: ReactNode;
   defaultVolume?: number;
   allowMultiple?: boolean;

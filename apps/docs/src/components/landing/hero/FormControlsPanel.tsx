@@ -1,7 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight, Check, SlidersHorizontal, AlertCircle, Info, TriangleAlert } from 'lucide-react';
+import {
+  ArrowRight,
+  Check,
+  SlidersHorizontal,
+  AlertCircle,
+  Info,
+  TriangleAlert,
+} from 'lucide-react';
 import {
   Alert,
   Badge,
@@ -102,8 +109,6 @@ export function FormControlsPanel() {
         </Divider>
 
         <div className="flex flex-col gap-4">
-
-
           <Switch
             label="Auto-save drafts"
             description="Persist changes locally as you type"
@@ -135,7 +140,9 @@ export function FormControlsPanel() {
           </Alert.Icon>
           <Alert.Content>
             <Alert.Title>Ready to generate</Alert.Title>
-            <Alert.Description>All form controls are live and interactive. Try changing values above.</Alert.Description>
+            <Alert.Description>
+              All form controls are live and interactive. Try changing values above.
+            </Alert.Description>
           </Alert.Content>
         </Alert>
 
@@ -145,7 +152,9 @@ export function FormControlsPanel() {
           </Alert.Icon>
           <Alert.Content>
             <Alert.Title>Action Required</Alert.Title>
-            <Alert.Description>Please resolve the missing inputs before generating the layout.</Alert.Description>
+            <Alert.Description>
+              Please resolve the missing inputs before generating the layout.
+            </Alert.Description>
           </Alert.Content>
         </Alert>
 
@@ -155,7 +164,9 @@ export function FormControlsPanel() {
           </Alert.Icon>
           <Alert.Content>
             <Alert.Title>Approaching limits</Alert.Title>
-            <Alert.Description>You are close to exceeding the maximum component density.</Alert.Description>
+            <Alert.Description>
+              You are close to exceeding the maximum component density.
+            </Alert.Description>
           </Alert.Content>
         </Alert>
 
@@ -165,7 +176,9 @@ export function FormControlsPanel() {
           </Alert.Icon>
           <Alert.Content>
             <Alert.Title>New update available</Alert.Title>
-            <Alert.Description>A new version of the design system is ready to be installed.</Alert.Description>
+            <Alert.Description>
+              A new version of the design system is ready to be installed.
+            </Alert.Description>
           </Alert.Content>
         </Alert>
       </div>

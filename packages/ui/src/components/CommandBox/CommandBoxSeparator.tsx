@@ -16,9 +16,7 @@ export const CommandBoxSeparator = forwardRef<HTMLDivElement, CommandBoxSeparato
     // Hide separator when searching and fewer than 2 groups have visible items
     const shouldHide = useMemo(() => {
       if (!searchQuery) return false;
-      const visibleGroups = new Set(
-        filteredItems.map((item) => item.group).filter(Boolean),
-      );
+      const visibleGroups = new Set(filteredItems.map((item) => item.group).filter(Boolean));
       return visibleGroups.size < 2;
     }, [filteredItems, searchQuery]);
 

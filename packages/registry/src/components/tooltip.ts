@@ -36,9 +36,19 @@ export const tooltipEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Tooltip',
   files: [
-    { name: 'Tooltip.tsx', description: 'ForwardRef component with portal rendering, positioning logic, show/hide timing, and variant styling' },
-    { name: 'types.ts', description: 'TypeScript interfaces for TooltipProps, TooltipPosition, and TooltipVariant' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting Tooltip and all type definitions' },
+    {
+      name: 'Tooltip.tsx',
+      description:
+        'ForwardRef component with portal rendering, positioning logic, show/hide timing, and variant styling',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript interfaces for TooltipProps, TooltipPosition, and TooltipVariant',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting Tooltip and all type definitions',
+    },
     { name: 'README.md', description: 'Component anatomy and use-case documentation' },
   ],
   targetPath: 'src/components',
@@ -75,7 +85,8 @@ export const tooltipEntry: ComponentRegistryEntry = {
       type: 'number',
       required: false,
       defaultValue: '150',
-      description: 'Delay in milliseconds before the tooltip disappears after the cursor leaves the trigger',
+      description:
+        'Delay in milliseconds before the tooltip disappears after the cursor leaves the trigger',
     },
     {
       name: 'variant',
@@ -104,7 +115,8 @@ export const tooltipEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'true',
-      description: 'Enforce a minimum 24×24px touch target on the trigger for WCAG 2.5.8 compliance; set false for inline text tooltips',
+      description:
+        'Enforce a minimum 24×24px touch target on the trigger for WCAG 2.5.8 compliance; set false for inline text tooltips',
     },
     {
       name: 'children',
@@ -129,7 +141,8 @@ export const tooltipEntry: ComponentRegistryEntry = {
       prop: 'isVisible (internal)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'The tooltip portal is mounted and positioned; controlled internally by hover/focus timeouts',
+      description:
+        'The tooltip portal is mounted and positioned; controlled internally by hover/focus timeouts',
     },
     {
       name: 'disabled',
@@ -143,7 +156,8 @@ export const tooltipEntry: ComponentRegistryEntry = {
       prop: 'mounted (internal)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Client-side hydration flag; portal only renders after mount to avoid SSR mismatches',
+      description:
+        'Client-side hydration flag; portal only renders after mount to avoid SSR mismatches',
     },
   ],
 
@@ -177,28 +191,33 @@ export const tooltipEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-describedby',
-        description: 'Applied to the trigger element when the tooltip is visible; references the tooltip portal element by auto-generated ID to associate descriptive content with the trigger',
+        description:
+          'Applied to the trigger element when the tooltip is visible; references the tooltip portal element by auto-generated ID to associate descriptive content with the trigger',
         managedByComponent: true,
       },
       {
         name: 'role="tooltip"',
-        description: 'Applied to the tooltip portal element to identify it as a tooltip for assistive technology',
+        description:
+          'Applied to the tooltip portal element to identify it as a tooltip for assistive technology',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Applied to the directional arrow div to hide the decorative element from the accessibility tree',
+        description:
+          'Applied to the directional arrow div to hide the decorative element from the accessibility tree',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Tab',
-        behavior: 'Focuses the trigger element, which initiates the show delay and displays the tooltip',
+        behavior:
+          'Focuses the trigger element, which initiates the show delay and displays the tooltip',
       },
       {
         key: 'Shift+Tab',
-        behavior: 'Moves focus away from the trigger, which initiates the hide delay and dismisses the tooltip',
+        behavior:
+          'Moves focus away from the trigger, which initiates the hide delay and dismisses the tooltip',
       },
       {
         key: 'Escape',
@@ -213,9 +232,7 @@ export const tooltipEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -223,15 +240,18 @@ export const tooltipEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'button',
-      reason: 'Tooltips are most commonly attached to Button elements, especially icon-only buttons that need a text label',
+      reason:
+        'Tooltips are most commonly attached to Button elements, especially icon-only buttons that need a text label',
     },
     {
       slug: 'badge',
-      reason: 'Badges with truncated or abbreviated text benefit from tooltips showing the full label',
+      reason:
+        'Badges with truncated or abbreviated text benefit from tooltips showing the full label',
     },
     {
       slug: 'typography',
-      reason: 'Typography.Link and inline text elements can use tooltips for supplementary context or definitions',
+      reason:
+        'Typography.Link and inline text elements can use tooltips for supplementary context or definitions',
     },
     {
       slug: 'avatar',
@@ -267,7 +287,8 @@ export default function PositionsDemo() {
     },
     {
       title: 'Variants',
-      description: 'Color variants matching status tokens — default, success, warning, destructive, and primary.',
+      description:
+        'Color variants matching status tokens — default, success, warning, destructive, and primary.',
       code: `import { Tooltip, Button } from 'vayu-ui';
 import { Info, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
 
@@ -346,7 +367,8 @@ export default function OptionsDemo() {
     },
     {
       title: 'Accessibility',
-      description: 'Hoverable tooltip with extended hide delay (WCAG 2.5.7) and inline text tooltip with touch target disabled.',
+      description:
+        'Hoverable tooltip with extended hide delay (WCAG 2.5.7) and inline text tooltip with touch target disabled.',
       code: `import { Tooltip, Button, Typography } from 'vayu-ui';
 import { Accessibility } from 'lucide-react';
 
@@ -383,31 +405,36 @@ export default function AccessibilityDemo() {
       title: 'Putting critical information only in a tooltip',
       bad: '<Tooltip content="Deleting this item is permanent and cannot be undone"><Button variant="destructive">Delete</Button></Tooltip>',
       good: '<Button variant="destructive" onClick={openConfirmDialog}>Delete</Button> with a confirmation Modal showing the warning',
-      reason: 'Tooltips are supplementary — they disappear on mouse leave, Escape, or scroll. Critical actions, warnings, or required instructions must be persistently visible, not hidden behind a hover interaction.',
+      reason:
+        'Tooltips are supplementary — they disappear on mouse leave, Escape, or scroll. Critical actions, warnings, or required instructions must be persistently visible, not hidden behind a hover interaction.',
     },
     {
       title: 'Using Tooltip for form validation messages',
       bad: '<Tooltip content="Email is required" variant="destructive"><TextInput /></Tooltip>',
       good: '<TextInput error="Email is required" /> with visible inline error text below the field',
-      reason: 'Validation errors must be persistently visible and programmatically associated via aria-describedby on the input. Tooltips are transient and will not pass WCAG 3.3.1 (Error Identification) or 3.3.3 (Error Suggestion).',
+      reason:
+        'Validation errors must be persistently visible and programmatically associated via aria-describedby on the input. Tooltips are transient and will not pass WCAG 3.3.1 (Error Identification) or 3.3.3 (Error Suggestion).',
     },
     {
       title: 'Wrapping non-interactive elements without ensuring focusability',
       bad: '<Tooltip content="Detail"><span>Some text</span></Tooltip>',
       good: '<Tooltip content="Detail"><button type="button" className="...">Some text</button></Tooltip>',
-      reason: 'The tooltip trigger uses onFocus/onBlur to show/hide. Plain <span> elements are not keyboard-focusable by default, so the tooltip will be invisible to keyboard and assistive technology users.',
+      reason:
+        'The tooltip trigger uses onFocus/onBlur to show/hide. Plain <span> elements are not keyboard-focusable by default, so the tooltip will be invisible to keyboard and assistive technology users.',
     },
     {
       title: 'Setting hideDelay to 0',
       bad: '<Tooltip content="Gone instantly" hideDelay={0}>...',
       good: '<Tooltip content="Persists briefly" hideDelay={150}>...',
-      reason: 'A zero hide delay makes the tooltip disappear the instant the cursor leaves the trigger, violating WCAG 2.5.7 (Dragging Movements). Users need time to move their cursor into the tooltip body. Use at least 100–150ms.',
+      reason:
+        'A zero hide delay makes the tooltip disappear the instant the cursor leaves the trigger, violating WCAG 2.5.7 (Dragging Movements). Users need time to move their cursor into the tooltip body. Use at least 100–150ms.',
     },
     {
       title: 'Disabling ensureTouchTarget on interactive triggers',
       bad: '<Tooltip ensureTouchTarget={false}><Button size="small">Tiny</Button></Tooltip>',
       good: '<Tooltip ensureTouchTarget><Button size="small">Small</Button></Tooltip>',
-      reason: 'ensureTouchTarget enforces WCAG 2.5.8 minimum target sizes. Only disable it for inline text tooltips where the surrounding text provides sufficient hit area. Interactive triggers like buttons need the minimum size.',
+      reason:
+        'ensureTouchTarget enforces WCAG 2.5.8 minimum target sizes. Only disable it for inline text tooltips where the surrounding text provides sufficient hit area. Interactive triggers like buttons need the minimum size.',
     },
   ],
 };

@@ -37,17 +37,54 @@ export const commandBoxEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'CommandBox',
   files: [
-    { name: 'CommandBox.tsx', description: 'Root component managing open state, search filtering, keyboard navigation, and context provider' },
-    { name: 'CommandBoxInput.tsx', description: 'Combobox input with search icon, keyboard arrow navigation, and ARIA combobox attributes' },
-    { name: 'CommandBoxList.tsx', description: 'Listbox container with configurable max height and ARIA listbox role' },
-    { name: 'CommandBoxItem.tsx', description: 'Option item with icon, description, keyboard shortcuts, highlight state, and ARIA option role' },
-    { name: 'CommandBoxGroup.tsx', description: 'Labeled group container that auto-hides during search when no items match' },
-    { name: 'CommandBoxEmpty.tsx', description: 'Empty state shown when no results match the search query' },
-    { name: 'CommandBoxSeparator.tsx', description: 'Visual divider between groups that hides during single-group searches' },
-    { name: 'CommandBoxOverlay.tsx', description: 'Portal-based overlay backdrop that closes on click and locks body scroll' },
-    { name: 'types.ts', description: 'TypeScript type definitions for all CommandBox props, context, and item data' },
-    { name: 'hooks.ts', description: 'React context, group context, useCommandBox hook, and fuzzy search scoring utility' },
-    { name: 'index.ts', description: 'Barrel export assembling the compound component and re-exporting all types' },
+    {
+      name: 'CommandBox.tsx',
+      description:
+        'Root component managing open state, search filtering, keyboard navigation, and context provider',
+    },
+    {
+      name: 'CommandBoxInput.tsx',
+      description:
+        'Combobox input with search icon, keyboard arrow navigation, and ARIA combobox attributes',
+    },
+    {
+      name: 'CommandBoxList.tsx',
+      description: 'Listbox container with configurable max height and ARIA listbox role',
+    },
+    {
+      name: 'CommandBoxItem.tsx',
+      description:
+        'Option item with icon, description, keyboard shortcuts, highlight state, and ARIA option role',
+    },
+    {
+      name: 'CommandBoxGroup.tsx',
+      description: 'Labeled group container that auto-hides during search when no items match',
+    },
+    {
+      name: 'CommandBoxEmpty.tsx',
+      description: 'Empty state shown when no results match the search query',
+    },
+    {
+      name: 'CommandBoxSeparator.tsx',
+      description: 'Visual divider between groups that hides during single-group searches',
+    },
+    {
+      name: 'CommandBoxOverlay.tsx',
+      description: 'Portal-based overlay backdrop that closes on click and locks body scroll',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript type definitions for all CommandBox props, context, and item data',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'React context, group context, useCommandBox hook, and fuzzy search scoring utility',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export assembling the compound component and re-exporting all types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -57,7 +94,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
     {
       name: 'Input',
       fileName: 'CommandBoxInput.tsx',
-      description: 'Combobox input field with search icon, handling arrow key navigation, Enter selection, and Home/End jumps',
+      description:
+        'Combobox input field with search icon, handling arrow key navigation, Enter selection, and Home/End jumps',
       props: [
         {
           name: 'placeholder',
@@ -77,7 +115,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
     {
       name: 'List',
       fileName: 'CommandBoxList.tsx',
-      description: 'Scrollable listbox container with configurable max height and ARIA listbox role',
+      description:
+        'Scrollable listbox container with configurable max height and ARIA listbox role',
       props: [
         {
           name: 'maxHeight',
@@ -91,13 +130,15 @@ export const commandBoxEntry: ComponentRegistryEntry = {
     {
       name: 'Item',
       fileName: 'CommandBoxItem.tsx',
-      description: 'Selectable option with icon, description, keyboard shortcut display, highlight/disabled states, and ARIA option role',
+      description:
+        'Selectable option with icon, description, keyboard shortcut display, highlight/disabled states, and ARIA option role',
       props: [
         {
           name: 'id',
           type: 'string',
           required: true,
-          description: 'Unique identifier for this item, used for selection, registration, and keyboard navigation',
+          description:
+            'Unique identifier for this item, used for selection, registration, and keyboard navigation',
         },
         {
           name: 'disabled',
@@ -110,7 +151,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
           name: 'shortcut',
           type: 'string[]',
           required: false,
-          description: 'Keyboard shortcut keys displayed on the right side of the item (e.g. ["⌘", "K"])',
+          description:
+            'Keyboard shortcut keys displayed on the right side of the item (e.g. ["⌘", "K"])',
         },
         {
           name: 'icon',
@@ -135,7 +177,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
     {
       name: 'Group',
       fileName: 'CommandBoxGroup.tsx',
-      description: 'Labeled group of items with a visible header; auto-hides when no items match the search query',
+      description:
+        'Labeled group of items with a visible header; auto-hides when no items match the search query',
       props: [
         {
           name: 'label',
@@ -161,13 +204,15 @@ export const commandBoxEntry: ComponentRegistryEntry = {
     {
       name: 'Separator',
       fileName: 'CommandBoxSeparator.tsx',
-      description: 'Visual horizontal divider between groups; auto-hides during single-group filtered searches',
+      description:
+        'Visual horizontal divider between groups; auto-hides during single-group filtered searches',
       props: [],
     },
     {
       name: 'Overlay',
       fileName: 'CommandBoxOverlay.tsx',
-      description: 'Portal-based overlay wrapper that renders children in a centered modal with backdrop click-to-close',
+      description:
+        'Portal-based overlay wrapper that renders children in a centered modal with backdrop click-to-close',
       props: [
         {
           name: 'children',
@@ -211,14 +256,16 @@ export const commandBoxEntry: ComponentRegistryEntry = {
       name: 'filter',
       type: '((item: CommandBoxItemData, search: string) => number) | null',
       required: false,
-      description: 'Custom filter function returning a relevance score (0–100); defaults to built-in fuzzy search',
+      description:
+        'Custom filter function returning a relevance score (0–100); defaults to built-in fuzzy search',
     },
     {
       name: 'showShortcuts',
       type: 'boolean',
       required: false,
       defaultValue: 'true',
-      description: 'When true, displays keyboard shortcut badges on items that have the shortcut prop',
+      description:
+        'When true, displays keyboard shortcut badges on items that have the shortcut prop',
     },
     {
       name: 'loading',
@@ -240,28 +287,32 @@ export const commandBoxEntry: ComponentRegistryEntry = {
       prop: 'open',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Controls visibility of the command box. Supports both controlled (open + onOpenChange) and uncontrolled (defaultOpen) modes.',
+      description:
+        'Controls visibility of the command box. Supports both controlled (open + onOpenChange) and uncontrolled (defaultOpen) modes.',
     },
     {
       name: 'loading',
       prop: 'loading',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'When true, indicates async loading. Suppresses the empty state so a custom loading indicator can be shown instead.',
+      description:
+        'When true, indicates async loading. Suppresses the empty state so a custom loading indicator can be shown instead.',
     },
     {
       name: 'disabled',
       prop: 'disabled',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Applies to individual CommandBox.Item elements. Disabled items are visible but non-interactive with reduced opacity and pointer-events-none.',
+      description:
+        'Applies to individual CommandBox.Item elements. Disabled items are visible but non-interactive with reduced opacity and pointer-events-none.',
     },
     {
       name: 'highlighted',
       prop: 'highlightedIndex',
       isBoolean: false,
       values: ['number (0 to items.length - 1)'],
-      description: 'Internally managed index tracking which item is visually highlighted via arrow key navigation. Applied as data-highlighted attribute and bg-brand/90 styling.',
+      description:
+        'Internally managed index tracking which item is visually highlighted via arrow key navigation. Applied as data-highlighted attribute and bg-brand/90 styling.',
     },
   ],
 
@@ -270,17 +321,20 @@ export const commandBoxEntry: ComponentRegistryEntry = {
     {
       name: 'onOpenChange',
       signature: '(open: boolean) => void',
-      description: 'Fired when the command box opens or closes, including via Escape key, backdrop click, or programmatic setOpen',
+      description:
+        'Fired when the command box opens or closes, including via Escape key, backdrop click, or programmatic setOpen',
     },
     {
       name: 'onSelect',
       signature: '(item: CommandBoxItemData) => void',
-      description: 'Fired when an item is selected via Enter key, click, or Space key. Receives the full CommandBoxItemData object with id, title, description, icon, shortcut, group, disabled, onSelect, and data fields.',
+      description:
+        'Fired when an item is selected via Enter key, click, or Space key. Receives the full CommandBoxItemData object with id, title, description, icon, shortcut, group, disabled, onSelect, and data fields.',
     },
     {
       name: 'onKeyDown (Input)',
       signature: '(event: React.KeyboardEvent<HTMLInputElement>) => void',
-      description: 'Internal handler on the input for ArrowDown (next), ArrowUp (previous), Enter (select), Home (first), End (last)',
+      description:
+        'Internal handler on the input for ArrowDown (next), ArrowUp (previous), Enter (select), Home (first), End (last)',
     },
     {
       name: 'onKeyDown (Item)',
@@ -299,7 +353,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-expanded (Input)',
-        description: 'Set to true when the command box is open, indicating the listbox popup is visible',
+        description:
+          'Set to true when the command box is open, indicating the listbox popup is visible',
         managedByComponent: true,
       },
       {
@@ -309,12 +364,14 @@ export const commandBoxEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-controls (Input)',
-        description: 'References the listbox element ID for programmatic association between combobox and listbox',
+        description:
+          'References the listbox element ID for programmatic association between combobox and listbox',
         managedByComponent: true,
       },
       {
         name: 'aria-activedescendant (Input)',
-        description: 'References the currently highlighted item ID, keeping screen reader focus in sync with visual highlight',
+        description:
+          'References the currently highlighted item ID, keeping screen reader focus in sync with visual highlight',
         managedByComponent: true,
       },
       {
@@ -349,7 +406,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-disabled (Item)',
-        description: 'Set to true on disabled items to communicate non-interactive state to assistive technology',
+        description:
+          'Set to true on disabled items to communicate non-interactive state to assistive technology',
         managedByComponent: true,
       },
       {
@@ -359,7 +417,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-label (Group)',
-        description: 'Set to the group label value, providing an accessible name for the option group',
+        description:
+          'Set to the group label value, providing an accessible name for the option group',
         managedByComponent: true,
       },
       {
@@ -369,7 +428,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-live="polite" (Empty)',
-        description: 'Announces "no results" messages to screen readers without interrupting current speech',
+        description:
+          'Announces "no results" messages to screen readers without interrupting current speech',
         managedByComponent: true,
       },
       {
@@ -384,7 +444,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-hidden="true" (Overlay backdrop)',
-        description: 'Hides the backdrop overlay from the accessibility tree since it is purely decorative',
+        description:
+          'Hides the backdrop overlay from the accessibility tree since it is purely decorative',
         managedByComponent: true,
       },
     ],
@@ -419,7 +480,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
       },
       {
         key: 'Custom shortcuts',
-        behavior: 'Registered via useKeyPress on the root; triggers the corresponding item\'s onSelect callback',
+        behavior:
+          "Registered via useKeyPress on the root; triggers the corresponding item's onSelect callback",
       },
     ],
     focusManagement:
@@ -430,10 +492,7 @@ export const commandBoxEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'lucide-react' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'lucide-react' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -441,7 +500,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'button',
-      reason: 'Buttons commonly trigger the command palette open state (e.g. "Open Command Box" button)',
+      reason:
+        'Buttons commonly trigger the command palette open state (e.g. "Open Command Box" button)',
     },
     {
       slug: 'modal',
@@ -449,7 +509,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'tooltip',
-      reason: 'Tooltips can display keyboard shortcut hints on trigger buttons that open the command palette',
+      reason:
+        'Tooltips can display keyboard shortcut hints on trigger buttons that open the command palette',
     },
     {
       slug: 'card',
@@ -465,7 +526,8 @@ export const commandBoxEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Command Palette with Overlay',
-      description: 'A full command palette triggered by keyboard shortcut with overlay backdrop, grouped items, and shortcuts.',
+      description:
+        'A full command palette triggered by keyboard shortcut with overlay backdrop, grouped items, and shortcuts.',
       code: `import { useState } from 'react';
 import { CommandBox, Button } from 'vayu-ui';
 import { useKeyPress } from 'vayu-ui';
@@ -529,7 +591,8 @@ export default function CommandPaletteDemo() {
     },
     {
       title: 'Inline CommandBox',
-      description: 'An embedded command box without overlay backdrop, useful inside panels or cards.',
+      description:
+        'An embedded command box without overlay backdrop, useful inside panels or cards.',
       code: `import { CommandBox } from 'vayu-ui';
 import { User, Mail, Calendar, Star, Trash2 } from 'lucide-react';
 
@@ -564,7 +627,8 @@ export default function InlineDemo() {
     },
     {
       title: 'With Descriptions and Groups',
-      description: 'Grouped items with descriptions and shortcuts hidden, ideal for documentation search.',
+      description:
+        'Grouped items with descriptions and shortcuts hidden, ideal for documentation search.',
       code: `import { CommandBox } from 'vayu-ui';
 import { FileText, Download, Layers, Code, Zap } from 'lucide-react';
 
@@ -654,7 +718,8 @@ export default function SimpleListDemo() {
     },
     {
       title: 'Loading State',
-      description: 'Command box in loading state with disabled input and a spinner, for async command loading.',
+      description:
+        'Command box in loading state with disabled input and a spinner, for async command loading.',
       code: `import { CommandBox } from 'vayu-ui';
 
 export default function LoadingDemo() {
@@ -689,31 +754,36 @@ export default function LoadingDemo() {
       title: 'Using CommandBox without an id on Items',
       bad: '<CommandBox.Item>Home</CommandBox.Item>',
       good: '<CommandBox.Item id="home">Home</CommandBox.Item>',
-      reason: 'The id prop is required on every Item for registration, keyboard navigation, ARIA activedescendant, and selection callbacks. Without it, the item cannot be tracked or selected.',
+      reason:
+        'The id prop is required on every Item for registration, keyboard navigation, ARIA activedescendant, and selection callbacks. Without it, the item cannot be tracked or selected.',
     },
     {
       title: 'Using CommandBox.Overlay without controlled open state',
       bad: '<CommandBox><CommandBox.Overlay>...</CommandBox.Overlay></CommandBox>',
       good: '<CommandBox open={open} onOpenChange={setOpen}><CommandBox.Overlay>...</CommandBox.Overlay></CommandBox>',
-      reason: 'The Overlay renders via a portal and needs to know when to show/hide. Without controlled or defaultOpen state, the overlay has no trigger mechanism and the command box will remain invisible.',
+      reason:
+        'The Overlay renders via a portal and needs to know when to show/hide. Without controlled or defaultOpen state, the overlay has no trigger mechanism and the command box will remain invisible.',
     },
     {
       title: 'Nesting interactive elements inside CommandBox.Item',
       bad: '<CommandBox.Item id="link"><a href="/page">Go to page</a></CommandBox.Item>',
       good: '<CommandBox.Item id="link" onSelect={() => router.push("/page")}>Go to page</CommandBox.Item>',
-      reason: 'Items already handle click and keyboard selection. Nesting interactive elements (links, buttons, inputs) breaks the ARIA option role and causes double-activation or focus management issues.',
+      reason:
+        'Items already handle click and keyboard selection. Nesting interactive elements (links, buttons, inputs) breaks the ARIA option role and causes double-activation or focus management issues.',
     },
     {
       title: 'Using CommandBox.Group without a label',
       bad: '<CommandBox.Group><CommandBox.Item id="x">Item</CommandBox.Item></CommandBox.Group>',
       good: '<CommandBox.Group label="Actions"><CommandBox.Item id="x">Item</CommandBox.Item></CommandBox.Group>',
-      reason: 'The label prop is required for the group\'s aria-label attribute. Without it, screen readers cannot identify the group, violating accessibility requirements.',
+      reason:
+        "The label prop is required for the group's aria-label attribute. Without it, screen readers cannot identify the group, violating accessibility requirements.",
     },
     {
       title: 'Placing CommandBox.Input outside the list context',
       bad: '<CommandBox><CommandBox.Input /></CommandBox><CommandBox.List>...</CommandBox.List>',
       good: '<CommandBox><CommandBox.Input /><CommandBox.List>...</CommandBox.List></CommandBox>',
-      reason: 'Input, List, Item, Group, and Empty all depend on the CommandBox context provider. Placing them outside the CommandBox root will crash because useCommandBox() returns undefined.',
+      reason:
+        'Input, List, Item, Group, and Empty all depend on the CommandBox context provider. Placing them outside the CommandBox root will crash because useCommandBox() returns undefined.',
     },
   ],
 };

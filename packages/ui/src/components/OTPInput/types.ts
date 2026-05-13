@@ -15,7 +15,10 @@ export interface OTPInputContextValue {
   size: InputSize;
 }
 
-export interface OTPInputRootProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
+export interface OTPInputRootProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'onChange' | 'size'
+> {
   value?: string;
   onChange?: (value: string) => void;
   maxLength?: number;

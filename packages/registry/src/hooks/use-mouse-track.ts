@@ -224,7 +224,7 @@ useEffect(() => {
   if (rect) setLocal({ x: x - rect.left, y: y - rect.top });
 }, [x, y]);`,
       reason:
-        'useMouseTrack returns clientX/clientY, which are relative to the viewport top-left corner — not to any specific element. If you position a child element using these values directly, it will be offset by the element\'s own position on the page. Subtract getBoundingClientRect().left/top to convert to element-local coordinates.',
+        "useMouseTrack returns clientX/clientY, which are relative to the viewport top-left corner — not to any specific element. If you position a child element using these values directly, it will be offset by the element's own position on the page. Subtract getBoundingClientRect().left/top to convert to element-local coordinates.",
     },
     {
       title: 'Ignoring performance with unthrottled re-renders',

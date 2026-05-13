@@ -8,15 +8,8 @@ import { useCarouselContext } from './hooks';
 // Layout
 const CarouselViewport = forwardRef<HTMLDivElement, import('./types').CarouselViewportProps>(
   ({ className, children, ...props }, ref) => {
-    const {
-      currentIndex,
-      totalItems,
-      itemsPerSlide,
-      totalPages,
-      goNext,
-      goPrevious,
-      goTo,
-    } = useCarouselContext();
+    const { currentIndex, totalItems, itemsPerSlide, totalPages, goNext, goPrevious, goTo } =
+      useCarouselContext();
 
     const isMultiItem = itemsPerSlide > 1;
 
@@ -93,7 +86,9 @@ const CarouselViewport = forwardRef<HTMLDivElement, import('./types').CarouselVi
       };
     }, [isMultiItem, currentIndex, totalItems]);
 
-    const currentPage = isMultiItem ? Math.floor(currentIndex / itemsPerSlide) + 1 : currentIndex + 1;
+    const currentPage = isMultiItem
+      ? Math.floor(currentIndex / itemsPerSlide) + 1
+      : currentIndex + 1;
     const pageCount = isMultiItem ? totalPages : totalItems;
 
     if (isMultiItem) {
@@ -112,10 +107,7 @@ const CarouselViewport = forwardRef<HTMLDivElement, import('./types').CarouselVi
           <div aria-live="polite" aria-atomic="true" className="sr-only">
             Page {currentPage} of {pageCount}
           </div>
-          <div
-            className="flex transition-transform duration-300 ease-in-out"
-            style={trackStyle}
-          >
+          <div className="flex transition-transform duration-300 ease-in-out" style={trackStyle}>
             {children}
           </div>
         </div>

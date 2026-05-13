@@ -82,7 +82,7 @@ export const useMapEntry: HookRegistryEntry = {
       name: 'has',
       type: '(key: K) => boolean',
       description:
-        'Returns true if the Map contains the given key. This reads from the current render\'s Map instance, so it reflects the state at the time of the last render — not pending mutator calls.',
+        "Returns true if the Map contains the given key. This reads from the current render's Map instance, so it reflects the state at the time of the last render — not pending mutator calls.",
     },
   ],
 

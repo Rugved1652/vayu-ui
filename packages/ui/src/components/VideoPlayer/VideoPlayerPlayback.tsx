@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { forwardRef, ReactNode } from "react";
-import { clsx } from "clsx";
-import { useVideoPlayer } from "./VideoPlayer";
-import { VIDEO_BTN } from "./utils";
+import { forwardRef, ReactNode } from 'react';
+import { clsx } from 'clsx';
+import { useVideoPlayer } from './VideoPlayer';
+import { VIDEO_BTN } from './utils';
 import type {
   VideoPlayerPlayPauseProps,
   VideoPlayerNextProps,
   VideoPlayerPreviousProps,
-} from "./types";
+} from './types';
 
 // ============================================================================
 // PlayPause
@@ -22,25 +22,25 @@ export const VideoPlayerPlayPause = forwardRef<HTMLButtonElement, VideoPlayerPla
       <button
         ref={ref}
         type="button"
-        aria-label={isPlaying ? "Pause" : "Play"}
+        aria-label={isPlaying ? 'Pause' : 'Play'}
         aria-pressed={isPlaying}
         disabled={isLoading}
         onClick={togglePlay}
         className={clsx(
           VIDEO_BTN,
-          "bg-brand text-brand-content rounded-full",
-          "hover:bg-brand/90",
-          className
+          'bg-brand text-brand-content rounded-full',
+          'hover:bg-brand/90',
+          className,
         )}
         {...props}
       >
-        {typeof children === "function" ? children(isPlaying) : children}
+        {typeof children === 'function' ? children(isPlaying) : children}
       </button>
     );
-  }
+  },
 );
 
-VideoPlayerPlayPause.displayName = "VideoPlayer.PlayPause";
+VideoPlayerPlayPause.displayName = 'VideoPlayer.PlayPause';
 
 // ============================================================================
 // Next
@@ -64,10 +64,10 @@ export const VideoPlayerNext = forwardRef<HTMLButtonElement, VideoPlayerNextProp
         {children}
       </button>
     );
-  }
+  },
 );
 
-VideoPlayerNext.displayName = "VideoPlayer.Next";
+VideoPlayerNext.displayName = 'VideoPlayer.Next';
 
 // ============================================================================
 // Previous
@@ -91,7 +91,7 @@ export const VideoPlayerPrevious = forwardRef<HTMLButtonElement, VideoPlayerPrev
         {children}
       </button>
     );
-  }
+  },
 );
 
-VideoPlayerPrevious.displayName = "VideoPlayer.Previous";
+VideoPlayerPrevious.displayName = 'VideoPlayer.Previous';

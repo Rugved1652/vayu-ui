@@ -1,15 +1,8 @@
-"use client";
+'use client';
 
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
-import { cn } from "../../utils";
-import { GridLayoutContext, type GridLayoutContextValue, type GridLayoutRootProps } from "./types";
+import React, { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { cn } from '../../utils';
+import { GridLayoutContext, type GridLayoutContextValue, type GridLayoutRootProps } from './types';
 import {
   computeColWidth,
   pixelToGrid,
@@ -19,34 +12,26 @@ import {
   matchBreakpoint,
   adjustLayoutForCols,
   findItem,
-} from "./algorithms";
-import {
-  DEFAULT_BREAKPOINTS,
-  DEFAULT_BREAKPOINT_WIDTHS,
-} from "./types";
+} from './algorithms';
+import { DEFAULT_BREAKPOINTS, DEFAULT_BREAKPOINT_WIDTHS } from './types';
 
 /* ------------------------------------------------------------------ */
 /*  Live Region                                                        */
 /* ------------------------------------------------------------------ */
 
 function LiveRegion({ ref }: { ref: React.RefObject<string> }) {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   useEffect(() => {
     const id = setInterval(() => {
       if (ref.current) {
         setMessage(ref.current);
-        ref.current = "";
+        ref.current = '';
       }
     }, 100);
     return () => clearInterval(id);
   }, [ref]);
   return (
-    <div
-      aria-live="assertive"
-      aria-atomic="true"
-      role="status"
-      className="sr-only"
-    >
+    <div aria-live="assertive" aria-atomic="true" role="status" className="sr-only">
       {message}
     </div>
   );
@@ -73,41 +58,34 @@ function GridLayoutRoot({
 }: GridLayoutRootProps) {
   /* ---- controlled / uncontrolled state ---- */
   const [internalLayout, setInternalLayout] = useState<
-    GridLayoutRootProps["layout"] extends undefined ? never : typeof controlledLayout
+    GridLayoutRootProps['layout'] extends undefined ? never : typeof controlledLayout
   >(() => defaultLayout ?? controlledLayout ?? []);
-  const layout =
-    controlledLayout !== undefined ? controlledLayout : internalLayout;
+  const layout = controlledLayout !== undefined ? controlledLayout : internalLayout;
 
   const setLayout = useCallback(
     (next: typeof layout) => {
       if (controlledLayout === undefined) setInternalLayout(next);
       onLayoutChange?.(next);
     },
-    [controlledLayout, onLayoutChange]
+    [controlledLayout, onLayoutChange],
   );
 
   /* ---- responsive state ---- */
   const [responsiveState, setResponsiveState] = useState({
     cols: colsProp,
     rowHeight: rowHeightProp,
-    breakpoint: "lg" as string,
+    breakpoint: 'lg' as string,
   });
   const { cols, rowHeight } = responsiveState;
 
   /* ---- interaction state ---- */
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [interactionType, setInteractionType] = useState<
-    "drag" | "resize" | null
-  >(null);
+  const [interactionType, setInteractionType] = useState<'drag' | 'resize' | null>(null);
   const [activeResizeDirection, setActiveResizeDirection] = useState<
-    import("./types").ResizeDirection | null
+    import('./types').ResizeDirection | null
   >(null);
-  const [placeholder, setPlaceholder] = useState<
-    import("./types").GridLayoutItem | null
-  >(null);
-  const [movingLayout, setMovingLayout] = useState<
-    import("./types").GridLayoutItem[] | null
-  >(null);
+  const [placeholder, setPlaceholder] = useState<import('./types').GridLayoutItem | null>(null);
+  const [movingLayout, setMovingLayout] = useState<import('./types').GridLayoutItem[] | null>(null);
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [isKeyboardDragging, setIsKeyboardDragging] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -115,18 +93,18 @@ function GridLayoutRoot({
   /* ---- refs ---- */
   const containerRef = useRef<HTMLDivElement | null>(null);
   const itemRefsMap = useRef(new Map<string, HTMLDivElement>());
-  const announceRef = useRef("");
+  const announceRef = useRef('');
   const activeIdRef = useRef<string | null>(null);
-  const interactionTypeRef = useRef<"drag" | "resize" | null>(null);
-  const resizeDirRef = useRef<import("./types").ResizeDirection | null>(null);
+  const interactionTypeRef = useRef<'drag' | 'resize' | null>(null);
+  const resizeDirRef = useRef<import('./types').ResizeDirection | null>(null);
   const flipRects = useRef(new Map<string, DOMRect>());
-  const originalItemRef = useRef<import("./types").GridLayoutItem | null>(null);
+  const originalItemRef = useRef<import('./types').GridLayoutItem | null>(null);
   const dragStartOffsetRef = useRef({ x: 0, y: 0 });
   const lastGridPosRef = useRef({ x: -1, y: -1, w: -1, h: -1 });
   const resizeStartPointerRef = useRef({ x: 0, y: 0 });
-  const resizeStartItemRef = useRef<import("./types").GridLayoutItem | null>(null);
+  const resizeStartItemRef = useRef<import('./types').GridLayoutItem | null>(null);
   const movingLayoutRef = useRef<typeof layout | null>(null);
-  const placeholderRef = useRef<import("./types").GridLayoutItem | null>(null);
+  const placeholderRef = useRef<import('./types').GridLayoutItem | null>(null);
 
   // Stable refs for grid config so moveDrag/moveResize don't go stale
   const colsRef = useRef(cols);
@@ -141,11 +119,11 @@ function GridLayoutRoot({
   layoutRef.current = layout;
 
   /* Stable refs for global listener callbacks */
-  const moveDragRef = useRef<(x: number, y: number) => void>(() => { });
-  const endDragRef = useRef<() => void>(() => { });
-  const moveResizeRef = useRef<(x: number, y: number) => void>(() => { });
-  const endResizeRef = useRef<() => void>(() => { });
-  const cancelRef = useRef<() => void>(() => { });
+  const moveDragRef = useRef<(x: number, y: number) => void>(() => {});
+  const endDragRef = useRef<() => void>(() => {});
+  const moveResizeRef = useRef<(x: number, y: number) => void>(() => {});
+  const endResizeRef = useRef<() => void>(() => {});
+  const cancelRef = useRef<() => void>(() => {});
 
   /* ---- announce ---- */
   const announce = useCallback((msg: string) => {
@@ -171,10 +149,10 @@ function GridLayoutRoot({
       const dy = old.top - cur.top;
       if (!dx && !dy) return;
       el.style.transform = `translate3d(${dx}px,${dy}px,0)`;
-      el.style.transition = "none";
+      el.style.transition = 'none';
       requestAnimationFrame(() => {
-        el.style.transition = "transform 200ms cubic-bezier(0.2,0,0,1)";
-        el.style.transform = "translate3d(0,0,0)";
+        el.style.transition = 'transform 200ms cubic-bezier(0.2,0,0,1)';
+        el.style.transform = 'translate3d(0,0,0)';
       });
     });
   }, []);
@@ -198,12 +176,9 @@ function GridLayoutRoot({
   }
 
   /* ---- registration ---- */
-  const registerItem = useCallback(
-    (id: string, el: HTMLDivElement) => {
-      itemRefsMap.current.set(id, el);
-    },
-    []
-  );
+  const registerItem = useCallback((id: string, el: HTMLDivElement) => {
+    itemRefsMap.current.set(id, el);
+  }, []);
   const unregisterItem = useCallback((id: string) => {
     itemRefsMap.current.delete(id);
   }, []);
@@ -219,13 +194,25 @@ function GridLayoutRoot({
         const nextRowHeight = bpConfig.rowHeight;
         setResponsiveState({ cols: nextCols, rowHeight: nextRowHeight, breakpoint: bp });
 
-        const adjusted = adjustLayoutForCols(layoutRef.current, responsiveState.cols, nextCols, compactOnMove);
+        const adjusted = adjustLayoutForCols(
+          layoutRef.current,
+          responsiveState.cols,
+          nextCols,
+          compactOnMove,
+        );
         if (adjusted !== layoutRef.current) {
           setLayout(adjusted);
         }
       }
     },
-    [breakpointWidths, breakpoints, responsiveState.breakpoint, responsiveState.cols, compactOnMove, setLayout]
+    [
+      breakpointWidths,
+      breakpoints,
+      responsiveState.breakpoint,
+      responsiveState.cols,
+      compactOnMove,
+      setLayout,
+    ],
   );
 
   /* ================================================================== */
@@ -241,20 +228,20 @@ function GridLayoutRoot({
       originalItemRef.current = { ...item };
       dragStartOffsetRef.current = { x: offsetX, y: offsetY };
       activeIdRef.current = id;
-      interactionTypeRef.current = "drag";
+      interactionTypeRef.current = 'drag';
 
       setActiveId(id);
-      setInteractionType("drag");
+      setInteractionType('drag');
       setIsKeyboardDragging(false);
       announce(`Picked up item ${id}. Use arrow keys to move.`);
     },
-    [recordRects, announce]
+    [recordRects, announce],
   );
 
   const moveDrag = useCallback(
     (clientX: number, clientY: number) => {
       const id = activeIdRef.current;
-      if (!id || interactionTypeRef.current !== "drag") return;
+      if (!id || interactionTypeRef.current !== 'drag') return;
 
       // Use last resolved layout during drag, not the committed layout.
       // Starting from committed layout every frame resets all pushed items
@@ -276,7 +263,15 @@ function GridLayoutRoot({
       const relX = clientX - containerRect.left - dragStartOffsetRef.current.x;
       const relY = clientY - containerRect.top - dragStartOffsetRef.current.y;
 
-      const gridPos = pixelToGrid(relX, relY, colWidth, currentRowHeight, currentGap, currentCols, item.w);
+      const gridPos = pixelToGrid(
+        relX,
+        relY,
+        colWidth,
+        currentRowHeight,
+        currentGap,
+        currentCols,
+        item.w,
+      );
 
       const newX = Math.max(0, Math.min(currentCols - item.w, gridPos.x));
       const newY = Math.max(0, gridPos.y);
@@ -301,7 +296,7 @@ function GridLayoutRoot({
       setPlaceholder(newPlaceholder);
       setMovingLayout(resolved);
     },
-    [] // uses refs only — no stale closures
+    [], // uses refs only — no stale closures
   );
   moveDragRef.current = moveDrag;
 
@@ -318,7 +313,7 @@ function GridLayoutRoot({
       setLayout(currentMoving);
       const finalItem = currentMoving.find((i) => i.i === id);
       announce(
-        `Dropped at column ${finalItem ? finalItem.x + 1 : "?"}, row ${finalItem ? finalItem.y + 1 : "?"}`
+        `Dropped at column ${finalItem ? finalItem.x + 1 : '?'}, row ${finalItem ? finalItem.y + 1 : '?'}`,
       );
       requestAnimationFrame(playFlip);
     }
@@ -332,7 +327,12 @@ function GridLayoutRoot({
   /* ================================================================== */
 
   const startResize = useCallback(
-    (id: string, direction: import("./types").ResizeDirection, startPointerX: number, startPointerY: number) => {
+    (
+      id: string,
+      direction: import('./types').ResizeDirection,
+      startPointerX: number,
+      startPointerY: number,
+    ) => {
       const item = findItem(layoutRef.current, id);
       if (!item || item.static) return;
 
@@ -341,22 +341,22 @@ function GridLayoutRoot({
       resizeStartItemRef.current = { ...item };
       resizeStartPointerRef.current = { x: startPointerX, y: startPointerY };
       activeIdRef.current = id;
-      interactionTypeRef.current = "resize";
+      interactionTypeRef.current = 'resize';
       resizeDirRef.current = direction;
 
       setActiveId(id);
-      setInteractionType("resize");
+      setInteractionType('resize');
       setActiveResizeDirection(direction);
       setIsKeyboardDragging(false);
       announce(`Started resizing item ${id}.`);
     },
-    [recordRects, announce]
+    [recordRects, announce],
   );
 
   const moveResize = useCallback(
     (clientX: number, clientY: number) => {
       const id = activeIdRef.current;
-      if (!id || interactionTypeRef.current !== "resize") return;
+      if (!id || interactionTypeRef.current !== 'resize') return;
       if (!resizeStartItemRef.current) return;
 
       const containerEl = containerRef.current;
@@ -383,17 +383,31 @@ function GridLayoutRoot({
         deltaCols,
         deltaRows,
         currentCols,
-        maxRows
+        maxRows,
       );
 
       // Skip if resized position/size hasn't changed
       const last = lastGridPosRef.current;
-      if (last.x === resized.x && last.y === resized.y && last.w === resized.w && last.h === resized.h) return;
+      if (
+        last.x === resized.x &&
+        last.y === resized.y &&
+        last.w === resized.w &&
+        last.h === resized.h
+      )
+        return;
       lastGridPosRef.current = { x: resized.x, y: resized.y, w: resized.w, h: resized.h };
 
       // Resolve collisions with the new size — use moving layout for consistency
       const currentLayout = movingLayoutRef.current ?? layoutRef.current;
-      let resolved = resolveCollisions(currentLayout, id, resized.x, resized.y, resized.w, resized.h, currentCols);
+      let resolved = resolveCollisions(
+        currentLayout,
+        id,
+        resized.x,
+        resized.y,
+        resized.w,
+        resized.h,
+        currentCols,
+      );
       if (compactOnMoveRef.current) {
         resolved = compactLayout(resolved, currentCols, id);
       }
@@ -405,7 +419,7 @@ function GridLayoutRoot({
       setPlaceholder(newPlaceholder);
       setMovingLayout(resolved);
     },
-    [maxRows]
+    [maxRows],
   );
   moveResizeRef.current = moveResize;
 
@@ -421,9 +435,7 @@ function GridLayoutRoot({
       recordRects();
       setLayout(currentMoving);
       const finalItem = currentMoving.find((i) => i.i === id);
-      announce(
-        `Resized to ${finalItem?.w ?? "?"} columns by ${finalItem?.h ?? "?"} rows`
-      );
+      announce(`Resized to ${finalItem?.w ?? '?'} columns by ${finalItem?.h ?? '?'} rows`);
       requestAnimationFrame(playFlip);
     }
 
@@ -433,7 +445,7 @@ function GridLayoutRoot({
 
   /* ---- cancel ---- */
   const cancelInteraction = useCallback(() => {
-    announce("Action cancelled");
+    announce('Action cancelled');
     resetInteraction();
   }, [announce]);
   cancelRef.current = cancelInteraction;
@@ -454,32 +466,40 @@ function GridLayoutRoot({
       if (!rafId) {
         rafId = requestAnimationFrame(() => {
           rafId = 0;
-          if (interactionTypeRef.current === "drag") moveDragRef.current(lastPointerX, lastPointerY);
-          else if (interactionTypeRef.current === "resize") moveResizeRef.current(lastPointerX, lastPointerY);
+          if (interactionTypeRef.current === 'drag')
+            moveDragRef.current(lastPointerX, lastPointerY);
+          else if (interactionTypeRef.current === 'resize')
+            moveResizeRef.current(lastPointerX, lastPointerY);
         });
       }
     };
     const onUp = (e: PointerEvent) => {
       e.preventDefault();
-      if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
-      if (interactionTypeRef.current === "drag") endDragRef.current();
-      else if (interactionTypeRef.current === "resize") endResizeRef.current();
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      if (interactionTypeRef.current === 'drag') endDragRef.current();
+      else if (interactionTypeRef.current === 'resize') endResizeRef.current();
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         e.preventDefault();
-        if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
         cancelRef.current();
       }
     };
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
-    window.addEventListener("keydown", onKey);
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('keydown', onKey);
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("keydown", onKey);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('keydown', onKey);
     };
   }, [activeId]);
 
@@ -493,20 +513,18 @@ function GridLayoutRoot({
       setIsKeyboardDragging(true);
       originalItemRef.current = { ...item };
       activeIdRef.current = id;
-      interactionTypeRef.current = "drag";
+      interactionTypeRef.current = 'drag';
 
       setActiveId(id);
-      setInteractionType("drag");
-      announce(
-        `Picked up item ${id}. Use arrow keys to move. Shift plus arrow keys to resize.`
-      );
+      setInteractionType('drag');
+      announce(`Picked up item ${id}. Use arrow keys to move. Shift plus arrow keys to resize.`);
     },
-    [recordRects, announce]
+    [recordRects, announce],
   );
 
   const keyboardMove = useCallback(
-    (id: string, direction: "up" | "down" | "left" | "right") => {
-      if (!activeIdRef.current || interactionTypeRef.current !== "drag") return;
+    (id: string, direction: 'up' | 'down' | 'left' | 'right') => {
+      if (!activeIdRef.current || interactionTypeRef.current !== 'drag') return;
 
       const currentLayout = movingLayoutRef.current ?? layoutRef.current;
       const item = findItem(currentLayout, id);
@@ -517,10 +535,10 @@ function GridLayoutRoot({
       let newX = item.x;
       let newY = item.y;
 
-      if (direction === "up") newY = Math.max(0, item.y - 1);
-      else if (direction === "down") newY = item.y + 1;
-      else if (direction === "left") newX = Math.max(0, item.x - 1);
-      else if (direction === "right") newX = Math.min(currentCols - item.w, item.x + 1);
+      if (direction === 'up') newY = Math.max(0, item.y - 1);
+      else if (direction === 'down') newY = item.y + 1;
+      else if (direction === 'left') newX = Math.max(0, item.x - 1);
+      else if (direction === 'right') newX = Math.min(currentCols - item.w, item.x + 1);
 
       let resolved = resolveCollisions(currentLayout, id, newX, newY, item.w, item.h, currentCols);
       if (compactOnMoveRef.current) resolved = compactLayout(resolved, currentCols, id);
@@ -532,15 +550,15 @@ function GridLayoutRoot({
       setPlaceholder(newPlaceholder);
       setMovingLayout(resolved);
       announce(
-        `Moved to column ${newPlaceholder ? newPlaceholder.x + 1 : "?"}, row ${newPlaceholder ? newPlaceholder.y + 1 : "?"}`
+        `Moved to column ${newPlaceholder ? newPlaceholder.x + 1 : '?'}, row ${newPlaceholder ? newPlaceholder.y + 1 : '?'}`,
       );
     },
-    [announce]
+    [announce],
   );
 
   const keyboardResize = useCallback(
-    (id: string, direction: "up" | "down" | "left" | "right") => {
-      if (!activeIdRef.current || interactionTypeRef.current !== "drag") return;
+    (id: string, direction: 'up' | 'down' | 'left' | 'right') => {
+      if (!activeIdRef.current || interactionTypeRef.current !== 'drag') return;
 
       const currentLayout = movingLayoutRef.current ?? layoutRef.current;
       const item = findItem(currentLayout, id);
@@ -548,12 +566,20 @@ function GridLayoutRoot({
 
       const currentCols = colsRef.current;
 
-      const deltaCols = direction === "left" ? -1 : direction === "right" ? 1 : 0;
-      const deltaRows = direction === "up" ? -1 : direction === "down" ? 1 : 0;
+      const deltaCols = direction === 'left' ? -1 : direction === 'right' ? 1 : 0;
+      const deltaRows = direction === 'up' ? -1 : direction === 'down' ? 1 : 0;
 
-      const resized = computeResize(item, "se", deltaCols, deltaRows, currentCols, maxRows);
+      const resized = computeResize(item, 'se', deltaCols, deltaRows, currentCols, maxRows);
 
-      let resolved = resolveCollisions(currentLayout, id, resized.x, resized.y, resized.w, resized.h, currentCols);
+      let resolved = resolveCollisions(
+        currentLayout,
+        id,
+        resized.x,
+        resized.y,
+        resized.w,
+        resized.h,
+        currentCols,
+      );
       if (compactOnMoveRef.current) resolved = compactLayout(resolved, currentCols, id);
 
       const newPlaceholder = resolved.find((i) => i.i === id) ?? null;
@@ -563,10 +589,10 @@ function GridLayoutRoot({
       setPlaceholder(newPlaceholder);
       setMovingLayout(resolved);
       announce(
-        `Resized to ${newPlaceholder?.w ?? "?"} columns by ${newPlaceholder?.h ?? "?"} rows`
+        `Resized to ${newPlaceholder?.w ?? '?'} columns by ${newPlaceholder?.h ?? '?'} rows`,
       );
     },
-    [maxRows, announce]
+    [maxRows, announce],
   );
 
   const keyboardDrop = useCallback(() => {
@@ -581,11 +607,11 @@ function GridLayoutRoot({
     }
 
     resetInteraction();
-    announce("Dropped");
+    announce('Dropped');
   }, [setLayout, recordRects, playFlip, announce]);
 
   const keyboardCancel = useCallback(() => {
-    announce("Action cancelled");
+    announce('Action cancelled');
     resetInteraction();
   }, [announce]);
 
@@ -609,7 +635,7 @@ function GridLayoutRoot({
         return () => observer.disconnect();
       }
     },
-    [handleContainerResize]
+    [handleContainerResize],
   );
 
   const containerRefSetter = useRef(setContainerRef);
@@ -651,14 +677,36 @@ function GridLayoutRoot({
       compactOnMove,
     }),
     [
-      layout, cols, rowHeight, gap, containerWidth, maxRows,
-      activeId, interactionType, activeResizeDirection, placeholder, movingLayout,
-      registerItem, unregisterItem,
-      startDrag, moveDrag, endDrag, cancelInteraction,
-      startResize, moveResize, endResize,
-      keyboardGrab, keyboardMove, keyboardResize, keyboardDrop, keyboardCancel,
-      focusedId, setFocusedId, announce, compactOnMove,
-    ]
+      layout,
+      cols,
+      rowHeight,
+      gap,
+      containerWidth,
+      maxRows,
+      activeId,
+      interactionType,
+      activeResizeDirection,
+      placeholder,
+      movingLayout,
+      registerItem,
+      unregisterItem,
+      startDrag,
+      moveDrag,
+      endDrag,
+      cancelInteraction,
+      startResize,
+      moveResize,
+      endResize,
+      keyboardGrab,
+      keyboardMove,
+      keyboardResize,
+      keyboardDrop,
+      keyboardCancel,
+      focusedId,
+      setFocusedId,
+      announce,
+      compactOnMove,
+    ],
   );
 
   // Expose container ref setter and startResize with pointer for Container/ResizeHandle
@@ -666,7 +714,7 @@ function GridLayoutRoot({
 
   return (
     <GridLayoutContext.Provider value={ctx}>
-      <div className={cn("relative", className)}>
+      <div className={cn('relative', className)}>
         {children}
         <LiveRegion ref={announceRef} />
       </div>

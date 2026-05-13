@@ -1,4 +1,9 @@
-import type { RegistryEntry, ComponentRegistryEntry, HookRegistryEntry, NpmDependency } from 'vayu-ui-registry';
+import type {
+  RegistryEntry,
+  ComponentRegistryEntry,
+  HookRegistryEntry,
+  NpmDependency,
+} from 'vayu-ui-registry';
 
 interface ScaffoldOptions {
   variant?: string;
@@ -12,26 +17,21 @@ interface ScaffoldResult {
   dependencies: NpmDependency[];
 }
 
-export function scaffoldComponent(
-  entry: RegistryEntry,
-  options: ScaffoldOptions,
-): ScaffoldResult {
+export function scaffoldComponent(entry: RegistryEntry, options: ScaffoldOptions): ScaffoldResult {
   if (entry.type === 'hook') {
     return scaffoldHook(entry, options);
   }
   return scaffoldComponentEntry(entry, options);
 }
 
-function scaffoldHook(
-  entry: HookRegistryEntry,
-  _options: ScaffoldOptions,
-): ScaffoldResult {
+function scaffoldHook(entry: HookRegistryEntry, _options: ScaffoldOptions): ScaffoldResult {
   const deps = [...entry.npmDependencies];
 
   // Build a basic usage example from the first example or from the signature
-  const code = entry.examples.length > 0
-    ? entry.examples[0].code
-    : `import { ${entry.name} } from 'vayu-ui';\n\nconst result = ${entry.signature.replace(/^function /, '')};`;
+  const code =
+    entry.examples.length > 0
+      ? entry.examples[0].code
+      : `import { ${entry.name} } from 'vayu-ui';\n\nconst result = ${entry.signature.replace(/^function /, '')};`;
 
   return {
     code,
@@ -54,7 +54,14 @@ function scaffoldComponentEntry(
   const features = options.features || [];
 
   // Check if we have a specialized scaffolder
-  const specialized = getSpecializedScaffold(entry.slug, { variant, size, features, name, imports, deps });
+  const specialized = getSpecializedScaffold(entry.slug, {
+    variant,
+    size,
+    features,
+    name,
+    imports,
+    deps,
+  });
   if (specialized) return specialized;
 
   // Generic scaffold for compound components
@@ -82,7 +89,14 @@ export default function ${name}Example() {
 
 function scaffoldCompoundComponent(
   entry: ComponentRegistryEntry,
-  ctx: { variant: string; size: string; features: string[]; name: string; imports: Set<string>; deps: NpmDependency[] },
+  ctx: {
+    variant: string;
+    size: string;
+    features: string[];
+    name: string;
+    imports: Set<string>;
+    deps: NpmDependency[];
+  },
 ): ScaffoldResult {
   const { variant, size, features, name, imports, deps } = ctx;
 
@@ -94,9 +108,9 @@ function scaffoldCompoundComponent(
   const children: string[] = [];
 
   for (const sub of entry.subComponents) {
-    const included = features.length === 0 || features.some(
-      (f) => sub.name.toLowerCase().includes(f.toLowerCase()),
-    );
+    const included =
+      features.length === 0 ||
+      features.some((f) => sub.name.toLowerCase().includes(f.toLowerCase()));
     if (!included) continue;
 
     switch (sub.name.toLowerCase()) {
@@ -117,7 +131,9 @@ function scaffoldCompoundComponent(
         children.push(`      <${name}.Description>Description text</${name}.Description>`);
         break;
       case 'content':
-        children.push(`      <${name}.Content>\n        {/* Content here */}\n      </${name}.Content>`);
+        children.push(
+          `      <${name}.Content>\n        {/* Content here */}\n      </${name}.Content>`,
+        );
         break;
       case 'trigger':
         children.push(`      <${name}.Trigger>Open</${name}.Trigger>`);
@@ -157,10 +173,7 @@ type ScaffoldContext = {
   deps: NpmDependency[];
 };
 
-function getSpecializedScaffold(
-  slug: string,
-  ctx: ScaffoldContext,
-): ScaffoldResult | null {
+function getSpecializedScaffold(slug: string, ctx: ScaffoldContext): ScaffoldResult | null {
   const { variant, size, features, name, imports, deps } = ctx;
 
   switch (slug) {

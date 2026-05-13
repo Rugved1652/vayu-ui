@@ -37,16 +37,51 @@ export const tableEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Table',
   files: [
-    { name: 'Table.tsx', description: 'Root table component wrapping native <table> in a responsive scroll container with design token styling and compound component attachment' },
-    { name: 'TableCaption.tsx', description: 'Caption sub-component with visually-hidden support for accessible table descriptions' },
-    { name: 'TableHead.tsx', description: '<thead> section component with muted background styling' },
-    { name: 'TableBody.tsx', description: '<tbody> section component with divider styling and empty-state aria-live region' },
-    { name: 'TableFooter.tsx', description: '<tfoot> section component with bold styling for totals and summaries' },
-    { name: 'TableRow.tsx', description: 'Row component with selected and selectable states, hover styling, and keyboard focus support' },
-    { name: 'TableHeader.tsx', description: 'Header cell (<th>) with scope, sortable indicator icons, and aria-sort support' },
-    { name: 'TableCell.tsx', description: 'Data cell (<td>) with accessible column and row index attributes' },
-    { name: 'types.ts', description: 'TypeScript type definitions for all Table sub-component props' },
-    { name: 'index.ts', description: 'Barrel export file assembling the compound component and re-exporting all types' },
+    {
+      name: 'Table.tsx',
+      description:
+        'Root table component wrapping native <table> in a responsive scroll container with design token styling and compound component attachment',
+    },
+    {
+      name: 'TableCaption.tsx',
+      description:
+        'Caption sub-component with visually-hidden support for accessible table descriptions',
+    },
+    {
+      name: 'TableHead.tsx',
+      description: '<thead> section component with muted background styling',
+    },
+    {
+      name: 'TableBody.tsx',
+      description:
+        '<tbody> section component with divider styling and empty-state aria-live region',
+    },
+    {
+      name: 'TableFooter.tsx',
+      description: '<tfoot> section component with bold styling for totals and summaries',
+    },
+    {
+      name: 'TableRow.tsx',
+      description:
+        'Row component with selected and selectable states, hover styling, and keyboard focus support',
+    },
+    {
+      name: 'TableHeader.tsx',
+      description: 'Header cell (<th>) with scope, sortable indicator icons, and aria-sort support',
+    },
+    {
+      name: 'TableCell.tsx',
+      description: 'Data cell (<td>) with accessible column and row index attributes',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript type definitions for all Table sub-component props',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export file assembling the compound component and re-exporting all types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -56,20 +91,22 @@ export const tableEntry: ComponentRegistryEntry = {
     {
       name: 'Caption',
       fileName: 'TableCaption.tsx',
-      description: 'Renders a <caption> element for the table, providing an accessible description. Can be visually hidden while remaining available to screen readers.',
+      description:
+        'Renders a <caption> element for the table, providing an accessible description. Can be visually hidden while remaining available to screen readers.',
       props: [
         {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
-          description: 'Caption text content describing the table\'s purpose or data',
+          description: "Caption text content describing the table's purpose or data",
         },
         {
           name: 'visuallyHidden',
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, applies sr-only classes to hide the caption visually while keeping it accessible to screen readers',
+          description:
+            'When true, applies sr-only classes to hide the caption visually while keeping it accessible to screen readers',
         },
         {
           name: 'className',
@@ -82,13 +119,15 @@ export const tableEntry: ComponentRegistryEntry = {
     {
       name: 'Head',
       fileName: 'TableHead.tsx',
-      description: 'Renders the <thead> section of the table, containing header rows with muted background styling.',
+      description:
+        'Renders the <thead> section of the table, containing header rows with muted background styling.',
       props: [
         {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
-          description: 'Header row content, typically one or more Table.Row elements containing Table.Header cells',
+          description:
+            'Header row content, typically one or more Table.Row elements containing Table.Header cells',
         },
         {
           name: 'className',
@@ -101,20 +140,23 @@ export const tableEntry: ComponentRegistryEntry = {
     {
       name: 'Body',
       fileName: 'TableBody.tsx',
-      description: 'Renders the <tbody> section of the table with row dividers and optional empty-state announcement.',
+      description:
+        'Renders the <tbody> section of the table with row dividers and optional empty-state announcement.',
       props: [
         {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
-          description: 'Body row content, typically Table.Row elements containing Table.Cell elements',
+          description:
+            'Body row content, typically Table.Row elements containing Table.Cell elements',
         },
         {
           name: 'empty',
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, adds aria-live="polite" to announce the empty state to screen readers',
+          description:
+            'When true, adds aria-live="polite" to announce the empty state to screen readers',
         },
         {
           name: 'className',
@@ -127,13 +169,15 @@ export const tableEntry: ComponentRegistryEntry = {
     {
       name: 'Footer',
       fileName: 'TableFooter.tsx',
-      description: 'Renders the <tfoot> section of the table with bold styling, used for totals and summary rows.',
+      description:
+        'Renders the <tfoot> section of the table with bold styling, used for totals and summary rows.',
       props: [
         {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
-          description: 'Footer row content, typically a Table.Row with summary or total Table.Cell elements',
+          description:
+            'Footer row content, typically a Table.Row with summary or total Table.Cell elements',
         },
         {
           name: 'className',
@@ -146,7 +190,8 @@ export const tableEntry: ComponentRegistryEntry = {
     {
       name: 'Row',
       fileName: 'TableRow.tsx',
-      description: 'Renders a <tr> element with optional selection state, hover styling, and keyboard focus for interactive rows.',
+      description:
+        'Renders a <tr> element with optional selection state, hover styling, and keyboard focus for interactive rows.',
       props: [
         {
           name: 'children',
@@ -159,14 +204,16 @@ export const tableEntry: ComponentRegistryEntry = {
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, applies a muted background to visually indicate the row is selected',
+          description:
+            'When true, applies a muted background to visually indicate the row is selected',
         },
         {
           name: 'selectable',
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, makes the row interactive with cursor-pointer, focus ring, and aria-selected attribute for accessibility',
+          description:
+            'When true, makes the row interactive with cursor-pointer, focus ring, and aria-selected attribute for accessibility',
         },
         {
           name: 'aria-rowindex',
@@ -185,7 +232,8 @@ export const tableEntry: ComponentRegistryEntry = {
     {
       name: 'Header',
       fileName: 'TableHeader.tsx',
-      description: 'Renders a <th> header cell with scope attribute, optional sort indicators, and keyboard interaction for sortable columns.',
+      description:
+        'Renders a <th> header cell with scope attribute, optional sort indicators, and keyboard interaction for sortable columns.',
       props: [
         {
           name: 'children',
@@ -198,7 +246,8 @@ export const tableEntry: ComponentRegistryEntry = {
           type: "'row' | 'col' | 'rowgroup' | 'colgroup'",
           required: false,
           defaultValue: "'col'",
-          description: 'HTML scope attribute indicating whether the header applies to a row, column, or group',
+          description:
+            'HTML scope attribute indicating whether the header applies to a row, column, or group',
           options: ['row', 'col', 'rowgroup', 'colgroup'],
         },
         {
@@ -206,20 +255,23 @@ export const tableEntry: ComponentRegistryEntry = {
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, adds a sort indicator icon, cursor-pointer styling, tabIndex for keyboard focus, and focus ring',
+          description:
+            'When true, adds a sort indicator icon, cursor-pointer styling, tabIndex for keyboard focus, and focus ring',
         },
         {
           name: 'aria-sort',
           type: "'ascending' | 'descending' | 'none' | 'other'",
           required: false,
-          description: 'Indicates the current sort direction of the column. Required when sortable is true for accessibility.',
+          description:
+            'Indicates the current sort direction of the column. Required when sortable is true for accessibility.',
           options: ['ascending', 'descending', 'none', 'other'],
         },
         {
           name: 'aria-colindex',
           type: 'number',
           required: false,
-          description: 'Column index for accessibility, useful for tables with a large or dynamic number of columns',
+          description:
+            'Column index for accessibility, useful for tables with a large or dynamic number of columns',
         },
         {
           name: 'className',
@@ -244,7 +296,8 @@ export const tableEntry: ComponentRegistryEntry = {
           name: 'aria-colindex',
           type: 'number',
           required: false,
-          description: 'Column index for accessibility in tables with a large or dynamic number of columns',
+          description:
+            'Column index for accessibility in tables with a large or dynamic number of columns',
         },
         {
           name: 'aria-rowindex',
@@ -256,7 +309,8 @@ export const tableEntry: ComponentRegistryEntry = {
           name: 'headers',
           type: 'string',
           required: false,
-          description: 'Space-separated list of header cell IDs that this data cell belongs to, for complex table relationships',
+          description:
+            'Space-separated list of header cell IDs that this data cell belongs to, for complex table relationships',
         },
         {
           name: 'className',
@@ -274,25 +328,29 @@ export const tableEntry: ComponentRegistryEntry = {
       name: 'aria-label',
       type: 'string',
       required: false,
-      description: 'Accessible name for the table, providing a concise label for screen reader users when a visible caption is not present',
+      description:
+        'Accessible name for the table, providing a concise label for screen reader users when a visible caption is not present',
     },
     {
       name: 'aria-describedby',
       type: 'string',
       required: false,
-      description: 'ID reference to an element that provides additional description of the table\'s content or structure',
+      description:
+        "ID reference to an element that provides additional description of the table's content or structure",
     },
     {
       name: 'aria-colcount',
       type: 'number',
       required: false,
-      description: 'Total number of columns in the full dataset, useful when the table displays a subset of columns or is virtualized',
+      description:
+        'Total number of columns in the full dataset, useful when the table displays a subset of columns or is virtualized',
     },
     {
       name: 'aria-rowcount',
       type: 'number',
       required: false,
-      description: 'Total number of rows in the full dataset, useful when the table displays paginated or virtualized rows',
+      description:
+        'Total number of rows in the full dataset, useful when the table displays paginated or virtualized rows',
     },
   ],
   rendersAs: 'table',
@@ -304,35 +362,40 @@ export const tableEntry: ComponentRegistryEntry = {
       prop: 'selected',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Applied to Table.Row. When true, the row is visually highlighted with a muted background and aria-selected is set to true.',
+      description:
+        'Applied to Table.Row. When true, the row is visually highlighted with a muted background and aria-selected is set to true.',
     },
     {
       name: 'selectable',
       prop: 'selectable',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Applied to Table.Row. When true, the row becomes interactive with cursor-pointer, keyboard focus ring, and aria-selected attribute.',
+      description:
+        'Applied to Table.Row. When true, the row becomes interactive with cursor-pointer, keyboard focus ring, and aria-selected attribute.',
     },
     {
       name: 'sortable',
       prop: 'sortable',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Applied to Table.Header. When true, the header cell shows a sort direction indicator, becomes keyboard-focusable, and supports aria-sort.',
+      description:
+        'Applied to Table.Header. When true, the header cell shows a sort direction indicator, becomes keyboard-focusable, and supports aria-sort.',
     },
     {
       name: 'empty',
       prop: 'empty',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Applied to Table.Body. When true, adds aria-live="polite" to announce the empty state to screen readers.',
+      description:
+        'Applied to Table.Body. When true, adds aria-live="polite" to announce the empty state to screen readers.',
     },
     {
       name: 'visuallyHidden',
       prop: 'visuallyHidden',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Applied to Table.Caption. When true, hides the caption visually using sr-only classes while keeping it accessible to screen readers.',
+      description:
+        'Applied to Table.Caption. When true, hides the caption visually using sr-only classes while keeping it accessible to screen readers.',
     },
   ],
 
@@ -356,47 +419,56 @@ export const tableEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-label',
-        description: 'Applied to the root <table> element to provide an accessible name when a visible caption is not used.',
+        description:
+          'Applied to the root <table> element to provide an accessible name when a visible caption is not used.',
         managedByComponent: false,
       },
       {
         name: 'aria-describedby',
-        description: 'Applied to the root <table> element to reference an element that describes the table\'s content.',
+        description:
+          "Applied to the root <table> element to reference an element that describes the table's content.",
         managedByComponent: false,
       },
       {
         name: 'aria-colcount / aria-rowcount',
-        description: 'Applied to the root <table> element for virtualized or partial datasets to indicate total column/row counts.',
+        description:
+          'Applied to the root <table> element for virtualized or partial datasets to indicate total column/row counts.',
         managedByComponent: false,
       },
       {
         name: 'scope',
-        description: 'Applied to Table.Header (<th>) elements with a default of "col", indicating whether the header applies to a row, column, or group.',
+        description:
+          'Applied to Table.Header (<th>) elements with a default of "col", indicating whether the header applies to a row, column, or group.',
         managedByComponent: true,
       },
       {
         name: 'aria-sort',
-        description: 'Applied to sortable Table.Header elements to announce the current sort direction (ascending, descending, none, other) to screen readers.',
+        description:
+          'Applied to sortable Table.Header elements to announce the current sort direction (ascending, descending, none, other) to screen readers.',
         managedByComponent: false,
       },
       {
         name: 'aria-selected',
-        description: 'Applied to selectable Table.Row elements to communicate the current selection state to assistive technology.',
+        description:
+          'Applied to selectable Table.Row elements to communicate the current selection state to assistive technology.',
         managedByComponent: true,
       },
       {
         name: 'aria-live="polite"',
-        description: 'Applied to Table.Body when the empty prop is true, announcing empty state changes to screen readers without interrupting.',
+        description:
+          'Applied to Table.Body when the empty prop is true, announcing empty state changes to screen readers without interrupting.',
         managedByComponent: true,
       },
       {
         name: 'aria-colindex / aria-rowindex',
-        description: 'Applied to Table.Header and Table.Cell elements for accessibility in tables with dynamic, virtualized, or large datasets.',
+        description:
+          'Applied to Table.Header and Table.Cell elements for accessibility in tables with dynamic, virtualized, or large datasets.',
         managedByComponent: false,
       },
       {
         name: 'headers',
-        description: 'Applied to Table.Cell elements to associate data cells with their corresponding header cells by ID for complex table structures.',
+        description:
+          'Applied to Table.Cell elements to associate data cells with their corresponding header cells by ID for complex table structures.',
         managedByComponent: false,
       },
     ],
@@ -426,9 +498,7 @@ export const tableEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -436,23 +506,28 @@ export const tableEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'badge',
-      reason: 'Badges are frequently used inside Table.Cell elements to display status indicators like "Paid", "Pending", or "Unpaid"',
+      reason:
+        'Badges are frequently used inside Table.Cell elements to display status indicators like "Paid", "Pending", or "Unpaid"',
     },
     {
       slug: 'button',
-      reason: 'Action buttons (View, Edit, Delete) are commonly placed in a table\'s last column for row-level operations',
+      reason:
+        "Action buttons (View, Edit, Delete) are commonly placed in a table's last column for row-level operations",
     },
     {
       slug: 'checkbox',
-      reason: 'Checkboxes are used in the first column for multi-row selection alongside the selectable row feature',
+      reason:
+        'Checkboxes are used in the first column for multi-row selection alongside the selectable row feature',
     },
     {
       slug: 'skeleton',
-      reason: 'Skeleton loaders replace table content while data is being fetched, providing a smooth loading experience',
+      reason:
+        'Skeleton loaders replace table content while data is being fetched, providing a smooth loading experience',
     },
     {
       slug: 'typography',
-      reason: 'Typography components provide consistent heading and text styling for table titles and descriptions',
+      reason:
+        'Typography components provide consistent heading and text styling for table titles and descriptions',
     },
   ],
 
@@ -460,7 +535,8 @@ export const tableEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Default Table',
-      description: 'A basic table with caption, header rows, body rows, and a footer row showing totals.',
+      description:
+        'A basic table with caption, header rows, body rows, and a footer row showing totals.',
       code: `import { Table } from 'vayu-ui';
 
 const invoices = [
@@ -506,7 +582,8 @@ export default function DefaultTable() {
     },
     {
       title: 'Table with Selected Row',
-      description: 'A table demonstrating row selection with the selected prop to highlight a specific row.',
+      description:
+        'A table demonstrating row selection with the selected prop to highlight a specific row.',
       code: `import { Table } from 'vayu-ui';
 
 const invoices = [
@@ -543,7 +620,8 @@ export default function SelectedRowTable() {
     },
     {
       title: 'Table with Sortable Columns',
-      description: 'A table with sortable column headers using the sortable and aria-sort props to indicate sort direction.',
+      description:
+        'A table with sortable column headers using the sortable and aria-sort props to indicate sort direction.',
       code: `import { Table } from 'vayu-ui';
 
 const invoices = [
@@ -586,7 +664,8 @@ export default function SortableTable() {
     },
     {
       title: 'Table with Selectable Rows',
-      description: 'A table where each row is interactive using the selectable prop, enabling click and keyboard selection with focus rings.',
+      description:
+        'A table where each row is interactive using the selectable prop, enabling click and keyboard selection with focus rings.',
       code: `import { Table } from 'vayu-ui';
 
 const invoices = [
@@ -623,7 +702,8 @@ export default function SelectableTable() {
     },
     {
       title: 'Table with Actions',
-      description: 'A table with action buttons in the last column for row-level operations like View and Edit.',
+      description:
+        'A table with action buttons in the last column for row-level operations like View and Edit.',
       code: `import { Table, Button } from 'vayu-ui';
 
 const invoices = [
@@ -673,31 +753,36 @@ export default function ActionsTable() {
       title: 'Omitting aria-label or Caption on data tables',
       bad: '<Table><Table.Body>...</Table.Body></Table>',
       good: '<Table aria-label="User accounts"><Table.Caption>List of user accounts</Table.Caption><Table.Body>...</Table.Body></Table>',
-      reason: 'Every table must have an accessible name. Without aria-label or a <caption>, screen readers cannot identify the table\'s purpose. WCAG 2.2 requires an accessible name for all data tables.',
+      reason:
+        "Every table must have an accessible name. Without aria-label or a <caption>, screen readers cannot identify the table's purpose. WCAG 2.2 requires an accessible name for all data tables.",
     },
     {
       title: 'Using sortable without aria-sort',
       bad: '<Table.Header sortable>Status</Table.Header>',
       good: '<Table.Header sortable aria-sort="ascending">Status</Table.Header>',
-      reason: 'The sortable prop adds visual indicators and keyboard focus, but without aria-sort, screen readers cannot determine the current sort direction. Always pair sortable with an aria-sort value to communicate the sort state.',
+      reason:
+        'The sortable prop adds visual indicators and keyboard focus, but without aria-sort, screen readers cannot determine the current sort direction. Always pair sortable with an aria-sort value to communicate the sort state.',
     },
     {
       title: 'Using div or span instead of Table sub-components',
       bad: '<Table.Body><div className="row"><span className="cell">Data</span></div></Table.Body>',
       good: '<Table.Body><Table.Row><Table.Cell>Data</Table.Cell></Table.Row></Table.Body>',
-      reason: 'Non-semantic elements break the table\'s accessibility tree. Screen readers rely on proper <tr> and <td> markup to navigate tables. Always use Table.Row and Table.Cell to maintain semantic structure.',
+      reason:
+        "Non-semantic elements break the table's accessibility tree. Screen readers rely on proper <tr> and <td> markup to navigate tables. Always use Table.Row and Table.Cell to maintain semantic structure.",
     },
     {
       title: 'Setting selectable without handling selection logic',
       bad: '<Table.Row selectable>Selectable row</Table.Row>',
       good: '<Table.Row selectable selected={isSelected} onClick={() => onSelect(row.id)}>Selectable row</Table.Row>',
-      reason: 'The selectable prop adds visual interactivity (cursor, focus ring, aria-selected) but does not manage selection state. You must pair it with selected and onClick handlers to actually track and display the user\'s selection.',
+      reason:
+        "The selectable prop adds visual interactivity (cursor, focus ring, aria-selected) but does not manage selection state. You must pair it with selected and onClick handlers to actually track and display the user's selection.",
     },
     {
       title: 'Nesting tables inside Table.Cell',
       bad: '<Table.Cell><Table>...</Table></Table.Cell>',
       good: 'Use a separate section or expandable row pattern to show nested data',
-      reason: 'Nesting tables creates confusing accessibility trees and breaks keyboard navigation for screen reader users. Use expandable rows, detail panels, or a separate table below the parent to show hierarchical data.',
+      reason:
+        'Nesting tables creates confusing accessibility trees and breaks keyboard navigation for screen reader users. Use expandable rows, detail panels, or a separate table below the parent to show hierarchical data.',
     },
   ],
 };

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { forwardRef, useCallback, useRef } from "react";
-import { cn } from "../../utils";
-import { useContextMenuCtx } from "./hooks";
-import type { ContextMenuTriggerProps } from "./types";
+import React, { forwardRef, useCallback, useRef } from 'react';
+import { cn } from '../../utils';
+import { useContextMenuCtx } from './hooks';
+import type { ContextMenuTriggerProps } from './types';
 
 const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
   ({ children, disabled = false, className, ...props }, ref) => {
@@ -18,7 +18,7 @@ const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
         cursorPositionRef.current = { x: e.clientX, y: e.clientY };
         setIsOpen(true);
       },
-      [disabled, setIsOpen, cursorPositionRef]
+      [disabled, setIsOpen, cursorPositionRef],
     );
 
     // Left-click closes menu when already open
@@ -29,14 +29,14 @@ const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
           closeMenu();
         }
       },
-      [disabled, isOpen, closeMenu]
+      [disabled, isOpen, closeMenu],
     );
 
     // Context Menu key / Shift+F10
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent) => {
         if (disabled) return;
-        if (e.key === "ContextMenu" || (e.shiftKey && e.key === "F10")) {
+        if (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')) {
           e.preventDefault();
           const rect = triggerRef.current?.getBoundingClientRect();
           if (rect) {
@@ -48,7 +48,7 @@ const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
           setIsOpen(true);
         }
       },
-      [disabled, setIsOpen, cursorPositionRef]
+      [disabled, setIsOpen, cursorPositionRef],
     );
 
     return (
@@ -58,9 +58,9 @@ const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
         onMouseDown={handleMouseDown}
         onKeyDown={handleKeyDown}
         className={cn(
-          "select-none",
-          disabled ? "cursor-default" : "cursor-context-menu",
-          className
+          'select-none',
+          disabled ? 'cursor-default' : 'cursor-context-menu',
+          className,
         )}
         aria-haspopup="menu"
         {...props}
@@ -68,9 +68,9 @@ const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
         {children}
       </div>
     );
-  }
+  },
 );
 
-ContextMenuTrigger.displayName = "ContextMenu.Trigger";
+ContextMenuTrigger.displayName = 'ContextMenu.Trigger';
 
 export { ContextMenuTrigger };

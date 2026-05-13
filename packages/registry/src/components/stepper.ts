@@ -8,9 +8,21 @@ export const stepperEntry: ComponentRegistryEntry = {
   category: 'navigation',
 
   // ── Description ───────────────────────────────────────
-  description: 'A progress indicator that displays steps in a horizontal or vertical workflow with connectors, statuses, and keyboard navigation.',
-  longDescription: 'Stepper shows a multi-step process progress using compound subcomponents. It supports horizontal and vertical orientations, five step statuses (active, completed, inactive, loading, error), clickable steps with keyboard navigation, and custom step indicators with icons or content.',
-  tags: ['stepper', 'steps', 'progress', 'wizard', 'workflow', 'navigation', 'form-steps', 'multi-step', 'indicator'],
+  description:
+    'A progress indicator that displays steps in a horizontal or vertical workflow with connectors, statuses, and keyboard navigation.',
+  longDescription:
+    'Stepper shows a multi-step process progress using compound subcomponents. It supports horizontal and vertical orientations, five step statuses (active, completed, inactive, loading, error), clickable steps with keyboard navigation, and custom step indicators with icons or content.',
+  tags: [
+    'stepper',
+    'steps',
+    'progress',
+    'wizard',
+    'workflow',
+    'navigation',
+    'form-steps',
+    'multi-step',
+    'indicator',
+  ],
   useCases: [
     'Multi-step form wizards (account creation, checkout, onboarding)',
     'Displaying progress through a sequential process or workflow',
@@ -22,9 +34,18 @@ export const stepperEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Stepper',
   files: [
-    { name: 'Stepper.tsx', description: 'Root component with context providers and compound assembly' },
-    { name: 'step.tsx', description: 'Individual step with connectors, layout, and keyboard handling' },
-    { name: 'StepperIndicator.tsx', description: 'Step indicator circle with status-based styling' },
+    {
+      name: 'Stepper.tsx',
+      description: 'Root component with context providers and compound assembly',
+    },
+    {
+      name: 'step.tsx',
+      description: 'Individual step with connectors, layout, and keyboard handling',
+    },
+    {
+      name: 'StepperIndicator.tsx',
+      description: 'Step indicator circle with status-based styling',
+    },
     { name: 'StepperContent.tsx', description: 'Content wrapper with orientation-aware layout' },
     { name: 'hooks.ts', description: 'Context definitions and status helper' },
     { name: 'types.ts', description: 'TypeScript type definitions' },
@@ -38,13 +59,15 @@ export const stepperEntry: ComponentRegistryEntry = {
     {
       name: 'Step',
       fileName: 'step.tsx',
-      description: 'Individual step container that renders indicator, connectors, and content based on orientation',
+      description:
+        'Individual step container that renders indicator, connectors, and content based on orientation',
       props: [
         {
           name: 'status',
           type: "'active' | 'completed' | 'inactive' | 'loading' | 'error'",
           required: false,
-          description: 'Override the automatically computed step status. When omitted, status is derived from activeStep and step index.',
+          description:
+            'Override the automatically computed step status. When omitted, status is derived from activeStep and step index.',
           options: ['active', 'completed', 'inactive', 'loading', 'error'],
         },
       ],
@@ -52,20 +75,23 @@ export const stepperEntry: ComponentRegistryEntry = {
     {
       name: 'Indicator',
       fileName: 'StepperIndicator.tsx',
-      description: 'Circular step indicator that displays status-based styling, check marks, error icons, or custom content',
+      description:
+        'Circular step indicator that displays status-based styling, check marks, error icons, or custom content',
       props: [
         {
           name: 'icon',
           type: 'ReactNode',
           required: false,
-          description: 'Custom icon to display inside the indicator circle instead of the default check or error symbol',
+          description:
+            'Custom icon to display inside the indicator circle instead of the default check or error symbol',
         },
       ],
     },
     {
       name: 'Content',
       fileName: 'StepperContent.tsx',
-      description: 'Container for step title and description with orientation-aware padding and alignment',
+      description:
+        'Container for step title and description with orientation-aware padding and alignment',
       props: [],
     },
     {
@@ -77,7 +103,8 @@ export const stepperEntry: ComponentRegistryEntry = {
     {
       name: 'Description',
       fileName: 'StepperContent.tsx',
-      description: 'Step description rendered as a p element with muted styling and horizontal line-clamping',
+      description:
+        'Step description rendered as a p element with muted styling and horizontal line-clamping',
       props: [],
     },
   ],
@@ -89,21 +116,24 @@ export const stepperEntry: ComponentRegistryEntry = {
       name: 'activeStep',
       type: 'number',
       required: true,
-      description: 'Zero-based index of the currently active step. Determines which step is highlighted and which connectors are filled.',
+      description:
+        'Zero-based index of the currently active step. Determines which step is highlighted and which connectors are filled.',
     },
     {
       name: 'orientation',
       type: "'horizontal' | 'vertical'",
       required: false,
       defaultValue: "'horizontal'",
-      description: 'Layout direction for the stepper. Horizontal arranges steps in a row; vertical stacks them in a column.',
+      description:
+        'Layout direction for the stepper. Horizontal arranges steps in a row; vertical stacks them in a column.',
       options: ['horizontal', 'vertical'],
     },
     {
       name: 'onStepClick',
       type: '((step: number) => void) | undefined',
       required: false,
-      description: 'Callback when a step is clicked. Receives the zero-based step index. When provided, steps become focusable and clickable with keyboard support.',
+      description:
+        'Callback when a step is clicked. Receives the zero-based step index. When provided, steps become focusable and clickable with keyboard support.',
     },
   ],
   rendersAs: 'div',
@@ -122,14 +152,16 @@ export const stepperEntry: ComponentRegistryEntry = {
       prop: 'status',
       values: ['active'],
       isBoolean: false,
-      description: 'The current step. Indicator shows brand-colored circle with a ring glow. Connectors to this step are highlighted.',
+      description:
+        'The current step. Indicator shows brand-colored circle with a ring glow. Connectors to this step are highlighted.',
     },
     {
       name: 'completed',
       prop: 'status',
       values: ['completed'],
       isBoolean: false,
-      description: 'A step that has been finished. Indicator shows a brand-filled circle with a check mark by default.',
+      description:
+        'A step that has been finished. Indicator shows a brand-filled circle with a check mark by default.',
     },
     {
       name: 'inactive',
@@ -151,7 +183,8 @@ export const stepperEntry: ComponentRegistryEntry = {
       prop: 'status',
       values: ['error'],
       isBoolean: false,
-      description: 'A step that encountered an error. Indicator shows a destructive-colored circle with an exclamation mark by default.',
+      description:
+        'A step that encountered an error. Indicator shows a destructive-colored circle with an exclamation mark by default.',
     },
   ],
 
@@ -160,7 +193,8 @@ export const stepperEntry: ComponentRegistryEntry = {
     {
       name: 'onStepClick',
       signature: '(step: number) => void',
-      description: 'Fires when a user clicks a step. Receives the zero-based step index. Only fires when onStepClick is provided to Stepper.Root.',
+      description:
+        'Fires when a user clicks a step. Receives the zero-based step index. Only fires when onStepClick is provided to Stepper.Root.',
     },
     {
       name: 'onClick',
@@ -170,7 +204,8 @@ export const stepperEntry: ComponentRegistryEntry = {
     {
       name: 'onKeyDown',
       signature: '(event: React.KeyboardEvent<HTMLDivElement>) => void',
-      description: 'Native keydown handler on a Step element. Fires after internal keyboard navigation is processed.',
+      description:
+        'Native keydown handler on a Step element. Fires after internal keyboard navigation is processed.',
     },
   ],
 
@@ -180,7 +215,8 @@ export const stepperEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-label',
-        description: 'Applied to the root element as "Progress steps, {completed} of {total} completed"',
+        description:
+          'Applied to the root element as "Progress steps, {completed} of {total} completed"',
         managedByComponent: true,
       },
       {
@@ -200,7 +236,8 @@ export const stepperEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-hidden',
-        description: 'Set to "true" on the StepIndicator since status is communicated via sr-only text',
+        description:
+          'Set to "true" on the StepIndicator since status is communicated via sr-only text',
         managedByComponent: true,
       },
     ],
@@ -214,16 +251,15 @@ export const stepperEntry: ComponentRegistryEntry = {
       { key: 'Home', behavior: 'Moves focus to the first step' },
       { key: 'End', behavior: 'Moves focus to the last step' },
     ],
-    focusManagement: 'Clickable steps receive tabindex="0" and support roving focus via arrow keys. Non-clickable steppers set tabindex="-1".',
+    focusManagement:
+      'Clickable steps receive tabindex="0" and support roving focus via arrow keys. Non-clickable steppers set tabindex="-1".',
     wcagLevel: 'AA',
-    notes: 'Each step includes a screen reader announcement ("Step {n} of {total}, {status}") via sr-only text. Focus-visible ring is shown on group focus-visible.',
+    notes:
+      'Each step includes a screen reader announcement ("Step {n} of {total}, {status}") via sr-only text. Focus-visible ring is shown on group focus-visible.',
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'lucide-react' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'lucide-react' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -251,7 +287,8 @@ export const stepperEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Horizontal Clickable Stepper',
-      description: 'A horizontal stepper with clickable steps, custom icons, and navigation buttons.',
+      description:
+        'A horizontal stepper with clickable steps, custom icons, and navigation buttons.',
       tags: ['horizontal', 'clickable', 'icons'],
       code: `import { Stepper, Button } from 'vayu-ui';
 import { useState } from 'react';
@@ -376,7 +413,8 @@ export default function Example() {
     },
     {
       title: 'Non-Clickable Display Stepper',
-      description: 'A display-only stepper without step click handlers for showing progress in a read-only context.',
+      description:
+        'A display-only stepper without step click handlers for showing progress in a read-only context.',
       tags: ['non-clickable', 'display-only', 'read-only'],
       code: `import { Stepper } from 'vayu-ui';
 
@@ -410,31 +448,36 @@ export default function Example() {
       title: 'Do not nest Stepper.Root inside another Stepper',
       bad: '<Stepper.Root><Stepper.Step><Stepper.Root>...</Stepper.Root></Stepper.Step></Stepper.Root>',
       good: 'Use a single Stepper.Root per workflow. If branching is needed, conditionally render different step arrays.',
-      reason: 'Nesting steppers creates conflicting context providers and breaks keyboard navigation and ARIA semantics.',
+      reason:
+        'Nesting steppers creates conflicting context providers and breaks keyboard navigation and ARIA semantics.',
     },
     {
       title: 'Do not override status without understanding auto-computation',
       bad: '<Stepper.Step status="completed"><Stepper.Indicator>1</Stepper.Indicator></Stepper.Step>',
       good: 'Omit the status prop and let it derive from activeStep, or use it intentionally for error/loading overrides.',
-      reason: 'The status prop overrides automatic derivation. Setting it manually on every step defeats the purpose of activeStep-driven state.',
+      reason:
+        'The status prop overrides automatic derivation. Setting it manually on every step defeats the purpose of activeStep-driven state.',
     },
     {
       title: 'Do not render StepIndicator outside of Stepper.Step',
       bad: '<div><Stepper.Indicator icon={...} /></div>',
       good: 'Always place Stepper.Indicator as a child of Stepper.Step so it receives status context.',
-      reason: 'StepIndicator reads from StepStatusContext which is only provided inside a Stepper.Step.',
+      reason:
+        'StepIndicator reads from StepStatusContext which is only provided inside a Stepper.Step.',
     },
     {
       title: 'Do not use negative or out-of-range activeStep values',
       bad: '<Stepper.Root activeStep={-1}>...</Stepper.Root>',
       good: 'Clamp activeStep between 0 and steps.length - 1.',
-      reason: 'Negative or oversized activeStep values produce undefined visual states and incorrect ARIA labels.',
+      reason:
+        'Negative or oversized activeStep values produce undefined visual states and incorrect ARIA labels.',
     },
     {
       title: 'Do not hardcode step indicator colors',
       bad: '<Stepper.Indicator className="bg-blue-500 text-white" />',
       good: 'Use the built-in status-driven styling which uses design tokens (bg-brand, bg-border, bg-destructive).',
-      reason: 'Hardcoding colors bypasses design tokens and breaks theme consistency and dark mode support.',
+      reason:
+        'Hardcoding colors bypasses design tokens and breaks theme consistency and dark mode support.',
     },
   ],
 };

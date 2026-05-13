@@ -56,12 +56,24 @@ function BadgesAndSwitchDemo() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="brand" size="sm">Brand</Badge>
-        <Badge variant="muted" size="sm">Muted</Badge>
-        <Badge variant="success" size="sm">Success</Badge>
-        <Badge variant="warning" size="sm">Warning</Badge>
-        <Badge variant="destructive" size="sm">Error</Badge>
-        <Badge variant="info" size="sm">Info</Badge>
+        <Badge variant="brand" size="sm">
+          Brand
+        </Badge>
+        <Badge variant="muted" size="sm">
+          Muted
+        </Badge>
+        <Badge variant="success" size="sm">
+          Success
+        </Badge>
+        <Badge variant="warning" size="sm">
+          Warning
+        </Badge>
+        <Badge variant="destructive" size="sm">
+          Error
+        </Badge>
+        <Badge variant="info" size="sm">
+          Info
+        </Badge>
       </div>
       <Switch label="Enable notifications" defaultChecked />
     </div>
@@ -97,9 +109,16 @@ function TabsDemo() {
       </Tabs.Content>
       <Tabs.Content value="api">
         <div className="mt-4 space-y-2 text-sm font-secondary text-surface-content">
-          <p><code className="font-tertiary text-brand">defaultValue</code> — Initial active tab (uncontrolled)</p>
-          <p><code className="font-tertiary text-brand">value</code> — Active tab (controlled)</p>
-          <p><code className="font-tertiary text-brand">onValueChange</code> — Callback on tab switch</p>
+          <p>
+            <code className="font-tertiary text-brand">defaultValue</code> — Initial active tab
+            (uncontrolled)
+          </p>
+          <p>
+            <code className="font-tertiary text-brand">value</code> — Active tab (controlled)
+          </p>
+          <p>
+            <code className="font-tertiary text-brand">onValueChange</code> — Callback on tab switch
+          </p>
         </div>
       </Tabs.Content>
     </Tabs>
@@ -131,7 +150,5 @@ function FormDemo() {
 }
 
 export function ComponentShowcase() {
-  return (
-    <></>
-  );
+  return <></>;
 }

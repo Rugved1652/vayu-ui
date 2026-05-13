@@ -207,7 +207,7 @@ if (renders > 3) {
 console.debug('Component rendered', renders, 'times');
 // Use proper state management for production UI logic`,
       reason:
-        'Render count is a debugging and profiling tool, not a reliable state variable. The count depends on React\'s internal scheduling and can vary between React versions or modes (concurrent vs. legacy). Never drive production UI behavior from render counts.',
+        "Render count is a debugging and profiling tool, not a reliable state variable. The count depends on React's internal scheduling and can vary between React versions or modes (concurrent vs. legacy). Never drive production UI behavior from render counts.",
     },
     {
       title: 'Calling the hook conditionally',

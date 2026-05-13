@@ -38,15 +38,45 @@ export const checkboxEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'CheckBox',
   files: [
-    { name: 'CheckBox.tsx', description: 'Root component with controlled/uncontrolled state management and context provider' },
-    { name: 'CheckBoxIndicator.tsx', description: 'Visual checkbox indicator with hidden native input, ARIA attributes, and focus styling' },
-    { name: 'CheckBoxLabel.tsx', description: 'Label element linked to the checkbox input via htmlFor' },
-    { name: 'CheckBoxDescription.tsx', description: 'Helper text linked to the checkbox via aria-describedby' },
-    { name: 'CheckBoxError.tsx', description: 'Error message with role="alert" and aria-live for screen reader announcements' },
-    { name: 'hooks.ts', description: 'CheckboxContext provider and useCheckboxContext consumer hook' },
-    { name: 'types.ts', description: 'TypeScript type definitions for all component props and context value' },
-    { name: 'index.ts', description: 'Barrel export file assembling the compound component and re-exporting types' },
-    { name: 'README.md', description: 'Component documentation and usage guidelines', optional: true },
+    {
+      name: 'CheckBox.tsx',
+      description:
+        'Root component with controlled/uncontrolled state management and context provider',
+    },
+    {
+      name: 'CheckBoxIndicator.tsx',
+      description:
+        'Visual checkbox indicator with hidden native input, ARIA attributes, and focus styling',
+    },
+    {
+      name: 'CheckBoxLabel.tsx',
+      description: 'Label element linked to the checkbox input via htmlFor',
+    },
+    {
+      name: 'CheckBoxDescription.tsx',
+      description: 'Helper text linked to the checkbox via aria-describedby',
+    },
+    {
+      name: 'CheckBoxError.tsx',
+      description: 'Error message with role="alert" and aria-live for screen reader announcements',
+    },
+    {
+      name: 'hooks.ts',
+      description: 'CheckboxContext provider and useCheckboxContext consumer hook',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript type definitions for all component props and context value',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file assembling the compound component and re-exporting types',
+    },
+    {
+      name: 'README.md',
+      description: 'Component documentation and usage guidelines',
+      optional: true,
+    },
   ],
   targetPath: 'src/components',
 
@@ -56,7 +86,8 @@ export const checkboxEntry: ComponentRegistryEntry = {
     {
       name: 'Indicator',
       fileName: 'CheckBoxIndicator.tsx',
-      description: 'Renders a hidden native checkbox input for accessibility, overlaid with a custom visual indicator showing check, minus (indeterminate), or empty states.',
+      description:
+        'Renders a hidden native checkbox input for accessibility, overlaid with a custom visual indicator showing check, minus (indeterminate), or empty states.',
       props: [
         {
           name: 'className',
@@ -69,7 +100,8 @@ export const checkboxEntry: ComponentRegistryEntry = {
     {
       name: 'Label',
       fileName: 'CheckBoxLabel.tsx',
-      description: 'Renders a label element with htmlFor linked to the checkbox input ID for accessible click-to-toggle behavior.',
+      description:
+        'Renders a label element with htmlFor linked to the checkbox input ID for accessible click-to-toggle behavior.',
       props: [
         {
           name: 'children',
@@ -88,7 +120,8 @@ export const checkboxEntry: ComponentRegistryEntry = {
     {
       name: 'Description',
       fileName: 'CheckBoxDescription.tsx',
-      description: 'Renders helper or descriptive text linked to the checkbox via aria-describedby for screen reader context.',
+      description:
+        'Renders helper or descriptive text linked to the checkbox via aria-describedby for screen reader context.',
       props: [
         {
           name: 'children',
@@ -107,7 +140,8 @@ export const checkboxEntry: ComponentRegistryEntry = {
     {
       name: 'Error',
       fileName: 'CheckBoxError.tsx',
-      description: 'Renders an error message with role="alert" and aria-live="polite" for immediate screen reader announcement.',
+      description:
+        'Renders an error message with role="alert" and aria-live="polite" for immediate screen reader announcement.',
       props: [
         {
           name: 'children',
@@ -132,7 +166,8 @@ export const checkboxEntry: ComponentRegistryEntry = {
       name: 'checked',
       type: 'boolean',
       required: false,
-      description: 'Controlled checked state. When provided, the component operates in controlled mode and does not manage internal state.',
+      description:
+        'Controlled checked state. When provided, the component operates in controlled mode and does not manage internal state.',
     },
     {
       name: 'defaultChecked',
@@ -146,21 +181,24 @@ export const checkboxEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Shows the indeterminate (minus icon) visual state. Used for "select all" patterns where some but not all items are selected.',
+      description:
+        'Shows the indeterminate (minus icon) visual state. Used for "select all" patterns where some but not all items are selected.',
     },
     {
       name: 'disabled',
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Disables the checkbox, preventing user interaction and applying reduced opacity.',
+      description:
+        'Disables the checkbox, preventing user interaction and applying reduced opacity.',
     },
     {
       name: 'error',
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Shows error styling (destructive border) and sets aria-invalid="true" on the input.',
+      description:
+        'Shows error styling (destructive border) and sets aria-invalid="true" on the input.',
     },
     {
       name: 'onChange',
@@ -199,14 +237,16 @@ export const checkboxEntry: ComponentRegistryEntry = {
       prop: 'checked',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Whether the checkbox is selected. In controlled mode, set via the checked prop; in uncontrolled mode, managed internally via defaultChecked.',
+      description:
+        'Whether the checkbox is selected. In controlled mode, set via the checked prop; in uncontrolled mode, managed internally via defaultChecked.',
     },
     {
       name: 'indeterminate',
       prop: 'indeterminate',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Shows a minus icon instead of a checkmark. Typically used in parent checkboxes to indicate partial selection in a group.',
+      description:
+        'Shows a minus icon instead of a checkmark. Typically used in parent checkboxes to indicate partial selection in a group.',
     },
     {
       name: 'disabled',
@@ -220,7 +260,8 @@ export const checkboxEntry: ComponentRegistryEntry = {
       prop: 'error',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Applies destructive border color and sets aria-invalid="true" on the native input for screen reader error indication.',
+      description:
+        'Applies destructive border color and sets aria-invalid="true" on the native input for screen reader error indication.',
     },
   ],
 
@@ -229,7 +270,8 @@ export const checkboxEntry: ComponentRegistryEntry = {
     {
       name: 'onChange',
       signature: '(checked: boolean) => void',
-      description: 'Fired when the user toggles the checkbox. Receives the new checked state as a boolean. Works in both controlled and uncontrolled modes.',
+      description:
+        'Fired when the user toggles the checkbox. Receives the new checked state as a boolean. Works in both controlled and uncontrolled modes.',
     },
   ],
 
@@ -238,38 +280,45 @@ export const checkboxEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-invalid',
-        description: 'Set to "true" when the error prop is true, indicating a validation error to screen readers.',
+        description:
+          'Set to "true" when the error prop is true, indicating a validation error to screen readers.',
         managedByComponent: true,
       },
       {
         name: 'aria-describedby',
-        description: 'Dynamically built client-side to reference both the error element (when error is true) and the description element (when present), linking them to the input.',
+        description:
+          'Dynamically built client-side to reference both the error element (when error is true) and the description element (when present), linking them to the input.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Set to "true" on the visual indicator div to prevent double-announcement — the hidden native input handles screen reader output.',
+        description:
+          'Set to "true" on the visual indicator div to prevent double-announcement — the hidden native input handles screen reader output.',
         managedByComponent: true,
       },
       {
         name: 'role="alert"',
-        description: 'Applied to the Error sub-component so screen readers immediately announce validation errors.',
+        description:
+          'Applied to the Error sub-component so screen readers immediately announce validation errors.',
         managedByComponent: true,
       },
       {
         name: 'aria-live="polite"',
-        description: 'Applied to the Error sub-component to announce error changes without interrupting the user.',
+        description:
+          'Applied to the Error sub-component to announce error changes without interrupting the user.',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Space',
-        behavior: 'Toggles the checkbox checked state. Handled natively by the hidden input element.',
+        behavior:
+          'Toggles the checkbox checked state. Handled natively by the hidden input element.',
       },
       {
         key: 'Tab',
-        behavior: 'Moves focus to or from the checkbox input. Focus ring appears only on keyboard focus via focus-visible.',
+        behavior:
+          'Moves focus to or from the checkbox input. Focus ring appears only on keyboard focus via focus-visible.',
       },
     ],
     focusManagement:
@@ -280,9 +329,7 @@ export const checkboxEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-  ],
+  npmDependencies: [{ name: 'clsx' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -336,7 +383,8 @@ export default function BasicCheckbox() {
     },
     {
       title: 'Uncontrolled with Description',
-      description: 'An uncontrolled checkbox using defaultChecked with a description for additional context.',
+      description:
+        'An uncontrolled checkbox using defaultChecked with a description for additional context.',
       code: `import { Checkbox } from 'vayu-ui';
 
 export default function DescriptionCheckbox() {
@@ -378,7 +426,8 @@ export default function ErrorCheckbox() {
     },
     {
       title: 'Indeterminate Select All',
-      description: 'A parent checkbox with indeterminate state controlling a group of child checkboxes, implementing a select-all pattern.',
+      description:
+        'A parent checkbox with indeterminate state controlling a group of child checkboxes, implementing a select-all pattern.',
       code: `import { Checkbox } from 'vayu-ui';
 import { useState } from 'react';
 
@@ -437,25 +486,29 @@ export default function SelectAllCheckbox() {
       title: 'Using onChange from HTMLAttributes instead of the Checkbox prop',
       bad: '<Checkbox onChange={(e: React.ChangeEvent) => ...}>...</Checkbox>',
       good: '<Checkbox onChange={(checked: boolean) => ...}>...</Checkbox>',
-      reason: 'The Checkbox onChange prop receives a boolean (the new checked state), not a React ChangeEvent. The component\'s types omit the HTML div onChange to prevent this mistake.',
+      reason:
+        "The Checkbox onChange prop receives a boolean (the new checked state), not a React ChangeEvent. The component's types omit the HTML div onChange to prevent this mistake.",
     },
     {
       title: 'Setting indeterminate via ref on the Checkbox root',
       bad: 'const ref = useRef(); ref.current.indeterminate = true; <Checkbox ref={ref}>...</Checkbox>',
       good: '<Checkbox indeterminate={isIndeterminate}>...</Checkbox>',
-      reason: 'The ref on Checkbox points to the wrapper div, not the input. The indeterminate prop is handled internally via useLayoutEffect on the hidden native input element.',
+      reason:
+        'The ref on Checkbox points to the wrapper div, not the input. The indeterminate prop is handled internally via useLayoutEffect on the hidden native input element.',
     },
     {
       title: 'Using Checkbox.Indicator outside Checkbox',
       bad: '<div><Checkbox.Indicator /></div>',
       good: '<Checkbox><Checkbox.Indicator /></Checkbox>',
-      reason: 'Checkbox.Indicator reads state from CheckboxContext. Using it outside a Checkbox parent throws an error because useCheckboxContext requires a provider.',
+      reason:
+        'Checkbox.Indicator reads state from CheckboxContext. Using it outside a Checkbox parent throws an error because useCheckboxContext requires a provider.',
     },
     {
       title: 'Hardcoding error styling instead of using the error prop',
       bad: '<Checkbox className="border-red-500"><Checkbox.Indicator /><Checkbox.Label>...</Checkbox.Label></Checkbox>',
       good: '<Checkbox error><Checkbox.Indicator /><Checkbox.Label>...</Checkbox.Label></Checkbox>',
-      reason: 'Hardcoding colors bypasses the design tokens (destructive) and does not set aria-invalid="true" on the input. Always use the error prop for proper styling and accessibility.',
+      reason:
+        'Hardcoding colors bypasses the design tokens (destructive) and does not set aria-invalid="true" on the input. Always use the error prop for proper styling and accessibility.',
     },
   ],
 };

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { forwardRef } from "react";
-import { clsx } from "clsx";
-import { useVideoPlayer } from "./VideoPlayer";
-import type { VideoPlayerLoadingProps, VideoPlayerErrorProps } from "./types";
+import { forwardRef } from 'react';
+import { clsx } from 'clsx';
+import { useVideoPlayer } from './VideoPlayer';
+import type { VideoPlayerLoadingProps, VideoPlayerErrorProps } from './types';
 
 // ============================================================================
 // Loading overlay
@@ -21,9 +21,9 @@ export const VideoPlayerLoading = forwardRef<HTMLDivElement, VideoPlayerLoadingP
         role="status"
         aria-live="polite"
         className={clsx(
-          "absolute inset-0 flex items-center justify-center",
-          "bg-black/40 backdrop-blur-sm",
-          className
+          'absolute inset-0 flex items-center justify-center',
+          'bg-black/40 backdrop-blur-sm',
+          className,
         )}
         {...props}
       >
@@ -53,10 +53,10 @@ export const VideoPlayerLoading = forwardRef<HTMLDivElement, VideoPlayerLoadingP
         </div>
       </div>
     );
-  }
+  },
 );
 
-VideoPlayerLoading.displayName = "VideoPlayer.Loading";
+VideoPlayerLoading.displayName = 'VideoPlayer.Loading';
 
 // ============================================================================
 // Error display
@@ -74,10 +74,10 @@ export const VideoPlayerError = forwardRef<HTMLDivElement, VideoPlayerErrorProps
         role="alert"
         aria-live="assertive"
         className={clsx(
-          "absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 p-3",
-          "bg-destructive/90 text-destructive-content",
-          "text-sm",
-          className
+          'absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 p-3',
+          'bg-destructive/90 text-destructive-content',
+          'text-sm',
+          className,
         )}
         {...props}
       >
@@ -99,7 +99,7 @@ export const VideoPlayerError = forwardRef<HTMLDivElement, VideoPlayerErrorProps
         </button>
       </div>
     );
-  }
+  },
 );
 
-VideoPlayerError.displayName = "VideoPlayer.Error";
+VideoPlayerError.displayName = 'VideoPlayer.Error';

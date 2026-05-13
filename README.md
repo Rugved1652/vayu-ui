@@ -39,7 +39,7 @@ npm install vayu-ui
 ```
 
 ```tsx
-import { Button } from "vayu-ui";
+import { Button } from 'vayu-ui';
 
 export default function App() {
   return (
@@ -69,18 +69,16 @@ Vayu UI uses semantic design tokens defined in CSS via Tailwind v4's `@theme`:
 
 ```tsx
 <div className="bg-surface text-surface-content rounded-surface shadow-surface">
-  <button className="bg-brand text-brand-content rounded-control shadow-control">
-    Action
-  </button>
+  <button className="bg-brand text-brand-content rounded-control shadow-control">Action</button>
 </div>
 ```
 
-| Token Layer | Class Prefix | Use For |
-|---|---|---|
-| Canvas | `bg-canvas`, `text-canvas-content` | App backgrounds |
-| Surface | `bg-surface`, `text-surface-content` | Cards, containers |
-| Elevated | `bg-elevated`, `text-elevated-content` | Modals, dropdowns |
-| Brand | `bg-brand`, `text-brand-content` | Primary actions |
+| Token Layer | Class Prefix                           | Use For           |
+| ----------- | -------------------------------------- | ----------------- |
+| Canvas      | `bg-canvas`, `text-canvas-content`     | App backgrounds   |
+| Surface     | `bg-surface`, `text-surface-content`   | Cards, containers |
+| Elevated    | `bg-elevated`, `text-elevated-content` | Modals, dropdowns |
+| Brand       | `bg-brand`, `text-brand-content`       | Primary actions   |
 
 ## Components
 
@@ -191,6 +189,7 @@ npm run dev
 ## Documentation
 
 <!-- TODO: add docs site URL -->
+
 Full documentation with interactive examples is available in the docs app.
 
 ## License

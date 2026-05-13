@@ -58,13 +58,19 @@ function BasicDashboardDemo() {
       <GridLayout layout={layout} onLayoutChange={setLayout} cols={12} rowHeight={60} gap={12}>
         <GridLayout.Container>
           {layout.map((item) => {
-            const meta = widgetLabels[item.i] ?? { title: item.i, icon: 'file', color: 'bg-muted text-muted-content' };
+            const meta = widgetLabels[item.i] ?? {
+              title: item.i,
+              icon: 'file',
+              color: 'bg-muted text-muted-content',
+            };
             const Icon = ICONS[meta.icon] ?? FileText;
             return (
               <GridLayout.Item key={item.i} id={item.i}>
                 <div className="flex items-center gap-3 p-3 bg-surface border border-border rounded-surface h-full overflow-hidden hover:border-brand/30 transition-colors">
                   <GridLayout.DragHandle />
-                  <div className={`flex items-center justify-center w-9 h-9 shrink-0 rounded-control ${meta.color}`}>
+                  <div
+                    className={`flex items-center justify-center w-9 h-9 shrink-0 rounded-control ${meta.color}`}
+                  >
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -112,20 +118,27 @@ function ResizableDashboardDemo() {
   return (
     <div>
       <p className="text-xs font-secondary text-muted-content mb-3">
-        Resizable — Drag to reposition, use corner handles to resize. Shift + Arrow keys for keyboard resize.
+        Resizable — Drag to reposition, use corner handles to resize. Shift + Arrow keys for
+        keyboard resize.
       </p>
 
       <GridLayout layout={layout} onLayoutChange={setLayout} cols={12} rowHeight={60} gap={12}>
         <GridLayout.Container>
           {layout.map((item) => {
-            const meta = resizableLabels[item.i] ?? { title: item.i, icon: 'file', color: 'bg-muted text-muted-content' };
+            const meta = resizableLabels[item.i] ?? {
+              title: item.i,
+              icon: 'file',
+              color: 'bg-muted text-muted-content',
+            };
             const Icon = ICONS[meta.icon] ?? FileText;
             return (
               <GridLayout.Item key={item.i} id={item.i}>
                 <div className="flex flex-col gap-2 p-4 bg-surface border border-border rounded-surface h-full overflow-hidden hover:border-brand/30 transition-colors">
                   <div className="flex items-center justify-between">
                     <GridLayout.DragHandle />
-                    <div className={`flex items-center justify-center w-8 h-8 rounded-control ${meta.color}`}>
+                    <div
+                      className={`flex items-center justify-center w-8 h-8 rounded-control ${meta.color}`}
+                    >
                       <Icon className="w-4 h-4" />
                     </div>
                   </div>
@@ -167,7 +180,8 @@ function StaticItemsDemo() {
   return (
     <div>
       <p className="text-xs font-secondary text-muted-content mb-3">
-        Static Items — Header and sidebar are locked (static: true). Drag the other widgets around them.
+        Static Items — Header and sidebar are locked (static: true). Drag the other widgets around
+        them.
       </p>
 
       <GridLayout layout={layout} onLayoutChange={setLayout} cols={12} rowHeight={50} gap={12}>
@@ -185,7 +199,9 @@ function StaticItemsDemo() {
                 >
                   {!isStatic && <GridLayout.DragHandle />}
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-secondary font-semibold truncate ${isStatic ? 'text-muted-content' : 'text-surface-content'}`}>
+                    <p
+                      className={`text-sm font-secondary font-semibold truncate ${isStatic ? 'text-muted-content' : 'text-surface-content'}`}
+                    >
                       {item.i.charAt(0).toUpperCase() + item.i.slice(1)}
                     </p>
                     <p className="text-xs font-secondary text-muted-content">

@@ -35,18 +35,65 @@ export const modalEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Modal',
   files: [
-    { name: 'Modal.tsx', description: 'Root component providing ModalContext, controlled/uncontrolled state management, body scroll lock, and compound component assembly' },
-    { name: 'ModalTrigger.tsx', description: 'Button that opens the modal; supports asChild for custom trigger elements with aria-expanded and aria-haspopup' },
-    { name: 'ModalOverlay.tsx', description: 'Semi-transparent backdrop with backdrop blur; optionally dismissible on click based on closeOnOverlayClick prop' },
-    { name: 'ModalContent.tsx', description: 'Portal-rendered dialog container with focus trapping, keyboard navigation, Escape handling, and auto-generated ARIA attributes' },
-    { name: 'ModalHeader.tsx', description: 'Flex row layout for the header area, typically containing Title, Description, and Close sub-components' },
-    { name: 'ModalTitle.tsx', description: 'Heading element with auto-generated id linked to aria-labelledby on the dialog' },
-    { name: 'ModalDescription.tsx', description: 'Paragraph element with auto-generated id linked to aria-describedby on the dialog' },
-    { name: 'ModalBody.tsx', description: 'Scrollable content area with flex-1 to fill available space between header and footer' },
-    { name: 'ModalFooter.tsx', description: 'Flex row layout at the bottom of the modal for action buttons (Confirm, Cancel, etc.)' },
-    { name: 'ModalClose.tsx', description: 'Button that closes the modal; renders a Lucide X icon by default, supports asChild for custom close elements' },
-    { name: 'types.ts', description: 'TypeScript type definitions for ModalProps, ModalSize, ModalContextType, and all sub-component prop interfaces' },
-    { name: 'index.ts', description: 'Barrel export file assembling the compound component via Object.assign and re-exporting all types' },
+    {
+      name: 'Modal.tsx',
+      description:
+        'Root component providing ModalContext, controlled/uncontrolled state management, body scroll lock, and compound component assembly',
+    },
+    {
+      name: 'ModalTrigger.tsx',
+      description:
+        'Button that opens the modal; supports asChild for custom trigger elements with aria-expanded and aria-haspopup',
+    },
+    {
+      name: 'ModalOverlay.tsx',
+      description:
+        'Semi-transparent backdrop with backdrop blur; optionally dismissible on click based on closeOnOverlayClick prop',
+    },
+    {
+      name: 'ModalContent.tsx',
+      description:
+        'Portal-rendered dialog container with focus trapping, keyboard navigation, Escape handling, and auto-generated ARIA attributes',
+    },
+    {
+      name: 'ModalHeader.tsx',
+      description:
+        'Flex row layout for the header area, typically containing Title, Description, and Close sub-components',
+    },
+    {
+      name: 'ModalTitle.tsx',
+      description: 'Heading element with auto-generated id linked to aria-labelledby on the dialog',
+    },
+    {
+      name: 'ModalDescription.tsx',
+      description:
+        'Paragraph element with auto-generated id linked to aria-describedby on the dialog',
+    },
+    {
+      name: 'ModalBody.tsx',
+      description:
+        'Scrollable content area with flex-1 to fill available space between header and footer',
+    },
+    {
+      name: 'ModalFooter.tsx',
+      description:
+        'Flex row layout at the bottom of the modal for action buttons (Confirm, Cancel, etc.)',
+    },
+    {
+      name: 'ModalClose.tsx',
+      description:
+        'Button that closes the modal; renders a Lucide X icon by default, supports asChild for custom close elements',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for ModalProps, ModalSize, ModalContextType, and all sub-component prop interfaces',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export file assembling the compound component via Object.assign and re-exporting all types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -56,20 +103,23 @@ export const modalEntry: ComponentRegistryEntry = {
     {
       name: 'Trigger',
       fileName: 'ModalTrigger.tsx',
-      description: 'Button that opens the modal. When asChild is true, clones the child element instead of rendering a default button.',
+      description:
+        'Button that opens the modal. When asChild is true, clones the child element instead of rendering a default button.',
       props: [
         {
           name: 'asChild',
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, merges event handlers and ARIA attributes onto the child element instead of rendering a wrapping button',
+          description:
+            'When true, merges event handlers and ARIA attributes onto the child element instead of rendering a wrapping button',
         },
         {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
-          description: 'Content to render; either a custom element (with asChild) or the button label text',
+          description:
+            'Content to render; either a custom element (with asChild) or the button label text',
         },
       ],
       supportsAsChild: true,
@@ -77,62 +127,72 @@ export const modalEntry: ComponentRegistryEntry = {
     {
       name: 'Overlay',
       fileName: 'ModalOverlay.tsx',
-      description: 'Semi-transparent backdrop with backdrop blur rendered behind the modal content. Clicking it closes the modal when closeOnOverlayClick is true.',
+      description:
+        'Semi-transparent backdrop with backdrop blur rendered behind the modal content. Clicking it closes the modal when closeOnOverlayClick is true.',
       props: [],
     },
     {
       name: 'Content',
       fileName: 'ModalContent.tsx',
-      description: 'Portal-rendered dialog container. Handles focus trapping, keyboard navigation (Escape and Tab), and links Title/Description via ARIA attributes.',
+      description:
+        'Portal-rendered dialog container. Handles focus trapping, keyboard navigation (Escape and Tab), and links Title/Description via ARIA attributes.',
       props: [],
     },
     {
       name: 'Header',
       fileName: 'ModalHeader.tsx',
-      description: 'Flex row layout for the header area, typically containing Title, Description, and Close sub-components.',
+      description:
+        'Flex row layout for the header area, typically containing Title, Description, and Close sub-components.',
       props: [],
     },
     {
       name: 'Title',
       fileName: 'ModalTitle.tsx',
-      description: 'Heading element whose auto-generated id is linked to the dialog via aria-labelledby for screen reader access.',
+      description:
+        'Heading element whose auto-generated id is linked to the dialog via aria-labelledby for screen reader access.',
       props: [],
     },
     {
       name: 'Description',
       fileName: 'ModalDescription.tsx',
-      description: 'Paragraph element whose auto-generated id is linked to the dialog via aria-describedby for screen reader access.',
+      description:
+        'Paragraph element whose auto-generated id is linked to the dialog via aria-describedby for screen reader access.',
       props: [],
     },
     {
       name: 'Body',
       fileName: 'ModalBody.tsx',
-      description: 'Scrollable content area with flex-1 to fill available space between the header and footer.',
+      description:
+        'Scrollable content area with flex-1 to fill available space between the header and footer.',
       props: [],
     },
     {
       name: 'Footer',
       fileName: 'ModalFooter.tsx',
-      description: 'Flex row layout pinned to the bottom of the modal for action buttons (Confirm, Cancel, etc.).',
+      description:
+        'Flex row layout pinned to the bottom of the modal for action buttons (Confirm, Cancel, etc.).',
       props: [],
     },
     {
       name: 'Close',
       fileName: 'ModalClose.tsx',
-      description: 'Button that closes the modal. Renders a Lucide X icon by default. When asChild is true, clones the child element instead.',
+      description:
+        'Button that closes the modal. Renders a Lucide X icon by default. When asChild is true, clones the child element instead.',
       props: [
         {
           name: 'asChild',
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true, merges the close handler onto the child element instead of rendering the default X icon button',
+          description:
+            'When true, merges the close handler onto the child element instead of rendering the default X icon button',
         },
         {
           name: 'children',
           type: 'React.ReactNode',
           required: false,
-          description: 'Custom content for the close button; when omitted, renders the default Lucide X icon',
+          description:
+            'Custom content for the close button; when omitted, renders the default Lucide X icon',
         },
       ],
       supportsAsChild: true,
@@ -146,7 +206,8 @@ export const modalEntry: ComponentRegistryEntry = {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description: 'Modal sub-components (Trigger, Content, Header, etc.) composing the full modal UI',
+      description:
+        'Modal sub-components (Trigger, Content, Header, etc.) composing the full modal UI',
     },
     {
       name: 'open',
@@ -169,10 +230,11 @@ export const modalEntry: ComponentRegistryEntry = {
     },
     {
       name: 'size',
-      type: "ModalSize",
+      type: 'ModalSize',
       required: false,
       defaultValue: "'md'",
-      description: 'Width preset for the modal dialog. Maps to maxWidth: sm=28rem, md=32rem, lg=40rem, xl=48rem, full=calc(100vw - 4rem)',
+      description:
+        'Width preset for the modal dialog. Maps to maxWidth: sm=28rem, md=32rem, lg=40rem, xl=48rem, full=calc(100vw - 4rem)',
       options: ['sm', 'md', 'lg', 'xl', 'full'],
     },
     {
@@ -207,7 +269,8 @@ export const modalEntry: ComponentRegistryEntry = {
       prop: 'open',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Whether the modal is visible. In controlled mode, set via the open prop; in uncontrolled mode, toggled by Trigger and Close.',
+      description:
+        'Whether the modal is visible. In controlled mode, set via the open prop; in uncontrolled mode, toggled by Trigger and Close.',
     },
     {
       name: 'size',
@@ -222,14 +285,16 @@ export const modalEntry: ComponentRegistryEntry = {
       prop: 'closeOnOverlayClick',
       isBoolean: true,
       defaultValue: 'true',
-      description: 'Whether clicking the overlay backdrop dismisses the modal. Disable for critical confirmation dialogs.',
+      description:
+        'Whether clicking the overlay backdrop dismisses the modal. Disable for critical confirmation dialogs.',
     },
     {
       name: 'closeOnEscape',
       prop: 'closeOnEscape',
       isBoolean: true,
       defaultValue: 'true',
-      description: 'Whether pressing Escape dismisses the modal. Disable for mandatory user-action dialogs.',
+      description:
+        'Whether pressing Escape dismisses the modal. Disable for mandatory user-action dialogs.',
     },
   ],
 
@@ -238,27 +303,32 @@ export const modalEntry: ComponentRegistryEntry = {
     {
       name: 'onOpenChange',
       signature: '(open: boolean) => void',
-      description: 'Fired when the modal open state changes (opened via Trigger, closed via Close/Escape/overlay click). Use this in controlled mode.',
+      description:
+        'Fired when the modal open state changes (opened via Trigger, closed via Close/Escape/overlay click). Use this in controlled mode.',
     },
     {
       name: 'onClick (Trigger)',
       signature: '(event: React.MouseEvent<HTMLButtonElement>) => void',
-      description: 'Fired when the Trigger is clicked, before the modal opens. Call event.preventDefault() to prevent opening.',
+      description:
+        'Fired when the Trigger is clicked, before the modal opens. Call event.preventDefault() to prevent opening.',
     },
     {
       name: 'onClick (Overlay)',
       signature: '(event: React.MouseEvent<HTMLDivElement>) => void',
-      description: 'Fired when the Overlay is clicked. If closeOnOverlayClick is true (default), the modal closes after the handler.',
+      description:
+        'Fired when the Overlay is clicked. If closeOnOverlayClick is true (default), the modal closes after the handler.',
     },
     {
       name: 'onClick (Close)',
       signature: '(event: React.MouseEvent<HTMLButtonElement>) => void',
-      description: 'Fired when the Close button is clicked, before the modal closes. Call event.preventDefault() to prevent closing.',
+      description:
+        'Fired when the Close button is clicked, before the modal closes. Call event.preventDefault() to prevent closing.',
     },
     {
       name: 'onKeyDown (Content)',
       signature: '(event: React.KeyboardEvent<HTMLDivElement>) => void',
-      description: 'Fired on key down within the modal content. Escape closes the modal; Tab/Shift+Tab cycle focus within the trap.',
+      description:
+        'Fired on key down within the modal content. Escape closes the modal; Tab/Shift+Tab cycle focus within the trap.',
     },
   ],
 
@@ -268,32 +338,38 @@ export const modalEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-modal',
-        description: 'Set to "true" on Modal.Content, informing screen readers that content outside the dialog is inert',
+        description:
+          'Set to "true" on Modal.Content, informing screen readers that content outside the dialog is inert',
         managedByComponent: true,
       },
       {
         name: 'aria-labelledby',
-        description: 'Set on Modal.Content with the auto-generated id from Modal.Title, linking the dialog to its accessible name',
+        description:
+          'Set on Modal.Content with the auto-generated id from Modal.Title, linking the dialog to its accessible name',
         managedByComponent: true,
       },
       {
         name: 'aria-describedby',
-        description: 'Set on Modal.Content with the auto-generated id from Modal.Description, linking the dialog to its description',
+        description:
+          'Set on Modal.Content with the auto-generated id from Modal.Description, linking the dialog to its description',
         managedByComponent: true,
       },
       {
         name: 'aria-expanded',
-        description: 'Set on Modal.Trigger to indicate whether the modal is currently open or closed',
+        description:
+          'Set on Modal.Trigger to indicate whether the modal is currently open or closed',
         managedByComponent: true,
       },
       {
         name: 'aria-haspopup',
-        description: 'Set to "dialog" on Modal.Trigger to indicate that activating it opens a dialog',
+        description:
+          'Set to "dialog" on Modal.Trigger to indicate that activating it opens a dialog',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Set to "true" on Modal.Overlay to hide the backdrop from the accessibility tree',
+        description:
+          'Set to "true" on Modal.Overlay to hide the backdrop from the accessibility tree',
         managedByComponent: true,
       },
       {
@@ -305,15 +381,18 @@ export const modalEntry: ComponentRegistryEntry = {
     keyboardInteractions: [
       {
         key: 'Escape',
-        behavior: 'Closes the modal when focus is inside the content panel (unless closeOnEscape is false)',
+        behavior:
+          'Closes the modal when focus is inside the content panel (unless closeOnEscape is false)',
       },
       {
         key: 'Tab',
-        behavior: 'Cycles focus to the next focusable element inside the modal; wraps from last to first element',
+        behavior:
+          'Cycles focus to the next focusable element inside the modal; wraps from last to first element',
       },
       {
         key: 'Shift+Tab',
-        behavior: 'Cycles focus to the previous focusable element inside the modal; wraps from first to last element',
+        behavior:
+          'Cycles focus to the previous focusable element inside the modal; wraps from first to last element',
       },
     ],
     focusManagement:
@@ -324,10 +403,7 @@ export const modalEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'lucide-react' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'lucide-react' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -335,19 +411,23 @@ export const modalEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'button',
-      reason: 'Used as the trigger element via asChild on Modal.Trigger and as footer actions (Confirm, Cancel) via Modal.Close',
+      reason:
+        'Used as the trigger element via asChild on Modal.Trigger and as footer actions (Confirm, Cancel) via Modal.Close',
     },
     {
       slug: 'text-input',
-      reason: 'Form modals commonly contain TextInput fields for editing data (profile, settings, filters)',
+      reason:
+        'Form modals commonly contain TextInput fields for editing data (profile, settings, filters)',
     },
     {
       slug: 'typography',
-      reason: 'Used for body text, headings, and labels inside modal content for consistent styling',
+      reason:
+        'Used for body text, headings, and labels inside modal content for consistent styling',
     },
     {
       slug: 'alert',
-      reason: 'Alerts can appear inside a modal for form validation feedback or warning messages before destructive actions',
+      reason:
+        'Alerts can appear inside a modal for form validation feedback or warning messages before destructive actions',
     },
     {
       slug: 'divider',
@@ -359,7 +439,8 @@ export const modalEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Uncontrolled Modal',
-      description: 'State is managed internally. Use Modal.Trigger to open and Modal.Close or overlay/Escape to close.',
+      description:
+        'State is managed internally. Use Modal.Trigger to open and Modal.Close or overlay/Escape to close.',
       code: `import { Modal, Button, Typography } from 'vayu-ui';
 
 export default function UncontrolledModalDemo() {
@@ -400,7 +481,8 @@ export default function UncontrolledModalDemo() {
     },
     {
       title: 'Controlled Modal',
-      description: 'Control the modal state externally with open and onOpenChange props for programmatic opening.',
+      description:
+        'Control the modal state externally with open and onOpenChange props for programmatic opening.',
       code: `import { useState } from 'react';
 import { Modal, Button, Typography } from 'vayu-ui';
 
@@ -450,7 +532,8 @@ export default function ControlledModalDemo() {
     },
     {
       title: 'Form Modal',
-      description: 'Modal containing a form with labeled inputs for editing user profile information.',
+      description:
+        'Modal containing a form with labeled inputs for editing user profile information.',
       code: `import { Modal, Button, Typography } from 'vayu-ui';
 
 export default function FormModalDemo() {
@@ -512,7 +595,8 @@ export default function FormModalDemo() {
     },
     {
       title: 'Destructive Action Confirmation',
-      description: 'Small modal for confirming destructive actions with closeOnOverlayClick disabled to force explicit user choice.',
+      description:
+        'Small modal for confirming destructive actions with closeOnOverlayClick disabled to force explicit user choice.',
       code: `import { useState } from 'react';
 import { Modal, Button, Typography } from 'vayu-ui';
 
@@ -570,7 +654,8 @@ export default function DestructiveModalDemo() {
     },
     {
       title: 'Size Variants',
-      description: 'Demonstrates all five size presets (sm, md, lg, xl, full) for different content needs.',
+      description:
+        'Demonstrates all five size presets (sm, md, lg, xl, full) for different content needs.',
       code: `import { Modal, Button, Typography } from 'vayu-ui';
 
 export default function SizeModalDemo() {
@@ -617,7 +702,8 @@ export default function SizeModalDemo() {
     },
     {
       title: 'Configuration Options',
-      description: 'Demonstrates disabling overlay click close and Escape key close for important notices.',
+      description:
+        'Demonstrates disabling overlay click close and Escape key close for important notices.',
       code: `import { Modal, Button, Typography } from 'vayu-ui';
 
 export default function ConfigModalDemo() {
@@ -697,25 +783,29 @@ export default function ConfigModalDemo() {
       title: 'Omitting Modal.Title',
       bad: '<Modal.Content><Modal.Header><Modal.Description>Settings</Modal.Description></Modal.Header></Modal.Content>',
       good: '<Modal.Content><Modal.Header><Modal.Title>Settings</Modal.Title><Modal.Description>Configure your preferences.</Modal.Description></Modal.Header></Modal.Content>',
-      reason: 'The dialog requires an accessible name via aria-labelledby, which is linked to Modal.Title. Without it, screen readers cannot identify the modal purpose.',
+      reason:
+        'The dialog requires an accessible name via aria-labelledby, which is linked to Modal.Title. Without it, screen readers cannot identify the modal purpose.',
     },
     {
       title: 'Mixing controlled and uncontrolled props',
       bad: '<Modal open={isVisible} defaultOpen={true}>',
       good: '<Modal open={isVisible} onOpenChange={setIsVisible}>',
-      reason: 'Passing both open and defaultOpen creates conflicting state management. Use open + onOpenChange for controlled mode, or defaultOpen for uncontrolled mode — never both.',
+      reason:
+        'Passing both open and defaultOpen creates conflicting state management. Use open + onOpenChange for controlled mode, or defaultOpen for uncontrolled mode — never both.',
     },
     {
       title: 'Using Modal.Close without asChild for custom content',
       bad: '<Modal.Close><Button variant="destructive">Delete</Button></Modal.Close>',
       good: '<Modal.Close asChild><Button variant="destructive">Delete</Button></Modal.Close>',
-      reason: 'Without asChild, Modal.Close wraps children in a <button> element, resulting in a nested <button> inside <button> which is invalid HTML and causes accessibility issues.',
+      reason:
+        'Without asChild, Modal.Close wraps children in a <button> element, resulting in a nested <button> inside <button> which is invalid HTML and causes accessibility issues.',
     },
     {
       title: 'Nesting modals inside each other',
       bad: '<Modal><Modal.Content><Modal><Modal.Trigger>Open inner</Modal.Trigger></Modal></Modal.Content></Modal>',
       good: 'Close the first modal before opening the second, or use a different overlay pattern like a drawer for the second layer.',
-      reason: 'Nesting modals creates conflicting focus traps, z-index stacking issues, and broken body scroll lock management. Each modal expects to be the top-level overlay.',
+      reason:
+        'Nesting modals creates conflicting focus traps, z-index stacking issues, and broken body scroll lock management. Each modal expects to be the top-level overlay.',
     },
   ],
 };

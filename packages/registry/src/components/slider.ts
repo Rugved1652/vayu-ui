@@ -89,8 +89,7 @@ export const sliderEntry: ComponentRegistryEntry = {
           name: 'values',
           type: 'number[]',
           required: true,
-          description:
-            'Current thumb values used to calculate the range fill position',
+          description: 'Current thumb values used to calculate the range fill position',
         },
       ],
     },
@@ -146,15 +145,13 @@ export const sliderEntry: ComponentRegistryEntry = {
           name: 'totalThumbs',
           type: 'number',
           required: true,
-          description:
-            'Total number of thumbs, used for multi-thumb ARIA labels',
+          description: 'Total number of thumbs, used for multi-thumb ARIA labels',
         },
         {
           name: 'label',
           type: 'string',
           required: false,
-          description:
-            'Accessible label for the slider, included in aria-valuetext',
+          description: 'Accessible label for the slider, included in aria-valuetext',
         },
         {
           name: 'isDragging',
@@ -172,8 +169,7 @@ export const sliderEntry: ComponentRegistryEntry = {
           name: 'onValueChange',
           type: '(values: number[]) => void',
           required: true,
-          description:
-            'Callback fired when the value changes during drag or keyboard interaction',
+          description: 'Callback fired when the value changes during drag or keyboard interaction',
         },
         {
           name: 'onValueCommit',
@@ -258,8 +254,7 @@ export const sliderEntry: ComponentRegistryEntry = {
       name: 'onValueChange',
       type: '(value: number[]) => void',
       required: false,
-      description:
-        'Callback fired on every value change during drag or keyboard interaction',
+      description: 'Callback fired on every value change during drag or keyboard interaction',
     },
     {
       name: 'onValueCommit',
@@ -334,20 +329,17 @@ export const sliderEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-valuemin',
-        description:
-          'Applied to each thumb, reflecting the minimum allowed value.',
+        description: 'Applied to each thumb, reflecting the minimum allowed value.',
         managedByComponent: true,
       },
       {
         name: 'aria-valuemax',
-        description:
-          'Applied to each thumb, reflecting the maximum allowed value.',
+        description: 'Applied to each thumb, reflecting the maximum allowed value.',
         managedByComponent: true,
       },
       {
         name: 'aria-valuenow',
-        description:
-          'Applied to each thumb, reflecting its current numeric value.',
+        description: 'Applied to each thumb, reflecting its current numeric value.',
         managedByComponent: true,
       },
       {
@@ -396,8 +388,7 @@ export const sliderEntry: ComponentRegistryEntry = {
       },
       {
         key: 'Tab',
-        behavior:
-          'Moves focus between thumbs (when multiple) and other focusable elements',
+        behavior: 'Moves focus between thumbs (when multiple) and other focusable elements',
       },
     ],
     focusManagement:
@@ -502,8 +493,7 @@ export default function PriceRangeSlider() {
     },
     {
       title: 'Controlled Slider',
-      description:
-        'A fully controlled slider with external state management and a reset button.',
+      description: 'A fully controlled slider with external state management and a reset button.',
       code: `import { Slider, Typography, Button } from 'vayu-ui';
 import { useState } from 'react';
 
@@ -535,8 +525,7 @@ export default function ControlledSlider() {
     },
     {
       title: 'Disabled Slider',
-      description:
-        'A slider in the disabled state with reduced opacity and no interaction.',
+      description: 'A slider in the disabled state with reduced opacity and no interaction.',
       code: `import { Slider, Typography } from 'vayu-ui';
 
 const { Label } = Typography;

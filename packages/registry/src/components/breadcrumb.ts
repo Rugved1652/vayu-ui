@@ -8,22 +8,12 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
   category: 'navigation',
 
   // ── Description ───────────────────────────────────────
-  description:
-    'A navigation trail showing the user\'s location within a page hierarchy.',
+  description: "A navigation trail showing the user's location within a page hierarchy.",
   longDescription:
     'The Breadcrumb component uses the compound component pattern (Breadcrumb.List, Breadcrumb.Item, Breadcrumb.Link, Breadcrumb.Page, Breadcrumb.Separator, Breadcrumb.Ellipsis) to create an accessible navigation trail. It renders a semantic <nav> with an ordered list following WAI-ARIA breadcrumb patterns, supports custom separators, and provides an ellipsis indicator for collapsed paths.',
-  tags: [
-    'breadcrumb',
-    'navigation',
-    'trail',
-    'hierarchy',
-    'path',
-    'nav',
-    'wayfinding',
-    'sitemap',
-  ],
+  tags: ['breadcrumb', 'navigation', 'trail', 'hierarchy', 'path', 'nav', 'wayfinding', 'sitemap'],
   useCases: [
-    'Showing the user\'s current location within a deep page hierarchy',
+    "Showing the user's current location within a deep page hierarchy",
     'Providing quick navigation back to parent pages in multi-level sites',
     'Improving SEO with semantic breadcrumb markup that search engines can parse',
     'Helping users understand site structure in documentation or e-commerce pages',
@@ -33,15 +23,39 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Breadcrumb',
   files: [
-    { name: 'Breadcrumb.tsx', description: 'Root navigation container rendering a <nav> with aria-label="breadcrumb"' },
-    { name: 'BreadCrumbList.tsx', description: 'Ordered list wrapper with flex layout for breadcrumb items' },
-    { name: 'BreadCrumbItem.tsx', description: 'List item container for individual breadcrumb entries' },
-    { name: 'BreadCrumbLink.tsx', description: 'Clickable navigation link using Next.js Link with focus-visible styles' },
-    { name: 'BreadCrumbPage.tsx', description: 'Current page indicator span with aria-current="page"' },
-    { name: 'BreadCrumbSeparator.tsx', description: 'Visual separator between items, defaults to a chevron icon' },
-    { name: 'BreadcrumbEllipsis.tsx', description: 'Overflow indicator for collapsed breadcrumb paths using a MoreHorizontal icon' },
+    {
+      name: 'Breadcrumb.tsx',
+      description: 'Root navigation container rendering a <nav> with aria-label="breadcrumb"',
+    },
+    {
+      name: 'BreadCrumbList.tsx',
+      description: 'Ordered list wrapper with flex layout for breadcrumb items',
+    },
+    {
+      name: 'BreadCrumbItem.tsx',
+      description: 'List item container for individual breadcrumb entries',
+    },
+    {
+      name: 'BreadCrumbLink.tsx',
+      description: 'Clickable navigation link using Next.js Link with focus-visible styles',
+    },
+    {
+      name: 'BreadCrumbPage.tsx',
+      description: 'Current page indicator span with aria-current="page"',
+    },
+    {
+      name: 'BreadCrumbSeparator.tsx',
+      description: 'Visual separator between items, defaults to a chevron icon',
+    },
+    {
+      name: 'BreadcrumbEllipsis.tsx',
+      description: 'Overflow indicator for collapsed breadcrumb paths using a MoreHorizontal icon',
+    },
     { name: 'types.ts', description: 'TypeScript type definitions for all breadcrumb props' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting all sub-components and types' },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting all sub-components and types',
+    },
   ],
   targetPath: 'src/components',
 
@@ -51,7 +65,8 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
     {
       name: 'List',
       fileName: 'BreadCrumbList.tsx',
-      description: 'Ordered list container that wraps all breadcrumb items, separators, and the page indicator',
+      description:
+        'Ordered list container that wraps all breadcrumb items, separators, and the page indicator',
       props: [
         {
           name: 'children',
@@ -89,7 +104,8 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
     {
       name: 'Link',
       fileName: 'BreadCrumbLink.tsx',
-      description: 'Clickable navigation link using Next.js Link with WCAG-compliant focus ring and hover styles',
+      description:
+        'Clickable navigation link using Next.js Link with WCAG-compliant focus ring and hover styles',
       props: [
         {
           name: 'href',
@@ -133,7 +149,8 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
     {
       name: 'Separator',
       fileName: 'BreadCrumbSeparator.tsx',
-      description: 'Visual divider between breadcrumb items; defaults to a ChevronRight icon but accepts custom content',
+      description:
+        'Visual divider between breadcrumb items; defaults to a ChevronRight icon but accepts custom content',
       props: [
         {
           name: 'children',
@@ -153,7 +170,8 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
     {
       name: 'Ellipsis',
       fileName: 'BreadcrumbEllipsis.tsx',
-      description: 'Overflow indicator for collapsed breadcrumb paths, rendered as a MoreHorizontal icon with screen reader text',
+      description:
+        'Overflow indicator for collapsed breadcrumb paths, rendered as a MoreHorizontal icon with screen reader text',
       props: [
         {
           name: 'className',
@@ -190,14 +208,16 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['page'],
       defaultValue: 'page',
-      description: 'The BreadcrumbPage sub-component always renders aria-current="page" to indicate the current location in the trail. All other items are links.',
+      description:
+        'The BreadcrumbPage sub-component always renders aria-current="page" to indicate the current location in the trail. All other items are links.',
     },
     {
       name: 'collapsed',
       prop: 'BreadcrumbEllipsis (presence)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'When BreadcrumbEllipsis is present in the list, intermediate breadcrumb levels are collapsed with a "More" indicator. Screen readers announce "More" via sr-only text.',
+      description:
+        'When BreadcrumbEllipsis is present in the list, intermediate breadcrumb levels are collapsed with a "More" indicator. Screen readers announce "More" via sr-only text.',
     },
   ],
 
@@ -206,7 +226,8 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
     {
       name: 'onClick (BreadcrumbLink)',
       signature: '(event: React.MouseEvent<HTMLAnchorElement>) => void',
-      description: 'Fired when a breadcrumb link is clicked. Handled natively by Next.js Link for client-side navigation.',
+      description:
+        'Fired when a breadcrumb link is clicked. Handled natively by Next.js Link for client-side navigation.',
     },
   ],
 
@@ -215,24 +236,28 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-label',
-        description: 'Applied to the root <nav> element with value "breadcrumb" to identify the navigation landmark.',
+        description:
+          'Applied to the root <nav> element with value "breadcrumb" to identify the navigation landmark.',
         managedByComponent: true,
       },
       {
         name: 'aria-current',
-        description: 'Applied to BreadcrumbPage span with value "page" to indicate the current page in the breadcrumb trail.',
+        description:
+          'Applied to BreadcrumbPage span with value "page" to indicate the current page in the breadcrumb trail.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Applied to BreadcrumbSeparator and BreadcrumbEllipsis with value "true" since they are decorative elements not meant for screen readers.',
+        description:
+          'Applied to BreadcrumbSeparator and BreadcrumbEllipsis with value "true" since they are decorative elements not meant for screen readers.',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Tab',
-        behavior: 'Moves focus between BreadcrumbLink elements in order. BreadcrumbPage is not focusable since it represents the current page.',
+        behavior:
+          'Moves focus between BreadcrumbLink elements in order. BreadcrumbPage is not focusable since it represents the current page.',
       },
       {
         key: 'Shift+Tab',
@@ -251,11 +276,7 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'tailwind-merge' },
-    { name: 'lucide-react' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'tailwind-merge' }, { name: 'lucide-react' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -271,7 +292,8 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'sidebar',
-      reason: 'Sidebar navigation pairs with breadcrumbs to show both global and hierarchical position',
+      reason:
+        'Sidebar navigation pairs with breadcrumbs to show both global and hierarchical position',
     },
     {
       slug: 'tabs',
@@ -283,7 +305,8 @@ export const breadcrumbEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Basic Breadcrumb',
-      description: 'Standard breadcrumb trail with Home > Components > Breadcrumb using the default chevron separator.',
+      description:
+        'Standard breadcrumb trail with Home > Components > Breadcrumb using the default chevron separator.',
       code: `import {
   Breadcrumb,
   BreadcrumbItem,
@@ -316,7 +339,8 @@ export default function BasicBreadcrumb() {
     },
     {
       title: 'Custom Separator',
-      description: 'Breadcrumb with a "/" separator passed as children to BreadcrumbSeparator instead of the default chevron icon.',
+      description:
+        'Breadcrumb with a "/" separator passed as children to BreadcrumbSeparator instead of the default chevron icon.',
       code: `import {
   Breadcrumb,
   BreadcrumbItem,
@@ -349,7 +373,8 @@ export default function CustomSeparatorBreadcrumb() {
     },
     {
       title: 'Collapsed Breadcrumb',
-      description: 'Breadcrumb with an ellipsis indicator to collapse intermediate levels in deep navigation hierarchies.',
+      description:
+        'Breadcrumb with an ellipsis indicator to collapse intermediate levels in deep navigation hierarchies.',
       code: `import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -393,31 +418,36 @@ export default function CollapsedBreadcrumb() {
       title: 'Making BreadcrumbPage clickable',
       bad: '<BreadcrumbItem><BreadcrumbLink href="/current-page">Current Page</BreadcrumbLink></BreadcrumbItem>',
       good: '<BreadcrumbItem><BreadcrumbPage>Current Page</BreadcrumbPage></BreadcrumbItem>',
-      reason: 'The current page in a breadcrumb trail must not be a link — it should use BreadcrumbPage which renders aria-current="page". Linking to the current page violates WAI-ARIA breadcrumb pattern and confuses screen reader users.',
+      reason:
+        'The current page in a breadcrumb trail must not be a link — it should use BreadcrumbPage which renders aria-current="page". Linking to the current page violates WAI-ARIA breadcrumb pattern and confuses screen reader users.',
     },
     {
       title: 'Using BreadcrumbLink or BreadcrumbPage outside BreadcrumbList',
       bad: '<Breadcrumb><BreadcrumbLink href="/">Home</BreadcrumbLink></Breadcrumb>',
       good: '<Breadcrumb><BreadcrumbList><BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem></BreadcrumbList></Breadcrumb>',
-      reason: 'BreadcrumbLink and BreadcrumbPage must be wrapped in BreadcrumbItem and placed inside BreadcrumbList. The semantic structure requires <nav> > <ol> > <li> for proper accessibility.',
+      reason:
+        'BreadcrumbLink and BreadcrumbPage must be wrapped in BreadcrumbItem and placed inside BreadcrumbList. The semantic structure requires <nav> > <ol> > <li> for proper accessibility.',
     },
     {
       title: 'Removing the separator between items',
       bad: '<BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem><BreadcrumbItem><BreadcrumbPage>Current</BreadcrumbPage></BreadcrumbItem>',
       good: '<BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem><BreadcrumbSeparator /><BreadcrumbItem><BreadcrumbPage>Current</BreadcrumbPage></BreadcrumbItem>',
-      reason: 'Omitting BreadcrumbSeparator between items removes the visual delimiter that helps sighted users distinguish breadcrumb levels. Always include a separator between each pair of items.',
+      reason:
+        'Omitting BreadcrumbSeparator between items removes the visual delimiter that helps sighted users distinguish breadcrumb levels. Always include a separator between each pair of items.',
     },
     {
       title: 'Overriding aria-label on the root nav',
       bad: '<Breadcrumb aria-label="site navigation">...</Breadcrumb>',
       good: '<Breadcrumb>...</Breadcrumb>',
-      reason: 'The root Breadcrumb already sets aria-label="breadcrumb" which is the standard label for breadcrumb navigation landmarks. Overriding it reduces clarity for screen reader users.',
+      reason:
+        'The root Breadcrumb already sets aria-label="breadcrumb" which is the standard label for breadcrumb navigation landmarks. Overriding it reduces clarity for screen reader users.',
     },
     {
       title: 'Nesting breadcrumb components',
       bad: '<Breadcrumb><BreadcrumbList><BreadcrumbItem><Breadcrumb><BreadcrumbList>...</BreadcrumbList></Breadcrumb></BreadcrumbItem></BreadcrumbList></Breadcrumb>',
       good: 'Use a single flat Breadcrumb with BreadcrumbEllipsis to collapse deep hierarchies.',
-      reason: 'Nesting Breadcrumb components creates invalid HTML (nav inside li inside ol inside nav) and confuses assistive technologies. Use a flat structure with Ellipsis for deep paths.',
+      reason:
+        'Nesting Breadcrumb components creates invalid HTML (nav inside li inside ol inside nav) and confuses assistive technologies. Use a flat structure with Ellipsis for deep paths.',
     },
   ],
 };

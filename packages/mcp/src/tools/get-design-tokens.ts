@@ -18,9 +18,7 @@ export function registerGetDesignTokens(server: Parameters<typeof registerTool>[
     async (params) => {
       const { group } = params as { group?: string };
       const categories = group
-        ? designTokenCategories.filter((c) =>
-            c.name.toLowerCase().includes(group.toLowerCase()),
-          )
+        ? designTokenCategories.filter((c) => c.name.toLowerCase().includes(group.toLowerCase()))
         : designTokenCategories;
 
       return {

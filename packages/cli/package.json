@@ -56,7 +56,9 @@
     "dirname": "vayu-ui",
     "commands": "./dist/commands",
     "helpClass": "./dist/help.js",
-    "additionalHelpFlags": ["-h"],
+    "additionalHelpFlags": [
+      "-h"
+    ],
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-plugins"

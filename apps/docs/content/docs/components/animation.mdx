@@ -260,15 +260,15 @@ Uses common props only, but defaults `fillMode` to `'forwards'` instead of `'non
 
 ### Animation.InView
 
-| Prop         | Type                                                                                                | Default    | Description                                                        |
-| :----------- | :-------------------------------------------------------------------------------------------------- | :--------- | :----------------------------------------------------------------- |
-| `variant`    | `'fade' \| 'slide' \| 'bounce' \| 'flip' \| 'rotate' \| 'zoom' \| 'roll' \| 'jackInTheBox' \| 'hinge'` | —          | Animation type to play when the element enters the viewport.       |
-| `direction`  | `'up' \| 'down' \| 'left' \| 'right'`                                                              | `'left'`   | Direction for `slide`, `flip`, and `roll` variants.                |
-| `scale`      | `'small' \| 'medium' \| 'large'`                                                                    | `'medium'` | Scale intensity for `bounce` and `zoom` variants.                  |
-| `degrees`    | `number`                                                                                            | `-200`     | Starting rotation angle for `rotate` variant.                      |
-| `triggerOnce`| `boolean`                                                                                           | `true`     | Whether to animate only the first time the element enters view.    |
-| `threshold`  | `number`                                                                                            | `0.1`      | Intersection ratio (0–1) needed to trigger the animation.          |
-| `rootMargin` | `string`                                                                                            | `'0px'`    | Margin around the root element for IntersectionObserver.           |
+| Prop          | Type                                                                                                   | Default    | Description                                                     |
+| :------------ | :----------------------------------------------------------------------------------------------------- | :--------- | :-------------------------------------------------------------- |
+| `variant`     | `'fade' \| 'slide' \| 'bounce' \| 'flip' \| 'rotate' \| 'zoom' \| 'roll' \| 'jackInTheBox' \| 'hinge'` | —          | Animation type to play when the element enters the viewport.    |
+| `direction`   | `'up' \| 'down' \| 'left' \| 'right'`                                                                  | `'left'`   | Direction for `slide`, `flip`, and `roll` variants.             |
+| `scale`       | `'small' \| 'medium' \| 'large'`                                                                       | `'medium'` | Scale intensity for `bounce` and `zoom` variants.               |
+| `degrees`     | `number`                                                                                               | `-200`     | Starting rotation angle for `rotate` variant.                   |
+| `triggerOnce` | `boolean`                                                                                              | `true`     | Whether to animate only the first time the element enters view. |
+| `threshold`   | `number`                                                                                               | `0.1`      | Intersection ratio (0–1) needed to trigger the animation.       |
+| `rootMargin`  | `string`                                                                                               | `'0px'`    | Margin around the root element for IntersectionObserver.        |
 
 Plus all [Common Props](#common-props-all-variants).
 

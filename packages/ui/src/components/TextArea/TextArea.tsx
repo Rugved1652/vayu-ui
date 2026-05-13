@@ -59,16 +59,12 @@ const TextAreaRoot = ({
         supportTextId,
         errorTextId,
         labelId,
-        setLabelId: () => { },
+        setLabelId: () => {},
         hasSupportText,
         setHasSupportText,
       }}
     >
-      <div
-        className={cn(inputRootLayout, className)}
-        role="group"
-        aria-labelledby={labelId}
-      >
+      <div className={cn(inputRootLayout, className)} role="group" aria-labelledby={labelId}>
         {children}
       </div>
     </TextAreaContext.Provider>

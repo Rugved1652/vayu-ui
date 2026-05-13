@@ -11,7 +11,13 @@ import TreeNodeItem from './TreeNode';
 import TreeSearch from './TreeSearch';
 import TreeActions from './TreeActions';
 import TreeContainer from './TreeContainer';
-import { getAllNodeIds, getParentIds, getChildIds, findNodeInTree, getVisibleNodeIds as computeVisibleIds } from './utils';
+import {
+  getAllNodeIds,
+  getParentIds,
+  getChildIds,
+  findNodeInTree,
+  getVisibleNodeIds as computeVisibleIds,
+} from './utils';
 import type { CheckboxState, TreeNode, TreeRootProps, TreeNodesProps } from './types';
 
 // ---------------------------------------------------------------------------
@@ -48,27 +54,24 @@ const TreeRoot: React.FC<TreeRootProps> = ({
 
   // ---- Internal state ----
 
-  const [internalExpandedKeys, setInternalExpandedKeys] = useState<
-    (string | number)[]
-  >(() => (defaultExpandAll ? getAllNodeIds(data) : defaultExpandedKeys));
+  const [internalExpandedKeys, setInternalExpandedKeys] = useState<(string | number)[]>(() =>
+    defaultExpandAll ? getAllNodeIds(data) : defaultExpandedKeys,
+  );
 
-  const [internalSelectedKey, setInternalSelectedKey] = useState<
-    string | number | null
-  >(defaultSelectedKey ?? null);
+  const [internalSelectedKey, setInternalSelectedKey] = useState<string | number | null>(
+    defaultSelectedKey ?? null,
+  );
 
-  const [internalCheckedKeys, setInternalCheckedKeys] = useState<
-    (string | number)[]
-  >(defaultCheckedKeys);
+  const [internalCheckedKeys, setInternalCheckedKeys] =
+    useState<(string | number)[]>(defaultCheckedKeys);
 
   const [focusedKey, setFocusedKey] = useState<string | number | null>(null);
 
   // ---- Controlled / uncontrolled resolution ----
 
   const expandedKeys = controlledExpandedKeys ?? internalExpandedKeys;
-  const selectedKey =
-    mode === 'normal' ? (controlledSelectedKey ?? internalSelectedKey) : null;
-  const checkedKeys =
-    mode === 'checkbox' ? (controlledCheckedKeys ?? internalCheckedKeys) : [];
+  const selectedKey = mode === 'normal' ? (controlledSelectedKey ?? internalSelectedKey) : null;
+  const checkedKeys = mode === 'checkbox' ? (controlledCheckedKeys ?? internalCheckedKeys) : [];
 
   // ---- Actions ----
 
@@ -105,9 +108,7 @@ const TreeRoot: React.FC<TreeRootProps> = ({
       let next = [...checkedKeys];
 
       if (checkStrictly) {
-        next = checked
-          ? [...next, node.id]
-          : next.filter((k) => k !== node.id);
+        next = checked ? [...next, node.id] : next.filter((k) => k !== node.id);
       } else {
         // Check/uncheck self + all descendants
         const childIds = getChildIds(node);
@@ -121,9 +122,7 @@ const TreeRoot: React.FC<TreeRootProps> = ({
         getParentIds(node.id, data).forEach((parentId) => {
           const parent = findNodeInTree(parentId, data);
           if (parent?.children) {
-            const allChecked = parent.children.every((c) =>
-              next.includes(c.id),
-            );
+            const allChecked = parent.children.every((c) => next.includes(c.id));
             if (allChecked) {
               if (!next.includes(parentId)) next.push(parentId);
             } else {
@@ -135,9 +134,7 @@ const TreeRoot: React.FC<TreeRootProps> = ({
 
       if (controlledCheckedKeys === undefined) setInternalCheckedKeys(next);
 
-      const checkedNodes = next
-        .map((k) => findNodeInTree(k, data))
-        .filter(Boolean) as TreeNode[];
+      const checkedNodes = next.map((k) => findNodeInTree(k, data)).filter(Boolean) as TreeNode[];
       onCheck?.(next, checkedNodes);
     },
     [mode, checkedKeys, checkStrictly, data, controlledCheckedKeys, onCheck],
@@ -149,8 +146,7 @@ const TreeRoot: React.FC<TreeRootProps> = ({
       if (!node.children?.length) return 'unchecked';
 
       const childIds = getChildIds(node).filter((id) => id !== node.id);
-      const checkedCount = childIds.filter((id) => checkedKeys.includes(id))
-        .length;
+      const checkedCount = childIds.filter((id) => checkedKeys.includes(id)).length;
 
       if (checkedCount === 0) return 'unchecked';
       if (checkedCount === childIds.length) return 'checked';

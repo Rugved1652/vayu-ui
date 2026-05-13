@@ -3,7 +3,8 @@ import { registerTool } from '../lib/register-tool.js';
 import { allEntries } from 'vayu-ui-registry';
 
 export function registerGetInstallGuide(server: Parameters<typeof registerTool>[0]) {
-  registerTool(server,
+  registerTool(
+    server,
     'get_install_guide',
     'Get the exact CLI commands and import statements needed to install and use a component or hook. Returns vayu-ui add commands, npm install commands, and import statements. Call this before writing code to know what to install.',
     {

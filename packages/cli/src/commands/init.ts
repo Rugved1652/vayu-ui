@@ -1,16 +1,15 @@
-import { Command, Flags, ux } from '@oclif/core';
+import {Command, Flags, ux} from '@oclif/core'
 
-import { runInit } from '../utils/init-runner.js';
+import {runInit} from '../utils/init-runner.js'
 
 export default class Init extends Command {
-  static description =
-    'Sets up the Vayu UI folder structure, design tokens CSS, and Tailwind CSS v4.';
-static examples = [
+  static description = 'Sets up the Vayu UI folder structure, design tokens CSS, and Tailwind CSS v4.'
+  static examples = [
     '<%= config.bin %> init',
     '<%= config.bin %> init --path src/lib/ui',
     '<%= config.bin %> init --merge',
-  ];
-static flags = {
+  ]
+  static flags = {
     'css-path': Flags.string({
       description: 'Custom path for the main CSS file',
       required: false,
@@ -31,16 +30,16 @@ static flags = {
       default: false,
       description: 'Skip Tailwind CSS installation check',
     }),
-  };
-static summary = 'Initialize Vayu UI in your project';
+  }
+  static summary = 'Initialize Vayu UI in your project'
 
   async run(): Promise<void> {
-    const { flags } = await this.parse(Init);
+    const {flags} = await this.parse(Init)
 
-    this.log('');
-    this.log(ux.colorize('bold', '  Vayu UI Init'));
-    this.log(ux.colorize('dim', '  ─────────────────────────────────────────────────────'));
-    this.log('');
+    this.log('')
+    this.log(ux.colorize('bold', '  Vayu UI Init'))
+    this.log(ux.colorize('dim', '  ─────────────────────────────────────────────────────'))
+    this.log('')
 
     await runInit({
       cssPath: flags['css-path'],
@@ -50,14 +49,19 @@ static summary = 'Initialize Vayu UI in your project';
       root: process.cwd(),
       skipTailwind: flags['skip-tailwind'],
       uiDir: flags.path,
-    });
+    })
 
-    this.log('');
-    this.log(ux.colorize('green', '  Done! Vayu UI is ready.'));
-    this.log('');
-    this.log(ux.colorize('dim', '  Next steps:'));
-    this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli list')}       Browse available components and hooks`));
-    this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli add button')}  Add your first component`));
-    this.log('');
+    this.log('')
+    this.log(ux.colorize('green', '  Done! Vayu UI is ready.'))
+    this.log('')
+    this.log(ux.colorize('dim', '  Next steps:'))
+    this.log(
+      ux.colorize(
+        'dim',
+        `    ${ux.colorize('bold', 'npx vayu-ui-cli list')}       Browse available components and hooks`,
+      ),
+    )
+    this.log(ux.colorize('dim', `    ${ux.colorize('bold', 'npx vayu-ui-cli add button')}  Add your first component`))
+    this.log('')
   }
 }

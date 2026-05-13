@@ -46,7 +46,7 @@ const TableHeader = React.forwardRef<HTMLTableCellElement, TableHeaderProps>(
           'px-4 py-3 text-left font-primary font-semibold text-sm whitespace-nowrap',
           'text-muted-content',
           sortable &&
-          'cursor-pointer hover:bg-muted transition-colors transition-medium select-none',
+            'cursor-pointer hover:bg-muted transition-colors transition-medium select-none',
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
           className,
         )}

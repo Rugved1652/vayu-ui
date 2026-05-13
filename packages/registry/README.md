@@ -31,17 +31,13 @@ This package holds structured metadata for every Vayu UI component and hook — 
 ## Usage
 
 ```ts
-import {
-  componentEntries,
-  hookEntries,
-  allEntries,
-} from "vayu-ui-registry";
+import { componentEntries, hookEntries, allEntries } from 'vayu-ui-registry';
 
 // Find by slug
-const button = componentEntries.find((e) => e.slug === "button");
+const button = componentEntries.find((e) => e.slug === 'button');
 
 // Filter by category
-const inputs = componentEntries.filter((e) => e.category === "inputs");
+const inputs = componentEntries.filter((e) => e.category === 'inputs');
 ```
 
 ---

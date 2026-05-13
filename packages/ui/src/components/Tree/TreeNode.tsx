@@ -4,15 +4,7 @@
 'use client';
 
 import { clsx } from 'clsx';
-import {
-  Check,
-  ChevronDown,
-  ChevronRight,
-  File,
-  Folder,
-  FolderOpen,
-  Minus,
-} from 'lucide-react';
+import { Check, ChevronDown, ChevronRight, File, Folder, FolderOpen, Minus } from 'lucide-react';
 import React, { useCallback, useEffect, useRef } from 'react';
 
 import { useTree } from './hooks';
@@ -54,14 +46,12 @@ const variantStyles = {
   },
   filled: {
     node: 'hover:bg-muted rounded-md',
-    selected:
-      'bg-brand/15 border-l-4 border-brand text-brand',
+    selected: 'bg-brand/15 border-l-4 border-brand text-brand',
     line: 'border-l-2 border-border',
   },
   bordered: {
     node: 'border border-transparent hover:border-border rounded-md',
-    selected:
-      'border-2 border-brand bg-brand/10 text-brand',
+    selected: 'border-2 border-brand bg-brand/10 text-brand',
     line: 'border-l-2 border-border',
   },
   minimal: {
@@ -102,8 +92,7 @@ const TreeNodeItem: React.FC<TreeNodeItemProps> = ({ node, level = 0 }) => {
   const isSelected = mode === 'normal' && selectedKey === node.id;
   const isFocused = focusedKey === node.id;
   const hasChildren = Boolean(node.children?.length);
-  const checkState =
-    mode === 'checkbox' ? getCheckboxState(node) : 'unchecked';
+  const checkState = mode === 'checkbox' ? getCheckboxState(node) : 'unchecked';
 
   // Focus this node when focusedKey changes to it
   useEffect(() => {
@@ -267,11 +256,7 @@ const TreeNodeItem: React.FC<TreeNodeItemProps> = ({ node, level = 0 }) => {
               : 'border-border hover:border-brand cursor-pointer',
         )}
         role="checkbox"
-        aria-checked={
-          checkState === 'indeterminate'
-            ? 'mixed'
-            : checkState === 'checked'
-        }
+        aria-checked={checkState === 'indeterminate' ? 'mixed' : checkState === 'checked'}
         aria-label={`${checkState === 'checked' ? 'Uncheck' : 'Check'} ${node.label}`}
         tabIndex={-1}
       >
@@ -304,9 +289,7 @@ const TreeNodeItem: React.FC<TreeNodeItemProps> = ({ node, level = 0 }) => {
       );
     }
 
-    return (
-      <File className={clsx(config.icon, 'text-muted-content')} aria-hidden="true" />
-    );
+    return <File className={clsx(config.icon, 'text-muted-content')} aria-hidden="true" />;
   };
 
   // ---- Render ----
@@ -345,11 +328,7 @@ const TreeNodeItem: React.FC<TreeNodeItemProps> = ({ node, level = 0 }) => {
 
         {/* Expand / collapse chevron */}
         {hasChildren ? (
-          <div
-            onClick={handleChevronClick}
-            className="shrink-0 cursor-pointer"
-            aria-hidden="true"
-          >
+          <div onClick={handleChevronClick} className="shrink-0 cursor-pointer" aria-hidden="true">
             {isExpanded ? (
               <ChevronDown className={clsx(config.icon, 'text-muted-content')} />
             ) : (

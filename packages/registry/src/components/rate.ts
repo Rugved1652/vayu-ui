@@ -12,17 +12,7 @@ export const rateEntry: ComponentRegistryEntry = {
     'A star rating component with half-star precision, custom icons, text labels, and WCAG 2.2 AA accessibility using the compound component pattern.',
   longDescription:
     'The Rate component provides interactive star ratings with support for half-star precision, configurable star counts, custom empty/filled/half icons, text labels per rating level, and read-only display mode. It uses the compound component pattern (Rate.Label, Rate.Stars, Rate.Value, Rate.TextLabel, Rate.Description, Rate.Container, Rate.ErrorText) for flexible composition. Controlled and uncontrolled modes are supported, with keyboard navigation (Arrow keys, Home/End) and full ARIA slider semantics on the stars container.',
-  tags: [
-    'rate',
-    'rating',
-    'star',
-    'review',
-    'feedback',
-    'score',
-    'input',
-    'form',
-    'interactive',
-  ],
+  tags: ['rate', 'rating', 'star', 'review', 'feedback', 'score', 'input', 'form', 'interactive'],
   useCases: [
     'Product or content rating inputs where users select a score from 1 to N stars',
     'Read-only rating display showing an average or user-submitted score',
@@ -52,8 +42,7 @@ export const rateEntry: ComponentRegistryEntry = {
     },
     {
       name: 'RateDescription.tsx',
-      description:
-        'Descriptive text rendered below the label for helper text or instructions',
+      description: 'Descriptive text rendered below the label for helper text or instructions',
     },
     {
       name: 'RateValue.tsx',
@@ -114,8 +103,7 @@ export const rateEntry: ComponentRegistryEntry = {
     {
       name: 'Description',
       fileName: 'RateDescription.tsx',
-      description:
-        'Renders helper or instructional text below the label in a muted, smaller font',
+      description: 'Renders helper or instructional text below the label in a muted, smaller font',
       props: [
         {
           name: 'children',
@@ -176,8 +164,7 @@ export const rateEntry: ComponentRegistryEntry = {
     {
       name: 'Value',
       fileName: 'RateValue.tsx',
-      description:
-        'Displays the current numeric rating value, optionally with a "/ total" suffix',
+      description: 'Displays the current numeric rating value, optionally with a "/ total" suffix',
       props: [
         {
           name: 'className',
@@ -321,12 +308,11 @@ export const rateEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'true',
-      description:
-        'When true, clicking the already-selected value resets the rating to 0',
+      description: 'When true, clicking the already-selected value resets the rating to 0',
     },
     {
       name: 'size',
-      type: "RateSize",
+      type: 'RateSize',
       required: false,
       defaultValue: "'md'",
       description: 'Size of the stars and associated text',
@@ -343,8 +329,7 @@ export const rateEntry: ComponentRegistryEntry = {
       name: 'filledIcon',
       type: 'React.ReactElement',
       required: false,
-      description:
-        'Custom filled icon element. Falls back to the icon prop if not provided.',
+      description: 'Custom filled icon element. Falls back to the icon prop if not provided.',
     },
     {
       name: 'halfIcon',
@@ -462,8 +447,7 @@ export const rateEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-valuemin',
-        description:
-          'Applied to the stars slider element, always set to 0.',
+        description: 'Applied to the stars slider element, always set to 0.',
         managedByComponent: true,
       },
       {
@@ -474,14 +458,12 @@ export const rateEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-valuenow',
-        description:
-          'Applied to the stars slider element, reflecting the current rating value.',
+        description: 'Applied to the stars slider element, reflecting the current rating value.',
         managedByComponent: true,
       },
       {
         name: 'aria-readonly',
-        description:
-          'Applied to the stars slider element when the readOnly prop is true.',
+        description: 'Applied to the stars slider element when the readOnly prop is true.',
         managedByComponent: true,
       },
       {
@@ -599,8 +581,7 @@ export default function BasicRate() {
     },
     {
       title: 'Read-Only Display',
-      description:
-        'A read-only rating that displays a value without allowing user interaction.',
+      description: 'A read-only rating that displays a value without allowing user interaction.',
       code: `import { Rate } from 'vayu-ui';
 
 export default function ReadOnlyRate() {
@@ -660,8 +641,7 @@ export default function RateWithLabels() {
     },
     {
       title: 'With Value Display',
-      description:
-        'Rating with a numeric value display showing the current and total stars.',
+      description: 'Rating with a numeric value display showing the current and total stars.',
       code: `import { Rate } from 'vayu-ui';
 
 export default function RateWithValue() {
@@ -678,8 +658,7 @@ export default function RateWithValue() {
     },
     {
       title: 'Custom Icons',
-      description:
-        'Rating with custom empty, filled, and half-filled icons from Lucide.',
+      description: 'Rating with custom empty, filled, and half-filled icons from Lucide.',
       code: `import { Rate } from 'vayu-ui';
 import { Star, StarHalf } from 'lucide-react';
 
@@ -698,8 +677,7 @@ export default function CustomIconsRate() {
     },
     {
       title: 'Error State',
-      description:
-        'Rating with validation error styling and error message text.',
+      description: 'Rating with validation error styling and error message text.',
       code: `import { Rate } from 'vayu-ui';
 
 export default function ErrorRate() {
@@ -715,8 +693,7 @@ export default function ErrorRate() {
     },
     {
       title: 'Half Star vs Full Star Only',
-      description:
-        'Comparison of half-star mode (default) and full-star-only mode.',
+      description: 'Comparison of half-star mode (default) and full-star-only mode.',
       code: `import { Rate } from 'vayu-ui';
 
 export default function HalfVsFull() {

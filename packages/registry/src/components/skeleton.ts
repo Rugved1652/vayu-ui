@@ -42,13 +42,36 @@ export const skeletonEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Skeleton',
   files: [
-    { name: 'index.ts', description: 'Barrel export with compound component Object.assign pattern' },
-    { name: 'types.ts', description: 'TypeScript type definitions for all Skeleton props interfaces and unions' },
-    { name: 'config.ts', description: 'Size/animation class mappings and helper functions for variant styling' },
-    { name: 'SkeletonRoot.tsx', description: 'Root wrapper component with ARIA live region, aria-busy, and configurable aria-label' },
-    { name: 'SkeletonItem.tsx', description: 'Core rendering primitive supporting variant, animation, count, and custom dimensions' },
-    { name: 'SkeletonPrimitives.tsx', description: 'Text, Circle, and Rectangle wrapper components built on SkeletonItem' },
-    { name: 'SkeletonComposites.tsx', description: 'Pre-built composite components: Card, Avatar, List, Table, Grid, and Group' },
+    {
+      name: 'index.ts',
+      description: 'Barrel export with compound component Object.assign pattern',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript type definitions for all Skeleton props interfaces and unions',
+    },
+    {
+      name: 'config.ts',
+      description: 'Size/animation class mappings and helper functions for variant styling',
+    },
+    {
+      name: 'SkeletonRoot.tsx',
+      description:
+        'Root wrapper component with ARIA live region, aria-busy, and configurable aria-label',
+    },
+    {
+      name: 'SkeletonItem.tsx',
+      description:
+        'Core rendering primitive supporting variant, animation, count, and custom dimensions',
+    },
+    {
+      name: 'SkeletonPrimitives.tsx',
+      description: 'Text, Circle, and Rectangle wrapper components built on SkeletonItem',
+    },
+    {
+      name: 'SkeletonComposites.tsx',
+      description: 'Pre-built composite components: Card, Avatar, List, Table, Grid, and Group',
+    },
     { name: 'README.md', description: 'Component documentation and usage guidelines' },
   ],
   targetPath: 'src/components',
@@ -59,11 +82,12 @@ export const skeletonEntry: ComponentRegistryEntry = {
     {
       name: 'Root',
       fileName: 'SkeletonRoot.tsx',
-      description: 'Accessible wrapper with ARIA live region, aria-busy="true", and configurable aria-label. Use to wrap skeleton content for screen reader announcements.',
+      description:
+        'Accessible wrapper with ARIA live region, aria-busy="true", and configurable aria-label. Use to wrap skeleton content for screen reader announcements.',
       props: [
         {
           name: 'animation',
-          type: "SkeletonAnimation",
+          type: 'SkeletonAnimation',
           required: false,
           defaultValue: "'pulse'",
           description: 'Animation style applied to all child skeleton elements.',
@@ -71,7 +95,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'size',
-          type: "SkeletonSize",
+          type: 'SkeletonSize',
           required: false,
           defaultValue: "'md'",
           description: 'Default size propagated to child skeleton elements.',
@@ -82,25 +106,28 @@ export const skeletonEntry: ComponentRegistryEntry = {
           type: 'string',
           required: false,
           defaultValue: "'Loading'",
-          description: 'Accessible label announced by screen readers to describe the loading state.',
+          description:
+            'Accessible label announced by screen readers to describe the loading state.',
         },
         {
           name: 'aria-live',
           type: "'polite' | 'assertive' | 'off'",
           required: false,
           defaultValue: "'polite'",
-          description: 'ARIA live region politeness setting. Use "polite" for non-urgent updates, "assertive" for critical content.',
+          description:
+            'ARIA live region politeness setting. Use "polite" for non-urgent updates, "assertive" for critical content.',
         },
       ],
     },
     {
       name: 'Item',
       fileName: 'SkeletonItem.tsx',
-      description: 'Core rendering primitive with variant, animation, count, and custom dimensions. Use for custom placeholder shapes.',
+      description:
+        'Core rendering primitive with variant, animation, count, and custom dimensions. Use for custom placeholder shapes.',
       props: [
         {
           name: 'variant',
-          type: "SkeletonVariant",
+          type: 'SkeletonVariant',
           required: false,
           defaultValue: "'text'",
           description: 'Shape variant controlling the rendered placeholder style.',
@@ -108,7 +135,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'animation',
-          type: "SkeletonAnimation",
+          type: 'SkeletonAnimation',
           required: false,
           defaultValue: "'pulse'",
           description: 'Animation style for the placeholder element.',
@@ -118,17 +145,19 @@ export const skeletonEntry: ComponentRegistryEntry = {
           name: 'width',
           type: 'string | number',
           required: false,
-          description: 'Explicit width override. Accepts CSS values (e.g. "100%", "200px") or numbers (treated as px).',
+          description:
+            'Explicit width override. Accepts CSS values (e.g. "100%", "200px") or numbers (treated as px).',
         },
         {
           name: 'height',
           type: 'string | number',
           required: false,
-          description: 'Explicit height override. Accepts CSS values (e.g. "48px") or numbers (treated as px).',
+          description:
+            'Explicit height override. Accepts CSS values (e.g. "48px") or numbers (treated as px).',
         },
         {
           name: 'size',
-          type: "SkeletonSize",
+          type: 'SkeletonSize',
           required: false,
           defaultValue: "'md'",
           description: 'Predefined size controlling dimensions when width/height are not set.',
@@ -139,21 +168,24 @@ export const skeletonEntry: ComponentRegistryEntry = {
           type: 'number',
           required: false,
           defaultValue: '1',
-          description: 'Number of identical skeleton items to render. Useful for repeating placeholder elements.',
+          description:
+            'Number of identical skeleton items to render. Useful for repeating placeholder elements.',
         },
       ],
     },
     {
       name: 'Text',
       fileName: 'SkeletonPrimitives.tsx',
-      description: 'Multi-line text placeholder with configurable line count, widths, and trailing line width.',
+      description:
+        'Multi-line text placeholder with configurable line count, widths, and trailing line width.',
       props: [
         {
           name: 'lines',
           type: 'number',
           required: false,
           defaultValue: '1',
-          description: 'Number of text lines to render. The last line can have a different width via lastLineWidth.',
+          description:
+            'Number of text lines to render. The last line can have a different width via lastLineWidth.',
         },
         {
           name: 'width',
@@ -165,11 +197,12 @@ export const skeletonEntry: ComponentRegistryEntry = {
           name: 'lastLineWidth',
           type: 'string | number',
           required: false,
-          description: 'Width of the last line to create a more natural text appearance. Defaults to a partial width.',
+          description:
+            'Width of the last line to create a more natural text appearance. Defaults to a partial width.',
         },
         {
           name: 'animation',
-          type: "SkeletonAnimation",
+          type: 'SkeletonAnimation',
           required: false,
           defaultValue: "'pulse'",
           description: 'Animation style for each text line.',
@@ -177,7 +210,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'size',
-          type: "SkeletonSize",
+          type: 'SkeletonSize',
           required: false,
           defaultValue: "'md'",
           description: 'Controls text line height: sm (h-3), md (h-4), lg (h-5), xl (h-6).',
@@ -188,19 +221,21 @@ export const skeletonEntry: ComponentRegistryEntry = {
     {
       name: 'Circle',
       fileName: 'SkeletonPrimitives.tsx',
-      description: 'Circular placeholder for avatars and icons. Renders as a perfect circle with size-based dimensions.',
+      description:
+        'Circular placeholder for avatars and icons. Renders as a perfect circle with size-based dimensions.',
       props: [
         {
           name: 'size',
-          type: "SkeletonSize",
+          type: 'SkeletonSize',
           required: false,
           defaultValue: "'md'",
-          description: 'Circle diameter: sm (w-8 h-8), md (w-12 h-12), lg (w-16 h-16), xl (w-24 h-24).',
+          description:
+            'Circle diameter: sm (w-8 h-8), md (w-12 h-12), lg (w-16 h-16), xl (w-24 h-24).',
           options: ['sm', 'md', 'lg', 'xl'],
         },
         {
           name: 'animation',
-          type: "SkeletonAnimation",
+          type: 'SkeletonAnimation',
           required: false,
           defaultValue: "'pulse'",
           description: 'Animation style for the circle.',
@@ -234,7 +269,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'animation',
-          type: "SkeletonAnimation",
+          type: 'SkeletonAnimation',
           required: false,
           defaultValue: "'pulse'",
           description: 'Animation style for the rectangle.',
@@ -242,10 +277,11 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'size',
-          type: "SkeletonSize",
+          type: 'SkeletonSize',
           required: false,
           defaultValue: "'md'",
-          description: 'Predefined height when height prop is not set: sm (h-20), md (h-32), lg (h-48), xl (h-64).',
+          description:
+            'Predefined height when height prop is not set: sm (h-20), md (h-32), lg (h-48), xl (h-64).',
           options: ['sm', 'md', 'lg', 'xl'],
         },
       ],
@@ -253,7 +289,8 @@ export const skeletonEntry: ComponentRegistryEntry = {
     {
       name: 'Card',
       fileName: 'SkeletonComposites.tsx',
-      description: 'Pre-built card loading placeholder with optional image area, title line, and body text lines.',
+      description:
+        'Pre-built card loading placeholder with optional image area, title line, and body text lines.',
       props: [
         {
           name: 'showImage',
@@ -285,7 +322,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'animation',
-          type: "SkeletonAnimation",
+          type: 'SkeletonAnimation',
           required: false,
           defaultValue: "'pulse'",
           description: 'Animation style for all card skeleton elements.',
@@ -293,7 +330,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'size',
-          type: "SkeletonSize",
+          type: 'SkeletonSize',
           required: false,
           defaultValue: "'md'",
           description: 'Size applied to text and image elements within the card.',
@@ -304,7 +341,8 @@ export const skeletonEntry: ComponentRegistryEntry = {
     {
       name: 'Avatar',
       fileName: 'SkeletonComposites.tsx',
-      description: 'Avatar loading placeholder with a circle and adjacent text lines for name and subtitle.',
+      description:
+        'Avatar loading placeholder with a circle and adjacent text lines for name and subtitle.',
       props: [
         {
           name: 'showText',
@@ -336,7 +374,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'size',
-          type: "SkeletonSize",
+          type: 'SkeletonSize',
           required: false,
           defaultValue: "'md'",
           description: 'Avatar circle size: sm (w-8), md (w-12), lg (w-16), xl (w-24).',
@@ -344,7 +382,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'animation',
-          type: "SkeletonAnimation",
+          type: 'SkeletonAnimation',
           required: false,
           defaultValue: "'pulse'",
           description: 'Animation style for the avatar and text elements.',
@@ -355,7 +393,8 @@ export const skeletonEntry: ComponentRegistryEntry = {
     {
       name: 'List',
       fileName: 'SkeletonComposites.tsx',
-      description: 'List loading placeholder with repeated rows, each containing an optional avatar and text lines.',
+      description:
+        'List loading placeholder with repeated rows, each containing an optional avatar and text lines.',
       props: [
         {
           name: 'items',
@@ -373,7 +412,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'animation',
-          type: "SkeletonAnimation",
+          type: 'SkeletonAnimation',
           required: false,
           defaultValue: "'pulse'",
           description: 'Animation style for all list skeleton elements.',
@@ -381,7 +420,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'size',
-          type: "SkeletonSize",
+          type: 'SkeletonSize',
           required: false,
           defaultValue: "'md'",
           description: 'Size applied to avatar circles and text lines within each row.',
@@ -392,7 +431,8 @@ export const skeletonEntry: ComponentRegistryEntry = {
     {
       name: 'Table',
       fileName: 'SkeletonComposites.tsx',
-      description: 'Table loading placeholder with optional header row and configurable rows/columns grid.',
+      description:
+        'Table loading placeholder with optional header row and configurable rows/columns grid.',
       props: [
         {
           name: 'rows',
@@ -417,7 +457,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'animation',
-          type: "SkeletonAnimation",
+          type: 'SkeletonAnimation',
           required: false,
           defaultValue: "'pulse'",
           description: 'Animation style for all table skeleton elements.',
@@ -425,7 +465,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'size',
-          type: "SkeletonSize",
+          type: 'SkeletonSize',
           required: false,
           defaultValue: "'md'",
           description: 'Size applied to each cell within the table.',
@@ -436,7 +476,8 @@ export const skeletonEntry: ComponentRegistryEntry = {
     {
       name: 'Grid',
       fileName: 'SkeletonComposites.tsx',
-      description: 'Grid loading placeholder with configurable item count, columns, and item height.',
+      description:
+        'Grid loading placeholder with configurable item count, columns, and item height.',
       props: [
         {
           name: 'items',
@@ -461,7 +502,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'animation',
-          type: "SkeletonAnimation",
+          type: 'SkeletonAnimation',
           required: false,
           defaultValue: "'pulse'",
           description: 'Animation style for all grid items.',
@@ -469,7 +510,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
         },
         {
           name: 'size',
-          type: "SkeletonSize",
+          type: 'SkeletonSize',
           required: false,
           defaultValue: "'md'",
           description: 'Size applied to each grid item.',
@@ -480,7 +521,8 @@ export const skeletonEntry: ComponentRegistryEntry = {
     {
       name: 'Group',
       fileName: 'SkeletonComposites.tsx',
-      description: 'Spacing wrapper for grouping multiple skeleton elements with consistent gap spacing.',
+      description:
+        'Spacing wrapper for grouping multiple skeleton elements with consistent gap spacing.',
       props: [
         {
           name: 'spacing',
@@ -498,7 +540,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
   rootProps: [
     {
       name: 'animation',
-      type: "SkeletonAnimation",
+      type: 'SkeletonAnimation',
       required: false,
       defaultValue: "'pulse'",
       description: 'Default animation style propagated to child skeleton elements.',
@@ -506,7 +548,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
     },
     {
       name: 'size',
-      type: "SkeletonSize",
+      type: 'SkeletonSize',
       required: false,
       defaultValue: "'md'",
       description: 'Default size propagated to child skeleton elements.',
@@ -551,7 +593,8 @@ export const skeletonEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['pulse', 'wave', 'none'],
       defaultValue: "'pulse'",
-      description: 'Controls the loading animation style. Pulse fades opacity in and out, wave applies a shimmer sweep effect, and none renders a static placeholder. All animations respect prefers-reduced-motion.',
+      description:
+        'Controls the loading animation style. Pulse fades opacity in and out, wave applies a shimmer sweep effect, and none renders a static placeholder. All animations respect prefers-reduced-motion.',
     },
   ],
 
@@ -564,32 +607,38 @@ export const skeletonEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'role="status"',
-        description: 'Applied to Skeleton.Root to create an ARIA live region that announces loading state changes to screen readers.',
+        description:
+          'Applied to Skeleton.Root to create an ARIA live region that announces loading state changes to screen readers.',
         managedByComponent: true,
       },
       {
         name: 'aria-live',
-        description: 'Applied to Skeleton.Root. Defaults to "polite" so loading announcements do not interrupt the user. Configurable via the aria-live prop.',
+        description:
+          'Applied to Skeleton.Root. Defaults to "polite" so loading announcements do not interrupt the user. Configurable via the aria-live prop.',
         managedByComponent: true,
       },
       {
         name: 'aria-busy="true"',
-        description: 'Applied to Skeleton.Root to indicate the region is currently being updated and content is not yet available.',
+        description:
+          'Applied to Skeleton.Root to indicate the region is currently being updated and content is not yet available.',
         managedByComponent: true,
       },
       {
         name: 'aria-label',
-        description: 'Applied to Skeleton.Root. Defaults to "Loading" and should be overridden to describe what is loading (e.g. "Loading user profile").',
+        description:
+          'Applied to Skeleton.Root. Defaults to "Loading" and should be overridden to describe what is loading (e.g. "Loading user profile").',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden="true"',
-        description: 'Applied to all skeleton items (Item, Text, Circle, Rectangle, Card, Avatar, List, Table, Grid) since they are visual-only and not meaningful to screen readers.',
+        description:
+          'Applied to all skeleton items (Item, Text, Circle, Rectangle, Card, Avatar, List, Table, Grid) since they are visual-only and not meaningful to screen readers.',
         managedByComponent: true,
       },
       {
         name: 'tabIndex={-1}',
-        description: 'Applied to Skeleton.Item to remove it from the keyboard tab order, since skeleton elements are non-interactive.',
+        description:
+          'Applied to Skeleton.Item to remove it from the keyboard tab order, since skeleton elements are non-interactive.',
         managedByComponent: true,
       },
     ],
@@ -598,7 +647,7 @@ export const skeletonEntry: ComponentRegistryEntry = {
       'Skeleton elements are removed from the tab order via tabIndex={-1} and marked aria-hidden="true". The Root wrapper uses role="status" with aria-live for screen reader announcements without requiring focus.',
     wcagLevel: 'AA',
     notes:
-      'All animations respect prefers-reduced-motion via Tailwind\'s motion-reduce:animate-none class. The Root component includes a screen-reader-only text node with the aria-label value. For best accessibility, always wrap skeleton content in Skeleton.Root rather than using standalone items.',
+      "All animations respect prefers-reduced-motion via Tailwind's motion-reduce:animate-none class. The Root component includes a screen-reader-only text node with the aria-label value. For best accessibility, always wrap skeleton content in Skeleton.Root rather than using standalone items.",
   },
 
   // ── Dependencies ──────────────────────────────────────
@@ -610,19 +659,23 @@ export const skeletonEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'card',
-      reason: 'Skeleton.Card is used to show loading states before the actual Card component renders with data',
+      reason:
+        'Skeleton.Card is used to show loading states before the actual Card component renders with data',
     },
     {
       slug: 'button',
-      reason: 'Commonly paired with skeleton loading to provide refresh or retry actions alongside loading placeholders',
+      reason:
+        'Commonly paired with skeleton loading to provide refresh or retry actions alongside loading placeholders',
     },
     {
       slug: 'typography',
-      reason: 'Skeleton.Text mirrors the layout of Typography components, making them natural companions for loading text content',
+      reason:
+        'Skeleton.Text mirrors the layout of Typography components, making them natural companions for loading text content',
     },
     {
       slug: 'badge',
-      reason: 'Skeleton items can be used to show loading states for badge-based status indicators before data loads',
+      reason:
+        'Skeleton items can be used to show loading states for badge-based status indicators before data loads',
     },
   ],
 
@@ -688,7 +741,8 @@ export default function TableSkeleton() {
     },
     {
       title: 'Accessible Root Wrapper',
-      description: 'Using Skeleton.Root as an accessible wrapper with ARIA live region for screen readers.',
+      description:
+        'Using Skeleton.Root as an accessible wrapper with ARIA live region for screen readers.',
       code: `import { Skeleton } from 'vayu-ui';
 
 export default function AccessibleSkeleton() {
@@ -708,31 +762,36 @@ export default function AccessibleSkeleton() {
       title: 'Using skeleton items without Skeleton.Root',
       bad: '<Skeleton.Text lines={3} />',
       good: '<Skeleton.Root aria-label="Loading content"><Skeleton.Text lines={3} /></Skeleton.Root>',
-      reason: 'Without Skeleton.Root, the loading state has no ARIA live region or aria-busy indicator. Screen readers cannot detect or announce that content is loading, violating WCAG accessibility requirements.',
+      reason:
+        'Without Skeleton.Root, the loading state has no ARIA live region or aria-busy indicator. Screen readers cannot detect or announce that content is loading, violating WCAG accessibility requirements.',
     },
     {
       title: 'Hardcoding pixel dimensions instead of using size prop',
       bad: '<Skeleton.Item variant="circular" width={48} height={48} />',
       good: '<Skeleton.Circle size="md" />',
-      reason: 'Hardcoding dimensions bypasses the size system and creates inconsistency across the UI. The size prop ensures all skeleton elements scale together and match the design tokens.',
+      reason:
+        'Hardcoding dimensions bypasses the size system and creates inconsistency across the UI. The size prop ensures all skeleton elements scale together and match the design tokens.',
     },
     {
       title: 'Showing skeleton and content simultaneously',
       bad: '<div><Skeleton.Text lines={2} /><p>Actual content</p></div>',
       good: '{isLoading ? <Skeleton.Text lines={2} /> : <p>Actual content</p>}',
-      reason: 'Skeletons are decorative placeholders with aria-hidden="true". Rendering them alongside real content doubles visual noise and confuses assistive technology about which content is meaningful.',
+      reason:
+        'Skeletons are decorative placeholders with aria-hidden="true". Rendering them alongside real content doubles visual noise and confuses assistive technology about which content is meaningful.',
     },
     {
       title: 'Leaving skeletons visible permanently',
       bad: '<div>{data ? <Content /> : <Skeleton.Card />}</div>',
       good: '<div>{isLoading ? <Skeleton.Card /> : data ? <Content /> : <EmptyState />}</div>',
-      reason: 'Skeletons are transient loading indicators, not fallback content. If data fails to load, show an error or empty state instead. Permanently visible skeletons suggest the page is broken.',
+      reason:
+        'Skeletons are transient loading indicators, not fallback content. If data fails to load, show an error or empty state instead. Permanently visible skeletons suggest the page is broken.',
     },
     {
       title: 'Overriding animation with custom CSS',
       bad: '<Skeleton.Text className="animate-bounce" />',
       good: '<Skeleton.Text animation="wave" />',
-      reason: 'The animation prop provides three designed animation options that respect prefers-reduced-motion. Custom CSS animations may not honor reduced-motion preferences and can cause accessibility violations.',
+      reason:
+        'The animation prop provides three designed animation options that respect prefers-reduced-motion. Custom CSS animations may not honor reduced-motion preferences and can cause accessibility violations.',
     },
   ],
 };

@@ -81,7 +81,8 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
         const items = contentRef.current?.querySelectorAll(
           '[role="option"]:not([data-disabled="true"])',
         );
-        if (items && items.length > 0) (items[items.length - 1] as HTMLElement).focus({ preventScroll: true });
+        if (items && items.length > 0)
+          (items[items.length - 1] as HTMLElement).focus({ preventScroll: true });
       } else if (e.key === 'Enter') {
         setOpen(true);
       } else if (e.key === 'Backspace' && multiple && search === '') {
@@ -124,9 +125,7 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
         aria-invalid={validationState === 'error'}
         aria-busy={isLoading}
       >
-        {showSelectedLabel && (
-          <span className="truncate">{selectedLabel}</span>
-        )}
+        {showSelectedLabel && <span className="truncate">{selectedLabel}</span>}
         {multiple &&
           selectedArray.map((val) => (
             <span

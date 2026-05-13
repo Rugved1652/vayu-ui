@@ -21,14 +21,19 @@ export function registerGetComponentExample(server: Parameters<typeof registerTo
       const entry = findBySlug(slug);
       if (!entry) {
         return {
-          content: [{ type: 'text' as const, text: JSON.stringify({ error: `No entry found for slug "${slug}"` }) }],
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: `No entry found for slug "${slug}"` }),
+            },
+          ],
           isError: true,
         };
       }
 
       if (tag) {
-        const matching = entry.examples.filter(
-          (ex) => ex.tags?.some((t) => t.toLowerCase().includes(tag.toLowerCase())),
+        const matching = entry.examples.filter((ex) =>
+          ex.tags?.some((t) => t.toLowerCase().includes(tag.toLowerCase())),
         );
 
         if (matching.length === 0) {

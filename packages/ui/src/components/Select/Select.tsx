@@ -382,7 +382,7 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
           </label>
         )}
         {children}
-        {(validationState === 'error' && error) && (
+        {validationState === 'error' && error && (
           <p className={clsx(inputMessageBase, inputErrorMessageStyles)}>
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>

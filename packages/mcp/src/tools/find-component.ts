@@ -22,9 +22,7 @@ export function registerFindComponent(server: Parameters<typeof registerTool>[0]
     async (params) => {
       const { query, type } = params as { query: string; type?: 'component' | 'hook' };
 
-      const pool = type
-        ? allEntries.filter((e) => e.type === type)
-        : allEntries;
+      const pool = type ? allEntries.filter((e) => e.type === type) : allEntries;
 
       const results = searchEntries(query, pool, 5).map((r) => ({
         slug: r.entry.slug,

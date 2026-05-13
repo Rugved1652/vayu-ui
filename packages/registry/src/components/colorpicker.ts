@@ -38,22 +38,80 @@ export const colorPickerEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'ColorPicker',
   files: [
-    { name: 'ColorPicker.tsx', description: 'Root component managing color state, open state, context provider, click-outside, and Escape key handling' },
-    { name: 'ColorPickerLabel.tsx', description: 'Accessible label linked to the input via htmlFor/id' },
-    { name: 'ColorPickerDescription.tsx', description: 'Helper description text linked to the input via aria-describedby' },
-    { name: 'ColorPickerError.tsx', description: 'Error message with role="alert" that renders only in error validation state' },
-    { name: 'ColorPickerTrigger.tsx', description: 'Color swatch button that toggles the dropdown, with size variants and ARIA attributes' },
-    { name: 'ColorPickerInput.tsx', description: 'Text input for hex/rgb/hsl values with validation, focus sync, and aria-invalid support' },
-    { name: 'ColorPickerCopyButton.tsx', description: 'Clipboard copy button with check icon feedback and 2-second reset' },
-    { name: 'ColorPickerContent.tsx', description: 'Dropdown dialog with fixed positioning, viewport boundary detection, and placement props' },
-    { name: 'ColorPickerPalette.tsx', description: 'Native browser color picker input with label and Pipette icon' },
-    { name: 'ColorPickerEyeDropper.tsx', description: 'EyeDropper API button for picking colors from the screen, with unsupported browser fallback' },
-    { name: 'ColorPickerPresets.tsx', description: 'Grid of preset color swatches using listbox/option ARIA pattern with selection indicator' },
-    { name: 'ColorPickerSwatches.tsx', description: 'Standalone swatch grid component usable outside the ColorPicker context' },
-    { name: 'types.ts', description: 'TypeScript type definitions for all props, context, ColorFormat, ValidationState, RGB, and HSL types' },
-    { name: 'hooks.ts', description: 'React context, ColorPickerContext, and useColorPicker hook for accessing component state' },
-    { name: 'utils.ts', description: 'Color parsing, formatting, validation, and contrast calculation utilities with DEFAULT_PRESETS constant' },
-    { name: 'index.ts', description: 'Barrel export assembling the compound component and re-exporting all types, hooks, and utilities' },
+    {
+      name: 'ColorPicker.tsx',
+      description:
+        'Root component managing color state, open state, context provider, click-outside, and Escape key handling',
+    },
+    {
+      name: 'ColorPickerLabel.tsx',
+      description: 'Accessible label linked to the input via htmlFor/id',
+    },
+    {
+      name: 'ColorPickerDescription.tsx',
+      description: 'Helper description text linked to the input via aria-describedby',
+    },
+    {
+      name: 'ColorPickerError.tsx',
+      description: 'Error message with role="alert" that renders only in error validation state',
+    },
+    {
+      name: 'ColorPickerTrigger.tsx',
+      description:
+        'Color swatch button that toggles the dropdown, with size variants and ARIA attributes',
+    },
+    {
+      name: 'ColorPickerInput.tsx',
+      description:
+        'Text input for hex/rgb/hsl values with validation, focus sync, and aria-invalid support',
+    },
+    {
+      name: 'ColorPickerCopyButton.tsx',
+      description: 'Clipboard copy button with check icon feedback and 2-second reset',
+    },
+    {
+      name: 'ColorPickerContent.tsx',
+      description:
+        'Dropdown dialog with fixed positioning, viewport boundary detection, and placement props',
+    },
+    {
+      name: 'ColorPickerPalette.tsx',
+      description: 'Native browser color picker input with label and Pipette icon',
+    },
+    {
+      name: 'ColorPickerEyeDropper.tsx',
+      description:
+        'EyeDropper API button for picking colors from the screen, with unsupported browser fallback',
+    },
+    {
+      name: 'ColorPickerPresets.tsx',
+      description:
+        'Grid of preset color swatches using listbox/option ARIA pattern with selection indicator',
+    },
+    {
+      name: 'ColorPickerSwatches.tsx',
+      description: 'Standalone swatch grid component usable outside the ColorPicker context',
+    },
+    {
+      name: 'types.ts',
+      description:
+        'TypeScript type definitions for all props, context, ColorFormat, ValidationState, RGB, and HSL types',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'React context, ColorPickerContext, and useColorPicker hook for accessing component state',
+    },
+    {
+      name: 'utils.ts',
+      description:
+        'Color parsing, formatting, validation, and contrast calculation utilities with DEFAULT_PRESETS constant',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export assembling the compound component and re-exporting all types, hooks, and utilities',
+    },
     { name: 'README.md', description: 'Component documentation and usage guide', optional: true },
   ],
   targetPath: 'src/components',
@@ -97,7 +155,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     {
       name: 'Error',
       fileName: 'ColorPickerError.tsx',
-      description: 'Error message with role="alert" and aria-live="polite", rendered only when validationState is "error"',
+      description:
+        'Error message with role="alert" and aria-live="polite", rendered only when validationState is "error"',
       props: [
         {
           name: 'children',
@@ -125,7 +184,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     {
       name: 'Input',
       fileName: 'ColorPickerInput.tsx',
-      description: 'Text input displaying the current color value in the active format, with live parsing and validation',
+      description:
+        'Text input displaying the current color value in the active format, with live parsing and validation',
       props: [
         {
           name: 'placeholder',
@@ -139,7 +199,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     {
       name: 'CopyButton',
       fileName: 'ColorPickerCopyButton.tsx',
-      description: 'Button that copies the current formatted color to the clipboard with a 2-second check icon feedback',
+      description:
+        'Button that copies the current formatted color to the clipboard with a 2-second check icon feedback',
       props: [
         {
           name: 'copiedText',
@@ -153,7 +214,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     {
       name: 'Content',
       fileName: 'ColorPickerContent.tsx',
-      description: 'Dropdown dialog container with fixed positioning, viewport-aware placement, and focus management',
+      description:
+        'Dropdown dialog container with fixed positioning, viewport-aware placement, and focus management',
       props: [
         {
           name: 'side',
@@ -197,7 +259,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     {
       name: 'Eyedropper',
       fileName: 'ColorPickerEyeDropper.tsx',
-      description: 'EyeDropper API integration for picking colors from the screen, with graceful unsupported-browser fallback',
+      description:
+        'EyeDropper API integration for picking colors from the screen, with graceful unsupported-browser fallback',
       props: [
         {
           name: 'label',
@@ -218,7 +281,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     {
       name: 'Presets',
       fileName: 'ColorPickerPresets.tsx',
-      description: 'Grid of preset color swatches using listbox/option ARIA pattern with selection check indicator',
+      description:
+        'Grid of preset color swatches using listbox/option ARIA pattern with selection check indicator',
       props: [
         {
           name: 'label',
@@ -231,7 +295,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
           name: 'colors',
           type: 'string[]',
           required: false,
-          description: 'Custom preset color array; falls back to the root presets prop or DEFAULT_PRESETS',
+          description:
+            'Custom preset color array; falls back to the root presets prop or DEFAULT_PRESETS',
         },
         {
           name: 'columns',
@@ -245,7 +310,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     {
       name: 'Swatches',
       fileName: 'ColorPickerSwatches.tsx',
-      description: 'Standalone color swatch grid usable independently without ColorPicker context, with controlled/uncontrolled value support',
+      description:
+        'Standalone color swatch grid usable independently without ColorPicker context, with controlled/uncontrolled value support',
       props: [
         {
           name: 'colors',
@@ -321,7 +387,7 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     },
     {
       name: 'format',
-      type: "ColorFormat",
+      type: 'ColorFormat',
       required: false,
       defaultValue: "'hex'",
       description: 'Color output format for the input display and clipboard copy',
@@ -331,7 +397,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
       name: 'presets',
       type: 'string[]',
       required: false,
-      description: 'Array of hex color codes for the Presets sub-component; defaults to 24 Tailwind-inspired colors',
+      description:
+        'Array of hex color codes for the Presets sub-component; defaults to 24 Tailwind-inspired colors',
     },
     {
       name: 'disabled',
@@ -345,14 +412,16 @@ export const colorPickerEntry: ComponentRegistryEntry = {
       type: 'ValidationState',
       required: false,
       defaultValue: "'default'",
-      description: 'Visual validation state applied to the input border and error message visibility',
+      description:
+        'Visual validation state applied to the input border and error message visibility',
       options: ['default', 'error', 'warning', 'success'],
     },
     {
       name: 'open',
       type: 'boolean',
       required: false,
-      description: 'Controlled open state for the dropdown; use with onOpenChange for fully controlled behavior',
+      description:
+        'Controlled open state for the dropdown; use with onOpenChange for fully controlled behavior',
     },
     {
       name: 'defaultOpen',
@@ -380,14 +449,16 @@ export const colorPickerEntry: ComponentRegistryEntry = {
       prop: 'open',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Controls dropdown visibility. Supports controlled (open + onOpenChange) and uncontrolled (defaultOpen) modes. Closes on Escape key or click-outside.',
+      description:
+        'Controls dropdown visibility. Supports controlled (open + onOpenChange) and uncontrolled (defaultOpen) modes. Closes on Escape key or click-outside.',
     },
     {
       name: 'disabled',
       prop: 'disabled',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'When true, all interactive elements are non-interactive with reduced opacity. The trigger becomes non-clickable, the input is disabled, and the content cannot open.',
+      description:
+        'When true, all interactive elements are non-interactive with reduced opacity. The trigger becomes non-clickable, the input is disabled, and the content cannot open.',
     },
     {
       name: 'validationState',
@@ -395,21 +466,24 @@ export const colorPickerEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['default', 'error', 'warning', 'success'],
       defaultValue: "'default'",
-      description: 'Controls the input border color and ring style. The "error" state also makes the Error sub-component visible and sets aria-invalid on the input.',
+      description:
+        'Controls the input border color and ring style. The "error" state also makes the Error sub-component visible and sets aria-invalid on the input.',
     },
     {
       name: 'picking',
       prop: 'Eyedropper internal state',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Internal state tracking whether the EyeDropper API is actively sampling a color from the screen. Shows "Picking..." text and animated icon.',
+      description:
+        'Internal state tracking whether the EyeDropper API is actively sampling a color from the screen. Shows "Picking..." text and animated icon.',
     },
     {
       name: 'copied',
       prop: 'CopyButton internal state',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Internal state on the CopyButton showing a check icon and updated aria-label for 2 seconds after a successful clipboard copy.',
+      description:
+        'Internal state on the CopyButton showing a check icon and updated aria-label for 2 seconds after a successful clipboard copy.',
     },
   ],
 
@@ -418,12 +492,14 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     {
       name: 'onChange',
       signature: '(color: string) => void',
-      description: 'Fired when the color value changes via any method — palette selection, text input, preset click, eyedropper pick, or swatch selection',
+      description:
+        'Fired when the color value changes via any method — palette selection, text input, preset click, eyedropper pick, or swatch selection',
     },
     {
       name: 'onOpenChange',
       signature: '(open: boolean) => void',
-      description: 'Fired when the dropdown opens or closes, including trigger click, Escape key, or click-outside dismissal',
+      description:
+        'Fired when the dropdown opens or closes, including trigger click, Escape key, or click-outside dismissal',
     },
   ],
 
@@ -432,7 +508,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-expanded (Trigger)',
-        description: 'Set to true when the dropdown is open, indicating the dialog popup is visible',
+        description:
+          'Set to true when the dropdown is open, indicating the dialog popup is visible',
         managedByComponent: true,
       },
       {
@@ -442,7 +519,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-labelledby (Trigger)',
-        description: 'References the label element ID so screen readers announce the label when the trigger is focused',
+        description:
+          'References the label element ID so screen readers announce the label when the trigger is focused',
         managedByComponent: true,
       },
       {
@@ -457,7 +535,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-modal="false" (Content)',
-        description: 'Indicates the dialog is not fully modal; background content remains interactive',
+        description:
+          'Indicates the dialog is not fully modal; background content remains interactive',
         managedByComponent: true,
       },
       {
@@ -467,7 +546,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-invalid (Input)',
-        description: 'Set to true when validationState is "error", signaling the invalid state to assistive technology',
+        description:
+          'Set to true when validationState is "error", signaling the invalid state to assistive technology',
         managedByComponent: true,
       },
       {
@@ -477,22 +557,26 @@ export const colorPickerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-describedby (Input)',
-        description: 'Dynamically references description and/or error element IDs based on current validation state',
+        description:
+          'Dynamically references description and/or error element IDs based on current validation state',
         managedByComponent: true,
       },
       {
         name: 'role="alert" (Error)',
-        description: 'Identifies the error message as an alert that screen readers should announce immediately',
+        description:
+          'Identifies the error message as an alert that screen readers should announce immediately',
         managedByComponent: true,
       },
       {
         name: 'aria-live="polite" (Error)',
-        description: 'Announces error message changes to screen readers without interrupting current speech',
+        description:
+          'Announces error message changes to screen readers without interrupting current speech',
         managedByComponent: true,
       },
       {
         name: 'aria-label (CopyButton)',
-        description: 'Dynamic label: "Copy color to clipboard" by default, or the copiedText value after a successful copy',
+        description:
+          'Dynamic label: "Copy color to clipboard" by default, or the copiedText value after a successful copy',
         managedByComponent: true,
       },
       {
@@ -512,14 +596,16 @@ export const colorPickerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-selected (Preset/Swatch buttons)',
-        description: 'Set to true on the currently selected swatch, communicating the active selection',
+        description:
+          'Set to true on the currently selected swatch, communicating the active selection',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Enter',
-        behavior: 'On Trigger: toggles the dropdown open state. On Eyedropper: initiates screen color picking.',
+        behavior:
+          'On Trigger: toggles the dropdown open state. On Eyedropper: initiates screen color picking.',
       },
       {
         key: 'Space',
@@ -531,7 +617,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
       },
       {
         key: 'Tab',
-        behavior: 'Moves focus between interactive elements. Tabbing out of the dropdown closes it via click-outside detection.',
+        behavior:
+          'Moves focus between interactive elements. Tabbing out of the dropdown closes it via click-outside detection.',
       },
     ],
     focusManagement:
@@ -542,10 +629,7 @@ export const colorPickerEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'lucide-react' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'lucide-react' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -553,11 +637,13 @@ export const colorPickerEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'text-input',
-      reason: 'TextInput pairs with ColorPicker in forms that collect both text and color values (e.g. product configuration)',
+      reason:
+        'TextInput pairs with ColorPicker in forms that collect both text and color values (e.g. product configuration)',
     },
     {
       slug: 'popover',
-      reason: 'Popover provides a similar dropdown pattern; ColorPicker uses custom positioning but the two are often used together in design tool UIs',
+      reason:
+        'Popover provides a similar dropdown pattern; ColorPicker uses custom positioning but the two are often used together in design tool UIs',
     },
     {
       slug: 'button',
@@ -565,11 +651,13 @@ export const colorPickerEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'card',
-      reason: 'Cards serve as containers for color picker panels in settings pages and theme editors',
+      reason:
+        'Cards serve as containers for color picker panels in settings pages and theme editors',
     },
     {
       slug: 'tooltip',
-      reason: 'Tooltips can display hex/rgb/hsl values on hover over trigger swatches or preset colors',
+      reason:
+        'Tooltips can display hex/rgb/hsl values on hover over trigger swatches or preset colors',
     },
   ],
 
@@ -577,7 +665,8 @@ export const colorPickerEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Full-Featured ColorPicker',
-      description: 'Complete color picker with label, description, trigger, input, copy button, palette, eyedropper, and presets.',
+      description:
+        'Complete color picker with label, description, trigger, input, copy button, palette, eyedropper, and presets.',
       code: `import { useState } from 'react';
 import { ColorPicker } from 'vayu-ui';
 
@@ -607,7 +696,8 @@ export default function ColorPickerDemo() {
     },
     {
       title: 'RGB Format',
-      description: 'Color picker using RGB format with custom trigger size and preset column count.',
+      description:
+        'Color picker using RGB format with custom trigger size and preset column count.',
       code: `import { useState } from 'react';
 import { ColorPicker } from 'vayu-ui';
 
@@ -635,7 +725,8 @@ export default function RGBPicker() {
     },
     {
       title: 'HSL Format with End Alignment',
-      description: 'Color picker using HSL format with the dropdown aligned to the right edge of the trigger.',
+      description:
+        'Color picker using HSL format with the dropdown aligned to the right edge of the trigger.',
       code: `import { useState } from 'react';
 import { ColorPicker } from 'vayu-ui';
 
@@ -664,7 +755,8 @@ export default function HSLPicker() {
     },
     {
       title: 'Standalone Swatches',
-      description: 'Independent swatch grid that works outside the ColorPicker context, useful for quick color selection.',
+      description:
+        'Independent swatch grid that works outside the ColorPicker context, useful for quick color selection.',
       code: `import { useState } from 'react';
 import { ColorPicker } from 'vayu-ui';
 
@@ -689,7 +781,8 @@ export default function SwatchesDemo() {
     },
     {
       title: 'Disabled and Error States',
-      description: 'Color picker in disabled state preventing all interaction, and an error state showing validation feedback.',
+      description:
+        'Color picker in disabled state preventing all interaction, and an error state showing validation feedback.',
       code: `import { ColorPicker } from 'vayu-ui';
 
 export default function StatesDemo() {
@@ -721,7 +814,8 @@ export default function StatesDemo() {
     },
     {
       title: 'Minimal Picker',
-      description: 'Simplest color picker with just a trigger and palette, no input or copy button.',
+      description:
+        'Simplest color picker with just a trigger and palette, no input or copy button.',
       code: `import { ColorPicker } from 'vayu-ui';
 
 export default function MinimalPicker() {
@@ -745,31 +839,36 @@ export default function MinimalPicker() {
       title: 'Using Swatches without the colors prop',
       bad: '<ColorPicker.Swatches />',
       good: '<ColorPicker.Swatches colors={["#ef4444", "#3b82f6", "#22c55e"]} />',
-      reason: 'The colors prop is required on Swatches because it is a standalone component with no ColorPicker context to fall back to. Omitting it results in an empty grid.',
+      reason:
+        'The colors prop is required on Swatches because it is a standalone component with no ColorPicker context to fall back to. Omitting it results in an empty grid.',
     },
     {
       title: 'Mixing controlled and uncontrolled patterns',
       bad: '<ColorPicker value={color} defaultValue="#3b82f6" onChange={setColor}>',
       good: '<ColorPicker value={color} onChange={setColor}>',
-      reason: 'Passing both value and defaultValue is contradictory. Use value + onChange for controlled mode, or defaultValue alone for uncontrolled mode. Never mix the two.',
+      reason:
+        'Passing both value and defaultValue is contradictory. Use value + onChange for controlled mode, or defaultValue alone for uncontrolled mode. Never mix the two.',
     },
     {
       title: 'Placing sub-components outside the ColorPicker root',
       bad: '<ColorPicker /><ColorPicker.Trigger />',
       good: '<ColorPicker><ColorPicker.Trigger /></ColorPicker>',
-      reason: 'All sub-components except Swatches depend on the ColorPicker context via useColorPicker(). Placing them outside the root will throw an error because the context is undefined.',
+      reason:
+        'All sub-components except Swatches depend on the ColorPicker context via useColorPicker(). Placing them outside the root will throw an error because the context is undefined.',
     },
     {
       title: 'Setting validationState to error without providing an Error sub-component',
       bad: '<ColorPicker validationState="error"><ColorPicker.Trigger /></ColorPicker>',
       good: '<ColorPicker validationState="error"><ColorPicker.Trigger /><ColorPicker.Error>Invalid color</ColorPicker.Error></ColorPicker>',
-      reason: 'Without the Error sub-component, the input shows error styling but no message is communicated to the user. Always pair error state with a descriptive error message for accessibility.',
+      reason:
+        'Without the Error sub-component, the input shows error styling but no message is communicated to the user. Always pair error state with a descriptive error message for accessibility.',
     },
     {
       title: 'Relying on EyeDropper in production without a fallback',
       bad: '<ColorPicker.Eyedropper />',
       good: '<ColorPicker.Eyedropper label="Pick from screen" unsupportedText="Not supported — enter a hex value instead" />',
-      reason: 'The EyeDropper API is only available in Chromium browsers. The component provides a built-in fallback, but custom unsupportedText provides better UX guidance for users on unsupported browsers.',
+      reason:
+        'The EyeDropper API is only available in Chromium browsers. The component provides a built-in fallback, but custom unsupportedText provides better UX guidance for users on unsupported browsers.',
     },
   ],
 };

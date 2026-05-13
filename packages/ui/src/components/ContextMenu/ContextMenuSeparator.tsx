@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { forwardRef } from "react";
-import { cn } from "../../utils";
-import type { ContextMenuSeparatorProps } from "./types";
+import React, { forwardRef } from 'react';
+import { cn } from '../../utils';
+import type { ContextMenuSeparatorProps } from './types';
 
 const ContextMenuSeparator = forwardRef<HTMLDivElement, ContextMenuSeparatorProps>(
   ({ className, ...props }, ref) => (
@@ -10,12 +10,12 @@ const ContextMenuSeparator = forwardRef<HTMLDivElement, ContextMenuSeparatorProp
       ref={ref}
       role="separator"
       aria-orientation="horizontal"
-      className={cn("my-1 h-px bg-border", className)}
+      className={cn('my-1 h-px bg-border', className)}
       {...props}
     />
-  )
+  ),
 );
 
-ContextMenuSeparator.displayName = "ContextMenu.Separator";
+ContextMenuSeparator.displayName = 'ContextMenu.Separator';
 
 export { ContextMenuSeparator };

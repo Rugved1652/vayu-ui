@@ -419,14 +419,8 @@ export interface DesignTokenCategory {
 
 /** Response for list_components tool. */
 export interface ListComponentsResponse {
-  components: Pick<
-    ComponentRegistryEntry,
-    'slug' | 'name' | 'category' | 'description' | 'tags'
-  >[];
-  hooks: Pick<
-    HookRegistryEntry,
-    'slug' | 'name' | 'category' | 'description' | 'tags'
-  >[];
+  components: Pick<ComponentRegistryEntry, 'slug' | 'name' | 'category' | 'description' | 'tags'>[];
+  hooks: Pick<HookRegistryEntry, 'slug' | 'name' | 'category' | 'description' | 'tags'>[];
 }
 
 /** Response for find_component tool. */

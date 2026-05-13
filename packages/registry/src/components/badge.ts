@@ -38,9 +38,19 @@ export const badgeEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Badge',
   files: [
-    { name: 'Badge.tsx', description: 'Root component with variant/size styling, interactive/dismissible logic, and accessibility attributes' },
-    { name: 'types.ts', description: 'TypeScript type definitions for BadgeProps, BadgeVariant, and BadgeSize' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the Badge component and types' },
+    {
+      name: 'Badge.tsx',
+      description:
+        'Root component with variant/size styling, interactive/dismissible logic, and accessibility attributes',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript type definitions for BadgeProps, BadgeVariant, and BadgeSize',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the Badge component and types',
+    },
     { name: 'README.md', description: 'Component documentation and usage guidelines' },
   ],
   targetPath: 'src/components',
@@ -53,7 +63,7 @@ export const badgeEntry: ComponentRegistryEntry = {
   rootProps: [
     {
       name: 'variant',
-      type: "BadgeVariant",
+      type: 'BadgeVariant',
       required: false,
       defaultValue: "'brand'",
       description: 'Semantic variant controlling background and text colors.',
@@ -61,29 +71,33 @@ export const badgeEntry: ComponentRegistryEntry = {
     },
     {
       name: 'size',
-      type: "BadgeSize",
+      type: 'BadgeSize',
       required: false,
       defaultValue: "'md'",
-      description: 'Controls the badge height, padding, and font size. All sizes meet WCAG 2.2 minimum target dimensions.',
+      description:
+        'Controls the badge height, padding, and font size. All sizes meet WCAG 2.2 minimum target dimensions.',
       options: ['sm', 'md', 'lg'],
     },
     {
       name: 'as',
       type: "'span' | 'div' | 'a'",
       required: false,
-      description: 'Forces a specific HTML element to render. When omitted, the component uses "button" if onClick is provided, otherwise "span".',
+      description:
+        'Forces a specific HTML element to render. When omitted, the component uses "button" if onClick is provided, otherwise "span".',
     },
     {
       name: 'onClick',
       type: '() => void',
       required: false,
-      description: 'Makes the badge interactive. When provided, the badge renders as a <button> element with hover and active states.',
+      description:
+        'Makes the badge interactive. When provided, the badge renders as a <button> element with hover and active states.',
     },
     {
       name: 'onDismiss',
       type: '() => void',
       required: false,
-      description: 'Adds a dismiss button with an X icon. Can be combined with onClick for badges that are both clickable and dismissible.',
+      description:
+        'Adds a dismiss button with an X icon. Can be combined with onClick for badges that are both clickable and dismissible.',
     },
     {
       name: 'dismissLabel',
@@ -123,21 +137,24 @@ export const badgeEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['brand', 'muted', 'warning', 'success', 'destructive', 'info'],
       defaultValue: "'brand'",
-      description: 'Controls the visual style and semantic meaning. Brand is the primary style, muted de-emphasizes content, and the remaining variants convey status.',
+      description:
+        'Controls the visual style and semantic meaning. Brand is the primary style, muted de-emphasizes content, and the remaining variants convey status.',
     },
     {
       name: 'interactive',
       prop: 'onClick',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'When onClick is provided, the badge renders as a <button> with cursor-pointer, hover:opacity-90, and active:scale-95 effects.',
+      description:
+        'When onClick is provided, the badge renders as a <button> with cursor-pointer, hover:opacity-90, and active:scale-95 effects.',
     },
     {
       name: 'dismissible',
       prop: 'onDismiss',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'When onDismiss is provided, a close button with an X icon appears. In static mode it sits inline; when combined with onClick, the badge uses a group layout with sibling buttons.',
+      description:
+        'When onDismiss is provided, a close button with an X icon appears. In static mode it sits inline; when combined with onClick, the badge uses a group layout with sibling buttons.',
     },
   ],
 
@@ -146,12 +163,14 @@ export const badgeEntry: ComponentRegistryEntry = {
     {
       name: 'onClick',
       signature: '() => void',
-      description: 'Fired when the badge (or its main action area in dismissible mode) is clicked. Makes the badge interactive and renders it as a button.',
+      description:
+        'Fired when the badge (or its main action area in dismissible mode) is clicked. Makes the badge interactive and renders it as a button.',
     },
     {
       name: 'onDismiss',
       signature: '() => void',
-      description: 'Fired when the dismiss (X) button is clicked. Typically used to remove the badge from a list via state management.',
+      description:
+        'Fired when the dismiss (X) button is clicked. Typically used to remove the badge from a list via state management.',
     },
   ],
 
@@ -160,37 +179,44 @@ export const badgeEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-label',
-        description: 'Applied to the dismiss button. Defaults to "Remove" via dismissLabel prop, and should be overridden to describe what is being removed (e.g. "Remove React tag").',
+        description:
+          'Applied to the dismiss button. Defaults to "Remove" via dismissLabel prop, and should be overridden to describe what is being removed (e.g. "Remove React tag").',
         managedByComponent: true,
       },
       {
         name: 'role="group"',
-        description: 'Applied to the outer span when the badge is both interactive and dismissible, to semantically group the two sibling button elements.',
+        description:
+          'Applied to the outer span when the badge is both interactive and dismissible, to semantically group the two sibling button elements.',
         managedByComponent: true,
       },
       {
         name: 'aria-hidden',
-        description: 'Applied to the visual separator span between the action and dismiss buttons (interactive + dismissible mode), since it is purely decorative.',
+        description:
+          'Applied to the visual separator span between the action and dismiss buttons (interactive + dismissible mode), since it is purely decorative.',
         managedByComponent: true,
       },
       {
         name: 'type="button"',
-        description: 'Applied to all internal button elements to prevent unintended form submission when the badge is used inside a form.',
+        description:
+          'Applied to all internal button elements to prevent unintended form submission when the badge is used inside a form.',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Tab',
-        behavior: 'Moves focus to the badge when interactive (renders as button), or to the dismiss button when dismissible.',
+        behavior:
+          'Moves focus to the badge when interactive (renders as button), or to the dismiss button when dismissible.',
       },
       {
         key: 'Enter',
-        behavior: 'Activates the focused button — triggers onClick on the main action area or onDismiss on the dismiss button.',
+        behavior:
+          'Activates the focused button — triggers onClick on the main action area or onDismiss on the dismiss button.',
       },
       {
         key: 'Space',
-        behavior: 'Activates the focused button — triggers onClick on the main action area or onDismiss on the dismiss button.',
+        behavior:
+          'Activates the focused button — triggers onClick on the main action area or onDismiss on the dismiss button.',
       },
     ],
     focusManagement:
@@ -313,7 +339,8 @@ export default function DismissibleTags() {
     },
     {
       title: 'Interactive + Dismissible Filters',
-      description: 'Badges that are both clickable (to apply a filter) and dismissible (to remove), rendering as a group with sibling buttons.',
+      description:
+        'Badges that are both clickable (to apply a filter) and dismissible (to remove), rendering as a group with sibling buttons.',
       code: `import { useState } from 'react';
 import { Badge } from 'vayu-ui';
 
@@ -352,31 +379,36 @@ export default function FilterBadges() {
       title: 'Nesting Badge inside a button or link',
       bad: '<button><Badge variant="success">Active</Badge> Click me</button>',
       good: '<Badge variant="success" onClick={() => handleClick()}>Active</Badge>',
-      reason: 'Badge already renders as a <button> when onClick is provided. Nesting buttons inside buttons or links creates invalid HTML and breaks keyboard accessibility.',
+      reason:
+        'Badge already renders as a <button> when onClick is provided. Nesting buttons inside buttons or links creates invalid HTML and breaks keyboard accessibility.',
     },
     {
       title: 'Using onClick and onDismiss without dismissLabel',
       bad: '<Badge variant="brand" onClick={handleClick} onDismiss={handleDismiss}>Filter</Badge>',
       good: '<Badge variant="brand" onClick={handleClick} onDismiss={handleDismiss} dismissLabel="Remove Filter">Filter</Badge>',
-      reason: 'Without a descriptive dismissLabel, the dismiss button announces "Remove" generically to screen readers. Always provide a label that identifies what is being dismissed.',
+      reason:
+        'Without a descriptive dismissLabel, the dismiss button announces "Remove" generically to screen readers. Always provide a label that identifies what is being dismissed.',
     },
     {
       title: 'Hardcoding colors instead of using variants',
       bad: '<Badge className="bg-red-500 text-white">Error</Badge>',
       good: '<Badge variant="destructive">Error</Badge>',
-      reason: 'Hardcoding Tailwind colors bypasses the semantic design tokens and breaks dark mode support. Always use the variant prop for consistent theming.',
+      reason:
+        'Hardcoding Tailwind colors bypasses the semantic design tokens and breaks dark mode support. Always use the variant prop for consistent theming.',
     },
     {
       title: 'Passing very long content into Badge',
       bad: '<Badge variant="info">This is a very long descriptive sentence that defeats the purpose of a badge</Badge>',
       good: '<Badge variant="info">Active</Badge>',
-      reason: 'Badges are designed for short labels (1-3 words). Long content breaks the pill shape, overflows containers, and defeats the visual purpose. Use a Card or Alert for longer messages.',
+      reason:
+        'Badges are designed for short labels (1-3 words). Long content breaks the pill shape, overflows containers, and defeats the visual purpose. Use a Card or Alert for longer messages.',
     },
     {
       title: 'Using "as" prop to render interactive elements',
       bad: '<Badge as="a" href="/page" onClick={handleClick}>Link</Badge>',
       good: '<Badge onClick={handleClick}>Link</Badge>  // or use a proper link component',
-      reason: 'The "as" prop forces a specific element but does not add appropriate link semantics or attributes. If you need a link, use a proper link component that handles href, accessibility, and routing.',
+      reason:
+        'The "as" prop forces a specific element but does not add appropriate link semantics or attributes. If you need a link, use a proper link component that handles href, accessibility, and routing.',
     },
   ],
 };

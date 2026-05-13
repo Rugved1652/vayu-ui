@@ -68,9 +68,7 @@ export default function HoverCardDemo() {
 
       {/* Rich content */}
       <div>
-        <Typography.H5>
-          Rich content
-        </Typography.H5>
+        <Typography.H5>Rich content</Typography.H5>
         <HoverCard
           side="right"
           content={

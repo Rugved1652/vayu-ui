@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { forwardRef } from "react";
-import { clsx } from "clsx";
-import { useVideoPlayer } from "./VideoPlayer";
-import { VIDEO_BTN } from "./utils";
+import { forwardRef } from 'react';
+import { clsx } from 'clsx';
+import { useVideoPlayer } from './VideoPlayer';
+import { VIDEO_BTN } from './utils';
 import type {
   VideoPlayerFullscreenProps,
   VideoPlayerPiPProps,
   VideoPlayerCaptionsProps,
   VideoPlayerQualityProps,
   VideoPlayerSpeedProps,
-} from "./types";
+} from './types';
 
 // ============================================================================
 // Fullscreen toggle
@@ -24,19 +24,19 @@ export const VideoPlayerFullscreen = forwardRef<HTMLButtonElement, VideoPlayerFu
       <button
         ref={ref}
         type="button"
-        aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+        aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
         aria-pressed={isFullscreen}
         onClick={toggleFullscreen}
         className={clsx(VIDEO_BTN, className)}
         {...props}
       >
-        {typeof children === "function" ? children(isFullscreen) : children}
+        {typeof children === 'function' ? children(isFullscreen) : children}
       </button>
     );
-  }
+  },
 );
 
-VideoPlayerFullscreen.displayName = "VideoPlayer.Fullscreen";
+VideoPlayerFullscreen.displayName = 'VideoPlayer.Fullscreen';
 
 // ============================================================================
 // PiP toggle
@@ -45,8 +45,7 @@ VideoPlayerFullscreen.displayName = "VideoPlayer.Fullscreen";
 export const VideoPlayerPiP = forwardRef<HTMLButtonElement, VideoPlayerPiPProps>(
   ({ children, className, ...props }, ref) => {
     const { isPiP, togglePiP } = useVideoPlayer();
-    const isSupported =
-      typeof document !== "undefined" && "pictureInPictureEnabled" in document;
+    const isSupported = typeof document !== 'undefined' && 'pictureInPictureEnabled' in document;
 
     if (!isSupported) return null;
 
@@ -54,19 +53,19 @@ export const VideoPlayerPiP = forwardRef<HTMLButtonElement, VideoPlayerPiPProps>
       <button
         ref={ref}
         type="button"
-        aria-label={isPiP ? "Exit picture-in-picture" : "Enter picture-in-picture"}
+        aria-label={isPiP ? 'Exit picture-in-picture' : 'Enter picture-in-picture'}
         aria-pressed={isPiP}
         onClick={togglePiP}
         className={clsx(VIDEO_BTN, className)}
         {...props}
       >
-        {typeof children === "function" ? children(isPiP) : children}
+        {typeof children === 'function' ? children(isPiP) : children}
       </button>
     );
-  }
+  },
 );
 
-VideoPlayerPiP.displayName = "VideoPlayer.PiP";
+VideoPlayerPiP.displayName = 'VideoPlayer.PiP';
 
 // ============================================================================
 // Captions toggle
@@ -81,20 +80,20 @@ export const VideoPlayerCaptions = forwardRef<HTMLButtonElement, VideoPlayerCapt
       <button
         ref={ref}
         type="button"
-        aria-label={captionsEnabled ? "Disable captions" : "Enable captions"}
+        aria-label={captionsEnabled ? 'Disable captions' : 'Enable captions'}
         aria-pressed={captionsEnabled}
         disabled={!hasCaptions}
         onClick={toggleCaptions}
         className={clsx(VIDEO_BTN, className)}
         {...props}
       >
-        {typeof children === "function" ? children(captionsEnabled) : children}
+        {typeof children === 'function' ? children(captionsEnabled) : children}
       </button>
     );
-  }
+  },
 );
 
-VideoPlayerCaptions.displayName = "VideoPlayer.Captions";
+VideoPlayerCaptions.displayName = 'VideoPlayer.Captions';
 
 // ============================================================================
 // Quality selector
@@ -113,12 +112,12 @@ export const VideoPlayerQuality = forwardRef<HTMLSelectElement, VideoPlayerQuali
         onChange={(e) => setQuality(parseInt(e.target.value))}
         aria-label="Video quality"
         className={clsx(
-          "px-2 py-1 text-xs rounded-control",
-          "bg-surface border border-field",
-          "text-surface-content",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-          "cursor-pointer",
-          className
+          'px-2 py-1 text-xs rounded-control',
+          'bg-surface border border-field',
+          'text-surface-content',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+          'cursor-pointer',
+          className,
         )}
         {...props}
       >
@@ -130,10 +129,10 @@ export const VideoPlayerQuality = forwardRef<HTMLSelectElement, VideoPlayerQuali
         ))}
       </select>
     );
-  }
+  },
 );
 
-VideoPlayerQuality.displayName = "VideoPlayer.Quality";
+VideoPlayerQuality.displayName = 'VideoPlayer.Quality';
 
 // ============================================================================
 // Speed selector
@@ -150,23 +149,23 @@ export const VideoPlayerSpeed = forwardRef<HTMLSelectElement, VideoPlayerSpeedPr
         onChange={(e) => setPlaybackRate(parseFloat(e.target.value))}
         aria-label="Playback speed"
         className={clsx(
-          "px-2 py-1 text-xs rounded-control",
-          "bg-surface border border-field",
-          "text-surface-content",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-          "cursor-pointer",
-          className
+          'px-2 py-1 text-xs rounded-control',
+          'bg-surface border border-field',
+          'text-surface-content',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-focus',
+          'cursor-pointer',
+          className,
         )}
         {...props}
       >
         {rates.map((rate) => (
           <option key={rate} value={rate}>
-            {rate === 1 ? "1x" : `${rate}x`}
+            {rate === 1 ? '1x' : `${rate}x`}
           </option>
         ))}
       </select>
     );
-  }
+  },
 );
 
-VideoPlayerSpeed.displayName = "VideoPlayer.Speed";
+VideoPlayerSpeed.displayName = 'VideoPlayer.Speed';

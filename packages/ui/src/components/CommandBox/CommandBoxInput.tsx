@@ -28,14 +28,18 @@ export const CommandBoxInput = forwardRef<HTMLInputElement, CommandBoxInputProps
     } = useCommandBox();
 
     const localRef = useRef<HTMLInputElement | null>(null);
-    const enabledItems = useMemo(() => filteredItems.filter((item) => !item.disabled), [filteredItems]);
+    const enabledItems = useMemo(
+      () => filteredItems.filter((item) => !item.disabled),
+      [filteredItems],
+    );
 
     // Merge refs
     useEffect(() => {
       if (localRef.current) {
         (inputRef as React.MutableRefObject<HTMLInputElement | null>).current = localRef.current;
         if (typeof ref === 'function') ref(localRef.current);
-        else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = localRef.current;
+        else if (ref)
+          (ref as React.MutableRefObject<HTMLInputElement | null>).current = localRef.current;
       }
     }, [localRef.current, ref, inputRef]);
 
@@ -45,16 +49,12 @@ export const CommandBoxInput = forwardRef<HTMLInputElement, CommandBoxInputProps
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          setHighlightedIndex((prev: number) =>
-            prev < enabledItems.length - 1 ? prev + 1 : 0,
-          );
+          setHighlightedIndex((prev: number) => (prev < enabledItems.length - 1 ? prev + 1 : 0));
           break;
 
         case 'ArrowUp':
           e.preventDefault();
-          setHighlightedIndex((prev: number) =>
-            prev > 0 ? prev - 1 : enabledItems.length - 1,
-          );
+          setHighlightedIndex((prev: number) => (prev > 0 ? prev - 1 : enabledItems.length - 1));
           break;
 
         case 'Enter':

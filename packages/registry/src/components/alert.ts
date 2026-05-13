@@ -38,14 +38,39 @@ export const alertEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Alert',
   files: [
-    { name: 'Alert.tsx', description: 'Root component with variant styling, ARIA roles, and compound component assembly' },
-    { name: 'AlertIcon.tsx', description: 'Icon container with variant-aware color styling and aria-hidden' },
-    { name: 'AlertTitle.tsx', description: 'Heading element for the alert message title, renders as h5' },
-    { name: 'AlertDescription.tsx', description: 'Descriptive body text for the alert message details' },
-    { name: 'AlertContent.tsx', description: 'Layout wrapper that groups Title and Description with flex spacing' },
-    { name: 'AlertDismiss.tsx', description: 'Close button with variant-aware focus ring, dynamic aria-label, and X icon' },
-    { name: 'types.ts', description: 'TypeScript type definitions for AlertVariant and all component props' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the compound component and types' },
+    {
+      name: 'Alert.tsx',
+      description:
+        'Root component with variant styling, ARIA roles, and compound component assembly',
+    },
+    {
+      name: 'AlertIcon.tsx',
+      description: 'Icon container with variant-aware color styling and aria-hidden',
+    },
+    {
+      name: 'AlertTitle.tsx',
+      description: 'Heading element for the alert message title, renders as h5',
+    },
+    {
+      name: 'AlertDescription.tsx',
+      description: 'Descriptive body text for the alert message details',
+    },
+    {
+      name: 'AlertContent.tsx',
+      description: 'Layout wrapper that groups Title and Description with flex spacing',
+    },
+    {
+      name: 'AlertDismiss.tsx',
+      description: 'Close button with variant-aware focus ring, dynamic aria-label, and X icon',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript type definitions for AlertVariant and all component props',
+    },
+    {
+      name: 'index.ts',
+      description: 'Barrel export file re-exporting the compound component and types',
+    },
     { name: 'README.md', description: 'Component documentation and usage guidelines' },
   ],
   targetPath: 'src/components',
@@ -56,21 +81,24 @@ export const alertEntry: ComponentRegistryEntry = {
     {
       name: 'Icon',
       fileName: 'AlertIcon.tsx',
-      description: 'Renders a decorative icon with variant-aware color. Must wrap an icon element (e.g. from lucide-react).',
+      description:
+        'Renders a decorative icon with variant-aware color. Must wrap an icon element (e.g. from lucide-react).',
       props: [
         {
           name: 'variant',
-          type: "AlertVariant",
+          type: 'AlertVariant',
           required: false,
           defaultValue: "'info'",
-          description: 'Controls the icon color. Should match the parent Alert variant for consistent styling.',
+          description:
+            'Controls the icon color. Should match the parent Alert variant for consistent styling.',
           options: ['info', 'success', 'warning', 'error'],
         },
         {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
-          description: 'Icon element to display, typically an SVG icon from lucide-react or a similar library.',
+          description:
+            'Icon element to display, typically an SVG icon from lucide-react or a similar library.',
         },
         {
           name: 'className',
@@ -121,7 +149,8 @@ export const alertEntry: ComponentRegistryEntry = {
     {
       name: 'Content',
       fileName: 'AlertContent.tsx',
-      description: 'Flex layout wrapper that groups Title and Description, with right padding to avoid the dismiss button.',
+      description:
+        'Flex layout wrapper that groups Title and Description, with right padding to avoid the dismiss button.',
       props: [
         {
           name: 'children',
@@ -140,27 +169,31 @@ export const alertEntry: ComponentRegistryEntry = {
     {
       name: 'Dismiss',
       fileName: 'AlertDismiss.tsx',
-      description: 'Positioned close button with an X icon, variant-aware focus ring, and dynamically generated aria-label.',
+      description:
+        'Positioned close button with an X icon, variant-aware focus ring, and dynamically generated aria-label.',
       props: [
         {
           name: 'variant',
-          type: "AlertVariant",
+          type: 'AlertVariant',
           required: false,
           defaultValue: "'info'",
-          description: 'Controls the dismiss button color and focus ring. Should match the parent Alert variant.',
+          description:
+            'Controls the dismiss button color and focus ring. Should match the parent Alert variant.',
           options: ['info', 'success', 'warning', 'error'],
         },
         {
           name: 'alertTitle',
           type: 'string',
           required: false,
-          description: 'Optional alert title included in the auto-generated aria-label for better screen reader context (e.g. "Dismiss success alert: Saved").',
+          description:
+            'Optional alert title included in the auto-generated aria-label for better screen reader context (e.g. "Dismiss success alert: Saved").',
         },
         {
           name: 'onClick',
           type: '(event: React.MouseEvent<HTMLButtonElement>) => void',
           required: false,
-          description: 'Click handler for the dismiss button. Typically used to hide the alert via state.',
+          description:
+            'Click handler for the dismiss button. Typically used to hide the alert via state.',
         },
         {
           name: 'className',
@@ -176,17 +209,19 @@ export const alertEntry: ComponentRegistryEntry = {
   rootProps: [
     {
       name: 'variant',
-      type: "AlertVariant",
+      type: 'AlertVariant',
       required: false,
       defaultValue: "'info'",
-      description: 'Semantic variant controlling background, border, and text colors, as well as the ARIA role and live region behavior.',
+      description:
+        'Semantic variant controlling background, border, and text colors, as well as the ARIA role and live region behavior.',
       options: ['info', 'success', 'warning', 'error'],
     },
     {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description: 'Alert sub-components: Icon, Content (Title + Description), and optionally Dismiss.',
+      description:
+        'Alert sub-components: Icon, Content (Title + Description), and optionally Dismiss.',
     },
     {
       name: 'className',
@@ -212,21 +247,24 @@ export const alertEntry: ComponentRegistryEntry = {
       isBoolean: false,
       values: ['info', 'success', 'warning', 'error'],
       defaultValue: "'info'",
-      description: 'Controls the visual and semantic style. Info and success use role="status" with aria-live="polite"; warning and error use role="alert" with aria-live="assertive".',
+      description:
+        'Controls the visual and semantic style. Info and success use role="status" with aria-live="polite"; warning and error use role="alert" with aria-live="assertive".',
     },
     {
       name: 'visible',
       prop: 'parent-controlled (conditional rendering)',
       isBoolean: true,
       defaultValue: 'true',
-      description: 'Alert visibility is managed by the parent via conditional rendering. Typically toggled by the Dismiss onClick handler.',
+      description:
+        'Alert visibility is managed by the parent via conditional rendering. Typically toggled by the Dismiss onClick handler.',
     },
     {
       name: 'disabled',
       prop: 'disabled (on Dismiss)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'When disabled is passed to Alert.Dismiss, the button becomes non-interactive via native HTMLButtonElement disabled attribute.',
+      description:
+        'When disabled is passed to Alert.Dismiss, the button becomes non-interactive via native HTMLButtonElement disabled attribute.',
     },
   ],
 
@@ -235,7 +273,8 @@ export const alertEntry: ComponentRegistryEntry = {
     {
       name: 'onClick',
       signature: '(event: React.MouseEvent<HTMLButtonElement>) => void',
-      description: 'Fired when the Dismiss button is clicked. Typically used to set visibility state and hide the alert.',
+      description:
+        'Fired when the Dismiss button is clicked. Typically used to set visibility state and hide the alert.',
     },
   ],
 
@@ -244,17 +283,20 @@ export const alertEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'role',
-        description: 'Set to "status" for info/success variants and "alert" for warning/error variants, matching the urgency of the message.',
+        description:
+          'Set to "status" for info/success variants and "alert" for warning/error variants, matching the urgency of the message.',
         managedByComponent: true,
       },
       {
         name: 'aria-live',
-        description: 'Set to "polite" for info/success variants (announced when idle) and "assertive" for warning/error variants (announced immediately).',
+        description:
+          'Set to "polite" for info/success variants (announced when idle) and "assertive" for warning/error variants (announced immediately).',
         managedByComponent: true,
       },
       {
         name: 'aria-atomic',
-        description: 'Always "true" — ensures screen readers announce the entire alert content as a single unit.',
+        description:
+          'Always "true" — ensures screen readers announce the entire alert content as a single unit.',
         managedByComponent: true,
       },
       {
@@ -264,27 +306,32 @@ export const alertEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-hidden',
-        description: 'Applied to the Icon container div, always "true" since icons are decorative and the meaning is conveyed by the variant role and text content.',
+        description:
+          'Applied to the Icon container div, always "true" since icons are decorative and the meaning is conveyed by the variant role and text content.',
         managedByComponent: true,
       },
       {
         name: 'aria-label',
-        description: 'Applied to the Dismiss button. Dynamically generated: "Dismiss {variant} alert" or "Dismiss {variant} alert: {alertTitle}" when alertTitle is provided.',
+        description:
+          'Applied to the Dismiss button. Dynamically generated: "Dismiss {variant} alert" or "Dismiss {variant} alert: {alertTitle}" when alertTitle is provided.',
         managedByComponent: true,
       },
     ],
     keyboardInteractions: [
       {
         key: 'Tab',
-        behavior: 'Moves focus to the Dismiss button if present. The Dismiss button is the only focusable element inside the alert.',
+        behavior:
+          'Moves focus to the Dismiss button if present. The Dismiss button is the only focusable element inside the alert.',
       },
       {
         key: 'Enter',
-        behavior: 'Activates the focused Dismiss button, triggering the onClick handler to hide the alert.',
+        behavior:
+          'Activates the focused Dismiss button, triggering the onClick handler to hide the alert.',
       },
       {
         key: 'Space',
-        behavior: 'Activates the focused Dismiss button, triggering the onClick handler to hide the alert.',
+        behavior:
+          'Activates the focused Dismiss button, triggering the onClick handler to hide the alert.',
       },
     ],
     focusManagement:
@@ -303,7 +350,8 @@ export const alertEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'button',
-      reason: 'Used alongside alerts for "try again" or "reset" actions after error or warning states',
+      reason:
+        'Used alongside alerts for "try again" or "reset" actions after error or warning states',
     },
     {
       slug: 'typography',
@@ -327,7 +375,8 @@ export const alertEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Info Alert',
-      description: 'Basic informational alert using the default variant with an icon, title, and description.',
+      description:
+        'Basic informational alert using the default variant with an icon, title, and description.',
       code: `import { Alert } from 'vayu-ui';
 import { Info } from 'lucide-react';
 
@@ -350,7 +399,8 @@ export default function InfoAlert() {
     },
     {
       title: 'Dismissible Success Alert',
-      description: 'Success alert with a dismiss button that hides the alert on click using React state.',
+      description:
+        'Success alert with a dismiss button that hides the alert on click using React state.',
       code: `import { useState } from 'react';
 import { Alert } from 'vayu-ui';
 import { CheckCircle } from 'lucide-react';
@@ -381,7 +431,8 @@ export default function DismissibleAlert() {
     },
     {
       title: 'Error Alert with Dismiss',
-      description: 'Error alert with dismiss functionality for displaying form validation or API errors.',
+      description:
+        'Error alert with dismiss functionality for displaying form validation or API errors.',
       code: `import { useState } from 'react';
 import { Alert } from 'vayu-ui';
 import { XCircle } from 'lucide-react';
@@ -420,25 +471,29 @@ export default function ErrorAlert() {
       title: 'Mismatched variant on Icon or Dismiss',
       bad: '<Alert variant="error"><Alert.Icon variant="info"><XCircle /></Alert.Icon>...</Alert>',
       good: '<Alert variant="error"><Alert.Icon variant="error"><XCircle /></Alert.Icon>...</Alert>',
-      reason: 'The Icon and Dismiss variant must match the root Alert variant. Mismatched variants produce inconsistent colors — the icon or dismiss button will have a different color than the alert background and border.',
+      reason:
+        'The Icon and Dismiss variant must match the root Alert variant. Mismatched variants produce inconsistent colors — the icon or dismiss button will have a different color than the alert background and border.',
     },
     {
       title: 'Using Dismiss outside Alert',
       bad: '<div><Alert.Dismiss variant="error" onClick={handleClose} /></div>',
       good: '<Alert variant="error">...<Alert.Dismiss variant="error" onClick={handleClose} /></Alert>',
-      reason: 'Alert.Dismiss is absolutely positioned (top-4 right-4) relative to the Alert container. Using it outside Alert breaks positioning and it loses its visual context.',
+      reason:
+        'Alert.Dismiss is absolutely positioned (top-4 right-4) relative to the Alert container. Using it outside Alert breaks positioning and it loses its visual context.',
     },
     {
       title: 'Hardcoding colors instead of using variants',
       bad: '<Alert className="bg-red-100 border-red-500 text-red-900">...</Alert>',
       good: '<Alert variant="error">...</Alert>',
-      reason: 'Hardcoding Tailwind colors bypasses the semantic design tokens (destructive, info, success, warning) and breaks dark mode support. Always use the variant prop.',
+      reason:
+        'Hardcoding Tailwind colors bypasses the semantic design tokens (destructive, info, success, warning) and breaks dark mode support. Always use the variant prop.',
     },
     {
       title: 'Wrapping Title or Description in interactive elements',
       bad: '<Alert.Title><a href="/help">Learn more</a></Alert.Title>',
       good: '<Alert.Title>Error</Alert.Title><Alert.Description>See the <a href="/help">help docs</a> for details.</Alert.Description>',
-      reason: 'Alerts use aria-live regions that announce changes to screen readers. Embedding interactive elements inside the Title or inside the live region can cause confusing repeated announcements and breaks the expected alert pattern.',
+      reason:
+        'Alerts use aria-live regions that announce changes to screen readers. Embedding interactive elements inside the Title or inside the live region can cause confusing repeated announcements and breaks the expected alert pattern.',
     },
   ],
 };

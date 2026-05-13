@@ -8,8 +8,7 @@ export const affixEntry: ComponentRegistryEntry = {
   category: 'layout',
 
   // ── Description ───────────────────────────────────────
-  description:
-    'Pins content to the viewport or a scroll container when scrolling past it.',
+  description: 'Pins content to the viewport or a scroll container when scrolling past it.',
   longDescription:
     'The Affix component monitors scroll position and switches its child to fixed or absolute positioning once a scroll threshold is reached. It supports top and bottom placement, custom scroll containers via the target prop, and fires an onAffixed callback on state transitions. A hidden placeholder preserves layout flow when the element becomes affixed.',
   tags: [
@@ -35,8 +34,16 @@ export const affixEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Affix',
   files: [
-    { name: 'Affix.tsx', description: 'Root component with ref management, placeholder, and scroll-based positioning logic' },
-    { name: 'hooks.ts', description: 'useAffixMeasure and useAffixScroll hooks for scroll/resize detection and position calculation' },
+    {
+      name: 'Affix.tsx',
+      description:
+        'Root component with ref management, placeholder, and scroll-based positioning logic',
+    },
+    {
+      name: 'hooks.ts',
+      description:
+        'useAffixMeasure and useAffixScroll hooks for scroll/resize detection and position calculation',
+    },
     { name: 'types.ts', description: 'AffixPosition and AffixProps type definitions' },
     { name: 'index.ts', description: 'Barrel export file re-exporting the component and types' },
     { name: 'README.md', description: 'Component anatomy and use-case reference', optional: true },
@@ -101,7 +108,8 @@ export const affixEntry: ComponentRegistryEntry = {
       prop: 'isAffixed (internal)',
       isBoolean: true,
       defaultValue: 'false',
-      description: 'Whether the element is currently pinned. Managed internally via scroll position measurement. Reflects in the data-affixed attribute and triggers onAffixed callback.',
+      description:
+        'Whether the element is currently pinned. Managed internally via scroll position measurement. Reflects in the data-affixed attribute and triggers onAffixed callback.',
     },
   ],
 
@@ -110,7 +118,8 @@ export const affixEntry: ComponentRegistryEntry = {
     {
       name: 'onAffixed',
       signature: '(affixed: boolean) => void',
-      description: 'Fires when the element transitions between static and affixed positioning. Receives true when affixed, false when returning to static flow.',
+      description:
+        'Fires when the element transitions between static and affixed positioning. Receives true when affixed, false when returning to static flow.',
     },
   ],
 
@@ -119,12 +128,14 @@ export const affixEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-hidden',
-        description: 'Applied to the placeholder element (always "true") to prevent screen readers from announcing the invisible layout spacer.',
+        description:
+          'Applied to the placeholder element (always "true") to prevent screen readers from announcing the invisible layout spacer.',
         managedByComponent: true,
       },
       {
         name: 'data-affixed',
-        description: 'Set on the affixed element when it is pinned. Useful for CSS hooks and test assertions. Not an ARIA attribute but aids accessibility testing.',
+        description:
+          'Set on the affixed element when it is pinned. Useful for CSS hooks and test assertions. Not an ARIA attribute but aids accessibility testing.',
         managedByComponent: true,
       },
     ],
@@ -137,10 +148,7 @@ export const affixEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'tailwind-merge' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'tailwind-merge' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -148,19 +156,23 @@ export const affixEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'navbar',
-      reason: 'Sticky navigation is the most common use case — NavBar content wrapped in Affix for persistent visibility',
+      reason:
+        'Sticky navigation is the most common use case — NavBar content wrapped in Affix for persistent visibility',
     },
     {
       slug: 'button',
-      reason: 'Frequently used inside bottom-affixed action bars for save, submit, or confirm actions',
+      reason:
+        'Frequently used inside bottom-affixed action bars for save, submit, or confirm actions',
     },
     {
       slug: 'card',
-      reason: 'Card headers or toolbars inside scrollable containers often use Affix to stay visible',
+      reason:
+        'Card headers or toolbars inside scrollable containers often use Affix to stay visible',
     },
     {
       slug: 'typography',
-      reason: 'Used alongside Affix for labels, status text, and descriptive content within pinned bars',
+      reason:
+        'Used alongside Affix for labels, status text, and descriptive content within pinned bars',
     },
     {
       slug: 'divider',
@@ -172,7 +184,8 @@ export const affixEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Top Affix with Offset',
-      description: 'Pins a navigation bar to the top of the viewport with a 20px offset and tracks affixed state via onAffixed callback.',
+      description:
+        'Pins a navigation bar to the top of the viewport with a 20px offset and tracks affixed state via onAffixed callback.',
       code: `import { Affix } from 'vayu-ui';
 import { useState } from 'react';
 
@@ -200,7 +213,8 @@ export default function TopAffix() {
     },
     {
       title: 'Bottom Affix',
-      description: 'An action bar pinned to the bottom of the viewport, useful for cookie consents or save/submit workflows.',
+      description:
+        'An action bar pinned to the bottom of the viewport, useful for cookie consents or save/submit workflows.',
       code: `import { Affix } from 'vayu-ui';
 
 export default function BottomAffix() {
@@ -219,7 +233,8 @@ export default function BottomAffix() {
     },
     {
       title: 'Custom Target Container',
-      description: 'Scopes the affix behavior to a specific scrollable element instead of the window. The bar sticks within the container boundaries.',
+      description:
+        'Scopes the affix behavior to a specific scrollable element instead of the window. The bar sticks within the container boundaries.',
       code: `import { Affix } from 'vayu-ui';
 import { useState } from 'react';
 
@@ -254,7 +269,8 @@ export default function CustomTargetAffix() {
     },
     {
       title: 'Custom Styled Affix',
-      description: 'Demonstrates passing className and style props, plus aria attributes for screen reader accessibility.',
+      description:
+        'Demonstrates passing className and style props, plus aria attributes for screen reader accessibility.',
       code: `import { Affix } from 'vayu-ui';
 
 export default function StyledAffix() {
@@ -282,31 +298,36 @@ export default function StyledAffix() {
       title: 'Forgetting role and aria-label',
       bad: '<Affix offset={20}><nav>Navigation</nav></Affix>',
       good: '<Affix offset={20} role="navigation" aria-label="Main navigation"><nav>Navigation</nav></Affix>',
-      reason: "Affix renders a plain div with no semantic role. Without explicit role and aria-label, screen readers cannot identify the pinned content's purpose.",
+      reason:
+        "Affix renders a plain div with no semantic role. Without explicit role and aria-label, screen readers cannot identify the pinned content's purpose.",
     },
     {
       title: 'Passing target as a CSS selector string',
       bad: '<Affix target="#scroll-box" position="bottom">...</Affix>',
       good: '<Affix target={document.getElementById("scroll-box")} position="bottom">...</Affix>',
-      reason: 'The target prop expects an HTMLElement reference or null, not a CSS selector string. Use a ref or querySelector to pass the actual DOM element.',
+      reason:
+        'The target prop expects an HTMLElement reference or null, not a CSS selector string. Use a ref or querySelector to pass the actual DOM element.',
     },
     {
       title: 'Using Affix without sufficient scroll content',
       bad: '<Affix offset={0}><div>Pinned</div></Affix><div style={{ height: 50 }} />',
       good: '<Affix offset={0}><div>Pinned</div></Affix><div style={{ height: 800 }} />',
-      reason: 'If the page or container has no scrollable overflow, Affix will never trigger and the component adds unnecessary overhead. Only use Affix when there is enough content to scroll past the element.',
+      reason:
+        'If the page or container has no scrollable overflow, Affix will never trigger and the component adds unnecessary overhead. Only use Affix when there is enough content to scroll past the element.',
     },
     {
       title: 'Overriding position style without understanding affix logic',
       bad: '<Affix style={{ position: "absolute", top: 0 }}>...</Affix>',
       good: '<Affix offset={0}>...</Affix>',
-      reason: 'Affix dynamically manages position, top, bottom, left, width, and zIndex in its inline styles. Overriding these via the style prop will conflict with the affix positioning logic.',
+      reason:
+        'Affix dynamically manages position, top, bottom, left, width, and zIndex in its inline styles. Overriding these via the style prop will conflict with the affix positioning logic.',
     },
     {
       title: 'Nesting Affix components',
       bad: '<Affix position="top"><Affix position="bottom">...</Affix></Affix>',
       good: 'Place each Affix as a sibling at the same level in the DOM tree.',
-      reason: 'Nested Affix components create conflicting scroll listeners and layout placeholder interactions. Each Affix should be an independent sibling element.',
+      reason:
+        'Nested Affix components create conflicting scroll listeners and layout placeholder interactions. Each Affix should be an independent sibling element.',
     },
   ],
 };

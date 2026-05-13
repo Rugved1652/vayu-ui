@@ -73,8 +73,7 @@ export const textAreaEntry: ComponentRegistryEntry = {
     },
     {
       name: 'index.ts',
-      description:
-        'Barrel export file assembling the compound component and re-exporting types',
+      description: 'Barrel export file assembling the compound component and re-exporting types',
     },
     {
       name: 'README.md',
@@ -104,8 +103,7 @@ export const textAreaEntry: ComponentRegistryEntry = {
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description:
-            'Whether to display the character count inline next to the label text.',
+          description: 'Whether to display the character count inline next to the label text.',
         },
         {
           name: 'className',
@@ -222,16 +220,14 @@ export const textAreaEntry: ComponentRegistryEntry = {
       name: 'children',
       type: 'React.ReactNode',
       required: true,
-      description:
-        'Compound sub-components (Label, Input, SupportText, ErrorText, CharCount).',
+      description: 'Compound sub-components (Label, Input, SupportText, ErrorText, CharCount).',
     },
     {
       name: 'size',
       type: "'sm' | 'md' | 'lg'",
       required: false,
       defaultValue: "'md'",
-      description:
-        'Controls the padding and font size of the textarea input.',
+      description: 'Controls the padding and font size of the textarea input.',
       options: ['sm', 'md', 'lg'],
     },
     {
@@ -280,8 +276,7 @@ export const textAreaEntry: ComponentRegistryEntry = {
       prop: 'isFocused (internal)',
       isBoolean: true,
       defaultValue: 'false',
-      description:
-        'Textarea has focus. Applies focus ring (ring-focus/20) and focus border color.',
+      description: 'Textarea has focus. Applies focus ring (ring-focus/20) and focus border color.',
     },
     {
       name: 'error',
@@ -305,8 +300,7 @@ export const textAreaEntry: ComponentRegistryEntry = {
   events: [
     {
       name: 'onChange',
-      signature:
-        '(event: React.ChangeEvent<HTMLTextAreaElement>) => void',
+      signature: '(event: React.ChangeEvent<HTMLTextAreaElement>) => void',
       description:
         'Fires when the textarea value changes. Also updates the internal character count.',
     },
@@ -319,8 +313,7 @@ export const textAreaEntry: ComponentRegistryEntry = {
     {
       name: 'onBlur',
       signature: '(event: React.FocusEvent<HTMLTextAreaElement>) => void',
-      description:
-        'Fires when the textarea loses focus. Also clears internal focus state.',
+      description: 'Fires when the textarea loses focus. Also clears internal focus state.',
     },
   ],
 
@@ -336,8 +329,7 @@ export const textAreaEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-invalid',
-        description:
-          'Set to true on the textarea when the error prop is true on the root.',
+        description: 'Set to true on the textarea when the error prop is true on the root.',
         managedByComponent: true,
       },
       {
@@ -360,8 +352,7 @@ export const textAreaEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-disabled',
-        description:
-          'Set to true on the textarea when the disabled prop is true on the root.',
+        description: 'Set to true on the textarea when the disabled prop is true on the root.',
         managedByComponent: true,
       },
       {
@@ -391,14 +382,14 @@ export const textAreaEntry: ComponentRegistryEntry = {
       },
       {
         key: 'Shift+Tab',
-        behavior:
-          'Moves focus away from the textarea to the previous focusable element.',
+        behavior: 'Moves focus away from the textarea to the previous focusable element.',
       },
     ],
     focusManagement:
       'Focus ring with ring-focus/20 and border-focus is shown on focus and removed on blur via internal isFocused state.',
     wcagLevel: 'AA',
-    notes: 'The component uses auto-generated IDs (via React.useId) for label, input, support text, and error text elements, ensuring aria-labelledby, htmlFor, aria-describedby, and aria-errormessage are always correctly linked. SupportText registers its presence via context so aria-describedby is only populated when support text exists.',
+    notes:
+      'The component uses auto-generated IDs (via React.useId) for label, input, support text, and error text elements, ensuring aria-labelledby, htmlFor, aria-describedby, and aria-errormessage are always correctly linked. SupportText registers its presence via context so aria-describedby is only populated when support text exists.',
   },
 
   // ── Dependencies ──────────────────────────────────────
@@ -415,8 +406,7 @@ export const textAreaEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'button',
-      reason:
-        'Submit and cancel actions are commonly placed below TextArea fields in forms.',
+      reason: 'Submit and cancel actions are commonly placed below TextArea fields in forms.',
     },
     {
       slug: 'form',
@@ -498,8 +488,7 @@ export default function ValidationTextArea() {
     },
     {
       title: 'Resize Options',
-      description:
-        'All four resize modes: none, vertical (default), horizontal, and both.',
+      description: 'All four resize modes: none, vertical (default), horizontal, and both.',
       code: `import { TextArea } from 'vayu-ui';
 
 export default function ResizeTextArea() {
@@ -528,8 +517,7 @@ export default function ResizeTextArea() {
     },
     {
       title: 'Standalone Character Count',
-      description:
-        'Character count displayed below the input instead of in the label.',
+      description: 'Character count displayed below the input instead of in the label.',
       code: `import { TextArea } from 'vayu-ui';
 import { useState } from 'react';
 
@@ -552,8 +540,7 @@ export default function StandaloneCharCount() {
     },
     {
       title: 'With Form Actions',
-      description:
-        'TextArea paired with submit and cancel buttons in a form layout.',
+      description: 'TextArea paired with submit and cancel buttons in a form layout.',
       code: `import { TextArea, Button } from 'vayu-ui';
 
 export default function FormTextArea() {

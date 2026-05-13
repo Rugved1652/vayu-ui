@@ -38,14 +38,42 @@ export const typographyEntry: ComponentRegistryEntry = {
   // ── File & CLI ────────────────────────────────────────
   directoryName: 'Typography',
   files: [
-    { name: 'Typography.tsx', description: 'Root compound object assembling all typography sub-components into a single namespace' },
-    { name: 'TypographyHeadings.tsx', description: 'H1–H6 heading components with responsive sizing and variant styling' },
-    { name: 'TypographyTextElements.tsx', description: 'P, Label, and CTA text components with variant and font support' },
-    { name: 'TypographyCode.tsx', description: 'Inline code component with language metadata and monospace styling' },
-    { name: 'TypographyLink.tsx', description: 'Link component with Next.js routing, external-link detection, and WCAG announcements' },
-    { name: 'utils.ts', description: 'getVariantClasses helper mapping variant names to design-token Tailwind classes' },
-    { name: 'types.ts', description: 'TypeScript interfaces for BaseTypographyProps and all sub-component prop types' },
-    { name: 'index.ts', description: 'Barrel export file re-exporting the Typography namespace and all type definitions' },
+    {
+      name: 'Typography.tsx',
+      description:
+        'Root compound object assembling all typography sub-components into a single namespace',
+    },
+    {
+      name: 'TypographyHeadings.tsx',
+      description: 'H1–H6 heading components with responsive sizing and variant styling',
+    },
+    {
+      name: 'TypographyTextElements.tsx',
+      description: 'P, Label, and CTA text components with variant and font support',
+    },
+    {
+      name: 'TypographyCode.tsx',
+      description: 'Inline code component with language metadata and monospace styling',
+    },
+    {
+      name: 'TypographyLink.tsx',
+      description:
+        'Link component with Next.js routing, external-link detection, and WCAG announcements',
+    },
+    {
+      name: 'utils.ts',
+      description:
+        'getVariantClasses helper mapping variant names to design-token Tailwind classes',
+    },
+    {
+      name: 'types.ts',
+      description: 'TypeScript interfaces for BaseTypographyProps and all sub-component prop types',
+    },
+    {
+      name: 'index.ts',
+      description:
+        'Barrel export file re-exporting the Typography namespace and all type definitions',
+    },
   ],
   targetPath: 'src/components',
 
@@ -55,7 +83,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'H1',
       fileName: 'TypographyHeadings.tsx',
-      description: 'Renders an <h1> element with responsive sizing (4xl/5xl/6xl), bold weight, and tight tracking',
+      description:
+        'Renders an <h1> element with responsive sizing (4xl/5xl/6xl), bold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -69,7 +98,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -90,7 +128,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'H2',
       fileName: 'TypographyHeadings.tsx',
-      description: 'Renders an <h2> element with responsive sizing (3xl/4xl/5xl), extra-bold weight, and tight tracking',
+      description:
+        'Renders an <h2> element with responsive sizing (3xl/4xl/5xl), extra-bold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -104,7 +143,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -126,7 +174,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'H3',
       fileName: 'TypographyHeadings.tsx',
-      description: 'Renders an <h3> element with responsive sizing (2xl/3xl/4xl), semibold weight, and tight tracking',
+      description:
+        'Renders an <h3> element with responsive sizing (2xl/3xl/4xl), semibold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -140,7 +189,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -161,7 +219,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'H4',
       fileName: 'TypographyHeadings.tsx',
-      description: 'Renders an <h4> element with responsive sizing (xl/2xl/3xl), semibold weight, and tight tracking',
+      description:
+        'Renders an <h4> element with responsive sizing (xl/2xl/3xl), semibold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -175,7 +234,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -196,7 +264,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'H5',
       fileName: 'TypographyHeadings.tsx',
-      description: 'Renders an <h5> element with responsive sizing (lg/xl/2xl), semibold weight, and tight tracking',
+      description:
+        'Renders an <h5> element with responsive sizing (lg/xl/2xl), semibold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -210,7 +279,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -231,7 +309,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'H6',
       fileName: 'TypographyHeadings.tsx',
-      description: 'Renders an <h6> element with responsive sizing (base/lg/xl), semibold weight, and tight tracking',
+      description:
+        'Renders an <h6> element with responsive sizing (base/lg/xl), semibold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -245,7 +324,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -266,7 +354,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'P',
       fileName: 'TypographyTextElements.tsx',
-      description: 'Renders a <p> element with paragraph sizing, relaxed leading, and secondary font by default',
+      description:
+        'Renders a <p> element with paragraph sizing, relaxed leading, and secondary font by default',
       props: [
         {
           name: 'children',
@@ -280,7 +369,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -302,7 +400,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'Label',
       fileName: 'TypographyTextElements.tsx',
-      description: 'Renders a <label> element with base sizing and relaxed leading, supports htmlFor for form association',
+      description:
+        'Renders a <label> element with base sizing and relaxed leading, supports htmlFor for form association',
       props: [
         {
           name: 'children',
@@ -322,7 +421,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -343,7 +451,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'Code',
       fileName: 'TypographyCode.tsx',
-      description: 'Renders a <code> element with monospace font, rounded background, focus ring, and optional language metadata',
+      description:
+        'Renders a <code> element with monospace font, rounded background, focus ring, and optional language metadata',
       props: [
         {
           name: 'children',
@@ -355,7 +464,8 @@ export const typographyEntry: ComponentRegistryEntry = {
           name: 'codeLang',
           type: 'string',
           required: false,
-          description: 'Programming language hint stored as data-code-lang and used for auto-generated aria-label',
+          description:
+            'Programming language hint stored as data-code-lang and used for auto-generated aria-label',
         },
         {
           name: 'variant',
@@ -363,7 +473,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -384,7 +503,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'Link',
       fileName: 'TypographyLink.tsx',
-      description: 'Renders a navigation link using Next.js Link for internal routes or a native <a> for external URLs, with WCAG-compliant external-link announcements and focus rings',
+      description:
+        'Renders a navigation link using Next.js Link for internal routes or a native <a> for external URLs, with WCAG-compliant external-link announcements and focus rings',
       props: [
         {
           name: 'children',
@@ -396,13 +516,15 @@ export const typographyEntry: ComponentRegistryEntry = {
           name: 'href',
           type: 'string',
           required: false,
-          description: 'URL or path; http/https URLs render as external links, all others use Next.js Link',
+          description:
+            'URL or path; http/https URLs render as external links, all others use Next.js Link',
         },
         {
           name: 'target',
           type: 'string',
           required: false,
-          description: 'Link target attribute; target="_blank" triggers external-link behavior with rel="noopener noreferrer"',
+          description:
+            'Link target attribute; target="_blank" triggers external-link behavior with rel="noopener noreferrer"',
         },
         {
           name: 'variant',
@@ -410,7 +532,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -431,7 +562,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'CTA',
       fileName: 'TypographyTextElements.tsx',
-      description: 'Renders a <p> element with CTA-specific styling for call-to-action text in marketing sections',
+      description:
+        'Renders a <p> element with CTA-specific styling for call-to-action text in marketing sections',
       props: [
         {
           name: 'children',
@@ -445,7 +577,16 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: "'primary'",
           description: 'Color variant applied via design tokens',
-          options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+          options: [
+            'primary',
+            'secondary',
+            'tertiary',
+            'error',
+            'warning',
+            'info',
+            'success',
+            'gradient',
+          ],
         },
         {
           name: 'ellipsis',
@@ -472,8 +613,18 @@ export const typographyEntry: ComponentRegistryEntry = {
       type: "'primary' | 'secondary' | 'tertiary' | 'error' | 'warning' | 'info' | 'success' | 'gradient'",
       required: false,
       defaultValue: "'primary'",
-      description: 'Color variant mapped to design tokens: canvas-content, muted-content, surface-content/70, destructive, warning, info, success, or brand gradient',
-      options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+      description:
+        'Color variant mapped to design tokens: canvas-content, muted-content, surface-content/70, destructive, warning, info, success, or brand gradient',
+      options: [
+        'primary',
+        'secondary',
+        'tertiary',
+        'error',
+        'warning',
+        'info',
+        'success',
+        'gradient',
+      ],
     },
     {
       name: 'ellipsis',
@@ -486,7 +637,8 @@ export const typographyEntry: ComponentRegistryEntry = {
       name: 'font',
       type: "'primary' | 'secondary'",
       required: false,
-      description: 'Switches the font family between primary (Oswald) and secondary (Mulish) using Tailwind font-{value}',
+      description:
+        'Switches the font family between primary (Oswald) and secondary (Mulish) using Tailwind font-{value}',
       options: ['primary', 'secondary'],
     },
     {
@@ -526,7 +678,16 @@ export const typographyEntry: ComponentRegistryEntry = {
   // ── Variants & Sizes ──────────────────────────────────
   variants: {
     propName: 'variant',
-    options: ['primary', 'secondary', 'tertiary', 'error', 'warning', 'info', 'success', 'gradient'],
+    options: [
+      'primary',
+      'secondary',
+      'tertiary',
+      'error',
+      'warning',
+      'info',
+      'success',
+      'gradient',
+    ],
     default: 'primary',
   },
 
@@ -538,12 +699,14 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'onClick',
       signature: '(event: React.MouseEvent<HTMLElement>) => void',
-      description: 'Fired when the element is clicked; available on all sub-components via inherited HTML attributes',
+      description:
+        'Fired when the element is clicked; available on all sub-components via inherited HTML attributes',
     },
     {
       name: 'onFocus',
       signature: '(event: React.FocusEvent<HTMLElement>) => void',
-      description: 'Fired when the element receives focus; triggers the focus-visible ring on Link and Code',
+      description:
+        'Fired when the element receives focus; triggers the focus-visible ring on Link and Code',
     },
     {
       name: 'onBlur',
@@ -562,32 +725,38 @@ export const typographyEntry: ComponentRegistryEntry = {
     attributes: [
       {
         name: 'aria-label',
-        description: 'Set via the ariaLabel prop on all sub-components. Link auto-appends "(opens in a new tab)" or "(external link)" for external URLs. Code auto-generates from codeLang when no ariaLabel is provided.',
+        description:
+          'Set via the ariaLabel prop on all sub-components. Link auto-appends "(opens in a new tab)" or "(external link)" for external URLs. Code auto-generates from codeLang when no ariaLabel is provided.',
         managedByComponent: false,
       },
       {
         name: 'aria-describedby',
-        description: 'Set via the ariaDescribedby prop on all sub-components to associate descriptive text',
+        description:
+          'Set via the ariaDescribedby prop on all sub-components to associate descriptive text',
         managedByComponent: false,
       },
       {
         name: 'aria-hidden',
-        description: 'Set via the ariaHidden prop on all sub-components. Also applied to the external-link SVG icon in Link to hide decorative content from assistive technology.',
+        description:
+          'Set via the ariaHidden prop on all sub-components. Also applied to the external-link SVG icon in Link to hide decorative content from assistive technology.',
         managedByComponent: false,
       },
       {
         name: 'role',
-        description: 'Code defaults to role="code"; all other sub-components use native semantic roles. Overridable via the role prop.',
+        description:
+          'Code defaults to role="code"; all other sub-components use native semantic roles. Overridable via the role prop.',
         managedByComponent: false,
       },
       {
         name: 'rel="noopener noreferrer"',
-        description: 'Automatically added by Link when target="_blank" to prevent reverse tabnapping security vulnerability.',
+        description:
+          'Automatically added by Link when target="_blank" to prevent reverse tabnapping security vulnerability.',
         managedByComponent: true,
       },
       {
         name: 'data-code-lang',
-        description: 'Set by Code component from the codeLang prop to expose language metadata for tooling.',
+        description:
+          'Set by Code component from the codeLang prop to expose language metadata for tooling.',
         managedByComponent: true,
       },
     ],
@@ -613,10 +782,7 @@ export const typographyEntry: ComponentRegistryEntry = {
   },
 
   // ── Dependencies ──────────────────────────────────────
-  npmDependencies: [
-    { name: 'clsx' },
-    { name: 'next' },
-  ],
+  npmDependencies: [{ name: 'clsx' }, { name: 'next' }],
   registryDependencies: [],
   reactPeerDependency: '>=18.0.0',
 
@@ -624,7 +790,8 @@ export const typographyEntry: ComponentRegistryEntry = {
   peerComponents: [
     {
       slug: 'card',
-      reason: 'Cards commonly contain Typography headings, paragraphs, and CTAs for content sections',
+      reason:
+        'Cards commonly contain Typography headings, paragraphs, and CTAs for content sections',
     },
     {
       slug: 'text-input',
@@ -632,7 +799,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'alert',
-      reason: 'Typography error/warning/success/info variants align with Alert status colors for consistent feedback',
+      reason:
+        'Typography error/warning/success/info variants align with Alert status colors for consistent feedback',
     },
     {
       slug: 'modal',
@@ -640,7 +808,8 @@ export const typographyEntry: ComponentRegistryEntry = {
     },
     {
       slug: 'button',
-      reason: 'Typography.CTA is often used alongside or above Button components in marketing and hero sections',
+      reason:
+        'Typography.CTA is often used alongside or above Button components in marketing and hero sections',
     },
   ],
 
@@ -648,7 +817,8 @@ export const typographyEntry: ComponentRegistryEntry = {
   examples: [
     {
       title: 'Headings H1–H6',
-      description: 'All six heading levels rendered inside a surface container, demonstrating the visual hierarchy from H1 down to H6.',
+      description:
+        'All six heading levels rendered inside a surface container, demonstrating the visual hierarchy from H1 down to H6.',
       code: `import { Typography } from 'vayu-ui';
 
 export default function HeadingsDemo() {
@@ -667,7 +837,8 @@ export default function HeadingsDemo() {
     },
     {
       title: 'Paragraphs',
-      description: 'Primary and secondary paragraph variants demonstrating standard body text and de-emphasized content.',
+      description:
+        'Primary and secondary paragraph variants demonstrating standard body text and de-emphasized content.',
       code: `import { Typography } from 'vayu-ui';
 
 export default function ParagraphsDemo() {
@@ -693,7 +864,8 @@ export default function ParagraphsDemo() {
     },
     {
       title: 'Text Components',
-      description: 'Label, Code, Link, and CTA sub-components demonstrating form labels, inline code snippets, internal and external links, and call-to-action text.',
+      description:
+        'Label, Code, Link, and CTA sub-components demonstrating form labels, inline code snippets, internal and external links, and call-to-action text.',
       code: `import { Typography } from 'vayu-ui';
 
 export default function TextComponentsDemo() {
@@ -740,7 +912,8 @@ export default function TextComponentsDemo() {
     },
     {
       title: 'Color Variants',
-      description: 'Status color variants (error, success, warning, info) for feedback text, plus a gradient heading effect.',
+      description:
+        'Status color variants (error, success, warning, info) for feedback text, plus a gradient heading effect.',
       code: `import { Typography } from 'vayu-ui';
 
 export default function VariantsDemo() {
@@ -770,7 +943,8 @@ export default function VariantsDemo() {
     },
     {
       title: 'Font Variants',
-      description: 'Switching between primary (Oswald) and secondary (Mulish) font families on paragraph elements.',
+      description:
+        'Switching between primary (Oswald) and secondary (Mulish) font families on paragraph elements.',
       code: `import { Typography } from 'vayu-ui';
 
 export default function FontDemo() {
@@ -791,31 +965,36 @@ export default function FontDemo() {
       title: 'Skipping heading levels in the document outline',
       bad: '<Typography.H1>Title</Typography.H1><Typography.H4>Section</Typography.H4>',
       good: '<Typography.H1>Title</Typography.H1><Typography.H2>Section</Typography.H2>',
-      reason: 'Heading levels must be sequential (H1→H2→H3) to maintain a proper document outline. Skipping levels confuses screen reader users who navigate by headings. Use the correct semantic level, not the visual size.',
+      reason:
+        'Heading levels must be sequential (H1→H2→H3) to maintain a proper document outline. Skipping levels confuses screen reader users who navigate by headings. Use the correct semantic level, not the visual size.',
     },
     {
       title: 'Using Typography.Link for non-navigation actions',
       bad: '<Typography.Link href="#" onClick={handleDelete}>Delete item</Typography.Link>',
       good: '<Button variant="destructive" onClick={handleDelete}>Delete item</Button>',
-      reason: 'Links are for navigation. Actions like delete, submit, or toggle should use Button. Using a link with href="#" and an onClick handler breaks accessibility expectations and keyboard navigation patterns.',
+      reason:
+        'Links are for navigation. Actions like delete, submit, or toggle should use Button. Using a link with href="#" and an onClick handler breaks accessibility expectations and keyboard navigation patterns.',
     },
     {
       title: 'Adding multiple H1 elements on a single page',
       bad: '<Typography.H1>Home</Typography.H1> ... <Typography.H1>Welcome</Typography.H1>',
       good: '<Typography.H1>Welcome</Typography.H1> ... <Typography.H2>Section</Typography.H2>',
-      reason: 'WCAG best practice recommends exactly one H1 per page to give the document a single top-level heading. Use H2–H6 for all subsequent sections.',
+      reason:
+        'WCAG best practice recommends exactly one H1 per page to give the document a single top-level heading. Use H2–H6 for all subsequent sections.',
     },
     {
       title: 'Using Typography.Label without htmlFor for form fields',
       bad: '<Typography.Label>Email</Typography.Label><input id="email" />',
       good: '<Typography.Label htmlFor="email">Email</Typography.Label><input id="email" />',
-      reason: 'Without htmlFor, the label is not programmatically associated with its input. Screen readers cannot announce the label when the input receives focus, and clicking the label will not focus the input.',
+      reason:
+        'Without htmlFor, the label is not programmatically associated with its input. Screen readers cannot announce the label when the input receives focus, and clicking the label will not focus the input.',
     },
     {
       title: 'Hardcoding colors instead of using the variant prop',
       bad: '<Typography.P className="text-red-500">Error message</Typography.P>',
       good: '<Typography.P variant="error">Error message</Typography.P>',
-      reason: 'Hardcoded colors bypass design tokens and will not adapt to theme changes (light/dark mode). The variant prop maps to semantic tokens that ensure consistent theming and WCAG contrast compliance.',
+      reason:
+        'Hardcoded colors bypass design tokens and will not adapt to theme changes (light/dark mode). The variant prop maps to semantic tokens that ensure consistent theming and WCAG contrast compliance.',
     },
   ],
 };

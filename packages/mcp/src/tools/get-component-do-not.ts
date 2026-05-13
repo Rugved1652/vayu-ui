@@ -3,7 +3,8 @@ import { registerTool } from '../lib/register-tool.js';
 import { findBySlug } from '../lib/registry.js';
 
 export function registerGetComponentDoNot(server: Parameters<typeof registerTool>[0]) {
-  registerTool(server,
+  registerTool(
+    server,
     'get_component_do_not',
     'Get anti-pattern rules for a component or hook — common mistakes with bad code, good code, and reasons. Use this to avoid generating incorrect usage.',
     {
@@ -14,7 +15,12 @@ export function registerGetComponentDoNot(server: Parameters<typeof registerTool
       const entry = findBySlug(slug);
       if (!entry) {
         return {
-          content: [{ type: 'text' as const, text: JSON.stringify({ error: `No entry found for slug "${slug}"` }) }],
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify({ error: `No entry found for slug "${slug}"` }),
+            },
+          ],
           isError: true,
         };
       }

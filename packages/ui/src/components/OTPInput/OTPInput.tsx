@@ -14,7 +14,11 @@ import React, {
 } from 'react';
 import { clsx } from 'clsx';
 import { Loader2 } from 'lucide-react';
-import { normalizeValidationState, inputLoadingSpinnerStyles, inputLoadingAria } from '../../utils/input-styles';
+import {
+  normalizeValidationState,
+  inputLoadingSpinnerStyles,
+  inputLoadingAria,
+} from '../../utils/input-styles';
 import type { OTPInputContextValue, OTPInputRootProps } from './types';
 
 // Context

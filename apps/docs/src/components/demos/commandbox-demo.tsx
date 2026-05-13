@@ -56,7 +56,7 @@ export default function CommandBoxDemo() {
 
   return (
     <div className="space-y-8">
-      <section className='my-4'>
+      <section className="my-4">
         <Typography.H5>Command Box Examples</Typography.H5>
       </section>
 
@@ -72,9 +72,7 @@ export default function CommandBoxDemo() {
             <Button onClick={() => setOpen(true)} variant="outline" className="gap-2">
               <Search className="w-4 h-4" />
               Open Command Box
-              <kbd className="ml-2 px-1.5 py-0.5 text-xs bg-muted/50 rounded">
-                Ctrl+Shift+P
-              </kbd>
+              <kbd className="ml-2 px-1.5 py-0.5 text-xs bg-muted/50 rounded">Ctrl+Shift+P</kbd>
             </Button>
 
             <p className="text-sm text-muted-content text-center">
