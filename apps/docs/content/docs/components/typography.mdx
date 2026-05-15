@@ -1,6 +1,6 @@
 ---
 title: Typography
-description: Text styles for headings, paragraphs, links, and inline code with WCAG 2.2 AA contrast compliance.
+description: Text styles for headings, paragraphs, links, and inline code with Accessible contrast compliance.
 ---
 
 import TypographyDemo from '@/components/demos/typography-demo';
@@ -9,15 +9,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui-cli@latest init #one time only
-```
-
-```bash
 npx vayu-ui-cli@latest add typography
-```
-
-```bash
-npx vayu-ui-cli@latest add -t typography
 ```
 
 ## Usage
@@ -106,7 +98,7 @@ npx vayu-ui-cli@latest add -t typography
 - **ARIA attributes** — Full support for `ariaLabel`, `ariaDescribedby`, `ariaHidden`, and `role` props on all components
 - **Focus indicators** — Links and Code elements display visible focus rings (`focus:ring-2`) for keyboard navigation
 - **Semantic HTML** — Headings use `<h1>`–`<h6>`, paragraphs use `<p>`, labels use `<label>`, code uses `<code>`, links use `<a>` or Next.js `<Link>`
-- **Contrast compliance** — All color variants use design tokens that meet WCAG 2.2 AA contrast ratios (4.5:1 for normal text, 3:1 for large text)
+- **Contrast compliance** — All color variants use design tokens that meet Accessible contrast ratios (4.5:1 for normal text, 3:1 for large text)
 - **External link announcements** — External links append "(opens in a new tab)" or "(external link)" to `aria-label` per WCAG 2.4.4 and 2.5.3
 - **Touch targets** — Links enforce a minimum 44px touch target (`min-h-11 min-w-11`) per WCAG 2.5.8
 - **Language support** — `lang` attribute for content language declaration; `codeLang` sets `data-code-lang` and auto-generates `aria-label` on Code

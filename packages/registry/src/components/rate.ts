@@ -9,7 +9,7 @@ export const rateEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A star rating component with half-star precision, custom icons, text labels, and WCAG 2.2 AA accessibility using the compound component pattern.',
+    'A star rating component with half-star precision, custom icons, text labels, and Accessible accessibility using the compound component pattern.',
   longDescription:
     'The Rate component provides interactive star ratings with support for half-star precision, configurable star counts, custom empty/filled/half icons, text labels per rating level, and read-only display mode. It uses the compound component pattern (Rate.Label, Rate.Stars, Rate.Value, Rate.TextLabel, Rate.Description, Rate.Container, Rate.ErrorText) for flexible composition. Controlled and uncontrolled modes are supported, with keyboard navigation (Arrow keys, Home/End) and full ARIA slider semantics on the stars container.',
   tags: ['rate', 'rating', 'star', 'review', 'feedback', 'score', 'input', 'form', 'interactive'],

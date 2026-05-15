@@ -5,8 +5,8 @@ export const installCommand = 'npx vayu-ui-cli@latest create my-app';
 export const highlights = [
   { label: 'Components', value: '50+', tone: 'bg-brand' },
   { label: 'Hooks', value: '35+', tone: 'bg-info' },
-  { label: 'WCAG 2.2 AA', value: 'A11y', tone: 'bg-success' },
-  { label: 'Tailwind v4', value: 'Tokens', tone: 'bg-warning' },
+  { label: 'MCP Tools', value: '15+', tone: 'bg-success' },
+  { label: 'SKILL.md', value: '5+', tone: 'bg-warning' },
 ];
 
 export const collageTreeData: TreeNode[] = [

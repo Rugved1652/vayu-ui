@@ -12,7 +12,7 @@ export default function AccordionDemo() {
           <Accordion.Header itemId="item-1">Is it accessible?</Accordion.Header>
           <Accordion.Body itemId="item-1">
             <Typography.P>
-              Yes. It adheres to the WAI-ARIA design pattern and WCAG 2.2 AA standards.
+              Yes. It adheres to the WAI-ARIA design pattern and Accessible standards.
             </Typography.P>
           </Accordion.Body>
         </Accordion.Item>
@@ -43,7 +43,7 @@ export default function AccordionDemo() {
           <Accordion.Header itemId="multi-item-1">Is it accessible?</Accordion.Header>
           <Accordion.Body itemId="multi-item-1">
             <Typography.P>
-              Yes. It adheres to the WAI-ARIA design pattern and WCAG 2.2 AA standards.
+              Yes. It adheres to the WAI-ARIA design pattern and Accessible standards.
             </Typography.P>
           </Accordion.Body>
         </Accordion.Item>

@@ -11,7 +11,7 @@ export const buttonEntry: ComponentRegistryEntry = {
   description:
     'A versatile button component with variants, sizes, loading states, icon support, and badge notifications using the compound component pattern.',
   longDescription:
-    'The Button component uses the compound component pattern (Button.Icon, Button.Badge, Button.Text) to compose rich button layouts. It supports five visual variants (primary, secondary, outline, ghost, destructive), three sizes (small, medium, large), async loading states with a spinner and customizable loading text, icon placement on either side of the label, and notification badges with absolute or inline positioning. All variants follow WCAG 2.2 AA accessibility standards.',
+    'The Button component uses the compound component pattern (Button.Icon, Button.Badge, Button.Text) to compose rich button layouts. It supports five visual variants (primary, secondary, outline, ghost, destructive), three sizes (small, medium, large), async loading states with a spinner and customizable loading text, icon placement on either side of the label, and notification badges with absolute or inline positioning. All variants follow Accessible accessibility standards.',
   tags: [
     'button',
     'click',

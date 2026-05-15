@@ -9,7 +9,7 @@ export const spinnerEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A WCAG 2.2 AA compliant animated circular loading indicator with three sizes, accessible ARIA attributes, and reduced-motion support.',
+    'A Accessible compliant animated circular loading indicator with three sizes, accessible ARIA attributes, and reduced-motion support.',
   longDescription:
     'The Spinner component renders an animated circular border spinner as an inline loading indicator. It uses design system tokens (border-brand) for consistent styling and supports three sizes: sm (w-4 h-4), md (w-6 h-6), and lg (w-8 h-8). The component includes built-in accessibility with role="status", aria-live="polite", aria-busy="true", and a screen-reader-only text node. Animations automatically respect prefers-reduced-motion via Tailwind\'s motion-reduce:animate-none. Custom colors can be applied via the className prop using semantic tokens like border-info, border-success, border-warning, or border-destructive.',
   tags: [

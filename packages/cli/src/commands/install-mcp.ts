@@ -1,5 +1,4 @@
 import {Command, Flags, ux} from '@oclif/core'
-import {homedir} from 'node:os'
 import {TOOL_DEFINITIONS, ALL_TOOL_IDS, writeMcpConfig, getConfigPath, type ToolId} from '../utils/mcp-config.js'
 import {confirm, findProjectRoot} from '../utils/project.js'
 
@@ -13,18 +12,14 @@ export default class InstallMcp extends Command {
     '<%= config.bin %> install-mcp',
     '<%= config.bin %> install-mcp --tool claude',
     '<%= config.bin %> install-mcp --tool claude,cursor',
-    '<%= config.bin %> install-mcp --global',
     '<%= config.bin %> install-mcp --dry-run',
     '<%= config.bin %> install-mcp --tool claude --force',
   ]
 
   static flags = {
     tool: Flags.string({
-      description: 'Comma-separated AI tools: claude, cursor, opencode',
-    }),
-    global: Flags.boolean({
-      description: 'Configure globally (home directory) instead of project-level',
-      default: false,
+      description:
+        'Comma-separated AI tools: claude, cursor, opencode. For Codex, Antigravity, and Windsurf, see manual setup docs.',
     }),
     'dry-run': Flags.boolean({
       description: 'Preview changes without writing files',
@@ -38,7 +33,7 @@ export default class InstallMcp extends Command {
 
   async run(): Promise<void> {
     const {flags} = await this.parse(InstallMcp)
-    const targetDir = flags.global ? homedir() : findProjectRoot(process.cwd())
+    const targetDir = findProjectRoot(process.cwd())
 
     // Resolve which tools to configure
     const toolIds = await this.resolveToolIds(flags)
@@ -54,7 +49,7 @@ export default class InstallMcp extends Command {
     this.log('')
 
     // Print plan
-    this.printPlan(toolIds, targetDir, flags.global)
+    this.printPlan(toolIds, targetDir)
     this.log('')
 
     this.log(ux.colorize('dim', '  The following entry will be added:'))
@@ -81,14 +76,11 @@ export default class InstallMcp extends Command {
         const result = writeMcpConfig(toolDef, targetDir, {
           dryRun: true,
           force: flags.force,
-          isGlobal: flags.global,
         })
-        const displayFile =
-          flags.global && toolDef.globalConfigFileName ? toolDef.globalConfigFileName : toolDef.configFileName
         if (result.action === 'dry-run') {
-          this.log(`    ${ux.colorize('cyan', 'would write')} ${displayFile}`)
+          this.log(`    ${ux.colorize('cyan', 'would write')} ${toolDef.configFileName}`)
         } else if (result.action === 'skipped-exists') {
-          this.log(`    ${ux.colorize('yellow', 'already configured')} ${displayFile}`)
+          this.log(`    ${ux.colorize('yellow', 'already configured')} ${toolDef.configFileName}`)
         }
       }
       this.log('')
@@ -104,7 +96,6 @@ export default class InstallMcp extends Command {
       const result = writeMcpConfig(toolDef, targetDir, {
         dryRun: false,
         force: flags.force,
-        isGlobal: flags.global,
       })
       results.push(result)
     }
@@ -116,9 +107,7 @@ export default class InstallMcp extends Command {
 
     for (const result of results) {
       const toolDef = TOOL_DEFINITIONS[result.toolId]
-      const fileName =
-        flags.global && toolDef.globalConfigFileName ? toolDef.globalConfigFileName : toolDef.configFileName
-      const relPath = fileName
+      const relPath = toolDef.configFileName
       if (result.action === 'created') {
         this.log(`    ${ux.colorize('green', 'created')}  ${toolDef.name.padEnd(16)} ${relPath}`)
       } else if (result.action === 'updated') {
@@ -162,13 +151,12 @@ export default class InstallMcp extends Command {
     return selected
   }
 
-  private printPlan(toolIds: ToolId[], targetDir: string, isGlobal: boolean): void {
-    const scope = isGlobal ? 'global' : 'project'
-    this.log(`  Configuring for (${scope}):`)
+  private printPlan(toolIds: ToolId[], targetDir: string): void {
+    this.log('  Configuring for (project):')
     this.log('')
     for (const id of toolIds) {
       const def = TOOL_DEFINITIONS[id]
-      const configPath = getConfigPath(id, targetDir, isGlobal)
+      const configPath = getConfigPath(id, targetDir)
       this.log(`    ${def.name.padEnd(16)} ${configPath}`)
     }
   }

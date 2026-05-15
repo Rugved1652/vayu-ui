@@ -5,6 +5,12 @@ description: A hook to manage data in localStorage.
 
 import { UseLocalStorageDemo } from '@/components/demos/use-local-storage-demo';
 
+## Installation
+
+```bash
+npx vayu-ui-cli@latest add use-local-storage
+```
+
 The `useLocalStorage` hook allows you to persist state in the browser's `localStorage`. It works similarly to `useState` but synchronizes the data with local storage so that it persists across page reloads.
 
 It also listens for changes to the local storage key from other tabs/windows and updates the state accordingly.

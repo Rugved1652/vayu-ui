@@ -308,7 +308,7 @@ export default function BasicAccordion() {
       <Accordion.Item itemId="item-1">
         <Accordion.Header itemId="item-1">Is it accessible?</Accordion.Header>
         <Accordion.Body itemId="item-1">
-          Yes. It adheres to the WAI-ARIA design pattern and WCAG 2.2 AA standards.
+          Yes. It adheres to the WAI-ARIA design pattern and Accessible standards.
         </Accordion.Body>
       </Accordion.Item>
       <Accordion.Item itemId="item-2">

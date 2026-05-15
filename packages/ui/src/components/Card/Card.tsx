@@ -32,7 +32,7 @@ const CardRoot = forwardRef<HTMLDivElement, CardProps>(
       'shadow-surface hover:shadow-elevated',
     );
 
-    // WCAG 2.2 AA: Focus visible styling using semantic focus token
+    // Accessible: Focus visible styling using semantic focus token
     const focusStyles =
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus';
 

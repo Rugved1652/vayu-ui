@@ -19,7 +19,7 @@ const sizeClasses: Record<SpinnerSize, string> = {
 // ============================================================================
 
 /**
- * Spinner — A WCAG 2.2 AA compliant loading indicator component.
+ * Spinner — A Accessible compliant loading indicator component.
  *
  * Displays an animated circular spinner using design system tokens.
  * Fully accessible with proper ARIA attributes for screen readers.

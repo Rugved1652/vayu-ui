@@ -9,7 +9,7 @@ export const fileUploadEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A compound file upload component providing drag-and-drop zone, file list with progress, validation errors, and action buttons with WCAG 2.2 AA accessibility.',
+    'A compound file upload component providing drag-and-drop zone, file list with progress, validation errors, and action buttons with Accessible accessibility.',
   longDescription:
     'The FileUpload component uses the compound component pattern (FileUpload, FileUpload.DropZone, FileUpload.DropZoneContent, FileUpload.ErrorMessage, FileUpload.List, FileUpload.Actions) to provide a complete file upload experience. The root FileUpload manages state via React Context — tracking files with metadata (id, progress, status), validation errors, and drag state. DropZone handles drag-and-drop events, keyboard activation, and hidden file input. DropZoneContent renders default upload instructions with icon. List renders selected files with per-item progress bars, file type icons, and remove buttons. ErrorMessage displays validation alerts with aria-live="polite". Actions provides Clear All and Upload Files buttons. The component validates file size, type, and count, supports keyboard navigation (Enter/Space to open dialog), manages focus back to DropZone when the file list empties, and uses ARIA roles throughout (region, button, alert, progressbar, list).',
   tags: [

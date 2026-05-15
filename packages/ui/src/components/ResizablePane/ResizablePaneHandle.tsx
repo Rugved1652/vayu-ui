@@ -1,5 +1,5 @@
 // handle.tsx
-// UI: drag handle with mouse/touch/keyboard support (WCAG 2.2 AA)
+// UI: drag handle with mouse/touch/keyboard support (Accessible)
 
 'use client';
 

@@ -12,7 +12,7 @@ Accessible, TypeScript-first React component library with Tailwind CSS v4 design
 - **31 hooks** — State management, DOM, sensors, timing, side effects
 - **Tailwind v4 tokens** — Semantic design tokens for colors, radii, shadows, and layers
 - **Compound components** — Composable APIs with namespaced subcomponents
-- **WCAG 2.2 AA** — Keyboard navigation, focus management, ARIA support
+- **Accessible** — Keyboard navigation, focus management, ARIA support
 - **CLI** — Scaffold components and hooks into any React project
 - **MCP server** — Expose the registry to AI coding assistants
 

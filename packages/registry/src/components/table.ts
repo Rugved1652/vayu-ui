@@ -9,7 +9,7 @@ export const tableEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A responsive HTML table component with compound sub-components for headers, rows, cells, caption, and footer, supporting sortable columns, selectable rows, and WCAG 2.2 AA accessibility.',
+    'A responsive HTML table component with compound sub-components for headers, rows, cells, caption, and footer, supporting sortable columns, selectable rows, and Accessible accessibility.',
   longDescription:
     'The Table component uses the compound component pattern (Table.Caption, Table.Head, Table.Body, Table.Footer, Table.Row, Table.Header, Table.Cell) to compose accessible data tables. It wraps a native <table> element in a responsive scroll container with design token styling. Table.Header supports sortable columns with aria-sort indicators and keyboard focus. Table.Row supports selection states with aria-selected and focus rings. Table.Caption can be visually hidden while remaining accessible. Table.Body announces empty states via aria-live. All sub-components extend their native HTML counterparts and support forwarded refs.',
   tags: [

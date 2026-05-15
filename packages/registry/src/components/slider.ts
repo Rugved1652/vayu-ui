@@ -9,7 +9,7 @@ export const sliderEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A range slider component supporting single value or multi-thumb range selection with pointer drag, keyboard navigation, and WCAG 2.2 AA accessibility.',
+    'A range slider component supporting single value or multi-thumb range selection with pointer drag, keyboard navigation, and Accessible accessibility.',
   longDescription:
     'The Slider component provides single value or range (multiple thumbs) selection within a configurable min/max range. It supports controlled and uncontrolled modes, custom step intervals, form submission via hidden inputs, pointer capture for smooth dragging, and comprehensive keyboard navigation (Arrow keys, Page Up/Down, Home/End). Built with compound component sub-components Slider.Track and Slider.Thumb for visual customization.',
   tags: [

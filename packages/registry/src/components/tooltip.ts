@@ -9,7 +9,7 @@ export const tooltipEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A portal-based tooltip component that displays contextual content on hover or focus, with four placement positions, seven color variants, configurable show/hide delays, directional arrows, and WCAG 2.2 AA accessibility.',
+    'A portal-based tooltip component that displays contextual content on hover or focus, with four placement positions, seven color variants, configurable show/hide delays, directional arrows, and Accessible accessibility.',
   longDescription:
     'The Tooltip component renders a floating portal element positioned relative to a trigger. It supports four placements (top, bottom, left, right) with automatic viewport-edge clamping. Seven color variants map to design tokens (default/elevated, brand, muted, success, warning, destructive, info). Show and hide delays are independently configurable. A directional arrow is rendered via a rotated square div. The tooltip body is hoverable (WCAG 2.5.7) — the hide delay keeps it visible while the cursor moves toward it. Touch targets are enforced at a minimum of 44×44px (WCAG 2.5.8) by default, but can be disabled for inline text usage. The component uses React portals for z-index layering and requestAnimationFrame for flicker-free positioning.',
   tags: [

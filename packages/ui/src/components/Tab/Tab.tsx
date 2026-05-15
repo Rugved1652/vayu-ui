@@ -13,7 +13,7 @@ import type { TabsProps, TabsOrientation, TabsContextValue } from './types';
 /**
  * Tabs Component - Compound Pattern
  * A flexible, headless-style tabbed interface component with full dark/light mode support.
- * Supports controlled/uncontrolled modes, keyboard navigation, and full accessibility (WCAG 2.2 AA).
+ * Supports controlled/uncontrolled modes, keyboard navigation, and full accessibility (Accessible).
  *
  * @example
  * ```tsx

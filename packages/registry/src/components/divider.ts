@@ -9,7 +9,7 @@ export const dividerEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A compound divider component providing horizontal or vertical visual separation with labeled variants, customizable line styles, colors, thicknesses, and WCAG 2.2 AA accessibility.',
+    'A compound divider component providing horizontal or vertical visual separation with labeled variants, customizable line styles, colors, thicknesses, and Accessible accessibility.',
   longDescription:
     'The Divider component uses the compound component pattern (Divider, Divider.Line, Divider.Label) to render visual separators between content sections. The root Divider controls orientation (horizontal/vertical) and spacing via design tokens. Divider.Line offers variant (solid/dashed/dotted), color (default/brand/success/warning/destructive/info), size (thin/normal/thick/bold), custom thickness, and opacity controls. Divider.Label renders text between line segments for labeled separators. The component automatically applies ARIA separator semantics when unlabeled, hides decorative dividers from assistive technology, and maps all colors to semantic design tokens via Tailwind classes.',
   tags: [

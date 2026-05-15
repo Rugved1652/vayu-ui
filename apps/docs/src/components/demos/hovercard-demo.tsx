@@ -17,12 +17,12 @@ export default function HoverCardDemo() {
                   VU
                 </div>
                 <div>
-                  <p className="font-semibold text-sm">Ved UI</p>
+                  <p className="font-semibold text-sm">Vayu UI</p>
                   <p className="text-xs text-muted-content">@vayuui</p>
                 </div>
               </div>
               <p className="text-xs text-muted-content">
-                A modern React component library with WCAG 2.2 AA compliance, compound patterns, and
+                A modern React component library with Accessible compliance, compound patterns, and
                 premium design.
               </p>
               <div className="flex items-center gap-3 text-xs text-muted-content">

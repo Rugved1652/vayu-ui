@@ -7,8 +7,8 @@ export interface ToolDefinition {
   id: ToolId
   name: string
   configFileName: string
-  globalConfigFileName?: string
   topLevelKey: string
+  buildEntry: () => Record<string, unknown>
 }
 
 export interface WriteResult {
@@ -17,52 +17,58 @@ export interface WriteResult {
   action: 'created' | 'updated' | 'skipped-exists' | 'dry-run'
 }
 
-export const TOOL_DEFINITIONS: Record<ToolId, ToolDefinition> = {
-  claude: {
-    id: 'claude',
-    name: 'Claude Code',
-    configFileName: '.mcp.json',
-    globalConfigFileName: '.claude.json',
-    topLevelKey: 'mcpServers',
-  },
-  cursor: {
-    id: 'cursor',
-    name: 'Cursor',
-    configFileName: '.cursor/mcp.json',
-    topLevelKey: 'mcpServers',
-  },
-  opencode: {
-    id: 'opencode',
-    name: 'OpenCode',
-    configFileName: 'opencode.json',
-    topLevelKey: 'mcpServers',
-  },
-}
-
-export const ALL_TOOL_IDS: ToolId[] = ['claude', 'cursor', 'opencode']
-
-export function buildServerEntry(_toolId: ToolId): Record<string, unknown> {
+function defaultEntry(): Record<string, unknown> {
   return {
     command: 'npx',
     args: ['-y', 'vayu-ui-mcp'],
   }
 }
 
-export function getConfigPath(toolId: ToolId, targetDir: string, isGlobal = false): string {
+function opencodeEntry(): Record<string, unknown> {
+  return {
+    type: 'local',
+    command: ['npx', '-y', 'vayu-ui-mcp'],
+  }
+}
+
+export const TOOL_DEFINITIONS: Record<ToolId, ToolDefinition> = {
+  claude: {
+    id: 'claude',
+    name: 'Claude Code',
+    configFileName: '.mcp.json',
+    topLevelKey: 'mcpServers',
+    buildEntry: defaultEntry,
+  },
+  cursor: {
+    id: 'cursor',
+    name: 'Cursor',
+    configFileName: '.cursor/mcp.json',
+    topLevelKey: 'mcpServers',
+    buildEntry: defaultEntry,
+  },
+  opencode: {
+    id: 'opencode',
+    name: 'OpenCode',
+    configFileName: 'opencode.json',
+    topLevelKey: 'mcp',
+    buildEntry: opencodeEntry,
+  },
+}
+
+export const ALL_TOOL_IDS: ToolId[] = ['claude', 'cursor', 'opencode']
+
+export function getConfigPath(toolId: ToolId, targetDir: string): string {
   const def = TOOL_DEFINITIONS[toolId]
-  const fileName = isGlobal && def.globalConfigFileName ? def.globalConfigFileName : def.configFileName
-  return join(targetDir, fileName)
+  return join(targetDir, def.configFileName)
 }
 
 export function writeMcpConfig(
   toolDef: ToolDefinition,
   targetDir: string,
-  options: {dryRun: boolean; force: boolean; isGlobal?: boolean},
+  options: {dryRun: boolean; force: boolean},
 ): WriteResult {
-  const fileName =
-    options.isGlobal && toolDef.globalConfigFileName ? toolDef.globalConfigFileName : toolDef.configFileName
-  const configPath = join(targetDir, fileName)
-  const serverEntry = buildServerEntry(toolDef.id)
+  const configPath = join(targetDir, toolDef.configFileName)
+  const serverEntry = toolDef.buildEntry()
 
   let json: Record<string, any> = {}
 

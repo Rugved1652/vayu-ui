@@ -17,7 +17,7 @@ const sliderRootStyles =
  * Slider — An input where the user selects a value from within a given range.
  *
  * Supports single value or range (multiple thumbs) with full keyboard
- * accessibility and WCAG 2.2 AA compliance.
+ * accessibility and Accessible compliance.
  *
  * @example
  * ```tsx
@@ -102,8 +102,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
             label={label}
             isDragging={isDragging}
             isActive={activeThumb === index}
-            onValueChange={onValueChange || (() => {})}
-            onValueCommit={onValueCommit || (() => {})}
+            onValueChange={onValueChange || (() => { })}
+            onValueCommit={onValueCommit || (() => { })}
             values={values}
           />
         ))}

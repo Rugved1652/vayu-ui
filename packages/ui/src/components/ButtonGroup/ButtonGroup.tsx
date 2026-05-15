@@ -24,7 +24,7 @@ const radiusClasses: Record<ButtonGroupRadius, string> = {
  *
  * - Uses CSS to enforce sizing and border connections (Server Component safe).
  * - No Context or cloneElement required.
- * - WCAG 2.2 AA Compliant (Focus management via z-index).
+ * - Accessible Compliant (Focus management via z-index).
  * - Uses semantic design tokens for consistent styling.
  *
  * @example

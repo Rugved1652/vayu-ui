@@ -55,7 +55,7 @@ vayu-ui list
 
     feedback
       alert                         A contextual feedback banner that communicates statu...
-      spinner                       A WCAG 2.2 AA compliant animated circular loading in...
+      spinner                       A Accessible compliant animated circular loading in...
 
     overlay
       modal                         An accessible dialog component with focus trapping, ...
@@ -285,9 +285,6 @@ npx vayu-ui-cli@latest install-mcp
 npx vayu-ui-cli@latest install-mcp --tool claude
 npx vayu-ui-cli@latest install-mcp --tool claude,cursor
 
-# Configure globally (home directory)
-npx vayu-ui-cli@latest install-mcp --global
-
 # Preview without writing
 npx vayu-ui-cli@latest install-mcp --dry-run
 ```
@@ -299,17 +296,15 @@ npx vayu-ui-cli@latest install-mcp --dry-run
 3. Creates parent directories if needed
 4. Skips tools that already have the config (unless `--force`)
 
-**Config files written:**
+**Config files written (project-level only):**
 
-| Tool            | Project-level             | Global                 |
-| --------------- | ------------------------- | ---------------------- |
-| Claude Code     | `.mcp.json`               | `~/.claude.json`       |
-| Cursor          | `.cursor/mcp.json`        | `~/.cursor/mcp.json`   |
-| VS Code Copilot | `.vscode/mcp.json`        | `~/.vscode/mcp.json`   |
-| Windsurf        | `.windsurf/mcp.json`      | `~/.windsurf/mcp.json` |
-| Antigravity     | `antigravity.config.json` | —                      |
+| Tool        | Config file        |
+| ----------- | ------------------ |
+| Claude Code | `.mcp.json`        |
+| Cursor      | `.cursor/mcp.json` |
+| OpenCode    | `opencode.json`    |
 
-**Entry added:**
+**Entry added (Claude Code / Cursor):**
 
 ```json
 {
@@ -322,14 +317,26 @@ npx vayu-ui-cli@latest install-mcp --dry-run
 }
 ```
 
+**Entry added (OpenCode):**
+
+```json
+{
+  "mcp": {
+    "vayu-ui": {
+      "type": "local",
+      "command": ["npx", "-y", "vayu-ui-mcp"]
+    }
+  }
+}
+```
+
 **Flags:**
 
-| Flag        | Description                                                                       |
-| ----------- | --------------------------------------------------------------------------------- |
-| `--tool`    | Comma-separated AI tools: `claude`, `cursor`, `vscode`, `windsurf`, `antigravity` |
-| `--global`  | Configure globally (home directory) instead of project-level                      |
-| `--dry-run` | Preview changes without writing files                                             |
-| `--force`   | Skip prompts and overwrite existing entries                                       |
+| Flag        | Description                                              |
+| ----------- | -------------------------------------------------------- |
+| `--tool`    | Comma-separated AI tools: `claude`, `cursor`, `opencode` |
+| `--dry-run` | Preview changes without writing files                    |
+| `--force`   | Skip prompts and overwrite existing entries              |
 
 ```bash
 # Overwrite existing config

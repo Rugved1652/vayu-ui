@@ -9,7 +9,7 @@ export default function MarqueeDemo() {
         <div className="space-y-2">
           <Typography.H1 variant="primary">Marquee Component</Typography.H1>
           <Typography.P variant="secondary">
-            WCAG 2.2 AA compliant scrolling content component with pause controls
+            Accessible compliant scrolling content component with pause controls
           </Typography.P>
         </div>
 
@@ -229,7 +229,7 @@ export default function MarqueeDemo() {
         {/* Accessibility Notes */}
         <section className="space-y-4 p-6 rounded-surface bg-muted border border-border">
           <div className="space-y-2">
-            <Typography.H3 variant="info">WCAG 2.2 AA Compliance</Typography.H3>
+            <Typography.H3 variant="info">Accessible Compliance</Typography.H3>
             <div className="space-y-3">
               <Typography.P variant="secondary">
                 <span className="font-semibold text-surface-content">2.2.2 (Level A):</span> Pause

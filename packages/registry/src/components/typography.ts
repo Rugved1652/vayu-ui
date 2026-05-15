@@ -9,7 +9,7 @@ export const typographyEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A compound typography component providing semantic heading, paragraph, label, code, link, and CTA elements with color variants, font switching, and WCAG 2.2 AA accessibility.',
+    'A compound typography component providing semantic heading, paragraph, label, code, link, and CTA elements with color variants, font switching, and Accessible accessibility.',
   longDescription:
     'The Typography component uses the compound component pattern (Typography.H1–H6, Typography.P, Typography.Label, Typography.Code, Typography.Link, Typography.CTA) to render semantic HTML text elements. All sub-components share a common set of props for color variants (primary, secondary, tertiary, error, warning, info, success, gradient), font family switching (primary, secondary), text truncation, and ARIA attributes. Link supports automatic internal/external routing with Next.js, external-link icons, and WCAG-compliant new-window announcements. Code renders inline code snippets with optional language metadata. All elements use design tokens via Tailwind classes for consistent theming.',
   tags: [
@@ -778,7 +778,7 @@ export const typographyEntry: ComponentRegistryEntry = {
       'Link and Code components include focus-visible rings (focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2). Link has a minimum touch target of 44px (min-h-11 min-w-11) for mobile accessibility.',
     wcagLevel: 'AA',
     notes:
-      'All sub-components render semantic HTML elements (h1–h6, p, label, code, a) for proper document outline and screen reader navigation. Link auto-announces external links and new-window behavior via computed aria-label per WCAG 2.4.4 and 2.5.3. Variant colors meet WCAG 2.2 AA contrast ratios: 4.5:1 for normal text, 3:1 for large text.',
+      'All sub-components render semantic HTML elements (h1–h6, p, label, code, a) for proper document outline and screen reader navigation. Link auto-announces external links and new-window behavior via computed aria-label per WCAG 2.4.4 and 2.5.3. Variant colors meet Accessible contrast ratios: 4.5:1 for normal text, 3:1 for large text.',
   },
 
   // ── Dependencies ──────────────────────────────────────

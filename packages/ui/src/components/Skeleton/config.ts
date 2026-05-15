@@ -31,7 +31,7 @@ export const sizeClasses = {
   },
 };
 
-// WCAG 2.2 AA: Respects prefers-reduced-motion
+// Accessible: Respects prefers-reduced-motion
 export const animationClasses = {
   pulse: 'animate-pulse motion-reduce:animate-none',
   wave: 'skeleton-wave motion-reduce:animate-none',

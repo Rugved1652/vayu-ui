@@ -66,7 +66,7 @@ Types: `info` (default), `warn`, `error`.
 Use standard markdown code blocks.
 
 \`\`\`tsx
-import { Button } from '@ved-ui/react';
+import { Button } from '@vayu-ui/react';
 \`\`\`
 
 ## Adding New Skills (Component Docs)

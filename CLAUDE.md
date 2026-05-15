@@ -158,7 +158,7 @@ description: A clickable button component.
 
 ## Component Guidelines
 
-1. **Accessibility**: WCAG 2.2 AA compliance (keyboard nav, focus visible, ARIA)
+1. **Accessibility**: Accessible compliance (keyboard nav, focus visible, ARIA)
 2. **Styling**: Use design tokens, never hardcode colors or pixel values
 3. **Pattern**: Prefer compound components for complex UI
 4. **Props**: Extend HTMLAttributes, support `asChild` where applicable

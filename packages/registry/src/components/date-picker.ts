@@ -9,9 +9,9 @@ export const datePickerEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A date and date-range selection component with calendar popup, month/year dropdowns, disabled date support, and WCAG 2.2 AA accessibility using the compound component pattern.',
+    'A date and date-range selection component with calendar popup, month/year dropdowns, disabled date support, and Accessible accessibility using the compound component pattern.',
   longDescription:
-    'The DatePicker component provides interactive date selection with support for single-date and date-range modes. It features a calendar popup with month/year dropdown navigation, configurable disabled weekdays and specific disabled dates, controlled and uncontrolled modes, and a footer with Today and Clear actions. It uses the compound component pattern (DatePicker.Trigger, DatePicker.Calendar, DatePicker.Calendar.Footer) for flexible composition. Full keyboard navigation (arrow keys, Home/End, PageUp/PageDown) and ARIA dialog/grid semantics are built in for WCAG 2.2 AA compliance.',
+    'The DatePicker component provides interactive date selection with support for single-date and date-range modes. It features a calendar popup with month/year dropdown navigation, configurable disabled weekdays and specific disabled dates, controlled and uncontrolled modes, and a footer with Today and Clear actions. It uses the compound component pattern (DatePicker.Trigger, DatePicker.Calendar, DatePicker.Calendar.Footer) for flexible composition. Full keyboard navigation (arrow keys, Home/End, PageUp/PageDown) and ARIA dialog/grid semantics are built in for Accessible compliance.',
   tags: [
     'date',
     'date-picker',

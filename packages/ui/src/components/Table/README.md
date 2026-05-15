@@ -15,7 +15,7 @@
 
 ## Use Cases
 
-- Displaying tabular data with WCAG 2.2 AA compliance
+- Displaying tabular data with Accessible compliance
 - Sortable column headers with aria-sort indicators
 - Selectable rows with keyboard focus support
 - Responsive tables with horizontal overflow scrolling

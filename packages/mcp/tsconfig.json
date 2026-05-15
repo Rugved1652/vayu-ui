@@ -14,7 +14,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "ved-ui-cli": ["../cli/dist"]
+      "vayu-ui-cli": ["../cli/dist"]
     }
   },
   "include": ["src/**/*"],

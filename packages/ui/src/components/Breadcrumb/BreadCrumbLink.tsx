@@ -9,7 +9,7 @@ const BreadcrumbLink = ({ className, ...props }: BreadcrumbLinkProps) => {
   return (
     <Link
       className={cn(
-        // WCAG 2.2 AA: Minimum target size is 24x24px.
+        // Accessible: Minimum target size is 24x24px.
         // py-2 (8px top/bottom) + text height (~16px) ensures vertical size >= 24px.
         // px-3 provides horizontal spacing.
         // -mx-1 prevents the increased padding from shifting the visual layout alignment.

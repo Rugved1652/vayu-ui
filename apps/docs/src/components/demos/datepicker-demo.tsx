@@ -59,7 +59,7 @@ export default function DatePickerDemo() {
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-canvas-content">DatePicker Component</h1>
           <p className="text-muted-content">
-            WCAG 2.2 AA Compliant • Keyboard Navigation • Range Selection • Disabled Dates
+            Accessible Compliant • Keyboard Navigation • Range Selection • Disabled Dates
           </p>
         </div>
 
@@ -182,7 +182,7 @@ export default function DatePickerDemo() {
             <CardHeader
               title="Keyboard Navigation"
               subtitle="Full keyboard support for accessibility"
-              action={<Badge variant="brand">WCAG 2.2 AA</Badge>}
+              action={<Badge variant="brand">Accessible</Badge>}
             />
             <CardContent>
               <div className="space-y-4">

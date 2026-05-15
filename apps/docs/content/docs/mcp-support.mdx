@@ -9,7 +9,7 @@ The **Vayu UI MCP server** exposes 17 tools that let AI assistants understand yo
 
 ## Quick Setup
 
-The fastest way is using the CLI:
+The fastest way is using the CLI. All configurations are written at the **project level** (workspace root):
 
 ```bash
 # Interactive — prompts which tools to configure
@@ -20,23 +20,24 @@ npx vayu-ui-cli@latest install-mcp --tool claude
 npx vayu-ui-cli@latest install-mcp --tool claude,cursor,opencode
 ```
 
-This writes the correct config to each tool's settings file. Restart your AI tool after running it.
+This writes the correct config to each tool's settings file in your project root. Restart your AI tool after running it.
 
 | Flag        | Description                                     |
 | :---------- | :---------------------------------------------- |
 | `--tool`    | Comma-separated: `claude`, `cursor`, `opencode` |
-| `--global`  | Write to home directory instead of project root |
 | `--dry-run` | Preview changes without writing                 |
 | `--force`   | Overwrite existing entries                      |
 
+> **Note:** The CLI auto-configures **Claude Code**, **Cursor**, and **OpenCode**. For **Codex**, **Antigravity**, and **Windsurf**, use the manual setup below.
+
 ## Manual Setup
 
-If you prefer to add the config manually, add the JSON below to the correct file for your tool.
+If you prefer to add the config manually, add the JSON (or TOML) below to the correct file for your tool.
 
-<Tabs items={['Claude Code', 'Cursor', 'OpenCode']}>
+<Tabs items={['Claude Code', 'Cursor', 'OpenCode', 'Codex', 'Antigravity', 'Windsurf']}>
   <Tab value="Claude Code">
 
-**File:** `.claude/settings.json` (project) or `~/.claude/settings.json` (global)
+**File:** `.mcp.json` (project root)
 
 ```json
 {
@@ -52,7 +53,7 @@ If you prefer to add the config manually, add the JSON below to the correct file
   </Tab>
   <Tab value="Cursor">
 
-**File:** `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global)
+**File:** `.cursor/mcp.json` (project root)
 
 ```json
 {
@@ -68,7 +69,39 @@ If you prefer to add the config manually, add the JSON below to the correct file
   </Tab>
   <Tab value="OpenCode">
 
-**File:** `opencode.json`
+**File:** `opencode.json` (project root)
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "vayu-ui": {
+      "type": "local",
+      "command": ["npx", "-y", "vayu-ui-mcp"]
+    }
+  }
+}
+```
+
+OpenCode uses `mcp` (not `mcpServers`) as the top-level key, requires `"type": "local"`, and expects `command` as an array with arguments merged in.
+
+  </Tab>
+  <Tab value="Codex">
+
+**File:** `.codex/config.toml` (project root)
+
+```toml
+[mcp_servers.vayu-ui]
+command = "npx"
+args = ["-y", "vayu-ui-mcp"]
+```
+
+> Codex project-level config requires the project to be marked as **trusted**. If you encounter issues, you can also add the server globally via `codex mcp add vayu-ui -- npx -y vayu-ui-mcp`.
+
+  </Tab>
+  <Tab value="Antigravity">
+
+**File:** `.antigravity/mcp_config.json` (project root)
 
 ```json
 {
@@ -81,10 +114,40 @@ If you prefer to add the config manually, add the JSON below to the correct file
 }
 ```
 
+Alternatively, you can install via the **MCP Store** UI inside Antigravity: open the Agent Panel → More Options (⋯) → MCP Servers → search for custom config.
+
+  </Tab>
+  <Tab value="Windsurf">
+
+**File:** `~/.codeium/windsurf/mcp_config.json` (global) or via the **MCP Marketplace** UI
+
+```json
+{
+  "mcpServers": {
+    "vayu-ui": {
+      "command": "npx",
+      "args": ["-y", "vayu-ui-mcp"]
+    }
+  }
+}
+```
+
+Windsurf also supports one-click install via the Cascade MCP Marketplace. Go to **Settings > Cascade > MCP Servers > Open MCP Marketplace** to browse and add servers.
+
   </Tab>
 </Tabs>
 
-If the file already exists, merge the `vayu-ui` entry into the existing `mcpServers` or `servers` object — don't overwrite other entries.
+If the file already exists, merge the `vayu-ui` entry into the existing `mcpServers`, `mcp`, or `mcp_servers` object — don't overwrite other entries.
+
+## Project-Level Setup
+
+All MCP configurations managed by this CLI are **project-scoped**. This means:
+
+- Config files are created in your **project root**, not your home directory.
+- The MCP server is only active when the AI tool is working inside this project.
+- Other projects are unaffected.
+
+If you need the same MCP server in multiple projects, run `install-mcp` in each project directory.
 
 ## Available Tools
 

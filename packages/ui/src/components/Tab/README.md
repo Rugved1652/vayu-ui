@@ -14,5 +14,5 @@
 
 - Horizontal or vertical tabbed navigation
 - Controlled or uncontrolled tab state
-- Accessible tab interfaces with keyboard navigation (WCAG 2.2 AA)
+- Accessible tab interfaces with keyboard navigation (Accessible)
 - Content panels with optional force-mount rendering

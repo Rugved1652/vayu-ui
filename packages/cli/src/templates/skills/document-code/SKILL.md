@@ -1,0 +1,68 @@
+---
+name: document-code
+description: >
+  Enforces documentation standards for code, including README files, inline comments, and
+  component documentation. Apply this skill whenever you are writing documentation, creating
+  README files, adding code comments, or documenting component APIs.
+  Also trigger when the user mentions "documentation", "readme", "comments", "jsdoc",
+  "document code", "api docs", or asks about how to document their code.
+  Do NOT trigger for general writing questions unrelated to code documentation.
+---
+
+# Documentation
+
+Guidelines for writing clear, maintainable documentation at every level of the codebase.
+
+## README Standards
+
+Every package and major feature should have a README containing:
+
+- **Purpose** — What this code does and why it exists
+- **Installation** — How to add it to a project
+- **Usage** — Minimal working example
+- **API** — Key functions, props, or configuration options
+- **Contributing** — How to extend or modify
+
+## Inline Comments
+
+Comment the "why", not the "what":
+
+```tsx
+// Good: Explains business logic
+// Invalidate cache after mutation to ensure UI stays in sync
+queryClient.invalidateQueries({ queryKey: ['users'] });
+
+// Bad: Restates the obvious
+// Call invalidateQueries
+queryClient.invalidateQueries({ queryKey: ['users'] });
+```
+
+## Component Documentation
+
+Document component props using JSDoc or TypeScript interfaces:
+
+```tsx
+interface ButtonProps {
+  /** The visual style of the button */
+  variant?: 'primary' | 'secondary' | 'ghost';
+  /** Button size affecting padding and font */
+  size?: 'sm' | 'md' | 'lg';
+  /** Disables the button and shows a loading state */
+  isLoading?: boolean;
+}
+```
+
+## Code Examples
+
+Include runnable examples in documentation:
+
+- Use the actual component, not pseudocode
+- Show real-world usage patterns
+- Include error handling where relevant
+
+## Anti-Patterns
+
+- **Outdated documentation** — Keep docs in sync with code changes
+- **Obvious comments** — `// increment counter` on `counter++`
+- **Missing README** — Every package needs an entry point for developers
+- **Undocumented props** — Every public API surface needs explanation

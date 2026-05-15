@@ -29,7 +29,7 @@ const features = [
   },
   {
     icon: ShieldCheck,
-    title: 'WCAG 2.2 AA Accessible',
+    title: 'Accessible Accessible',
     description:
       'Every component meets accessibility standards. Keyboard navigation, screen reader support, and focus management built in.',
   },

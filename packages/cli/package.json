@@ -45,7 +45,8 @@
   "files": [
     "./bin",
     "./dist",
-    "./oclif.manifest.json"
+    "./oclif.manifest.json",
+    "./dist/templates"
   ],
   "homepage": "https://vayu.design/docs/cli-support",
   "license": "MIT",
@@ -67,7 +68,7 @@
   },
   "repository": "https://github.com/Rugved1652/vayu-ui/tree/main/packages/cli",
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && cp -r src/templates dist/",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "npm run lint",

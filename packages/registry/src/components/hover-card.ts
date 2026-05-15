@@ -9,7 +9,7 @@ export const hoverCardEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'A portal-based hover card component that displays rich content on hover or focus, with four placement sides, three alignment options, configurable open/close delays, auto-flipping when near viewport edges, directional arrows, and WCAG 2.2 AA accessibility.',
+    'A portal-based hover card component that displays rich content on hover or focus, with four placement sides, three alignment options, configurable open/close delays, auto-flipping when near viewport edges, directional arrows, and Accessible accessibility.',
   longDescription:
     'The HoverCard component renders a floating portal element positioned relative to a trigger. It supports four placement sides (top, bottom, left, right) with three alignment options (start, center, end) and automatic viewport-edge flipping when there is insufficient space. Open and close delays are independently configurable to allow the cursor to travel between trigger and card. A directional arrow is rendered via a rotated square div. The card body is hoverable — the close delay keeps it visible while the cursor moves into it. Content resizing is handled via a ResizeObserver for dynamic children. The component uses React portals for z-index layering, double requestAnimationFrame for flicker-free positioning, and scroll/resize listeners for continuous alignment. Body scroll is locked while the card is open.',
   tags: [
@@ -342,12 +342,12 @@ export default function BasicHoverCard() {
               VU
             </div>
             <div>
-              <p className="font-semibold text-sm">Ved UI</p>
+              <p className="font-semibold text-sm">Vayu UI</p>
               <p className="text-xs text-neutral-500">@vayuui</p>
             </div>
           </div>
           <p className="text-xs text-neutral-600 dark:text-neutral-400">
-            A modern React component library with WCAG 2.2 AA compliance, compound patterns, and
+            A modern React component library with Accessible compliance, compound patterns, and
             premium design.
           </p>
           <div className="flex items-center gap-3 text-xs text-neutral-500">

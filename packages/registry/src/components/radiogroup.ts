@@ -11,7 +11,7 @@ export const radioGroupEntry: ComponentRegistryEntry = {
   description:
     'An accessible radio group component for single selection from multiple options, supporting controlled and uncontrolled modes, vertical and horizontal layouts, descriptions, error validation, and the compound component pattern.',
   longDescription:
-    'The RadioGroup component uses the compound component pattern (RadioGroup.Item) to compose radio selection interfaces. It supports controlled (via value + onChange) and uncontrolled (via defaultValue) modes, vertical and horizontal orientation, group-level and item-level labels with descriptions, disabled state at both group and item levels, error validation with error text, required field marking, and full WCAG 2.2 AA accessibility with ARIA radiogroup semantics and keyboard navigation.',
+    'The RadioGroup component uses the compound component pattern (RadioGroup.Item) to compose radio selection interfaces. It supports controlled (via value + onChange) and uncontrolled (via defaultValue) modes, vertical and horizontal orientation, group-level and item-level labels with descriptions, disabled state at both group and item levels, error validation with error text, required field marking, and full Accessible accessibility with ARIA radiogroup semantics and keyboard navigation.',
   tags: [
     'radio',
     'radiogroup',

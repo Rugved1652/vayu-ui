@@ -23,7 +23,7 @@ interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Accessible label for the tab list. Required for WCAG 2.2 AA compliance. */
+  /** Accessible label for the tab list. Required for Accessible compliance. */
   'aria-label'?: string;
   /** Alternative to aria-label, references an element that labels the tab list */
   'aria-labelledby'?: string;

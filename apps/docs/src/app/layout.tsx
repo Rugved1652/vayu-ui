@@ -10,6 +10,9 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://vayu.design'),
+  verification: {
+    google: 'HBJdJN82gp-YsL0CNw8oe7zbW6gX-Ic8QEzDvhRtGYc',
+  },
   icons: {
     icon: [
       { url: '/icon', type: 'image/png', sizes: '32x32' },

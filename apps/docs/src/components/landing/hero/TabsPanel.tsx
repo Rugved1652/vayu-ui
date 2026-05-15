@@ -43,7 +43,7 @@ export function TabsPanel() {
           <Tabs.Content value="docs">
             <div className="rounded-surface border border-border bg-canvas p-3">
               <p className="text-xs text-muted-content">
-                Built-in WCAG 2.2 AA support with keyboard navigation and screen reader
+                Built-in Accessible support with keyboard navigation and screen reader
                 compatibility.
               </p>
             </div>

@@ -9,9 +9,9 @@ export const switchEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'An accessible toggle switch with controlled/uncontrolled modes, label and description support, error states, and WCAG 2.2 AA compliance.',
+    'An accessible toggle switch with controlled/uncontrolled modes, label and description support, error states, and Accessible compliance.',
   longDescription:
-    'The Switch component renders a binary toggle control using a hidden native checkbox input with role="switch" for full accessibility. It supports both controlled mode (via checked + onCheckedChange) and uncontrolled mode (via defaultChecked). Optional label and description props render adjacent text linked to the input via aria-labelledby and aria-describedby. The visual track and thumb are rendered by internal SwitchTrack and SwitchLabel sub-components that are not user-facing. An error prop applies destructive styling and sets aria-invalid on the input. Focus-visible styling meets WCAG 2.2 AA requirements.',
+    'The Switch component renders a binary toggle control using a hidden native checkbox input with role="switch" for full accessibility. It supports both controlled mode (via checked + onCheckedChange) and uncontrolled mode (via defaultChecked). Optional label and description props render adjacent text linked to the input via aria-labelledby and aria-describedby. The visual track and thumb are rendered by internal SwitchTrack and SwitchLabel sub-components that are not user-facing. An error prop applies destructive styling and sets aria-invalid on the input. Focus-visible styling meets Accessible requirements.',
 
   tags: [
     'switch',

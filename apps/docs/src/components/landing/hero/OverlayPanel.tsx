@@ -133,7 +133,7 @@ export function OverlayPanel() {
                   </div>
                 </div>
                 <p className="text-xs text-muted-content">
-                  A modern React component library with WCAG 2.2 AA compliance and compound
+                  A modern React component library with Accessible compliance and compound
                   patterns.
                 </p>
               </div>

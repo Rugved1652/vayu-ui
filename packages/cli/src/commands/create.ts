@@ -7,9 +7,12 @@ import {join} from 'node:path'
 import {allEntries} from 'vayu-ui-registry'
 
 import {markInstalled, readConfig} from '../utils/config.js'
+import {copySkills} from '../utils/copy-skills.js'
+import {createFolderStructure} from '../utils/create-folder-structure.js'
 import {fetchComponentFiles, fetchHookFile, fetchUtils} from '../utils/fetcher.js'
 import {runInit} from '../utils/init-runner.js'
 import {confirm, detectProject, prompt} from '../utils/project.js'
+import InstallMcp from './install-mcp.js'
 
 type Framework = 'next' | 'vite'
 
@@ -20,6 +23,7 @@ interface CreateOptions {
   packageManager: string
   skipInit: boolean
   skipInstall: boolean
+  skipMcp: boolean
   srcDir: boolean
   tailwind: boolean
   typescript: boolean
@@ -78,6 +82,11 @@ export default class Create extends Command {
       description: 'Skip npm install during scaffolding',
       required: false,
     }),
+    'skip-mcp': Flags.boolean({
+      default: false,
+      description: 'Skip MCP server installation',
+      required: false,
+    }),
     'src-dir': Flags.boolean({
       default: true,
       description: 'Use src/ directory',
@@ -134,6 +143,37 @@ export default class Create extends Command {
       this.log(ux.colorize('green', '  Vayu UI initialized.'))
 
       await this.addStarterKit(projectPath, options)
+
+      // Create full folder structure
+      this.log('')
+      this.log(ux.colorize('bold', '  Creating folder structure...'))
+      this.log('')
+      createFolderStructure(projectPath, options.srcDir, (m) => this.log(m))
+      this.log('')
+      this.log(ux.colorize('green', '  Folder structure created.'))
+
+      // Copy skill files
+      this.log('')
+      this.log(ux.colorize('bold', '  Adding Vayu UI skills...'))
+      this.log('')
+      copySkills(projectPath, (m) => this.log(m))
+      this.log('')
+      this.log(ux.colorize('green', '  Skills added.'))
+
+      // Install MCP server
+      if (!options.skipMcp) {
+        this.log('')
+        this.log(ux.colorize('bold', '  Installing MCP server...'))
+        this.log('')
+        try {
+          const mcpCommand = new InstallMcp([], this.config)
+          await mcpCommand.run()
+          this.log('')
+          this.log(ux.colorize('green', '  MCP server installed.'))
+        } catch {
+          this.warn('Failed to install MCP server. You can install it manually later.')
+        }
+      }
     }
 
     this.printSuccess(projectName, options)
@@ -274,6 +314,7 @@ export default class Create extends Command {
 
     this.log(`  ${dim('ESLint:')}           ${options.eslint ? ux.colorize('green', 'yes') : dim('no')}`)
     this.log(`  ${dim('src/ directory:')}   ${options.srcDir ? ux.colorize('green', 'yes') : dim('no')}`)
+    this.log(`  ${dim('MCP server:')}      ${options.skipMcp ? dim('no') : ux.colorize('green', 'yes')}`)
     this.log(
       `  ${dim('Starter kit:')}      ${bold('Button, Typography, useLocalStorage, useDebounce, useOnClickOutside')}`,
     )
@@ -340,6 +381,7 @@ export default class Create extends Command {
         packageManager,
         skipInit: Boolean(flags['skip-init']),
         skipInstall: Boolean(flags['skip-install']),
+        skipMcp: Boolean(flags['skip-mcp']),
         srcDir: Boolean(flags['src-dir']),
         tailwind: Boolean(flags.tailwind),
         typescript: Boolean(flags.typescript),
@@ -350,6 +392,7 @@ export default class Create extends Command {
     const eslint = Boolean(flags.eslint)
     const tailwind = Boolean(flags.tailwind)
     const srcDir = Boolean(flags['src-dir'])
+    const skipMcp = Boolean(flags['skip-mcp'])
     let appRouter = Boolean(flags['app-router'])
 
     if (framework === 'next') {
@@ -363,6 +406,7 @@ export default class Create extends Command {
       packageManager,
       skipInit: Boolean(flags['skip-init']),
       skipInstall: Boolean(flags['skip-install']),
+      skipMcp,
       srcDir,
       tailwind,
       typescript,

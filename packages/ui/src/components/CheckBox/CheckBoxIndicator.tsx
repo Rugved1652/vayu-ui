@@ -89,7 +89,7 @@ export const CheckboxIndicator = forwardRef<HTMLInputElement, CheckboxIndicatorP
             // Base unchecked state - using semantic tokens
             !indeterminate && 'bg-surface border-field',
 
-            // Focus state (WCAG 2.2 AA)
+            // Focus state (Accessible)
             'peer-focus-visible:outline-none',
             'peer-focus-visible:ring-2 peer-focus-visible:ring-focus/20',
             'peer-focus-visible:border-focus',

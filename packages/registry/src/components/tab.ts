@@ -9,9 +9,9 @@ export const tabEntry: ComponentRegistryEntry = {
 
   // ── Description ───────────────────────────────────────
   description:
-    'An accessible tabbed interface component using the compound component pattern with horizontal/vertical orientation, controlled/uncontrolled modes, and full WCAG 2.2 AA keyboard navigation.',
+    'An accessible tabbed interface component using the compound component pattern with horizontal/vertical orientation, controlled/uncontrolled modes, and full Accessible keyboard navigation.',
   longDescription:
-    'The Tab component provides a tabbed navigation interface using the compound component pattern (Tabs.List, Tabs.Trigger, Tabs.Content). It supports horizontal and vertical orientations, controlled (via value/onValueChange) and uncontrolled (via defaultValue) modes, automatic ARIA attribute management linking triggers to panels, roving tabindex for keyboard accessibility, optional auto-focus on panel activation, disabled tabs, and force-mounted panels for preserving state. All variants follow WCAG 2.2 AA accessibility standards with full arrow key, Home, End, Enter, and Space keyboard support.',
+    'The Tab component provides a tabbed navigation interface using the compound component pattern (Tabs.List, Tabs.Trigger, Tabs.Content). It supports horizontal and vertical orientations, controlled (via value/onValueChange) and uncontrolled (via defaultValue) modes, automatic ARIA attribute management linking triggers to panels, roving tabindex for keyboard accessibility, optional auto-focus on panel activation, disabled tabs, and force-mounted panels for preserving state. All variants follow Accessible accessibility standards with full arrow key, Home, End, Enter, and Space keyboard support.',
   tags: [
     'tab',
     'tabs',
@@ -93,7 +93,7 @@ export const tabEntry: ComponentRegistryEntry = {
           type: 'string',
           required: false,
           description:
-            'Accessible label for the tab list. Required for WCAG 2.2 AA compliance when no visible label element exists.',
+            'Accessible label for the tab list. Required for Accessible compliance when no visible label element exists.',
         },
         {
           name: 'aria-labelledby',
@@ -614,7 +614,7 @@ export default function TabsWithActionsDemo() {
       bad: '<Tabs defaultValue="tab1"><Tabs.List><Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger></Tabs.List></Tabs>',
       good: '<Tabs defaultValue="tab1"><Tabs.List aria-label="Content sections"><Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger></Tabs.List></Tabs>',
       reason:
-        'The tablist requires an accessible name via aria-label or aria-labelledby for WCAG 2.2 AA compliance. Without it, screen readers cannot identify the purpose of the tab list.',
+        'The tablist requires an accessible name via aria-label or aria-labelledby for Accessible compliance. Without it, screen readers cannot identify the purpose of the tab list.',
     },
     {
       title: 'Mismatched value between Trigger and Content',

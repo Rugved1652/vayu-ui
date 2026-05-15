@@ -42,17 +42,25 @@ export function GetStarted() {
             </p>
 
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="rounded-surface bg-canvas border border-border p-6 text-left">
-                <p className="text-sm font-secondary text-muted-content mb-3">Install</p>
-                <pre className="font-tertiary text-sm text-canvas-content space-y-1">
-                  <code>npx vayu-ui-cli@latest init</code>
-                  <br />
-                  <code className="font-tertiary text-sm text-surface-content">
-                    npx vayu-ui-cli@latest install-mcp
-                  </code>
-                  <br />
-                  <code>npx vayu-ui-cli@latest add button card input</code>
-                </pre>
+              <div className="rounded-surface bg-canvas border border-border p-6 text-left space-y-5">
+                <div>
+                  <p className="text-sm font-secondary text-muted-content mb-3">Create (1-shot boilerplate)</p>
+                  <pre className="font-tertiary text-sm text-canvas-content">
+                    <code>npx vayu-ui-cli@latest create my-app</code>
+                  </pre>
+                </div>
+                <div>
+                  <p className="text-sm font-secondary text-muted-content mb-3">Install to existing project</p>
+                  <pre className="font-tertiary text-sm text-canvas-content space-y-1">
+                    <code>npx vayu-ui-cli@latest init</code>
+                    <br />
+                    <code className="font-tertiary text-sm text-surface-content">
+                      npx vayu-ui-cli@latest install-mcp
+                    </code>
+                    <br />
+                    <code>npx vayu-ui-cli@latest add button card</code>
+                  </pre>
+                </div>
               </div>
               <div className="flex flex-col gap-4 justify-center">
                 <Link href="/docs">
