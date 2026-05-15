@@ -1,236 +1,177 @@
 ---
 title: TanStack Query API Integration
-description: Enforces a strict layered architecture for API integration using Axios service functions and TanStack Query hooks.
+description: Enforce strict layered HTTP API integration with service functions and TanStack Query hooks.
 ---
 
-# TanStack Query API Integration Patterns
+# TanStack Query API Integration
 
-This skill defines a clean layered architecture for integrating HTTP APIs into React apps. The goal: every API call flows through the same layers in the same order, every hook follows the same structure, and every cache key follows the same conventions. This makes data-fetching code predictable, testable, and easy to review.
+This skill enforces a strict layered architecture for HTTP API integration. It ensures every API call flows through typed service functions and TanStack Query hooks, making data-fetching predictable, testable, and cache-safe.
 
-## Architecture Overview
-
-All API code flows through four layers, each with a single responsibility:
-
-```
-Types (contracts) -> Services (HTTP calls) -> Hooks (TanStack Query) -> UI (consumers)
+```bash
+npx skills add Rugved1652/vayu-ui/api-call-tanstack-query
 ```
 
-Each layer only talks to the layer directly below it. UI never imports axios. Hooks never import axios. Services never use TanStack Query. This separation is what makes the codebase navigable — when a bug shows up in the network tab, you know to look in services; when a bug shows up in the cache, you know to look in hooks.
+Use one-way layers:
 
-## Layer 1: API Client Setup
+```txt
+types/api-types -> api/services -> api/hooks -> UI
+```
 
-Dedicate a single file to the HTTP client instance and its interceptors. This is the only place axios (or fetch wrappers) are configured.
+UI imports hooks only. Hooks import services and query keys only. Services import `api/api.ts` (the HTTP client) and API types only. Services never use React/TanStack Query; UI never imports axios/fetch clients or service functions.
 
-Typical responsibilities:
+## File Placement
 
-- Base URL configuration
-- Auth header injection (request interceptor)
-- Global error handling / token refresh (response interceptor)
-- Exposing convenience methods (`get`, `post`, `put`, `patch`, `del`)
+| Artifact | Path | Rule |
+| --- | --- | --- |
+| HTTP client/interceptors | `api/api.ts` | Axios/fetch singleton; auth headers, refresh, global 401/403/500 handling. |
+| API types | `types/api-types/` | Shared request/response/params contracts; never redefine in UI/hooks. |
+| Service functions | `api/services/<feature>Service.ts` | Endpoint path, method, params, payload; no React/cache/UI logic. |
+| Query keys/hooks | `api/hooks/` | One hook per file plus key factory per feature. |
+| UI consumption | `containers/`, `components/`, `app/` | Consume hooks and render loading/error/empty/success states. |
 
-If the app talks to multiple backends (e.g., a main API and an orchestration service), define separate instances in this same file or in adjacent files — not scattered across the codebase.
+Follow `folder-structure`, `code-quality`, and `react-hook-form-zod-validation` for forms/mutations.
 
-**One file, one concern.** Don't mix interceptor logic with component code or hook logic.
+## Query Keys
 
-## Layer 2: API Types
-
-Dedicate a shared types location for all API contracts. This is the single source of truth for request shapes, response shapes, and shared parameter types.
-
-Each feature's types should live in a dedicated file (e.g., `<feature>.api.types.ts` or `<feature>-types.ts`). UI components, hooks, and services all import from here — never redefine the same interface in multiple places.
-
-Typical type structure per feature:
+- Use a feature key factory; never hand-build keys in components.
+- Include every server-impacting param in the key.
+- Keep list/detail keys distinct.
 
 ```ts
-// Request/response types
-export type GetFeatureListParams = { page: number; search?: string; status?: string };
-export type FeatureListResponse = { data: Feature[]; total: number };
-export type CreateFeaturePayload = { name: string; description?: string };
-export type FeatureDetailResponse = { id: string; name: string; createdAt: string };
-```
-
-**Why this matters:** When the backend changes a contract, you update one file and TypeScript surfaces every break across hooks, services, and UI. Without a shared types location, contracts drift silently.
-
-## Layer 3: Service Functions
-
-Each feature gets a service file that owns the endpoint path, HTTP method, query-param mapping, and raw API function. Service functions are plain async functions that call the API client — no React, no hooks, no TanStack Query.
-
-```ts
-// featureService.ts
-import { api } from '../api';
-import type {
-  GetFeatureListParams,
-  FeatureListResponse,
-  CreateFeaturePayload,
-  FeatureDetailResponse,
-} from '../../types/feature.api.types';
-
-export const getFeatureList = (params: GetFeatureListParams) =>
-  api.get<FeatureListResponse>('/features', { params });
-
-export const getFeatureDetail = (id: string) => api.get<FeatureDetailResponse>(`/features/${id}`);
-
-export const createFeature = (data: CreateFeaturePayload) =>
-  api.post<FeatureDetailResponse>('/features', data);
-
-export const updateFeature = (id: string, data: Partial<CreateFeaturePayload>) =>
-  api.patch<FeatureDetailResponse>(`/features/${id}`, data);
-
-export const deleteFeature = (id: string) => api.delete(`/features/${id}`);
-```
-
-Service files contain zero UI logic, zero state management, and zero cache concerns. They are thin wrappers over HTTP calls — the kind of file you can unit test with a mocked axios instance.
-
-## Layer 4: TanStack Query Hooks
-
-Each hook gets its own file. One file, one hook export. This sounds strict but it pays off: finding a hook is O(1), git diffs are clean, and code review is fast.
-
-### Query Key Conventions
-
-Build stable, descriptive query keys. Keys must include every parameter that affects what the server returns — if a param changes the response, it must be in the key. Missing params cause stale cache bugs that are extremely hard to track down.
-
-```ts
-// List keys include all server-impacting params
-const featureKeys = {
-  list: (params: GetFeatureListParams) => ['features', 'list', params] as const,
-  detail: (id: string) => ['features', 'detail', id] as const,
+export const featureKeys = {
+  all: ['features'] as const,
+  lists: () => [...featureKeys.all, 'list'] as const,
+  list: (params: GetFeatureListParams) => [...featureKeys.lists(), params] as const,
+  details: () => [...featureKeys.all, 'detail'] as const,
+  detail: (id: string) => [...featureKeys.details(), id] as const,
 };
 ```
 
-Use a `queryKey` factory object per feature — it documents the key structure and prevents typos.
-
-### Query Hooks (Fetching Data)
+## Services
 
 ```ts
-// useGetFeatureList.ts
-import { useQuery } from '@tanstack/react-query';
-import { getFeatureList } from '../services/featureService';
-import { featureKeys } from './queryKeys';
+export const getFeatures = (params: GetFeatureListParams) =>
+  api.get<FeatureListResponse>('/features', { params });
 
-export function useGetFeatureList(params: GetFeatureListParams) {
-  return useQuery({
-    queryKey: featureKeys.list(params),
-    queryFn: () => getFeatureList(params),
-    refetchOnWindowFocus: false,
-  });
-}
+export const getFeatureDetail = (id: string) =>
+  api.get<FeatureDetailResponse>(`/features/${id}`);
 
-// useGetFeatureDetail.ts
-export function useGetFeatureDetail(id: string) {
-  return useQuery({
-    queryKey: featureKeys.detail(id),
-    queryFn: () => getFeatureDetail(id),
-    enabled: !!id, // don't fetch if no id yet
-  });
-}
+export const createFeature = (payload: CreateFeatureRequest) =>
+  api.post<FeatureResponse>('/features', payload);
+
+export const updateFeature = ({ id, payload }: UpdateFeatureVariables) =>
+  api.patch<FeatureResponse>(`/features/${id}`, payload);
+
+export const deleteFeature = (id: string) => api.delete<void>(`/features/${id}`);
 ```
 
-The `enabled` option is essential for detail queries that depend on an id that may not be available on first render (e.g., waiting for a user to select a row). Without it, the query fires with `undefined` and either fails or returns wrong data.
+Service functions are thin, typed HTTP calls. Put param serialization, URL construction, and payload shape here.
 
-Use `refetchOnWindowFocus: false` by default. Only opt in when the feature explicitly needs real-time refresh on tab switch.
-
-### Mutation Hooks (Writing Data)
-
-Mutations must invalidate only the relevant query keys. Over-invalidating (e.g., `queryClient.invalidateQueries()`) causes unnecessary refetches across the entire app.
+## Query Hooks
 
 ```ts
-// useCreateFeature.ts
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createFeature } from '../services/featureService';
-import { featureKeys } from './queryKeys';
+export const useGetFeatures = (params: GetFeatureListParams) =>
+  useQuery({
+    queryKey: featureKeys.list(params),
+    queryFn: () => getFeatures(params),
+    refetchOnWindowFocus: false,
+  });
 
-export function useCreateFeature() {
+export const useGetFeatureDetail = (id?: string) =>
+  useQuery({
+    queryKey: featureKeys.detail(id ?? ''),
+    queryFn: () => getFeatureDetail(id as string),
+    enabled: !!id,
+    refetchOnWindowFocus: false,
+  });
+```
+
+Use `enabled` for detail/dependent queries that need an id, open state, auth state, or selected row. Default `refetchOnWindowFocus: false`; opt in only when the feature needs tab-focus freshness.
+
+## Mutation Hooks
+
+```ts
+export const useCreateFeature = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: createFeature,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['features', 'list'] });
+      await queryClient.invalidateQueries({ queryKey: featureKeys.lists() });
     },
   });
-}
+};
 
-// useUpdateFeature.ts
-export function useUpdateFeature() {
+export const useUpdateFeature = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<CreateFeaturePayload> }) =>
-      updateFeature(id, data),
+    mutationFn: updateFeature,
     onSuccess: async (_data, variables) => {
-      await queryClient.invalidateQueries({ queryKey: ['features', 'list'] });
+      await queryClient.invalidateQueries({ queryKey: featureKeys.lists() });
       await queryClient.invalidateQueries({ queryKey: featureKeys.detail(variables.id) });
     },
   });
-}
+};
 ```
 
-After a create, invalidate the list. After an update, invalidate both the list and the specific detail. After a delete, invalidate the list. This precision keeps the cache fresh without wasting network requests.
+Invalidation rules:
 
-## Layer 5: UI Consumption
+- Create: invalidate lists.
+- Update: invalidate lists and changed detail.
+- Delete: invalidate lists and remove/invalidate deleted detail when cached.
+- Never call unfiltered `queryClient.invalidateQueries()` unless the whole app cache is intentionally stale.
 
-UI components consume hooks only. They never import axios, never call service functions directly, and never construct query keys manually.
+## UI Consumption
 
 ```tsx
-function FeatureList() {
-  const { data, isLoading, error } = useGetFeatureList({ page: 1 });
+const { data, isLoading, error } = useGetFeatures(params);
 
-  if (isLoading) return <Skeleton />;
-  if (error) return <ErrorState error={error} />;
-  if (!data.data.length) return <EmptyState />;
+if (isLoading) return <Skeleton />;
+if (error) return <ErrorState error={error} />;
+if (!data?.data.length) return <EmptyState />;
 
-  return <List items={data.data} />;
-}
+return <FeatureList items={data.data} />;
 ```
 
-Always handle all four states: **loading**, **error**, **empty**, and **success**. Missing any of these creates a broken UX for real users.
+Every consuming UI handles loading, error, empty, and success. UI may format/display data and call hook mutation functions; it must not know transport details or construct query keys.
 
-Keep UI logic to view-specific concerns — formatting, display mapping, interaction handlers. Data fetching and caching logic belongs in the hook layer.
+## Naming
 
-## Naming Conventions
+| Artifact | Pattern | Example |
+| --- | --- | --- |
+| Service file | `<feature>Service.ts` | `userService.ts` |
+| List service | `get<FeaturePlural>` | `getUsers` |
+| Detail service | `get<Feature>Detail` | `getUserDetail` |
+| Create/update/delete | `create<Feature>`, `update<Feature>`, `delete<Feature>` | `updateUser` |
+| Query hook | `useGet<FeaturePlural>.ts` | `useGetUsers.ts` |
+| Detail hook | `useGet<Feature>Detail.ts` | `useGetUserDetail.ts` |
+| Mutation hook | `useCreate<Feature>.ts`, `useUpdate<Feature>.ts` | `useCreateUser.ts` |
+| Types | `<APIname><Request/Response>.ts` or feature API file | `GetUsersRequest.ts` |
 
-Consistent naming makes codebase navigation fast:
+## Error Boundaries
 
-| Artifact            | Pattern                    | Example                  |
-| ------------------- | -------------------------- | ------------------------ |
-| Service file        | `<feature>Service.ts`      | `featureService.ts`      |
-| Get list function   | `get<FeaturePlural>`       | `getFeatures`            |
-| Get detail function | `get<Feature>Detail`       | `getFeatureDetail`       |
-| Create function     | `create<Feature>`          | `createFeature`          |
-| Update function     | `update<Feature>`          | `updateFeature`          |
-| Delete function     | `delete<Feature>`          | `deleteFeature`          |
-| Hook file (query)   | `useGet<FeaturePlural>.ts` | `useGetFeatures.ts`      |
-| Hook file (detail)  | `useGet<Feature>Detail.ts` | `useGetFeatureDetail.ts` |
-| Hook file (create)  | `useCreate<Feature>.ts`    | `useCreateFeature.ts`    |
-| Hook file (update)  | `useUpdate<Feature>.ts`    | `useUpdateFeature.ts`    |
-| Types file          | `<feature>.api.types.ts`   | `feature.api.types.ts`   |
+- Global interceptor handles cross-cutting auth/server behavior: 401, 403, refresh, generic 500.
+- Hooks expose `error`; UI decides inline state, toast, or boundary.
+- Avoid duplicate toasts when interceptor already handles a status code.
 
-## Error Handling Strategy
+## Review Checklist
 
-Two levels, each with a clear boundary:
-
-**Global (interceptor level):** Handles cross-cutting concerns — 401 redirects to login, 403 shows forbidden page, 500 shows generic error. This lives in the API client setup file.
-
-**Feature (hook level):** Hooks expose `error` state. UI components decide how to display it — inline message, toast, error boundary. Avoid duplicate handling: if the interceptor already shows a toast for a status code, don't add another one in the hook's `onError`.
+- API types live in shared `types/api-types/`.
+- Services are typed, thin, and free of React/cache/UI logic.
+- One hook per file; hooks import services, not HTTP clients.
+- Query keys include all server-impacting params.
+- Detail/dependent queries use `enabled`.
+- Mutations invalidate only relevant keys.
+- UI imports hooks only and handles loading/error/empty/success.
+- No direct axios/fetch/service calls in UI.
 
 ## Anti-Patterns
 
-These consistently cause bugs and should be avoided:
-
-- **Defining API types in component or hook files.** Types drift from the actual contract and you get silent mismatches.
-- **Multiple hooks in one file.** Makes code search harder, git diffs noisier, and code review slower.
-- **Calling the HTTP client directly from UI.** Breaks the layer boundary — the UI now knows about transport details it shouldn't care about.
-- **Omitting params from query keys.** The most common source of stale cache bugs. If a param affects the server response, it must be in the key.
-- **Over-invalidating after mutations.** `invalidateQueries()` with no filter refetches everything. Be specific.
-- **Fetching without `enabled` guard for detail queries.** Fires a request with `undefined` id on first render.
-
-## PR Checklist
-
-- [ ] HTTP client changes isolated to the client setup file
-- [ ] API types in the shared types location, not in component/hook files
-- [ ] Service functions in service files, no UI logic
-- [ ] One hook per file
-- [ ] Query keys include all server-impacting params
-- [ ] Mutations invalidate only related keys
-- [ ] Detail queries use `enabled` guard
-- [ ] UI handles loading, error, empty, and success states
-- [ ] No direct HTTP client usage in UI or hook files
+- API types inside components or hooks.
+- Multiple unrelated hooks in one file.
+- HTTP client usage from UI or hooks.
+- Missing params from query keys.
+- Over-invalidating with unfiltered `invalidateQueries()`.
+- Fetching detail data without an `enabled` guard.
+- UI that only handles success state.
