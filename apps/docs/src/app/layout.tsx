@@ -3,6 +3,7 @@ import { ToastProvider } from 'vayu-ui';
 import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import './global.css';
+import { GoogleAnalytics, PageViewTracker } from '@/components/analytics/google-analytics';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,7 +27,11 @@ export const metadata: Metadata = {
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
+      <head>
+        <GoogleAnalytics />
+      </head>
       <body className="flex flex-col min-h-screen">
+        <PageViewTracker />
         <RootProvider>
           <ToastProvider>{children}</ToastProvider>
         </RootProvider>
