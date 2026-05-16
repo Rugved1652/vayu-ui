@@ -25,23 +25,31 @@ export function registerGetComponentProps(server: Parameters<typeof registerTool
         };
       }
 
+      const response: Record<string, unknown> = {
+        slug: entry.slug,
+        name: entry.name,
+        rootProps: entry.rootProps,
+        subComponentProps: entry.subComponents.map((sc) => ({
+          subComponent: sc.name,
+          props: sc.props,
+        })),
+      };
+
+      // Surface known caveats that className alone can't cover
+      if (slug === 'typography') {
+        response.caveats = [
+          {
+            component: 'H1-H6',
+            note: 'Responsive size classes (sm:/lg:) are baked in by default. Passing a size class via className only overrides the base breakpoint because twMerge does not resolve conflicts across breakpoints. Use the `unsized` prop to opt out of default sizing, then provide your own size classes.',
+          },
+        ];
+      }
+
       return {
         content: [
           {
             type: 'text' as const,
-            text: JSON.stringify(
-              {
-                slug: entry.slug,
-                name: entry.name,
-                rootProps: entry.rootProps,
-                subComponentProps: entry.subComponents.map((sc) => ({
-                  subComponent: sc.name,
-                  props: sc.props,
-                })),
-              },
-              null,
-              2,
-            ),
+            text: JSON.stringify(response, null, 2),
           },
         ],
       };

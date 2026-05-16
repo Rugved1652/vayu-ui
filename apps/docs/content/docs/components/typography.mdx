@@ -147,6 +147,7 @@ All typography components accept these props.
 | `lang`            | `string`                                                                                              | —           | Content language declaration.            |
 | `role`            | `AriaRole`                                                                                            | —           | ARIA role override.                      |
 | `ariaLabel`       | `string`                                                                                              | —           | Accessible label.                        |
+| `unsized`         | `boolean`                                                                                             | `false`     | Skip baked-in responsive size classes so className fully controls sizing. |
 | `ariaDescribedby` | `string`                                                                                              | —           | ARIA describedby reference.              |
 | `ariaHidden`      | `boolean`                                                                                             | —           | Hide element from screen readers.        |
 
@@ -162,6 +163,24 @@ Each heading extends base props plus native `HTMLAttributes<HTMLHeadingElement>`
 | `Typography.H4` | `text-xl` / `sm:text-2xl` / `lg:text-3xl`  | `font-semibold`  |
 | `Typography.H5` | `text-lg` / `sm:text-xl` / `lg:text-2xl`   | `font-semibold`  |
 | `Typography.H6` | `text-base` / `sm:text-lg` / `lg:text-xl`  | `font-semibold`  |
+
+### Overriding Heading Sizes
+
+Headings bake in responsive size classes (e.g. `text-2xl sm:text-3xl lg:text-4xl` for H3). `twMerge` resolves conflicts **within** the same breakpoint, but **not across breakpoints**. That means a consumer `className="text-sm"` only overrides the base size — the `sm:` and `lg:` classes survive and kick in at their breakpoints.
+
+Use the `unsized` prop to opt out of the default sizing block entirely:
+
+```tsx
+{/* Stays text-sm on all breakpoints */}
+<Typography.H3 unsized className="text-sm font-semibold">
+  Small heading everywhere
+</Typography.H3>
+
+{/* Without unsized: balloons back to 2xl/3xl/4xl — don't do this */}
+<Typography.H3 className="text-sm">
+  Broken override
+</Typography.H3>
+```
 
 ### Typography.P
 

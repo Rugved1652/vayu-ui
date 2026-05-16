@@ -17,6 +17,8 @@ export interface BaseTypographyProps {
     | 'gradient';
   ellipsis?: boolean;
   font?: 'primary' | 'secondary';
+  /** When true, skips the default responsive size classes so you can fully override sizing via className. */
+  unsized?: boolean;
   id?: string;
   ariaLabel?: string;
   ariaDescribedby?: string;

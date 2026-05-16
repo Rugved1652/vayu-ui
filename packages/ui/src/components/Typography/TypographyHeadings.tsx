@@ -12,6 +12,7 @@ export const H1 = ({
   variant = 'primary',
   ellipsis,
   font,
+  unsized,
   id,
   ariaLabel,
   ariaDescribedby,
@@ -28,7 +29,7 @@ export const H1 = ({
     lang={lang}
     role={role}
     className={cn(
-      'text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight',
+      !unsized && 'text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight',
       getVariantClasses(variant),
       ellipsis && 'truncate',
       font && `font-${font}`,
@@ -46,6 +47,7 @@ export const H2 = ({
   variant = 'primary',
   ellipsis,
   font = 'primary',
+  unsized,
   id,
   ariaLabel,
   ariaDescribedby,
@@ -62,7 +64,7 @@ export const H2 = ({
     lang={lang}
     role={role}
     className={cn(
-      'tracking-tight text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight',
+      !unsized && 'tracking-tight text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight',
       getVariantClasses(variant),
       ellipsis && 'truncate',
       font && `font-${font}`,
@@ -80,6 +82,7 @@ export const H3 = ({
   variant = 'primary',
   ellipsis,
   font,
+  unsized,
   id,
   ariaLabel,
   ariaDescribedby,
@@ -96,7 +99,7 @@ export const H3 = ({
     lang={lang}
     role={role}
     className={cn(
-      'text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight',
+      !unsized && 'text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight',
       getVariantClasses(variant),
       ellipsis && 'truncate',
       font && `font-${font}`,
@@ -114,6 +117,7 @@ export const H4 = ({
   variant = 'primary',
   ellipsis,
   font,
+  unsized,
   id,
   ariaLabel,
   ariaDescribedby,
@@ -130,7 +134,7 @@ export const H4 = ({
     lang={lang}
     role={role}
     className={cn(
-      'text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight',
+      !unsized && 'text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight',
       getVariantClasses(variant),
       ellipsis && 'truncate',
       font && `font-${font}`,
@@ -148,6 +152,7 @@ export const H5 = ({
   variant = 'primary',
   ellipsis,
   font,
+  unsized,
   id,
   ariaLabel,
   ariaDescribedby,
@@ -164,7 +169,7 @@ export const H5 = ({
     lang={lang}
     role={role}
     className={cn(
-      'text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight',
+      !unsized && 'text-lg sm:text-xl lg:text-2xl font-semibold tracking-tight',
       getVariantClasses(variant),
       ellipsis && 'truncate',
       font && `font-${font}`,
@@ -182,6 +187,7 @@ export const H6 = ({
   variant = 'primary',
   ellipsis,
   font,
+  unsized,
   id,
   ariaLabel,
   ariaDescribedby,
@@ -198,7 +204,7 @@ export const H6 = ({
     lang={lang}
     role={role}
     className={cn(
-      'text-base sm:text-lg lg:text-xl font-semibold tracking-tight',
+      !unsized && 'text-base sm:text-lg lg:text-xl font-semibold tracking-tight',
       getVariantClasses(variant),
       ellipsis && 'truncate',
       font && `font-${font}`,

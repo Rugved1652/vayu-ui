@@ -15,6 +15,8 @@ export const cardEntry: ComponentRegistryEntry = {
   tags: [
     'card',
     'container',
+    'content-container',
+    'section-header',
     'layout',
     'surface',
     'media',
@@ -477,6 +479,32 @@ export default function AvatarCard() {
   );
 }`,
       tags: ['avatar', 'action', 'profile', 'user'],
+    },
+    {
+      title: 'Stacked Card Footer',
+      description:
+        'Override the default justify-end flex layout when you need a stacked column footer with multiple rows.',
+      code: `import { Card, Button, Typography } from 'vayu-ui';
+
+export default function StackedFooterCard() {
+  return (
+    <Card>
+      <Card.Header title="Confirm Action" subtitle="Review before proceeding." />
+      <Card.Content>
+        <Typography.P variant="secondary">
+          This action cannot be undone. Please verify all details before continuing.
+        </Typography.P>
+      </Card.Content>
+      <Card.Footer className="flex-col items-stretch justify-start gap-2">
+        <Button variant="primary" fullWidth>Confirm</Button>
+        <Typography.Link href="/help" className="text-sm text-center">
+          Need help?
+        </Typography.Link>
+      </Card.Footer>
+    </Card>
+  );
+}`,
+      tags: ['footer', 'stacked', 'column', 'layout'],
     },
   ],
 

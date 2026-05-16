@@ -7,9 +7,9 @@ import { clsx } from 'clsx';
 import React, { forwardRef, HTMLAttributes } from 'react';
 import { TextProps } from './types';
 
-const Text = forwardRef<HTMLSpanElement, TextProps>(({ children, className, ...props }, ref) => {
+const Text = forwardRef<HTMLSpanElement, TextProps>(({ children, className, wrap, ...props }, ref) => {
   return (
-    <span ref={ref} className={clsx('truncate', className)} {...props}>
+    <span ref={ref} className={clsx(!wrap && 'truncate', className)} {...props}>
       {children}
     </span>
   );

@@ -24,16 +24,24 @@ export interface SidebarProps {
   children: React.ReactNode;
 }
 
+export type SidebarHeaderChildren =
+  | React.ReactNode
+  | ((state: { collapsed: boolean; mobile: boolean }) => React.ReactNode);
+
 export interface SidebarHeaderProps {
-  children: React.ReactNode;
+  children: SidebarHeaderChildren;
 }
 
 export interface SidebarContentProps {
   children: React.ReactNode;
 }
 
+export type SidebarFooterChildren =
+  | React.ReactNode
+  | ((state: { collapsed: boolean; mobile: boolean }) => React.ReactNode);
+
 export interface SidebarFooterProps {
-  children: React.ReactNode;
+  children: SidebarFooterChildren;
 }
 
 export interface SidebarMenuProps {
@@ -43,6 +51,11 @@ export interface SidebarMenuProps {
 export interface SidebarMenuGroupProps {
   label?: string;
   children: React.ReactNode;
+}
+
+export interface SidebarToggleProps {
+  /** When true, renders as an absolute floating handle on the sidebar edge (legacy mode). Defaults to true for backwards compatibility. */
+  floating?: boolean;
 }
 
 export interface SidebarMenuItemProps {

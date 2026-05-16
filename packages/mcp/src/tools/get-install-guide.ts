@@ -64,23 +64,26 @@ export function registerGetInstallGuide(server: Parameters<typeof registerTool>[
         imports.push(`import { ${entry.name} } from 'vayu-ui';`);
       }
 
+      const response: Record<string, unknown> = {
+        slug: entry.slug,
+        name: entry.name,
+        type: entry.type,
+        cliCommands: commands.join('\n'),
+        imports,
+        registryDependencies: entry.registryDependencies.map((d) => d.slug),
+        npmDependencies: entry.npmDependencies.map((d) => d.name),
+      };
+
+      if (slug === 'sidebar') {
+        response.layoutNote =
+          'Layout requirement: Wrap the page in a container with `className="h-screen overflow-hidden flex"`. The sidebar uses h-screen; if the parent stretches with content (e.g. min-h-screen without overflow-hidden), overflow-y-auto inside SidebarContent will never engage and the entire page will scroll instead.';
+      }
+
       return {
         content: [
           {
             type: 'text' as const,
-            text: JSON.stringify(
-              {
-                slug: entry.slug,
-                name: entry.name,
-                type: entry.type,
-                cliCommands: commands.join('\n'),
-                imports,
-                registryDependencies: entry.registryDependencies.map((d) => d.slug),
-                npmDependencies: entry.npmDependencies.map((d) => d.name),
-              },
-              null,
-              2,
-            ),
+            text: JSON.stringify(response, null, 2),
           },
         ],
       };

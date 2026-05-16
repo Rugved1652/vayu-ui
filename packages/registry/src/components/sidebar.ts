@@ -92,9 +92,10 @@ export const sidebarEntry: ComponentRegistryEntry = {
       props: [
         {
           name: 'children',
-          type: 'React.ReactNode',
+          type: 'React.ReactNode | ((state: { collapsed: boolean; mobile: boolean }) => React.ReactNode)',
           required: true,
-          description: 'Header content such as logo, app name, and toggle button',
+          description:
+            'Header content such as logo, app name, and toggle button. Pass a function to render different content when the sidebar is collapsed (rail mode) vs expanded.',
         },
       ],
     },
@@ -118,9 +119,10 @@ export const sidebarEntry: ComponentRegistryEntry = {
       props: [
         {
           name: 'children',
-          type: 'React.ReactNode',
+          type: 'React.ReactNode | ((state: { collapsed: boolean; mobile: boolean }) => React.ReactNode)',
           required: true,
-          description: 'Footer content such as user avatar and actions',
+          description:
+            'Footer content such as user avatar and actions. Pass a function to render different content when the sidebar is collapsed (rail mode) vs expanded.',
         },
       ],
     },
@@ -206,8 +208,17 @@ export const sidebarEntry: ComponentRegistryEntry = {
       name: 'SidebarToggle',
       fileName: 'SidebarToggle.tsx',
       description:
-        'Desktop-only collapse/expand button positioned on the sidebar edge; hidden in mobile mode',
-      props: [],
+        'Desktop-only collapse/expand button. Set floating=true (default) for the absolute handle on the sidebar edge, or floating=false for an inline button you can place anywhere.',
+      props: [
+        {
+          name: 'floating',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'true',
+          description:
+            'When true, renders as an absolute floating handle positioned on the sidebar edge. When false, renders as a plain inline button suitable for toolbars or custom headers.',
+        },
+      ],
     },
     {
       name: 'MobileMenuButton',
@@ -580,6 +591,168 @@ export default function MinimalSidebar() {
 }`,
     },
     {
+      title: 'Inline vs Floating SidebarToggle',
+      description:
+        'SidebarToggle supports two modes: floating handle (default, absolute positioning) and inline button (plain flex child you can place anywhere).',
+      tags: ['toggle', 'floating', 'inline', 'positioning'],
+      code: `import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarProvider,
+  SidebarToggle,
+} from 'vayu-ui';
+
+export default function ToggleModes() {
+  return (
+    <SidebarProvider>
+      {/* Floating handle — the default, attaches to sidebar edge */}
+      <Sidebar>
+        <SidebarHeader>
+          <div className="flex items-center justify-between">
+            <span className="font-bold">App</span>
+            <SidebarToggle floating />
+          </div>
+        </SidebarHeader>
+        <SidebarContent>...</SidebarContent>
+      </Sidebar>
+
+      {/* Inline button — place it in any toolbar or custom header */}
+      <div className="flex items-center gap-2 p-4">
+        <span>Custom toolbar</span>
+        <SidebarToggle floating={false} />
+      </div>
+    </SidebarProvider>
+  );
+}`,
+    },
+    {
+      title: 'Rail-Aware SidebarHeader and Footer',
+      description:
+        'Use function-as-child to render different header/footer content when the sidebar is collapsed to its 80px rail.',
+      tags: ['rail', 'collapsed', 'responsive', 'header', 'footer'],
+      code: `import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarProvider,
+  Avatar,
+} from 'vayu-ui';
+import { Home, Settings, User } from 'lucide-react';
+
+export default function RailAwareSidebar() {
+  return (
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader>
+          {({ collapsed }) =>
+            collapsed ? (
+              <div className="flex justify-center">
+                <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
+                  <span className="text-brand-content font-bold text-sm">V</span>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
+                  <span className="text-brand-content font-bold text-sm">V</span>
+                </div>
+                <span className="font-bold text-sidebar-content">Vayu UI</span>
+              </div>
+            )
+          }
+        </SidebarHeader>
+
+        <SidebarContent>
+          <SidebarMenu>
+            <SidebarMenuItem icon={<Home size={20} />}>Home</SidebarMenuItem>
+            <SidebarMenuItem icon={<Settings size={20} />}>Settings</SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarContent>
+
+        <SidebarFooter>
+          {({ collapsed }) =>
+            collapsed ? (
+              <div className="flex justify-center">
+                <Avatar size="small" username="John">
+                  <Avatar.Image src="https://github.com/shadcn.png" alt="User" />
+                  <Avatar.Fallback />
+                </Avatar>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Avatar size="small" username="John">
+                  <Avatar.Image src="https://github.com/shadcn.png" alt="User" />
+                  <Avatar.Fallback />
+                </Avatar>
+                <div className="flex flex-col overflow-hidden">
+                  <span className="text-sm font-medium text-sidebar-content truncate">John Doe</span>
+                  <span className="text-xs text-muted-content truncate">john@example.com</span>
+                </div>
+              </div>
+            )
+          }
+        </SidebarFooter>
+      </Sidebar>
+    </SidebarProvider>
+  );
+}`,
+    },
+    {
+      title: 'Dashboard Shell Layout',
+      description:
+        'The correct outer wrapper for a dashboard with sidebar: h-screen overflow-hidden flex so SidebarContent overflow-y-auto engages independently.',
+      tags: ['layout', 'shell', 'dashboard', 'overflow', 'scrolling'],
+      code: `import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuGroup,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarToggle,
+  MobileMenuButton,
+  Typography,
+} from 'vayu-ui';
+import { Home, Settings } from 'lucide-react';
+
+export default function DashboardLayout() {
+  return (
+    <div className="h-screen overflow-hidden flex bg-canvas">
+      <SidebarProvider>
+        <MobileMenuButton />
+        <Sidebar>
+          <SidebarHeader>
+            <div className="font-bold text-sidebar-content">App</div>
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarMenu>
+              <SidebarMenuGroup label="Main">
+                <SidebarMenuItem icon={<Home size={20} />} active>Dashboard</SidebarMenuItem>
+                <SidebarMenuItem icon={<Settings size={20} />}>Settings</SidebarMenuItem>
+              </SidebarMenuGroup>
+            </SidebarMenu>
+          </SidebarContent>
+          <SidebarFooter>
+            <div className="text-xs text-muted-content">v1.0.0</div>
+          </SidebarFooter>
+        </Sidebar>
+
+        <main className="flex-1 overflow-y-auto p-6">
+          <Typography.H2>Dashboard</Typography.H2>
+          {/* Page content scrolls independently */}
+        </main>
+      </SidebarProvider>
+    </div>
+  );
+}`,
+    },
+    {
       title: 'Sidebar with Expandable Sub-Items',
       description: 'Menu items with nested sub-navigation links that expand on click.',
       tags: ['sub-items', 'expandable', 'nested'],
@@ -645,6 +818,20 @@ export default function SidebarWithSubItems() {
       good: 'Wrap SidebarProvider in a container with className="relative" so MobileMenuButton (absolute positioning) stays inside the layout.',
       reason:
         'MobileMenuButton uses absolute positioning. Without a positioned parent, it will be positioned relative to the nearest positioned ancestor or the viewport.',
+    },
+    {
+      title: 'Do not assume header/footer content auto-adapts to rail mode',
+      bad: '<SidebarHeader><div className="flex gap-2"><Logo /><span>App Name</span></div></SidebarHeader>',
+      good: '<SidebarHeader>{({ collapsed }) => collapsed ? <Logo /> : <div className="flex gap-2"><Logo /><span>App Name</span></div>}</SidebarHeader>',
+      reason:
+        'SidebarHeader and SidebarFooter pass children through verbatim. When the sidebar collapses to 80px, long text clips and layouts break. Use function-as-child or useSidebar() manually to render rail-friendly content.',
+    },
+    {
+      title: 'Do not wrap the dashboard in min-h-screen without overflow-hidden',
+      bad: '<div className="min-h-screen flex"><SidebarProvider>...</SidebarProvider></div>',
+      good: '<div className="h-screen overflow-hidden flex"><SidebarProvider>...</SidebarProvider></div>',
+      reason:
+        'The sidebar uses h-screen and SidebarContent uses overflow-y-auto. If the parent stretches with page content (min-h-screen), the sidebar grows with the page and internal scrolling never engages — the whole page scrolls instead.',
     },
     {
       title: 'Do not hardcode sidebar widths or breakpoint values',

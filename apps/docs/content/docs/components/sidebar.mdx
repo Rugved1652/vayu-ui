@@ -37,7 +37,7 @@ npx vayu-ui-cli@latest add sidebar
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
-          <SidebarToggle />
+          <SidebarToggle floating />
         </SidebarFooter>
       </Sidebar>
     </SidebarProvider>
@@ -63,11 +63,50 @@ npx vayu-ui-cli@latest add sidebar
       </SidebarMenu>
     </SidebarContent>
     <SidebarFooter>
-      <SidebarToggle />
+      <SidebarToggle floating />
     </SidebarFooter>
   </Sidebar>
 </SidebarProvider>
 ```
+
+## Dashboard Shell Layout
+
+The sidebar must live inside a locked-height shell so its internal scrolling works correctly.
+
+```tsx
+<div className="h-screen overflow-hidden flex bg-canvas">
+  <SidebarProvider>
+    <MobileMenuButton />
+    <Sidebar>...</Sidebar>
+    <main className="flex-1 overflow-y-auto p-6">...</main>
+  </SidebarProvider>
+</div>
+```
+
+**Why this matters:** `Sidebar` uses `h-screen` and `SidebarContent` uses `overflow-y-auto`. If the outer wrapper stretches with content (`min-h-screen` without `overflow-hidden`), the sidebar grows with the page and the internal scrollbar never engages — the entire page scrolls instead.
+
+## Rail-Aware Header and Footer
+
+`SidebarHeader` and `SidebarFooter` accept a **function as children** so you can render different content when the sidebar is collapsed to its 80px rail:
+
+```tsx
+<SidebarHeader>
+  {({ collapsed, mobile }) =>
+    collapsed && !mobile ? (
+      <div className="flex justify-center">
+        <LogoIcon />
+      </div>
+    ) : (
+      <div className="flex items-center gap-3">
+        <LogoIcon />
+        <span className="font-bold">App Name</span>
+      </div>
+    )
+  }
+</SidebarHeader>
+```
+
+Static children still work unchanged — this is purely opt-in.
 
 ## Accessibility
 
@@ -97,6 +136,24 @@ Sidebar/
 ```
 
 ## Props
+
+### SidebarToggle
+
+| Prop      | Type      | Default | Description                                                            |
+| :-------- | :-------- | :------ | :--------------------------------------------------------------------- |
+| `floating` | `boolean` | `true`  | `true` = absolute floating handle on the sidebar edge. `false` = plain inline button. |
+
+### SidebarHeader
+
+| Prop       | Type                                                     | Default | Description                                      |
+| :--------- | :------------------------------------------------------- | :------ | :----------------------------------------------- |
+| `children` | `ReactNode \| ((state: { collapsed, mobile }) => ReactNode)` | —       | Header content. Pass a function to react to rail state. |
+
+### SidebarFooter
+
+| Prop       | Type                                                     | Default | Description                                      |
+| :--------- | :------------------------------------------------------- | :------ | :----------------------------------------------- |
+| `children` | `ReactNode \| ((state: { collapsed, mobile }) => ReactNode)` | —       | Footer content. Pass a function to react to rail state. |
 
 ### SidebarMenuItem
 

@@ -45,4 +45,6 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 
 export interface TextProps extends HTMLAttributes<HTMLSpanElement> {
   children: React.ReactNode;
+  /** When true, disables the default truncate behaviour so long labels can wrap. */
+  wrap?: boolean;
 }

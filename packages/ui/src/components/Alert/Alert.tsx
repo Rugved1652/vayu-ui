@@ -12,10 +12,10 @@ import { AlertContent } from './AlertContent';
 
 // Layout
 const variantStyles: Record<AlertVariant, string> = {
-  info: 'bg-info/10 border-info/30 text-canvas-content',
-  success: 'bg-success/10 border-success/30 text-canvas-content',
-  warning: 'bg-warning/10 border-warning/30 text-canvas-content',
-  error: 'bg-destructive/10 border-destructive/30 text-canvas-content',
+  info: 'bg-info/10 border-info/40 text-surface-content',
+  success: 'bg-success/10 border-success/40 text-surface-content',
+  warning: 'bg-warning/10 border-warning/40 text-surface-content',
+  error: 'bg-destructive/10 border-destructive/40 text-surface-content',
 };
 
 const variantRole: Record<AlertVariant, 'alert' | 'status'> = {

@@ -53,7 +53,7 @@ export default function AlertDemo() {
         {/* Warning Alert */}
         <Alert variant="warning">
           <Alert.Icon variant="warning">
-            <TriangleAlert className="w-5 h-5" />
+            <TriangleAlert className="w-5 h-5 text-warning" />
           </Alert.Icon>
           <Alert.Content>
             <Alert.Title>Warning</Alert.Title>

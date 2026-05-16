@@ -28,40 +28,40 @@ import {
   MessageSquare,
 } from 'lucide-react';
 
-// Inner component to access sidebar context
-const SidebarHeaderContent = () => {
-  const { collapsed, mobile } = useSidebar();
-
-  return (
-    <div className="flex items-center gap-3">
-      <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center shrink-0">
-        <span className="text-brand-content font-bold">V</span>
-      </div>
-      {(!collapsed || mobile) && (
-        <div className="flex flex-col">
-          <Typography.Label className="font-bold text-sm text-sidebar-content">
-            Vayu UI
-          </Typography.Label>
-          <Typography.Label variant="secondary" className="text-xs">
-            Dashboard
-          </Typography.Label>
-        </div>
-      )}
-      <div className="ml-auto">
-        <SidebarToggle />
-      </div>
-    </div>
-  );
-};
-
 export default function SidebarDemo() {
   return (
     <div className="h-150 w-full border border-border rounded-xl overflow-hidden flex bg-canvas relative">
       <SidebarProvider>
         <MobileMenuButton />
         <Sidebar>
+          {/* Function-as-child: render different header in rail mode */}
           <SidebarHeader>
-            <SidebarHeaderContent />
+            {({ collapsed, mobile }) =>
+              collapsed && !mobile ? (
+                <div className="flex justify-center">
+                  <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center shrink-0">
+                    <span className="text-brand-content font-bold">V</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center shrink-0">
+                    <span className="text-brand-content font-bold">V</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <Typography.Label className="font-bold text-sm text-sidebar-content">
+                      Vayu UI
+                    </Typography.Label>
+                    <Typography.Label variant="secondary" className="text-xs">
+                      Dashboard
+                    </Typography.Label>
+                  </div>
+                  <div className="ml-auto">
+                    <SidebarToggle floating />
+                  </div>
+                </div>
+              )
+            }
           </SidebarHeader>
 
           <SidebarContent>
@@ -100,26 +100,38 @@ export default function SidebarDemo() {
             </SidebarMenu>
           </SidebarContent>
 
+          {/* Function-as-child: render different footer in rail mode */}
           <SidebarFooter>
-            <div className="flex not-prose items-center gap-3 p-1">
-              <Avatar size="small" username="John Doe">
-                <Avatar.Image src="https://github.com/shadcn.png" alt="User" />
-                <Avatar.Fallback />
-              </Avatar>
-              <div className="flex flex-col overflow-hidden">
-                <Typography.Label className="text-sm font-medium text-sidebar-content truncate">
-                  John Doe
-                </Typography.Label>
-                <Typography.Label variant="secondary" className="text-xs truncate">
-                  john@example.com
-                </Typography.Label>
-              </div>
-              <Button variant="ghost" size="small" className="ml-auto" aria-label="Logout">
-                <Button.Icon size="small">
-                  <LogOut size={18} />
-                </Button.Icon>
-              </Button>
-            </div>
+            {({ collapsed, mobile }) =>
+              collapsed && !mobile ? (
+                <div className="flex not-prose justify-center">
+                  <Avatar size="small" username="John Doe">
+                    <Avatar.Image src="https://github.com/shadcn.png" alt="User" />
+                    <Avatar.Fallback />
+                  </Avatar>
+                </div>
+              ) : (
+                <div className="flex not-prose items-center gap-3 p-1">
+                  <Avatar size="small" username="John Doe">
+                    <Avatar.Image src="https://github.com/shadcn.png" alt="User" />
+                    <Avatar.Fallback />
+                  </Avatar>
+                  <div className="flex flex-col overflow-hidden">
+                    <Typography.Label className="text-sm font-medium text-sidebar-content truncate">
+                      John Doe
+                    </Typography.Label>
+                    <Typography.Label variant="secondary" className="text-xs truncate">
+                      john@example.com
+                    </Typography.Label>
+                  </div>
+                  <Button variant="ghost" size="small" className="ml-auto" aria-label="Logout">
+                    <Button.Icon size="small">
+                      <LogOut size={18} />
+                    </Button.Icon>
+                  </Button>
+                </div>
+              )
+            }
           </SidebarFooter>
         </Sidebar>
 

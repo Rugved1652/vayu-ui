@@ -140,9 +140,10 @@ Button/
 
 ### Button.Text
 
-| Prop       | Type        | Default | Description                |
-| :--------- | :---------- | :------ | :------------------------- |
-| `children` | `ReactNode` | —       | Text content of the button |
+| Prop       | Type        | Default | Description                                                |
+| :--------- | :---------- | :------ | :--------------------------------------------------------- |
+| `children` | `ReactNode` | —       | Text content of the button                                 |
+| `wrap`     | `boolean`   | `false` | When `true`, disables the default truncation so long labels can wrap. |
 
 ### Button.Badge
 
@@ -154,6 +155,16 @@ Button/
 | `position` | `"top-right" \| "top-left" \| "inline-right" \| "inline-left"` | `"top-right"` | Position relative to the button               |
 | `size`     | `"small" \| "medium" \| "large"`                               | `"small"`     | Size of the badge                             |
 | `showZero` | `boolean`                                                      | `false`       | Whether to render the badge when value is `0` |
+
+### Wrapping Long Labels
+
+`Button.Text` truncates by default. For labels that should wrap instead of showing an ellipsis, use the `wrap` prop:
+
+```tsx
+<Button variant="primary">
+  <Button.Text wrap>Very long label that should wrap to multiple lines</Button.Text>
+</Button>
+```
 
 ### Status
 

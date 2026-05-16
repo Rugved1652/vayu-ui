@@ -50,6 +50,17 @@ npx vayu-ui-cli@latest add card
       <Card.Header title="Card with Overlay" avatar={<div className="w-8 h-8 rounded-full bg-surface" />} action={<span className="text-xs text-muted-content">Badge</span>} />
       <Card.Content>Supports avatar, action, and media overlay.</Card.Content>
     </Card>
+
+    <Card>
+      <Card.Header title="Confirm Action" subtitle="Review before proceeding." />
+      <Card.Content>
+        This action cannot be undone. Please verify all details before continuing.
+      </Card.Content>
+      <Card.Footer className="flex-col items-stretch justify-start gap-2">
+        <button>Confirm</button>
+        <a href="/help" className="text-sm text-center">Need help?</a>
+      </Card.Footer>
+    </Card>
     ```
 
   </Tab>

@@ -18,6 +18,8 @@ export const alertEntry: ComponentRegistryEntry = {
     'feedback',
     'status',
     'banner',
+    'status-banner',
+    'notification-banner',
     'toast',
     'message',
     'validation',
@@ -463,6 +465,40 @@ export default function ErrorAlert() {
 }`,
       tags: ['error', 'dismissible', 'validation'],
     },
+    {
+      title: 'Soft Warning Banner',
+      description:
+        'Warning alert using the soft-tint pattern: tinted background, border, and a coloured icon with surface-content text for reliable contrast in both light and dark themes.',
+      code: `import { useState } from 'react';
+import { Alert } from 'vayu-ui';
+import { AlertTriangle } from 'lucide-react';
+
+export default function SoftWarningBanner() {
+  const [show, setShow] = useState(true);
+
+  if (!show) return null;
+
+  return (
+    <Alert variant="warning">
+      <Alert.Icon variant="warning">
+        <AlertTriangle className="w-5 h-5 text-warning" />
+      </Alert.Icon>
+      <Alert.Content>
+        <Alert.Title>Maintenance Scheduled</Alert.Title>
+        <Alert.Description>
+          The system will be down for maintenance on Sunday at 2 AM UTC.
+        </Alert.Description>
+      </Alert.Content>
+      <Alert.Dismiss
+        variant="warning"
+        alertTitle="Maintenance Scheduled"
+        onClick={() => setShow(false)}
+      />
+    </Alert>
+  );
+}`,
+      tags: ['warning', 'soft-tint', 'contrast', 'banner'],
+    },
   ],
 
   // ── Anti-patterns ─────────────────────────────────────
@@ -494,6 +530,13 @@ export default function ErrorAlert() {
       good: '<Alert.Title>Error</Alert.Title><Alert.Description>See the <a href="/help">help docs</a> for details.</Alert.Description>',
       reason:
         'Alerts use aria-live regions that announce changes to screen readers. Embedding interactive elements inside the Title or inside the live region can cause confusing repeated announcements and breaks the expected alert pattern.',
+    },
+    {
+      title: 'Using warning-content text on a tinted warning background',
+      bad: '<div className="bg-warning/10 text-warning-content">Warning</div>',
+      good: '<Alert variant="warning"><Alert.Icon variant="warning"><AlertTriangle className="w-5 h-5 text-warning" /></Alert.Icon><Alert.Content><Alert.Title>Warning</Alert.Title></Alert.Content></Alert>',
+      reason:
+        'The warning-content token is designed for solid warning backgrounds (bg-warning), not tinted ones (bg-warning/10). On a tinted background it becomes unreadable in light mode. Use the Alert component which applies text-surface-content for reliable contrast, or pair a coloured icon with neutral text.',
     },
   ],
 };

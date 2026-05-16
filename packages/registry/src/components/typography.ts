@@ -123,6 +123,14 @@ export const typographyEntry: ComponentRegistryEntry = {
           description: 'Font family override',
           options: ['primary', 'secondary'],
         },
+        {
+          name: 'unsized',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'false',
+          description:
+            'When true, skips the default responsive size classes so you can fully override sizing via className. Without this, sm:/lg: size classes survive className overrides because twMerge does not resolve conflicts across breakpoints.',
+        },
       ],
     },
     {
@@ -169,6 +177,14 @@ export const typographyEntry: ComponentRegistryEntry = {
           description: 'Font family override; defaults to primary for headings',
           options: ['primary', 'secondary'],
         },
+        {
+          name: 'unsized',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'false',
+          description:
+            'When true, skips the default responsive size classes so you can fully override sizing via className.',
+        },
       ],
     },
     {
@@ -213,6 +229,14 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           description: 'Font family override',
           options: ['primary', 'secondary'],
+        },
+        {
+          name: 'unsized',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'false',
+          description:
+            'When true, skips the default responsive size classes so you can fully override sizing via className.',
         },
       ],
     },
@@ -259,6 +283,14 @@ export const typographyEntry: ComponentRegistryEntry = {
           description: 'Font family override',
           options: ['primary', 'secondary'],
         },
+        {
+          name: 'unsized',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'false',
+          description:
+            'When true, skips the default responsive size classes so you can fully override sizing via className.',
+        },
       ],
     },
     {
@@ -303,6 +335,14 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           description: 'Font family override',
           options: ['primary', 'secondary'],
+        },
+        {
+          name: 'unsized',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'false',
+          description:
+            'When true, skips the default responsive size classes so you can fully override sizing via className.',
         },
       ],
     },
@@ -957,6 +997,26 @@ export default function FontDemo() {
 }`,
       tags: ['font', 'primary', 'secondary', 'font-family'],
     },
+    {
+      title: 'Overriding Heading Size with unsized',
+      description:
+        'Use the unsized prop to opt out of the baked-in responsive size classes, then provide your own size via className. Without unsized, sm:/lg: breakpoints would survive the override.',
+      code: `import { Typography } from 'vayu-ui';
+
+export default function UnsizedHeadingDemo() {
+  return (
+    <div className="space-y-4 bg-surface rounded-surface p-6 border border-border shadow-surface">
+      <Typography.H3 unsized className="text-sm font-semibold">
+        This stays text-sm on all breakpoints
+      </Typography.H3>
+      <Typography.H3 className="text-sm">
+        This balloons back to 2xl/3xl/4xl — don't do this
+      </Typography.H3>
+    </div>
+  );
+}`,
+      tags: ['unsized', 'size-override', 'responsive', 'caveat'],
+    },
   ],
 
   // ── Anti-patterns ─────────────────────────────────────
@@ -995,6 +1055,13 @@ export default function FontDemo() {
       good: '<Typography.P variant="error">Error message</Typography.P>',
       reason:
         'Hardcoded colors bypass design tokens and will not adapt to theme changes (light/dark mode). The variant prop maps to semantic tokens that ensure consistent theming and WCAG contrast compliance.',
+    },
+    {
+      title: 'Overriding heading size via className without unsized',
+      bad: '<Typography.H3 className="text-sm">Small heading</Typography.H3>',
+      good: '<Typography.H3 unsized className="text-sm">Small heading</Typography.H3>',
+      reason:
+        'Heading components bake in responsive size classes (e.g. text-2xl sm:text-3xl lg:text-4xl). twMerge resolves conflicts within the same breakpoint but not across them, so a consumer className only overrides the base breakpoint. Use the unsized prop to opt out of default sizing entirely.',
     },
   ],
 };

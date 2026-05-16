@@ -14,10 +14,13 @@ export type {
   SidebarProviderProps,
   SidebarProps,
   SidebarHeaderProps,
+  SidebarHeaderChildren,
   SidebarContentProps,
   SidebarFooterProps,
+  SidebarFooterChildren,
   SidebarMenuProps,
   SidebarMenuGroupProps,
   SidebarMenuItemProps,
+  SidebarToggleProps,
   SubItem,
 } from './types';

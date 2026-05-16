@@ -124,6 +124,29 @@ export default function TypographyDemo() {
           <Typography.P font="secondary">Secondary font (Mulish) - for body text</Typography.P>
         </div>
       </section>
+
+      {/* Size Override Section */}
+      <section>
+        <Typography.H5 className="mb-6">Size Override with unsized</Typography.H5>
+        <div className="space-y-4 bg-surface rounded-surface p-6 border border-border shadow-surface">
+          <div>
+            <Typography.P className="text-xs text-muted-content mb-1">
+              With unsized — stays small on all breakpoints:
+            </Typography.P>
+            <Typography.H3 unsized className="text-sm font-semibold">
+              Custom-sized heading
+            </Typography.H3>
+          </div>
+          <div>
+            <Typography.P className="text-xs text-muted-content mb-1">
+              Without unsized — className only overrides the base breakpoint:
+            </Typography.P>
+            <Typography.H3 className="text-sm font-semibold">
+              Broken override (balloons on sm/lg)
+            </Typography.H3>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

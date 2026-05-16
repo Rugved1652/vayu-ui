@@ -10,11 +10,15 @@ import type { SidebarHeaderProps } from './types';
 export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ children }) => {
   const { collapsed, mobile } = useSidebar();
 
+  const content = typeof children === 'function'
+    ? children({ collapsed, mobile })
+    : children;
+
   return (
     <div
       className={`p-6 border-b border-border ${collapsed && !mobile ? 'px-4 overflow-hidden' : ''}`}
     >
-      {children}
+      {content}
     </div>
   );
 };

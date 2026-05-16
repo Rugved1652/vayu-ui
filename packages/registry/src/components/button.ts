@@ -167,13 +167,20 @@ export const buttonEntry: ComponentRegistryEntry = {
     {
       name: 'Text',
       fileName: 'ButtonText.tsx',
-      description: 'Wraps button label text with built-in truncation for overflow handling',
+      description: 'Wraps button label text with built-in truncation for overflow handling. Use the wrap prop to allow long labels to wrap instead of truncating.',
       props: [
         {
           name: 'children',
           type: 'React.ReactNode',
           required: true,
           description: 'Text content to display as the button label',
+        },
+        {
+          name: 'wrap',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'false',
+          description: 'When true, disables the default truncate behaviour so long labels can wrap across multiple lines.',
         },
         {
           name: 'className',

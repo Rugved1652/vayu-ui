@@ -18,6 +18,8 @@ export const badgeEntry: ComponentRegistryEntry = {
     'label',
     'status',
     'indicator',
+    'status-indicator',
+    'notification-dot',
     'counter',
     'chip',
     'pill',
