@@ -164,7 +164,8 @@ export default class Update extends Command {
     const existing = readFileSync(target, 'utf-8')
     const fresh = await getContent()
 
-    if (!flags.force && existing === fresh) {
+    const normalizeEndings = (s: string) => s.replace(/\r\n/g, '\n')
+    if (!flags.force && normalizeEndings(existing) === normalizeEndings(fresh)) {
       return 'unchanged'
     }
 

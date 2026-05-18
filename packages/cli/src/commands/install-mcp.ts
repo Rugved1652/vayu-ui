@@ -31,17 +31,11 @@ export default class InstallMcp extends Command {
     }),
   }
 
-  async run(): Promise<void> {
-    const {flags} = await this.parse(InstallMcp)
-    const targetDir = findProjectRoot(process.cwd())
-
-    // Resolve which tools to configure
-    const toolIds = await this.resolveToolIds(flags)
-    if (toolIds.length === 0) {
-      this.log(ux.colorize('dim', '  No tools selected. Nothing to do.'))
-      return
-    }
-
+  async installToDir(
+    targetDir: string,
+    toolIds: ToolId[],
+    options: {dryRun: boolean; force: boolean},
+  ): Promise<void> {
     // Header
     this.log('')
     this.log(ux.colorize('bold', '  Vayu UI MCP Setup'))
@@ -61,7 +55,7 @@ export default class InstallMcp extends Command {
     this.log('')
 
     // Confirm
-    if (!flags.force && !flags['dry-run']) {
+    if (!options.force && !options.dryRun) {
       const ok = await confirm('  Apply changes?')
       if (!ok) {
         this.log(ux.colorize('dim', '  Aborted.'))
@@ -70,12 +64,12 @@ export default class InstallMcp extends Command {
     }
 
     // Dry-run early exit
-    if (flags['dry-run']) {
+    if (options.dryRun) {
       for (const toolId of toolIds) {
         const toolDef = TOOL_DEFINITIONS[toolId]
         const result = writeMcpConfig(toolDef, targetDir, {
           dryRun: true,
-          force: flags.force,
+          force: options.force,
         })
         if (result.action === 'dry-run') {
           this.log(`    ${ux.colorize('cyan', 'would write')} ${toolDef.configFileName}`)
@@ -95,7 +89,7 @@ export default class InstallMcp extends Command {
       const toolDef = TOOL_DEFINITIONS[toolId]
       const result = writeMcpConfig(toolDef, targetDir, {
         dryRun: false,
-        force: flags.force,
+        force: options.force,
       })
       results.push(result)
     }
@@ -122,6 +116,20 @@ export default class InstallMcp extends Command {
     this.log('')
     this.log(ux.colorize('dim', '  Restart your AI tool to load the Vayu UI MCP server (17 tools available).'))
     this.log('')
+  }
+
+  async run(): Promise<void> {
+    const {flags} = await this.parse(InstallMcp)
+    const targetDir = findProjectRoot(process.cwd())
+
+    // Resolve which tools to configure
+    const toolIds = await this.resolveToolIds(flags)
+    if (toolIds.length === 0) {
+      this.log(ux.colorize('dim', '  No tools selected. Nothing to do.'))
+      return
+    }
+
+    await this.installToDir(targetDir, toolIds, {dryRun: flags['dry-run'], force: flags.force})
   }
 
   private async resolveToolIds(flags: {tool?: string; force: boolean}): Promise<ToolId[]> {

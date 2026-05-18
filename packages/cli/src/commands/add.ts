@@ -1,6 +1,6 @@
 import {Command, Args, Flags, ux} from '@oclif/core'
 import {existsSync, mkdirSync, writeFileSync} from 'node:fs'
-import {join} from 'node:path'
+import {basename, join} from 'node:path'
 import {execSync} from 'node:child_process'
 import {allEntries} from 'vayu-ui-registry'
 import type {RegistryEntry, ComponentRegistryEntry, HookRegistryEntry} from 'vayu-ui-registry'
@@ -231,7 +231,7 @@ export default class Add extends Command {
       const target = join(uiAbsDir, 'components', relPath)
 
       if (!overwrite && existsSync(target)) {
-        this.log(`    ${ux.colorize('dim', 'exists')} ${entry.directoryName}/${relPath.split('/').pop()}`)
+        this.log(`    ${ux.colorize('dim', 'exists')} ${entry.directoryName}/${basename(relPath)}`)
         continue
       }
 

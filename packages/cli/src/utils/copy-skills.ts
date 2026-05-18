@@ -1,5 +1,5 @@
 import {existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync} from 'node:fs'
-import {dirname, join} from 'node:path'
+import {dirname, join, relative} from 'node:path'
 import {fileURLToPath} from 'node:url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -46,7 +46,7 @@ export function copySkills(root: string, log: (msg: string) => void): void {
         }
       }
 
-      log(`    copied ${skillsDir.replace(root + '/', '')}/${folder}/`)
+      log(`    copied ${relative(root, join(skillsDir, folder))}/`)
     }
   }
 

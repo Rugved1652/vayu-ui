@@ -1,5 +1,5 @@
 import {existsSync, readFileSync} from 'node:fs'
-import {join} from 'node:path'
+import {join, parse} from 'node:path'
 import {createInterface} from 'node:readline'
 
 export interface ProjectInfo {
@@ -42,11 +42,13 @@ export function detectProject(cwd: string): ProjectInfo {
 
 export function findProjectRoot(cwd: string): string {
   let dir = cwd
-  while (dir !== '/') {
+  const {root} = parse(dir)
+  while (dir !== root) {
     if (existsSync(join(dir, 'package.json'))) return dir
     dir = join(dir, '..')
   }
 
+  if (existsSync(join(dir, 'package.json'))) return dir
   return cwd
 }
 

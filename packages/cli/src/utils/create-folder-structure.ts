@@ -1,5 +1,5 @@
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs'
-import {dirname, join} from 'node:path'
+import {dirname, join, relative} from 'node:path'
 import {fileURLToPath} from 'node:url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -76,8 +76,7 @@ function writeBarrelFiles(baseDir: string, log: (msg: string) => void): void {
   for (const path of barrelPaths) {
     if (!existsSync(path)) {
       writeFileSync(path, barrelTemplate)
-      const relPath = path.replace(baseDir + '/', '')
-      log(`    wrote ${relPath}`)
+      log(`    wrote ${relative(baseDir, path)}`)
     }
   }
 }

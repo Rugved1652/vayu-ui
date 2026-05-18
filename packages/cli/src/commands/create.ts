@@ -3,7 +3,7 @@ import type {ComponentRegistryEntry, HookRegistryEntry, RegistryEntry} from 'vay
 import {Args, Command, Flags, ux} from '@oclif/core'
 import {execSync} from 'node:child_process'
 import {existsSync, mkdirSync, writeFileSync} from 'node:fs'
-import {join} from 'node:path'
+import {basename, join} from 'node:path'
 import {allEntries} from 'vayu-ui-registry'
 
 import {markInstalled, readConfig} from '../utils/config.js'
@@ -11,6 +11,7 @@ import {copySkills} from '../utils/copy-skills.js'
 import {createFolderStructure} from '../utils/create-folder-structure.js'
 import {fetchComponentFiles, fetchHookFile, fetchUtils} from '../utils/fetcher.js'
 import {runInit} from '../utils/init-runner.js'
+import {ALL_TOOL_IDS} from '../utils/mcp-config.js'
 import {confirm, detectProject, prompt} from '../utils/project.js'
 import InstallMcp from './install-mcp.js'
 
@@ -167,7 +168,7 @@ export default class Create extends Command {
         this.log('')
         try {
           const mcpCommand = new InstallMcp([], this.config)
-          await mcpCommand.run()
+          await mcpCommand.installToDir(projectPath, [...ALL_TOOL_IDS], {dryRun: false, force: true})
           this.log('')
           this.log(ux.colorize('green', '  MCP server installed.'))
         } catch {
@@ -277,7 +278,7 @@ export default class Create extends Command {
         execSync(addCmd, {cwd: projectPath, stdio: 'pipe'})
         this.log(ux.colorize('green', '  Dependencies installed.'))
       } catch {
-        this.warn('Failed to install dependencies. Run manually: cd ' + options.packageManager + ' && ' + addCmd)
+        this.warn('Failed to install dependencies. Run manually: cd ' + basename(projectPath) + ' && ' + addCmd)
       }
     }
 
