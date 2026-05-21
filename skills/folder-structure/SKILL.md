@@ -1,11 +1,11 @@
 ---
 name: folder-structure
-description: Enforce the standard Next.js/React consumer-app folder structure, naming, file placement, and data-flow rules for projects using Vayu UI. Use when creating, moving, naming, or reviewing pages, components, ui primitives, forms, modals, drawers, popovers, API services, TanStack Query hooks, WebSocket/Socket.io hooks and services, non-API hooks, types, Zod schemas, table columns, sections, or project architecture. This skill answers "where does this go?" for app projects, not the Vayu UI toolkit monorepo.
+description: Enforce the standard Next.js/React consumer-app folder structure, naming, file placement, and data-flow rules for projects using Vayu UI. Use when creating, moving, naming, or reviewing pages, ui components, ui hooks, forms, modals, drawers, popovers, API services, TanStack Query hooks, WebSocket/Socket.io hooks and services, types, Zod schemas, table columns, sections, or project architecture. This skill answers "where does this go?" for app projects, not the Vayu UI toolkit monorepo.
 ---
 
 # Folder Structure
 
-Use this locked app architecture for Next.js App Router or React projects using Vayu UI. Pages stay thin, API work stays centralized, domain UI lives in `containers/`, reusable app components live in `components/`, and toolkit primitives live in top-level `ui/`.
+Use this locked app architecture for Next.js App Router or React projects using Vayu UI. Pages stay thin, API work stays centralized, domain UI lives in `containers/`, and all reusable UI (Vayu primitives, custom primitives, shared app components, and non-API hooks) lives under `ui/`.
 
 ## Structure
 
@@ -36,17 +36,15 @@ project-root/
 │   ├── Card/
 │   └── Sections/
 ├── ui/
-│   ├── components/            # Vayu/custom primitives
-│   ├── hooks/                 # primitive-only hooks
-│   └── utils/                 # primitive-only helpers
-├── components/                # reusable app components, not primitives
+│   ├── components/            # reusable app components, Vayu/custom primitives
+│   ├── hooks/                 # non-API app hooks, primitive hooks
+│   └── utils/                 # helpers for sibling folders, components and hooks
 ├── types/
 │   ├── api-types/             # shared API contracts
 │   └── enums/
 ├── utils/
 │   ├── validations/           # Zod schemas
 │   └── columns/               # TanStack Table columns
-├── hooks/                     # non-API app hooks
 ├── lib/                       # axios/query-client/auth adapters
 └── public/
 ```
@@ -58,7 +56,7 @@ project-root/
 | `app/` | route segments, `layout.tsx`, `page.tsx`, route handlers, loading/error boundaries | business components, API service calls, table columns |
 | `api/api.ts` | axios client singleton, interceptors, global error handling | feature logic, UI imports |
 | `api/services/` | fetch/axios functions returning typed data | React hooks, UI imports |
-| `api/hooks/` | one TanStack Query hook per file | non-API hooks |
+| `api/hooks/` | one TanStack Query hook per file | non-API hooks, WS hooks |
 | `ws/ws.ts` | socket.io client singleton, connection config | feature logic, UI imports |
 | `ws/services/` | socket.io emitters/listeners per feature | React hooks, UI imports |
 | `ws/hooks/` | one React hook per channel; consumes ws/services | non-WS hooks, direct socket.io client usage |
@@ -69,25 +67,23 @@ project-root/
 | `containers/Drawer/` | concrete drawer/sheet instances | generic drawer primitive |
 | `containers/Card/` | complex domain cards | base card primitive |
 | `containers/Sections/` | chunks from large pages | generic components |
-| `ui/components/` | Vayu UI or custom base primitives | domain-specific UI |
-| `ui/hooks/` | hooks used only by UI primitives | app or API hooks |
-| `ui/utils/` | helpers used only by UI primitives | validations, columns, feature utils |
-| `components/` | reusable domain-agnostic app components | forms, modals, drawers, popovers, page sections |
+| `ui/components/` | Vayu UI primitives, custom primitives, reusable domain-agnostic app components | forms, modals, drawers, popovers, page sections |
+| `ui/hooks/` | non-API hooks (`useDebounce`, `useMediaQuery`) and hooks used by UI primitives | TanStack Query hooks, WS hooks |
+| `ui/utils/` | helpers used by `ui/components/` and `ui/hooks/` | validations, columns, feature utils |
 | `types/api-types/` | shared request/response contracts | feature-local one-off types |
 | `types/enums/` | project enums | string constants hidden in components |
 | `utils/validations/` | Zod schemas | UI primitive helpers |
 | `utils/columns/` | TanStack Table columns | inline route-page column defs |
-| `hooks/` | non-API hooks like `useDebounce`, `useMediaQuery` | TanStack Query hooks |
 | `lib/` | query-client, auth adapters, and other singletons | feature UI |
 
-Prefer `types/api-types/` over `api/types/` when a contract is reused. Add `index.ts` barrels inside `api/services/`, `api/hooks/`, `ws/services/`, `ws/hooks/`, and container category folders when multiple files exist.
+Prefer `types/api-types/` over `api/types/` when a contract is reused. Add `index.ts` barrels inside `api/services/`, `api/hooks/`, `ws/services/`, `ws/hooks/`, `ui/components/`, and container category folders when multiple files exist.
 
 ## Data Flow
 
 ```txt
 app/page or layout -> containers/* -> api/hooks/* -> api/services/* -> api/api.ts -> backend
 app/page or layout -> containers/* -> ws/hooks/* -> ws/services/* -> ws/ws.ts -> backend
-containers/* -> ui/components/* | components/* | utils/validations/* | utils/columns/* | types/*
+containers/* -> ui/components/* | utils/validations/* | utils/columns/* | types/*
 api/hooks/* -> api/services/*
 api/services/* -> types/api-types/*
 ws/hooks/* -> ws/services/*
@@ -107,6 +103,8 @@ Keep imports one-way. Lower layers must not import pages, containers, or domain 
 | WS services | `<feature>SocketService.ts` | `chatSocketService.ts`, `notificationSocketService.ts` |
 | WS hooks | `use<ChannelName>.ts` | `useChatSocket.ts`, `useNotifications.ts` |
 | WS types | `<Feature>SocketPayload.ts`, `<Feature>SocketEvent.ts` | `ChatSocketPayload.ts` |
+| UI components | `PascalCase.tsx` | `DataTable.tsx`, `Button.tsx` |
+| UI hooks | `use<Name>.ts` | `useDebounce.ts`, `useMergeRefs.ts` |
 | Modals | `<Action><Modal>.tsx` | `AddUserModal.tsx`, `DeleteConfirmModal.tsx` |
 | Drawers | `<Name>Drawer.tsx` | `UserDetailsDrawer.tsx` |
 | Popovers | `<Name>Popover.tsx` | `UserActionsPopover.tsx` |
@@ -125,16 +123,18 @@ Use PascalCase for React components/enums. Use camelCase for services, schemas, 
 - Form: `containers/Forms/<Name>Form.tsx` + `utils/validations/<feature>Schema.ts` + `types/api-types/*` + `api/hooks/use<Operation>.ts`.
 - Users table page: use `api/hooks/useUsers.ts`, `utils/columns/userColumns.ts`, and action UI such as `containers/PopOver/UserActionsPopover.tsx`.
 - Modal/drawer/popover: concrete instance in `containers/<Category>/`; underlying primitive from `ui/components/`; Vayu UI usage/composition verified with the MCP usage skill.
-- API: components and containers call query hooks, not services. Services perform HTTP only; query hooks own query keys, `useQuery`, and `useMutation`.
+- Reusable app component: `ui/components/<Name>.tsx` when it is domain-agnostic and shared across containers/pages.
+- API: containers and `ui/components/` call query hooks, not services. Services perform HTTP only; query hooks own query keys, `useQuery`, and `useMutation`.
 - WebSocket: `containers/` → `ws/hooks/use<ChannelName>` → `ws/services/<feature>SocketService.ts` → `ws/ws.ts`. UI imports hooks only; hooks import services only; services import the socket client only.
-- Root `utils/`: app-level validations, columns, and feature helpers. `ui/utils/`: primitive-only helpers.
+- Root `utils/`: app-level validations, columns, and feature helpers. `ui/utils/`: helpers scoped to `ui/components/` and `ui/hooks/` only.
 
 ## Anti-Patterns
 
-- Do not put domain forms, modals, drawers, popovers, cards, or large sections in `ui/` or `components/`.
+- Do not put domain forms, modals, drawers, popovers, cards, or large sections in `ui/components/`.
+- Do not create a root-level `components/` or `hooks/` folder — use `ui/components/` and `ui/hooks/` instead.
 - Do not put primitives in `containers/`.
 - Do not call `fetch` or axios directly from `page.tsx`, containers, forms, or UI primitives.
-- Do not put TanStack Query hooks in root `hooks/`.
+- Do not put TanStack Query hooks in `ui/hooks/`.
 - Do not define table columns inside route pages.
 - Do not let `app/` become a business-component dumping ground.
 - Do not let any `page.tsx` exceed 400 lines.
@@ -142,5 +142,5 @@ Use PascalCase for React components/enums. Use camelCase for services, schemas, 
 - Do not duplicate shared API contracts between `api/types/` and `types/api-types/`.
 - Do not import upward, such as `api/services` importing from `containers`.
 - Do not use Socket.io client directly in UI or containers; always go through `ws/hooks/`.
-- Do not put WS hooks in root `hooks/`.
+- Do not put WS hooks in `ui/hooks/`.
 - Do not duplicate WS types between `ws/types/` and `types/ws-types/`.

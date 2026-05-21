@@ -3,6 +3,12 @@ import {dirname, join} from 'node:path'
 
 export type ToolId = 'claude' | 'cursor' | 'opencode'
 
+/** MCP server key written inside each tool's config JSON */
+export const MCP_SERVER_KEY = 'vayu-ui'
+
+/** npm package started via npx */
+export const MCP_PACKAGE_NAME = 'vayu-ui-mcp'
+
 export interface ToolDefinition {
   id: ToolId
   name: string
@@ -20,14 +26,26 @@ export interface WriteResult {
 function defaultEntry(): Record<string, unknown> {
   return {
     command: 'npx',
-    args: ['-y', 'vayu-ui-mcp'],
+    args: ['-y', MCP_PACKAGE_NAME],
   }
 }
 
 function opencodeEntry(): Record<string, unknown> {
   return {
     type: 'local',
-    command: ['npx', '-y', 'vayu-ui-mcp'],
+    command: ['npx', '-y', MCP_PACKAGE_NAME],
+  }
+}
+
+/** Build the JSON fragment that will be merged into a tool's config file */
+export function buildMcpPreview(
+  toolDef: ToolDefinition,
+  serverKey: string = MCP_SERVER_KEY,
+): Record<string, unknown> {
+  return {
+    [toolDef.topLevelKey]: {
+      [serverKey]: toolDef.buildEntry(),
+    },
   }
 }
 

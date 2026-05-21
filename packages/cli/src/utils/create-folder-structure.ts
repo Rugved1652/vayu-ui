@@ -12,11 +12,10 @@ const TEMPLATE_DIR = existsSync(join(__dirname, '..', 'templates'))
 
 const FOLDER_STRUCTURE = {
   api: ['services', 'hooks', 'types'],
-  components: [],
   containers: ['Modals', 'Forms', 'PopOver', 'Drawer', 'Card', 'Sections'],
-  hooks: [],
   lib: [],
   types: ['api-types', 'enums'],
+  ui: ['components', 'hooks', 'utils'],
   utils: ['validations', 'columns'],
   ws: ['services', 'hooks', 'types'],
 }
