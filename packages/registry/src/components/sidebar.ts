@@ -6,6 +6,7 @@ export const sidebarEntry: ComponentRegistryEntry = {
   name: 'Sidebar',
   type: 'component',
   category: 'navigation',
+  capabilities: ['navigation-primitive'],
 
   // ── Description ───────────────────────────────────────
   description:

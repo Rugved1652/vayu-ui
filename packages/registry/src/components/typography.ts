@@ -6,6 +6,7 @@ export const typographyEntry: ComponentRegistryEntry = {
   name: 'Typography',
   type: 'component',
   category: 'data-display',
+  capabilities: ['content-primitive'],
 
   // ── Description ───────────────────────────────────────
   description:

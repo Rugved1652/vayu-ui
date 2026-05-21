@@ -6,6 +6,7 @@ export const animationEntry: ComponentRegistryEntry = {
   name: 'Animation',
   type: 'component',
   category: 'animation',
+  capabilities: ['animation-primitive'],
 
   // ── Description ───────────────────────────────────────
   description:

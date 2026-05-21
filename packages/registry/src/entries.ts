@@ -1,4 +1,4 @@
-import type { ComponentRegistryEntry, HookRegistryEntry, RegistryEntry } from './types.js';
+import type { ComponentRegistryEntry, HookRegistryEntry, RegistryCapability, RegistryEntry } from './types.js';
 
 import { accordionEntry } from './components/accordion.js';
 import { affixEntry } from './components/affix.js';
@@ -171,3 +171,7 @@ export const hookEntries: HookRegistryEntry[] = [
 ];
 
 export const allEntries: RegistryEntry[] = [...componentEntries, ...hookEntries];
+
+export function getEntriesByCapability(capability: RegistryCapability): RegistryEntry[] {
+  return allEntries.filter((entry) => entry.capabilities?.includes(capability));
+}

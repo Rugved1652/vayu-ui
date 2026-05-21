@@ -6,6 +6,7 @@ export const modalEntry: ComponentRegistryEntry = {
   name: 'Modal',
   type: 'component',
   category: 'overlay',
+  capabilities: ['overlay-primitive'],
 
   // ── Description ───────────────────────────────────────
   description:

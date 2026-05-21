@@ -69,6 +69,7 @@
   "repository": "https://github.com/Rugved1652/vayu-ui/tree/main/packages/cli",
   "scripts": {
     "build": "tsup && shx cp -r src/templates dist/",
+    "check": "node ./bin/dev.js check --strict --path src/commands",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "npm run lint",

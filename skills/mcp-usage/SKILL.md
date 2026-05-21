@@ -5,7 +5,19 @@ description: Use the Vayu UI MCP server as the source of truth for choosing, ins
 
 # Vayu UI MCP Usage
 
-Before writing Vayu UI code, query MCP instead of guessing names, props, variants, states, events, examples, install commands, tokens, or composition. Treat MCP as the toolkit oracle; scaffold first, then verify with exact detail tools.
+MCP discovery is mandatory before writing Vayu UI code. Never guess names, props, variants, states, events, examples, install commands, tokens, or composition from memory.
+
+## Hard Gates (Non-Negotiable)
+
+| Gate | Requirement |
+| --- | --- |
+| Component/hook choice | MUST call `find_component` when slug/name is unknown, then MUST call `get_component_summary` before implementation. |
+| API accuracy | MUST confirm props/variants/states/events with MCP detail tools before final code. |
+| Overlay/form/focus UI | MUST call `get_component_a11y` for dialogs, popovers, menus, tooltips, forms, and keyboard-driven interactions. |
+| Compound components | MUST call `get_component_composition` before writing nested sub-components. |
+| Safety checks | MUST call `get_component_do_not` before finalizing code. |
+| Install/import commands | MUST call `get_install_guide`; never invent commands or import paths. |
+| Custom alternatives | MUST justify in one line when not using a Vayu component/hook that MCP indicates is suitable. |
 
 ## Tool Map
 
@@ -40,15 +52,15 @@ Before writing Vayu UI code, query MCP instead of guessing names, props, variant
 
 Good `find_component` queries describe behavior/context: `"floating dialog with overlay"`, `"button with loading state and icon"`, `"temporary message after successful save"`, `"debounce rapidly changing value"`, `"accessible hover preview card"`. If results are weak, add interaction/category words such as `open`, `dismiss`, `select`, `submit`, `preview`, `validate`, `announce`, `overlay`, `feedback`, `forms`, `input`, `navigation`, `state`, `dom`.
 
-## Detail Recipes
+## Minimum Required Call Sequences
 
 | Case | Call Sequence |
 | --- | --- |
-| Simple visual component | `get_component_summary` -> `get_component_variants` -> `scaffold_component_usage` -> `get_component_do_not` |
-| Compound/overlay component | `get_component_summary` -> `get_component_composition` -> `get_component_props` -> `get_component_states` -> `get_component_events` -> `get_component_a11y` -> `scaffold_component_usage` -> `get_component_do_not` |
-| Hook | `find_component` with `type: "hook"` if needed -> `get_component_summary` -> `get_hook_details` -> `get_component_example` -> `get_component_do_not` |
+| New component selection | `find_component` (if needed) -> `get_component_summary` -> `get_component_variants` -> `scaffold_component_usage` -> `get_component_do_not` |
+| Compound/overlay component | `find_component` (if needed) -> `get_component_summary` -> `get_component_composition` -> `get_component_props` -> `get_component_states` -> `get_component_events` -> `get_component_a11y` -> `scaffold_component_usage` -> `get_component_do_not` |
+| Hook selection | `find_component` with `type: "hook"` (if needed) -> `get_component_summary` -> `get_hook_details` -> `get_component_example` -> `get_component_do_not` |
 | Styling | `get_design_tokens` with focused `group`: `color`, `radius`, `shadow`, `font`, or `animation` |
-| Install/imports | `get_install_guide`; do not invent paths or CLI commands |
+| Install/import verification | `get_install_guide` -> `get_component_dependencies` (if dependency review is needed) |
 
 ## Examples
 
@@ -85,8 +97,8 @@ If no tag matches, read `availableTags` from the response and retry. Skip step 1
 
 ## Anti-Patterns
 
-- Do not choose components or hooks from memory when MCP can search.
-- Do not use unconfirmed props, variants, sizes, events, sub-components, imports, or CLI commands.
-- Do not skip `get_component_a11y` for focusable, overlay, keyboard, form, or feedback UI.
-- Do not paste scaffold output blindly; refine it with detail tools.
-- Do not hardcode design values when `get_design_tokens` exposes a semantic token.
+- Never choose components or hooks from memory when MCP can search.
+- Never use unconfirmed props, variants, sizes, events, sub-components, imports, or CLI commands.
+- Never skip `get_component_a11y` for focusable, overlay, keyboard, form, or feedback UI.
+- Never paste scaffold output blindly; refine it with detail tools.
+- Never hardcode design values when `get_design_tokens` exposes a semantic token.

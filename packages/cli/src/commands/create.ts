@@ -9,7 +9,7 @@ import {allEntries} from 'vayu-ui-registry'
 import {markInstalled, readConfig} from '../utils/config.js'
 import {copySkills} from '../utils/copy-skills.js'
 import {createFolderStructure} from '../utils/create-folder-structure.js'
-import {fetchComponentFiles, fetchHookFile, fetchUtils} from '../utils/fetcher.js'
+import {fetchComponentFiles, fetchHookFile, fetchInputStyles, fetchUtils} from '../utils/fetcher.js'
 import {runInit} from '../utils/init-runner.js'
 import {ALL_TOOL_IDS} from '../utils/mcp-config.js'
 import {confirm, detectProject, prompt} from '../utils/project.js'
@@ -222,6 +222,9 @@ export default class Create extends Command {
     const utilsResult = await fetchUtils()
     writeFileSync(join(utilsDir, 'index.ts'), utilsResult.content)
     this.log(ux.colorize('dim', '    wrote utils/index.ts'))
+    const inputStylesResult = await fetchInputStyles()
+    writeFileSync(join(utilsDir, 'input-styles.ts'), inputStylesResult.content)
+    this.log(ux.colorize('dim', '    wrote utils/input-styles.ts'))
 
     // Write component files
     const compResults = await Promise.all(
@@ -346,17 +349,12 @@ export default class Create extends Command {
       this.log(
         ux.colorize(
           'dim',
-          `    ${ux.colorize('bold', 'npx vayu-ui-cli@latest mcp install')}      Set up the Vayu UI MCP server for your AI tools`,
+          `    ${ux.colorize('bold', 'npx vayu-ui-cli@latest install-mcp')}      Set up the Vayu UI MCP server for your AI tools`,
         ),
       )
       this.log('')
-      this.log(ux.colorize('dim', '  Add Vayu UI skills (Vercel Skills platform):'))
-      this.log(
-        ux.colorize(
-          'dim',
-          `    ${ux.colorize('bold', 'npx skills add Rugved1652/vayu-ui')}   Install Vayu UI skills for your AI coding agent`,
-        ),
-      )
+      this.log(ux.colorize('dim', '  Skills were copied to .agent/.agents/.claude/.cursor skill directories.'))
+      this.log(ux.colorize('dim', '  Use skills.sh only if you want the remote hosted skill set as well.'))
     }
 
     this.log('')

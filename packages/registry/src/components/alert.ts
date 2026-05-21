@@ -6,6 +6,7 @@ export const alertEntry: ComponentRegistryEntry = {
   name: 'Alert',
   type: 'component',
   category: 'feedback',
+  capabilities: ['feedback-primitive'],
 
   // ── Description ───────────────────────────────────────
   description:

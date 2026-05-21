@@ -1,0 +1,26 @@
+---
+description: Enforce MCP-first Vayu UI implementation workflow
+alwaysApply: true
+---
+
+# Vayu MCP-First Rule
+
+Use the Vayu UI MCP server as the source of truth before writing UI code.
+
+## Mandatory preflight
+
+1. If the component/hook slug is not already confirmed, call `find_component`.
+2. Call `get_component_summary` before choosing a component or hook.
+3. Before shipping code, verify implementation details with relevant tools:
+   - API shape: `get_component_props`, `get_component_variants`, `get_component_states`, `get_component_events`
+   - Accessibility: `get_component_a11y` for overlays, forms, feedback, focus, or keyboard interactions
+   - Composition: `get_component_composition` for compound components
+   - Anti-pattern validation: `get_component_do_not`
+   - Install/import commands: `get_install_guide`
+
+## Hard constraints
+
+- Do not invent props, variants, states, imports, or CLI commands from memory.
+- Do not introduce `framer-motion` when Vayu `Animation` or token animations cover the use case.
+- Do not hand-roll primitives (sidebar, popover/dropdown, avatar, alert, typography, modal, toaster, tooltip) when an equivalent Vayu component exists.
+- If custom code is still required, include a one-line justification explaining why the Vayu equivalent is not suitable.

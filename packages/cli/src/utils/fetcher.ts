@@ -19,6 +19,10 @@ export function buildUtilsUrl(): string {
   return `${GITHUB_BASE}/utils/index.ts`
 }
 
+export function buildInputStylesUrl(): string {
+  return `${GITHUB_BASE}/utils/input-styles.ts`
+}
+
 export async function fetchFile(url: string): Promise<string> {
   const res = await fetch(url)
   if (!res.ok) {
@@ -47,4 +51,9 @@ export async function fetchHookFile(fileName: string): Promise<FetchResult> {
 export async function fetchUtils(): Promise<FetchResult> {
   const content = await fetchFile(buildUtilsUrl())
   return {path: 'utils/index.ts', content}
+}
+
+export async function fetchInputStyles(): Promise<FetchResult> {
+  const content = await fetchFile(buildInputStylesUrl())
+  return {path: 'utils/input-styles.ts', content}
 }

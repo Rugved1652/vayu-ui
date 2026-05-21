@@ -13,6 +13,17 @@ npx skills add Rugved1652/vayu-ui/mcp-usage
 
 Before writing Vayu UI code, query MCP instead of guessing names, props, variants, states, events, examples, install commands, tokens, or composition. Treat MCP as the toolkit oracle; scaffold first, then verify with exact detail tools.
 
+## Hard Gates (Non-Negotiable)
+
+| Gate | Requirement |
+| --- | --- |
+| Component/hook choice | MUST call `find_component` when slug/name is unknown, then MUST call `get_component_summary` before implementation. |
+| API accuracy | MUST confirm props/variants/states/events with MCP detail tools before final code. |
+| Overlay/form/focus UI | MUST call `get_component_a11y` for dialogs, popovers, menus, tooltips, forms, and keyboard-driven interactions. |
+| Compound components | MUST call `get_component_composition` before writing nested sub-components. |
+| Safety checks | MUST call `get_component_do_not` before finalizing code. |
+| Install/import commands | MUST call `get_install_guide`; never invent commands or import paths. |
+
 ## Tool Map
 
 | Need | Tool |

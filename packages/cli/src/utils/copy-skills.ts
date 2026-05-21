@@ -10,7 +10,12 @@ const SKILLS_TEMPLATE_DIR = existsSync(join(__dirname, '..', 'templates', 'skill
   : join(__dirname, 'templates', 'skills')
 
 export function copySkills(root: string, log: (msg: string) => void): void {
-  const skillsDirs = [join(root, '.agents', 'skills'), join(root, '.claude', 'skills')]
+  const skillsDirs = [
+    join(root, '.agent', 'skills'),
+    join(root, '.agents', 'skills'),
+    join(root, '.claude', 'skills'),
+    join(root, '.cursor', 'skills'),
+  ]
 
   if (!existsSync(SKILLS_TEMPLATE_DIR)) {
     log(`  Skills templates not found at ${SKILLS_TEMPLATE_DIR}`)

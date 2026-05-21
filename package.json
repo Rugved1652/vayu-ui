@@ -9,6 +9,7 @@
   "scripts": {
     "refactor": "tsx scripts/refactor-component.ts",
     "build": "turbo run build",
+    "check": "turbo run check",
     "dev": "turbo run dev",
     "start": "turbo run start",
     "lint": "turbo run lint",

@@ -6,6 +6,7 @@ export const cardEntry: ComponentRegistryEntry = {
   name: 'Card',
   type: 'component',
   category: 'layout',
+  capabilities: ['surface-primitive'],
 
   // ── Description ───────────────────────────────────────
   description:

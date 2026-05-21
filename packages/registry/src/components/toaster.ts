@@ -6,6 +6,7 @@ export const toasterEntry: ComponentRegistryEntry = {
   name: 'Toaster',
   type: 'component',
   category: 'feedback',
+  capabilities: ['feedback-primitive'],
 
   // ── Description ───────────────────────────────────────
   description:

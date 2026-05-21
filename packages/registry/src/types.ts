@@ -36,6 +36,16 @@ export type HookCategory =
   | 'async' // useIndexedDB
   | 'input'; // useKeyPress, usePermission, useDeviceOS, useIdle
 
+/** Capability tags for intent-based component and hook enforcement. */
+export type RegistryCapability =
+  | 'content-primitive'
+  | 'surface-primitive'
+  | 'overlay-primitive'
+  | 'feedback-primitive'
+  | 'navigation-primitive'
+  | 'state-persistence'
+  | 'animation-primitive';
+
 // ============================================================================
 // Shared Leaf Types
 // ============================================================================
@@ -251,6 +261,8 @@ export interface ComponentRegistryEntry {
   type: 'component';
   /** Category for filtering */
   category: ComponentCategory;
+  /** High-level capability tags used for intent-based tooling and guardrails */
+  capabilities?: RegistryCapability[];
 
   // ── Description ───────────────────────────────────────
   /** One-line description for listings */
@@ -342,6 +354,8 @@ export interface HookRegistryEntry {
   tags: string[];
   /** Problem category */
   category: HookCategory;
+  /** High-level capability tags used for intent-based tooling and guardrails */
+  capabilities?: RegistryCapability[];
 
   // ── File & CLI ────────────────────────────────────────
   /** File name within packages/ui/src/hooks/, e.g. "useLocalStorage.ts" */

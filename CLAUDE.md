@@ -6,6 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 VVayu UI is an AI-optimized React UI component library monorepo. It provides reusable components, hooks, a CLI for scaffolding, and an MCP server for AI tool integration.
 
+## MCP-First Enforcement
+
+When you are writing or reviewing Vayu UI usage code in this repository (components, hooks, docs examples, scaffold snippets, or generated usage code), MCP discovery is mandatory:
+
+1. Run discovery before implementation:
+   - `find_component` when slug/name is unknown
+   - `get_component_summary` before deciding primitives
+2. Validate implementation details before finalizing:
+   - `get_component_props`, `get_component_variants`, `get_component_states`, `get_component_events`
+   - `get_component_a11y` for focusable, overlay, form, feedback, or keyboard-driven UI
+3. Validate anti-patterns and install/import correctness:
+   - `get_component_do_not`
+   - `get_install_guide`
+4. Do not invent props, variants, states, CLI commands, or imports from memory when MCP can confirm them.
+5. If a non-Vayu custom implementation is used where a Vayu equivalent exists, include a short justification.
+
 ## Commands
 
 ```bash

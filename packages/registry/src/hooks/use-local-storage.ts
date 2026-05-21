@@ -5,6 +5,7 @@ export const useLocalStorageEntry: HookRegistryEntry = {
   slug: 'use-local-storage',
   name: 'useLocalStorage',
   type: 'hook',
+  capabilities: ['state-persistence'],
 
   // ── Description ───────────────────────────────────────
   description:
