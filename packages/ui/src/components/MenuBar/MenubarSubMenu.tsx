@@ -2,7 +2,7 @@
 // Composition: nested submenu trigger + dropdown
 
 import React, { useCallback, useId, useRef, useState } from 'react';
-import { useElementPosition } from 'vayu-ui';
+import { useElementPosition } from '../../hooks';
 import { cn } from '../../utils';
 import { useMenuContext, MenuContext, useTypeahead, useFocusItems } from './hooks';
 import { Portal } from './MenubarPortal';

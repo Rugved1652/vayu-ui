@@ -2,7 +2,7 @@
 // Composition: top-level menu trigger + dropdown
 
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { useElementPosition } from 'vayu-ui';
+import { useElementPosition } from '../../hooks';
 import { cn } from '../../utils';
 import {
   useMenubarContext,

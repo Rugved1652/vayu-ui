@@ -4,7 +4,7 @@
 'use client';
 
 import { forwardRef, HTMLAttributes } from 'react';
-import { Avatar } from 'vayu-ui';
+import { Avatar } from '../Avatar';
 import { clsx } from 'clsx';
 import type { UserData, AvatarGroupSize, AvatarGroupLayout } from './types';
 

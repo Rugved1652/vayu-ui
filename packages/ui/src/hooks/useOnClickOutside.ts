@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, RefObject } from 'react';
+import { useEffect, RefObject, useRef } from 'react';
 
 type EventType = MouseEvent | TouchEvent | PointerEvent;
 
@@ -7,6 +7,9 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
   refs: RefObject<T> | RefObject<T>[],
   handler: (event: EventType) => void,
 ) => {
+  const handlerRef = useRef(handler);
+  handlerRef.current = handler;
+
   useEffect(() => {
     const refArray = Array.isArray(refs) ? refs : [refs];
 
@@ -16,7 +19,7 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
       if (refArray.some((ref) => ref.current && ref.current.contains(target))) {
         return;
       }
-      handler(event);
+      handlerRef.current(event);
     };
 
     document.addEventListener('mousedown', listener);
@@ -28,5 +31,5 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
       document.removeEventListener('touchstart', listener);
       document.removeEventListener('pointerdown', listener);
     };
-  }, [refs, handler]);
+  }, [refs]);
 };

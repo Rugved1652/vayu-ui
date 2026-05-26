@@ -1,6 +1,6 @@
 # Vayu UI
 
-Accessible, TypeScript-first React component library with Tailwind CSS v4 design tokens. 50+ components, 31 hooks, a CLI for scaffolding, and an MCP server for AI tool integration.
+Accessible, TypeScript-first React component library with Tailwind CSS v4 design tokens. 60+ components, 34 hooks, a CLI for scaffolding, and an MCP server for AI tool integration.
 
 [![npm version](https://img.shields.io/npm/v/vayu-ui-cli.svg)](https://www.npmjs.com/package/vayu-ui-cli)
 [![license](https://img.shields.io/github/license/Rugved1652/vayu-ui.svg)](https://github.com/Rugved1652/vayu-ui/blob/main/LICENSE)
@@ -8,8 +8,8 @@ Accessible, TypeScript-first React component library with Tailwind CSS v4 design
 
 ## Features
 
-- **50+ components** — Inputs, overlays, navigation, data display, animation, media, and more
-- **31 hooks** — State management, DOM, sensors, timing, side effects
+- **60+ components** — Inputs, overlays, navigation, data display, animation, media, and more
+- **34 hooks** — State management, DOM, sensors, timing, side effects
 - **Tailwind v4 tokens** — Semantic design tokens for colors, radii, shadows, and layers
 - **Compound components** — Composable APIs with namespaced subcomponents
 - **Accessible** — Keyboard navigation, focus management, ARIA support
@@ -178,7 +178,7 @@ This gives AI tools access to 17 capabilities including component discovery, pro
 ## Local Development
 
 ```bash
-git clone <!-- TODO: add repo URL --> && cd vayu-ui
+git clone https://github.com/Rugved1652/vayu-ui.git && cd vayu-ui
 npm install
 npm run build
 
@@ -188,9 +188,7 @@ npm run dev
 
 ## Documentation
 
-<!-- TODO: add docs site URL -->
-
-Full documentation with interactive examples is available in the docs app.
+Full documentation with interactive examples is available in the docs app. Run `npm run dev` to start it locally at `http://localhost:3000`.
 
 ## License
 

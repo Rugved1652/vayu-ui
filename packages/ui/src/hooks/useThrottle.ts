@@ -6,16 +6,14 @@ export const useThrottle = <T>(value: T, interval: number): T => {
   const lastExecuted = useRef<number>(Date.now());
 
   useEffect(() => {
-    const handler = setTimeout(
-      () => {
-        const now = Date.now();
-        if (now - lastExecuted.current >= interval) {
-          setThrottledValue(value);
-          lastExecuted.current = now;
-        }
-      },
-      interval - (Date.now() - lastExecuted.current),
-    );
+    const delay = Math.max(0, interval - (Date.now() - lastExecuted.current));
+    const handler = setTimeout(() => {
+      const now = Date.now();
+      if (now - lastExecuted.current >= interval) {
+        setThrottledValue(value);
+        lastExecuted.current = now;
+      }
+    }, delay);
 
     return () => {
       clearTimeout(handler);

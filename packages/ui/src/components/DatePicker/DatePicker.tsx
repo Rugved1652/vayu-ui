@@ -41,19 +41,18 @@ export const useDatePicker = (): DatePickerContextValue => {
 export function useMergeRefs<T = unknown>(
   ...refs: Array<React.RefObject<T | null> | React.ForwardedRef<T> | undefined>
 ): React.RefCallback<T | null> {
-  return useCallback(
-    (node) => {
-      refs.forEach((ref) => {
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref != null) {
-          (ref as React.RefObject<T | null>).current = node;
-        }
-      });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    refs,
-  );
+  const refsRef = useRef(refs);
+  refsRef.current = refs;
+
+  return useCallback((node) => {
+    refsRef.current.forEach((ref) => {
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref != null) {
+        (ref as React.RefObject<T | null>).current = node;
+      }
+    });
+  }, []);
 }
 
 // Root component

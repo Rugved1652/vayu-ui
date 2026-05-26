@@ -50,6 +50,15 @@ import { toasterEntry } from './components/toaster.js';
 import { tooltipEntry } from './components/tooltip.js';
 import { tourEntry } from './components/tour.js';
 import { typographyEntry } from './components/typography.js';
+import { audioPlayerEntry } from './components/audio-player.js';
+import { bigCalendarEntry } from './components/big-calendar.js';
+import { contextMenuEntry } from './components/context-menu.js';
+import { qrCodeEntry } from './components/qrcode.js';
+import { selectEntry } from './components/select.js';
+import { showEntry } from './components/show.js';
+import { timePickerEntry } from './components/time-picker.js';
+import { treeEntry } from './components/tree.js';
+import { videoPlayerEntry } from './components/video-player.js';
 
 import { useBatteryStatusEntry } from './hooks/use-battery-status.js';
 import { useConfirmExitEntry } from './hooks/use-confirm-exit.js';
@@ -82,6 +91,9 @@ import { useThrottleEntry } from './hooks/use-throttle.js';
 import { useTimeoutEntry } from './hooks/use-timeout.js';
 import { useVisibilityChangeEntry } from './hooks/use-visibility-change.js';
 import { useWindowSizeEntry } from './hooks/use-window-size.js';
+import { useCountdownEntry } from './hooks/use-countdown.js';
+import { useInViewEntry } from './hooks/use-in-view.js';
+import { useIsMountEntry } from './hooks/use-is-mount.js';
 
 export const componentEntries: ComponentRegistryEntry[] = [
   accordionEntry,
@@ -134,6 +146,15 @@ export const componentEntries: ComponentRegistryEntry[] = [
   tooltipEntry,
   tourEntry,
   typographyEntry,
+  audioPlayerEntry,
+  bigCalendarEntry,
+  contextMenuEntry,
+  qrCodeEntry,
+  selectEntry,
+  showEntry,
+  timePickerEntry,
+  treeEntry,
+  videoPlayerEntry,
 ];
 
 export const hookEntries: HookRegistryEntry[] = [
@@ -168,6 +189,9 @@ export const hookEntries: HookRegistryEntry[] = [
   useTimeoutEntry,
   useVisibilityChangeEntry,
   useWindowSizeEntry,
+  useCountdownEntry,
+  useInViewEntry,
+  useIsMountEntry,
 ];
 
 export const allEntries: RegistryEntry[] = [...componentEntries, ...hookEntries];

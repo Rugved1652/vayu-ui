@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export const useLocalStorage = <T>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -16,8 +16,15 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
     }
   });
 
+  const isFirstMount = useRef(true);
+
   useEffect(() => {
     if (typeof window === 'undefined') {
+      return;
+    }
+
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
       return;
     }
 

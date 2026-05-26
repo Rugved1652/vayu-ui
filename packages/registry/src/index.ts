@@ -49,6 +49,15 @@ export { toasterEntry } from './components/toaster.js';
 export { tooltipEntry } from './components/tooltip.js';
 export { tourEntry } from './components/tour.js';
 export { typographyEntry } from './components/typography.js';
+export { audioPlayerEntry } from './components/audio-player.js';
+export { bigCalendarEntry } from './components/big-calendar.js';
+export { contextMenuEntry } from './components/context-menu.js';
+export { qrCodeEntry } from './components/qrcode.js';
+export { selectEntry } from './components/select.js';
+export { showEntry } from './components/show.js';
+export { timePickerEntry } from './components/time-picker.js';
+export { treeEntry } from './components/tree.js';
+export { videoPlayerEntry } from './components/video-player.js';
 
 // Hooks
 export { useBatteryStatusEntry } from './hooks/use-battery-status.js';
@@ -82,5 +91,8 @@ export { useThrottleEntry } from './hooks/use-throttle.js';
 export { useTimeoutEntry } from './hooks/use-timeout.js';
 export { useVisibilityChangeEntry } from './hooks/use-visibility-change.js';
 export { useWindowSizeEntry } from './hooks/use-window-size.js';
+export { useCountdownEntry } from './hooks/use-countdown.js';
+export { useInViewEntry } from './hooks/use-in-view.js';
+export { useIsMountEntry } from './hooks/use-is-mount.js';
 
 export { componentEntries, hookEntries, allEntries } from './entries.js';
