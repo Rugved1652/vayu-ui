@@ -2,9 +2,9 @@
 
 Accessible, TypeScript-first React component library with Tailwind CSS v4 design tokens. 50+ components, 31 hooks, a CLI for scaffolding, and an MCP server for AI tool integration.
 
-[![npm version](https://img.shields.io/npm/v/vayu-ui.svg)](https://www.npmjs.com/package/vayu-ui)
-[![license](https://img.shields.io/npm/l/vayu-ui.svg)](https://github.com/VayuUI/vayu-ui-cli/blob/main/LICENSE)
-[![react](https://img.shields.io/npm/dependency-version/vayu-ui/peer/react.svg)](https://react.dev)
+[![npm version](https://img.shields.io/npm/v/vayu-ui-cli.svg)](https://www.npmjs.com/package/vayu-ui-cli)
+[![license](https://img.shields.io/github/license/Rugved1652/vayu-ui.svg)](https://github.com/Rugved1652/vayu-ui/blob/main/LICENSE)
+[![react](https://img.shields.io/badge/react-%5E19.0.0-blue.svg)](https://react.dev)
 
 ## Features
 

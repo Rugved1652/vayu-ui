@@ -45,6 +45,11 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
 
     const size = sizeProp ?? ctxSize;
 
+    const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
+    const chipIconSize = size === 'sm' ? 'w-3 h-3' : 'w-3 h-3';
+    const chipPadding = size === 'sm' ? 'px-1 py-0.5' : 'px-1.5 py-0.5';
+    const chipTextSize = size === 'sm' ? 'text-xs' : 'text-xs';
+
     const isLoading = isSearchLoading || isCreating;
     const localTriggerRef = useRef<HTMLDivElement | null>(null);
 
@@ -130,7 +135,11 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
           selectedArray.map((val) => (
             <span
               key={val}
-              className="flex items-center gap-1 bg-muted/50 border border-border px-1.5 py-0.5 rounded text-xs"
+              className={clsx(
+                'flex items-center gap-1 bg-muted/50 border border-border rounded',
+                chipPadding,
+                chipTextSize,
+              )}
             >
               {getLabel(val)}
               <button
@@ -142,7 +151,7 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
                 }}
                 className="hover:bg-destructive/20 rounded-sm p-0.5 -mr-1"
               >
-                <X className="w-3 h-3" />
+                <X className={chipIconSize} />
               </button>
             </span>
           ))}
@@ -167,13 +176,14 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
           )}
         />
         {isLoading ? (
-          <Loader2 className={clsx(inputLoadingSpinnerStyles, 'ml-auto')} {...inputLoadingAria} />
+          <Loader2 className={clsx('text-brand animate-spin shrink-0 ml-auto', iconSize)} {...inputLoadingAria} />
         ) : onSearch && showSearchIcon ? (
-          <Search className="w-4 h-4 text-muted-content ml-auto shrink-0" />
+          <Search className={clsx('text-muted-content ml-auto shrink-0', iconSize)} />
         ) : (
           <ChevronDown
             className={clsx(
-              'w-4 h-4 text-muted-content transition-transform ml-auto shrink-0',
+              'text-muted-content transition-transform ml-auto shrink-0',
+              iconSize,
               open && 'rotate-180',
             )}
             onClick={(e) => {

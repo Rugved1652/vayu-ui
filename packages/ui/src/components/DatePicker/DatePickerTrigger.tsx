@@ -16,7 +16,6 @@ import {
   inputBorderStyles,
   inputHoverBorder,
   inputDisabledStyles,
-  inputLoadingSpinnerStyles,
   inputLoadingAria,
 } from '../../utils/input-styles';
 import { Loader2 } from 'lucide-react';
@@ -38,6 +37,8 @@ export const DatePickerTrigger = forwardRef<HTMLButtonElement, DatePickerTrigger
 
     const size = sizeProp ?? ctxSize;
     const isDisabled = disabled ?? contextDisabled;
+
+    const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
 
     const getDisplayValue = (): string => {
       if (mode === 'range' && selectedRange) {
@@ -105,9 +106,9 @@ export const DatePickerTrigger = forwardRef<HTMLButtonElement, DatePickerTrigger
           {getDisplayValue()}
         </span>
         {loading ? (
-          <Loader2 className={inputLoadingSpinnerStyles} {...inputLoadingAria} />
+          <Loader2 className={cn('text-brand animate-spin shrink-0', iconSize)} {...inputLoadingAria} />
         ) : (
-          <CalendarIcon className="w-4 h-4 text-muted-content shrink-0" />
+          <CalendarIcon className={cn('text-muted-content shrink-0', iconSize)} />
         )}
       </button>
     );

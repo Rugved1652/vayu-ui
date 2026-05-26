@@ -5,15 +5,18 @@
 
 import React from 'react';
 import { Loader2 } from 'lucide-react';
+import { cn } from '../../utils';
 import { useTextInput } from './TextInput';
-import { inputLoadingSpinnerStyles, inputLoadingAria } from '../../utils/input-styles';
+import { inputLoadingAria } from '../../utils/input-styles';
 
 const LoadingSpinner: React.FC = () => {
-  const { isLoading } = useTextInput();
+  const { isLoading, size } = useTextInput();
 
   if (!isLoading) return null;
 
-  return <Loader2 className={inputLoadingSpinnerStyles} {...inputLoadingAria} />;
+  const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
+
+  return <Loader2 className={cn('text-brand animate-spin shrink-0', iconSize)} {...inputLoadingAria} />;
 };
 
 LoadingSpinner.displayName = 'TextInput.LoadingSpinner';
