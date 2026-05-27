@@ -11,7 +11,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "vayu-ui": "0.0.0",
+    "vayu-ui": "*",
     "@lexical/code": "^0.41.0",
     "@lexical/html": "^0.41.0",
     "@lexical/link": "^0.41.0",

@@ -3,20 +3,28 @@
   "version": "1.0.6",
   "private": false,
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./*": "./src/*"
+  },
+  "files": [
+    "src"
+  ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "tsc --noEmit",
     "lint": "tsc --noEmit"
   },
   "peerDependencies": {
+    "next": ">=15.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "^15.0.0"
+    "react-dom": "^19.0.0"
   },
   "optionalDependencies": {
     "hls.js": "^1.6.15",
@@ -29,7 +37,6 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
-    "tsup": "^8.5.1",
     "typescript": "^5.0.0"
   }
 }

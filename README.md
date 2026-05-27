@@ -43,7 +43,7 @@ import { Button } from 'vayu-ui';
 
 export default function App() {
   return (
-    <Button variant="solid" colorScheme="brand">
+    <Button variant="primary">
       <Button.Text>Get Started</Button.Text>
     </Button>
   );
