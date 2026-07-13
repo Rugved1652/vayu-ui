@@ -18,10 +18,6 @@ Accessible, TypeScript-first React component library with Tailwind CSS v4 design
 
 ## Installation
 
-```bash
-npm install vayu-ui
-```
-
 ### Peer Dependencies
 
 Vayu UI requires React 19+:
