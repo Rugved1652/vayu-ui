@@ -337,6 +337,14 @@ export const popoverEntry: ComponentRegistryEntry = {
       slug: 'button',
       reason: 'Popover.Trigger renders a Button component by default when asChild is not used',
     },
+    {
+      slug: 'use-on-click-outside',
+      reason: 'Popover uses useOnClickOutside to close when clicking outside',
+    },
+    {
+      slug: 'use-key-press',
+      reason: 'Popover uses useKeyPress for keyboard interactions (Escape to close)',
+    },
   ],
   reactPeerDependency: '>=18.0.0',
 

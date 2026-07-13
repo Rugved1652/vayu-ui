@@ -630,7 +630,18 @@ export const colorPickerEntry: ComponentRegistryEntry = {
 
   // ── Dependencies ──────────────────────────────────────
   npmDependencies: [{ name: 'clsx' }, { name: 'lucide-react' }],
-  registryDependencies: [],
+  registryDependencies: [
+    {
+      slug: 'use-on-click-outside',
+      reason:
+        'ColorPicker uses useOnClickOutside to close when clicking outside',
+    },
+    {
+      slug: 'use-key-press',
+      reason:
+        'ColorPicker uses useKeyPress for keyboard interactions',
+    },
+  ],
   reactPeerDependency: '>=18.0.0',
 
   // ── Peer Suggestions ──────────────────────────────────

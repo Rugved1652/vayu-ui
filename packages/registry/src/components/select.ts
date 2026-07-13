@@ -632,7 +632,23 @@ export const selectEntry: ComponentRegistryEntry = {
 
   // ── Dependencies ──────────────────────────────────────
   npmDependencies: [{ name: 'clsx' }, { name: 'lucide-react' }],
-  registryDependencies: [],
+  registryDependencies: [
+    {
+      slug: 'use-lock-body-scroll',
+      reason:
+        'Select uses useLockBodyScroll to prevent body scrolling when the dropdown is open',
+    },
+    {
+      slug: 'use-on-click-outside',
+      reason:
+        'Select uses useOnClickOutside to close the dropdown when clicking outside',
+    },
+    {
+      slug: 'use-key-press',
+      reason:
+        'Select uses useKeyPress for keyboard navigation (ArrowDown, ArrowUp, Enter, Escape)',
+    },
+  ],
   reactPeerDependency: '>=18.0.0',
 
   // ── Peer Suggestions ──────────────────────────────────

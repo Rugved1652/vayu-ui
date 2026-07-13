@@ -530,7 +530,18 @@ export const menubarEntry: ComponentRegistryEntry = {
 
   // ── Dependencies ──────────────────────────────────────
   npmDependencies: [{ name: 'clsx' }],
-  registryDependencies: [],
+  registryDependencies: [
+    {
+      slug: 'use-key-press',
+      reason:
+        'MenuBar uses useKeyPress for keyboard navigation',
+    },
+    {
+      slug: 'use-on-click-outside',
+      reason:
+        'MenuBar uses useOnClickOutside to close when clicking outside',
+    },
+  ],
   reactPeerDependency: '>=18.0.0',
 
   // ── Peer Suggestions ──────────────────────────────────

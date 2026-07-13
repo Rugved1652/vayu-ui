@@ -558,7 +558,18 @@ export const contextMenuEntry: ComponentRegistryEntry = {
 
   // ── Dependencies ──────────────────────────────────────
   npmDependencies: [{ name: 'clsx' }],
-  registryDependencies: [],
+  registryDependencies: [
+    {
+      slug: 'use-on-click-outside',
+      reason:
+        'ContextMenu uses useOnClickOutside to close when clicking outside',
+    },
+    {
+      slug: 'use-lock-body-scroll',
+      reason:
+        'ContextMenu uses useLockBodyScroll to prevent body scrolling when open',
+    },
+  ],
   reactPeerDependency: '>=18.0.0',
 
   // ── Peer Suggestions ──────────────────────────────────

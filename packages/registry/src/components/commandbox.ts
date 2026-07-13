@@ -493,7 +493,23 @@ export const commandBoxEntry: ComponentRegistryEntry = {
 
   // ── Dependencies ──────────────────────────────────────
   npmDependencies: [{ name: 'clsx' }, { name: 'lucide-react' }],
-  registryDependencies: [],
+  registryDependencies: [
+    {
+      slug: 'use-lock-body-scroll',
+      reason:
+        'CommandBox uses useLockBodyScroll to prevent body scrolling when open',
+    },
+    {
+      slug: 'use-key-press',
+      reason:
+        'CommandBox uses useKeyPress for keyboard navigation',
+    },
+    {
+      slug: 'use-on-click-outside',
+      reason:
+        'CommandBox uses useOnClickOutside to close when clicking outside',
+    },
+  ],
   reactPeerDependency: '>=18.0.0',
 
   // ── Peer Suggestions ──────────────────────────────────

@@ -32,25 +32,7 @@ npm install react@^19 react-dom@^19
 
 ## Quick Start
 
-### Option 1: Install the package
-
-```bash
-npm install vayu-ui
-```
-
-```tsx
-import { Button } from 'vayu-ui';
-
-export default function App() {
-  return (
-    <Button variant="primary">
-      <Button.Text>Get Started</Button.Text>
-    </Button>
-  );
-}
-```
-
-### Option 2: Use the CLI to copy source files
+### Use the CLI to copy source files
 
 ```bash
 # Initialize Vayu UI in your project (sets up Tailwind + tokens)

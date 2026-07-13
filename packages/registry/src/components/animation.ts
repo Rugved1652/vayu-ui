@@ -387,7 +387,13 @@ export const animationEntry: ComponentRegistryEntry = {
 
   // ── Dependencies ──────────────────────────────────────
   npmDependencies: [{ name: 'clsx' }, { name: 'tailwind-merge' }],
-  registryDependencies: [],
+  registryDependencies: [
+    {
+      slug: 'use-in-view',
+      reason:
+        'Animation component (AnimateInView) uses useInView hook for intersection observer',
+    },
+  ],
   reactPeerDependency: '>=19.0.0',
 
   // ── Peer Suggestions ──────────────────────────────────
