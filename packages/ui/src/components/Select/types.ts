@@ -56,6 +56,7 @@ export interface SelectContextValue extends AsyncSearchProps, CreateableProps {
   error?: string;
   validationState: ValidationState;
   size: InputSize;
+  disabled: boolean;
   triggerRef: React.RefObject<HTMLDivElement | null>;
   contentRef: React.RefObject<HTMLDivElement | null>;
   inputRef: React.RefObject<HTMLInputElement | null>;
@@ -101,6 +102,8 @@ export interface SelectRootProps extends AsyncSearchProps, CreateableProps {
   error?: string;
   validationState?: ValidationState;
   size?: InputSize;
+  /** Disable the field, including search, opening, selection, and chip removal. */
+  disabled?: boolean;
   className?: string;
   multiple?: boolean;
 }

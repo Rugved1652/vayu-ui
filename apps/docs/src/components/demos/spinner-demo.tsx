@@ -105,7 +105,7 @@ export default function SpinnerDemo() {
         <div className="flex items-center gap-3 p-4 bg-muted rounded-surface">
           <Spinner size="md" aria-label="Loading your dashboard preferences" />
           <Typography.P variant="secondary" className="text-sm">
-            Screen readers announce "Loading your dashboard preferences"
+            Screen readers announce &quot;Loading your dashboard preferences&quot;
           </Typography.P>
         </div>
       </div>

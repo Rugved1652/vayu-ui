@@ -18,3 +18,6 @@ apps/docs/.next
 **/*.css
 **/*.scss
 
+
+# Deterministic registry output from registry:sync
+packages/registry/src/source-manifest.ts

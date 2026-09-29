@@ -1,7 +1,7 @@
 {
   "name": "vayu-ui-mcp",
-  "version": "1.0.7",
-  "description": "MCP Server for Vayu UI — exposes the component/hook registry to AI assistants",
+  "version": "1.1.0",
+  "description": "MCP Server for Vayu UI \u2014 exposes the component/hook registry to AI assistants",
   "author": "Rugved Patel",
   "license": "MIT",
   "repository": "https://github.com/Rugved1652/vayu-ui/tree/main/packages/mcp",
@@ -14,11 +14,14 @@
   },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "test": "node --test test/*.test.mjs",
+    "check": "tsc --noEmit",
+    "prepack": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
-    "vayu-ui-registry": "*",
+    "vayu-ui-registry": "1.1.0",
     "zod": "^3.24.4"
   },
   "devDependencies": {

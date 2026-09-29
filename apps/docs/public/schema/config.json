@@ -12,8 +12,7 @@
       "description": "Optional schema reference URL."
     },
     "version": {
-      "type": "integer",
-      "minimum": 1
+      "const": 1
     },
     "uiPath": {
       "type": "string",
@@ -23,8 +22,7 @@
       "type": ["string", "null"]
     },
     "tokensFile": {
-      "type": "string",
-      "minLength": 1
+      "type": "string"
     },
     "installed": {
       "type": "object",
@@ -44,6 +42,47 @@
           }
         }
       }
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "components": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hooks": {
+          "type": "string",
+          "minLength": 1
+        },
+        "utils": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "aliases": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "components": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hooks": {
+          "type": "string",
+          "minLength": 1
+        },
+        "utils": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "packagePath": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Project-relative package directory receiving dependencies (for shared workspace packages)."
     }
   }
 }

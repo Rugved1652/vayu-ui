@@ -1,39 +1,37 @@
-import {Command, Args, Flags, ux} from '@oclif/core'
-import {existsSync, rmSync, readdirSync} from 'node:fs'
-import {join} from 'node:path'
-import {allEntries} from 'vayu-ui-registry'
 import type {RegistryEntry} from 'vayu-ui-registry'
+
+import {Args, Command, Flags, ux} from '@oclif/core'
+import {existsSync, rmSync} from 'node:fs'
+import {findEntry} from 'vayu-ui-registry'
+
+import {markUninstalled, projectPath, resolveConfig, sourceTarget} from '../utils/config.js'
 import {confirm} from '../utils/project.js'
-import {resolveConfig, getUiPath, markUninstalled} from '../utils/config.js'
 
 export default class Remove extends Command {
-  static strict = false
-
-  static summary = 'Remove installed components or hooks'
-
-  static description =
-    'Removes one or more installed components or hooks from your project. Warns if other installed items depend on what you are removing.'
-
-  static examples = [
-    '<%= config.bin %> remove button',
-    '<%= config.bin %> remove button modal',
-    '<%= config.bin %> remove use-debounce --force',
-  ]
-
   static args = {
     slugs: Args.string({
       description: 'One or more component/hook slugs to remove',
       required: true,
     }),
   }
-
+  static description =
+    'Removes one or more installed components or hooks from your project. Warns if other installed items depend on what you are removing.'
+  static examples = [
+    '<%= config.bin %> remove button',
+    '<%= config.bin %> remove button modal',
+    '<%= config.bin %> remove use-debounce --force',
+  ]
   static flags = {
+    cwd: Flags.string({description: 'Target project or workspace directory'}),
+    'dry-run': Flags.boolean({default: false, description: 'Preview removal without writing files'}),
     force: Flags.boolean({
       char: 'f',
-      description: 'Skip confirmation prompt',
       default: false,
+      description: 'Skip confirmation prompt',
     }),
   }
+  static strict = false
+  static summary = 'Remove installed components or hooks'
 
   async run(): Promise<void> {
     const {argv, flags} = await this.parse(Remove)
@@ -43,27 +41,24 @@ export default class Remove extends Command {
       this.error('Please provide at least one slug. Example: vayu-ui remove button')
     }
 
-    const {root, config, project} = resolveConfig()
+    const {config, root} = resolveConfig(flags.cwd)
     if (!config) {
       this.error('No vayu-ui.config.json found. Run "vayu-ui init" first.')
     }
 
-    const uiDir = getUiPath(config, project)
-    const uiAbsDir = join(root, uiDir)
-    const registry = new Map<string, RegistryEntry>()
-    for (const entry of allEntries) registry.set(entry.slug, entry)
-
     // Resolve entries and validate
     const entries: RegistryEntry[] = []
     for (const slug of slugs) {
-      const entry = registry.get(slug)
+      const entry = findEntry(slug)
       if (!entry) {
         this.warn(`Unknown slug: "${slug}". Skipping.`)
-        continue
+        this.error(`Unknown slug: ${slug}`)
       }
-      if (!config.installed?.[slug]) {
+
+      if (!config.installed?.[entry.slug]) {
         this.warn(`"${slug}" is not tracked as installed. Files will still be removed if they exist.`)
       }
+
       entries.push(entry)
     }
 
@@ -71,7 +66,7 @@ export default class Remove extends Command {
 
     // Check for dependents
     const installedSlugs = new Set(Object.keys(config.installed ?? {}))
-    this.warnDependents(entries, installedSlugs, registry)
+    this.warnDependents(entries, installedSlugs)
 
     // Print plan
     this.log('')
@@ -80,13 +75,18 @@ export default class Remove extends Command {
     for (const entry of entries) {
       if (entry.type === 'component') {
         this.log(
-          `    ${ux.colorize('red', entry.name)}  ${ux.colorize('dim', `→ ${uiDir}/components/${entry.directoryName}/`)}`,
+          `    ${ux.colorize('red', entry.name)}  ${ux.colorize('dim', `→ ${sourceTarget(`components/${entry.directoryName}`, config)}/`)}`,
         )
       } else {
-        this.log(`    ${ux.colorize('red', entry.name)}  ${ux.colorize('dim', `→ ${uiDir}/hooks/${entry.fileName}`)}`)
+        this.log(
+          `    ${ux.colorize('red', entry.name)}  ${ux.colorize('dim', `→ ${sourceTarget(`hooks/${entry.fileName}`, config)}`)}`,
+        )
       }
     }
+
     this.log('')
+
+    if (flags['dry-run']) return
 
     if (!flags.force) {
       const ok = await confirm('  Continue?')
@@ -99,13 +99,13 @@ export default class Remove extends Command {
     // Remove files
     for (const entry of entries) {
       if (entry.type === 'component') {
-        const dir = join(uiAbsDir, 'components', entry.directoryName)
+        const dir = projectPath(root, sourceTarget(`components/${entry.directoryName}`, config))
         if (existsSync(dir)) {
-          rmSync(dir, {recursive: true, force: true})
+          rmSync(dir, {force: true, recursive: true})
           this.log(`    ${ux.colorize('dim', 'removed')} components/${entry.directoryName}/`)
         }
       } else {
-        const file = join(uiAbsDir, 'hooks', entry.fileName)
+        const file = projectPath(root, sourceTarget(`hooks/${entry.fileName}`, config))
         if (existsSync(file)) {
           rmSync(file, {force: true})
           this.log(`    ${ux.colorize('dim', 'removed')} hooks/${entry.fileName}`)
@@ -120,31 +120,17 @@ export default class Remove extends Command {
       entries.map((e) => e.slug),
     )
 
-    // Check if we can clean up utils
-    const remainingComponents = Object.entries(config.installed ?? {}).filter(([, v]) => v.type === 'component')
-    if (remainingComponents.length === 0) {
-      const utilsFile = join(uiAbsDir, 'utils', 'index.ts')
-      if (existsSync(utilsFile)) {
-        rmSync(utilsFile, {force: true})
-        this.log(`    ${ux.colorize('dim', 'removed')} utils/index.ts (no components remaining)`)
-      }
-    }
-
     this.log('')
     this.log(ux.colorize('green', `  Removed ${entries.length} item${entries.length > 1 ? 's' : ''}.`))
     this.log('')
   }
 
-  private warnDependents(
-    removing: RegistryEntry[],
-    installedSlugs: Set<string>,
-    registry: Map<string, RegistryEntry>,
-  ): void {
+  private warnDependents(removing: RegistryEntry[], installedSlugs: Set<string>): void {
     const removingSlugs = new Set(removing.map((e) => e.slug))
 
     for (const slug of installedSlugs) {
       if (removingSlugs.has(slug)) continue
-      const entry = registry.get(slug)
+      const entry = findEntry(slug)
       if (!entry) continue
 
       for (const dep of entry.registryDependencies) {

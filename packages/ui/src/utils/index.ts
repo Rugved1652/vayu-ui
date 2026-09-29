@@ -1,5 +1,15 @@
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
+
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      'font-size': [
+        { text: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'md', 'para', 'body', 'label', 'cta'] },
+      ],
+    },
+  },
+});
 
 /**
  * Utility function to merge Tailwind CSS classes with clsx

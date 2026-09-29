@@ -6,10 +6,10 @@
 
 ## Requirements
 
-| Requirement | Version  |
-| ----------- | -------- |
-| Node.js     | ≥ 20.0.0 |
-| npm         | ≥ 10.0.0 |
+| Requirement | Version   |
+| ----------- | --------- |
+| Node.js     | ≥ 20.19.0 |
+| npm         | ≥ 10.0.0  |
 
 ---
 
@@ -72,7 +72,7 @@ vayu-ui list
 
     ...
 
-  50 components, 31 hooks
+  59 components, 34 hooks
 ```
 
 **Flags:**
@@ -157,7 +157,7 @@ npx vayu-ui-cli@latest init --skip-tailwind
 
 ### `vayu-ui add <slugs...>`
 
-Copies one or more components or hooks from the Vayu UI GitHub repo into your project. Automatically resolves transitive dependencies and installs required npm packages.
+Copies one or more components or hooks from the installed CLI release into your project. Automatically resolves transitive dependencies and installs required npm packages.
 
 ```bash
 npx vayu-ui-cli@latest add button
@@ -169,7 +169,7 @@ npx vayu-ui-cli@latest add use-debounce
 
 1. Looks up each slug in the registry
 2. Recursively resolves dependencies (e.g., sidebar → tooltip)
-3. Fetches source files from GitHub
+3. Copies bundled source files
 4. Copies them into `{uiPath}/components/{Name}/` or `{uiPath}/hooks/`
 5. Auto-includes the `cn` utility if adding any component
 6. Installs npm packages (clsx, tailwind-merge, lucide-react, etc.)
@@ -221,7 +221,7 @@ npx vayu-ui-cli@latest add sidebar --skip-install
 
 ### `vayu-ui update [slugs...]`
 
-Re-fetches installed components and hooks from GitHub. Compares content and only overwrites changed files.
+Refreshes installed components and hooks from the installed CLI release. Compares content and only overwrites changed files.
 
 ```bash
 # Update all installed items
@@ -233,11 +233,11 @@ npx vayu-ui-cli@latest update button modal
 
 **Flags:**
 
-| Flag        | Short | Description                                         |
-| ----------- | ----- | --------------------------------------------------- |
-| `--force`   | `-f`  | Overwrite all files even if content is unchanged    |
-| `--dry-run` | —     | Preview what would be updated without writing files |
-| `--css`     | —     | Also update Vayu UI CSS design tokens               |
+| Flag        | Short | Description                                           |
+| ----------- | ----- | ----------------------------------------------------- |
+| `--force`   | `-f`  | Overwrite changed files (the default update behavior) |
+| `--dry-run` | —     | Preview what would be updated without writing files   |
+| `--css`     | —     | Also update Vayu UI CSS design tokens                 |
 
 ```bash
 # Preview changes
@@ -332,11 +332,11 @@ npx vayu-ui-cli@latest install-mcp --dry-run
 
 **Flags:**
 
-| Flag        | Description                                              |
-| ----------- | -------------------------------------------------------- |
-| `--tool`    | Comma-separated AI tools: `claude`, `cursor`, `opencode` |
-| `--dry-run` | Preview changes without writing files                    |
-| `--force`   | Skip prompts and overwrite existing entries              |
+| Flag        | Description                                                                 |
+| ----------- | --------------------------------------------------------------------------- |
+| `--tool`    | Comma-separated AI tools: `claude`, `cursor`, `opencode`, `vscode`, `codex` |
+| `--dry-run` | Preview changes without writing files                                       |
+| `--force`   | Skip prompts and overwrite existing entries                                 |
 
 ```bash
 # Overwrite existing config
@@ -439,7 +439,7 @@ packages/cli/
 │   │   └── tokens.ts     # Design tokens CSS template
 │   ├── utils/
 │   │   ├── config.ts     # Config read/write & install tracking
-│   │   ├── fetcher.ts    # GitHub raw file fetcher
+│   │   ├── installer.ts  # Bundled source and dependency installer
 │   │   ├── mcp-config.ts # MCP server config for AI tools
 │   │   └── project.ts    # Framework & project detection
 │   └── index.ts
@@ -453,3 +453,49 @@ packages/cli/
 ## License
 
 MIT © [Rugved Patel](https://github.com/Rugved1652)
+
+## Stable starters and workspace configuration
+
+```bash
+npx vayu-ui-cli@latest create my-app --framework next
+npx vayu-ui-cli@latest create my-app --framework vite --skip-install
+npx vayu-ui-cli@latest create my-workspace --framework next --turbo
+npx vayu-ui-cli@latest add --all --yes
+npx vayu-ui-cli@latest add text-input use-in-view --cwd apps/web --yes
+npx vayu-ui-cli@latest update --dry-run
+npx vayu-ui-cli@latest install-mcp --all --force
+```
+
+`create` uses bundled, tested Next.js and Vite starters. It supports `--turbo`, `--no-src-dir`, `--no-typescript`, `--no-tailwind`, `--no-eslint`, `--no-app-router` (Next.js Pages Router), `--package-manager npm|pnpm|yarn|bun`, `--skip-install`, `--skip-init`, and `--skip-mcp`. JavaScript application files still consume TypeScript Vayu sources. `--skip-install` writes dependency manifests without invoking the package manager.
+
+Starters include Button, Typography, Select, useLocalStorage, useDebounce, and useOnClickOutside, together with their required hooks and utilities. To add several components or hooks at once, separate their names with spaces: `vayu-ui add select modal drawer text-input use-in-view --yes`.
+
+`create --turbo` creates `apps/web` and `packages/ui`, with workspace manifests, Turbo build tasks, shared source imports, and Tailwind scanning. One root `vayu-ui.config.json` owns shared component generation.
+
+`init`, `add`, `update`, `remove`, `check`, and `install-mcp` accept `--cwd`. Component names such as `textinput` and `tabs` resolve to their registry slugs. `add`, `update`, and `remove` support `--dry-run`; `add` and `update` support `--skip-install`. Noninteractive `add` works without a confirmation prompt. `update` replaces copied source files, so preview changes before updating locally customized components.
+
+Paths are relative to the nearest ancestor configuration file:
+
+```json
+{
+  "version": 1,
+  "uiPath": "packages/ui/src",
+  "packagePath": "packages/ui",
+  "paths": {
+    "components": "packages/ui/src/components",
+    "hooks": "packages/ui/src/hooks",
+    "utils": "packages/ui/src/utils"
+  },
+  "aliases": {
+    "components": "@repo/ui/components",
+    "hooks": "@repo/ui/hooks"
+  },
+  "cssFile": "apps/web/src/app/globals.css",
+  "tokensFile": "packages/ui/src/styles.css",
+  "installed": {}
+}
+```
+
+`paths` controls generation destinations; `packagePath` controls dependency ownership. Aliases are used by MCP import guidance and must be configured in the application's resolver. `create --turbo` sets up the corresponding shared package exports.
+
+The eight canonical skills, including Taste Design, are discoverable using `npx skills add Rugved1652/vayu-ui`. Starters also include local copies of those skills.

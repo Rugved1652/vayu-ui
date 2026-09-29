@@ -1,12 +1,12 @@
 import {strict as assert} from 'node:assert'
 import {execFileSync} from 'node:child_process'
-import {mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync} from 'node:fs'
+import {existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync} from 'node:fs'
 import {tmpdir} from 'node:os'
 import {dirname, join} from 'node:path'
 import {fileURLToPath} from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const CLI_DEV_BIN = join(__dirname, '..', 'bin', 'dev.js')
+const CLI_DEV_BIN = join(__dirname, '..', 'bin', 'run.js')
 
 function createProject(name: string): string {
   const dir = mkdtempSync(join(tmpdir(), `vayu-cli-${name}-`))
@@ -38,14 +38,14 @@ describe('init command css path behavior', () => {
       assert.equal(existsSync(tokensPath), true)
       assert.equal(existsSync(configPath), true)
 
-      const cssContent = readFileSync(cssPath, 'utf-8')
+      const cssContent = readFileSync(cssPath, 'utf8')
       assert.equal(cssContent.includes("@import './vayu-ui-tokens.css';"), true)
 
-      const config = JSON.parse(readFileSync(configPath, 'utf-8'))
+      const config = JSON.parse(readFileSync(configPath, 'utf8'))
       assert.equal(config.cssFile, 'app/globals.css')
       assert.equal(config.tokensFile, 'app/vayu-ui-tokens.css')
     } finally {
-      rmSync(projectDir, {recursive: true, force: true})
+      rmSync(projectDir, {force: true, recursive: true})
     }
   })
 
@@ -63,14 +63,14 @@ describe('init command css path behavior', () => {
       assert.equal(existsSync(tokensPath), true)
       assert.equal(existsSync(configPath), true)
 
-      const cssContent = readFileSync(cssPath, 'utf-8')
+      const cssContent = readFileSync(cssPath, 'utf8')
       assert.equal(cssContent.includes("@import './vayu-ui-tokens.css';"), true)
 
-      const config = JSON.parse(readFileSync(configPath, 'utf-8'))
+      const config = JSON.parse(readFileSync(configPath, 'utf8'))
       assert.equal(config.cssFile, 'styles/globals.css')
       assert.equal(config.tokensFile, 'styles/vayu-ui-tokens.css')
     } finally {
-      rmSync(projectDir, {recursive: true, force: true})
+      rmSync(projectDir, {force: true, recursive: true})
     }
   })
 })

@@ -14,6 +14,8 @@ npx vayu-ui-cli@latest add select
 
 ## Usage
 
+Select and TextInput share field heights: `sm` is 36px, `md` is 44px, and `lg` is 52px at the default root font size. Set `size` and `disabled` on `Select.Root`. Disabled fields use the same muted appearance as TextInput and cannot open, search, select, or remove chips. Multi-select keeps the same minimum height and grows when chips wrap.
+
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
     <div className="not-prose flex w-full justify-center p-4">
@@ -197,6 +199,8 @@ Select/
 | `label`           | `string`                                              | —                 | Accessible label for the select.                   |
 | `error`           | `string`                                              | —                 | Error message displayed below the trigger.         |
 | `multiple`        | `boolean`                                             | `false`           | Enable multi-select mode.                          |
+| `size`            | `'sm' \| 'md' \| 'lg'`                                | `'md'`            | Field size matching TextInput.                     |
+| `disabled`        | `boolean`                                             | `false`           | Disable the field and all selection actions.       |
 | `className`       | `string`                                              | —                 | Additional CSS classes.                            |
 | `onSearch`        | `(searchValue: string) => Promise<OptionData[]>`      | —                 | Async search handler. Enables async mode.          |
 | `searchDebounce`  | `number`                                              | `300`             | Debounce delay in ms for async search.             |
@@ -210,11 +214,12 @@ Select/
 
 ### Select.Trigger
 
-| Prop             | Type      | Default | Description                        |
-| :--------------- | :-------- | :------ | :--------------------------------- |
-| `placeholder`    | `string`  | —       | Placeholder text for the input.    |
-| `showSearchIcon` | `boolean` | `false` | Show a search icon in the trigger. |
-| `className`      | `string`  | —       | Additional CSS classes.            |
+| Prop             | Type                   | Default   | Description                        |
+| :--------------- | :--------------------- | :-------- | :--------------------------------- |
+| `placeholder`    | `string`               | —         | Placeholder text for the input.    |
+| `showSearchIcon` | `boolean`              | `false`   | Show a search icon in the trigger. |
+| `size`           | `'sm' \| 'md' \| 'lg'` | Root size | Override the root field size.      |
+| `className`      | `string`               | —         | Additional CSS classes.            |
 
 ### Select.Content
 

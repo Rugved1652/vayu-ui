@@ -15,9 +15,15 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "format": "prettier '**/*.{ts,tsx,js,jsx,json,md,mdx,css,scss,html,yml,yaml}' --ignore-path .prettierignore --write",
-    "format:check": "prettier '**/*.{ts,tsx,js,jsx,json,md,mdx,css,scss,html,yml,yaml}' --ignore-path .prettierignore --check"
+    "format:check": "prettier '**/*.{ts,tsx,js,jsx,json,md,mdx,css,scss,html,yml,yaml}' --ignore-path .prettierignore --check",
+    "registry:sync": "tsx scripts/registry-sources.ts",
+    "registry:check": "tsx scripts/registry-sources.ts --check",
+    "test:scaffolds": "tsx scripts/check-scaffolds.ts",
+    "prebuild": "npm run registry:check",
+    "test:release": "npm run registry:check && npm run test && npm run test:scaffolds && npm run check"
   },
   "devDependencies": {
+    "mdast-util-to-markdown": "2.1.2",
     "prettier": "^3.8.1",
     "stylelint": "^17.5.0",
     "stylelint-config-standard": "^40.0.0",
@@ -25,5 +31,11 @@
     "turbo": "^2.0.0",
     "typescript": "^5.0.0"
   },
-  "packageManager": "npm@10.0.0"
+  "packageManager": "npm@10.0.0",
+  "engines": {
+    "node": ">=22.3.0"
+  },
+  "overrides": {
+    "mdast-util-to-markdown": "2.1.2"
+  }
 }

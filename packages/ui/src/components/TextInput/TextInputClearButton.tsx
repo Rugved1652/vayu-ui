@@ -10,11 +10,12 @@ import { useTextInput } from './TextInput';
 import type { ClearButtonProps } from './types';
 
 const ClearButton: React.FC<ClearButtonProps> = ({ onClear, className = '' }) => {
-  const { clearValue, hasValue, size } = useTextInput();
+  const { clearValue, hasValue, size, isDisabled, isReadOnly } = useTextInput();
 
   if (!hasValue) return null;
 
   const handleClear = () => {
+    if (isDisabled || isReadOnly) return;
     clearValue();
     onClear?.();
   };
@@ -25,9 +26,10 @@ const ClearButton: React.FC<ClearButtonProps> = ({ onClear, className = '' }) =>
   return (
     <button
       type="button"
+      disabled={isDisabled || isReadOnly}
       onClick={handleClear}
       className={cn(
-        'text-muted-content hover:text-surface-content transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded',
+        'shrink-0 text-muted-content enabled:hover:text-surface-content disabled:cursor-not-allowed transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded',
         btnPadding,
         className,
       )}

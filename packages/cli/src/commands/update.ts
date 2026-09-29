@@ -1,181 +1,63 @@
-import {Command, Args, Flags, ux} from '@oclif/core'
-import {existsSync, readFileSync, writeFileSync} from 'node:fs'
-import {join} from 'node:path'
-import {allEntries} from 'vayu-ui-registry'
-import type {RegistryEntry, ComponentRegistryEntry, HookRegistryEntry} from 'vayu-ui-registry'
-import {fetchComponentFiles, fetchHookFile, fetchUtils} from '../utils/fetcher.js'
-import {resolveConfig, getUiPath} from '../utils/config.js'
+import {Args, Command, Flags} from '@oclif/core'
+import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs'
+import {dirname} from 'node:path'
+
+import {TOKENS_END_MARKER, TOKENS_START_MARKER, VAYU_TOKENS_CSS} from '../templates/tokens.js'
+import {projectPath, resolveConfig} from '../utils/config.js'
+import {installEntries} from '../utils/installer.js'
 
 export default class Update extends Command {
-  static strict = false
-
-  static summary = 'Update installed components and hooks'
-
+  static args = {slugs: Args.string({description: 'Slugs to update (default: all installed)', required: false})}
   static description =
-    'Re-fetches installed components and hooks from GitHub. Compares content and only overwrites changed files.'
-
-  static examples = [
-    '<%= config.bin %> update',
-    '<%= config.bin %> update button',
-    '<%= config.bin %> update button modal --force',
-    '<%= config.bin %> update --dry-run',
-    '<%= config.bin %> update --css',
-  ]
-
-  static args = {
-    slugs: Args.string({
-      description: 'Specific slugs to update (updates all if omitted)',
-      required: false,
-    }),
-  }
-
+    'Update sources and dependencies to the installed CLI release. Use npx vayu-ui-cli@latest update for the latest release.'
   static flags = {
-    force: Flags.boolean({
-      char: 'f',
-      description: 'Overwrite all files even if content is unchanged',
+    css: Flags.boolean({default: false, description: 'Refresh design tokens, preserving CSS outside Vayu markers'}),
+    cwd: Flags.string({description: 'Target project or workspace directory'}),
+    'dry-run': Flags.boolean({default: false, description: 'Preview without writing files'}),
+    force: Flags.boolean({char: 'f', default: false, description: 'Overwrite changed files'}),
+    'skip-install': Flags.boolean({
       default: false,
-    }),
-    'dry-run': Flags.boolean({
-      description: 'Preview what would be updated without writing files',
-      default: false,
-    }),
-    css: Flags.boolean({
-      description: 'Also update Vayu UI CSS design tokens',
-      default: false,
+      description: 'Record dependencies without running the package manager',
     }),
   }
+  static strict = false
+  static summary = 'Update installed components and hooks'
 
   async run(): Promise<void> {
     const {argv, flags} = await this.parse(Update)
-    const slugs = (argv as string[]).filter((s) => !s.startsWith('-'))
-
-    const {root, config, project} = resolveConfig()
-    if (!config) {
-      this.error('No vayu-ui.config.json found. Run "vayu-ui init" first.')
-    }
-
-    const uiDir = getUiPath(config, project)
-    const uiAbsDir = join(root, uiDir)
-    const registry = new Map<string, RegistryEntry>()
-    for (const entry of allEntries) registry.set(entry.slug, entry)
-
-    // Determine which slugs to update
-    const installed = Object.keys(config.installed ?? {})
-    const targetSlugs = slugs.length > 0 ? slugs : installed
-
-    if (targetSlugs.length === 0) {
-      this.log(ux.colorize('dim', '  No installed items found. Run "vayu-ui add" first.'))
-      return
-    }
-
-    // Resolve entries
-    const entries: RegistryEntry[] = []
-    for (const slug of targetSlugs) {
-      const entry = registry.get(slug)
-      if (!entry) {
-        this.warn(`Unknown slug: "${slug}". Skipping.`)
-        continue
-      }
-      entries.push(entry)
-    }
-
-    const components = entries.filter((e): e is ComponentRegistryEntry => e.type === 'component')
-    const hooks = entries.filter((e): e is HookRegistryEntry => e.type === 'hook')
-
-    this.log('')
-    this.log(ux.colorize('bold', '  Checking for updates...'))
-    this.log('')
-
-    let updated = 0
-    let unchanged = 0
-
-    // Update utils if any components
-    if (components.length > 0) {
-      const result = await this.checkAndWrite(
-        uiAbsDir,
-        'utils/index.ts',
-        async () => (await fetchUtils()).content,
-        flags,
-      )
-      if (result === 'updated') updated++
-      else if (result === 'unchanged') unchanged++
-    }
-
-    for (const comp of components) {
-      const fileNames = comp.files.map((f) => f.name)
-      const results = await fetchComponentFiles(comp.directoryName, fileNames)
-
-      for (const {path: relPath, content} of results) {
-        const result = await this.checkAndWrite(uiAbsDir, `components/${relPath}`, async () => content, flags)
-        if (result === 'updated') updated++
-        else if (result === 'unchanged') unchanged++
-      }
-    }
-
-    for (const hook of hooks) {
-      const result = await this.checkAndWrite(
-        uiAbsDir,
-        `hooks/${hook.fileName}`,
-        async () => (await fetchHookFile(hook.fileName)).content,
-        flags,
-      )
-      if (result === 'updated') updated++
-      else if (result === 'unchanged') unchanged++
-    }
-
-    // Update CSS tokens if --css flag
+    const {config, project, root} = resolveConfig(flags.cwd)
+    if (!config) this.error('No vayu-ui.config.json found. Run "vayu-ui init" first.')
+    const slugs = argv.length > 0 ? (argv as string[]) : Object.keys(config.installed)
+    if (slugs.length > 0)
+      installEntries({
+        config,
+        dryRun: flags['dry-run'],
+        log: (message) => this.log(message),
+        overwrite: true,
+        packageManager: project.packageManager,
+        root,
+        skipInstall: flags['skip-install'],
+        slugs,
+      })
     if (flags.css && config.tokensFile) {
-      const tokensPath = join(root, config.tokensFile)
-      if (existsSync(tokensPath)) {
-        this.log(
-          ux.colorize('dim', '  CSS tokens update is not yet supported. Re-run "vayu-ui init --merge" to refresh.'),
-        )
+      const target = projectPath(root, config.tokensFile)
+      const existing = existsSync(target) ? readFileSync(target, 'utf8') : "@import 'tailwindcss';\n"
+      const tokens = `${TOKENS_START_MARKER}\n${VAYU_TOKENS_CSS}\n${TOKENS_END_MARKER}`
+      const start = existing.indexOf(TOKENS_START_MARKER)
+      const end = existing.indexOf(TOKENS_END_MARKER)
+      if (start !== -1 && end < start) this.error('Unclosed Vayu token markers; fix the CSS before updating.')
+      const updated =
+        start === -1
+          ? `${existing}\n${tokens}\n`
+          : existing.slice(0, start) + tokens + existing.slice(end + TOKENS_END_MARKER.length)
+      if (!flags['dry-run']) {
+        mkdirSync(dirname(target), {recursive: true})
+        writeFileSync(target, updated)
       }
+
+      this.log(`  ${flags['dry-run'] ? 'Would update' : 'Updated'} ${config.tokensFile}`)
     }
 
-    this.log('')
-    if (flags['dry-run']) {
-      this.log(ux.colorize('dim', `  Dry run — ${updated} file(s) would be updated, ${unchanged} unchanged.`))
-    } else {
-      this.log(ux.colorize('green', `  ${updated} file(s) updated, ${unchanged} unchanged.`))
-    }
-    this.log('')
-  }
-
-  private async checkAndWrite(
-    uiAbsDir: string,
-    relPath: string,
-    getContent: () => Promise<string>,
-    flags: {force: boolean; 'dry-run': boolean},
-  ): Promise<'updated' | 'unchanged' | 'skipped'> {
-    const target = join(uiAbsDir, relPath)
-
-    if (!existsSync(target)) {
-      if (flags['dry-run']) {
-        this.log(`    ${ux.colorize('yellow', 'missing')} ${relPath}`)
-        return 'skipped'
-      }
-      const content = await getContent()
-      writeFileSync(target, content, 'utf-8')
-      this.log(`    ${ux.colorize('green', 'created')} ${relPath}`)
-      return 'updated'
-    }
-
-    const existing = readFileSync(target, 'utf-8')
-    const fresh = await getContent()
-
-    const normalizeEndings = (s: string) => s.replace(/\r\n/g, '\n')
-    if (!flags.force && normalizeEndings(existing) === normalizeEndings(fresh)) {
-      return 'unchanged'
-    }
-
-    if (flags['dry-run']) {
-      this.log(`    ${ux.colorize('cyan', 'changed')} ${relPath}`)
-      return 'updated'
-    }
-
-    writeFileSync(target, fresh, 'utf-8')
-    this.log(`    ${ux.colorize('green', 'updated')} ${relPath}`)
-    return 'updated'
+    if (slugs.length === 0 && !flags.css) this.log('  No installed items found. Run "vayu-ui add" first.')
   }
 }

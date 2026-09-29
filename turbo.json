@@ -11,7 +11,7 @@
     },
     "check": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts"]
+      "inputs": ["$TURBO_DEFAULT$"]
     },
     "start": {
       "dependsOn": ["^build"],
@@ -23,11 +23,29 @@
     },
     "test": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts"]
+      "inputs": ["$TURBO_DEFAULT$"]
     },
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "vayu-ui-cli#build": {
+      "dependsOn": ["vayu-ui-registry#build", "vayu-ui#build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/packages/ui/src/**",
+        "$TURBO_ROOT$/skills/**",
+        "$TURBO_ROOT$/scripts/package-cli.mjs"
+      ],
+      "outputs": ["dist/**"]
+    },
+    "vayu-ui-cli#test": {
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$"]
+    },
+    "vayu-ui-mcp#test": {
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$"]
     }
   }
 }

@@ -12,7 +12,7 @@ export const typographyEntry: ComponentRegistryEntry = {
   description:
     'A compound typography component providing semantic heading, paragraph, label, code, link, and CTA elements with color variants, font switching, and Accessible accessibility.',
   longDescription:
-    'The Typography component uses the compound component pattern (Typography.H1–H6, Typography.P, Typography.Label, Typography.Code, Typography.Link, Typography.CTA) to render semantic HTML text elements. All sub-components share a common set of props for color variants (primary, secondary, tertiary, error, warning, info, success, gradient), font family switching (primary, secondary), text truncation, and ARIA attributes. Link supports automatic internal/external routing with Next.js, external-link icons, and WCAG-compliant new-window announcements. Code renders inline code snippets with optional language metadata. All elements use design tokens via Tailwind classes for consistent theming.',
+    'The Typography component uses the compound component pattern (Typography.H1–H6, Typography.P, Typography.Label, Typography.Code, Typography.Link, Typography.CTA) to render semantic HTML text elements. All sub-components share a common set of props for color variants (primary, secondary, tertiary, error, warning, info, success, gradient), font family switching (primary, secondary), text truncation, and ARIA attributes. Link supports framework-neutral native anchors, external-link icons, and WCAG-compliant new-window announcements. Code renders inline code snippets with optional language metadata. All elements use design tokens via Tailwind classes for consistent theming.',
   tags: [
     'typography',
     'text',
@@ -31,7 +31,7 @@ export const typographyEntry: ComponentRegistryEntry = {
     'Body paragraphs with primary and secondary color variants for content emphasis',
     'Form labels with htmlFor binding to associate text with inputs',
     'Inline code snippets with language metadata for technical documentation',
-    'Navigation links with automatic internal routing via Next.js and external-link icons',
+    'Navigation links with native anchor navigation and external-link icons',
     'Call-to-action text styled prominently for marketing or conversion sections',
     'Status-colored text using error, warning, info, or success variants for feedback messages',
   ],
@@ -46,7 +46,7 @@ export const typographyEntry: ComponentRegistryEntry = {
     },
     {
       name: 'TypographyHeadings.tsx',
-      description: 'H1–H6 heading components with responsive sizing and variant styling',
+      description: 'H1–H6 heading components with semantic application sizing and variant styling',
     },
     {
       name: 'TypographyTextElements.tsx',
@@ -59,7 +59,7 @@ export const typographyEntry: ComponentRegistryEntry = {
     {
       name: 'TypographyLink.tsx',
       description:
-        'Link component with Next.js routing, external-link detection, and WCAG announcements',
+        'Link component with native anchor navigation, external-link detection, and WCAG announcements',
     },
     {
       name: 'utils.ts',
@@ -85,7 +85,7 @@ export const typographyEntry: ComponentRegistryEntry = {
       name: 'H1',
       fileName: 'TypographyHeadings.tsx',
       description:
-        'Renders an <h1> element with responsive sizing (4xl/5xl/6xl), bold weight, and tight tracking',
+        'Renders an <h1> element with the text-h1 application size token, bold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -130,7 +130,7 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: 'false',
           description:
-            'When true, skips the default responsive size classes so you can fully override sizing via className. Without this, sm:/lg: size classes survive className overrides because twMerge does not resolve conflicts across breakpoints.',
+            'When true, skips the default semantic size token so you can fully override sizing via className. Prefer the default scale; use this only for an intentional custom display treatment.',
         },
       ],
     },
@@ -138,7 +138,7 @@ export const typographyEntry: ComponentRegistryEntry = {
       name: 'H2',
       fileName: 'TypographyHeadings.tsx',
       description:
-        'Renders an <h2> element with responsive sizing (3xl/4xl/5xl), extra-bold weight, and tight tracking',
+        'Renders an <h2> element with the text-h2 application size token, extra-bold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -184,7 +184,7 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: 'false',
           description:
-            'When true, skips the default responsive size classes so you can fully override sizing via className.',
+            'When true, skips the default semantic size token so you can fully override sizing via className.',
         },
       ],
     },
@@ -192,7 +192,7 @@ export const typographyEntry: ComponentRegistryEntry = {
       name: 'H3',
       fileName: 'TypographyHeadings.tsx',
       description:
-        'Renders an <h3> element with responsive sizing (2xl/3xl/4xl), semibold weight, and tight tracking',
+        'Renders an <h3> element with the text-h3 application size token, semibold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -237,7 +237,7 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: 'false',
           description:
-            'When true, skips the default responsive size classes so you can fully override sizing via className.',
+            'When true, skips the default semantic size token so you can fully override sizing via className.',
         },
       ],
     },
@@ -245,7 +245,7 @@ export const typographyEntry: ComponentRegistryEntry = {
       name: 'H4',
       fileName: 'TypographyHeadings.tsx',
       description:
-        'Renders an <h4> element with responsive sizing (xl/2xl/3xl), semibold weight, and tight tracking',
+        'Renders an <h4> element with the text-h4 application size token, semibold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -290,7 +290,7 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: 'false',
           description:
-            'When true, skips the default responsive size classes so you can fully override sizing via className.',
+            'When true, skips the default semantic size token so you can fully override sizing via className.',
         },
       ],
     },
@@ -298,7 +298,7 @@ export const typographyEntry: ComponentRegistryEntry = {
       name: 'H5',
       fileName: 'TypographyHeadings.tsx',
       description:
-        'Renders an <h5> element with responsive sizing (lg/xl/2xl), semibold weight, and tight tracking',
+        'Renders an <h5> element with the text-h5 application size token, semibold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -343,7 +343,7 @@ export const typographyEntry: ComponentRegistryEntry = {
           required: false,
           defaultValue: 'false',
           description:
-            'When true, skips the default responsive size classes so you can fully override sizing via className.',
+            'When true, skips the default semantic size token so you can fully override sizing via className.',
         },
       ],
     },
@@ -351,7 +351,7 @@ export const typographyEntry: ComponentRegistryEntry = {
       name: 'H6',
       fileName: 'TypographyHeadings.tsx',
       description:
-        'Renders an <h6> element with responsive sizing (base/lg/xl), semibold weight, and tight tracking',
+        'Renders an <h6> element with the text-h6 application size token, semibold weight, and tight tracking',
       props: [
         {
           name: 'children',
@@ -545,7 +545,7 @@ export const typographyEntry: ComponentRegistryEntry = {
       name: 'Link',
       fileName: 'TypographyLink.tsx',
       description:
-        'Renders a navigation link using Next.js Link for internal routes or a native <a> for external URLs, with WCAG-compliant external-link announcements and focus rings',
+        'Renders a navigation link using native anchors in any React framework, with WCAG-compliant external-link announcements and focus rings',
       props: [
         {
           name: 'children',
@@ -558,7 +558,7 @@ export const typographyEntry: ComponentRegistryEntry = {
           type: 'string',
           required: false,
           description:
-            'URL or path; http/https URLs render as external links, all others use Next.js Link',
+            'URL or path; http/https URLs render as external links, all others use native anchors',
         },
         {
           name: 'target',
@@ -1001,7 +1001,7 @@ export default function FontDemo() {
     {
       title: 'Overriding Heading Size with unsized',
       description:
-        'Use the unsized prop to opt out of the baked-in responsive size classes, then provide your own size via className. Without unsized, sm:/lg: breakpoints would survive the override.',
+        'Use semantic heading levels with the default application scale. Use unsized only for intentional custom display type.',
       code: `import { Typography } from 'vayu-ui';
 
 export default function UnsizedHeadingDemo() {
@@ -1011,7 +1011,7 @@ export default function UnsizedHeadingDemo() {
         This stays text-sm on all breakpoints
       </Typography.H3>
       <Typography.H3 className="text-sm">
-        This balloons back to 2xl/3xl/4xl — don't do this
+        A local size override is also supported
       </Typography.H3>
     </div>
   );
@@ -1058,11 +1058,11 @@ export default function UnsizedHeadingDemo() {
         'Hardcoded colors bypass design tokens and will not adapt to theme changes (light/dark mode). The variant prop maps to semantic tokens that ensure consistent theming and WCAG contrast compliance.',
     },
     {
-      title: 'Overriding heading size via className without unsized',
-      bad: '<Typography.H3 className="text-sm">Small heading</Typography.H3>',
-      good: '<Typography.H3 unsized className="text-sm">Small heading</Typography.H3>',
+      title: 'Oversized application headings',
+      bad: '<Typography.H3 className="text-6xl">Account settings</Typography.H3>',
+      good: '<Typography.H3>Account settings</Typography.H3>',
       reason:
-        'Heading components bake in responsive size classes (e.g. text-2xl sm:text-3xl lg:text-4xl). twMerge resolves conflicts within the same breakpoint but not across them, so a consumer className only overrides the base breakpoint. Use the unsized prop to opt out of default sizing entirely.',
+        'Headings use the text-h1–text-h6 semantic scale. Keep that scale for application UI; avoid inflating card or drawer headings into heroes. unsized allows intentional display typography.',
     },
   ],
 };

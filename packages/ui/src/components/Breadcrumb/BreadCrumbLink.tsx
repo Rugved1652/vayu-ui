@@ -1,13 +1,12 @@
 // link.tsx
 // UI: Clickable navigation link
 
-import Link from 'next/link';
 import { cn } from '../../utils';
 import type { BreadcrumbLinkProps } from './types';
 
 const BreadcrumbLink = ({ className, ...props }: BreadcrumbLinkProps) => {
   return (
-    <Link
+    <a
       className={cn(
         // Accessible: Minimum target size is 24x24px.
         // py-2 (8px top/bottom) + text height (~16px) ensures vertical size >= 24px.

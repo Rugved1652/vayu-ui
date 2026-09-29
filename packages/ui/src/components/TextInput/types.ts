@@ -73,6 +73,8 @@ export interface NumberInputProps extends Omit<
   'type' | 'value' | 'onChange' | 'size'
 > {
   numberType?: NumberType;
+  /** Show comma grouping; onChange on the root receives the unformatted numeric string. */
+  format?: boolean;
   min?: number;
   max?: number;
   step?: number;

@@ -111,7 +111,7 @@ export default function AspectRatioDemo() {
           {/* Cover (Default) */}
           <div>
             <Typography.Label variant="secondary" className="block mb-2">
-              objectFit="cover" (Default)
+              objectFit=&quot;cover&quot; (Default)
             </Typography.Label>
             <AspectRatio ratio="square" decorative rounded shadow>
               <Image
@@ -127,7 +127,7 @@ export default function AspectRatioDemo() {
           {/* Contain */}
           <div>
             <Typography.Label variant="secondary" className="block mb-2">
-              objectFit="contain"
+              objectFit=&quot;contain&quot;
             </Typography.Label>
             <AspectRatio
               ratio="square"

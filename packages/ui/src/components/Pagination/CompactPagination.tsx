@@ -2,7 +2,6 @@
 // UI: prev/next only variant
 
 import React from 'react';
-import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '../../utils';
 import type { CompactPaginationProps } from './types';
@@ -44,10 +43,10 @@ export const CompactPagination: React.FC<CompactPaginationProps> = ({
           <span>Previous</span>
         </span>
       ) : (
-        <Link href={hrefBuilder(currentPage - 1)} className={buttonClasses}>
+        <a href={hrefBuilder(currentPage - 1)} className={buttonClasses}>
           <ChevronLeft className="w-4 h-4" />
           <span>Previous</span>
-        </Link>
+        </a>
       )}
 
       {/* Status */}
@@ -66,10 +65,10 @@ export const CompactPagination: React.FC<CompactPaginationProps> = ({
           <ChevronRight className="w-4 h-4" />
         </span>
       ) : (
-        <Link href={hrefBuilder(currentPage + 1)} className={buttonClasses}>
+        <a href={hrefBuilder(currentPage + 1)} className={buttonClasses}>
           <span>Next</span>
           <ChevronRight className="w-4 h-4" />
-        </Link>
+        </a>
       )}
     </nav>
   );

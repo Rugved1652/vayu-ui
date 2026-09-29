@@ -1,12 +1,11 @@
 import {Command, ux} from '@oclif/core'
 
 export default class Version extends Command {
+  static aliases = ['v']
   static description = 'Show CLI version'
 
-  static aliases = ['v']
-
   async run(): Promise<void> {
-    const {version, platform, arch} = this.config
+    const {arch, platform, version} = this.config
     const nodeVersion = process.version
 
     this.log('')

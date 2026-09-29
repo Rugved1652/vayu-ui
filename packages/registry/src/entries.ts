@@ -1,4 +1,10 @@
-import type { ComponentRegistryEntry, HookRegistryEntry, RegistryCapability, RegistryEntry } from './types.js';
+import { sourceManifest } from './source-manifest.js';
+import type {
+  ComponentRegistryEntry,
+  HookRegistryEntry,
+  RegistryCapability,
+  RegistryEntry,
+} from './types.js';
 
 import { accordionEntry } from './components/accordion.js';
 import { affixEntry } from './components/affix.js';
@@ -196,6 +202,47 @@ export const hookEntries: HookRegistryEntry[] = [
 
 export const allEntries: RegistryEntry[] = [...componentEntries, ...hookEntries];
 
+// File/dependency metadata is derived from the source import graph at release time.
+for (const entry of allEntries) {
+  const source = sourceManifest[entry.slug as keyof typeof sourceManifest];
+  if (!source) continue;
+  entry.npmDependencies = source.npmDependencies;
+  entry.registryDependencies = source.registryDependencies.map((slug) => ({
+    slug,
+    reason: 'Required by source imports',
+  }));
+  if (entry.type === 'component') {
+    const prefix = `components/${entry.directoryName}/`;
+    entry.files = source.files
+      .filter((file) => file.startsWith(prefix))
+      .map((file) => {
+        const name = file.slice(prefix.length);
+        return (
+          entry.files.find((existing) => existing.name === name) ?? {
+            name,
+            description: 'Component source',
+          }
+        );
+      });
+  }
+}
+
 export function getEntriesByCapability(capability: RegistryCapability): RegistryEntry[] {
   return allEntries.filter((entry) => entry.capabilities?.includes(capability));
+}
+
+/** Accept documented slugs and common component/hook spellings without ambiguous guesses. */
+export function findEntry(name: string): RegistryEntry | undefined {
+  const exact = allEntries.find((entry) => entry.slug === name);
+  if (exact) return exact;
+  const normalize = (value: string) => value.replace(/[^a-z0-9]/gi, '').toLowerCase();
+  const needle = normalize(name);
+  const matches = allEntries.filter((entry) =>
+    [
+      entry.slug,
+      entry.name,
+      ...(entry.type === 'component' ? [entry.rootComponent, entry.directoryName] : []),
+    ].some((alias) => normalize(alias) === needle),
+  );
+  return matches.length === 1 ? matches[0] : undefined;
 }

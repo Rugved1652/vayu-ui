@@ -1,5 +1,5 @@
 import {Command, Flags, ux} from '@oclif/core'
-import {componentEntries, hookEntries, type ComponentCategory, type HookCategory} from 'vayu-ui-registry'
+import {type ComponentCategory, componentEntries, type HookCategory, hookEntries} from 'vayu-ui-registry'
 
 const COMPONENT_CATEGORIES: ComponentCategory[] = [
   'inputs',
@@ -26,11 +26,8 @@ const HOOK_CATEGORIES: HookCategory[] = [
 ]
 
 export default class List extends Command {
-  static summary = 'List all available Vayu UI components and hooks'
-
   static description =
     'Displays all components and hooks available in the Vayu UI registry, grouped by type and category.'
-
   static examples = [
     '<%= config.bin %> list',
     '<%= config.bin %> list --type component',
@@ -38,18 +35,18 @@ export default class List extends Command {
     '<%= config.bin %> list --category inputs',
     '<%= config.bin %> list --type component --category overlay',
   ]
-
   static flags = {
+    category: Flags.string({
+      description: 'Filter by category (e.g. inputs, state, overlay)',
+      required: false,
+    }),
     type: Flags.option({
       description: 'Filter by item type',
       options: ['component', 'hook'] as const,
       required: false,
     })(),
-    category: Flags.string({
-      description: 'Filter by category (e.g. inputs, state, overlay)',
-      required: false,
-    }),
   }
+  static summary = 'List all available Vayu UI components and hooks'
 
   async run(): Promise<void> {
     const {flags} = await this.parse(List)
@@ -89,7 +86,22 @@ export default class List extends Command {
     }
   }
 
-  private printSection<T extends {category: string; slug: string; description: string}>(
+  private groupByCategory<T extends {category: string}>(
+    entries: T[],
+    categoryOrder: readonly string[],
+  ): Map<string, T[]> {
+    const groups = new Map<string, T[]>()
+    for (const category of categoryOrder) {
+      const items = entries.filter((e) => e.category === category)
+      if (items.length > 0) {
+        groups.set(category, items)
+      }
+    }
+
+    return groups
+  }
+
+  private printSection<T extends {category: string; description: string; slug: string}>(
     title: string,
     entries: T[],
     categoryOrder: readonly string[],
@@ -113,20 +125,6 @@ export default class List extends Command {
   }
 
   private truncate(text: string, maxLen: number): string {
-    return text.length > maxLen ? text.substring(0, maxLen - 3) + '...' : text
-  }
-
-  private groupByCategory<T extends {category: string}>(
-    entries: T[],
-    categoryOrder: readonly string[],
-  ): Map<string, T[]> {
-    const groups = new Map<string, T[]>()
-    for (const category of categoryOrder) {
-      const items = entries.filter((e) => e.category === category)
-      if (items.length > 0) {
-        groups.set(category, items)
-      }
-    }
-    return groups
+    return text.length > maxLen ? text.slice(0, Math.max(0, maxLen - 3)) + '...' : text
   }
 }

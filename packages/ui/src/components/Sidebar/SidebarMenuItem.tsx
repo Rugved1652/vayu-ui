@@ -4,7 +4,6 @@
 'use client';
 
 import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
 import React, { useState, useId } from 'react';
 import { Tooltip } from '../Tooltip';
 import { useSidebar } from './hooks';
@@ -67,7 +66,7 @@ export const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
 
   // Link without subitems
   const linkElement = !hasSubItems && (
-    <Link
+    <a
       href={href || '#'}
       aria-current={active ? 'page' : undefined}
       className={`
@@ -84,7 +83,7 @@ export const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
             `}
     >
       {menuItemContent}
-    </Link>
+    </a>
   );
 
   // Button with subitems
@@ -131,7 +130,7 @@ export const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
           className="ml-6 mt-1 space-y-1 border-l-2 border-border pl-3"
         >
           {subItems.map((subItem, index) => (
-            <Link
+            <a
               href={subItem.href || '#'}
               key={`${itemId}-${index}`}
               aria-current={subItem.active ? 'page' : undefined}
@@ -149,7 +148,7 @@ export const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
             >
               <span className="w-1.5 h-1.5 rounded-full bg-current shrink-0" />
               {subItem.label}
-            </Link>
+            </a>
           ))}
         </div>
       )}

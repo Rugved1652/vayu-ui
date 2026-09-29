@@ -10,10 +10,8 @@ import type { FieldProps } from './types';
 import {
   inputBaseStyles,
   inputGapStyles,
-  inputSizeStyles,
-  inputBorderStyles,
-  inputHoverBorder,
-  inputDisabledMutedStyles,
+  inputControlSizeStyles,
+  getInputControlStateStyles,
 } from '../../utils/input-styles';
 
 const TextInputField: React.FC<FieldProps> = ({ children, className = '' }) => {
@@ -26,13 +24,8 @@ const TextInputField: React.FC<FieldProps> = ({ children, className = '' }) => {
       className={cn(
         inputBaseStyles,
         inputGapStyles,
-        inputSizeStyles[size],
-        validationState !== 'default'
-          ? inputBorderStyles[validationState]
-          : isActive
-            ? 'border-brand'
-            : cn(inputBorderStyles['default'], inputHoverBorder),
-        isDisabled && inputDisabledMutedStyles,
+        inputControlSizeStyles[size],
+        getInputControlStateStyles(validationState, isActive, isDisabled),
         className,
       )}
       onFocus={() => setFocused(true)}

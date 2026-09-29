@@ -54,7 +54,7 @@ export const drawerEntry: ComponentRegistryEntry = {
     {
       name: 'DrawerContent.tsx',
       description:
-        'Positioned panel container with focus trapping, keyboard navigation, slide animations, and a built-in close button',
+        'Positioned panel container with focus trapping, keyboard navigation, slide animations, and a composed header close button',
     },
     {
       name: 'DrawerHeader.tsx',
@@ -141,7 +141,7 @@ export const drawerEntry: ComponentRegistryEntry = {
       name: 'Content',
       fileName: 'DrawerContent.tsx',
       description:
-        'The main panel container. Handles positioning based on the side prop, slide animations, focus trapping, and keyboard navigation. Includes a built-in close button.',
+        'The main panel container. Handles positioning based on the side prop, slide animations, focus trapping, and keyboard navigation. Use Drawer.Header for an in-flow close button, or compose Drawer.Close explicitly.',
       props: [
         {
           name: 'trapFocus',
@@ -157,8 +157,24 @@ export const drawerEntry: ComponentRegistryEntry = {
       name: 'Header',
       fileName: 'DrawerHeader.tsx',
       description:
-        'Flex column layout for the header area, typically containing Title and Description sub-components.',
-      props: [],
+        'Header flex row with a flexible title/description area and an in-flow accessible X close button. An explicitly supplied Close child replaces the default control.',
+      props: [
+        {
+          name: 'showClose',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'true',
+          description:
+            'Show the default X close button. Set false when a separate close action is provided.',
+        },
+        {
+          name: 'closeLabel',
+          type: 'string',
+          required: false,
+          defaultValue: 'Close drawer',
+          description: 'Accessible label for the default close button; supports localization.',
+        },
+      ],
     },
     {
       name: 'Title',
@@ -185,7 +201,7 @@ export const drawerEntry: ComponentRegistryEntry = {
       name: 'Close',
       fileName: 'DrawerClose.tsx',
       description:
-        'Button that closes the drawer. When asChild is true, clones the child element instead of rendering a default button.',
+        'Accessible X button that closes the drawer by default. Honors preventDefault. When asChild is true, clones the child element instead of rendering a default button.',
       props: [
         {
           name: 'asChild',
@@ -353,7 +369,7 @@ export const drawerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-label',
-        description: 'Set to "Close drawer" on the built-in close button inside Drawer.Content',
+        description: 'Set to "Close drawer" on the built-in close button inside Drawer.Header',
         managedByComponent: true,
       },
     ],
@@ -377,7 +393,7 @@ export const drawerEntry: ComponentRegistryEntry = {
       'When the drawer opens and trapFocus is true, the first focusable element inside the content is auto-focused after a 50ms delay. Tab and Shift+Tab wrap focus within the drawer. Body scroll is locked in modal mode to prevent background interaction.',
     wcagLevel: 'AA',
     notes:
-      'Title and Description ids are generated via React.useId() and automatically linked to the dialog via aria-labelledby and aria-describedby. When using the drawer, always include a Drawer.Title for a valid accessible name. The built-in close button includes both an aria-label and sr-only text for screen readers.',
+      'Title and Description ids are generated via React.useId() and automatically linked to the dialog via aria-labelledby and aria-describedby. When using the drawer, always include a Drawer.Title for a valid accessible name. The built-in close button includes an aria-label for screen readers.',
   },
 
   // ── Dependencies ──────────────────────────────────────

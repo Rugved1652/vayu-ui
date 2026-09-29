@@ -4,6 +4,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
+import { X } from 'lucide-react';
 import { cn } from '../../utils';
 
 const ToastTitle = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
@@ -29,8 +30,10 @@ const ToastDescription = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 ToastDescription.displayName = 'Toast.Description';
 
 const ToastClose = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
-  ({ className, ...props }, ref) => (
+  ({ className, children, ...props }, ref) => (
     <button
+      type="button"
+      aria-label={children ? undefined : 'Close notification'}
       ref={ref}
       className={cn(
         'p-1.5 min-h-[28px] min-w-[28px] rounded-control',
@@ -42,7 +45,9 @@ const ToastClose = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTML
         className,
       )}
       {...props}
-    />
+    >
+      {children ?? <X className="h-4 w-4" aria-hidden="true" />}
+    </button>
   ),
 );
 ToastClose.displayName = 'Toast.Close';

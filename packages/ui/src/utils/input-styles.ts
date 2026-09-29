@@ -43,6 +43,13 @@ export const inputSizeStyles: Record<InputSize, string> = {
   lg: 'px-4 py-2.5 text-lg',
 };
 
+/** Shared single-line geometry for TextInput fields and Select triggers. */
+export const inputControlSizeStyles: Record<InputSize, string> = {
+  sm: 'h-9 min-h-9 px-3 text-sm leading-5',
+  md: 'h-11 min-h-11 px-3 text-base leading-6',
+  lg: 'h-13 min-h-13 px-4 text-lg leading-7',
+};
+
 /** Height-only size map for components where width is fixed (e.g. OTP slots). */
 export const inputSlotSizeStyles: Record<InputSize, string> = {
   sm: 'size-8 text-sm',
@@ -103,6 +110,17 @@ export const inputDisabledStyles = 'disabled:opacity-50 disabled:cursor-not-allo
 
 /** Disabled state that also swaps background (used by TextInput/TextArea). */
 export const inputDisabledMutedStyles = 'opacity-60 cursor-not-allowed bg-muted';
+
+/** Disabled fields keep their validation color but never receive hover/focus styling. */
+export function getInputControlStateStyles(
+  state: ValidationState,
+  active: boolean,
+  disabled: boolean,
+): string {
+  if (disabled) return `${inputBorderStyles[state]} ${inputDisabledMutedStyles}`;
+  if (state !== 'default') return inputBorderStyles[state];
+  return active ? 'border-brand' : inputStateStyles.default;
+}
 
 /* ------------------------------------------------------------------ */
 /*  Loading                                                           */

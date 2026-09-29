@@ -11,7 +11,7 @@ export const textInputEntry: ComponentRegistryEntry = {
   description:
     'A compound text input component supporting multiple input types, validation states, character counting, and specialized variants like password, number, and search inputs.',
   longDescription:
-    'The TextInput component uses the compound component pattern (TextInput.Label, TextInput.Field, TextInput.Input, etc.) to build accessible form inputs. It supports controlled and uncontrolled modes, multiple input types (text, email, password, number, tel, url, search), four validation states (default, error, warning, success), three sizes (sm, md, lg), character counting with configurable display modes, a clear button, and a loading spinner. Specialized sub-components include PasswordInput with a visibility toggle, NumberInput with keyboard-filtered numeric validation and min/max constraints, and SearchInput with a built-in search icon. All ARIA attributes (labelledby, describedby, invalid, required) are managed automatically via React context.',
+    'The TextInput component uses the compound component pattern (TextInput.Label, TextInput.Field, TextInput.Input, etc.) to build accessible form inputs. It supports controlled and uncontrolled modes, multiple input types (text, email, password, number, tel, url, search), four validation states (default, error, warning, success), three sizes (sm, md, lg), character counting with configurable display modes, a clear button, and a loading spinner. Specialized sub-components include PasswordInput with a visibility toggle, NumberInput with numeric validation and optional grouping and min/max constraints, and SearchInput with a built-in search icon. All ARIA attributes (labelledby, describedby, invalid, required) are managed automatically via React context.',
 
   tags: [
     'input',
@@ -105,7 +105,7 @@ export const textInputEntry: ComponentRegistryEntry = {
     {
       name: 'TextInputNumberInput.tsx',
       description:
-        'Number input with keyboard filtering, paste validation, and min/max blur constraints per numberType',
+        'Number input with typed/pasted value validation and optional grouping, and min/max blur constraints per numberType',
     },
     {
       name: 'TextInputSearchInput.tsx',
@@ -253,8 +253,16 @@ export const textInputEntry: ComponentRegistryEntry = {
       name: 'NumberInput',
       fileName: 'TextInputNumberInput.tsx',
       description:
-        'Numeric input with keyboard filtering, paste validation, and blur constraints based on numberType. Supports integer, decimal, positive, and natural number modes with min/max enforcement.',
+        'Numeric input with typed/pasted value validation and optional grouping, and blur constraints based on numberType. Supports integer, decimal, positive, and natural number modes with min/max enforcement.',
       props: [
+        {
+          name: 'format',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'false',
+          description:
+            'Display comma grouping and normalize leading zeros (01 → 1, 00 → 0, 1212 → 1,212). Root onChange receives the unformatted numeric string. Preserves large integers, decimal editing and caret position.',
+        },
         {
           name: 'numberType',
           type: 'NumberType',
@@ -281,7 +289,7 @@ export const textInputEntry: ComponentRegistryEntry = {
           type: 'number',
           required: false,
           description:
-            'Step increment for the native number input. Passed through to the HTML input element.',
+            'Metadata passed to the text input; this control does not implement a native number spinner.',
         },
       ],
     },
@@ -503,7 +511,8 @@ export const textInputEntry: ComponentRegistryEntry = {
       type: 'InputSize',
       required: false,
       defaultValue: "'md'",
-      description: 'Input size affecting padding, text size, and icon sizing.',
+      description:
+        'Matches Select heights: sm 36px, md 44px, lg 52px at the default root font size, with shared spacing and text sizing.',
       options: ['sm', 'md', 'lg'],
     },
     {
@@ -520,7 +529,8 @@ export const textInputEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Disables the input, preventing user interaction.',
+      description:
+        'Disables the input and its clear/password actions. Uses the same muted background, opacity, border, and disabled cursor as Select.',
     },
     {
       name: 'readOnly',
@@ -682,7 +692,7 @@ export const textInputEntry: ComponentRegistryEntry = {
       'The input element receives focus via Tab. The Field wrapper visually responds with a focus ring (ring-2 ring-focus/20). Focus state is tracked in context and shared with sub-components like CharacterCount.',
     wcagLevel: 'AA',
     notes:
-      'All label/input associations use auto-generated IDs via useId(). The Description is linked via aria-describedby, and when in error state the ErrorMessage is also included in aria-describedby. Error messages use role="alert" for immediate screen reader announcement. Validation icons use aria-hidden to prevent redundant announcement. The PasswordInput toggle uses aria-label to communicate its purpose. NumberInput uses inputMode="numeric" for mobile numeric keyboards and filters keyboard/paste input to valid characters per numberType.',
+      'All label/input associations use auto-generated IDs via useId(). The Description is linked via aria-describedby, and when in error state the ErrorMessage is also included in aria-describedby. Error messages use role="alert" for immediate screen reader announcement. Validation icons use aria-hidden to prevent redundant announcement. The PasswordInput toggle uses aria-label to communicate its purpose. NumberInput uses inputMode="numeric" for mobile numeric keyboards and validates typed/pasted values per numberType.',
   },
 
   // ── Dependencies ──────────────────────────────────────

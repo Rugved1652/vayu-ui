@@ -117,7 +117,7 @@ export default function TextInputDemo() {
                 <TextInput.Icon>
                   <DollarSign className="w-4 h-4" />
                 </TextInput.Icon>
-                <TextInput.NumberInput numberType="positive" placeholder="0.00" />
+                <TextInput.NumberInput numberType="positive" format placeholder="1,212.00" />
               </TextInput.Field>
             </TextInput>
             <TextInput inputType="number" defaultValue="5">

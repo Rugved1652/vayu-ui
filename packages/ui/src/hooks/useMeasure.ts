@@ -1,8 +1,8 @@
 'use client';
 import { useState, useRef, useLayoutEffect } from 'react';
 
-export const useMeasure = () => {
-  const ref = useRef<HTMLElement | null>(null);
+export const useMeasure = <T extends HTMLElement = HTMLDivElement>() => {
+  const ref = useRef<T | null>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useLayoutEffect(() => {

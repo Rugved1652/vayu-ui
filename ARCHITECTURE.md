@@ -40,16 +40,19 @@ Vayu UI is organized around a **registry-first** architecture. The actual React 
 All React components and hooks live here.
 
 ### Components
+
 - Located at `src/components/<PascalCaseName>/`
 - Use the **compound component pattern** with namespaced subcomponents
 - Example: `Button/` contains `Button.tsx`, `ButtonIcon.tsx`, `ButtonBadge.tsx`, `ButtonText.tsx`, `types.ts`
 - Assembled via `Object.assign(ButtonRoot, { Icon, Badge, Text })`
 
 ### Hooks
+
 - Located at `src/hooks/<hookName>.ts`
 - Flat files, no subdirectories
 
 ### Exports
+
 - `src/index.ts` → re-exports everything from hooks and components
 - `src/components/index.ts` → barrel file for ~50+ components
 - `src/hooks/index.ts` → barrel file for ~35 hooks
@@ -61,6 +64,7 @@ All React components and hooks live here.
 The central metadata layer consumed by both MCP and CLI. Contains **no React code**—only TypeScript data objects.
 
 ### Schema (`src/types.ts`)
+
 - `ComponentRegistryEntry` — identity, description, file list, compound component metadata, props, variants, sizes, states, events, a11y, dependencies, examples, anti-patterns
 - `HookRegistryEntry` — identity, signature, parameters, return values, examples, anti-patterns
 - `DesignToken`, `DesignTokenCategory`
@@ -68,19 +72,21 @@ The central metadata layer consumed by both MCP and CLI. Contains **no React cod
 - `CliConfig`
 
 ### Entries
+
 - `src/components/<slug>.ts` — one file per component
 - `src/hooks/<slug>.ts` — one file per hook
 - `src/entries.ts` — aggregates all into `componentEntries`, `hookEntries`, `allEntries`
 - `src/index.ts` — exports everything
 
 ### Relationship to `packages/ui`
+
 Every component/hook in `packages/ui` has a corresponding registry entry:
 
-| UI Path | Registry Field |
-|---------|---------------|
-| `src/components/<DirectoryName>/` | `directoryName` |
-| `src/components/<DirectoryName>/<FileName>` | `files[].name` |
-| `src/hooks/<fileName>` | `fileName` |
+| UI Path                                     | Registry Field  |
+| ------------------------------------------- | --------------- |
+| `src/components/<DirectoryName>/`           | `directoryName` |
+| `src/components/<DirectoryName>/<FileName>` | `files[].name`  |
+| `src/hooks/<fileName>`                      | `fileName`      |
 
 ---
 
@@ -90,27 +96,28 @@ Exposes the registry to AI tools via the Model Context Protocol (MCP).
 
 ### Tools (17 total)
 
-| Tool | Purpose |
-|------|---------|
-| `list_components` | List all components/hooks with filters |
-| `find_component` | Natural language search |
-| `get_component_summary` | Identity card (name, category, subcomponents) |
-| `get_component_props` | Full prop definitions |
-| `get_component_variants` | Variant and size definitions |
-| `get_component_states` | Interactive/visual states |
-| `get_component_events` | Event handler signatures |
-| `get_component_a11y` | ARIA roles, keyboard interactions, WCAG |
-| `get_component_do_not` | Anti-patterns |
-| `get_component_dependencies` | NPM and registry dependencies |
-| `get_component_peer_components` | Frequently co-used suggestions |
-| `get_component_composition` | Compound component structure |
-| `get_component_example` | Ready-to-paste TSX examples |
-| `scaffold_component_usage` | Generate minimal working code |
-| `get_hook_details` | Hook signature, parameters, return values |
-| `get_design_tokens` | Design tokens with Tailwind classes |
-| `get_install_guide` | Exact CLI commands and imports |
+| Tool                            | Purpose                                       |
+| ------------------------------- | --------------------------------------------- |
+| `list_components`               | List all components/hooks with filters        |
+| `find_component`                | Natural language search                       |
+| `get_component_summary`         | Identity card (name, category, subcomponents) |
+| `get_component_props`           | Full prop definitions                         |
+| `get_component_variants`        | Variant and size definitions                  |
+| `get_component_states`          | Interactive/visual states                     |
+| `get_component_events`          | Event handler signatures                      |
+| `get_component_a11y`            | ARIA roles, keyboard interactions, WCAG       |
+| `get_component_do_not`          | Anti-patterns                                 |
+| `get_component_dependencies`    | NPM and registry dependencies                 |
+| `get_component_peer_components` | Frequently co-used suggestions                |
+| `get_component_composition`     | Compound component structure                  |
+| `get_component_example`         | Ready-to-paste TSX examples                   |
+| `scaffold_component_usage`      | Generate minimal working code                 |
+| `get_hook_details`              | Hook signature, parameters, return values     |
+| `get_design_tokens`             | Design tokens with Tailwind classes           |
+| `get_install_guide`             | Exact CLI commands and imports                |
 
 ### Key Files
+
 - `src/lib/registry.ts` — wrapper around `vayu-ui-registry` for lookups
 - `src/lib/search.ts` — scoring algorithm for natural language search
 - `src/lib/scaffold-templates/index.ts` — code generation logic
@@ -123,6 +130,7 @@ Exposes the registry to AI tools via the Model Context Protocol (MCP).
 Oclif-based CLI distributed as `vayu-ui-cli` (binary: `vayu-ui`).
 
 ### Commands
+
 - `init` — Setup project, install Tailwind v4, inject design tokens
 - `add <slug...>` — Copy components/hooks into the user's project
 - `remove <slug...>` — Delete installed files
@@ -131,12 +139,13 @@ Oclif-based CLI distributed as `vayu-ui-cli` (binary: `vayu-ui`).
 - `create`, `check`, `update`, `version`
 
 ### How `add` Works
+
 1. Parse slugs from argv
 2. Build lookup Map from `allEntries` (from `vayu-ui-registry`)
 3. Resolve transitive `registryDependencies` recursively
 4. Separate components vs. hooks
 5. Collect NPM dependencies from all resolved entries
-6. Fetch file content from GitHub raw URLs:
+6. Read release-bundled source files, using the generated import graph:
    - Components: `.../components/<DirectoryName>/<FileName>`
    - Hooks: `.../hooks/<FileName>`
    - Utils: `.../utils/index.ts`
@@ -145,7 +154,8 @@ Oclif-based CLI distributed as `vayu-ui-cli` (binary: `vayu-ui`).
 9. Update `vayu-ui.config.json`
 
 ### Configuration
-- `vayu-ui.config.json` tracks `uiPath`, `cssFile`, `tokensFile`, and installed items
+
+- `vayu-ui.config.json` tracks `uiPath`, optional separate `paths`, import `aliases`, `packagePath`, `cssFile`, `tokensFile`, and installed items
 
 ---
 
@@ -180,7 +190,7 @@ Developer
             │
             ├─► Resolve "button" + "modal" from vayu-ui-registry
             ├─► Resolve transitive dependencies
-            ├─► Fetch raw files from GitHub
+            ├─► Read bundled source files
             ├─► Write to <uiDir>/components/
             ├─► npm install <deps>
             └─► Update vayu-ui.config.json
@@ -196,7 +206,7 @@ Add new component to packages/ui
     │
     ├─► MCP automatically sees it (consumes vayu-ui-registry)
     └─► CLI automatically sees it (consumes vayu-ui-registry)
-            └──► No CLI rebuild needed—fetches files dynamically from GitHub
+            └──► Rebuild registry and CLI so metadata and bundled source match
 ```
 
 ### Flow 4: MCP Installation via CLI
@@ -219,7 +229,7 @@ Developer
 
 1. **Registry is the single source of truth** — MCP and CLI both consume `vayu-ui-registry`
 2. **Metadata is externalized** — Props, a11y, examples, anti-patterns live in the registry, not inline
-3. **Dynamic file fetching** — CLI fetches source files from GitHub at runtime using registry paths
+3. **Release-bundled generation** — CLI copies sources bundled at build time; the registry source manifest is generated from imports
 4. **Zero-local-install MCP** — MCP server runs via `npx`, always latest
 5. **Compound component pattern** — Components are assembled from subcomponents via `Object.assign`
 

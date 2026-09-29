@@ -1,9 +1,9 @@
 import {Command, Flags, ux} from '@oclif/core'
 import {existsSync, readdirSync, readFileSync, statSync} from 'node:fs'
-import {extname, join, relative} from 'node:path'
+import {extname, join, relative, resolve, sep} from 'node:path'
 import {allEntries, type DoNotRule, type RegistryCapability} from 'vayu-ui-registry'
 
-import {resolveConfig} from '../utils/config.js'
+import {resolveConfig, sourceTarget} from '../utils/config.js'
 
 type Severity = 'error' | 'warn'
 
@@ -20,7 +20,7 @@ interface CapabilityCatalog {
   slugs: Record<RegistryCapability, string[]>
 }
 
-const SCANNED_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.jsx'])
+const SCANNED_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx'])
 const SKIP_DIRS = new Set([
   '.git',
   '.next',
@@ -35,7 +35,7 @@ const SKIP_DIRS = new Set([
 
 function findRule(slug: string, matcher: (rule: DoNotRule) => boolean): DoNotRule | undefined {
   const entry = allEntries.find((item) => item.slug === slug)
-  return entry?.doNot.find(matcher)
+  return entry?.doNot.find((rule) => matcher(rule))
 }
 
 function createCapabilityCatalog(): CapabilityCatalog {
@@ -173,13 +173,12 @@ function detectContentPrimitiveIntent(file: string, content: string, catalog: Ca
   if (!file.endsWith('.tsx') && !file.endsWith('.jsx')) return []
   const semanticTextPattern = /<h[1-6]\b|<p\b/m
   if (!semanticTextPattern.test(content)) return []
-  if (fileUsesCapability(content, 'content-primitive', catalog)) return []
 
   return [
     {
       file,
       message:
-        'Detected semantic text tags (`h1-h6` or `p`) without a registered Vayu content primitive. This usually means Typography was bypassed.',
+        'Detected semantic text tags (`h1-h6` or `p`) in application code. Use Typography for application headings and paragraphs.',
       rule: 'capability-content-primitive-required',
       severity: 'warn',
       suggestion: `${listCapabilitySuggestions('content-primitive', catalog)} If you intentionally keep raw HTML tags, document a one-line justification.`,
@@ -207,8 +206,7 @@ function detectSurfacePrimitiveIntent(file: string, content: string, catalog: Ca
 }
 
 function detectCustomAvatar(file: string, content: string, avatarRule: DoNotRule | undefined): Violation[] {
-  const classLikeAvatarRegex =
-    /className\s*=\s*["'`][^"'`]*rounded-full[^"'`]*(?:w-\d+|h-\d+)[^"'`]*bg-[^"'`]*["'`]/m
+  const classLikeAvatarRegex = /className\s*=\s*["'`][^"'`]*rounded-full[^"'`]*(?:w-\d+|h-\d+)[^"'`]*bg-[^"'`]*["'`]/m
   const hasAvatarImport = /import\s+.*\bAvatar\b.*from\s+['"][^'"]+['"]/m.test(content) || /<Avatar\b/m.test(content)
   if (!classLikeAvatarRegex.test(content) || hasAvatarImport) return []
 
@@ -288,14 +286,15 @@ function runDetectors(
 }
 
 export default class Check extends Command {
-  static summary = 'Detect anti-patterns and suggest Vayu replacements'
-
   static description =
     'Scans source files for common anti-patterns (raw localStorage, custom avatar/sidebar/dropdown patterns, framer-motion imports) and suggests Vayu component/hook replacements based on registry doNot guidance.'
-
-  static examples = ['<%= config.bin %> check', '<%= config.bin %> check --strict', '<%= config.bin %> check --path src']
-
+  static examples = [
+    '<%= config.bin %> check',
+    '<%= config.bin %> check --strict',
+    '<%= config.bin %> check --path src',
+  ]
   static flags = {
+    cwd: Flags.string({description: 'Target project or workspace directory'}),
     path: Flags.string({
       description: 'Directory to scan (relative to project root)',
       required: false,
@@ -306,10 +305,11 @@ export default class Check extends Command {
       required: false,
     }),
   }
+  static summary = 'Detect anti-patterns and suggest Vayu replacements'
 
   async run(): Promise<void> {
     const {flags} = await this.parse(Check)
-    const {config, root} = resolveConfig()
+    const {config, root} = resolveConfig(flags.cwd)
     const scanRoot = join(root, flags.path ?? '.')
 
     if (!existsSync(scanRoot)) {
@@ -326,12 +326,28 @@ export default class Check extends Command {
     const animationRule = findRule('animation', (rule) => rule.title.toLowerCase().includes('nesting animation'))
     const useLocalStorageInstalled = Boolean(config?.installed?.['use-local-storage'])
 
-    const files = collectSourceFiles(scanRoot)
+    const generatedDirs = config
+      ? ['components', 'hooks', 'utils'].map((kind) => resolve(root, sourceTarget(`${kind}/`, config)))
+      : []
+    const files = collectSourceFiles(scanRoot).filter(
+      (file) => !generatedDirs.some((dir) => file.startsWith(dir + sep) || file === dir),
+    )
     const violations: Violation[] = []
 
     for (const absPath of files) {
-      const content = readFileSync(absPath, 'utf8')
+      const content = readFileSync(absPath, 'utf8').replaceAll(/^\s*\/\/.*$/gm, '')
       const relativePath = toRelativePath(root, absPath)
+      if (/<(?:Typography\.H[1-6]|h[1-6])\b[^>]*className=["'][^"']*(?:text-[4-9]xl|text-\[[^\]]+\])/.test(content)) {
+        violations.push({
+          file: relativePath,
+          message: 'Large display heading detected. Confirm this is an intentional hero, not an application panel.',
+          rule: 'heading-scale',
+          severity: 'warn',
+          suggestion:
+            'Use Typography and the text-h1–text-h6 scale for application headings; reserve display sizes for an explicit hero design.',
+        })
+      }
+
       violations.push(
         ...runDetectors(relativePath, content, {
           animationRule,
@@ -371,7 +387,9 @@ export default class Check extends Command {
     }
 
     this.log('')
-    this.log(ux.colorize('dim', '  Tip: run MCP discovery before implementation (find_component -> get_component_summary).'))
+    this.log(
+      ux.colorize('dim', '  Tip: run MCP discovery before implementation (find_component -> get_component_summary).'),
+    )
     this.log('')
 
     if (flags.strict && violations.length > 0) {

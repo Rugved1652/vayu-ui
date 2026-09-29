@@ -1,7 +1,7 @@
 // index.ts
 // Public API
 
-export { default } from './Table';
+export { default, default as Table } from './Table';
 
 export {
   TableBody,

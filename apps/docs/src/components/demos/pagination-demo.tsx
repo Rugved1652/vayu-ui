@@ -1,6 +1,6 @@
 'use client';
 import { Pagination, Typography, Divider } from 'vayu-ui';
-import { useState, useEffect, Suspense } from 'react';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 // Helper function to build page URLs for the demo
@@ -8,21 +8,13 @@ const buildPageUrl = (page: number) => `?page=${page}`;
 
 function PaginationDemoContent() {
   const searchParams = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
   const totalItems = 450;
   const totalPages = Math.ceil(totalItems / pageSize);
 
-  // Read current page from URL query params
-  useEffect(() => {
-    const page = searchParams.get('page');
-    if (page) {
-      const parsedPage = parseInt(page, 10);
-      if (!isNaN(parsedPage) && parsedPage > 0 && parsedPage <= totalPages) {
-        setCurrentPage(parsedPage);
-      }
-    }
-  }, [searchParams, totalPages]);
+  const parsedPage = Number.parseInt(searchParams.get('page') ?? '1', 10);
+  const currentPage =
+    Number.isFinite(parsedPage) && parsedPage > 0 && parsedPage <= totalPages ? parsedPage : 1;
 
   return (
     <div className="w-full max-w-2xl not-prose space-y-10">

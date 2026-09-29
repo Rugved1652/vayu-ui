@@ -1,6 +1,6 @@
 # Vayu UI
 
-Accessible, TypeScript-first React component library with Tailwind CSS v4 design tokens. 60+ components, 34 hooks, a CLI for scaffolding, and an MCP server for AI tool integration.
+Accessible, TypeScript-first React component library with Tailwind CSS v4 design tokens. 59 components, 34 hooks, a CLI for scaffolding, and an MCP server for AI tool integration.
 
 [![npm version](https://img.shields.io/npm/v/vayu-ui-cli.svg)](https://www.npmjs.com/package/vayu-ui-cli)
 [![license](https://img.shields.io/github/license/Rugved1652/vayu-ui.svg)](https://github.com/Rugved1652/vayu-ui/blob/main/LICENSE)
@@ -8,7 +8,7 @@ Accessible, TypeScript-first React component library with Tailwind CSS v4 design
 
 ## Features
 
-- **60+ components** — Inputs, overlays, navigation, data display, animation, media, and more
+- **59 components** — Inputs, overlays, navigation, data display, animation, media, and more
 - **34 hooks** — State management, DOM, sensors, timing, side effects
 - **Tailwind v4 tokens** — Semantic design tokens for colors, radii, shadows, and layers
 - **Compound components** — Composable APIs with namespaced subcomponents
@@ -129,7 +129,7 @@ npx vayu-ui-cli update <slug>           # Update to the latest version
 npx vayu-ui-cli install-mcp --tool claude  # Configure MCP for AI tools
 ```
 
-Supported MCP tools: `claude`, `cursor`, `vscode`, `windsurf`, `antigravity`
+Supported MCP tools: `claude`, `cursor`, `opencode`, `vscode`, `codex`
 
 ## MCP Server
 
@@ -171,3 +171,27 @@ Full documentation with interactive examples is available in the docs app. Run `
 ## License
 
 MIT &copy; Rugved Patel
+
+## Stable release workflow
+
+```bash
+# New standalone or shared-workspace project
+npx vayu-ui-cli@latest create my-app --framework vite
+npx vayu-ui-cli@latest create my-workspace --framework next --turbo
+
+# Install the full registry or target another workspace
+npx vayu-ui-cli@latest add --all --yes
+npx vayu-ui-cli@latest add text-input --cwd apps/web --yes
+
+# Agent skills (select agents interactively)
+npx skills add Rugved1652/vayu-ui
+npx skills add Rugved1652/vayu-ui --skill taste-design
+```
+
+The CLI bundles source files with each release and uses `vayu-ui.config.json` to resolve their destinations. Optional `paths.components`, `paths.hooks`, and `paths.utils` support separate folders; `packagePath` selects a shared package for dependencies. Relative imports are rewritten to match the layout. `--skip-install` still records all dependencies for a later install.
+
+MCP setup supports Claude Code, Cursor, OpenCode, VS Code, and Codex. Source import guidance accepts your configuration and target filename. Typography and Taste Design guidance keep application headings proportionate and reuse Vayu text primitives.
+
+See [migration notes](CHANGELOG.md) for close-button placement, Typography sizing, and framework-neutral links. Before releasing, run `npm run test:release` and `npm run build`; source graph checks and MCP scaffold compilation are included in release validation.
+
+See [release changes and migration notes](./CHANGELOG.md) and [validation coverage](./RELEASE_VALIDATION.md) for the 1.1.0 release.

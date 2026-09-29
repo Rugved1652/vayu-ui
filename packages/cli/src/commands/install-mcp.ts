@@ -1,13 +1,12 @@
 import {Command, Flags, ux} from '@oclif/core'
-import {TOOL_DEFINITIONS, ALL_TOOL_IDS, writeMcpConfig, getConfigPath, type ToolId} from '../utils/mcp-config.js'
-import {confirm, findProjectRoot} from '../utils/project.js'
+
+import {resolveConfig} from '../utils/config.js'
+import {ALL_TOOL_IDS, getConfigPath, TOOL_DEFINITIONS, type ToolId, writeMcpConfig} from '../utils/mcp-config.js'
+import {confirm} from '../utils/project.js'
 
 export default class InstallMcp extends Command {
-  static summary = 'Configure the Vayu UI MCP server for AI coding tools'
-
   static description =
     'Configures the Vayu UI MCP server (17 tools for component discovery, props, variants, scaffolding, etc.) for your AI coding tools. No local installation needed — the server runs via npx.'
-
   static examples = [
     '<%= config.bin %> install-mcp',
     '<%= config.bin %> install-mcp --tool claude',
@@ -15,27 +14,24 @@ export default class InstallMcp extends Command {
     '<%= config.bin %> install-mcp --dry-run',
     '<%= config.bin %> install-mcp --tool claude --force',
   ]
-
   static flags = {
-    tool: Flags.string({
-      description:
-        'Comma-separated AI tools: claude, cursor, opencode. For Codex, Antigravity, and Windsurf, see manual setup docs.',
-    }),
+    all: Flags.boolean({default: false, description: 'Configure every supported project client', exclusive: ['tool']}),
+    cwd: Flags.string({description: 'Target project or workspace directory'}),
     'dry-run': Flags.boolean({
-      description: 'Preview changes without writing files',
       default: false,
+      description: 'Preview changes without writing files',
     }),
     force: Flags.boolean({
-      description: 'Skip prompts and overwrite existing config entries',
       default: false,
+      description: 'Skip prompts and overwrite existing config entries',
+    }),
+    tool: Flags.string({
+      description: 'Comma-separated AI tools: claude, cursor, opencode, vscode, codex.',
     }),
   }
+  static summary = 'Configure the Vayu UI MCP server for AI coding tools'
 
-  async installToDir(
-    targetDir: string,
-    toolIds: ToolId[],
-    options: {dryRun: boolean; force: boolean},
-  ): Promise<void> {
+  async installToDir(targetDir: string, toolIds: ToolId[], options: {dryRun: boolean; force: boolean}): Promise<void> {
     // Header
     this.log('')
     this.log(ux.colorize('bold', '  Vayu UI MCP Setup'))
@@ -55,7 +51,9 @@ export default class InstallMcp extends Command {
     this.log('')
 
     // Confirm
-    if (!options.force && !options.dryRun) {
+    if (!options.force && !options.dryRun && process.stdin.isTTY) {
+      // Prompts must be shown one at a time.
+
       const ok = await confirm('  Apply changes?')
       if (!ok) {
         this.log(ux.colorize('dim', '  Aborted.'))
@@ -77,11 +75,15 @@ export default class InstallMcp extends Command {
           this.log(`    ${ux.colorize('yellow', 'already configured')} ${toolDef.configFileName}`)
         }
       }
+
       this.log('')
       this.log(ux.colorize('dim', '  Dry run — no files were written.'))
       this.log('')
       return
     }
+
+    // Validate all selected configs before writing any of them.
+    for (const id of toolIds) writeMcpConfig(TOOL_DEFINITIONS[id], targetDir, {dryRun: true, force: options.force})
 
     // Write configs
     const results = []
@@ -102,14 +104,27 @@ export default class InstallMcp extends Command {
     for (const result of results) {
       const toolDef = TOOL_DEFINITIONS[result.toolId]
       const relPath = toolDef.configFileName
-      if (result.action === 'created') {
-        this.log(`    ${ux.colorize('green', 'created')}  ${toolDef.name.padEnd(16)} ${relPath}`)
-      } else if (result.action === 'updated') {
-        this.log(`    ${ux.colorize('green', 'updated')}  ${toolDef.name.padEnd(16)} ${relPath}`)
-      } else if (result.action === 'skipped-exists') {
-        this.log(
-          `    ${ux.colorize('yellow', 'exists')}    ${toolDef.name.padEnd(16)} ${relPath} ${ux.colorize('dim', '(use --force to overwrite)')}`,
-        )
+      switch (result.action) {
+        case 'created': {
+          this.log(`    ${ux.colorize('green', 'created')}  ${toolDef.name.padEnd(16)} ${relPath}`)
+
+          break
+        }
+
+        case 'skipped-exists': {
+          this.log(
+            `    ${ux.colorize('yellow', 'exists')}    ${toolDef.name.padEnd(16)} ${relPath} ${ux.colorize('dim', '(use --force to overwrite)')}`,
+          )
+
+          break
+        }
+
+        case 'updated': {
+          this.log(`    ${ux.colorize('green', 'updated')}  ${toolDef.name.padEnd(16)} ${relPath}`)
+
+          break
+        }
+        // No default
       }
     }
 
@@ -120,7 +135,7 @@ export default class InstallMcp extends Command {
 
   async run(): Promise<void> {
     const {flags} = await this.parse(InstallMcp)
-    const targetDir = findProjectRoot(process.cwd())
+    const targetDir = resolveConfig(flags.cwd).root
 
     // Resolve which tools to configure
     const toolIds = await this.resolveToolIds(flags)
@@ -132,7 +147,17 @@ export default class InstallMcp extends Command {
     await this.installToDir(targetDir, toolIds, {dryRun: flags['dry-run'], force: flags.force})
   }
 
-  private async resolveToolIds(flags: {tool?: string; force: boolean}): Promise<ToolId[]> {
+  private printPlan(toolIds: ToolId[], targetDir: string): void {
+    this.log('  Configuring for (project):')
+    this.log('')
+    for (const id of toolIds) {
+      const def = TOOL_DEFINITIONS[id]
+      const configPath = getConfigPath(id, targetDir)
+      this.log(`    ${def.name.padEnd(16)} ${configPath}`)
+    }
+  }
+
+  private async resolveToolIds(flags: {all: boolean; force: boolean; tool?: string}): Promise<ToolId[]> {
     if (flags.tool) {
       const ids = flags.tool.split(',').map((s) => s.trim().toLowerCase() as ToolId)
       for (const id of ids) {
@@ -140,10 +165,11 @@ export default class InstallMcp extends Command {
           this.error(`Unknown tool "${id}". Valid options: ${ALL_TOOL_IDS.join(', ')}`)
         }
       }
-      return ids
+
+      return [...new Set(ids)]
     }
 
-    if (flags.force) {
+    if (flags.all || flags.force || !process.stdin.isTTY) {
       return [...ALL_TOOL_IDS]
     }
 
@@ -153,19 +179,12 @@ export default class InstallMcp extends Command {
     this.log('')
     for (const id of ALL_TOOL_IDS) {
       const def = TOOL_DEFINITIONS[id]
+      // Prompts must be shown one at a time.
+      // eslint-disable-next-line no-await-in-loop
       const ok = await confirm(`    ${def.name}?`)
       if (ok) selected.push(id)
     }
-    return selected
-  }
 
-  private printPlan(toolIds: ToolId[], targetDir: string): void {
-    this.log('  Configuring for (project):')
-    this.log('')
-    for (const id of toolIds) {
-      const def = TOOL_DEFINITIONS[id]
-      const configPath = getConfigPath(id, targetDir)
-      this.log(`    ${def.name.padEnd(16)} ${configPath}`)
-    }
+    return selected
   }
 }

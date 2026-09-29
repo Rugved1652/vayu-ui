@@ -10,7 +10,7 @@ import { useSelect } from './Select';
 import type { SelectContentProps } from './types';
 
 export const SelectContent: React.FC<SelectContentProps> = ({ children, className }) => {
-  const { open, triggerRef, contentRef } = useSelect();
+  const { open, triggerRef, contentRef, id } = useSelect();
 
   useLayoutEffect(() => {
     if (!open || !triggerRef.current || !contentRef.current) return;
@@ -65,6 +65,7 @@ export const SelectContent: React.FC<SelectContentProps> = ({ children, classNam
   return createPortal(
     <div
       ref={contentRef}
+      id={`${id}-listbox`}
       role="listbox"
       className={clsx(
         'fixed z-50 overflow-hidden rounded-overlay border border-border bg-elevated shadow-elevated animate-in fade-in-0 zoom-in-95',

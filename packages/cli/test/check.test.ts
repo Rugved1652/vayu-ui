@@ -1,12 +1,12 @@
 import {strict as assert} from 'node:assert'
 import {execFileSync} from 'node:child_process'
-import {mkdtempSync, mkdirSync, rmSync, writeFileSync} from 'node:fs'
+import {mkdirSync, mkdtempSync, rmSync, writeFileSync} from 'node:fs'
 import {tmpdir} from 'node:os'
 import {dirname, join} from 'node:path'
 import {fileURLToPath} from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const CLI_DEV_BIN = join(__dirname, '..', 'bin', 'dev.js')
+const CLI_DEV_BIN = join(__dirname, '..', 'bin', 'run.js')
 
 function runCheck(args: string[], cwd: string): {error: Error | null; stderr: string; stdout: string} {
   try {
@@ -40,6 +40,7 @@ describe('check command', () => {
       writeFileSync(
         join(projectDir, 'src', 'clean.tsx'),
         `import { Avatar } from 'vayu-ui'
+// Example only: localStorage.getItem('token')
 
 export function CleanCard() {
   return (
@@ -55,7 +56,7 @@ export function CleanCard() {
       assert.equal(result.error, null, `Expected strict check to pass, got: ${result.stderr}`)
       assert.ok(result.stdout.includes('No compliance issues found'), 'Should print clean report')
     } finally {
-      rmSync(projectDir, {recursive: true, force: true})
+      rmSync(projectDir, {force: true, recursive: true})
     }
   })
 
@@ -84,7 +85,7 @@ export function BadCard() {
       assert.ok(output.includes('prefer-use-local-storage'), 'Should report localStorage rule')
       assert.ok(output.includes('animation-component-preferred'), 'Should report framer-motion rule')
     } finally {
-      rmSync(projectDir, {recursive: true, force: true})
+      rmSync(projectDir, {force: true, recursive: true})
     }
   })
 })

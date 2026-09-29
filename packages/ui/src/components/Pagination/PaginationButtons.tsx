@@ -2,7 +2,6 @@
 // UI: full page navigation with first/prev/pages/next/last
 
 import React from 'react';
-import Link from 'next/link';
 import {
   ChevronLeft,
   ChevronRight,
@@ -80,9 +79,9 @@ export const PaginationButtons: React.FC<PaginationButtonsProps> = ({
     }
 
     return (
-      <Link key={key} href={hrefBuilder(page!)} className={classes} aria-label={ariaLabel}>
+      <a key={key} href={hrefBuilder(page!)} className={classes} aria-label={ariaLabel}>
         {content}
-      </Link>
+      </a>
     );
   };
 

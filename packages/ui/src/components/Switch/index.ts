@@ -1,5 +1,5 @@
 // index.ts
 // Public API
 
-export { default } from './Switch';
+export { default, default as Switch } from './Switch';
 export type { SwitchProps } from './types';

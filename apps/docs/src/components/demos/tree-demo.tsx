@@ -49,6 +49,19 @@ const fileTree: TreeNode[] = [
   { id: 'README.md', label: 'README.md', disabled: true },
 ];
 
+function filterTree(nodes: TreeNode[], q: string): TreeNode[] {
+  if (!q) return nodes;
+  return nodes
+    .map((node) => {
+      const childMatch = node.children ? filterTree(node.children, q) : [];
+      if (node.label.toLowerCase().includes(q.toLowerCase()) || childMatch.length > 0) {
+        return { ...node, children: childMatch.length ? childMatch : node.children };
+      }
+      return null;
+    })
+    .filter(Boolean) as TreeNode[];
+}
+
 export default function TreeDemo() {
   const [search, setSearch] = useState('');
   const [expandedKeys, setExpandedKeys] = useState<(string | number)[]>(['src', 'components']);
@@ -70,19 +83,6 @@ export default function TreeDemo() {
 
   const handleCollapseAll = useCallback(() => {
     setExpandedKeys([]);
-  }, []);
-
-  const filterTree = useCallback((nodes: TreeNode[], q: string): TreeNode[] => {
-    if (!q) return nodes;
-    return nodes
-      .map((node) => {
-        const childMatch = node.children ? filterTree(node.children, q) : [];
-        if (node.label.toLowerCase().includes(q.toLowerCase()) || childMatch.length > 0) {
-          return { ...node, children: childMatch.length ? childMatch : node.children };
-        }
-        return null;
-      })
-      .filter(Boolean) as TreeNode[];
   }, []);
 
   const filtered = filterTree(fileTree, search);

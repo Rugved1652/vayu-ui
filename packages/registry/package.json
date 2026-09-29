@@ -1,6 +1,6 @@
 {
   "name": "vayu-ui-registry",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Shared component registry for Vayu UI CLI and MCP Server",
   "author": "Rugved Patel",
   "license": "MIT",
@@ -16,7 +16,8 @@
   "type": "module",
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "prepack": "npm run build"
   },
   "devDependencies": {
     "tsup": "^8.5.1",

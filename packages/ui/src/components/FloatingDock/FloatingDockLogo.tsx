@@ -2,12 +2,11 @@
 // UI: brand logo item
 
 import type { HTMLAttributes, ElementType } from 'react';
-import Link from 'next/link';
 import { cn } from '../../utils';
 import type { DockLogoProps, InjectedDockProps } from './types';
 
 const DockLogo = (allProps: DockLogoProps & InjectedDockProps) => {
-  const { href, children, className, linkComponent: LinkComponent = Link, ...props } = allProps;
+  const { href, children, className, linkComponent: LinkComponent = 'a', ...props } = allProps;
 
   const logoClasses = cn(
     'px-4 py-2 text-xl font-bold tracking-wider font-mono',

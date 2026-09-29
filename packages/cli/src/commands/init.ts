@@ -1,5 +1,6 @@
 import {Command, Flags, ux} from '@oclif/core'
 
+import {resolveConfig} from '../utils/config.js'
 import {runInit} from '../utils/init-runner.js'
 
 export default class Init extends Command {
@@ -14,6 +15,7 @@ export default class Init extends Command {
       description: 'Custom path for the main CSS file',
       required: false,
     }),
+    cwd: Flags.string({description: 'Target project or workspace directory'}),
     force: Flags.boolean({
       default: false,
       description: 'Skip all prompts and use defaults',
@@ -46,7 +48,7 @@ export default class Init extends Command {
       force: flags.force,
       log: (m) => this.log(m),
       merge: flags.merge,
-      root: process.cwd(),
+      root: resolveConfig(flags.cwd).root,
       skipTailwind: flags['skip-tailwind'],
       uiDir: flags.path,
     })

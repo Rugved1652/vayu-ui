@@ -9,17 +9,17 @@ Use Vayu UI's semantic tokens and component APIs before writing custom CSS. Firs
 
 ## Where CSS Changes Belong
 
-| Change Type | Change Here | Do Not |
-| --- | --- | --- |
-| Brand/color/theme changes used across app | `global.css`: update `:root`, `:root.dark`, and `@theme` token mapping | Scatter `text-blue-*`, `bg-[#...]`, or per-use overrides |
-| Token shipped by Vayu CLI/template | Also sync `packages/cli/src/templates/tokens.ts` | Update docs CSS only |
-| Docs preview token behavior | `apps/docs/src/app/global.css` | Patch random demo classNames |
-| New semantic color/radius/shadow/blur/font/animation token | `global.css` `@theme`; add light/dark values when color-based | Hide it inside component class strings |
-| New keyframe/animation | `animations.css` plus `@theme --animate-*` mapping | Inline ad hoc animation CSS |
-| New reusable visual kind for any component | Add a typed variant/size/state to that component's primitive API and variant map/classes | Write the recurring styling in every usage `className` |
-| Existing component style should change everywhere | Update the component implementation in `ui/components/` or `packages/ui/src/components/*` | Override it at page/container/call-site level |
-| One-off layout/spacing tweak for one screen | Usage `className`, using tokens/utilities | Add global token or component variant for a single use |
-| Repeated feature-specific composition | Extract container/presentational component | Keep growing page-level class strings |
+| Change Type                                                | Change Here                                                                               | Do Not                                                   |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| Brand/color/theme changes used across app                  | `global.css`: update `:root`, `:root.dark`, and `@theme` token mapping                    | Scatter `text-blue-*`, `bg-[#...]`, or per-use overrides |
+| Token shipped by Vayu CLI/template                         | Also sync `packages/cli/src/templates/tokens.ts`                                          | Update docs CSS only                                     |
+| Docs preview token behavior                                | `apps/docs/src/app/global.css`                                                            | Patch random demo classNames                             |
+| New semantic color/radius/shadow/blur/font/animation token | `global.css` `@theme`; add light/dark values when color-based                             | Hide it inside component class strings                   |
+| New keyframe/animation                                     | `animations.css` plus `@theme --animate-*` mapping                                        | Inline ad hoc animation CSS                              |
+| New reusable visual kind for any component                 | Add a typed variant/size/state to that component's primitive API and variant map/classes  | Write the recurring styling in every usage `className`   |
+| Existing component style should change everywhere          | Update the component implementation in `ui/components/` or `packages/ui/src/components/*` | Override it at page/container/call-site level            |
+| One-off layout/spacing tweak for one screen                | Usage `className`, using tokens/utilities                                                 | Add global token or component variant for a single use   |
+| Repeated feature-specific composition                      | Extract container/presentational component                                                | Keep growing page-level class strings                    |
 
 Default rule: if a style appears in more than one place, or represents a named design concept, promote it to a token, variant, or component. If it is truly one place only, use local `className` with existing tokens.
 
@@ -33,25 +33,25 @@ Default rule: if a style appears in more than one place, or represents a named d
 
 ## Semantic Layers
 
-| Layer | Use For | Classes |
-| --- | --- | --- |
-| Canvas | App/page background | `bg-canvas text-canvas-content` |
-| Surface | Cards, panels, forms, tables, list items, inputs | `bg-surface text-surface-content` |
-| Sidebar | Side nav, drawers, rails, mobile menus | `bg-sidebar text-sidebar-content` |
+| Layer    | Use For                                              | Classes                             |
+| -------- | ---------------------------------------------------- | ----------------------------------- |
+| Canvas   | App/page background                                  | `bg-canvas text-canvas-content`     |
+| Surface  | Cards, panels, forms, tables, list items, inputs     | `bg-surface text-surface-content`   |
+| Sidebar  | Side nav, drawers, rails, mobile menus               | `bg-sidebar text-sidebar-content`   |
 | Elevated | Modals, popovers, dropdowns, tooltips, notifications | `bg-elevated text-elevated-content` |
 
 Stack from canvas -> surface/sidebar -> elevated. Do not fake layer separation with random grays or opacity hacks.
 
 ## Semantic Effects
 
-| Token Family | Use |
-| --- | --- |
-| `rounded-control`, `rounded-surface`, `rounded-overlay`, `rounded-full` | Buttons/inputs, cards/panels, modals/popovers, pills/avatars |
+| Token Family                                                                          | Use                                                                   |
+| ------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `rounded-control`, `rounded-surface`, `rounded-overlay`, `rounded-full`               | Buttons/inputs, cards/panels, modals/popovers, pills/avatars          |
 | `shadow-control`, `shadow-surface`, `shadow-elevated`, `shadow-focus`, `shadow-inner` | Interactive lift, surface separation, overlays, focus, pressed states |
-| `drop-shadow-subtle`, `drop-shadow-elevated` | Icons/illustrations |
-| `text-shadow-subtle`, `text-shadow-surface`, `text-shadow-overlay` | Text over images/backgrounds |
-| `blur-control`, `blur-surface`, `blur-overlay` | Subtle effects, glass surfaces, modal backdrops |
-| `transition-fast`, `transition-medium`, `transition-slow`, `animate-*` | Motion timing and named animations |
+| `drop-shadow-subtle`, `drop-shadow-elevated`                                          | Icons/illustrations                                                   |
+| `text-shadow-subtle`, `text-shadow-surface`, `text-shadow-overlay`                    | Text over images/backgrounds                                          |
+| `blur-control`, `blur-surface`, `blur-overlay`                                        | Subtle effects, glass surfaces, modal backdrops                       |
+| `transition-fast`, `transition-medium`, `transition-slow`, `animate-*`                | Motion timing and named animations                                    |
 
 Avoid nested blur layers. Respect reduced motion; global CSS already disables animations under `prefers-reduced-motion`.
 
@@ -83,3 +83,11 @@ Avoid nested blur layers. Respect reduced motion; global CSS already disables an
 - Changing docs `global.css` but forgetting CLI token template for shipped tokens.
 - Mixing layer tokens incorrectly, such as elevated content on surface background.
 - Custom shadows/radius scales that bypass `@theme`.
+
+## Typography and proportion
+
+Use `Typography.H1`–`H6`, `Typography.P`, `Typography.Label`, and `Typography.Link` for application headings and text. Keep `Modal.Title`, `Drawer.Title`, and other compound titles for their accessible relationships. Native elements inside primitive implementations are appropriate; avoid replacing application Typography with custom styled heading/paragraph wrappers.
+
+Use semantic heading levels with the default `text-h1`–`text-h6` tokens (30/24/20/18/16/14px at the default base). Page headings should not inherit marketing hero sizes. Card and overlay titles usually need 16–20px. Large display type is an explicit design decision, not an automatic responsive enlargement. Read the optional `taste-design` skill when composing or reviewing a whole screen.
+
+Read `vayu-ui.config.json` before installation. Pass `--cwd` for the intended app or use a workspace-root config with `packagePath` and explicit `paths`. Request `get_install_guide` with those paths/aliases and use imports for copied sources. Use package imports only when the `vayu-ui` package is installed.

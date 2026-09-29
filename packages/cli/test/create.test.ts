@@ -6,7 +6,7 @@ import {dirname, join} from 'node:path'
 import {fileURLToPath} from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const CLI_DEV_BIN = join(__dirname, '..', 'bin', 'dev.js')
+const CLI_DEV_BIN = join(__dirname, '..', 'bin', 'run.js')
 
 function runCreate(args: string[], cwd: string): {error: Error | null; stderr: string; stdout: string} {
   try {
@@ -36,7 +36,7 @@ describe('create command', () => {
 
   after(() => {
     for (const dir of tmpDirs) {
-      rmSync(dir, {recursive: true, force: true})
+      rmSync(dir, {force: true, recursive: true})
     }
   })
 

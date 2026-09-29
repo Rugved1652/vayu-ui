@@ -112,7 +112,8 @@ export const selectEntry: ComponentRegistryEntry = {
           type: 'boolean',
           required: false,
           defaultValue: 'false',
-          description: 'When true and onSearch is active, shows a search icon instead of the chevron',
+          description:
+            'When true and onSearch is active, shows a search icon instead of the chevron',
         },
         {
           name: 'size',
@@ -132,7 +133,8 @@ export const selectEntry: ComponentRegistryEntry = {
           name: 'children',
           type: 'React.ReactNode',
           required: false,
-          description: 'Content to render inside the dropdown (typically Select.List, Select.Item, Select.Loading, etc.)',
+          description:
+            'Content to render inside the dropdown (typically Select.List, Select.Item, Select.Loading, etc.)',
         },
         {
           name: 'className',
@@ -197,7 +199,8 @@ export const selectEntry: ComponentRegistryEntry = {
     {
       name: 'NotFound',
       fileName: 'SelectStates.tsx',
-      description: 'Renders a "No results found" message when the filter or search yields no options',
+      description:
+        'Renders a "No results found" message when the filter or search yields no options',
       props: [
         {
           name: 'children',
@@ -223,7 +226,8 @@ export const selectEntry: ComponentRegistryEntry = {
           name: 'children',
           type: 'React.ReactNode',
           required: false,
-          description: 'Custom hint message; defaults to a dynamic message based on minSearchLength',
+          description:
+            'Custom hint message; defaults to a dynamic message based on minSearchLength',
         },
         {
           name: 'className',
@@ -243,7 +247,8 @@ export const selectEntry: ComponentRegistryEntry = {
           name: 'children',
           type: 'React.ReactNode',
           required: false,
-          description: 'Custom label for the create button; defaults to "Create option \"{search}\""',
+          description:
+            'Custom label for the create button; defaults to "Create option \"{search}\""',
         },
         {
           name: 'className',
@@ -386,7 +391,16 @@ export const selectEntry: ComponentRegistryEntry = {
       type: "'sm' | 'md' | 'lg'",
       required: false,
       defaultValue: "'md'",
-      description: 'Size of the trigger input and chips',
+      description:
+        'Matches TextInput heights: sm 36px, md 44px, lg 52px at the default root font size. Multi-select grows when chips wrap.',
+    },
+    {
+      name: 'disabled',
+      type: 'boolean',
+      required: false,
+      defaultValue: 'false',
+      description:
+        'Disables the entire field, including opening, search, selection, and chip removal. Uses the same muted appearance as TextInput.',
     },
     {
       name: 'className',
@@ -405,7 +419,8 @@ export const selectEntry: ComponentRegistryEntry = {
       name: 'onSearch',
       type: '(searchValue: string) => Promise<OptionData[]>',
       required: false,
-      description: 'Async search handler. When provided, the component fetches options on input change.',
+      description:
+        'Async search handler. When provided, the component fetches options on input change.',
     },
     {
       name: 'searchDebounce',
@@ -473,6 +488,14 @@ export const selectEntry: ComponentRegistryEntry = {
   // ── States ────────────────────────────────────────────
   states: [
     {
+      name: 'disabled',
+      prop: 'disabled',
+      isBoolean: true,
+      defaultValue: 'false',
+      description:
+        'Muted background and opacity, neutral border unless validation is set, no hover highlight, and no field interaction. Closes an open dropdown.',
+    },
+    {
       name: 'open',
       prop: 'open',
       isBoolean: true,
@@ -535,7 +558,8 @@ export const selectEntry: ComponentRegistryEntry = {
     {
       name: 'onClick (Trigger)',
       signature: '(event: React.MouseEvent<HTMLDivElement>) => void',
-      description: 'Clicking the trigger focuses the search input and toggles the dropdown open state.',
+      description:
+        'Clicking the trigger focuses the search input and toggles the dropdown open state.',
     },
     {
       name: 'onChange (search input)',
@@ -556,7 +580,8 @@ export const selectEntry: ComponentRegistryEntry = {
       },
       {
         name: 'role="option"',
-        description: 'Applied to each Select.Item and Select.CreateButton for listbox option semantics.',
+        description:
+          'Applied to each Select.Item and Select.CreateButton for listbox option semantics.',
         managedByComponent: true,
       },
       {
@@ -581,12 +606,14 @@ export const selectEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-disabled',
-        description: 'Set on options and the create button when they are disabled.',
+        description:
+          'Set on the trigger wrapper when the entire field is disabled. The search input and chip removal buttons are natively disabled.',
         managedByComponent: true,
       },
       {
         name: 'aria-label',
-        description: 'Provided on the root label element linking it to the search input via htmlFor.',
+        description:
+          'Provided on the root label element linking it to the search input via htmlFor.',
         managedByComponent: true,
       },
     ],
@@ -603,7 +630,8 @@ export const selectEntry: ComponentRegistryEntry = {
       },
       {
         key: 'Enter',
-        behavior: 'From the trigger: opens the dropdown. From an option: selects/deselects the option.',
+        behavior:
+          'From the trigger: opens the dropdown. From an option: selects/deselects the option.',
       },
       {
         key: 'Space',
@@ -635,18 +663,15 @@ export const selectEntry: ComponentRegistryEntry = {
   registryDependencies: [
     {
       slug: 'use-lock-body-scroll',
-      reason:
-        'Select uses useLockBodyScroll to prevent body scrolling when the dropdown is open',
+      reason: 'Select uses useLockBodyScroll to prevent body scrolling when the dropdown is open',
     },
     {
       slug: 'use-on-click-outside',
-      reason:
-        'Select uses useOnClickOutside to close the dropdown when clicking outside',
+      reason: 'Select uses useOnClickOutside to close the dropdown when clicking outside',
     },
     {
       slug: 'use-key-press',
-      reason:
-        'Select uses useKeyPress for keyboard navigation (ArrowDown, ArrowUp, Enter, Escape)',
+      reason: 'Select uses useKeyPress for keyboard navigation (ArrowDown, ArrowUp, Enter, Escape)',
     },
   ],
   reactPeerDependency: '>=18.0.0',

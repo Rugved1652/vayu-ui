@@ -246,7 +246,7 @@ export default function MarqueeDemo() {
               </Typography.P>
               <Typography.P variant="secondary">
                 <span className="font-semibold text-surface-content">4.1.2 (Level A):</span> Proper
-                ARIA labels (role="region", aria-roledescription, aria-label)
+                ARIA labels (role=&quot;region&quot;, aria-roledescription, aria-label)
               </Typography.P>
             </div>
           </div>

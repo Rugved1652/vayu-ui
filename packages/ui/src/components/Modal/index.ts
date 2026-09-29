@@ -46,3 +46,5 @@ export {
 };
 export { Modal as default };
 export { Modal };
+
+export type { ModalHeaderProps } from './ModalHeader';

@@ -12,7 +12,7 @@ import type { PasswordInputProps } from './types';
 
 const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>((props, ref) => {
   const [showPassword, setShowPassword] = useState(false);
-  const { inputType, size } = useTextInput();
+  const { inputType, size, isDisabled } = useTextInput();
 
   useEffect(() => {
     if (inputType !== 'password') {
@@ -28,9 +28,10 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>((props, r
       <Input ref={ref} {...props} type={showPassword ? 'text' : 'password'} />
       <button
         type="button"
+        disabled={isDisabled || props.disabled}
         onClick={() => setShowPassword(!showPassword)}
         className={cn(
-          'text-muted-content hover:text-surface-content transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded',
+          'shrink-0 text-muted-content enabled:hover:text-surface-content disabled:cursor-not-allowed transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded',
           btnPadding,
         )}
         aria-label={showPassword ? 'Hide password' : 'Show password'}

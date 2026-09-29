@@ -148,3 +148,17 @@ No meaningful props. Inherits `HTMLParagraphElement` attributes.
 | Prop      | Type      | Description                                                        |
 | :-------- | :-------- | :----------------------------------------------------------------- |
 | `asChild` | `boolean` | Change the default rendered element for the one passed as a child. |
+
+## Header close button
+
+`Modal.Header` includes an accessible X control in its flex row. Long titles wrap in the flexible text area without overlapping it. Use `showClose={false}` when supplying a separate close action, and `closeLabel` to localize the default button's name. An existing direct `Modal.Close` child replaces the default control.
+
+```tsx
+<Modal.Content>
+  <Modal.Header closeLabel="Close dialog">
+    <Modal.Title>Account settings</Modal.Title>
+    <Modal.Description>Manage your profile.</Modal.Description>
+  </Modal.Header>
+  <Modal.Body>...</Modal.Body>
+</Modal.Content>
+```

@@ -10,7 +10,7 @@
     "library"
   ],
   "description": "CLI for adding Vayu UI components and hooks to your React project",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "author": "Rugved Patel",
   "bin": {
     "vayu-ui": "./bin/run.js"
@@ -19,7 +19,9 @@
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
-    "vayu-ui-registry": "*"
+    "jsonc-parser": "^3.3.1",
+    "smol-toml": "^1.9.0",
+    "vayu-ui-registry": "1.1.0"
   },
   "devDependencies": {
     "@eslint/compat": "^1",
@@ -61,20 +63,18 @@
       "-h"
     ],
     "plugins": [
-      "@oclif/plugin-help",
-      "@oclif/plugin-plugins"
+      "@oclif/plugin-help"
     ],
     "topicSeparator": " "
   },
   "repository": "https://github.com/Rugved1652/vayu-ui/tree/main/packages/cli",
   "scripts": {
-    "build": "tsup && shx cp -r src/templates dist/",
-    "check": "node ./bin/dev.js check --strict --path src/commands",
+    "build": "tsup && node ../../scripts/package-cli.mjs",
+    "check": "tsc --noEmit",
     "lint": "eslint",
     "postpack": "shx rm -f oclif.manifest.json",
-    "posttest": "npm run lint",
-    "prepack": "oclif manifest && oclif readme",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "prepack": "npm run build && oclif manifest",
+    "test": "node --import tsx ../../node_modules/mocha/bin/mocha.js --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
   "types": "dist/index.d.ts"

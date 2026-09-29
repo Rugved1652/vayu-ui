@@ -24,7 +24,7 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
           </div>
           <h3 className="text-lg font-semibold">Scroll Locked</h3>
           <p className="text-sm text-muted-foreground">
-            Try scrolling the page background. You shouldn't be able to. This modal uses{' '}
+            Try scrolling the page background. You shouldn&apos;t be able to. This modal uses{' '}
             <code>useLockBodyScroll</code> to prevent background scrolling while open.
           </p>
           <button

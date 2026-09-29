@@ -51,7 +51,7 @@ export default function PopoverDemo() {
             <Popover.Trigger>Start</Popover.Trigger>
             <Popover.Content side="bottom" align="start">
               <div className="p-2">
-                <Typography.P variant="secondary">align="start"</Typography.P>
+                <Typography.P variant="secondary">align=&quot;start&quot;</Typography.P>
               </div>
             </Popover.Content>
           </Popover>
@@ -60,7 +60,7 @@ export default function PopoverDemo() {
             <Popover.Trigger>Center</Popover.Trigger>
             <Popover.Content side="bottom" align="center">
               <div className="p-2">
-                <Typography.P variant="secondary">align="center" (default)</Typography.P>
+                <Typography.P variant="secondary">align=&quot;center&quot; (default)</Typography.P>
               </div>
             </Popover.Content>
           </Popover>
@@ -69,7 +69,7 @@ export default function PopoverDemo() {
             <Popover.Trigger>End</Popover.Trigger>
             <Popover.Content side="bottom" align="end">
               <div className="p-2">
-                <Typography.P variant="secondary">align="end"</Typography.P>
+                <Typography.P variant="secondary">align=&quot;end&quot;</Typography.P>
               </div>
             </Popover.Content>
           </Popover>

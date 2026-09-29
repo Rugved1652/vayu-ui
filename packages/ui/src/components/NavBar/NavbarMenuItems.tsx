@@ -4,7 +4,6 @@
 'use client';
 
 import { cn } from '../../utils';
-import Link from 'next/link';
 import type { NavbarItemsProps, NavbarItemProps, InjectedLinkProps } from './types';
 
 export function NavbarItems({ className, children, ...props }: NavbarItemsProps) {
@@ -23,7 +22,7 @@ export function NavbarItem(allProps: NavbarItemProps & InjectedLinkProps) {
     className,
     children,
     href = '#',
-    linkComponent: LinkComponent = Link,
+    linkComponent: LinkComponent = 'a',
     ...props
   } = allProps;
 

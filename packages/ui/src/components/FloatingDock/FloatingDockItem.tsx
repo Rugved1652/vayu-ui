@@ -2,7 +2,6 @@
 // UI: interactive navigation item with tooltip
 
 import type { HTMLAttributes, ElementType, ComponentType } from 'react';
-import Link from 'next/link';
 import { cn } from '../../utils';
 import { Tooltip } from '../Tooltip';
 import type { DockItemProps, InjectedDockProps } from './types';
@@ -14,7 +13,7 @@ const DockItem = (allProps: DockItemProps & InjectedDockProps) => {
     href,
     onClick,
     className,
-    linkComponent: LinkComponent = Link,
+    linkComponent: LinkComponent = 'a',
     ...props
   } = allProps;
 

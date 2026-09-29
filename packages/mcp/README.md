@@ -14,7 +14,7 @@
 
 ## What It Does
 
-This is a [Model Context Protocol](https://modelcontextprotocol.io/) server that gives AI coding assistants (Claude Code, Cursor, OpenCode) access to the Vayu UI component and hook registry. It exposes **17 tools** for discovering, inspecting, and scaffolding components and hooks — so your AI assistant can suggest the right component, generate correct imports, and follow best practices automatically.
+This is a [Model Context Protocol](https://modelcontextprotocol.io/) server that gives AI coding assistants (Claude Code, Cursor, OpenCode, VS Code, Codex) access to the Vayu UI component and hook registry. It exposes **17 tools** for discovering, inspecting, and scaffolding components and hooks — so your AI assistant can suggest the right component, generate correct imports, and follow best practices automatically.
 
 ---
 
@@ -49,11 +49,13 @@ Add the following to your AI tool's MCP config file:
 
 ## Supported AI Tools
 
-| Tool        | Project-level config | Global config        |
-| ----------- | -------------------- | -------------------- |
-| Claude Code | `.mcp.json`          | `~/.claude.json`     |
-| Cursor      | `.cursor/mcp.json`   | `~/.cursor/mcp.json` |
-| OpenCode    | `opencode.json`      | —                    |
+| Tool        | Project-level config | Global config          |
+| ----------- | -------------------- | ---------------------- |
+| Claude Code | `.mcp.json`          | `~/.claude.json`       |
+| Cursor      | `.cursor/mcp.json`   | `~/.cursor/mcp.json`   |
+| OpenCode    | `opencode.json`      | —                      |
+| VS Code     | `.vscode/mcp.json`   | —                      |
+| Codex       | `.codex/config.toml` | `~/.codex/config.toml` |
 
 ---
 
@@ -190,3 +192,11 @@ packages/mcp/
 ## License
 
 MIT © [Rugved Patel](https://github.com/Rugved1652)
+
+## Source imports and design guidance
+
+`get_install_guide`, `get_component_example`, and `scaffold_component_usage` default to imports from CLI-generated source files. Pass `fromFile` (the project-relative destination file) and `config` (the `uiPath`, `paths`, and configured `aliases` from `vayu-ui.config.json`) for accurate imports. Use `mode: "package"` only when installing the `vayu-ui` npm package.
+
+Scaffold features select supported example tags. Discover tags with `get_component_example`; unsupported combinations and invalid variants return tool errors with guidance. Application text uses Typography on the standard heading scale; compound overlay titles retain their accessible relationships.
+
+`install-mcp --all --force` configures all five project clients. VS Code uses the `servers` JSON key; Codex uses TOML `mcp_servers`. Project Codex configurations require a trusted project. Existing servers and unrelated settings are preserved. The generic `mcpServers` JSON example above applies to Claude Code and Cursor.

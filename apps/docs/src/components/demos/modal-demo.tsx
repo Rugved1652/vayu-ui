@@ -327,7 +327,7 @@ export default function ModalDemo() {
                 <Modal.Body>
                   <Typography.P>
                     You must explicitly close this modal using the X button or the close button
-                    below. Clicking the overlay won't work.
+                    below. Clicking the overlay won&apos;t work.
                   </Typography.P>
                 </Modal.Body>
 
@@ -348,7 +348,9 @@ export default function ModalDemo() {
                 <Modal.Header>
                   <div className="flex-1">
                     <Modal.Title>No Escape Key</Modal.Title>
-                    <Modal.Description>Pressing Escape won't close this modal.</Modal.Description>
+                    <Modal.Description>
+                      Pressing Escape won&apos;t close this modal.
+                    </Modal.Description>
                   </div>
                   <Modal.Close />
                 </Modal.Header>

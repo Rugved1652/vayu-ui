@@ -5,17 +5,16 @@
 
 import React, { useRef, useEffect, forwardRef } from 'react';
 import { ChevronDown, X, Loader2, Search } from 'lucide-react';
-import { clsx } from 'clsx';
+import { cn } from '../../utils';
 import { useSelect } from './Select';
 import type { SelectTriggerProps, SingleValue, MultiValue } from './types';
 import {
   inputBaseStyles,
   inputGapStyles,
   inputSizeStyles,
-  inputBorderStyles,
-  inputHoverBorder,
-  inputDisabledStyles,
-  inputLoadingSpinnerStyles,
+  inputControlSizeStyles,
+  inputTextStyles,
+  getInputControlStateStyles,
   inputLoadingAria,
 } from '../../utils/input-styles';
 
@@ -24,8 +23,8 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
     const {
       open,
       setOpen,
-      error,
       validationState,
+      disabled,
       size: ctxSize,
       triggerRef,
       id,
@@ -47,7 +46,7 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
 
     const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
     const chipIconSize = size === 'sm' ? 'w-3 h-3' : 'w-3 h-3';
-    const chipPadding = size === 'sm' ? 'px-1 py-0.5' : 'px-1.5 py-0.5';
+    const chipPadding = size === 'sm' ? 'px-1' : 'px-1.5';
     const chipTextSize = size === 'sm' ? 'text-xs' : 'text-xs';
 
     const isLoading = isSearchLoading || isCreating;
@@ -70,6 +69,7 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
     }, [ref]);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (disabled) return;
       if (e.key === 'Escape') {
         e.preventDefault();
         if (open) setOpen(false);
@@ -113,81 +113,103 @@ export const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
     return (
       <div
         ref={localTriggerRef}
-        onClick={() => inputRef.current?.focus({ preventScroll: true })}
-        className={clsx(
+        onClick={() => {
+          if (disabled) return;
+          setOpen(true);
+          inputRef.current?.focus({ preventScroll: true });
+        }}
+        className={cn(
           inputBaseStyles,
           inputGapStyles,
-          inputSizeStyles[size],
-          validationState !== 'default'
-            ? inputBorderStyles[validationState]
-            : open || selectedLabel || selectedArray.length > 0
-              ? 'border-brand'
-              : clsx(inputBorderStyles['default'], inputHoverBorder),
-          inputDisabledStyles,
-          'flex-wrap cursor-text outline-none',
+          inputControlSizeStyles[size],
+          inputTextStyles,
+          multiple && [inputSizeStyles[size], 'h-auto'],
+          'outline-none',
+          !disabled && 'cursor-text',
+          getInputControlStateStyles(
+            validationState,
+            Boolean(open || selectedLabel || selectedArray.length > 0),
+            disabled,
+          ),
           className,
         )}
+        aria-disabled={disabled}
         aria-invalid={validationState === 'error'}
         aria-busy={isLoading}
       >
-        {showSelectedLabel && <span className="truncate">{selectedLabel}</span>}
-        {multiple &&
-          selectedArray.map((val) => (
-            <span
-              key={val}
-              className={clsx(
-                'flex items-center gap-1 bg-muted/50 border border-border rounded',
-                chipPadding,
-                chipTextSize,
-              )}
-            >
-              {getLabel(val)}
-              <button
-                type="button"
-                onMouseDown={(e) => e.stopPropagation()}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeValue(val);
-                }}
-                className="hover:bg-destructive/20 rounded-sm p-0.5 -mr-1"
+        <div className="relative flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+          {showSelectedLabel && <span className="min-w-0 flex-1 truncate">{selectedLabel}</span>}
+          {multiple &&
+            selectedArray.map((val) => (
+              <span
+                key={val}
+                className={cn(
+                  'flex h-5 max-w-full items-center gap-1 bg-muted/50 border border-border rounded',
+                  chipPadding,
+                  chipTextSize,
+                )}
               >
-                <X className={chipIconSize} />
-              </button>
-            </span>
-          ))}
-        <input
-          ref={inputRef}
-          id={id}
-          type="text"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            if (!open) setOpen(true);
-          }}
-          onFocus={() => {
-            if (!isProgrammaticFocus.current) setOpen(true);
-          }}
-          onKeyDown={handleKeyDown}
-          placeholder={selectedArray.length > 0 ? '' : showSelectedLabel ? '' : placeholder}
-          className={clsx(
-            'flex-1 bg-transparent outline-none min-w-[20px]',
-            multiple && selectedArray.length > 0 && 'py-0.5',
-            showSelectedLabel && 'absolute opacity-0 w-0 min-w-0',
-          )}
-        />
+                <span className="truncate">{getLabel(val)}</span>
+                <button
+                  type="button"
+                  disabled={disabled}
+                  aria-label={`Remove ${getLabel(val) ?? val}`}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeValue(val);
+                  }}
+                  className="shrink-0 enabled:hover:bg-destructive/20 disabled:cursor-not-allowed rounded-sm p-0.5 -mr-1"
+                >
+                  <X className={chipIconSize} />
+                </button>
+              </span>
+            ))}
+          <input
+            ref={inputRef}
+            id={id}
+            type="text"
+            role="combobox"
+            aria-expanded={open}
+            aria-controls={open ? `${id}-listbox` : undefined}
+            aria-autocomplete="list"
+            aria-invalid={validationState === 'error'}
+            disabled={disabled}
+            value={search}
+            onChange={(e) => {
+              if (disabled) return;
+              setSearch(e.target.value);
+              if (!open) setOpen(true);
+            }}
+            onFocus={() => {
+              if (!disabled && !isProgrammaticFocus.current) setOpen(true);
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder={selectedArray.length > 0 ? '' : showSelectedLabel ? '' : placeholder}
+            className={cn(
+              inputTextStyles,
+              'flex-1 bg-transparent outline-none min-w-[20px] disabled:cursor-not-allowed',
+              showSelectedLabel && 'sr-only min-w-0',
+            )}
+          />
+        </div>
         {isLoading ? (
-          <Loader2 className={clsx('text-brand animate-spin shrink-0 ml-auto', iconSize)} {...inputLoadingAria} />
+          <Loader2
+            className={cn('text-brand animate-spin shrink-0 ml-auto', iconSize)}
+            {...inputLoadingAria}
+          />
         ) : onSearch && showSearchIcon ? (
-          <Search className={clsx('text-muted-content ml-auto shrink-0', iconSize)} />
+          <Search className={cn('text-muted-content ml-auto shrink-0', iconSize)} />
         ) : (
           <ChevronDown
-            className={clsx(
+            className={cn(
               'text-muted-content transition-transform ml-auto shrink-0',
               iconSize,
               open && 'rotate-180',
             )}
             onClick={(e) => {
               e.stopPropagation();
+              if (disabled) return;
               setOpen(!open);
               inputRef.current?.focus({ preventScroll: true });
             }}

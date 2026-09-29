@@ -39,7 +39,7 @@ export function TablePanel() {
               <Table.Row>
                 <Table.Cell>
                   <Badge variant="warning" size="sm">
-                    Beta
+                    Ready
                   </Badge>
                 </Table.Cell>
                 <Table.Cell className="font-medium text-surface-content">Docs</Table.Cell>

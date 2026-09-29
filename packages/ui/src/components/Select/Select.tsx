@@ -60,6 +60,7 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
   error,
   validationState: validationStateProp,
   size = 'md',
+  disabled = false,
   className,
   multiple = false,
   onSearch,
@@ -81,7 +82,9 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
   };
 
   const [internalValue, setInternalValue] = useState<SelectValue>(getDefault);
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = internalOpen && !disabled;
+  const setOpen = (nextOpen: boolean) => setInternalOpen(nextOpen && !disabled);
   const [search, setSearch] = useState('');
   const [asyncOptions, setAsyncOptions] = useState<OptionData[]>([]);
   const [isSearchLoadingInternal, setIsSearchLoadingInternal] = useState(false);
@@ -97,7 +100,7 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
   const contentRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const isProgrammaticFocus = useRef(false);
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const id = useId();
   const isControlled = controlledValue !== undefined;
@@ -105,13 +108,18 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
   const isSearchLoading = isLoadingExternal ?? isSearchLoadingInternal;
   const isCreating = isCreatingExternal ?? isCreatingInternal;
 
+  useEffect(() => {
+    if (disabled) setInternalOpen(false);
+  }, [disabled]);
+
   const focusInput = useCallback(() => {
+    if (disabled) return;
     isProgrammaticFocus.current = true;
     inputRef.current?.focus({ preventScroll: true });
     requestAnimationFrame(() => {
       isProgrammaticFocus.current = false;
     });
-  }, []);
+  }, [disabled]);
 
   const registerOption = useCallback((option: OptionData) => {
     const isNew = !optionsMap.current.has(option.value);
@@ -125,6 +133,7 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
   }, []);
 
   const handleValueChange = (newValue: SingleValue) => {
+    if (disabled) return;
     let newResult: SelectValue;
 
     if (multiple) {
@@ -144,6 +153,7 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
   };
 
   const removeValue = (val: SingleValue) => {
+    if (disabled) return;
     const currentArray = (Array.isArray(value) ? value : []) as MultiValue;
     const newResult = currentArray.filter((v) => v !== val);
     if (!isControlled) setInternalValue(newResult);
@@ -249,7 +259,7 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
   }, [creatable, search, filteredOptions, value, multiple, validateCreate]);
 
   const handleCreateOption = useCallback(async () => {
-    if (!onCreateOption || !search.trim()) return;
+    if (disabled || !onCreateOption || !search.trim()) return;
     if (validateCreate) {
       const result = validateCreate(search);
       if (result === false) {
@@ -277,7 +287,15 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
     } finally {
       setIsCreatingInternal(false);
     }
-  }, [onCreateOption, search, validateCreate, registerOption, handleValueChange, multiple]);
+  }, [
+    disabled,
+    onCreateOption,
+    search,
+    validateCreate,
+    registerOption,
+    handleValueChange,
+    multiple,
+  ]);
 
   // Sync search based on open/close state
   useEffect(() => {
@@ -335,6 +353,7 @@ export const SelectRoot: React.FC<SelectRootProps> = ({
         error,
         validationState,
         size,
+        disabled,
         triggerRef,
         contentRef,
         inputRef,

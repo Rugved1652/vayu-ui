@@ -1,4 +1,4 @@
-import { componentEntries, hookEntries, allEntries } from 'vayu-ui-registry';
+import { componentEntries, hookEntries, allEntries, findEntry } from 'vayu-ui-registry';
 import type {
   ComponentRegistryEntry,
   HookRegistryEntry,
@@ -16,15 +16,17 @@ export type {
 };
 
 export function findBySlug(slug: string): RegistryEntry | undefined {
-  return allEntries.find((e) => e.slug === slug);
+  return findEntry(slug);
 }
 
 export function findComponent(slug: string): ComponentRegistryEntry | undefined {
-  return componentEntries.find((e) => e.slug === slug);
+  const entry = findEntry(slug);
+  return entry?.type === 'component' ? entry : undefined;
 }
 
 export function findHook(slug: string): HookRegistryEntry | undefined {
-  return hookEntries.find((e) => e.slug === slug);
+  const entry = findEntry(slug);
+  return entry?.type === 'hook' ? entry : undefined;
 }
 
 export function filterByType(type?: 'component' | 'hook') {

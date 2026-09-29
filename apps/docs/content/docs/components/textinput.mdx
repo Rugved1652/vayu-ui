@@ -9,10 +9,12 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 ## Installation
 
 ```bash
-npx vayu-ui-cli@latest add textinput
+npx vayu-ui-cli@latest add text-input
 ```
 
 ## Usage
+
+TextInput and Select share field heights: `sm` is 36px, `md` is 44px, and `lg` is 52px at the default root font size. Set `size` and `disabled` on the root. Disabled fields share the same muted background, opacity, and border behavior; clear and password visibility actions are disabled too.
 
 <Tabs items={['Preview', 'Code']}>
   <Tab value="Preview">
@@ -175,12 +177,13 @@ packages/ui/src/components/ui/TextInput/
 
 ### TextInput.NumberInput
 
-| Prop         | Type                                                | Default | Description                                         |
-| :----------- | :-------------------------------------------------- | :------ | :-------------------------------------------------- |
-| `numberType` | `"integer" \| "decimal" \| "positive" \| "natural"` | -       | Sets constraints format parameters on input values. |
-| `min`        | `number`                                            | -       | Minimum value allowed visually / bound.             |
-| `max`        | `number`                                            | -       | Maximum value allowed visually / bound.             |
-| `step`       | `number`                                            | -       | Step intervals.                                     |
+| Prop         | Type                                                | Default | Description                                                              |
+| :----------- | :-------------------------------------------------- | :------ | :----------------------------------------------------------------------- |
+| `numberType` | `"integer" \| "decimal" \| "positive" \| "natural"` | -       | Sets constraints format parameters on input values.                      |
+| `format`     | `boolean`                                           | `false` | Group digits with commas; root onChange receives the unformatted string. |
+| `min`        | `number`                                            | -       | Minimum value allowed visually / bound.                                  |
+| `max`        | `number`                                            | -       | Maximum value allowed visually / bound.                                  |
+| `step`       | `number`                                            | -       | Step intervals.                                                          |
 
 ### TextInput.CharacterCount
 
@@ -190,3 +193,18 @@ packages/ui/src/components/ui/TextInput/
 | `showCount` | `"always" \| "focus" \| "near-limit"` | -       | Dictates when the counter is visible.                                                 |
 | `threshold` | `number`                              | -       | Triggers display change based upon 'near-limit'.                                      |
 | `className` | `string`                              | -       | Additional class names for styling.                                                   |
+
+## Formatted numbers
+
+Use `format` on `TextInput.NumberInput` to group digits with commas. Leading zeros normalize (`01` → `1`, `00` → `0`) and `1212` displays as `1,212`. The root `onChange` receives the unformatted string, so validation and submission use `"1212"`. Empty input stays empty. Decimal fractions and large integers keep their precision; `min` and `max` apply on blur.
+
+```tsx
+<TextInput value={amount} onChange={setAmount}>
+  <TextInput.Label>Amount</TextInput.Label>
+  <TextInput.Field>
+    <TextInput.NumberInput format numberType="natural" />
+  </TextInput.Field>
+</TextInput>
+```
+
+Initialize `amount` with `useState('')`. Leave `format` false for ungrouped numeric entry. This is numeric input, so use a regular `TextInput.Input` for identifiers where leading zeros must be preserved.

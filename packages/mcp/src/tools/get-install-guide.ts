@@ -1,123 +1,50 @@
 import { z } from 'zod';
 import { registerTool } from '../lib/register-tool.js';
-import { allEntries } from 'vayu-ui-registry';
+import { findEntry } from 'vayu-ui-registry';
+import { entryImport, importOptionsSchema } from '../lib/imports.js';
 
 export function registerGetInstallGuide(server: Parameters<typeof registerTool>[0]) {
   registerTool(
     server,
     'get_install_guide',
-    'Get the exact CLI commands and import statements needed to install and use a component or hook. Returns vayu-ui add commands, npm install commands, and import statements. Call this before writing code to know what to install.',
+    'Get CLI installation commands and imports resolved for the usage file and vayu-ui.config.json. Defaults to copied source files; select package mode only for npm vayu-ui imports.',
     {
-      slug: z.string().describe('Component or hook slug, e.g. "button", "modal", "use-debounce"'),
+      slug: z.string(),
+      ...importOptionsSchema,
+      cwd: z.string().optional().describe('Project/workspace directory passed to CLI --cwd'),
     },
     async (params) => {
-      const { slug } = params as { slug: string };
-      const entry = allEntries.find((e) => e.slug === slug);
-      if (!entry) {
+      const entry = findEntry(params.slug);
+      if (!entry)
         return {
+          isError: true,
           content: [
             {
               type: 'text' as const,
-              text: JSON.stringify({ error: `No entry found for slug "${slug}"` }),
+              text: JSON.stringify({ error: `Unknown slug "${params.slug}"` }),
             },
           ],
-          isError: true,
         };
-      }
-
-      // Resolve all registry dependencies transitively
-      const allSlugs = resolveTransitiveSlugs(slug);
-
-      const commands: string[] = [];
-
-      // Init step
-      commands.push('# If not already initialized:');
-      commands.push('npx vayu-ui-cli init');
-      commands.push('');
-
-      // Add command with all dependencies
-      if (allSlugs.length > 1) {
-        commands.push(`# Install ${entry.name} with dependencies:`);
-        commands.push(`npx vayu-ui-cli add ${allSlugs.join(' ')}`);
-      } else {
-        commands.push(`# Install ${entry.name}:`);
-        commands.push(`npx vayu-ui-cli add ${slug}`);
-      }
-
-      // NPM deps
-      const npmDeps = collectNpmDeps(allSlugs);
-      if (npmDeps.length > 0) {
-        commands.push('');
-        commands.push('# Install npm dependencies:');
-        commands.push(`npm install ${npmDeps.join(' ')}`);
-      }
-
-      // Import statements
-      const imports: string[] = [];
-      if (entry.type === 'component') {
-        imports.push(`import { ${entry.rootComponent} } from 'vayu-ui';`);
-        const hasLoading = entry.states.some((s) => s.name === 'loading');
-        if (hasLoading) {
-          imports[0] = `import { ${entry.rootComponent}, Status } from 'vayu-ui';`;
-        }
-      } else {
-        imports.push(`import { ${entry.name} } from 'vayu-ui';`);
-      }
-
-      const response: Record<string, unknown> = {
+      const symbol = entry.type === 'component' ? entry.rootComponent : entry.name;
+      const cwd = params.cwd ? ` --cwd '${params.cwd.replaceAll("'", "'\\''")}'` : '';
+      const response = {
         slug: entry.slug,
         name: entry.name,
         type: entry.type,
-        cliCommands: commands.join('\n'),
-        imports,
-        registryDependencies: entry.registryDependencies.map((d) => d.slug),
-        npmDependencies: entry.npmDependencies.map((d) => d.name),
+        cliCommands:
+          params.mode === 'package'
+            ? 'npm install vayu-ui'
+            : `# Initialize once (preserves existing configuration):\nnpx vayu-ui-cli init${cwd}\n# Installs source and dependencies:\nnpx vayu-ui-cli add ${entry.slug}${cwd}`,
+        imports: [`import { ${symbol} } from '${entryImport(entry, params)}';`],
+        fromFile: params.fromFile ?? 'src/App.tsx',
+        registryDependencies: entry.registryDependencies.map((dep) => dep.slug),
+        npmDependencies: entry.npmDependencies,
+        notes:
+          'Read the local vayu-ui.config.json and pass its paths/aliases plus the file receiving this import. Source paths are relative to fromFile. Run workspace commands from the config directory or pass --cwd. CLI add installs transitive dependencies automatically.',
+        designGuidance:
+          'Use Typography for application text. Keep the default semantic heading scale; card and overlay titles should not become marketing heroes. Modal.Header and Drawer.Header include in-flow close controls.',
       };
-
-      if (slug === 'sidebar') {
-        response.layoutNote =
-          'Layout requirement: Wrap the page in a container with `className="h-screen overflow-hidden flex"`. The sidebar uses h-screen; if the parent stretches with content (e.g. min-h-screen without overflow-hidden), overflow-y-auto inside SidebarContent will never engage and the entire page will scroll instead.';
-      }
-
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: JSON.stringify(response, null, 2),
-          },
-        ],
-      };
+      return { content: [{ type: 'text' as const, text: JSON.stringify(response, null, 2) }] };
     },
   );
-}
-
-function resolveTransitiveSlugs(slug: string): string[] {
-  const visited = new Set<string>();
-  const result: string[] = [];
-
-  function walk(s: string) {
-    if (visited.has(s)) return;
-    visited.add(s);
-    const entry = allEntries.find((e) => e.slug === s);
-    if (!entry) return;
-    for (const dep of entry.registryDependencies) {
-      walk(dep.slug);
-    }
-    result.push(s);
-  }
-
-  walk(slug);
-  return result;
-}
-
-function collectNpmDeps(slugs: string[]): string[] {
-  const names = new Set<string>();
-  for (const s of slugs) {
-    const entry = allEntries.find((e) => e.slug === s);
-    if (!entry) continue;
-    for (const dep of entry.npmDependencies) {
-      names.add(dep.name);
-    }
-  }
-  return [...names];
 }

@@ -10,7 +10,7 @@ import {
   RotateCcw,
   Share,
   FileText,
-  Image,
+  Image as ImageIcon,
   Video,
   Music,
   ChevronRight,
@@ -103,7 +103,7 @@ export default function ContextMenuDemo() {
                 Text Document
               </ContextMenu.Item>
               <ContextMenu.Item
-                icon={<Image className="w-4 h-4" />}
+                icon={<ImageIcon aria-hidden="true" className="w-4 h-4" />}
                 onSelect={() => console.log('New Image')}
               >
                 Image

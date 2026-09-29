@@ -283,3 +283,25 @@ Pass `overridableOnly: true` to get only tokens that are safe to override withou
 - **Include accessibility** — reference `get_component_a11y` for ARIA and keyboard requirements
 - **Use the scaffold tool** — `scaffold_component_usage` generates complete code with imports and state
 - **Cache component lists** — call `list_components` once per session, not per request
+
+## Project setup and import accuracy
+
+```bash
+npx vayu-ui-cli@latest install-mcp --tool claude,cursor,opencode,vscode,codex --force
+```
+
+Setup merges the Vayu entry with existing server settings. It supports JSON comments for VS Code and TOML for Codex. `--dry-run` previews changes; malformed configuration stops setup before any selected file is modified.
+
+| Client      | Project configuration |
+| ----------- | --------------------- |
+| Claude Code | `.mcp.json`           |
+| Cursor      | `.cursor/mcp.json`    |
+| OpenCode    | `opencode.json`       |
+| VS Code     | `.vscode/mcp.json`    |
+| Codex       | `.codex/config.toml`  |
+
+Restart or reload your client after setup. Codex loads project MCP configuration in trusted projects; see the [official Codex MCP documentation](https://developers.openai.com/codex/mcp). VS Code uses a `servers` object with `type: "stdio"`, as described in its [MCP documentation](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
+
+Before requesting generated usage, read `vayu-ui.config.json`. Pass its `uiPath`, `paths`, and `aliases` as `config`, and pass the target source filename as `fromFile`, to `get_install_guide` or `scaffold_component_usage`. Their default is CLI-copied sources. Use `mode: "package"` only when the application installs the `vayu-ui` npm package.
+
+Scaffolding uses registry examples with valid compound nesting and returns the slugs used by the snippet. Application headings and paragraphs use Typography. Overlay titles retain `Modal.Title` / `Drawer.Title` so their accessible IDs stay connected.

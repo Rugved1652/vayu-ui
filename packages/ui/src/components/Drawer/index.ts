@@ -46,3 +46,5 @@ export {
 };
 export { Drawer as default };
 export { Drawer };
+
+export type { DrawerHeaderProps } from './DrawerHeader';

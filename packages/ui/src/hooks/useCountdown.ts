@@ -18,7 +18,7 @@ export const useCountdown = ({
 }: UseCountdownOptions) => {
   const [timeLeft, setTimeLeft] = useState(seconds);
   const [isRunning, setIsRunning] = useState(autoStart);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Ref-stabilize callbacks to avoid stale closures and effect restarts
   const onTickRef = useRef(onTick);

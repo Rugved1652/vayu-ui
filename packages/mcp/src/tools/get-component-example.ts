@@ -1,3 +1,4 @@
+import { adaptImports, applyTypography, importOptionsSchema } from '../lib/imports.js';
 import { z } from 'zod';
 import { findBySlug } from '../lib/registry.js';
 import { registerTool } from '../lib/register-tool.js';
@@ -8,6 +9,7 @@ export function registerGetComponentExample(server: Parameters<typeof registerTo
     'get_component_example',
     'Get code examples for a component or hook. Without a tag filter, returns only example titles and descriptions (no code). With a tag, returns full code for matching examples.',
     {
+      ...importOptionsSchema,
       slug: z.string().describe('Component or hook slug'),
       tag: z
         .string()
@@ -60,7 +62,10 @@ export function registerGetComponentExample(server: Parameters<typeof registerTo
                 {
                   slug: entry.slug,
                   name: entry.name,
-                  examples: matching,
+                  examples: matching.map((example) => ({
+                    ...example,
+                    code: adaptImports(applyTypography(example.code), params).code,
+                  })),
                 },
                 null,
                 2,

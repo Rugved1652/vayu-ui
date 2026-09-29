@@ -31,8 +31,8 @@ export const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(
         type="button"
         onClick={onClick}
         className={cn(
-          'absolute top-4 right-4 rounded p-1 transition-colors',
-          'hover:bg-black/10 dark:hover:bg-white/10',
+          'inline-flex shrink-0 self-start items-center justify-center min-h-9 min-w-9 rounded-control p-2 transition-colors',
+          'hover:bg-muted',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
           'ring-offset-surface',
           variantIconStyles[variant],
@@ -42,7 +42,7 @@ export const AlertDismiss = forwardRef<HTMLButtonElement, AlertDismissProps>(
         aria-label={ariaLabel}
         {...props}
       >
-        <XIcon />
+        <XIcon className="h-4 w-4" aria-hidden="true" />
       </button>
     );
   },

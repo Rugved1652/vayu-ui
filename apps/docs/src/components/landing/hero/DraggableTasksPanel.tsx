@@ -72,7 +72,7 @@ export function DraggableTasksPanel() {
             <Accordion.Header itemId="data-source">Where is the data stored?</Accordion.Header>
             <Accordion.Body itemId="data-source">
               <p className="text-xs text-muted-content">
-                Currently, it's stored in local state. You can easily connect the Draggable
+                Currently, it&apos;s stored in local state. You can easily connect the Draggable
                 component to your own backend.
               </p>
             </Accordion.Body>

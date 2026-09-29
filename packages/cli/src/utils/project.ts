@@ -1,5 +1,5 @@
 import {existsSync, readFileSync} from 'node:fs'
-import {join, parse} from 'node:path'
+import {dirname, join, parse, resolve} from 'node:path'
 import {createInterface} from 'node:readline'
 
 export interface ProjectInfo {
@@ -41,7 +41,7 @@ export function detectProject(cwd: string): ProjectInfo {
 }
 
 export function findProjectRoot(cwd: string): string {
-  let dir = cwd
+  let dir = resolve(cwd)
   const {root} = parse(dir)
   while (dir !== root) {
     if (existsSync(join(dir, 'package.json'))) return dir
@@ -82,11 +82,21 @@ function findCssFile(root: string, framework: string): null | string {
   return null
 }
 
-function detectPackageManager(root: string): string {
-  if (existsSync(join(root, 'pnpm-lock.yaml'))) return 'pnpm'
-  if (existsSync(join(root, 'yarn.lock'))) return 'yarn'
-  if (existsSync(join(root, 'bun.lockb')) || existsSync(join(root, 'bun.lock'))) return 'bun'
-  return 'npm'
+export function detectPackageManager(root: string): string {
+  let dir = resolve(root)
+  while (true) {
+    if (existsSync(join(dir, 'package.json'))) {
+      const manager = readPkg(dir).packageManager?.split('@')[0]
+      if (manager && ['bun', 'npm', 'pnpm', 'yarn'].includes(manager)) return manager
+    }
+
+    if (existsSync(join(dir, 'pnpm-lock.yaml'))) return 'pnpm'
+    if (existsSync(join(dir, 'yarn.lock'))) return 'yarn'
+    if (existsSync(join(dir, 'bun.lockb')) || existsSync(join(dir, 'bun.lock'))) return 'bun'
+    if (existsSync(join(dir, 'package-lock.json'))) return 'npm'
+    if (dirname(dir) === dir) return 'npm'
+    dir = dirname(dir)
+  }
 }
 
 function checkTailwind(root: string): boolean {
@@ -99,11 +109,16 @@ function checkTailwind(root: string): boolean {
   }
 }
 
-export function readPkg(root: string): Record<string, any> {
-  return JSON.parse(readFileSync(join(root, 'package.json'), 'utf-8'))
+export function readPkg(root: string): {
+  dependencies?: Record<string, string>
+  devDependencies?: Record<string, string>
+  packageManager?: string
+} {
+  return JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
 }
 
 export async function confirm(message: string): Promise<boolean> {
+  if (!process.stdin.isTTY) return false
   const rl = createInterface({input: process.stdin, output: process.stdout})
   return new Promise((resolve) => {
     rl.question(`${message} (y/N) `, (answer) => {
@@ -114,6 +129,7 @@ export async function confirm(message: string): Promise<boolean> {
 }
 
 export async function prompt(message: string, defaultValue?: string): Promise<string> {
+  if (!process.stdin.isTTY) return defaultValue ?? ''
   const rl = createInterface({input: process.stdin, output: process.stdout})
   return new Promise((resolve) => {
     const suffix = defaultValue ? ` (${defaultValue})` : ''

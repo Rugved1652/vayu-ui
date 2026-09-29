@@ -136,10 +136,10 @@ export const showEntry: ComponentRegistryEntry = {
       description: 'Render a user greeting only when user data exists.',
       code: `import { Show } from 'vayu-ui';
 
-export default function UserGreeting({ user }) {
+export default function UserGreeting({ user }: {user?: {name: string} | null}) {
   return (
     <Show when={user} fallback={<p>Please sign in.</p>}>
-      <h1>Welcome back, {user.name}!</h1>
+      <h1>Welcome back, {user?.name}!</h1>
     </Show>
   );
 }`,

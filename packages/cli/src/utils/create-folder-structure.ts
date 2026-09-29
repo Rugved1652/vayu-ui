@@ -24,11 +24,13 @@ export function createFolderStructure(
   root: string,
   hasSrc: boolean,
   log: (msg: string) => void,
+  includeUi = true,
 ): void {
   const baseDir = hasSrc ? join(root, 'src') : root
 
   // Create all directories
   for (const [mainDir, subDirs] of Object.entries(FOLDER_STRUCTURE)) {
+    if (mainDir === 'ui' && !includeUi) continue
     const mainPath = join(baseDir, mainDir)
     mkdirSync(mainPath, {recursive: true})
 

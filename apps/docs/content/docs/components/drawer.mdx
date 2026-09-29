@@ -91,7 +91,7 @@ import { Drawer } from 'vayu-ui';
 - **Drawer** — Root container. Manages open/close state and provides context to all subcomponents. Supports controlled and uncontrolled usage.
 - **Drawer.Trigger** — Button that opens the drawer. Supports `asChild` to merge props onto a custom element.
 - **Drawer.Overlay** — Backdrop behind the drawer. Clicking it dismisses the drawer by default.
-- **Drawer.Content** — The slide-in panel with focus trapping and keyboard navigation. Includes a built-in close button.
+- **Drawer.Content** — The slide-in panel with focus trapping and keyboard navigation. Use Drawer.Header for an in-flow close button.
 - **Drawer.Header** — Container for `Drawer.Title` and `Drawer.Description`.
 - **Drawer.Title** — Accessible heading rendered as an `<h2>`. Linked to the dialog via `aria-labelledby`.
 - **Drawer.Description** — Accessible description rendered as a `<p>`. Linked to the dialog via `aria-describedby`.
@@ -215,3 +215,18 @@ Drawer/
 | Prop       | Type        | Default | Description                          |
 | :--------- | :---------- | :------ | :----------------------------------- |
 | `children` | `ReactNode` | —       | Content to render inside the portal. |
+
+## Header close button
+
+`Drawer.Header` includes an accessible X control in the header flex row. The old absolutely positioned close button in `Drawer.Content` has moved into the header. Include a header or compose `Drawer.Close` explicitly when using a custom layout.
+
+```tsx
+<Drawer.Content>
+  <Drawer.Header closeLabel="Close navigation">
+    <Drawer.Title>Navigation</Drawer.Title>
+    <Drawer.Description>Choose a destination.</Drawer.Description>
+  </Drawer.Header>
+</Drawer.Content>
+```
+
+Use `showClose={false}` to hide the default header control. `Drawer.Close asChild` preserves the child's click handler and respects `event.preventDefault()`.

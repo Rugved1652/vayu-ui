@@ -1,7 +1,7 @@
 // index.ts
 // Public API
 
-export { default } from './Tab';
+export { default, default as Tabs } from './Tab';
 export type {
   TabsOrientation,
   TabsContextValue,

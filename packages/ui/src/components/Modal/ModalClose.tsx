@@ -1,65 +1,51 @@
-// close.tsx
-// UI: presentational
-
 'use client';
-
 import React, { forwardRef } from 'react';
-import { cn } from '../../utils';
 import { X } from 'lucide-react';
+import { cn } from '../../utils';
 import { useModal } from './Modal';
 import type { ModalCloseProps } from './types';
 
-const ModalClose = forwardRef<HTMLButtonElement, ModalCloseProps>(
+export const ModalClose = forwardRef<HTMLButtonElement, ModalCloseProps>(
   ({ className, onClick, asChild = false, children, ...props }, ref) => {
     const { setOpen } = useModal();
-
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(e);
-      if (!e.defaultPrevented) {
-        setOpen(false);
-      }
+    const child =
+      asChild && React.isValidElement(children)
+        ? (children as React.ReactElement<
+            React.ButtonHTMLAttributes<HTMLButtonElement> & { ref?: React.Ref<HTMLButtonElement> }
+          >)
+        : null;
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      child?.props.onClick?.(event);
+      if (!event.defaultPrevented) onClick?.(event);
+      if (!event.defaultPrevented) setOpen(false);
     };
-
-    if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children as React.ReactElement<any>, {
-        ref,
-        onClick: handleClick,
+    if (child)
+      return React.cloneElement(child, {
         ...props,
+        className: cn(child.props.className, className),
+        ref: (node: HTMLButtonElement | null) => {
+          for (const target of [ref, child.props.ref]) {
+            if (typeof target === 'function') target(node);
+            else if (target) target.current = node;
+          }
+        },
+        onClick: handleClick,
       });
-    }
-
-    // Default X icon button
-    if (!children) {
-      return (
-        <button
-          ref={ref}
-          type="button"
-          className={cn(
-            'inline-flex items-center justify-center rounded-control p-1.5',
-            'text-muted-content hover:text-elevated-content',
-            'transition-colors',
-            'focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2',
-            'focus-visible:ring-offset-elevated',
-            className,
-          )}
-          onClick={handleClick}
-          aria-label="Close"
-          {...props}
-        >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </button>
-      );
-    }
-
-    // Custom close button with children
     return (
-      <button ref={ref} type="button" className={className} onClick={handleClick} {...props}>
-        {children}
+      <button
+        ref={ref}
+        type="button"
+        aria-label={children ? undefined : 'Close modal'}
+        className={cn(
+          'inline-flex shrink-0 items-center justify-center self-start min-h-9 min-w-9 rounded-control p-2 text-muted-content hover:bg-muted hover:text-elevated-content focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus disabled:pointer-events-none disabled:opacity-50',
+          className,
+        )}
+        {...props}
+        onClick={handleClick}
+      >
+        {children ?? <X className="h-4 w-4" aria-hidden="true" />}
       </button>
     );
   },
 );
 ModalClose.displayName = 'Modal.Close';
-
-export { ModalClose };

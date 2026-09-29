@@ -9,7 +9,8 @@ const ChildComponent = () => {
   const [, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => setMounted(true), 250);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -46,8 +47,8 @@ export function UseIsMountDemo() {
         </button>
 
         <p className="text-xs text-muted-foreground text-center max-w-sm">
-          Clicking "Remount" changes the key of the child component, forcing React to destroy and
-          recreate it, triggering the mount effect again.
+          Clicking &quot;Remount&quot; changes the key of the child component, forcing React to
+          destroy and recreate it, triggering the mount effect again.
         </p>
       </div>
     </div>

@@ -4,7 +4,6 @@
 'use client';
 
 import { cn } from '../../utils';
-import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { useNavbar } from './NavBar';
 import type { NavbarMobileMenuProps, NavbarMobileItemProps, InjectedLinkProps } from './types';
@@ -137,7 +136,7 @@ export function NavbarMobileItem(allProps: NavbarMobileItemProps & InjectedLinkP
     children,
     href = '#',
     onClick,
-    linkComponent: LinkComponent = Link,
+    linkComponent: LinkComponent = 'a',
     ...props
   } = allProps;
   const { closeMenu } = useNavbar();

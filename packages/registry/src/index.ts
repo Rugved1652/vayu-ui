@@ -96,3 +96,7 @@ export { useInViewEntry } from './hooks/use-in-view.js';
 export { useIsMountEntry } from './hooks/use-is-mount.js';
 
 export { componentEntries, hookEntries, allEntries } from './entries.js';
+
+export { sourceManifest, publicExports } from './source-manifest.js';
+
+export { findEntry } from './entries.js';

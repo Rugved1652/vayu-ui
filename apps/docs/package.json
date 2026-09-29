@@ -8,10 +8,10 @@
     "start": "next start",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
     "postinstall": "fumadocs-mdx",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check": "npm run types:check"
   },
   "dependencies": {
-    "vayu-ui": "*",
     "@lexical/code": "^0.41.0",
     "@lexical/html": "^0.41.0",
     "@lexical/link": "^0.41.0",
@@ -21,15 +21,16 @@
     "@lexical/rich-text": "^0.41.0",
     "@lexical/selection": "^0.41.0",
     "@lexical/utils": "^0.41.0",
-    "fumadocs-core": "16.6.12",
-    "fumadocs-mdx": "14.2.9",
-    "fumadocs-ui": "16.6.12",
+    "fumadocs-core": "^16.15.15",
+    "fumadocs-mdx": "14.3.2",
+    "fumadocs-ui": "^16.15.15",
     "lexical": "^0.41.0",
     "lucide-react": "^0.577.0",
-    "next": "16.1.6",
+    "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "vayu-ui": "*"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",
@@ -37,8 +38,8 @@
     "@types/node": "^25.3.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^10.0.3",
-    "eslint-config-next": "16.1.6",
+    "eslint": "^9.39.0",
+    "eslint-config-next": "^16.1.6",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3"

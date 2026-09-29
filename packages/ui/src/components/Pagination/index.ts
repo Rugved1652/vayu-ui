@@ -1,7 +1,7 @@
 // index.ts
 // Public API
 
-export { default } from './Pagination';
+export { default, default as Pagination } from './Pagination';
 export type {
   PageRange,
   BaseProps,

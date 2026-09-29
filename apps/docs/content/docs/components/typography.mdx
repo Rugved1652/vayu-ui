@@ -136,20 +136,20 @@ Typography/
 
 All typography components accept these props.
 
-| Prop              | Type                                                                                                  | Default     | Description                              |
-| :---------------- | :---------------------------------------------------------------------------------------------------- | :---------- | :--------------------------------------- |
-| `children`        | `ReactNode`                                                                                           | —           | Content to render.                       |
-| `variant`         | `'primary' \| 'secondary' \| 'tertiary' \| 'error' \| 'warning' \| 'info' \| 'success' \| 'gradient'` | `'primary'` | Color style variant.                     |
-| `ellipsis`        | `boolean`                                                                                             | `false`     | Truncate text with ellipsis on overflow. |
-| `font`            | `'primary' \| 'secondary'`                                                                            | —           | Font family override.                    |
-| `className`       | `string`                                                                                              | `""`        | Additional CSS classes.                  |
-| `id`              | `string`                                                                                              | —           | HTML id attribute.                       |
-| `lang`            | `string`                                                                                              | —           | Content language declaration.            |
-| `role`            | `AriaRole`                                                                                            | —           | ARIA role override.                      |
-| `ariaLabel`       | `string`                                                                                              | —           | Accessible label.                        |
-| `unsized`         | `boolean`                                                                                             | `false`     | Skip baked-in responsive size classes so className fully controls sizing. |
-| `ariaDescribedby` | `string`                                                                                              | —           | ARIA describedby reference.              |
-| `ariaHidden`      | `boolean`                                                                                             | —           | Hide element from screen readers.        |
+| Prop              | Type                                                                                                  | Default     | Description                                                     |
+| :---------------- | :---------------------------------------------------------------------------------------------------- | :---------- | :-------------------------------------------------------------- |
+| `children`        | `ReactNode`                                                                                           | —           | Content to render.                                              |
+| `variant`         | `'primary' \| 'secondary' \| 'tertiary' \| 'error' \| 'warning' \| 'info' \| 'success' \| 'gradient'` | `'primary'` | Color style variant.                                            |
+| `ellipsis`        | `boolean`                                                                                             | `false`     | Truncate text with ellipsis on overflow.                        |
+| `font`            | `'primary' \| 'secondary'`                                                                            | —           | Font family override.                                           |
+| `className`       | `string`                                                                                              | `""`        | Additional CSS classes.                                         |
+| `id`              | `string`                                                                                              | —           | HTML id attribute.                                              |
+| `lang`            | `string`                                                                                              | —           | Content language declaration.                                   |
+| `role`            | `AriaRole`                                                                                            | —           | ARIA role override.                                             |
+| `ariaLabel`       | `string`                                                                                              | —           | Accessible label.                                               |
+| `unsized`         | `boolean`                                                                                             | `false`     | Skip the default size token so className fully controls sizing. |
+| `ariaDescribedby` | `string`                                                                                              | —           | ARIA describedby reference.                                     |
+| `ariaHidden`      | `boolean`                                                                                             | —           | Hide element from screen readers.                               |
 
 ### Typography.H1–H6
 
@@ -166,20 +166,22 @@ Each heading extends base props plus native `HTMLAttributes<HTMLHeadingElement>`
 
 ### Overriding Heading Sizes
 
-Headings bake in responsive size classes (e.g. `text-2xl sm:text-3xl lg:text-4xl` for H3). `twMerge` resolves conflicts **within** the same breakpoint, but **not across breakpoints**. That means a consumer `className="text-sm"` only overrides the base size — the `sm:` and `lg:` classes survive and kick in at their breakpoints.
+Headings use the application scale (`text-h1` through `text-h6`), without breakpoint-specific size overrides. Use `unsized` when supplying a custom size for an intentional marketing headline. Keep application page and panel titles on the default scale.
 
 Use the `unsized` prop to opt out of the default sizing block entirely:
 
 ```tsx
-{/* Stays text-sm on all breakpoints */}
+{
+  /* Stays text-sm on all breakpoints */
+}
 <Typography.H3 unsized className="text-sm font-semibold">
   Small heading everywhere
-</Typography.H3>
+</Typography.H3>;
 
-{/* Without unsized: balloons back to 2xl/3xl/4xl — don't do this */}
-<Typography.H3 className="text-sm">
-  Broken override
-</Typography.H3>
+{
+  /* Without unsized: balloons back to 2xl/3xl/4xl — don't do this */
+}
+<Typography.H3 className="text-sm">Broken override</Typography.H3>;
 ```
 
 ### Typography.P
@@ -219,3 +221,9 @@ Extends base props plus `HTMLAttributes<HTMLElement>`.
 | :--------- | :--------- | :------- | :--------------------------------------------------------------------------- |
 | `codeLang` | `string`   | —        | Programming language. Sets `data-code-lang` and auto-generates `aria-label`. |
 | `role`     | `AriaRole` | `"code"` | ARIA role. Defaults to `"code"`.                                             |
+
+## Application heading scale
+
+Headings use the semantic `text-h1`–`text-h6` tokens, approximately 30/24/20/18/16/14px at the default base size. They keep that scale across breakpoints instead of automatically expanding to hero sizes. Choose heading levels for document structure; use shared tokens to change the product-wide scale.
+
+Reserve `unsized` and large display classes for an intentional marketing design. Card and overlay titles usually need 16–20px. `Typography.Link` uses native anchors in every React framework; use your router's link component when client-side routing is required.

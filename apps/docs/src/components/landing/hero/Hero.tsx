@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Github, Sparkles } from 'lucide-react';
-import { Animation, Badge, Button } from 'vayu-ui';
+import { Animation, Badge, Button, Typography } from 'vayu-ui';
 import { DocsPreview } from './DocsPreview';
 import { InstallCommand } from './InstallCommand';
 import { highlights } from './constants';
@@ -32,20 +32,23 @@ export function Hero() {
                   className="gap-1.5 cursor-pointer shadow-control transition-transform group-hover:-translate-y-0.5"
                 >
                   <Sparkles className="h-3 w-3" />
-                  Beta Version
+                  Stable 1.1
                   <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                 </Badge>
               </Link>
             </Animation.Slide>
 
-            <h1 className="mt-7 max-w-4xl font-primary text-5xl font-bold leading-[1.04] tracking-normal text-canvas-content sm:text-6xl lg:text-7xl">
+            <Typography.H1
+              unsized
+              className="mt-7 max-w-4xl font-primary text-5xl font-bold leading-[1.04] tracking-normal text-canvas-content sm:text-6xl lg:text-7xl"
+            >
               AI Native UI Toolkit <span className="text-brand">for React Apps</span>
-            </h1>
+            </Typography.H1>
 
-            <p className="mt-6 max-w-2xl font-secondary text-lg leading-8 text-muted-content sm:text-xl">
+            <Typography.P className="mt-6 max-w-2xl font-secondary text-lg leading-8 text-muted-content sm:text-xl">
               Copy accessible components into your Next.js codebase with design tokens, CLI
               workflows, and MCP-ready docs that agents can follow.
-            </p>
+            </Typography.P>
 
             <div className="mt-9 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
               <Link href="/docs" className="w-full sm:w-auto">
@@ -78,9 +81,9 @@ export function Hero() {
                     <span className={`h-2 w-2 rounded-full ${item.tone}`} />
                     <span className="font-tertiary text-xs text-muted-content">{item.label}</span>
                   </div>
-                  <p className="mt-2 font-primary text-2xl font-bold leading-none text-surface-content">
+                  <Typography.P className="mt-2 font-primary text-2xl font-bold leading-none text-surface-content">
                     {item.value}
-                  </p>
+                  </Typography.P>
                 </div>
               ))}
             </div>

@@ -1,59 +1,33 @@
-import {existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync} from 'node:fs'
+import {copyFileSync, existsSync, mkdirSync, readdirSync} from 'node:fs'
 import {dirname, join, relative} from 'node:path'
 import {fileURLToPath} from 'node:url'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const moduleDir = dirname(fileURLToPath(import.meta.url))
+const templates = [
+  join(moduleDir, '../templates/skills'),
+  join(moduleDir, 'templates/skills'),
+  join(moduleDir, '../../../../skills'),
+].find((path) => existsSync(path))
 
-const SKILLS_TEMPLATE_DIR = existsSync(join(__dirname, '..', 'templates', 'skills'))
-  ? join(__dirname, '..', 'templates', 'skills')
-  : join(__dirname, 'templates', 'skills')
-
-export function copySkills(root: string, log: (msg: string) => void): void {
-  const skillsDirs = [
-    join(root, '.agent', 'skills'),
-    join(root, '.agents', 'skills'),
-    join(root, '.claude', 'skills'),
-    join(root, '.cursor', 'skills'),
-  ]
-
-  if (!existsSync(SKILLS_TEMPLATE_DIR)) {
-    log(`  Skills templates not found at ${SKILLS_TEMPLATE_DIR}`)
-    return
-  }
-
-  const skillFolders = readdirSync(SKILLS_TEMPLATE_DIR).filter((name) => {
-    const stat = statSync(join(SKILLS_TEMPLATE_DIR, name))
-    return stat.isDirectory()
-  })
-
-  let copiedCount = 0
-
-  for (const skillsDir of skillsDirs) {
-    mkdirSync(skillsDir, {recursive: true})
-
-    for (const folder of skillFolders) {
-      const srcDir = join(SKILLS_TEMPLATE_DIR, folder)
-      const destDir = join(skillsDir, folder)
-
-      mkdirSync(destDir, {recursive: true})
-
-      const files = readdirSync(srcDir)
-      for (const file of files) {
-        const srcFile = join(srcDir, file)
-        const destFile = join(destDir, file)
-        const stat = statSync(srcFile)
-
-        if (stat.isFile()) {
-          const content = readFileSync(srcFile, 'utf8')
-          writeFileSync(destFile, content)
-          copiedCount++
-        }
-      }
-
-      log(`    copied ${relative(root, join(skillsDir, folder))}/`)
+export function copySkills(root: string, log: (message: string) => void): void {
+  if (!templates) throw new Error('Bundled skills are missing. Rebuild or reinstall the CLI.')
+  for (const agent of ['.agents', '.agent', '.claude', '.cursor']) {
+    const target = join(root, agent, 'skills')
+    mkdirSync(target, {recursive: true})
+    for (const entry of readdirSync(templates, {withFileTypes: true})) {
+      if (!entry.isDirectory()) continue
+      const destination = join(target, entry.name)
+      copyTree(join(templates, entry.name), destination)
+      log(`  Added ${relative(root, destination)}`)
     }
   }
+}
 
-  log(`  Copied ${skillFolders.length} skill sets to ${skillsDirs.length} locations (${copiedCount} files)`)
+function copyTree(source: string, target: string): void {
+  mkdirSync(target, {recursive: true})
+  for (const item of readdirSync(source, {withFileTypes: true})) {
+    const destination = join(target, item.name)
+    if (item.isDirectory()) copyTree(join(source, item.name), destination)
+    else if (!existsSync(destination)) copyFileSync(join(source, item.name), destination)
+  }
 }

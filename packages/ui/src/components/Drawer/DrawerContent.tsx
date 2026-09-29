@@ -3,16 +3,14 @@
 
 'use client';
 
-import React, { forwardRef, useCallback, useEffect, useRef, HTMLAttributes } from 'react';
+import React, { forwardRef, useCallback, useLayoutEffect, useRef, HTMLAttributes } from 'react';
 import { cn } from '../../utils';
-import { X } from 'lucide-react';
 import { useDrawer } from './Drawer';
-import { DrawerClose } from './DrawerClose';
 import type { DrawerContentProps } from './types';
 
 const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
   ({ children, className, trapFocus = true, onKeyDown, ...props }, ref) => {
-    const { open, setOpen, side, titleId, descriptionId } = useDrawer();
+    const { open, setOpen, side, titleId, descriptionId, modal } = useDrawer();
     const contentRef = useRef<HTMLDivElement>(null);
 
     // Merge refs
@@ -28,30 +26,40 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
       [ref],
     );
 
+    const previousFocus = useRef<HTMLElement | null>(null);
     // Focus management
-    useEffect(() => {
-      if (open && trapFocus) {
+    useLayoutEffect(() => {
+      if (open && trapFocus && modal) {
+        previousFocus.current = document.activeElement as HTMLElement | null;
         const focusable = contentRef.current?.querySelector<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
         );
-        setTimeout(() => focusable?.focus({ preventScroll: true }), 50);
+        (focusable ?? contentRef.current)?.focus({ preventScroll: true });
+        return () => {
+          previousFocus.current?.focus({ preventScroll: true });
+        };
       }
-    }, [open, trapFocus]);
+    }, [open, trapFocus, modal]);
 
     // Keyboard navigation
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
       onKeyDown?.(e);
+      if (e.defaultPrevented) return;
 
       if (e.key === 'Escape') {
+        e.stopPropagation();
         setOpen(false);
       }
 
-      if (e.key === 'Tab' && trapFocus) {
+      if (e.key === 'Tab' && trapFocus && modal) {
         const focusableElements = contentRef.current?.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
         );
 
-        if (!focusableElements || focusableElements.length === 0) return;
+        if (!focusableElements || focusableElements.length === 0) {
+          e.preventDefault();
+          return;
+        }
 
         const firstElement = focusableElements[0];
         const lastElement = focusableElements[focusableElements.length - 1];
@@ -86,7 +94,8 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
       <div
         ref={setRefs}
         role="dialog"
-        aria-modal="true"
+        tabIndex={-1}
+        aria-modal={modal || undefined}
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
         data-state={open ? 'open' : 'closed'}
@@ -101,19 +110,6 @@ const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(
         {...props}
       >
         {children}
-        <DrawerClose
-          className={cn(
-            'absolute right-4 top-4 rounded-sm opacity-70 transition-opacity',
-            'hover:opacity-100 focus-visible:outline-none focus-visible:ring-2',
-            'focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-elevated',
-            'disabled:pointer-events-none',
-            'data-[state=open]:bg-muted',
-          )}
-          aria-label="Close drawer"
-        >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </DrawerClose>
       </div>
     );
   },

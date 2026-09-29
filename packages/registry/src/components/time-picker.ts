@@ -113,7 +113,8 @@ export const timePickerEntry: ComponentRegistryEntry = {
           name: 'children',
           type: 'React.ReactNode',
           required: false,
-          description: 'Content to render inside the dropdown (typically Timepicker.TimeGrid and Timepicker.Footer)',
+          description:
+            'Content to render inside the dropdown (typically Timepicker.TimeGrid and Timepicker.Footer)',
         },
         {
           name: 'className',
@@ -202,7 +203,8 @@ export const timePickerEntry: ComponentRegistryEntry = {
     {
       name: 'Error',
       fileName: 'TimePickerFooter.tsx',
-      description: 'Renders an error message with an alert icon, displaying the root error prop or custom children',
+      description:
+        'Renders an error message with an alert icon, displaying the root error prop or custom children',
       props: [
         {
           name: 'children',
@@ -262,7 +264,8 @@ export const timePickerEntry: ComponentRegistryEntry = {
       type: "'single' | 'range'",
       required: false,
       defaultValue: "'single'",
-      description: "Selection mode: 'single' for one time, 'range' for start and end time selection",
+      description:
+        "Selection mode: 'single' for one time, 'range' for start and end time selection",
       options: ['single', 'range'],
     },
     {
@@ -295,7 +298,8 @@ export const timePickerEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'Disables the entire time picker — trigger becomes non-interactive and visually muted',
+      description:
+        'Disables the entire time picker — trigger becomes non-interactive and visually muted',
     },
     {
       name: 'loading',
@@ -335,7 +339,8 @@ export const timePickerEntry: ComponentRegistryEntry = {
       type: 'boolean',
       required: false,
       defaultValue: 'false',
-      description: 'When true, selections in the dropdown update a temporary value until Apply is pressed',
+      description:
+        'When true, selections in the dropdown update a temporary value until Apply is pressed',
     },
     {
       name: 'disabledTimes',
@@ -506,7 +511,8 @@ export const timePickerEntry: ComponentRegistryEntry = {
       },
       {
         name: 'aria-disabled (options)',
-        description: 'Set on options that fall within disabled hours, times, or min/max constraints.',
+        description:
+          'Set on options that fall within disabled hours, times, or min/max constraints.',
         managedByComponent: true,
       },
       {
@@ -540,11 +546,13 @@ export const timePickerEntry: ComponentRegistryEntry = {
       },
       {
         key: 'Enter / Space',
-        behavior: 'Selects the focused option. In single mode without apply button, closes the dropdown.',
+        behavior:
+          'Selects the focused option. In single mode without apply button, closes the dropdown.',
       },
       {
         key: 'Escape',
-        behavior: 'Closes the dropdown, discards temporary changes, and returns focus to the trigger.',
+        behavior:
+          'Closes the dropdown, discards temporary changes, and returns focus to the trigger.',
       },
       {
         key: 'Tab',
@@ -605,12 +613,12 @@ export const timePickerEntry: ComponentRegistryEntry = {
 
 export default function BasicTimePicker() {
   return (
-    <Timepicker.Root>
+    <Timepicker>
       <Timepicker.Trigger />
       <Timepicker.Content>
         <Timepicker.TimeGrid />
       </Timepicker.Content>
-    </Timepicker.Root>
+    </Timepicker>
   );
 }`,
       tags: ['basic', 'single', '12h'],
@@ -625,7 +633,7 @@ export default function TimePicker24h() {
   const [value, setValue] = useState<{ hour: number; minute: number } | null>(null);
 
   return (
-    <Timepicker.Root
+    <Timepicker
       format="24h"
       minuteStep={15}
       value={value}
@@ -636,7 +644,7 @@ export default function TimePicker24h() {
       <Timepicker.Content>
         <Timepicker.TimeGrid />
       </Timepicker.Content>
-    </Timepicker.Root>
+    </Timepicker>
   );
 }`,
       tags: ['24h', 'step', 'controlled'],
@@ -651,7 +659,7 @@ export default function TimeRangePicker() {
   const [range, setRange] = useState<{ start: { hour: number; minute: number } | null; end: { hour: number; minute: number } | null } | null>(null);
 
   return (
-    <Timepicker.Root
+    <Timepicker
       mode="range"
       showApplyButton
       value={range}
@@ -663,7 +671,7 @@ export default function TimeRangePicker() {
         <Timepicker.TimeGrid />
         <Timepicker.Footer />
       </Timepicker.Content>
-    </Timepicker.Root>
+    </Timepicker>
   );
 }`,
       tags: ['range', 'apply', 'start-end'],
@@ -675,7 +683,7 @@ export default function TimeRangePicker() {
 
 export default function RestrictedTimePicker() {
   return (
-    <Timepicker.Root
+    <Timepicker
       disabledHours={[0, 1, 2, 3, 4, 5, 6, 22, 23]}
       disabledTimes={['12:00', '12:30']}
       minTime="09:00"
@@ -685,7 +693,7 @@ export default function RestrictedTimePicker() {
       <Timepicker.Content>
         <Timepicker.TimeGrid />
       </Timepicker.Content>
-    </Timepicker.Root>
+    </Timepicker>
   );
 }`,
       tags: ['disabled', 'constraints', 'business-hours'],
@@ -700,7 +708,7 @@ export default function ControlledTimePicker() {
   const [time, setTime] = useState<{ hour: number; minute: number } | null>({ hour: 9, minute: 0 });
 
   return (
-    <Timepicker.Root
+    <Timepicker
       value={time}
       onValueChange={setTime}
       label="Meeting Time"
@@ -711,7 +719,7 @@ export default function ControlledTimePicker() {
       <Timepicker.Content>
         <Timepicker.TimeGrid />
       </Timepicker.Content>
-    </Timepicker.Root>
+    </Timepicker>
   );
 }`,
       tags: ['controlled', 'label', 'validation', 'error'],
@@ -721,16 +729,16 @@ export default function ControlledTimePicker() {
   // ── Anti-patterns ─────────────────────────────────────
   doNot: [
     {
-      title: 'Using sub-components outside Timepicker.Root',
+      title: 'Using sub-components outside Timepicker',
       bad: '<Timepicker.Trigger /><Timepicker.Content />',
-      good: '<Timepicker.Root><Timepicker.Trigger /><Timepicker.Content /></Timepicker.Root>',
+      good: '<Timepicker><Timepicker.Trigger /><Timepicker.Content /></Timepicker>',
       reason:
-        'All Timepicker sub-components depend on TimepickerContext provided by Timepicker.Root. Rendering them outside Root throws a "must be used within Timepicker.Root" error.',
+        'All Timepicker sub-components depend on TimepickerContext provided by Timepicker. Rendering them outside Root throws a "must be used within Timepicker" error.',
     },
     {
       title: 'Mixing controlled and uncontrolled value props',
-      bad: '<Timepicker.Root value={time} defaultValue={{ hour: 9, minute: 0 }}>',
-      good: '<Timepicker.Root value={time} onValueChange={setTime}>',
+      bad: '<Timepicker value={time} defaultValue={{ hour: 9, minute: 0 }}>',
+      good: '<Timepicker value={time} onValueChange={setTime}>',
       reason:
         'Passing both value and defaultValue creates conflicting state management. Use value + onValueChange for controlled mode, or defaultValue alone for uncontrolled mode.',
     },
@@ -743,15 +751,15 @@ export default function ControlledTimePicker() {
     },
     {
       title: 'Passing invalid time strings to minTime or maxTime',
-      bad: '<Timepicker.Root minTime="9am" maxTime="5pm">',
-      good: '<Timepicker.Root minTime="09:00" maxTime="17:00">',
+      bad: '<Timepicker minTime="9am" maxTime="5pm">',
+      good: '<Timepicker minTime="09:00" maxTime="17:00">',
       reason:
         'minTime and maxTime expect strings in "HH:MM" 24-hour format. Invalid formats will fail silently during comparison and may not apply constraints correctly.',
     },
     {
       title: 'Forgetting Timepicker.Footer in range mode with showApplyButton',
-      bad: '<Timepicker.Root mode="range" showApplyButton><Timepicker.Trigger /><Timepicker.Content><Timepicker.TimeGrid /></Timepicker.Content></Timepicker.Root>',
-      good: '<Timepicker.Root mode="range" showApplyButton><Timepicker.Trigger /><Timepicker.Content><Timepicker.TimeGrid /><Timepicker.Footer /></Timepicker.Content></Timepicker.Root>',
+      bad: '<Timepicker mode="range" showApplyButton><Timepicker.Trigger /><Timepicker.Content><Timepicker.TimeGrid /></Timepicker.Content></Timepicker>',
+      good: '<Timepicker mode="range" showApplyButton><Timepicker.Trigger /><Timepicker.Content><Timepicker.TimeGrid /><Timepicker.Footer /></Timepicker.Content></Timepicker>',
       reason:
         'When showApplyButton is true in range mode, the user needs the Footer with Apply/Clear buttons to confirm or discard their selection. Without it, the temporary value cannot be committed.',
     },

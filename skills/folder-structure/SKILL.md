@@ -51,30 +51,30 @@ project-root/
 
 ## Placement
 
-| Path | Put Here | Keep Out |
-| --- | --- | --- |
-| `app/` | route segments, `layout.tsx`, `page.tsx`, route handlers, loading/error boundaries | business components, API service calls, table columns |
-| `api/api.ts` | axios client singleton, interceptors, global error handling | feature logic, UI imports |
-| `api/services/` | fetch/axios functions returning typed data | React hooks, UI imports |
-| `api/hooks/` | one TanStack Query hook per file | non-API hooks, WS hooks |
-| `ws/ws.ts` | socket.io client singleton, connection config | feature logic, UI imports |
-| `ws/services/` | socket.io emitters/listeners per feature | React hooks, UI imports |
-| `ws/hooks/` | one React hook per channel; consumes ws/services | non-WS hooks, direct socket.io client usage |
-| `ws/types/` | WS event names, message payload types | feature-local one-off types |
-| `containers/Forms/` | React Hook Form + Zod forms | generic inputs/primitives |
-| `containers/Modals/` | concrete modal/dialog instances | generic dialog primitive |
-| `containers/PopOver/` | concrete popover instances | generic popover primitive |
-| `containers/Drawer/` | concrete drawer/sheet instances | generic drawer primitive |
-| `containers/Card/` | complex domain cards | base card primitive |
-| `containers/Sections/` | chunks from large pages | generic components |
-| `ui/components/` | Vayu UI primitives, custom primitives, reusable domain-agnostic app components | forms, modals, drawers, popovers, page sections |
-| `ui/hooks/` | non-API hooks (`useDebounce`, `useMediaQuery`) and hooks used by UI primitives | TanStack Query hooks, WS hooks |
-| `ui/utils/` | helpers used by `ui/components/` and `ui/hooks/` | validations, columns, feature utils |
-| `types/api-types/` | shared request/response contracts | feature-local one-off types |
-| `types/enums/` | project enums | string constants hidden in components |
-| `utils/validations/` | Zod schemas | UI primitive helpers |
-| `utils/columns/` | TanStack Table columns | inline route-page column defs |
-| `lib/` | query-client, auth adapters, and other singletons | feature UI |
+| Path                   | Put Here                                                                           | Keep Out                                              |
+| ---------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `app/`                 | route segments, `layout.tsx`, `page.tsx`, route handlers, loading/error boundaries | business components, API service calls, table columns |
+| `api/api.ts`           | axios client singleton, interceptors, global error handling                        | feature logic, UI imports                             |
+| `api/services/`        | fetch/axios functions returning typed data                                         | React hooks, UI imports                               |
+| `api/hooks/`           | one TanStack Query hook per file                                                   | non-API hooks, WS hooks                               |
+| `ws/ws.ts`             | socket.io client singleton, connection config                                      | feature logic, UI imports                             |
+| `ws/services/`         | socket.io emitters/listeners per feature                                           | React hooks, UI imports                               |
+| `ws/hooks/`            | one React hook per channel; consumes ws/services                                   | non-WS hooks, direct socket.io client usage           |
+| `ws/types/`            | WS event names, message payload types                                              | feature-local one-off types                           |
+| `containers/Forms/`    | React Hook Form + Zod forms                                                        | generic inputs/primitives                             |
+| `containers/Modals/`   | concrete modal/dialog instances                                                    | generic dialog primitive                              |
+| `containers/PopOver/`  | concrete popover instances                                                         | generic popover primitive                             |
+| `containers/Drawer/`   | concrete drawer/sheet instances                                                    | generic drawer primitive                              |
+| `containers/Card/`     | complex domain cards                                                               | base card primitive                                   |
+| `containers/Sections/` | chunks from large pages                                                            | generic components                                    |
+| `ui/components/`       | Vayu UI primitives, custom primitives, reusable domain-agnostic app components     | forms, modals, drawers, popovers, page sections       |
+| `ui/hooks/`            | non-API hooks (`useDebounce`, `useMediaQuery`) and hooks used by UI primitives     | TanStack Query hooks, WS hooks                        |
+| `ui/utils/`            | helpers used by `ui/components/` and `ui/hooks/`                                   | validations, columns, feature utils                   |
+| `types/api-types/`     | shared request/response contracts                                                  | feature-local one-off types                           |
+| `types/enums/`         | project enums                                                                      | string constants hidden in components                 |
+| `utils/validations/`   | Zod schemas                                                                        | UI primitive helpers                                  |
+| `utils/columns/`       | TanStack Table columns                                                             | inline route-page column defs                         |
+| `lib/`                 | query-client, auth adapters, and other singletons                                  | feature UI                                            |
 
 Prefer `types/api-types/` over `api/types/` when a contract is reused. Add `index.ts` barrels inside `api/services/`, `api/hooks/`, `ws/services/`, `ws/hooks/`, `ui/components/`, and container category folders when multiple files exist.
 
@@ -95,24 +95,24 @@ Keep imports one-way. Lower layers must not import pages, containers, or domain 
 
 ## Naming
 
-| Category | Pattern | Example |
-| --- | --- | --- |
-| API types | `<APIname><Request/Response>.ts` | `LoginResponse.ts`, `GetUsersRequest.ts` |
-| API services | `<feature>Service.ts` | `authService.ts`, `paymentService.ts` |
-| Query hooks | `use<Operation>.ts` | `useLogin.ts`, `useUsers.ts` |
-| WS services | `<feature>SocketService.ts` | `chatSocketService.ts`, `notificationSocketService.ts` |
-| WS hooks | `use<ChannelName>.ts` | `useChatSocket.ts`, `useNotifications.ts` |
-| WS types | `<Feature>SocketPayload.ts`, `<Feature>SocketEvent.ts` | `ChatSocketPayload.ts` |
-| UI components | `PascalCase.tsx` | `DataTable.tsx`, `Button.tsx` |
-| UI hooks | `use<Name>.ts` | `useDebounce.ts`, `useMergeRefs.ts` |
-| Modals | `<Action><Modal>.tsx` | `AddUserModal.tsx`, `DeleteConfirmModal.tsx` |
-| Drawers | `<Name>Drawer.tsx` | `UserDetailsDrawer.tsx` |
-| Popovers | `<Name>Popover.tsx` | `UserActionsPopover.tsx` |
-| Forms | `<Name>Form.tsx` | `LoginForm.tsx`, `CheckoutForm.tsx` |
-| Sections | `<MainFile><SectionName>Section.tsx` | `OnboardingPageInfoSection.tsx` |
-| Zod schemas | `<feature>Schema.ts` | `loginSchema.ts`, `userSchema.ts` |
-| Table columns | `<feature>Columns.ts` | `userColumns.ts`, `orderColumns.ts` |
-| Enums | `PascalCase.ts` | `UserRole.ts`, `OrderStatus.ts` |
+| Category      | Pattern                                                | Example                                                |
+| ------------- | ------------------------------------------------------ | ------------------------------------------------------ |
+| API types     | `<APIname><Request/Response>.ts`                       | `LoginResponse.ts`, `GetUsersRequest.ts`               |
+| API services  | `<feature>Service.ts`                                  | `authService.ts`, `paymentService.ts`                  |
+| Query hooks   | `use<Operation>.ts`                                    | `useLogin.ts`, `useUsers.ts`                           |
+| WS services   | `<feature>SocketService.ts`                            | `chatSocketService.ts`, `notificationSocketService.ts` |
+| WS hooks      | `use<ChannelName>.ts`                                  | `useChatSocket.ts`, `useNotifications.ts`              |
+| WS types      | `<Feature>SocketPayload.ts`, `<Feature>SocketEvent.ts` | `ChatSocketPayload.ts`                                 |
+| UI components | `PascalCase.tsx`                                       | `DataTable.tsx`, `Button.tsx`                          |
+| UI hooks      | `use<Name>.ts`                                         | `useDebounce.ts`, `useMergeRefs.ts`                    |
+| Modals        | `<Action><Modal>.tsx`                                  | `AddUserModal.tsx`, `DeleteConfirmModal.tsx`           |
+| Drawers       | `<Name>Drawer.tsx`                                     | `UserDetailsDrawer.tsx`                                |
+| Popovers      | `<Name>Popover.tsx`                                    | `UserActionsPopover.tsx`                               |
+| Forms         | `<Name>Form.tsx`                                       | `LoginForm.tsx`, `CheckoutForm.tsx`                    |
+| Sections      | `<MainFile><SectionName>Section.tsx`                   | `OnboardingPageInfoSection.tsx`                        |
+| Zod schemas   | `<feature>Schema.ts`                                   | `loginSchema.ts`, `userSchema.ts`                      |
+| Table columns | `<feature>Columns.ts`                                  | `userColumns.ts`, `orderColumns.ts`                    |
+| Enums         | `PascalCase.ts`                                        | `UserRole.ts`, `OrderStatus.ts`                        |
 
 Use PascalCase for React components/enums. Use camelCase for services, schemas, columns, utilities, and hooks.
 
@@ -144,3 +144,7 @@ Use PascalCase for React components/enums. Use camelCase for services, schemas, 
 - Do not use Socket.io client directly in UI or containers; always go through `ws/hooks/`.
 - Do not put WS hooks in `ui/hooks/`.
 - Do not duplicate WS types between `ws/types/` and `types/ws-types/`.
+
+## Existing project configuration
+
+Read `vayu-ui.config.json` before generating files. Its `uiPath`, `paths`, `packagePath`, and `aliases` take precedence over the example layout. Search parent folders for workspace configuration. Use `--cwd` to target a project explicitly; do not create a second UI tree in a nested app when the root config owns a shared package.

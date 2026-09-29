@@ -143,8 +143,24 @@ export const modalEntry: ComponentRegistryEntry = {
       name: 'Header',
       fileName: 'ModalHeader.tsx',
       description:
-        'Flex row layout for the header area, typically containing Title, Description, and Close sub-components.',
-      props: [],
+        'Header flex row with a flexible title/description area and an in-flow accessible X close button. An explicitly supplied Close child replaces the default control.',
+      props: [
+        {
+          name: 'showClose',
+          type: 'boolean',
+          required: false,
+          defaultValue: 'true',
+          description:
+            'Show the default X close button. Set false when a separate close action is provided.',
+        },
+        {
+          name: 'closeLabel',
+          type: 'string',
+          required: false,
+          defaultValue: 'Close modal',
+          description: 'Accessible label for the default close button; supports localization.',
+        },
+      ],
     },
     {
       name: 'Title',

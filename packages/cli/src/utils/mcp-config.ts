@@ -1,7 +1,9 @@
+import {applyEdits, modify, type ParseError, parse as parseJsonc} from 'jsonc-parser'
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs'
 import {dirname, join} from 'node:path'
+import {parse as parseToml, stringify as stringifyToml} from 'smol-toml'
 
-export type ToolId = 'claude' | 'cursor' | 'opencode'
+export type ToolId = 'claude' | 'codex' | 'cursor' | 'opencode' | 'vscode'
 
 /** MCP server key written inside each tool's config JSON */
 export const MCP_SERVER_KEY = 'vayu-ui'
@@ -10,38 +12,35 @@ export const MCP_SERVER_KEY = 'vayu-ui'
 export const MCP_PACKAGE_NAME = 'vayu-ui-mcp'
 
 export interface ToolDefinition {
+  buildEntry: () => Record<string, unknown>
+  configFileName: string
   id: ToolId
   name: string
-  configFileName: string
   topLevelKey: string
-  buildEntry: () => Record<string, unknown>
 }
 
 export interface WriteResult {
-  toolId: ToolId
+  action: 'created' | 'dry-run' | 'skipped-exists' | 'updated'
   configPath: string
-  action: 'created' | 'updated' | 'skipped-exists' | 'dry-run'
+  toolId: ToolId
 }
 
 function defaultEntry(): Record<string, unknown> {
   return {
-    command: 'npx',
     args: ['-y', MCP_PACKAGE_NAME],
+    command: 'npx',
   }
 }
 
 function opencodeEntry(): Record<string, unknown> {
   return {
-    type: 'local',
     command: ['npx', '-y', MCP_PACKAGE_NAME],
+    type: 'local',
   }
 }
 
 /** Build the JSON fragment that will be merged into a tool's config file */
-export function buildMcpPreview(
-  toolDef: ToolDefinition,
-  serverKey: string = MCP_SERVER_KEY,
-): Record<string, unknown> {
+export function buildMcpPreview(toolDef: ToolDefinition, serverKey: string = MCP_SERVER_KEY): Record<string, unknown> {
   return {
     [toolDef.topLevelKey]: {
       [serverKey]: toolDef.buildEntry(),
@@ -51,29 +50,43 @@ export function buildMcpPreview(
 
 export const TOOL_DEFINITIONS: Record<ToolId, ToolDefinition> = {
   claude: {
+    buildEntry: defaultEntry,
+    configFileName: '.mcp.json',
     id: 'claude',
     name: 'Claude Code',
-    configFileName: '.mcp.json',
     topLevelKey: 'mcpServers',
+  },
+  codex: {
     buildEntry: defaultEntry,
+    configFileName: '.codex/config.toml',
+    id: 'codex',
+    name: 'Codex',
+    topLevelKey: 'mcp_servers',
   },
   cursor: {
+    buildEntry: defaultEntry,
+    configFileName: '.cursor/mcp.json',
     id: 'cursor',
     name: 'Cursor',
-    configFileName: '.cursor/mcp.json',
     topLevelKey: 'mcpServers',
-    buildEntry: defaultEntry,
   },
   opencode: {
+    buildEntry: opencodeEntry,
+    configFileName: 'opencode.json',
     id: 'opencode',
     name: 'OpenCode',
-    configFileName: 'opencode.json',
     topLevelKey: 'mcp',
-    buildEntry: opencodeEntry,
+  },
+  vscode: {
+    buildEntry: () => ({type: 'stdio', ...defaultEntry()}),
+    configFileName: '.vscode/mcp.json',
+    id: 'vscode',
+    name: 'VS Code',
+    topLevelKey: 'servers',
   },
 }
 
-export const ALL_TOOL_IDS: ToolId[] = ['claude', 'cursor', 'opencode']
+export const ALL_TOOL_IDS: ToolId[] = ['claude', 'cursor', 'opencode', 'vscode', 'codex']
 
 export function getConfigPath(toolId: ToolId, targetDir: string): string {
   const def = TOOL_DEFINITIONS[toolId]
@@ -88,11 +101,19 @@ export function writeMcpConfig(
   const configPath = join(targetDir, toolDef.configFileName)
   const serverEntry = toolDef.buildEntry()
 
-  let json: Record<string, any> = {}
+  let json: Record<string, unknown> = {}
+  const original = existsSync(configPath) ? readFileSync(configPath, 'utf8') : toolDef.id === 'codex' ? '' : '{}'
 
   if (existsSync(configPath)) {
     try {
-      json = JSON.parse(readFileSync(configPath, 'utf-8'))
+      if (toolDef.id === 'codex') json = parseToml(original)
+      else {
+        const errors: ParseError[] = []
+        json = parseJsonc(original, errors, {allowTrailingComma: true})
+        if (errors.length > 0) throw new Error('Invalid JSON')
+      }
+
+      if (!json || typeof json !== 'object' || Array.isArray(json)) throw new Error('Expected an object')
     } catch {
       throw new Error(`Failed to parse ${configPath}. Fix or remove the file and try again.`)
     }
@@ -102,15 +123,19 @@ export function writeMcpConfig(
     json[toolDef.topLevelKey] = {}
   }
 
-  const existing = json[toolDef.topLevelKey]['vayu-ui']
+  if (typeof json[toolDef.topLevelKey] !== 'object' || Array.isArray(json[toolDef.topLevelKey]))
+    throw new Error(`Invalid ${toolDef.topLevelKey} in ${configPath}: expected an object.`)
+
+  const servers = json[toolDef.topLevelKey] as Record<string, unknown>
+  const existing = servers[MCP_SERVER_KEY]
   if (existing && !options.force) {
-    return {toolId: toolDef.id, configPath, action: 'skipped-exists'}
+    return {action: 'skipped-exists', configPath, toolId: toolDef.id}
   }
 
-  json[toolDef.topLevelKey]['vayu-ui'] = serverEntry
+  servers[MCP_SERVER_KEY] = serverEntry
 
   if (options.dryRun) {
-    return {toolId: toolDef.id, configPath, action: 'dry-run'}
+    return {action: 'dry-run', configPath, toolId: toolDef.id}
   }
 
   const dir = dirname(configPath)
@@ -118,11 +143,22 @@ export function writeMcpConfig(
     mkdirSync(dir, {recursive: true})
   }
 
-  writeFileSync(configPath, JSON.stringify(json, null, 2) + '\n', 'utf-8')
+  const output =
+    toolDef.id === 'codex'
+      ? existing
+        ? stringifyToml(json)
+        : `${original.trimEnd()}\n\n[mcp_servers."vayu-ui"]\ncommand = "npx"\nargs = ["-y", "${MCP_PACKAGE_NAME}"]\n`
+      : applyEdits(
+          original,
+          modify(original, [toolDef.topLevelKey, MCP_SERVER_KEY], serverEntry, {
+            formattingOptions: {insertSpaces: true, tabSize: 2},
+          }),
+        ) + '\n'
+  writeFileSync(configPath, output, 'utf8')
 
   return {
-    toolId: toolDef.id,
-    configPath,
     action: existing ? 'updated' : 'created',
+    configPath,
+    toolId: toolDef.id,
   }
 }

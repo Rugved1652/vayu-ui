@@ -2,7 +2,6 @@
 // UI: Link component with Next.js routing
 
 import React from 'react';
-import NextLink from 'next/link';
 import { cn } from '../../utils';
 import { getVariantClasses } from './utils';
 import type { LinkProps } from './types';
@@ -83,9 +82,9 @@ export const Link = ({
     );
   }
 
-  // Internal links use Next.js Link
+  // Native links work in any React framework.
   return (
-    <NextLink
+    <a
       id={id}
       href={href || '#'}
       aria-label={computedAriaLabel}
@@ -97,6 +96,6 @@ export const Link = ({
       {...restProps}
     >
       {children}
-    </NextLink>
+    </a>
   );
 };

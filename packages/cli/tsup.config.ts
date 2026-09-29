@@ -1,11 +1,11 @@
 import {defineConfig} from 'tsup'
 
 export default defineConfig({
-  entry: ['src/**/*.ts', '!src/templates/**'],
-  format: ['esm'],
-  dts: true,
   clean: true,
-  sourcemap: true,
-  outDir: 'dist',
+  dts: true,
+  entry: ['src/**/*.ts', '!src/templates/**'],
   external: ['vayu-ui-registry'],
+  format: ['esm'],
+  outDir: 'dist',
+  sourcemap: true,
 })

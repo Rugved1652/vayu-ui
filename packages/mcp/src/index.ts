@@ -19,10 +19,16 @@ import { registerGetHookDetails } from './tools/get-hook-details.js';
 import { registerGetDesignTokens } from './tools/get-design-tokens.js';
 import { registerGetInstallGuide } from './tools/get-install-guide.js';
 
-const server = new McpServer({
-  name: 'vayu-ui-mcp',
-  version: '1.0.0',
-});
+const server = new McpServer(
+  {
+    name: 'vayu-ui-mcp',
+    version: '1.1.0',
+  },
+  {
+    instructions:
+      'Use Typography for application headings and paragraphs, and compound titles/descriptions for accessible overlays. Keep the default text-h1–text-h6 scale; large hero type requires an explicit brief. Read vayu-ui.config.json and pass config/fromFile to installation and scaffold tools so imports match copied files. Inspect component props and composition before adapting examples.',
+  },
+);
 
 // Register all tools
 registerListComponents(server);
@@ -45,4 +51,4 @@ registerGetInstallGuide(server);
 
 // Start server
 const transport = new StdioServerTransport();
-server.connect(transport);
+await server.connect(transport);

@@ -51,16 +51,16 @@ npx vayu-ui-cli@latest create my-app --framework vite --skip-init
 
 **What it does:**
 
-- Scaffolds a fresh Next.js or Vite project using the official templates
+- Scaffolds a fresh Next.js or Vite project using bundled, tested templates
 - Initializes Vayu UI automatically (unless `--skip-init`)
-- Adds starter components: `Button`, `Typography`, `useLocalStorage`, `useDebounce`, `useOnClickOutside`
+- Adds starter components: `Button`, `Typography`, `Select`, `useLocalStorage`, `useDebounce`, `useOnClickOutside`, plus their required hooks and utilities
 - Installs all npm dependencies automatically
 
 **Flags:**
 
 | Flag                                       | Description                                   |
 | :----------------------------------------- | :-------------------------------------------- |
-| `--framework <next\|vite>`                 | Framework to scaffold (default: prompts)      |
+| `--framework <next\|vite>`                 | Framework to scaffold (default: next)         |
 | `--package-manager <npm\|pnpm\|yarn\|bun>` | Package manager (default: auto-detect)        |
 | `--app-router`                             | Use App Router (Next.js only, default: true)  |
 | `--no-app-router`                          | Use Pages Router (Next.js only)               |
@@ -119,7 +119,7 @@ npx vayu-ui-cli@latest init --skip-tailwind
 
 ## `vayu-ui list`
 
-Displays all 50 components and 31 hooks available in the Vayu UI registry, grouped by type and category.
+Displays all 59 components and 34 hooks available in the Vayu UI registry, grouped by type and category.
 
 ```bash
 npx vayu-ui-cli@latest list
@@ -146,7 +146,7 @@ npx vayu-ui-cli@latest list --category sensor
 
 ## `vayu-ui add <slugs...>`
 
-Copies one or more components or hooks from GitHub into your project. Automatically resolves transitive dependencies and installs required npm packages.
+Copies one or more components or hooks from the installed CLI release into your project. Automatically resolves transitive dependencies and installs required npm packages.
 
 ```bash
 npx vayu-ui-cli@latest add button
@@ -164,7 +164,7 @@ npx vayu-ui-cli@latest add use-debounce use-local-storage
 
 - Looks up each slug in the registry
 - Recursively resolves dependencies (e.g. `sidebar` → `tooltip`)
-- Fetches source files from GitHub
+- Copies bundled source files
 - Writes them into `{uiPath}/components/{Name}/` or `{uiPath}/hooks/`
 - Auto-includes the `cn` utility (`utils/index.ts`) when adding any component
 - Installs npm packages (`clsx`, `tailwind-merge`, `lucide-react`, etc.)
@@ -200,7 +200,7 @@ import { useDebounce } from '@/ui/hooks/useDebounce';
 
 ## `vayu-ui update [slugs...]`
 
-Re-fetches installed components and hooks from GitHub. Compares file contents and only overwrites changed files.
+Refreshes installed components and hooks from the installed CLI release. Compares file contents and only overwrites changed files.
 
 ```bash
 npx vayu-ui-cli@latest update
@@ -212,11 +212,11 @@ npx vayu-ui-cli@latest update button modal
 
 **Flags:**
 
-| Flag        | Short | Description                                         |
-| :---------- | :---- | :-------------------------------------------------- |
-| `--force`   | `-f`  | Overwrite all files even if content is unchanged    |
-| `--dry-run` | —     | Preview what would be updated without writing files |
-| `--css`     | —     | Also update Vayu UI CSS design tokens               |
+| Flag        | Short | Description                                           |
+| :---------- | :---- | :---------------------------------------------------- |
+| `--force`   | `-f`  | Overwrite changed files (the default update behavior) |
+| `--dry-run` | —     | Preview what would be updated without writing files   |
+| `--css`     | —     | Also update Vayu UI CSS design tokens                 |
 
 ```bash
 npx vayu-ui-cli@latest update --dry-run
@@ -368,3 +368,45 @@ src/ui/
 ```
 
 This structure mirrors the internal `packages/ui/src/` layout, so relative imports between files (like `../../utils`) work without any path aliases.
+
+## Stable source generation and workspaces
+
+The CLI ships its component sources with the package. `add` and `update` use the same source dependency graph, including shared utilities. Updating to another release means running `npx vayu-ui-cli@latest update`. Local changes can be overwritten by `update`; preview with `--dry-run` first.
+
+```bash
+npx vayu-ui-cli@latest add --all --yes
+npx vayu-ui-cli@latest add modal --cwd apps/web --yes
+npx vayu-ui-cli@latest update --dry-run
+npx vayu-ui-cli@latest update --css
+npx vayu-ui-cli@latest remove modal --dry-run
+npx vayu-ui-cli@latest create workspace --framework next --turbo
+npx vayu-ui-cli@latest create workspace --framework vite --turbo --package-manager pnpm
+```
+
+`--turbo` creates `apps/web`, a shared `packages/ui` source package, workspace manifests, Turbo tasks, and CSS scanning for the shared sources. Next.js transpiles `@repo/ui`; both framework starters import its exported component paths.
+
+`--skip-install` writes complete dependencies and configuration without running a package manager. Run your package manager's install command once when ready. `--no-typescript` creates JavaScript application files; copied Vayu primitives remain TypeScript, which both supported bundlers compile. `--no-src-dir`, `--no-eslint`, `--no-tailwind`, and `--no-app-router` are supported. Without Tailwind, Vayu's utility classes require your own styling setup.
+
+## Custom folder layouts
+
+All configured paths are relative to the directory containing `vayu-ui.config.json`. The nearest config is used when executing from a nested directory; `--cwd` selects another project. A workspace root can own a shared package:
+
+```json
+{
+  "$schema": "https://vayu.design/schema/config.json",
+  "version": 1,
+  "uiPath": "packages/ui/src",
+  "packagePath": "packages/ui",
+  "aliases": {
+    "components": "@repo/ui/components",
+    "hooks": "@repo/ui/hooks"
+  },
+  "cssFile": "apps/web/src/app/globals.css",
+  "tokensFile": "packages/ui/src/styles.css",
+  "installed": {}
+}
+```
+
+For an existing app with separate directories, set `paths.components`, `paths.hooks`, and `paths.utils`, for example `src/components/ui`, `src/hooks`, and `src/lib/vayu`. The CLI rewrites relative source imports between those locations. `packagePath` selects the package receiving npm dependencies. `aliases` describe existing resolver aliases for MCP import guidance; they do not create TypeScript or bundler aliases.
+
+Paths cannot escape the config directory. Put a shared workspace config at the workspace root instead of using `../` to target another package.
